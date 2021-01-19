@@ -1,0 +1,31 @@
+{
+  "name": "web",
+  "version": "0.0.1",
+  "description": "Web V3",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SapienNetwork/web.git"
+  },
+  "keywords": [
+    "react",
+    "nextjs",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SapienNetwork/web/issues"
+  },
+  "homepage": "https://github.com/SapienNetwork/web#readme",
+  "dependencies": {
+    "next": "^10.0.5",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
