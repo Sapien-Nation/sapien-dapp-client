@@ -1,12 +1,22 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+// mui
+import { ThemeProvider } from '@material-ui/core/styles';
+
+// styles
+import theme from 'styles/theme';
+
+const AllTheProviders = ({ children }) => (
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+);
+
 const customRender = (
   ui: React.ReactElement,
   options: { container?: Element } = {}
 ) => {
   const rtl = render(ui, {
-    wrapper: ({ children }) => <>{children}</>,
+    wrapper: AllTheProviders,
     ...options
   });
 
