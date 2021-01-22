@@ -29,6 +29,10 @@
   "homepage": "https://github.com/SapienNetwork/web#readme",
   "dependencies": {
     "@material-ui/core": "^4.11.2",
+    "@sentry/browser": "^6.0.1",
+    "@sentry/integrations": "^6.0.1",
+    "@sentry/node": "^6.0.1",
+    "@sentry/webpack-plugin": "^1.14.0",
     "jest-coverage-badges": "^1.1.2",
     "next": "^10.0.5",
     "react": "^17.0.1",

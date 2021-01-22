@@ -11,8 +11,13 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
 
+// utils
+import { init } from 'utils/sentry';
+
 // styles
 import theme from 'styles/theme';
+
+init();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
