@@ -2,7 +2,7 @@
 import { render, screen } from 'utils/testUtils';
 
 // components
-import IndexPage from './index';
+import IndexPage from 'pages/index';
 
 test('render', () => {
   render(<IndexPage />);
