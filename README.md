@@ -1,6 +1,6 @@
 # Sapien Web V3
 
-Web App using the [NextJS Framework](https://nextjs.org/)
+![CI Passing](https://github.com/SapienNetwork/web/workflows/CI/badge.svg)
 
 ## Getting started
 
