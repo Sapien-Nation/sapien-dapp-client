@@ -6,7 +6,7 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': '<rootDir>/node_modules/babel-jest'
   },
-  coverageReporters: ['lcov', 'text-summary'],
+  coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   collectCoverageFrom: ['src/**/*.{ts,tsx}', '!<rootDir>/node_modules/'],
   coverageThreshold: {
     global: {
