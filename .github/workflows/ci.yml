@@ -23,7 +23,7 @@ jobs:
           node-version: 15.5.0
 
       - name: Install
-        run: npm ci
+        run: npm ci --only=production
 
       - name: Lint
         run: npm run lint
