@@ -73,9 +73,9 @@
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
+      "npm run test:badges",
       "eslint --fix --max-warnings=0",
-      "jest --forceExit --findRelatedTests --maxWorkers=2",
-      "npm run test:badges"
+      "jest --forceExit --findRelatedTests --maxWorkers=2"
     ]
   }
 }
