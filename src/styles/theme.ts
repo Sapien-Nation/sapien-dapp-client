@@ -1,5 +1,7 @@
 // mui
 import { createMuiTheme } from '@material-ui/core/styles';
+
+// styles
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
