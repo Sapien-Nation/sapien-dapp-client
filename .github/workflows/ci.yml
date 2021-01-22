@@ -9,7 +9,7 @@ on:
 
 jobs:
   validate:
-    name: 'Linting & Test'
+    name: 'Lint & Test'
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Current Builds
@@ -17,15 +17,21 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{secrets.GIT_PAT}}
+
       - name: Setup Node
         uses: actions/setup-node@v2-beta
         with:
           node-version: 15.5.0
 
       - name: Install
-        run: npm ci --only=production
+        run: npm ci
 
       - name: Lint
         run: npm run lint
+
       - name: Tests
         run: npm run test:coverage
