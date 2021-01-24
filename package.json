@@ -12,6 +12,19 @@
     "test:badges": "npm run test:coverage  && jest-coverage-badges --output ./badges",
     "test:coverage": "jest --colors --coverage --forceExit"
   },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./**/*.{ts,tsx}": [
+      "npm run test:badges",
+      "eslint --fix --max-warnings=0",
+      "jest --forceExit --findRelatedTests --maxWorkers=2"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SapienNetwork/web.git"
@@ -28,11 +41,14 @@
   },
   "homepage": "https://github.com/SapienNetwork/web#readme",
   "dependencies": {
+    "@commitlint/cli": "^11.0.0",
     "@material-ui/core": "^4.11.2",
     "@sentry/browser": "^6.0.1",
     "@sentry/integrations": "^6.0.1",
     "@sentry/node": "^6.0.1",
     "@sentry/webpack-plugin": "^1.14.0",
+    "commitlint-config-jira": "^1.4.1",
+    "commitlint-plugin-jira-rules": "^1.4.0",
     "jest-coverage-badges": "^1.1.2",
     "next": "^10.0.5",
     "react": "^17.0.1",
@@ -65,17 +81,5 @@
   },
   "engines": {
     "node": ">=15.0.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "./**/*.{ts,tsx}": [
-      "npm run test:badges",
-      "eslint --fix --max-warnings=0",
-      "jest --forceExit --findRelatedTests --maxWorkers=2"
-    ]
   }
 }
