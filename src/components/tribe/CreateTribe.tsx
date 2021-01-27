@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 // mui
-import { Box, Button, FormControl, Switch, TextField } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  DialogTitle,
+  FormControl,
+  Switch,
+  TextField
+} from '@material-ui/core';
 
 const tribe = {
   name: '',
@@ -42,6 +49,14 @@ const CreateTribe: React.FC = () => {
 
   const handleBack = () => {
     setStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const getTitle = () => {
+    return (
+      <DialogTitle id="tribe-dialog-title">
+        New Tribe {`${currentStep} / 2`}
+      </DialogTitle>
+    );
   };
 
   const renderContent = () => {
@@ -97,8 +112,8 @@ const CreateTribe: React.FC = () => {
 
   return (
     <Box>
+      {getTitle()}
       <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-        New Tribe {`${currentStep} / 2`}
         {renderContent()}
         <Button onClick={handleBack} disabled={currentStep === 1}>
           Cancel
