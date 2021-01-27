@@ -23,6 +23,21 @@ const theme = createMuiTheme({
           avertaRegular
         ] as unknown) as React.CSSProperties
       }
+    },
+    MuiDialogTitle: {
+      root: {
+        padding: 0
+      }
+    },
+    MuiDialogContent: {
+      root: {
+        padding: 0
+      }
+    },
+    MuiDialogActions: {
+      root: {
+        padding: 0
+      }
     }
   }
 });

@@ -1,13 +1,20 @@
-// core
-import React, { FC } from 'react';
+import { isValidElement } from 'react';
+
+// types
+import type { DialogProps } from '@material-ui/core/Dialog';
 
 // mui
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import MUIDialog, { DialogProps } from '@material-ui/core/Dialog';
-import { Box, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Typography,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  Dialog as MUIDialog
+} from '@material-ui/core';
 
-export interface Props extends Omit<DialogProps, 'title'> {
+interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
   isFetching?: boolean;
   onClose?: () => void;
@@ -21,7 +28,7 @@ export interface Props extends Omit<DialogProps, 'title'> {
   subtitle?: string | React.ReactNode;
 }
 
-const Dialog: FC<Props> = ({
+const Dialog: React.FC<Props> = ({
   isFetching,
   onClose,
   onCancel = onClose || (() => null),
@@ -32,7 +39,7 @@ const Dialog: FC<Props> = ({
   confirmLabel = 'Confirm',
   title,
   subtitle,
-  children = null,
+  children,
   actions = (
     <>
       {showCancel && (
@@ -51,18 +58,36 @@ const Dialog: FC<Props> = ({
 }) => {
   return (
     <MUIDialog aria-labelledby="dialog-title" {...rest}>
-      {typeof title === 'string' ? (
-        <DialogTitle id="dialog-title">{title}</DialogTitle>
-      ) : (
+      {isValidElement(title) ? (
         title
+      ) : (
+        <DialogTitle id="dialog-title">
+          <Box
+            fontSize="2.2rem"
+            fontWeight="600"
+            paddingTop="5rem"
+            paddingLeft="5rem"
+            paddingRight="5rem"
+          >
+            {title}
+          </Box>
+        </DialogTitle>
       )}
       {subtitle && (
         <Box>
           <Typography>{subtitle}</Typography>
         </Box>
       )}
-      {children}
-      {actions}
+      <DialogContent>
+        <Box paddingLeft="5rem" paddingRight="5rem">
+          {children}
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Box paddingBottom="5rem" paddingLeft="5rem" paddingRight="5rem">
+          {actions}
+        </Box>
+      </DialogActions>
     </MUIDialog>
   );
 };
