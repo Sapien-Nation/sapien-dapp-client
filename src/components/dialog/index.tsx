@@ -65,9 +65,6 @@ const Dialog: React.FC<Props> = ({
           <Box
             fontSize="2.2rem"
             fontWeight="600"
-            paddingTop="5rem"
-            paddingLeft="5rem"
-            paddingRight="5rem"
           >
             {title}
           </Box>
@@ -79,12 +76,12 @@ const Dialog: React.FC<Props> = ({
         </Box>
       )}
       <DialogContent>
-        <Box paddingLeft="5rem" paddingRight="5rem">
+        <Box>
           {children}
         </Box>
       </DialogContent>
       <DialogActions>
-        <Box paddingBottom="5rem" paddingLeft="5rem" paddingRight="5rem">
+        <Box>
           {actions}
         </Box>
       </DialogActions>

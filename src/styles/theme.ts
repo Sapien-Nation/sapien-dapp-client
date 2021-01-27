@@ -26,17 +26,17 @@ const theme = createMuiTheme({
     },
     MuiDialogTitle: {
       root: {
-        padding: 0
+        padding: '5rem 5rem 0 5rem'
       }
     },
     MuiDialogContent: {
       root: {
-        padding: 0
+        padding: '1rem 5rem'
       }
     },
     MuiDialogActions: {
       root: {
-        padding: 0
+        padding: '1rem 5rem 5rem 5rem'
       }
     }
   }
