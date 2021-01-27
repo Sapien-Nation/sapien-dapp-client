@@ -1,36 +1,39 @@
-import { useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+
 // mui
-import { Box, Button, Switch, TextField, FormControl } from '@material-ui/core';
+import { Box, Button, FormControl, Switch, TextField } from '@material-ui/core';
+
+const tribe = {
+  name: '',
+  type: false,
+  cover: '',
+  avatar: '',
+  description: '',
+  unique_identifier: ''
+};
+
+enum Steps {
+  TribeInfo = 1,
+  TribeMedia
+}
 
 const CreateTribe: React.FC = () => {
-  const steps = 2;
-  const tribe = {
-    name: '',
-    type: false,
-    cover: '',
-    avatar: '',
-    description: '',
-    unique_identifier: ''
-  };
-  const [tribeData, setTribeData] = useState(tribe);
-  const [currentStep, setStep] = useState(1);
-  console.log(tribeData);
+  const [data, setData] = useState(tribe);
+  const [currentStep, setStep] = useState(Steps.TribeInfo);
   const { register, handleSubmit, errors } = useForm();
 
   const handleFormSubmit = (data) => {
-    console.log(data);
-    setTribeData(data);
+    setData(data);
     handleNext();
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTribeData({ ...tribeData, [event.target.name]: event.target.checked });
+    setData({ ...data, [event.target.name]: event.target.checked });
   };
 
   const handleNext = () => {
     if (currentStep === 2) {
-      console.log(tribeData);
       console.log('Submitted!');
       return;
     }
@@ -43,7 +46,7 @@ const CreateTribe: React.FC = () => {
 
   const renderContent = () => {
     switch (currentStep) {
-      case 1: {
+      case Steps.TribeInfo: {
         return (
           <Box>
             <FormControl fullWidth variant="outlined">
@@ -54,7 +57,7 @@ const CreateTribe: React.FC = () => {
                 margin="dense"
                 variant="outlined"
                 inputRef={register({ required: true })}
-                defaultValue={tribeData.name}
+                defaultValue={data.name}
               />
               {errors.name && <span>This field is required</span>}
             </FormControl>
@@ -66,22 +69,22 @@ const CreateTribe: React.FC = () => {
                 margin="dense"
                 variant="outlined"
                 inputRef={register({ required: true })}
-                defaultValue={tribeData.unique_identifier}
+                defaultValue={data.unique_identifier}
               />
               {errors.unique_identifier && <span>This field is required</span>}
             </FormControl>
             <Switch
               color="primary"
               name="type"
-              checked={tribeData.type}
+              checked={data.type}
               onChange={handleTypeChange}
-              inputRef={register({ required: true })}
+              inputRef={register()}
               inputProps={{ 'aria-label': 'Tribe type' }}
             />
           </Box>
         );
       }
-      case 2: {
+      case Steps.TribeMedia: {
         return (
           <Box>
             <p>Avatar Upload</p>
@@ -95,7 +98,7 @@ const CreateTribe: React.FC = () => {
   return (
     <Box>
       <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-        New Tribe {`${currentStep} / ${steps}`}
+        New Tribe {`${currentStep} / 2`}
         {renderContent()}
         <Button onClick={handleBack} disabled={currentStep === 1}>
           Cancel
