@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import Dialog from 'components/dialog';
 import { Controller, useForm } from 'react-hook-form';
 
 // mui
-import { FormControl, Switch, TextField, Typography } from '@material-ui/core';
+import { FormControl, Switch, TextField } from '@material-ui/core';
 
 const defaultValues = {
   name: '',
@@ -15,7 +16,11 @@ enum Step {
   TribeMedia
 }
 
-const CreateTribe: React.FC = () => {
+interface Props {
+  onClose: () => void;
+}
+
+const CreateTribe: React.FC<Props> = ({ onClose }) => {
   const [step] = useState(Step.TribeSummary);
 
   const { control, errors, handleSubmit, register /* watch */ } = useForm({
@@ -85,12 +90,15 @@ const CreateTribe: React.FC = () => {
   };
 
   return (
-    <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-      <Typography variant="h1">
-        New Tribe {`${step === Step.TribeSummary ? 1 : 2} / 2`}
-      </Typography>
-      {renderContent()}
-    </form>
+    <Dialog
+      open
+      title={`New Tribe ${step === Step.TribeSummary ? 1 : 2} / 2`}
+      onClose={onClose}
+    >
+      <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
+        {renderContent()}
+      </form>
+    </Dialog>
   );
 };
 

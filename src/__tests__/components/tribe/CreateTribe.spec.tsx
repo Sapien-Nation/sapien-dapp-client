@@ -5,7 +5,13 @@ import { render, screen } from 'utils/testUtils';
 import CreateTribe from 'components/tribe/CreateTribe';
 
 test('renders', () => {
-  render(<CreateTribe />);
+  render(
+    <CreateTribe
+      onClose={() => {
+        return;
+      }}
+    />
+  );
 
   expect(screen.getByRole('heading', { name: /new tribe/i })).toHaveTextContent(
     '1 / 2'
