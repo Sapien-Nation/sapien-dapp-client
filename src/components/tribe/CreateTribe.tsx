@@ -1,126 +1,96 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 // mui
-import {
-  Box,
-  Button,
-  DialogTitle,
-  FormControl,
-  Switch,
-  TextField
-} from '@material-ui/core';
+import { FormControl, Switch, TextField, Typography } from '@material-ui/core';
 
-const tribe = {
+const defaultValues = {
   name: '',
   type: false,
-  cover: '',
-  avatar: '',
-  description: '',
   unique_identifier: ''
 };
 
-enum Steps {
-  TribeInfo = 1,
+enum Step {
+  TribeSummary,
   TribeMedia
 }
 
 const CreateTribe: React.FC = () => {
-  const [data, setData] = useState(tribe);
-  const [currentStep, setStep] = useState(Steps.TribeInfo);
-  const { register, handleSubmit, errors } = useForm();
+  const [step] = useState(Step.TribeSummary);
+
+  const { control, errors, handleSubmit, register /* watch */ } = useForm({
+    defaultValues
+  });
+
+  // TODO handleNext w/Dialog
+  // const handleNext = () => {};
+
+  // TODO handleFormSubmit w/Dialog
+
+  // TODO remove me: debugging
+  // console.log(watch('name'));
+  // console.log(watch('unique_identifier'));
+  // console.log(watch('type'));
 
   const handleFormSubmit = (data) => {
-    setData(data);
-    handleNext();
-  };
-
-  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, [event.target.name]: event.target.checked });
-  };
-
-  const handleNext = () => {
-    if (currentStep === 2) {
-      console.log('Submitted!');
-      return;
-    }
-    setStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const getTitle = () => {
-    return (
-      <DialogTitle id="tribe-dialog-title">
-        New Tribe {`${currentStep} / 2`}
-      </DialogTitle>
-    );
+    console.log(data);
   };
 
   const renderContent = () => {
-    switch (currentStep) {
-      case Steps.TribeInfo: {
+    switch (step) {
+      case Step.TribeSummary: {
         return (
-          <Box>
+          <>
             <FormControl fullWidth variant="outlined">
               <TextField
-                id="name"
                 name="name"
                 label="Name"
                 margin="dense"
                 variant="outlined"
                 inputRef={register({ required: true })}
-                defaultValue={data.name}
               />
               {errors.name && <span>This field is required</span>}
             </FormControl>
             <FormControl fullWidth variant="outlined">
               <TextField
-                id="handle"
                 name="unique_identifier"
                 label="Unique Identifier"
                 margin="dense"
                 variant="outlined"
                 inputRef={register({ required: true })}
-                defaultValue={data.unique_identifier}
               />
               {errors.unique_identifier && <span>This field is required</span>}
             </FormControl>
-            <Switch
-              color="primary"
+            <Controller
               name="type"
-              checked={data.type}
-              onChange={handleTypeChange}
-              inputRef={register()}
-              inputProps={{ 'aria-label': 'Tribe type' }}
+              control={control}
+              defaultValue={defaultValues.type}
+              rules={{ required: true }}
+              render={(props) => (
+                <Switch
+                  color="primary"
+                  onChange={(e) => props.onChange(e.target.checked)}
+                  checked={props.value}
+                  inputProps={{ 'aria-label': 'Tribe Type' }}
+                />
+              )}
             />
-          </Box>
+          </>
         );
       }
-      case Steps.TribeMedia: {
-        return (
-          <Box>
-            <p>Avatar Upload</p>
-            <p>Cover Upload</p>
-          </Box>
-        );
+      case Step.TribeMedia: {
+        return 'TODO';
       }
     }
   };
 
   return (
-    <Box>
-      {getTitle()}
-      <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-        {renderContent()}
-        <Button onClick={handleBack} disabled={currentStep === 1}>
-          Cancel
-        </Button>
-        <Button type="submit">Next</Button>
-      </form>
-    </Box>
+    <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
+      <Typography variant="h1">
+        New Tribe {`${step === Step.TribeSummary ? 1 : 2} / 2`}
+      </Typography>
+      {renderContent()}
+    </form>
   );
 };
 
