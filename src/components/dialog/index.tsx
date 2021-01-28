@@ -7,7 +7,6 @@ import type { DialogProps } from '@material-ui/core/Dialog';
 import {
   Box,
   Button,
-  Typography,
   DialogTitle,
   DialogActions,
   DialogContent,
@@ -55,38 +54,22 @@ const Dialog: React.FC<Props> = ({
     </>
   ),
   ...rest
-}) => {
-  return (
-    <MUIDialog aria-labelledby="dialog-title" {...rest}>
-      {isValidElement(title) ? (
-        title
-      ) : (
-        <DialogTitle id="dialog-title">
-          <Box
-            fontSize="2.2rem"
-            fontWeight="600"
-          >
-            {title}
-          </Box>
-        </DialogTitle>
-      )}
-      {subtitle && (
-        <Box>
-          <Typography>{subtitle}</Typography>
-        </Box>
-      )}
-      <DialogContent>
-        <Box>
-          {children}
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Box>
-          {actions}
-        </Box>
-      </DialogActions>
-    </MUIDialog>
-  );
-};
+}) => (
+  // TODO add close icon
+  <MUIDialog aria-labelledby="dialog-title" {...rest}>
+    {isValidElement(title) ? (
+      title
+    ) : (
+      <DialogTitle id="dialog-title">{title}</DialogTitle>
+    )}
+    {subtitle}
+    <DialogContent>
+      <Box>{children}</Box>
+    </DialogContent>
+    <DialogActions>
+      <Box>{actions}</Box>
+    </DialogActions>
+  </MUIDialog>
+);
 
 export default Dialog;
