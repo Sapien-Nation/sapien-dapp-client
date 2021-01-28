@@ -1,5 +1,5 @@
 // utils
-import { render, screen, user } from 'utils/testUtils';
+import { render, screen, user, getRoles } from 'utils/testUtils';
 
 // mui
 import { Typography } from '@material-ui/core';
@@ -33,12 +33,18 @@ test('default', () => {
   // default
   const cancelButton = screen.getByRole('button', { name: /cancel/i });
   const confirmButton = screen.getByRole('button', { name: /confirm/i });
+  const closeButton = screen.getByRole('button', { name: /close/i });
   expect(screen.getByRole('heading', { name: /dialog/i })).toBeInTheDocument();
   expect(cancelButton).toBeInTheDocument();
   expect(confirmButton).toBeInTheDocument();
+  expect(closeButton).toBeInTheDocument();
 
   // children
   expect(screen.getByRole('heading', { name: /children/i })).toBeInTheDocument();
+
+  // onClose
+  user.click(closeButton);
+  expect(onCancel).toHaveBeenCalled();
 
   // onCancel
   user.click(cancelButton);
@@ -82,7 +88,25 @@ describe('actions', () => {
     ).not.toBeInTheDocument();
   });
 
-  // TODO
-  // custom actions: renderComponent({ actions: <button>Click</button> });
-  // labels:
+  test('custom actions', () => {
+    renderComponent({
+      actions: (
+        <form aria-label="actions">
+          <button>Back</button>
+          <button>Next</button>
+        </form>
+      )
+    });
+    expect(screen.getByRole('form', { name: /actions/i })).toBeInTheDocument();
+  });
+});
+
+test('labels', () => {
+  renderComponent({ cancelLabel: 'Cancel', confirmLabel: 'Confirm' });
+  expect(screen.getByRole('button', { name: /cancel/i })).toHaveTextContent(
+    'Cancel'
+  );
+  expect(screen.getByRole('button', { name: /confirm/i })).toHaveTextContent(
+    'Confirm'
+  );
 });

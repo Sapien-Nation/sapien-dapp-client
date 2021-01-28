@@ -7,11 +7,16 @@ import type { DialogProps } from '@material-ui/core/Dialog';
 import {
   Box,
   Button,
+  makeStyles,
+  IconButton,
   DialogTitle,
   DialogActions,
   DialogContent,
   Dialog as MUIDialog
 } from '@material-ui/core';
+
+// icons
+import CloseIcon from '@material-ui/icons/Close';
 
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
@@ -26,6 +31,17 @@ interface Props extends Omit<DialogProps, 'title'> {
   title: string | React.ReactNode;
   subtitle?: string | React.ReactNode;
 }
+
+const useStyles = makeStyles(() => ({
+  root: () => ({
+    top: '1rem',
+    right: '1rem',
+    color: '#ccc',
+    cursor: 'pointer',
+    padding: 0,
+    position: 'absolute'
+  })
+}));
 
 const Dialog: React.FC<Props> = ({
   isFetching,
@@ -54,22 +70,27 @@ const Dialog: React.FC<Props> = ({
     </>
   ),
   ...rest
-}) => (
-  // TODO add close icon
-  <MUIDialog aria-labelledby="dialog-title" {...rest}>
-    {isValidElement(title) ? (
-      title
-    ) : (
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
-    )}
-    {subtitle}
-    <DialogContent>
-      <Box>{children}</Box>
-    </DialogContent>
-    <DialogActions>
-      <Box>{actions}</Box>
-    </DialogActions>
-  </MUIDialog>
-);
+}) => {
+  const classes = useStyles();
+  return (
+    <MUIDialog aria-labelledby="dialog-title" {...rest}>
+      <IconButton className={classes.root} aria-label="close" onClick={onCancel}>
+        <CloseIcon />
+      </IconButton>
+      {isValidElement(title) ? (
+        title
+      ) : (
+        <DialogTitle id="dialog-title">{title}</DialogTitle>
+      )}
+      {subtitle}
+      <DialogContent>
+        <Box>{children}</Box>
+      </DialogContent>
+      <DialogActions>
+        <Box>{actions}</Box>
+      </DialogActions>
+    </MUIDialog>
+  );
+};
 
 export default Dialog;
