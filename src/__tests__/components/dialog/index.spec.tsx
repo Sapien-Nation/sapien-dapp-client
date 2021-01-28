@@ -1,5 +1,5 @@
 // utils
-import { render, screen, user, getRoles } from 'utils/testUtils';
+import { render, screen, user } from 'utils/testUtils';
 
 // mui
 import { Typography } from '@material-ui/core';
@@ -53,8 +53,6 @@ test('default', () => {
   // onSubmit
   user.click(confirmButton);
   expect(onConfirm).toHaveBeenCalled();
-
-  //TODO test for onClose
 
   // subtitle
   expect(screen.getByRole('button', { name: /stepper/i })).toBeInTheDocument();

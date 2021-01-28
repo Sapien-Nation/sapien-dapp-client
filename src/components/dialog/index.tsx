@@ -15,7 +15,6 @@ import {
   Dialog as MUIDialog
 } from '@material-ui/core';
 
-// icons
 import CloseIcon from '@material-ui/icons/Close';
 
 interface Props extends Omit<DialogProps, 'title'> {
