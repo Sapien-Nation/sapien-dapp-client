@@ -57,12 +57,18 @@ const Dialog: React.FC<Props> = ({
   actions = (
     <>
       {showCancel && (
-        <Button disabled={isFetching} onClick={onCancel}>
+        <Button disabled={isFetching} onClick={onCancel} disableRipple>
           {cancelLabel}
         </Button>
       )}
       {showConfirm && (
-        <Button disabled={isFetching} onClick={onConfirm}>
+        <Button
+          color="primary"
+          variant="contained"
+          disabled={isFetching}
+          onClick={onConfirm}
+          disableRipple
+        >
           {confirmLabel}
         </Button>
       )}
