@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import Dialog from 'components/dialog';
 import { Controller, useForm } from 'react-hook-form';
+
+//components
+import Dialog from 'components/dialog';
 
 // mui
 import { FormControl, Switch, TextField } from '@material-ui/core';
