@@ -45,7 +45,7 @@
     "@material-ui/core": "^4.11.3",
     "@sentry/browser": "^6.0.2",
     "@sentry/integrations": "^6.0.3",
-    "@sentry/node": "^6.0.2",
+    "@sentry/node": "^6.0.4",
     "@sentry/webpack-plugin": "^1.14.0",
     "commitlint-config-jira": "^1.4.1",
     "commitlint-plugin-jira-rules": "^1.4.0",
