@@ -2,18 +2,35 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 // styles
+import colors from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
+  spacing: (factor) => `${parseFloat((0.8 * factor).toFixed(2))}rem`,
   palette: {
     type: 'light',
     common: {
-      black: '#333333'
+      black: colors.black
     },
     primary: {
-      light: '#6200EA',
-      main: '#6200EA',
-      dark: '#6200EA'
+      light: colors.purple,
+      main: colors.purple,
+      dark: colors.purple
+    },
+    formLabel: {
+      light: colors.black,
+      main: colors.black,
+      dark: colors.black
+    },
+    caption: {
+      light: colors.darkGrey,
+      main: colors.darkGrey,
+      dark: colors.darkGrey
+    },
+    input: {
+      light: colors.inputBG,
+      main: colors.inputBG,
+      dark: colors.inputBG
     }
   },
   typography: {
@@ -69,13 +86,26 @@ theme.overrides = {
   MuiInputLabel: {
     root: {
       fontSize: '1.4rem',
-      fontWeight: 600
+      fontWeight: 600,
+      transform: 'translate(0, 0) scale(1)',
+      color: theme.palette.formLabel.main
+    },
+    shrink: {
+      transform: 'translate(0, 0) scale(1)'
+    },
+    formControl: {
+      position: 'static'
+    }
+  },
+  MuiFormControl: {
+    root: {
+      marginBottom: `${theme.spacing(3)}`
     }
   },
   MuiInput: {
     root: {
-      outline: `1px solid transparent`,
-      border: `1px solid #ccc`,
+      border: `2px solid transparent`,
+      background: theme.palette.input.main,
       padding: theme.spacing(1, 2),
       borderRadius: '0.6rem',
       minHeight: '4.6rem',
@@ -83,14 +113,28 @@ theme.overrides = {
       '&$focused': {
         borderRadius: '0.6rem',
         border: `2px solid ${theme.palette.primary.main}`,
-        boxSizing: 'border-box',
-        outline: `1px solid ${theme.palette.primary.main}`
+        boxSizing: 'border-box'
+      }
+    },
+    formControl: {
+      'label + &': {
+        marginTop: theme.spacing(3)
       }
     },
     input: {
       padding: 0
     }
     // we don't need `focused: {}` with overrides
+  },
+  MuiTypography: {
+    caption: {
+      color: theme.palette.caption.main
+    }
+  },
+  MuiInputAdornment: {
+    positionStart: {
+      color: theme.palette.caption.main
+    }
   }
 };
 

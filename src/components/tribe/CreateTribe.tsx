@@ -5,11 +5,20 @@ import { Controller, useForm } from 'react-hook-form';
 import Dialog from 'components/dialog';
 
 // mui
-import { FormControl, Switch, TextField } from '@material-ui/core';
+import {
+  Box,
+  Input,
+  Switch,
+  Typography,
+  InputLabel,
+  FormControl,
+  InputAdornment
+} from '@material-ui/core';
 
 const defaultValues = {
   name: '',
   type: false,
+  description: '',
   unique_identifier: ''
 };
 
@@ -48,22 +57,71 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
       case Step.TribeSummary: {
         return (
           <>
-            <FormControl fullWidth variant="outlined">
-              <TextField
+            <FormControl required fullWidth>
+              <Box
+                mb={1}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Typography variant="caption">
+                  {defaultValues.description.length} / 36
+                </Typography>
+              </Box>
+              <Input
+                id="name"
                 name="name"
-                label="Name"
                 inputRef={register({ required: true })}
+                fullWidth
                 placeholder="Name"
               />
               {errors.name && <span>This field is required</span>}
             </FormControl>
-            <FormControl fullWidth variant="outlined">
-              <TextField
+            <FormControl required fullWidth>
+              <Box
+                mb={1.6}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="unique_identifier">
+                  Unique Identifier
+                </InputLabel>
+                <Typography variant="caption">12 / 36</Typography>
+              </Box>
+              <Input
+                id="unique_identifier"
                 name="unique_identifier"
-                label="Unique Identifier"
                 inputRef={register({ required: true })}
+                fullWidth
+                startAdornment={<InputAdornment position="start">@</InputAdornment>}
               />
               {errors.unique_identifier && <span>This field is required</span>}
+            </FormControl>
+            <FormControl required fullWidth>
+              <Box
+                mb={1.6}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <Typography variant="caption">12 / 36</Typography>
+              </Box>
+              <Input
+                id="description"
+                name="description"
+                rows={3}
+                rowsMax={5}
+                inputRef={register}
+                fullWidth
+                multiline
+                placeholder="Set brief description"
+              />
             </FormControl>
             <Controller
               name="type"
