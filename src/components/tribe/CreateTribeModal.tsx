@@ -43,10 +43,6 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
     console.log(data);
   };
 
-  const handleFormSubmit = (data) => {
-    console.log(data);
-  };
-
   const renderContent = () => {
     switch (step) {
       case Step.TribeSummary: {

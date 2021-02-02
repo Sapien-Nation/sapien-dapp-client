@@ -56,16 +56,6 @@ test('default', () => {
 
   // subtitle
   expect(screen.getByRole('button', { name: /stepper/i })).toBeInTheDocument();
-
-  // isFetching
-  rerender(
-    <Dialog {...defaultProps} isFetching>
-      <h1>children</h1>
-    </Dialog>
-  );
-
-  expect(cancelButton).toBeDisabled();
-  expect(confirmButton).toBeDisabled();
 });
 
 test('title node', () => {

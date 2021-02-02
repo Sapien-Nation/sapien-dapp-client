@@ -2,7 +2,7 @@
 import { render, screen } from 'utils/testUtils';
 
 // components
-import CreateTribe from 'components/tribe/CreateTribe';
+import CreateTribe from 'components/tribe/CreateTribeModal';
 
 // mocks
 const onClose = jest.fn();
