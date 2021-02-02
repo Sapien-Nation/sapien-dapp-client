@@ -3,7 +3,7 @@ import { withStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Switch, { SwitchClassKey, SwitchProps } from '@material-ui/core/Switch';
 
 // styles
-import colors from 'styles/colors';
+import { green, darker } from 'styles/colors';
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;
@@ -26,7 +26,7 @@ const StyledSwitch = withStyles((theme: Theme) =>
         transform: 'translateX(18px)',
         color: theme.palette.common.white,
         '& + $track': {
-          backgroundColor: colors.green,
+          backgroundColor: green,
           opacity: 1,
           border: 'none'
         }
@@ -39,7 +39,7 @@ const StyledSwitch = withStyles((theme: Theme) =>
     track: {
       borderRadius: 26 / 2,
       border: `1px solid ${theme.palette.input.main}`,
-      backgroundColor: colors.darkerBackground,
+      backgroundColor: darker,
       opacity: 1,
       transition: theme.transitions.create(['background-color', 'border'])
     },

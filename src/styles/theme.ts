@@ -2,7 +2,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 // styles
-import colors from './colors';
+import { black, purple, darkGrey, inputBG, lightGrey } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
@@ -10,32 +10,32 @@ const theme = createMuiTheme({
   palette: {
     type: 'light',
     common: {
-      black: colors.black
+      black: black
     },
     primary: {
-      light: colors.purple,
-      main: colors.purple,
-      dark: colors.purple
+      light: purple,
+      main: purple,
+      dark: purple
     },
     formLabel: {
-      light: colors.black,
-      main: colors.black,
-      dark: colors.black
+      light: black,
+      main: black,
+      dark: black
     },
     caption: {
-      light: colors.darkGrey,
-      main: colors.darkGrey,
-      dark: colors.darkGrey
+      light: darkGrey,
+      main: darkGrey,
+      dark: darkGrey
     },
     input: {
-      light: colors.inputBG,
-      main: colors.inputBG,
-      dark: colors.inputBG
+      light: inputBG,
+      main: inputBG,
+      dark: inputBG
     },
     infoIcon: {
-      light: colors.lightGrey,
-      main: colors.lightGrey,
-      dark: colors.lightGrey
+      light: lightGrey,
+      main: lightGrey,
+      dark: lightGrey
     }
   },
   typography: {
