@@ -31,6 +31,11 @@ const theme = createMuiTheme({
       light: colors.inputBG,
       main: colors.inputBG,
       dark: colors.inputBG
+    },
+    infoIcon: {
+      light: colors.lightGrey,
+      main: colors.lightGrey,
+      dark: colors.lightGrey
     }
   },
   typography: {
@@ -129,6 +134,10 @@ theme.overrides = {
   MuiTypography: {
     caption: {
       color: theme.palette.caption.main
+    },
+    h2: {
+      fontSize: '2.2rem',
+      fontWeight: 600
     }
   },
   MuiInputAdornment: {
@@ -140,7 +149,11 @@ theme.overrides = {
 
 // Global button props
 theme.props = {
+  MuiIconButton: {
+    disableRipple: true
+  },
   MuiButton: {
+    disableRipple: true,
     disableElevation: true
   },
   MuiInputLabel: {

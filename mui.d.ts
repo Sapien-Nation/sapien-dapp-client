@@ -5,10 +5,12 @@ declare module '@material-ui/core/styles/createPalette' {
     input?: PaletteColor;
     formLabel?: PaletteColor;
     caption?: PaletteColor;
+    infoIcon?: PaletteColor;
   }
   interface PaletteOptions {
     input?: PaletteColorOptions;
     formLabel?: PaletteColorOptions;
     caption?: PaletteColorOptions;
+    infoIcon?: PaletteColorOptions;
   }
 }

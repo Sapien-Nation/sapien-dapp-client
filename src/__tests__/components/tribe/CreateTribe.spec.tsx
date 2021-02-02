@@ -14,7 +14,5 @@ const defaultProps = {
 test('renders', () => {
   render(<CreateTribe {...defaultProps} />);
 
-  expect(screen.getByRole('heading', { name: /new tribe/i })).toHaveTextContent(
-    '1 / 2'
-  );
+  expect(screen.getByRole('heading', { name: /new tribe/i })).toBeInTheDocument();
 });
