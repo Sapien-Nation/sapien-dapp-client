@@ -22,7 +22,7 @@ interface Props {
   onClose: () => void;
 }
 
-const CreateTribe: React.FC<Props> = ({ onClose }) => {
+const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
   const [step] = useState(Step.TribeSummary);
 
   const { control, errors, handleSubmit, register /* watch */ } = useForm({
@@ -38,6 +38,10 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
   // console.log(watch('name'));
   // console.log(watch('unique_identifier'));
   // console.log(watch('type'));
+
+  const handleFormSubmit = (data) => {
+    console.log(data);
+  };
 
   const handleFormSubmit = (data) => {
     console.log(data);
@@ -104,4 +108,4 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-export default CreateTribe;
+export default CreateTribeModal;
