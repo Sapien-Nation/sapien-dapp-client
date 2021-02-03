@@ -1,5 +1,5 @@
 // mui
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core';
 
 // styles
 import {
@@ -14,7 +14,7 @@ import {
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
-  spacing: (factor) => `${parseFloat((0.8 * factor).toFixed(2))}rem`,
+  spacing: (factor) => `${parseFloat((1 * factor).toFixed(2))}rem`,
   palette: {
     type: 'light',
     common: {
@@ -139,7 +139,8 @@ theme.overrides = {
   },
   MuiTypography: {
     caption: {
-      color: theme.palette.caption.main
+      color: theme.palette.caption.main,
+      fontSize: '1.4rem'
     },
     h2: {
       fontSize: '2.2rem',

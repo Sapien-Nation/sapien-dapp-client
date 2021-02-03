@@ -1,15 +1,26 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+// mui
+import {
+  Box,
+  Input,
+  Switch,
+  IconButton,
+  Typography,
+  InputLabel,
+  FormControl,
+  InputAdornment
+} from '@material-ui/core';
+import { HelpOutlineOutlined as HelpIcon } from '@material-ui/icons';
+
 //components
 import Dialog from 'components/dialog';
-
-// mui
-import { FormControl, Switch, TextField } from '@material-ui/core';
 
 const defaultValues = {
   name: '',
   type: false,
+  description: '',
   unique_identifier: ''
 };
 
@@ -22,7 +33,7 @@ interface Props {
   onClose: () => void;
 }
 
-const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
+const CreateTribe: React.FC<Props> = ({ onClose }) => {
   const [step] = useState(Step.TribeSummary);
 
   const { control, errors, handleSubmit, register /* watch */ } = useForm({
@@ -48,25 +59,71 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
       case Step.TribeSummary: {
         return (
           <>
-            <FormControl fullWidth variant="outlined">
-              <TextField
+            <FormControl required fullWidth>
+              <Box
+                mb={1}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <Typography variant="caption">
+                  {defaultValues.description.length} / 36
+                </Typography>
+              </Box>
+              <Input
+                id="name"
                 name="name"
-                label="Name"
-                margin="dense"
-                variant="outlined"
                 inputRef={register({ required: true })}
+                fullWidth
+                placeholder="Name"
               />
               {errors.name && <span>This field is required</span>}
             </FormControl>
-            <FormControl fullWidth variant="outlined">
-              <TextField
+            <FormControl required fullWidth>
+              <Box
+                mb={1.6}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="unique_identifier">
+                  Unique Identifier
+                </InputLabel>
+                <Typography variant="caption">12 / 36</Typography>
+              </Box>
+              <Input
+                id="unique_identifier"
                 name="unique_identifier"
-                label="Unique Identifier"
-                margin="dense"
-                variant="outlined"
                 inputRef={register({ required: true })}
+                fullWidth
+                startAdornment={<InputAdornment position="start">@</InputAdornment>}
               />
               {errors.unique_identifier && <span>This field is required</span>}
+            </FormControl>
+            <FormControl required fullWidth>
+              <Box
+                mb={1.6}
+                display="flex"
+                alignItems="center"
+                flexDirection="row"
+                justifyContent="space-between"
+              >
+                <InputLabel htmlFor="description">Description</InputLabel>
+                <Typography variant="caption">12 / 36</Typography>
+              </Box>
+              <Input
+                id="description"
+                name="description"
+                rows={3}
+                rowsMax={5}
+                inputRef={register}
+                fullWidth
+                multiline
+                placeholder="Set brief description"
+              />
             </FormControl>
             <Controller
               name="type"
@@ -74,12 +131,38 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
               defaultValue={defaultValues.type}
               rules={{ required: true }}
               render={(props) => (
-                <Switch
-                  color="primary"
-                  onChange={(e) => props.onChange(e.target.checked)}
-                  checked={props.value}
-                  inputProps={{ 'aria-label': 'Tribe Type' }}
-                />
+                <FormControl fullWidth>
+                  <Box
+                    mb={1.6}
+                    display="flex"
+                    alignItems="center"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                  >
+                    <InputLabel htmlFor="unique_identifier">
+                      <Box
+                        display="flex"
+                        alignItems="center"
+                        flexDirection="row"
+                        justifyContent="space-between"
+                      >
+                        <Box component="span" mr={1}>
+                          Public tribe
+                        </Box>
+                        <IconButton aria-label="tribe type">
+                          <HelpIcon color="primary" />
+                        </IconButton>
+                      </Box>
+                    </InputLabel>
+                    <Switch
+                      color="default"
+                      onChange={(e) => props.onChange(e.target.checked)}
+                      checked={props.value}
+                      disableRipple
+                      inputProps={{ 'aria-label': 'Tribe Type' }}
+                    />
+                  </Box>
+                </FormControl>
               )}
             />
           </>
@@ -94,7 +177,29 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
   return (
     <Dialog
       open
-      title={`New Tribe ${step === Step.TribeSummary ? 1 : 2} / 2`}
+      title={
+        <Box
+          display="flex"
+          alignItems="center"
+          flexDirection="row"
+          justifyContent="space-between"
+          padding={5}
+        >
+          <Typography variant="h2">New Tribe</Typography>
+          <Typography variant="caption">
+            <Typography
+              variant="caption"
+              color="primary"
+              style={{
+                fontWeight: 600
+              }}
+            >
+              Step {step}
+            </Typography>{' '}
+            / 2
+          </Typography>
+        </Box>
+      }
       onClose={onClose}
     >
       <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
@@ -104,4 +209,4 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
   );
 };
 
-export default CreateTribeModal;
+export default CreateTribe;
