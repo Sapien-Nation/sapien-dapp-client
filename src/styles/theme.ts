@@ -2,7 +2,15 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 // styles
-import { black, purple, darkGrey, inputBG, lightGrey } from './colors';
+import {
+  black,
+  green,
+  purple,
+  darker,
+  darkGrey,
+  inputBG,
+  lightGrey
+} from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
@@ -83,7 +91,6 @@ theme.overrides = {
       minWidth: '8rem',
       fontWeight: 600
     },
-    text: {},
     containedSecondary: {
       fontWeight: 700
     }
@@ -129,7 +136,6 @@ theme.overrides = {
     input: {
       padding: 0
     }
-    // we don't need `focused: {}` with overrides
   },
   MuiTypography: {
     caption: {
@@ -144,6 +150,37 @@ theme.overrides = {
     positionStart: {
       color: theme.palette.caption.main
     }
+  },
+  MuiSwitch: {
+    root: {
+      width: 38,
+      height: 20,
+      padding: 0
+    },
+    switchBase: {
+      padding: 2,
+      '&$checked': {
+        transform: 'translateX(18px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          backgroundColor: green,
+          opacity: 1,
+          border: 'none'
+        }
+      }
+    },
+    thumb: {
+      width: 15,
+      height: 15
+    },
+    track: {
+      borderRadius: 26 / 2,
+      border: `1px solid ${theme.palette.input.main}`,
+      backgroundColor: darker,
+      opacity: 1,
+      transition: theme.transitions.create(['background-color', 'border'])
+    },
+    checked: {}
   }
 };
 
@@ -161,6 +198,9 @@ theme.props = {
   },
   MuiInput: {
     disableUnderline: true
+  },
+  MuiSwitch: {
+    disableRipple: true
   }
 };
 

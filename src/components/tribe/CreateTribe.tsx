@@ -3,12 +3,12 @@ import { Controller, useForm } from 'react-hook-form';
 
 //components
 import Dialog from 'components/dialog';
-import StyledSwitch from 'components/switch';
 
 // mui
 import {
   Box,
   Input,
+  Switch,
   IconButton,
   Typography,
   InputLabel,
@@ -52,31 +52,6 @@ interface Props {
   onClose: () => void;
 }
 
-interface titleProps {
-  step: number;
-}
-
-const TribeTitle: React.FC<titleProps> = ({ step }) => {
-  const classes = useStyles();
-  return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexDirection="row"
-      justifyContent="space-between"
-      className={classes.tribeTitle}
-    >
-      <Typography variant="h2">New Tribe</Typography>
-      <Typography variant="caption" className={classes.stepInfo}>
-        <Typography variant="caption" color="primary" className={classes.stepActive}>
-          Step {step}
-        </Typography>{' '}
-        / 2
-      </Typography>
-    </Box>
-  );
-};
-
 const CreateTribe: React.FC<Props> = ({ onClose }) => {
   const classes = useStyles();
   const [step] = useState(Step.TribeSummary);
@@ -97,6 +72,30 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
 
   const handleFormSubmit = (data) => {
     console.log(data);
+  };
+
+  const getTitle = () => {
+    return (
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="row"
+        justifyContent="space-between"
+        className={classes.tribeTitle}
+      >
+        <Typography variant="h2">New Tribe</Typography>
+        <Typography variant="caption" className={classes.stepInfo}>
+          <Typography
+            variant="caption"
+            color="primary"
+            className={classes.stepActive}
+          >
+            Step {step}
+          </Typography>{' '}
+          / 2
+        </Typography>
+      </Box>
+    );
   };
 
   const renderContent = () => {
@@ -199,8 +198,8 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                         </IconButton>
                       </Box>
                     </InputLabel>
-                    <StyledSwitch
-                      color="primary"
+                    <Switch
+                      color="default"
                       onChange={(e) => props.onChange(e.target.checked)}
                       checked={props.value}
                       disableRipple
@@ -220,11 +219,7 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
   };
 
   return (
-    <Dialog
-      open
-      title={<TribeTitle step={step === Step.TribeSummary ? 1 : 2} />}
-      onClose={onClose}
-    >
+    <Dialog open title={getTitle()} onClose={onClose}>
       <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
         {renderContent()}
       </form>
