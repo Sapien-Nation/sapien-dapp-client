@@ -24,10 +24,7 @@ import {
   ExploreRounded as ExploreIcon
 } from '@material-ui/icons';
 
-// components
-import CreateTribeModal from 'components/tribe/CreateTribeModal';
-
-const drawerWidth = 73;
+const drawerWidth = 72;
 
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
@@ -41,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => {
     nav: {
       cursor: 'pointer',
       gridArea: 'sidebar',
-      marginTop: `${theme.spacing(2)}px`
+      marginTop: `${theme.spacing(2)}`
     },
     avatar: {
       height: '4.5rem',
@@ -50,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => {
       borderRadius: 10,
       border: '2px solid',
       '& img': {
-        padding: `${theme.spacing(0.3)}px`,
+        padding: `${theme.spacing(0.3)}`,
         borderRadius: '9px'
       }
     },
@@ -66,20 +63,20 @@ const useStyles = makeStyles((theme: Theme) => {
       backgroundColor: 'rgba(249, 249, 250, 0.1)',
       borderRadius: '9px',
       '& svg': {
-        padding: `${theme.spacing(0.3)}px`
+        padding: `${theme.spacing(0.3)}`
       }
     }
   });
 });
 interface Props {
   tribes: Array<Tribe>;
+  setShowCreateTribeModal: (show: boolean) => void;
 }
 
-const Navbar: React.FC<Props> = ({ tribes }) => {
+const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
   const [tribeNavigation, setTribeNavigation] = useTribeNavigation();
-  const [showCreateTribeModal, setShowCreateTribeModal] = useState(false);
-
   const classes = useStyles();
+
   return (
     <>
       <Drawer
@@ -93,12 +90,11 @@ const Navbar: React.FC<Props> = ({ tribes }) => {
         <nav className={classes.nav}>
           {tribes.map((tribe) => (
             <Box
+              display="flex"
+              justifyContent="center"
+              marginBottom="2rem"
               key={tribe.id}
-              minWidth={72}
-              minHeight={64}
               onClick={() => setTribeNavigation(tribe)}
-              paddingX={2}
-              paddingY={1.5}
             >
               <Badge
                 classes={{
@@ -122,41 +118,37 @@ const Navbar: React.FC<Props> = ({ tribes }) => {
               </Badge>
             </Box>
           ))}
-          <Box paddingX={2} paddingY={1.5}>
-            <Box minWidth={72} minHeight={64}>
-              <Avatar
-                alt="Discover Tribe"
-                variant="square"
-                classes={{
-                  root: classes.avatarItems
-                }}
-              >
-                <ExploreIcon />
-              </Avatar>
-            </Box>
-            <Box
-              minWidth={72}
-              minHeight={64}
-              onClick={() => setShowCreateTribeModal(true)}
+          <Box display="flex" justifyContent="center" marginBottom="2rem">
+            <Avatar
+              alt="Discover Tribe"
+              variant="square"
+              classes={{
+                root: classes.avatarItems
+              }}
             >
-              <Avatar
-                alt="Create Tribe"
-                variant="square"
-                classes={{
-                  root: classes.avatarItems
-                }}
-              >
-                <AddIcon />
-              </Avatar>
-            </Box>
+              <ExploreIcon />
+            </Avatar>
+          </Box>
+          <Box
+            onClick={() => setShowCreateTribeModal(true)}
+            display="flex"
+            justifyContent="center"
+            marginBottom="2rem"
+          >
+            <Avatar
+              alt="Create Tribe"
+              variant="square"
+              classes={{
+                root: classes.avatarItems
+              }}
+            >
+              <AddIcon />
+            </Avatar>
           </Box>
         </nav>
       </Drawer>
-      {showCreateTribeModal && (
-        <CreateTribeModal onClose={() => setShowCreateTribeModal(false)} />
-      )}
     </>
   );
 };
 
-export default Navbar;
+export default TribeBar;

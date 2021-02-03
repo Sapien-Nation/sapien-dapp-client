@@ -48,7 +48,14 @@ const theme = createMuiTheme({
   },
   typography: {
     htmlFontSize: 10,
-    fontFamily: ['averta', 'Calibri', 'Arial', 'sans-serif'].join(',')
+    fontFamily: ['averta', 'Calibri', 'Arial', 'sans-serif'].join(','),
+    h5: {
+      color: darkGrey,
+      fontSize: '1.2rem',
+      fontWeight: 600,
+      textTransform: 'uppercase',
+      letterSpacing: '1.5px'
+    }
   }
 });
 

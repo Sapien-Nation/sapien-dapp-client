@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
   root: () => ({
     display: 'grid',
     gridTemplateAreas: "'sidebar main'",
-    gridTemplateColumns: '73px auto',
+    gridTemplateColumns: '72px 228px auto',
     height: '100vh',
     width: '100vw'
   })

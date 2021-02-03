@@ -23,11 +23,11 @@ import { TribeNavigationProvider } from 'context/tribes';
 
 // components
 const Layout = dynamic(() => import('./Layout'), { ssr: false });
-const Navbar = dynamic(() => import('components/navigation/Navbar'), { ssr: false });
+const Navbar = dynamic(() => import('components/navigation'), {
+  ssr: false
+});
 
 // mocks
-// TODO remove
-import { mockTribes } from 'mocks/tribe';
 
 initSentry();
 
@@ -53,9 +53,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <CssBaseline />
         <TribeNavigationProvider>
           <Layout>
-            <Navbar
-              tribes={mockTribes()}
-            />
+            <Navbar />
             <main>
               <Component {...pageProps} />
             </main>
