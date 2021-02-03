@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { useEffect, StrictMode } from 'react';
+import { useEffect } from 'react';
 
 // types
 import type { AppProps } from 'next/app';

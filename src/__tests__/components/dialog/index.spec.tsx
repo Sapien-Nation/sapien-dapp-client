@@ -28,7 +28,7 @@ const renderComponent = (props = {}) =>
   );
 
 test('default', () => {
-  const { rerender } = renderComponent({ subtitle: <button>Stepper</button> });
+  renderComponent({ subtitle: <button>Stepper</button> });
 
   // default
   const cancelButton = screen.getByRole('button', { name: /cancel/i });
