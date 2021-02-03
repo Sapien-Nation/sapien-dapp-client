@@ -1,8 +1,6 @@
-import { useState } from 'react';
-
 // types
-import { Tribe } from 'types/tribe';
-import { Theme } from '@material-ui/core/styles';
+import type { Tribe } from 'types/tribe';
+import type { Theme } from '@material-ui/core/styles';
 
 // context
 import { useTribeNavigation } from 'context/tribes';
@@ -41,8 +39,8 @@ const useStyles = makeStyles((theme: Theme) => {
       marginTop: `${theme.spacing(2)}`
     },
     avatar: {
-      height: '4.5rem',
-      width: '4.5rem',
+      height: theme.spacing(4.5),
+      width: theme.spacing(4.5),
       color: white,
       borderRadius: 10,
       border: '2px solid',
@@ -53,9 +51,9 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     badge: {
       top: '4px',
-      height: '1.9rem',
-      width: '2rem',
-      fontSize: '1rem',
+      height: theme.spacing(1.9),
+      width: theme.spacing(2),
+      fontSize: theme.spacing(1),
       border: `3px solid ${dark}`
     },
     avatarItems: {
@@ -78,76 +76,73 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
   const classes = useStyles();
 
   return (
-    <>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper
-        }}
-        anchor="left"
-      >
-        <nav className={classes.nav}>
-          {tribes.map((tribe) => (
-            <Box
-              display="flex"
-              justifyContent="center"
-              marginBottom="2rem"
-              key={tribe.id}
-              onClick={() => setTribeNavigation(tribe)}
-            >
-              <Badge
-                classes={{
-                  badge: classes.badge
-                }}
-                badgeContent={tribe.notificationNumber}
-                color="error"
-              >
-                <Avatar
-                  alt={tribe.name}
-                  src={tribe.image}
-                  style={{
-                    borderColor:
-                      tribe.id === tribeNavigation?.id ? white : darkPurple
-                  }}
-                  variant="square"
-                  classes={{
-                    root: classes.avatar
-                  }}
-                />
-              </Badge>
-            </Box>
-          ))}
-          <Box display="flex" justifyContent="center" marginBottom="2rem">
-            <Avatar
-              alt="Discover Tribe"
-              variant="square"
-              classes={{
-                root: classes.avatarItems
-              }}
-            >
-              <ExploreIcon />
-            </Avatar>
-          </Box>
+    <Drawer
+      className={classes.drawer}
+      variant="permanent"
+      classes={{
+        paper: classes.drawerPaper
+      }}
+      anchor="left"
+    >
+      <nav className={classes.nav}>
+        {tribes.map((tribe) => (
           <Box
-            onClick={() => setShowCreateTribeModal(true)}
             display="flex"
             justifyContent="center"
-            marginBottom="2rem"
+            marginBottom={2}
+            key={tribe.id}
+            onClick={() => setTribeNavigation(tribe)}
           >
-            <Avatar
-              alt="Create Tribe"
-              variant="square"
+            <Badge
               classes={{
-                root: classes.avatarItems
+                badge: classes.badge
               }}
+              badgeContent={tribe.notificationNumber}
+              color="error"
             >
-              <AddIcon />
-            </Avatar>
+              <Avatar
+                alt={tribe.name}
+                src={tribe.image}
+                style={{
+                  borderColor: tribe.id === tribeNavigation?.id ? white : darkPurple
+                }}
+                variant="square"
+                classes={{
+                  root: classes.avatar
+                }}
+              />
+            </Badge>
           </Box>
-        </nav>
-      </Drawer>
-    </>
+        ))}
+        <Box display="flex" justifyContent="center" marginBottom={2}>
+          <Avatar
+            alt="Discover Tribe"
+            variant="square"
+            classes={{
+              root: classes.avatarItems
+            }}
+          >
+            <ExploreIcon />
+          </Avatar>
+        </Box>
+        <Box
+          onClick={() => setShowCreateTribeModal(true)}
+          display="flex"
+          justifyContent="center"
+          marginBottom={2}
+        >
+          <Avatar
+            alt="Create Tribe"
+            variant="square"
+            classes={{
+              root: classes.avatarItems
+            }}
+          >
+            <AddIcon />
+          </Avatar>
+        </Box>
+      </nav>
+    </Drawer>
   );
 };
 

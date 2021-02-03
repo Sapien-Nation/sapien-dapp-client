@@ -2,6 +2,7 @@ import { isValidElement } from 'react';
 
 // types
 import type { DialogProps } from '@material-ui/core/Dialog';
+import type { Theme } from '@material-ui/core';
 
 // mui
 import {
@@ -31,10 +32,10 @@ interface Props extends Omit<DialogProps, 'title'> {
   subtitle?: string | React.ReactNode;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: () => ({
-    top: '1rem',
-    right: '1rem',
+    top: theme.spacing(1),
+    right: theme.spacing(1),
     color: '#ccc',
     cursor: 'pointer',
     padding: 0,

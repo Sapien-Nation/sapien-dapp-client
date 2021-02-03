@@ -27,8 +27,6 @@ const Navbar = dynamic(() => import('components/navigation'), {
   ssr: false
 });
 
-// mocks
-
 initSentry();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

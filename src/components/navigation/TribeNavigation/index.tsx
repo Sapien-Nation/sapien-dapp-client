@@ -1,18 +1,17 @@
 // types
-import { Tribe } from 'types/tribe';
-import { Theme } from '@material-ui/core/styles';
+import type { Theme } from '@material-ui/core/styles';
 
 // mui
 import {
+  Box,
   createStyles,
   Drawer,
   makeStyles,
-  Box,
   Typography
 } from '@material-ui/core';
 
-// icons
-import { BadgeStore, TribeName } from 'components/navigation/assets/svg';
+// assets
+import { BadgeStore, TribeName } from '../assets/svg';
 
 const drawerWidth = 228;
 
@@ -34,11 +33,8 @@ const useStyles = makeStyles((theme: Theme) => {
     }
   });
 });
-interface Props {
-  tribes?: Array<Tribe>;
-}
 
-const TribeNavigation: React.FC<Props> = () => {
+const TribeNavigation = () => {
   const classes = useStyles();
   return (
     <Drawer
@@ -50,15 +46,15 @@ const TribeNavigation: React.FC<Props> = () => {
       anchor="left"
     >
       <nav className={classes.nav}>
-        <Box display="flex" padding="2rem">
+        <Box display="flex" padding={2}>
           <TribeName />
-          <Box marginLeft="1.5rem">
+          <Box marginLeft={1.5}>
             <Typography variant="h5">Tribe Name</Typography>
           </Box>
         </Box>
-        <Box display="flex" padding="2rem">
+        <Box display="flex" padding={2}>
           <BadgeStore />
-          <Box marginLeft="1.5rem">
+          <Box marginLeft={1.5}>
             <Typography variant="h5">Badge Store</Typography>
           </Box>
         </Box>
