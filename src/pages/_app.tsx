@@ -25,6 +25,10 @@ import { TribeNavigationProvider } from 'context/tribes';
 const Layout = dynamic(() => import('./Layout'), { ssr: false });
 const Navbar = dynamic(() => import('components/navigation/Navbar'), { ssr: false });
 
+// mocks
+// TODO remove
+import { mockTribes } from 'mocks/tribe';
+
 initSentry();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
@@ -50,29 +54,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <TribeNavigationProvider>
           <Layout>
             <Navbar
-              tribes={[
-                {
-                  id: '1',
-                  name: 'name',
-                  image:
-                    'https://images.sapien.network/thumbnails/2d938ca6-f88f-4cf9-8014-dce8a62b557f-144x144.jpeg',
-                  notificationNumber: 40
-                },
-                {
-                  id: '2',
-                  name: 'general',
-                  image:
-                    'https://s3.amazonaws.com/sapien-default-tribes/icons/general.png',
-                  notificationNumber: 0
-                },
-                {
-                  id: '3',
-                  name: 'Crypto',
-                  image:
-                    'https://s3.amazonaws.com/sapien-default-tribes/icons/cryptocurrency.png',
-                  notificationNumber: 14
-                }
-              ]}
+              tribes={mockTribes()}
             />
             <main>
               <Component {...pageProps} />
