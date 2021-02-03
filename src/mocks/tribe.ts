@@ -10,5 +10,5 @@ export const mockTribe = ({ ...rest } = {}) => ({
 });
 
 export const mockTribes = () => {
-  return [tribe1, tribe2, tribe3, tribe4]
-}
+  return [tribe1, tribe2, tribe3, tribe4];
+};
