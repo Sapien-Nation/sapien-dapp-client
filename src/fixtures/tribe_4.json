@@ -1,6 +1,7 @@
 {
   "id": "4",
   "name": "Messages",
+  "channels": [],
   "image": "/fixtures/40x40/messaging.png",
   "notificationNumber": 0
 }

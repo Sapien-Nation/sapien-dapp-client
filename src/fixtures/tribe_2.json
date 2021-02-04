@@ -1,6 +1,7 @@
 {
   "id": "2",
   "name": "General",
+  "channels": [],
   "image": "/fixtures/40x40/folder.png",
   "notificationNumber": 0
 }

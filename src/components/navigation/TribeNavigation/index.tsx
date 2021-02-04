@@ -10,6 +10,9 @@ import {
   Typography
 } from '@material-ui/core';
 
+// context
+import { useTribeNavigation } from 'context/tribes';
+
 // assets
 import { BadgeStore, TribeName } from '../assets/svg';
 
@@ -35,6 +38,8 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 const TribeNavigation = () => {
+  const [tribeNavigation] = useTribeNavigation();
+
   const classes = useStyles();
   return (
     <Drawer
@@ -49,7 +54,7 @@ const TribeNavigation = () => {
         <Box display="flex" padding={2}>
           <TribeName />
           <Box marginLeft={1.5}>
-            <Typography variant="h5">Tribe Name</Typography>
+            <Typography variant="h5">{tribeNavigation.name}</Typography>
           </Box>
         </Box>
         <Box display="flex" padding={2}>
