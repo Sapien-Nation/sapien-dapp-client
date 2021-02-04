@@ -75,6 +75,11 @@ theme.overrides = {
       ] as unknown) as React.CSSProperties
     }
   },
+  MuiDialog: {
+    paper: {
+      borderRadius: '1rem'
+    }
+  },
   MuiDialogTitle: {
     root: {
       padding: '5rem 5rem 0 5rem'
@@ -118,7 +123,7 @@ theme.overrides = {
   },
   MuiFormControl: {
     root: {
-      marginBottom: `${theme.spacing(3)}`
+      marginBottom: `${theme.spacing(1.6)}`
     }
   },
   MuiInput: {
@@ -137,7 +142,7 @@ theme.overrides = {
     },
     formControl: {
       'label + &': {
-        marginTop: theme.spacing(3)
+        marginTop: theme.spacing(1.6)
       }
     },
     input: {

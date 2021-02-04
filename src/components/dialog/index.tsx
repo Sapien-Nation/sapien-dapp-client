@@ -6,7 +6,6 @@ import type { Theme } from '@material-ui/core';
 
 // mui
 import {
-  Box,
   Button,
   makeStyles,
   IconButton,
@@ -15,7 +14,7 @@ import {
   DialogContent,
   Dialog as MUIDialog
 } from '@material-ui/core';
-
+import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
 interface Props extends Omit<DialogProps, 'title'> {
@@ -40,7 +39,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     cursor: 'pointer',
     padding: 0,
     position: 'absolute'
-  })
+  }),
+  marginRight: {
+    marginRight: theme.spacing(1.6)
+  }
 }));
 
 const Dialog: React.FC<Props> = ({
@@ -58,7 +60,11 @@ const Dialog: React.FC<Props> = ({
   actions = (
     <>
       {showCancel && (
-        <Button disabled={isFetching} onClick={onCancel} disableRipple>
+        <Button
+          disabled={isFetching}
+          onClick={onCancel}
+          style={{ marginRight: useTheme().spacing(2) }}
+        >
           {cancelLabel}
         </Button>
       )}
@@ -68,7 +74,6 @@ const Dialog: React.FC<Props> = ({
           variant="contained"
           disabled={isFetching}
           onClick={onConfirm}
-          disableRipple
         >
           {confirmLabel}
         </Button>
@@ -89,12 +94,8 @@ const Dialog: React.FC<Props> = ({
         <DialogTitle id="dialog-title">{title}</DialogTitle>
       )}
       {subtitle}
-      <DialogContent>
-        <Box>{children}</Box>
-      </DialogContent>
-      <DialogActions>
-        <Box>{actions}</Box>
-      </DialogActions>
+      <DialogContent>{children}</DialogContent>
+      <DialogActions disableSpacing>{actions}</DialogActions>
     </MUIDialog>
   );
 };

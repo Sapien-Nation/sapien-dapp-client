@@ -12,6 +12,7 @@ import {
   FormControl,
   InputAdornment
 } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { HelpOutlineOutlined as HelpIcon } from '@material-ui/icons';
 
 //components
@@ -35,6 +36,7 @@ interface Props {
 
 const CreateTribe: React.FC<Props> = ({ onClose }) => {
   const [step] = useState(Step.TribeSummary);
+  const theme = useTheme();
 
   const { control, errors, handleSubmit, register /* watch */ } = useForm({
     defaultValues
@@ -103,7 +105,11 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
               />
               {errors.unique_identifier && <span>This field is required</span>}
             </FormControl>
-            <FormControl required fullWidth>
+            <FormControl
+              required
+              fullWidth
+              style={{ marginBottom: theme.spacing(0.5) }}
+            >
               <Box
                 mb={1.6}
                 display="flex"
@@ -133,7 +139,6 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
               render={(props) => (
                 <FormControl fullWidth>
                   <Box
-                    mb={1.6}
                     display="flex"
                     alignItems="center"
                     flexDirection="row"
@@ -146,11 +151,12 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                         flexDirection="row"
                         justifyContent="space-between"
                       >
-                        <Box component="span" mr={1}>
-                          Public tribe
-                        </Box>
-                        <IconButton aria-label="tribe type">
-                          <HelpIcon color="primary" />
+                        <Box component="span">Public tribe</Box>
+                        <IconButton
+                          style={{ color: theme.palette.infoIcon.main }}
+                          aria-label="tribe type"
+                        >
+                          <HelpIcon fontSize="small" />
                         </IconButton>
                       </Box>
                     </InputLabel>
@@ -183,7 +189,9 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
           alignItems="center"
           flexDirection="row"
           justifyContent="space-between"
-          padding={5}
+          px={5}
+          pb={2.5}
+          pt={5}
         >
           <Typography variant="h2">New Tribe</Typography>
           <Typography variant="caption">
