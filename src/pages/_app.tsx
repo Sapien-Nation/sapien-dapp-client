@@ -5,12 +5,11 @@ import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 
 // next
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, NoSsr } from '@material-ui/core';
 
 // utils
 import { init as initSentry } from 'utils/sentry';
@@ -22,10 +21,8 @@ import theme from 'styles/theme';
 import { NavigationProvider } from 'context/tribes';
 
 // components
-const Layout = dynamic(() => import('./Layout'), { ssr: false });
-const Navbar = dynamic(() => import('components/navigation'), {
-  ssr: false
-});
+import Layout from './Layout';
+import Navbar from 'components/navigation';
 
 initSentry();
 
@@ -51,7 +48,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <CssBaseline />
         <NavigationProvider>
           <Layout>
-            <Navbar />
+            <NoSsr>
+              <Navbar />
+            </NoSsr>
             <main>
               <Component {...pageProps} />
             </main>

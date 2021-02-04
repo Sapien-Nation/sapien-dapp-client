@@ -63,6 +63,10 @@ const useStyles = makeStyles((theme: Theme) => {
       '& svg': {
         padding: `${theme.spacing(0.3)}`
       }
+    },
+    img: {
+      width: '40px',
+      height: '40px'
     }
   });
 });
@@ -108,6 +112,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 }}
                 variant="square"
                 classes={{
+                  img: classes.img,
                   root: classes.avatar
                 }}
               />
@@ -119,7 +124,8 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             alt="Discover Tribe"
             variant="square"
             classes={{
-              root: classes.avatarItems
+              root: classes.avatarItems,
+              img: classes.img
             }}
           >
             <ExploreIcon />
@@ -135,6 +141,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             alt="Create Tribe"
             variant="square"
             classes={{
+              img: classes.img,
               root: classes.avatarItems
             }}
           >
