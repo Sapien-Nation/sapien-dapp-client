@@ -1,11 +1,15 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 
 // types
-import { Tribe } from 'types/tribe';
+import type { Tribe } from 'types/tribe';
 
-export const TribeNavigationStateContext = createContext<Tribe | null>(null);
-const TribeNavigationSetStateContext = createContext<(tribe: Tribe) => void | null>(
+interface Navigation {
+  tribe: Tribe | null;
+}
+
+export const NavigationContext = createContext<Navigation | null>(null);
+const NavigationDispatcher = createContext<(navigation: Navigation) => void | null>(
   null
 );
 
@@ -13,45 +17,46 @@ interface Props {
   children: React.ReactNode;
 }
 
-const TribeNavigationProvider: React.FC<Props> = ({ children }) => {
-  const [tribeNavigation, setTribeNavigation] = useLocalStorage(
-    'tribeNavigation',
-    null
-  );
+const NavigationProvider: React.FC<Props> = ({ children }) => {
+  const [navigation, setNavigation] = useLocalStorage('navigation', null);
+
+  useEffect(() => {
+    if (navigation === null || navigation?.tribe === null) {
+      // TODO fetch call to set always 1 tribe
+    }
+  }, []);
 
   return (
-    <TribeNavigationStateContext.Provider value={tribeNavigation}>
-      <TribeNavigationSetStateContext.Provider value={setTribeNavigation}>
+    <NavigationContext.Provider value={navigation}>
+      <NavigationDispatcher.Provider value={setNavigation}>
         {children}
-      </TribeNavigationSetStateContext.Provider>
-    </TribeNavigationStateContext.Provider>
+      </NavigationDispatcher.Provider>
+    </NavigationContext.Provider>
   );
 };
 
-function useTribeNavigationState() {
-  const context = useContext(TribeNavigationStateContext);
+function useNavigationState() {
+  const context = useContext(NavigationContext);
+
+  if (context === undefined) {
+    throw new Error('useNavigationState must be used within a NavigationProvider');
+  }
+  return context;
+}
+
+function useNavigationDispatcher() {
+  const context = useContext(NavigationDispatcher);
 
   if (context === undefined) {
     throw new Error(
-      'useTribeNavigationState must be used within a TribeNavigationProvider'
+      'useNavigationDispatcher must be used within a NavigationProvider'
     );
   }
   return context;
 }
 
-function useTribeNavigationSetState() {
-  const context = useContext(TribeNavigationSetStateContext);
-
-  if (context === undefined) {
-    throw new Error(
-      'useTribeNavigationSetState must be used within a TribeNavigationProvider'
-    );
-  }
-  return context;
+function useNavigation() {
+  return [useNavigationState(), useNavigationDispatcher()] as const;
 }
 
-function useTribeNavigation() {
-  return [useTribeNavigationState(), useTribeNavigationSetState()] as const;
-}
-
-export { TribeNavigationProvider, useTribeNavigation };
+export { NavigationProvider, useNavigation };

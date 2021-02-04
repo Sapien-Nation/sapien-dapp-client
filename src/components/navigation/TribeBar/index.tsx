@@ -3,7 +3,7 @@ import type { Tribe } from 'types/tribe';
 import type { Theme } from '@material-ui/core/styles';
 
 // context
-import { useTribeNavigation } from 'context/tribes';
+import { useNavigation } from 'context/tribes';
 
 // styles
 import { dark, darkPurple, white } from 'styles/colors';
@@ -72,7 +72,7 @@ interface Props {
 }
 
 const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
-  const [tribeNavigation, setTribeNavigation] = useTribeNavigation();
+  const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 
   return (
@@ -91,7 +91,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             justifyContent="center"
             marginBottom={2}
             key={tribe.id}
-            onClick={() => setTribeNavigation(tribe)}
+            onClick={() => setNavigation({ ...navigation, tribe })}
           >
             <Badge
               classes={{
@@ -104,7 +104,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 alt={tribe.name}
                 src={tribe.image}
                 style={{
-                  borderColor: tribe.id === tribeNavigation?.id ? white : darkPurple
+                  borderColor: tribe.id === navigation?.tribe.id ? white : darkPurple
                 }}
                 variant="square"
                 classes={{

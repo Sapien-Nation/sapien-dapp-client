@@ -10,14 +10,14 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'styles/theme';
 
 // context
-import { TribeNavigationStateContext } from 'context/tribes';
+import { NavigationContext } from 'context/tribes';
 
 const AllTheProviders = ({ children, tribeNavigation }) => {
   const Provider = (
     <ThemeProvider theme={theme}>
-      <TribeNavigationStateContext.Provider value={tribeNavigation}>
+      <NavigationContext.Provider value={tribeNavigation}>
         {children}
-      </TribeNavigationStateContext.Provider>
+      </NavigationContext.Provider>
     </ThemeProvider>
   );
 
@@ -27,7 +27,9 @@ const AllTheProviders = ({ children, tribeNavigation }) => {
 interface CustomRenderOptions {
   container?: Element;
   tribeNavigation?: {
-    id: string;
+    tribe: {
+      id: string;
+    };
   };
 }
 

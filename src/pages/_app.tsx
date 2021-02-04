@@ -19,7 +19,7 @@ import { init as initSentry } from 'utils/sentry';
 import theme from 'styles/theme';
 
 // context
-import { TribeNavigationProvider } from 'context/tribes';
+import { NavigationProvider } from 'context/tribes';
 
 // components
 const Layout = dynamic(() => import('./Layout'), { ssr: false });
@@ -49,14 +49,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <TribeNavigationProvider>
+        <NavigationProvider>
           <Layout>
             <Navbar />
             <main>
               <Component {...pageProps} />
             </main>
           </Layout>
-        </TribeNavigationProvider>
+        </NavigationProvider>
       </ThemeProvider>
     </>
   );

@@ -2,7 +2,7 @@
 import { render, screen, user } from 'utils/testUtils';
 
 // context
-import { TribeNavigationProvider, useTribeNavigation } from 'context/tribes';
+import { NavigationProvider, useNavigation } from 'context/tribes';
 
 // mocks
 import { mockTribe } from 'mocks/tribe';
@@ -10,20 +10,20 @@ import { mockTribe } from 'mocks/tribe';
 const tribe = mockTribe();
 
 const Consumer = () => {
-  const [tribeNavigation, setTribeNavigation] = useTribeNavigation();
+  const [navigation, setNavigation] = useNavigation();
   return (
     <>
-      <button onClick={() => setTribeNavigation(tribe)}>Set Tribe</button>
-      <h1>{tribeNavigation?.id}</h1>
+      <button onClick={() => setNavigation({ tribe })}>Set Tribe</button>
+      <h1>{navigation?.tribe.id}</h1>
     </>
   );
 };
 
 test('useTribeNavigation', () => {
   render(
-    <TribeNavigationProvider>
+    <NavigationProvider>
       <Consumer />
-    </TribeNavigationProvider>
+    </NavigationProvider>
   );
 
   expect(screen.queryByText(tribe.id)).not.toBeInTheDocument();
