@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // types
-import Tribe from 'types/tribe';
+import type { Tribe } from 'types/tribe';
 
 // components
 import CreateTribeModal from 'components/tribe/CreateTribeModal';
