@@ -1,8 +1,13 @@
 /* istanbul ignore file */
 import { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 // types
 import type { AppProps } from 'next/app';
+
+// api
+import axios from 'api';
 
 // next
 import Head from 'next/head';
@@ -26,6 +31,17 @@ import Navbar from 'components/navigation';
 
 initSentry();
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: async ({ queryKey }: { queryKey: Array<string> }) => {
+        const { data } = await axios.get(queryKey[0]);
+        return data;
+      }
+    }
+  }
+});
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -46,16 +62,19 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <NavigationProvider>
-          <Layout>
-            <NoSsr>
-              <Navbar />
-            </NoSsr>
-            <main>
-              <Component {...pageProps} />
-            </main>
-          </Layout>
-        </NavigationProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <NavigationProvider>
+            <Layout>
+              <NoSsr>
+                <Navbar />
+              </NoSsr>
+              <main>
+                <Component {...pageProps} />
+              </main>
+            </Layout>
+          </NavigationProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </>
   );

@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
+// types
+import Tribe from 'types/tribe';
+
 // components
+import CreateTribeModal from 'components/tribe/CreateTribeModal';
 import TribeBar from 'components/navigation/TribeBar';
 import TribeNavigation from 'components/navigation/TribeNavigation';
-import CreateTribeModal from 'components/tribe/CreateTribeModal';
+import Query from 'components/query';
 
 // mocks
 import { mockTribes } from 'mocks/tribe';
@@ -12,16 +16,20 @@ const Navbar: React.FC = () => {
   const [showCreateTribeModal, setShowCreateTribeModal] = useState(false);
 
   return (
-    <>
-      <TribeBar
-        tribes={mockTribes()}
-        setShowCreateTribeModal={setShowCreateTribeModal}
-      />
-      <TribeNavigation />
-      {showCreateTribeModal && (
-        <CreateTribeModal onClose={() => setShowCreateTribeModal(false)} />
+    <Query apiUrl="get-tribes-todo" fetcher={() => Promise.resolve(mockTribes())}>
+      {(tribes: Array<Tribe>) => (
+        <>
+          <TribeBar
+            tribes={tribes}
+            setShowCreateTribeModal={setShowCreateTribeModal}
+          />
+          <TribeNavigation />
+          {showCreateTribeModal && (
+            <CreateTribeModal onClose={() => setShowCreateTribeModal(false)} />
+          )}
+        </>
       )}
-    </>
+    </Query>
   );
 };
 
