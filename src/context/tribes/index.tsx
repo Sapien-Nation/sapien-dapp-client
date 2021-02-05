@@ -4,6 +4,9 @@ import { useLocalStorage } from 'react-use';
 // types
 import type { Tribe } from 'types/tribe';
 
+// mocks
+import { mockTribe } from 'mocks/tribe';
+
 interface Navigation {
   tribe: Tribe | null;
 }
@@ -23,6 +26,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (navigation === null || navigation?.tribe === null) {
       // TODO fetch call to set always 1 tribe
+      setNavigation({ ...navigation, tribe: mockTribe() });
     }
   }, []);
 
