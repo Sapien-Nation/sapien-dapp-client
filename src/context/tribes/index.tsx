@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 
 // types
+import type { Channel } from 'types/channel';
 import type { Tribe } from 'types/tribe';
 
 // mocks
@@ -9,6 +10,7 @@ import { mockTribe } from 'mocks/tribe';
 
 interface Navigation {
   tribe: Tribe | null;
+  channel: Channel | null;
 }
 
 export const NavigationContext = createContext<Navigation | null>(null);

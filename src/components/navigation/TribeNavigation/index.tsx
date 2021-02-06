@@ -24,6 +24,9 @@ import { background, outline, white } from 'styles/colors';
 // assets
 import { AddIcon, ArrowIcon, BadgeStore, TribeName } from '../assets/svg';
 
+// utils
+import { formatTimestampToRelative } from 'utils/date';
+
 const drawerWidth = 228;
 
 const useStyles = makeStyles((theme: Theme) => {
@@ -65,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 const TribeNavigation: React.FC = () => {
-  const [navigation] = useNavigation();
+  const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
 
   const classes = useStyles();
@@ -132,6 +135,7 @@ const TribeNavigation: React.FC = () => {
               px={2}
               justifyContent="space-between"
               key={channel.id}
+              onClick={() => setNavigation({ ...navigation, channel })}
             >
               <Box display="flex">
                 <Avatar
@@ -141,6 +145,10 @@ const TribeNavigation: React.FC = () => {
                   classes={{
                     root: classes.avatar
                   }}
+                  imgProps={{
+                    height: '4rem',
+                    width: '4rem'
+                  }}
                 />
                 <Box
                   display="flex"
@@ -149,10 +157,14 @@ const TribeNavigation: React.FC = () => {
                   marginLeft={1.2}
                 >
                   <Typography variant="body1">{channel.name}</Typography>
-                  <Typography variant="body2">227 members</Typography>
+                  <Typography variant="body2">
+                    {channel.memberCount} members
+                  </Typography>
                 </Box>
               </Box>
-              <Typography variant="body2">23 min</Typography>
+              <Typography variant="body2">
+                {formatTimestampToRelative(channel.lastUpdate)}
+              </Typography>
             </Box>
           ))}
         </Collapse>
