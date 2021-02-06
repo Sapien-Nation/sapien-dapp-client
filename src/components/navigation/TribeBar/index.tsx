@@ -66,6 +66,7 @@ const useStyles = makeStyles((theme: Theme) => {
     }
   });
 });
+
 interface Props {
   tribes: Array<Tribe>;
   setShowCreateTribeModal: (show: boolean) => void;

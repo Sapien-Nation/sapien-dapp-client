@@ -10,7 +10,7 @@ import TribeNavigation from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
 
 // mocks
-import { mockTribes } from 'mocks/tribe';
+import { mockTribes, mockTribe } from 'mocks/tribe';
 
 const Navbar: React.FC = () => {
   const [showCreateTribeModal, setShowCreateTribeModal] = useState(false);
@@ -23,7 +23,7 @@ const Navbar: React.FC = () => {
             tribes={tribes}
             setShowCreateTribeModal={setShowCreateTribeModal}
           />
-          <TribeNavigation />
+          <TribeNavigation channels={mockTribe().channels} />
           {showCreateTribeModal && (
             <CreateTribeModal onClose={() => setShowCreateTribeModal(false)} />
           )}
