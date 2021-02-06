@@ -4,56 +4,102 @@ import { Controller, useForm } from 'react-hook-form';
 // mui
 import {
   Box,
-  Input,
-  Switch,
-  IconButton,
-  Typography,
-  InputLabel,
   FormControl,
-  InputAdornment
+  Input,
+  IconButton,
+  InputLabel,
+  InputAdornment,
+  makeStyles,
+  Switch,
+  Typography
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
-import { HelpOutlineOutlined as HelpIcon } from '@material-ui/icons';
+
+//icons
+import { HelpOutlineOutlined as HelpIcon, Add as AddIcon } from '@material-ui/icons';
+
+// styles
+import { background, lightGrey } from 'styles/colors';
 
 //components
 import Dialog from 'components/dialog';
+import DropZone from 'components/dropzone';
 
 const defaultValues = {
   name: '',
   type: false,
+  cover: '',
+  avatar: '',
   description: '',
   unique_identifier: ''
 };
 
 enum Step {
-  TribeSummary,
+  TribeSummary = 1,
   TribeMedia
 }
+
+const useStyles = makeStyles(() => ({
+  dropzone: () => ({
+    background: background,
+    border: `1px dashed ${lightGrey}`,
+    borderRadius: `1.6rem`,
+    cursor: 'pointer',
+    margin: '1.6rem 0'
+  }),
+  avatar: {
+    width: '6.4rem',
+    height: '6.4rem'
+  },
+  cover: {
+    width: '100%',
+    height: '10rem'
+  }
+}));
 
 interface Props {
   onClose: () => void;
 }
 
 const CreateTribe: React.FC<Props> = ({ onClose }) => {
-  const [step] = useState(Step.TribeSummary);
+  const [step, setStep] = useState(Step.TribeSummary);
   const theme = useTheme();
+  const [data, setData] = useState(defaultValues);
+  const { control, errors, handleSubmit, register, watch, setValue } = useForm();
+  const classes = useStyles();
+  const formId = 'create-tribe';
 
-  const { control, errors, handleSubmit, register /* watch */ } = useForm({
-    defaultValues
-  });
+  const handleFormSubmit = (formData) => {
+    const result = { ...data, ...formData };
+    setData(result);
+    handleNext(result);
+  };
 
-  // TODO handleNext w/Dialog
-  // const handleNext = () => {};
+  const handleNext = (data) => {
+    switch (step) {
+      case Step.TribeSummary: {
+        setStep(Step.TribeMedia);
+        break;
+      }
+      case Step.TribeMedia: {
+        console.log(data);
+        // Axios call can be here
+        onClose();
+        break;
+      }
+    }
+  };
 
-  // TODO handleFormSubmit w/Dialog
-
-  // TODO remove me: debugging
-  // console.log(watch('name'));
-  // console.log(watch('unique_identifier'));
-  // console.log(watch('type'));
-
-  const handleFormSubmit = (data) => {
-    console.log(data);
+  const handleBack = () => {
+    switch (step) {
+      case Step.TribeSummary: {
+        onClose();
+        break;
+      }
+      case Step.TribeMedia: {
+        setStep(Step.TribeSummary);
+      }
+    }
   };
 
   const renderContent = () => {
@@ -71,7 +117,7 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
               >
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <Typography variant="caption">
-                  {defaultValues.description.length} / 36
+                  {watch('name')?.length || 0} / 36
                 </Typography>
               </Box>
               <Input
@@ -80,6 +126,8 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                 inputRef={register({ required: true })}
                 fullWidth
                 placeholder="Name"
+                inputProps={{ maxLength: 36 }}
+                defaultValue={data.name}
               />
               {errors.name && <span>This field is required</span>}
             </FormControl>
@@ -94,7 +142,9 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                 <InputLabel htmlFor="unique_identifier">
                   Unique Identifier
                 </InputLabel>
-                <Typography variant="caption">12 / 36</Typography>
+                <Typography variant="caption">
+                  {watch('unique_identifier')?.length || 0} / 15
+                </Typography>
               </Box>
               <Input
                 id="unique_identifier"
@@ -102,14 +152,12 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                 inputRef={register({ required: true })}
                 fullWidth
                 startAdornment={<InputAdornment position="start">@</InputAdornment>}
+                inputProps={{ maxLength: 15 }}
+                defaultValue={data.unique_identifier}
               />
               {errors.unique_identifier && <span>This field is required</span>}
             </FormControl>
-            <FormControl
-              required
-              fullWidth
-              style={{ marginBottom: theme.spacing(0.5) }}
-            >
+            <FormControl fullWidth style={{ marginBottom: theme.spacing(0.5) }}>
               <Box
                 mb={1.6}
                 display="flex"
@@ -118,7 +166,9 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                 justifyContent="space-between"
               >
                 <InputLabel htmlFor="description">Description</InputLabel>
-                <Typography variant="caption">12 / 36</Typography>
+                <Typography variant="caption">
+                  {watch('description')?.length || 0} / 60
+                </Typography>
               </Box>
               <Input
                 id="description"
@@ -128,14 +178,15 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                 inputRef={register}
                 fullWidth
                 multiline
+                inputProps={{ maxLength: 60 }}
                 placeholder="Set brief description"
+                defaultValue={data.description}
               />
             </FormControl>
             <Controller
               name="type"
               control={control}
-              defaultValue={defaultValues.type}
-              rules={{ required: true }}
+              defaultValue={data.type}
               render={(props) => (
                 <FormControl fullWidth>
                   <Box
@@ -162,7 +213,9 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
                     </InputLabel>
                     <Switch
                       color="default"
-                      onChange={(e) => props.onChange(e.target.checked)}
+                      onChange={(e) => {
+                        props.onChange(e.target.checked);
+                      }}
                       checked={props.value}
                       disableRipple
                       inputProps={{ 'aria-label': 'Tribe Type' }}
@@ -175,7 +228,78 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
         );
       }
       case Step.TribeMedia: {
-        return 'TODO';
+        return (
+          <>
+            <Controller
+              name="avatar"
+              control={control}
+              defaultValue={data.avatar}
+              render={() => (
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="description">Avatar</InputLabel>
+                  <DropZone
+                    accept="image/*"
+                    maxFiles={1}
+                    maxSize={20971520} // 20mb
+                    handleDrop={(files) => setValue('avatar', files[0])}
+                    className={`${classes.dropzone} ${classes.avatar}`}
+                    renderElement={() => {
+                      return (
+                        <IconButton
+                          style={{ color: theme.palette.infoIcon.main }}
+                          aria-label="tribe type"
+                        >
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      );
+                    }}
+                  />
+                  <Typography variant="caption">
+                    Drag and Drop or{' '}
+                    <Typography color="primary" variant="caption">
+                      Browse{' '}
+                    </Typography>
+                    to upload image (max 20MB)
+                  </Typography>
+                </FormControl>
+              )}
+            />
+            <Controller
+              name="cover"
+              control={control}
+              defaultValue={data.cover}
+              render={() => (
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="description">Cover image</InputLabel>
+                  <DropZone
+                    accept="image/*"
+                    maxFiles={1}
+                    maxSize={41943040} // 40mb
+                    className={`${classes.dropzone} ${classes.cover}`}
+                    handleDrop={(files) => setValue('cover', files[0])}
+                    renderElement={() => {
+                      return (
+                        <IconButton
+                          style={{ color: theme.palette.infoIcon.main }}
+                          aria-label="tribe type"
+                        >
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      );
+                    }}
+                  />
+                  <Typography variant="caption">
+                    Drag and Drop or{' '}
+                    <Typography color="primary" variant="caption">
+                      Browse{' '}
+                    </Typography>
+                    to upload image (max 40MB)
+                  </Typography>
+                </FormControl>
+              )}
+            />
+          </>
+        );
       }
     }
   };
@@ -208,9 +332,13 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
           </Typography>
         </Box>
       }
-      onClose={onClose}
+      form={formId}
+      onClose={handleBack}
+      cancelLabel={step == Step.TribeSummary ? 'Cancel' : 'Back'}
+      confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
+      confirmButtonType="submit"
     >
-      <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
+      <form id={formId} noValidate onSubmit={handleSubmit(handleFormSubmit)}>
         {renderContent()}
       </form>
     </Dialog>

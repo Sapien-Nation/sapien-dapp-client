@@ -19,16 +19,19 @@ import CloseIcon from '@material-ui/icons/Close';
 
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
+  confirmButtonType?: 'submit' | 'button' | 'reset';
+  form?: string;
   isFetching?: boolean;
   onClose?: () => void;
   onCancel?: (data?: unknown) => void;
   onConfirm?: (event?: unknown) => void;
-  showCancel?: boolean;
-  showConfirm?: boolean;
   cancelLabel?: string;
   confirmLabel?: string;
-  title: string | React.ReactNode;
+  showCancel?: boolean;
+  showConfirm?: boolean;
   subtitle?: string | React.ReactNode;
+  title: string | React.ReactNode;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -54,9 +57,12 @@ const Dialog: React.FC<Props> = ({
   showConfirm = true,
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
+  children,
+  confirmButtonType = 'button',
+  form,
   title,
   subtitle,
-  children,
+  size = 'xs',
   actions = (
     <>
       {showCancel && (
@@ -70,6 +76,8 @@ const Dialog: React.FC<Props> = ({
       )}
       {showConfirm && (
         <Button
+          type={confirmButtonType}
+          form={form}
           color="primary"
           variant="contained"
           disabled={isFetching}
@@ -84,7 +92,7 @@ const Dialog: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   return (
-    <MUIDialog aria-labelledby="dialog-title" {...rest}>
+    <MUIDialog aria-labelledby="dialog-title" {...rest} maxWidth={size}>
       <IconButton className={classes.root} aria-label="close" onClick={onCancel}>
         <CloseIcon />
       </IconButton>

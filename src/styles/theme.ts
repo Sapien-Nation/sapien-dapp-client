@@ -78,6 +78,10 @@ theme.overrides = {
   MuiDialog: {
     paper: {
       borderRadius: '1rem'
+    },
+    paperWidthXs: {
+      maxWidth: '49rem',
+      width: '100%'
     }
   },
   MuiDialogTitle: {
