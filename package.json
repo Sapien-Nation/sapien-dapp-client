@@ -24,6 +24,19 @@
   ],
   "author": "",
   "license": "ISC",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./**/*.{ts,tsx}": [
+      "npm run test:badges",
+      "eslint --fix --max-warnings=0",
+      "jest --forceExit --findRelatedTests --maxWorkers=2"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/SapienNetwork/web/issues"
   },

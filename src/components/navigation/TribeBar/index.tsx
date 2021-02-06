@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   tribes: Array<Tribe>;
-  setShowCreateTribeModal: (show: boolean) => void;
+  setShowCreateTribeModal: () => void;
 }
 
 const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
@@ -105,7 +105,8 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 alt={tribe.name}
                 src={tribe.image}
                 style={{
-                  borderColor: tribe.id === navigation?.tribe.id ? white : darkPurple
+                  borderColor:
+                    tribe.id === navigation?.tribe?.id ? white : darkPurple
                 }}
                 variant="square"
                 classes={{
@@ -135,7 +136,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           </Avatar>
         </Box>
         <Box
-          onClick={() => setShowCreateTribeModal(true)}
+          onClick={setShowCreateTribeModal}
           display="flex"
           justifyContent="center"
           marginBottom={2}

@@ -10,10 +10,15 @@ import TribeNavigation from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
 
 // mocks
-import { mockTribes, mockTribe } from 'mocks/tribe';
+import { mockTribes } from 'mocks/tribe';
+
+export enum Dialog {
+  CreateTribe,
+  DiscoverTribes
+}
 
 const Navbar: React.FC = () => {
-  const [showCreateTribeModal, setShowCreateTribeModal] = useState(false);
+  const [dialog, setDialog] = useState<Dialog | null>(null);
 
   return (
     <Query apiUrl="get-tribes-todo" fetcher={() => Promise.resolve(mockTribes())}>
@@ -21,11 +26,11 @@ const Navbar: React.FC = () => {
         <>
           <TribeBar
             tribes={tribes}
-            setShowCreateTribeModal={setShowCreateTribeModal}
+            setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
           />
-          <TribeNavigation channels={mockTribe().channels} />
-          {showCreateTribeModal && (
-            <CreateTribeModal onClose={() => setShowCreateTribeModal(false)} />
+          <TribeNavigation />
+          {dialog === Dialog.CreateTribe && (
+            <CreateTribeModal onClose={() => setDialog(null)} />
           )}
         </>
       )}

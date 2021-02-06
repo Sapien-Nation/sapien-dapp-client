@@ -19,13 +19,10 @@ import {
 import { useNavigation } from 'context/tribes';
 
 // styles
-import { background, black, darkGrey, outline, white } from 'styles/colors';
+import { background, outline, white } from 'styles/colors';
 
 // assets
 import { AddIcon, ArrowIcon, BadgeStore, TribeName } from '../assets/svg';
-
-// mocks
-import type { Channel } from 'types/channel';
 
 const drawerWidth = 228;
 
@@ -63,26 +60,16 @@ const useStyles = makeStyles((theme: Theme) => {
       padding: `${theme.spacing(0.6)}`,
       marginLeft: `${theme.spacing(1)}`,
       backgroundColor: background
-    },
-    channelPrimary: {
-      color: black,
-      fontSize: '1.4rem'
-    },
-    channelSecondary: {
-      color: darkGrey,
-      fontSize: '1.2rem'
     }
   });
 });
 
-interface Props {
-  channels: Array<Channel>;
-}
-
-const TribeNavigation: React.FC<Props> = ({ channels }) => {
+const TribeNavigation: React.FC = () => {
   const [navigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
+
   const classes = useStyles();
+
   return (
     <Drawer
       className={classes.drawer}
@@ -95,15 +82,15 @@ const TribeNavigation: React.FC<Props> = ({ channels }) => {
       <nav className={classes.nav}>
         <Box display="flex" padding={2}>
           <TribeName />
-          <Box marginLeft={1.5}>
-            <Typography variant="h5">{navigation?.tribe.name}</Typography>
-          </Box>
+          <Typography variant="h5" style={{ marginLeft: '1.5rem' }}>
+            {navigation?.tribe?.name}
+          </Typography>
         </Box>
         <Box display="flex" padding={2}>
           <BadgeStore />
-          <Box marginLeft={1.5}>
-            <Typography variant="h5">Badge Store</Typography>
-          </Box>
+          <Typography variant="h5" style={{ marginLeft: '1.5rem' }}>
+            Badge Store
+          </Typography>
         </Box>
         <Box
           display="flex"
@@ -127,7 +114,7 @@ const TribeNavigation: React.FC<Props> = ({ channels }) => {
             disableRipple
             aria-label="show channels"
             style={{
-              transform: !showChannels ? 'rotate(180deg)' : null
+              transform: showChannels ? '' : 'rotate(180deg)'
             }}
             classes={{
               root: classes.collapseButton
@@ -138,7 +125,7 @@ const TribeNavigation: React.FC<Props> = ({ channels }) => {
           </IconButton>
         </Box>
         <Collapse in={showChannels} timeout="auto" unmountOnExit>
-          {channels.map((channel) => (
+          {navigation?.tribe?.channels.map((channel) => (
             <Box
               display="flex"
               py={1}
@@ -161,31 +148,11 @@ const TribeNavigation: React.FC<Props> = ({ channels }) => {
                   flexDirection="column"
                   marginLeft={1.2}
                 >
-                  <Typography
-                    classes={{
-                      root: classes.channelPrimary
-                    }}
-                  >
-                    {channel.name}
-                  </Typography>
-                  <Typography
-                    classes={{
-                      root: classes.channelSecondary
-                    }}
-                  >
-                    227 members
-                  </Typography>
+                  <Typography variant="body1">{channel.name}</Typography>
+                  <Typography variant="body2">227 members</Typography>
                 </Box>
               </Box>
-              <Box>
-                <Typography
-                  classes={{
-                    root: classes.channelSecondary
-                  }}
-                >
-                  23 min
-                </Typography>
-              </Box>
+              <Typography variant="body2">23 min</Typography>
             </Box>
           ))}
         </Collapse>

@@ -7,7 +7,7 @@ import { NavigationProvider, useNavigation } from 'context/tribes';
 // mocks
 import { mockTribe } from 'mocks/tribe';
 
-const tribe = mockTribe();
+const tribe = mockTribe({ id: '2' });
 
 const Consumer = () => {
   const [navigation, setNavigation] = useNavigation();
@@ -26,9 +26,10 @@ test('useTribeNavigation', () => {
     </NavigationProvider>
   );
 
-  expect(screen.queryByText(tribe.id)).not.toBeInTheDocument();
-
+  // default
+  expect(screen.getByRole('heading', { name: /1/i })).toBeInTheDocument();
   user.click(screen.getByRole('button', { name: /set tribe/i }));
 
-  expect(screen.getByRole('heading', { name: /1/i })).toBeInTheDocument();
+  // new
+  expect(screen.getByRole('heading', { name: /2/i })).toBeInTheDocument();
 });

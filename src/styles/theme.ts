@@ -157,6 +157,14 @@ theme.overrides = {
     h2: {
       fontSize: '2.2rem',
       fontWeight: 600
+    },
+    body1: {
+      color: black,
+      fontSize: '1.4rem'
+    },
+    body2: {
+      color: darkGrey,
+      fontSize: '1.2rem'
     }
   },
   MuiInputAdornment: {
