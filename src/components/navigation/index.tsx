@@ -4,7 +4,7 @@ import { useState } from 'react';
 import type { Tribe } from 'types/tribe';
 
 // components
-import CreateTribeModal from 'components/tribe/CreateTribeModal';
+import { CreateTribeModal } from 'components/tribe/modals';
 import TribeBar from 'components/navigation/TribeBar';
 import TribeNavigation from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
@@ -25,8 +25,8 @@ const Navbar: React.FC = () => {
       {(tribes: Array<Tribe>) => (
         <>
           <TribeBar
-            tribes={tribes}
             setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
+            tribes={tribes}
           />
           <TribeNavigation />
           {dialog === Dialog.CreateTribe && (

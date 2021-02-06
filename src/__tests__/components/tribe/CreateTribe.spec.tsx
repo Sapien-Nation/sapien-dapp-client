@@ -2,7 +2,7 @@
 import { render, screen } from 'utils/testUtils';
 
 // components
-import CreateTribe from 'components/tribe/CreateTribeModal';
+import { CreateTribeModal } from 'components/tribe/modals';
 
 // mocks
 const onClose = jest.fn();
@@ -12,7 +12,7 @@ const defaultProps = {
 };
 
 test('renders', () => {
-  render(<CreateTribe {...defaultProps} />);
+  render(<CreateTribeModal {...defaultProps} />);
 
   expect(screen.getByRole('heading', { name: /new tribe/i })).toBeInTheDocument();
 });

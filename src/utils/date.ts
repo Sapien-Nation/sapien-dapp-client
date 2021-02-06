@@ -8,7 +8,7 @@ export const formatTimestampToRelative = (
   const msPerMonth = msPerDay * 30;
   const msPerYear = msPerDay * 365;
 
-  const elapsed = new Date(compare).getTime() - new Date(current).getTime();
+  const elapsed = new Date(current).getTime() - new Date(compare).getTime();
 
   if (elapsed < msPerMinute) {
     return `${Math.round(elapsed / 1000)} sec`;

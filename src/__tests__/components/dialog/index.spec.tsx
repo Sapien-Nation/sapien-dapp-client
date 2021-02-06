@@ -44,7 +44,7 @@ test('default', () => {
 
   // onClose
   user.click(closeButton);
-  expect(onCancel).toHaveBeenCalled();
+  expect(onClose).toHaveBeenCalled();
 
   // onCancel
   user.click(cancelButton);

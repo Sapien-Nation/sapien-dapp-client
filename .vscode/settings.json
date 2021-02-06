@@ -1,4 +1,6 @@
 {
-  "cSpell.words": [],
+  "cSpell.words": [
+    "dropzone"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib"
 }

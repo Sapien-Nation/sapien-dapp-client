@@ -75,40 +75,40 @@ const TribeNavigation: React.FC = () => {
 
   return (
     <Drawer
+      anchor="left"
       className={classes.drawer}
-      variant="permanent"
       classes={{
         paper: classes.drawerPaper
       }}
-      anchor="left"
+      variant="permanent"
     >
       <nav className={classes.nav}>
         <Box display="flex" padding={2}>
           <TribeName />
-          <Typography variant="h5" style={{ marginLeft: '1.5rem' }}>
+          <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             {navigation?.tribe?.name}
           </Typography>
         </Box>
         <Box display="flex" padding={2}>
           <BadgeStore />
-          <Typography variant="h5" style={{ marginLeft: '1.5rem' }}>
+          <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             Badge Store
           </Typography>
         </Box>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           justifyContent="space-between"
           px={2}
           py={1}
         >
-          <Box display="flex" alignItems="center">
+          <Box alignItems="center" display="flex">
             <Typography variant="h5">Channels</Typography>
             <IconButton
+              aria-label="add channels"
               classes={{
                 root: classes.addChannelButton
               }}
-              aria-label="add channels"
             >
               <AddIcon />
             </IconButton>
@@ -116,32 +116,30 @@ const TribeNavigation: React.FC = () => {
           <IconButton
             disableRipple
             aria-label="show channels"
-            style={{
-              transform: showChannels ? '' : 'rotate(180deg)'
-            }}
             classes={{
               root: classes.collapseButton
+            }}
+            style={{
+              transform: showChannels ? '' : 'rotate(180deg)'
             }}
             onClick={() => setShowChannels(!showChannels)}
           >
             <ArrowIcon />
           </IconButton>
         </Box>
-        <Collapse in={showChannels} timeout="auto" unmountOnExit>
+        <Collapse unmountOnExit in={showChannels} timeout="auto">
           {navigation?.tribe?.channels.map((channel) => (
             <Box
-              display="flex"
-              py={1}
-              px={2}
-              justifyContent="space-between"
               key={channel.id}
+              display="flex"
+              justifyContent="space-between"
+              px={2}
+              py={1}
               onClick={() => setNavigation({ ...navigation, channel })}
             >
               <Box display="flex">
                 <Avatar
                   alt={channel.name}
-                  src={channel.image}
-                  variant="square"
                   classes={{
                     root: classes.avatar
                   }}
@@ -149,11 +147,13 @@ const TribeNavigation: React.FC = () => {
                     height: '4rem',
                     width: '4rem'
                   }}
+                  src={channel.image}
+                  variant="square"
                 />
                 <Box
                   display="flex"
-                  justifyContent="center"
                   flexDirection="column"
+                  justifyContent="center"
                   marginLeft={1.2}
                 >
                   <Typography variant="body1">{channel.name}</Typography>

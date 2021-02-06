@@ -6,6 +6,7 @@ import type { Theme } from '@material-ui/core';
 
 // mui
 import {
+  Box,
   Button,
   makeStyles,
   IconButton,
@@ -19,7 +20,6 @@ import CloseIcon from '@material-ui/icons/Close';
 
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
-  confirmButtonType?: 'submit' | 'button' | 'reset';
   form?: string;
   isFetching?: boolean;
   onClose?: () => void;
@@ -31,7 +31,6 @@ interface Props extends Omit<DialogProps, 'title'> {
   showConfirm?: boolean;
   subtitle?: string | React.ReactNode;
   title: string | React.ReactNode;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -49,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const Dialog: React.FC<Props> = ({
+  form,
   isFetching,
   onClose,
   onCancel = onClose || (() => null),
@@ -58,29 +58,26 @@ const Dialog: React.FC<Props> = ({
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
   children,
-  confirmButtonType = 'button',
-  form,
   title,
   subtitle,
-  size = 'xs',
   actions = (
     <>
       {showCancel && (
         <Button
           disabled={isFetching}
-          onClick={onCancel}
           style={{ marginRight: useTheme().spacing(2) }}
+          onClick={onCancel}
         >
           {cancelLabel}
         </Button>
       )}
       {showConfirm && (
         <Button
-          type={confirmButtonType}
-          form={form}
           color="primary"
-          variant="contained"
           disabled={isFetching}
+          form={form}
+          type={form ? 'submit' : 'button'}
+          variant="contained"
           onClick={onConfirm}
         >
           {confirmLabel}
@@ -92,15 +89,25 @@ const Dialog: React.FC<Props> = ({
 }) => {
   const classes = useStyles();
   return (
-    <MUIDialog aria-labelledby="dialog-title" {...rest} maxWidth={size}>
-      <IconButton className={classes.root} aria-label="close" onClick={onCancel}>
+    <MUIDialog aria-labelledby="dialog-title" {...rest}>
+      <IconButton aria-label="close" className={classes.root} onClick={onClose}>
         <CloseIcon />
       </IconButton>
-      {isValidElement(title) ? (
-        title
-      ) : (
-        <DialogTitle id="dialog-title">{title}</DialogTitle>
-      )}
+      <Box
+        alignItems="center"
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        paddingBottom={2.5}
+        paddingTop={5}
+        paddingX={5}
+      >
+        {isValidElement(title) ? (
+          title
+        ) : (
+          <DialogTitle id="dialog-title">{title}</DialogTitle>
+        )}
+      </Box>
       {subtitle}
       <DialogContent>{children}</DialogContent>
       <DialogActions disableSpacing>{actions}</DialogActions>
