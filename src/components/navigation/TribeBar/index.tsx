@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => {
       height: theme.spacing(4.5),
       width: theme.spacing(4.5),
       color: white,
-      backgroundColor: 'transparent',
+      backgroundColor: 'inherit',
       borderRadius: 10,
       border: '2px solid'
     },
@@ -109,10 +109,6 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 alt={tribe.name}
                 classes={{
                   root: classes.avatar
-                }}
-                imgProps={{
-                  width: '4rem',
-                  height: '4rem'
                 }}
                 style={{
                   borderColor:

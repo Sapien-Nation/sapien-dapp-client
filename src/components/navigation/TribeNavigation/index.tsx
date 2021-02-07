@@ -3,6 +3,9 @@ import { useState } from 'react';
 // types
 import type { Theme } from '@material-ui/core/styles';
 
+// next
+import Image from 'next/image';
+
 // mui
 import {
   Avatar,
@@ -46,15 +49,16 @@ const useStyles = makeStyles((theme: Theme) => {
       marginTop: `${theme.spacing(1.5)}`
     },
     avatar: {
+      background: 'inherit',
       height: theme.spacing(4.5),
       width: theme.spacing(4.5),
       color: white,
       borderRadius: 10,
-      border: `2px solid ${outline}`,
-      '& img': {
-        padding: `${theme.spacing(0.3)}`,
-        borderRadius: '9px'
-      }
+      border: `2px solid ${outline}`
+    },
+    avatarImage: {
+      padding: `${theme.spacing(0.3)} !important`,
+      borderRadius: '9px'
     },
     collapseButton: {
       padding: 0
@@ -143,13 +147,15 @@ const TribeNavigation: React.FC = () => {
                   classes={{
                     root: classes.avatar
                   }}
-                  imgProps={{
-                    height: '4rem',
-                    width: '4rem'
-                  }}
-                  src={channel.image}
                   variant="square"
-                />
+                >
+                  <Image
+                    className={classes.avatarImage}
+                    height={40}
+                    src={channel.image}
+                    width={40}
+                  />
+                </Avatar>
                 <Box
                   display="flex"
                   flexDirection="column"
