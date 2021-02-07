@@ -2,6 +2,9 @@
 import type { Tribe } from 'types/tribe';
 import type { Theme } from '@material-ui/core/styles';
 
+// next
+import Image from 'next/image';
+
 // context
 import { useNavigation } from 'context/tribes';
 
@@ -42,12 +45,13 @@ const useStyles = makeStyles((theme: Theme) => {
       height: theme.spacing(4.5),
       width: theme.spacing(4.5),
       color: white,
+      backgroundColor: 'transparent',
       borderRadius: 10,
-      border: '2px solid',
-      '& img': {
-        padding: `${theme.spacing(0.3)}`,
-        borderRadius: '9px'
-      }
+      border: '2px solid'
+    },
+    avatarImage: {
+      padding: `${theme.spacing(0.3)} !important`,
+      borderRadius: '9px'
     },
     badge: {
       top: '4px',
@@ -78,37 +82,31 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
 
   return (
     <Drawer
+      anchor="left"
       className={classes.drawer}
-      variant="permanent"
       classes={{
         paper: classes.drawerPaper
       }}
-      anchor="left"
+      variant="permanent"
     >
       <nav className={classes.nav}>
         {tribes.map((tribe) => (
           <Box
+            key={tribe.id}
             display="flex"
             justifyContent="center"
             marginBottom={2}
-            key={tribe.id}
             onClick={() => setNavigation({ ...navigation, tribe })}
           >
             <Badge
+              badgeContent={tribe.notificationNumber}
               classes={{
                 badge: classes.badge
               }}
-              badgeContent={tribe.notificationNumber}
               color="error"
             >
               <Avatar
                 alt={tribe.name}
-                src={tribe.image}
-                style={{
-                  borderColor:
-                    tribe.id === navigation?.tribe?.id ? white : darkPurple
-                }}
-                variant="square"
                 classes={{
                   root: classes.avatar
                 }}
@@ -116,14 +114,25 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                   width: '4rem',
                   height: '4rem'
                 }}
-              />
+                style={{
+                  borderColor:
+                    tribe.id === navigation?.tribe?.id ? white : darkPurple
+                }}
+                variant="square"
+              >
+                <Image
+                  className={classes.avatarImage}
+                  height={40}
+                  src={tribe.image}
+                  width={40}
+                />
+              </Avatar>
             </Badge>
           </Box>
         ))}
         <Box display="flex" justifyContent="center" marginBottom={2}>
           <Avatar
             alt="Discover Tribe"
-            variant="square"
             classes={{
               root: classes.avatarItems
             }}
@@ -131,19 +140,19 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
               width: '4rem',
               height: '4rem'
             }}
+            variant="square"
           >
             <ExploreIcon />
           </Avatar>
         </Box>
         <Box
-          onClick={setShowCreateTribeModal}
           display="flex"
           justifyContent="center"
           marginBottom={2}
+          onClick={setShowCreateTribeModal}
         >
           <Avatar
             alt="Create Tribe"
-            variant="square"
             classes={{
               root: classes.avatarItems
             }}
@@ -151,6 +160,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
               width: '4rem',
               height: '4rem'
             }}
+            variant="square"
           >
             <AddIcon />
           </Avatar>
