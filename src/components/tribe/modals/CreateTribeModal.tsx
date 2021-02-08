@@ -104,7 +104,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
   const getChartCount = (field: string, maxCount: string) => {
     const val = watch(field) as string;
     return (
-      <Typography variant="caption">
+      <Typography data-testid="chart-count" variant="caption">
         {val?.length || 0} / {maxCount}
       </Typography>
     );
@@ -222,7 +222,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
       }
       case Step.TribeMedia: {
         return (
-          <FormProvider {...methods}>
+          <>
             <FormControl fullWidth>
               <InputLabel htmlFor="description">Avatar</InputLabel>
               <DropZone
@@ -277,7 +277,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 to upload image (max 40MB)
               </Typography>
             </FormControl>
-          </FormProvider>
+          </>
         );
       }
     }
@@ -310,9 +310,11 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
       onCancel={handleBack}
       onClose={onClose}
     >
-      <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
-        {renderForm()}
-      </form>
+      <FormProvider {...methods}>
+        <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
+          {renderForm()}
+        </form>
+      </FormProvider>
     </Dialog>
   );
 };

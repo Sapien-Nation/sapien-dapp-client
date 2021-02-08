@@ -24,7 +24,6 @@ const Query: React.FC<Props> = ({
   options = {}
 }) => {
   const { data, isLoading, isError } = useQuery(apiUrl, fetcher, options);
-
   if (isLoading) return loader;
 
   if (isError) return error;

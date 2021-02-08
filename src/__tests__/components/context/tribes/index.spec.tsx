@@ -1,5 +1,5 @@
 // utils
-import { render, screen, user } from 'utils/testUtils';
+import { render, screen, user } from 'utils/tests';
 
 // context
 import { NavigationProvider, useNavigation } from 'context/tribes';

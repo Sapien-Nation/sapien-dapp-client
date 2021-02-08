@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node';
 
 // utils
-import { render, screen } from 'utils/testUtils';
+import { render, screen } from 'utils/tests';
 
 // components
 import ErrorPage from 'pages/_error';

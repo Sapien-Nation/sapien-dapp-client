@@ -1,5 +1,5 @@
 // utils
-import { render, screen } from 'utils/testUtils';
+import { render, screen } from 'utils/tests';
 
 // components
 import FourOFourPage from 'pages/404';

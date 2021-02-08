@@ -16,7 +16,7 @@ export const mockTribes = () => {
   return [
     { ...tribe1, channels: [channel2] },
     { ...tribe2, channels: [channel1, channel2] },
-    { ...tribe3, channels: [channel1] },
+    { ...tribe3, channels: [channel2] },
     tribe4
   ];
 };

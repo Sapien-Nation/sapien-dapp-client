@@ -16,6 +16,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   createStyles,
   Drawer,
   makeStyles
@@ -89,78 +90,84 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
       }}
       variant="permanent"
     >
-      <nav className={classes.nav}>
-        {tribes.map((tribe) => (
-          <Box
-            key={tribe.id}
-            display="flex"
-            justifyContent="center"
-            marginBottom={2}
-            onClick={() => setNavigation({ ...navigation, tribe })}
-          >
-            <Badge
-              badgeContent={tribe.notificationNumber}
-              classes={{
-                badge: classes.badge
-              }}
-              color="error"
+      <nav aria-label="Tribe Bar" className={classes.nav}>
+        <div role="list">
+          {tribes.map((tribe) => (
+            <Box
+              key={tribe.id}
+              aria-label={tribe.name}
+              display="flex"
+              justifyContent="center"
+              marginBottom={2}
+              role="listitem"
+              onClick={() => setNavigation({ ...navigation, tribe })}
             >
-              <Avatar
-                alt={tribe.name}
+              <Badge
+                badgeContent={tribe.notificationNumber}
                 classes={{
-                  root: classes.avatar
+                  badge: classes.badge
                 }}
-                style={{
-                  borderColor:
-                    tribe.id === navigation?.tribe?.id ? white : darkPurple
-                }}
-                variant="square"
+                color="error"
               >
-                <Image
-                  className={classes.avatarImage}
-                  height={40}
-                  src={tribe.image}
-                  width={40}
-                />
-              </Avatar>
-            </Badge>
-          </Box>
-        ))}
-        <Box display="flex" justifyContent="center" marginBottom={2}>
-          <Avatar
-            alt="Discover Tribe"
-            classes={{
-              root: classes.avatarItems
-            }}
-            imgProps={{
-              width: '4rem',
-              height: '4rem'
-            }}
-            variant="square"
-          >
-            <ExploreIcon />
-          </Avatar>
-        </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          marginBottom={2}
-          onClick={setShowCreateTribeModal}
-        >
-          <Avatar
-            alt="Create Tribe"
-            classes={{
-              root: classes.avatarItems
-            }}
-            imgProps={{
-              width: '4rem',
-              height: '4rem'
-            }}
-            variant="square"
-          >
-            <AddIcon />
-          </Avatar>
-        </Box>
+                <Avatar
+                  alt={tribe.name}
+                  classes={{
+                    root: classes.avatar
+                  }}
+                  imgProps={{
+                    width: '4rem',
+                    height: '4rem'
+                  }}
+                  style={{
+                    borderColor:
+                      tribe.id === navigation?.tribe?.id ? white : darkPurple
+                  }}
+                  variant="square"
+                >
+                  <Image
+                    alt={tribe.name}
+                    className={classes.avatarImage}
+                    height={40}
+                    src={tribe.image}
+                    width={40}
+                  />
+                </Avatar>
+              </Badge>
+            </Box>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gap: '20px', justifyContent: 'center' }}>
+          <Button aria-label="Discover Tribes" onClick={() => {}}>
+            <Avatar
+              alt="Discover Tribe"
+              classes={{
+                root: classes.avatarItems
+              }}
+              imgProps={{
+                width: '4rem',
+                height: '4rem'
+              }}
+              variant="square"
+            >
+              <ExploreIcon />
+            </Avatar>
+          </Button>
+          <Button aria-label="Create Tribe" onClick={setShowCreateTribeModal}>
+            <Avatar
+              alt="Create Tribe"
+              classes={{
+                root: classes.avatarItems
+              }}
+              imgProps={{
+                width: '4rem',
+                height: '4rem'
+              }}
+              variant="square"
+            >
+              <AddIcon aria-label="" />
+            </Avatar>
+          </Button>
+        </div>
       </nav>
     </Drawer>
   );

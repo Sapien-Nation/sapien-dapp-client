@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Current Builds
+        if: ${{ !env.ACT }}
         uses: styfle/cancel-workflow-action@0.4.0
         with:
           access_token: ${{ github.token }}

@@ -76,7 +76,6 @@ const TribeNavigation: React.FC = () => {
   const [showChannels, setShowChannels] = useState(true);
 
   const classes = useStyles();
-
   return (
     <Drawer
       anchor="left"
@@ -86,7 +85,7 @@ const TribeNavigation: React.FC = () => {
       }}
       variant="permanent"
     >
-      <nav className={classes.nav}>
+      <nav aria-label="Tribe Navigation" className={classes.nav}>
         <Box display="flex" padding={2}>
           <TribeName />
           <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
@@ -132,47 +131,56 @@ const TribeNavigation: React.FC = () => {
           </IconButton>
         </Box>
         <Collapse unmountOnExit in={showChannels} timeout="auto">
-          {navigation?.tribe?.channels.map((channel) => (
-            <Box
-              key={channel.id}
-              display="flex"
-              justifyContent="space-between"
-              px={2}
-              py={1}
-              onClick={() => setNavigation({ ...navigation, channel })}
-            >
-              <Box display="flex">
-                <Avatar
-                  alt={channel.name}
-                  classes={{
-                    root: classes.avatar
-                  }}
-                  variant="square"
-                >
-                  <Image
-                    className={classes.avatarImage}
-                    height={40}
-                    src={channel.image}
-                    width={40}
-                  />
-                </Avatar>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="center"
-                  marginLeft={1.2}
-                >
-                  <Typography variant="body1">{channel.name}</Typography>
-                  <Typography variant="body2">
-                    {channel.memberCount} members
-                  </Typography>
+          <div role="list">
+            {navigation?.tribe?.channels.map((channel) => (
+              <Box
+                key={channel.id}
+                aria-label={channel.name}
+                display="flex"
+                justifyContent="space-between"
+                px={2}
+                py={1}
+                role="listitem"
+                onClick={() => setNavigation({ ...navigation, channel })}
+              >
+                <Box display="flex">
+                  <Avatar
+                    alt={channel.name}
+                    classes={{
+                      root: classes.avatar
+                    }}
+                    imgProps={{
+                      height: '4rem',
+                      width: '4rem'
+                    }}
+                    variant="square"
+                  >
+                    <Image
+                      alt={channel.name}
+                      className={classes.avatarImage}
+                      height={40}
+                      src={channel.image}
+                      width={40}
+                    />
+                  </Avatar>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="center"
+                    marginLeft={1.2}
+                  >
+                    <Typography variant="body1">{channel.name}</Typography>
+                    <Typography variant="body2">
+                      {channel.memberCount} members
+                    </Typography>
+                  </Box>
                 </Box>
+                <Typography variant="body2">
+                  {formatTimestampToRelative(channel.lastUpdate)}
+                </Typography>
               </Box>
-              <Typography variant="body2">
-                {formatTimestampToRelative(channel.lastUpdate)}
-              </Typography>
-            </Box>
-          ))}
+            ))}
+          </div>
         </Collapse>
       </nav>
     </Drawer>

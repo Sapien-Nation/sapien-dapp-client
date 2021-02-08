@@ -97,6 +97,7 @@ const Dialog: React.FC<Props> = ({
         alignItems="center"
         display="flex"
         flexDirection="row"
+        id="dialog-title"
         justifyContent="space-between"
         paddingBottom={2.5}
         paddingTop={5}

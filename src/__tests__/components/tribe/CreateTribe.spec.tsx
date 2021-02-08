@@ -1,5 +1,5 @@
 // utils
-import { render, screen } from 'utils/testUtils';
+import { render, screen } from 'utils/tests';
 
 // components
 import { CreateTribeModal } from 'components/tribe/modals';
