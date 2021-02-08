@@ -33,7 +33,7 @@ test('render', async () => {
   // Tribe bar
   const tribeBar = screen.getByRole('navigation', { name: /tribe bar/i });
 
-  const tribes = within(tribeBar).getAllByRole('listitem');
+  const tribes = within(tribeBar).getAllByRole('button');
 
   expect(within(tribes[0]).getByRole('img', { hidden: true })).toHaveAttribute(
     'alt',
@@ -52,16 +52,16 @@ test('render', async () => {
     'Messages'
   );
   expect(
-    within(tribeBar).getByRole('listitem', { name: /sapien/i })
+    within(tribeBar).getByRole('button', { name: /sapien/i })
   ).toHaveTextContent('10');
   expect(
-    within(tribeBar).getByRole('listitem', { name: /general/i })
+    within(tribeBar).getByRole('button', { name: /general/i })
   ).toHaveTextContent('0');
   expect(
-    within(tribeBar).getByRole('listitem', { name: /settings/i })
+    within(tribeBar).getByRole('button', { name: /settings/i })
   ).toHaveTextContent('0');
   expect(
-    within(tribeBar).getByRole('listitem', { name: /messages/i })
+    within(tribeBar).getByRole('button', { name: /messages/i })
   ).toHaveTextContent('0');
 
   // create tribe
@@ -141,7 +141,7 @@ test('render', async () => {
     within(tribeNavigation).getByRole('heading', { name: /channels/i })
   ).toBeInTheDocument();
 
-  const socialChannel = within(tribeNavigation).getByRole('listitem', {
+  const socialChannel = within(tribeNavigation).getByRole('button', {
     name: /social/i
   });
 
@@ -150,7 +150,7 @@ test('render', async () => {
   expect(socialChannel).toHaveTextContent('123 members');
   expect(socialChannel).toHaveTextContent('2 days');
 
-  let gamingChannel = within(tribeNavigation).getByRole('listitem', {
+  let gamingChannel = within(tribeNavigation).getByRole('button', {
     name: /gaming/i
   });
 
@@ -160,13 +160,13 @@ test('render', async () => {
   expect(socialChannel).toHaveTextContent('2 days');
 
   // select tribe
-  user.click(within(tribeBar).getByRole('listitem', { name: /settings/i }));
+  user.click(within(tribeBar).getByRole('button', { name: /settings/i }));
   tribeNavigation = getTribeNavigation();
   expect(
     within(tribeNavigation).getByRole('heading', { name: /settings/i })
   ).toBeInTheDocument();
 
-  gamingChannel = within(tribeNavigation).getByRole('listitem', {
+  gamingChannel = within(tribeNavigation).getByRole('button', {
     name: /gaming/i
   });
 

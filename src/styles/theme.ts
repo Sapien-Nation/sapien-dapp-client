@@ -9,7 +9,8 @@ import {
   darker,
   darkGrey,
   inputBG,
-  lightGrey
+  lightGrey,
+  background
 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
@@ -73,6 +74,21 @@ theme.overrides = {
         avertaMedium,
         avertaRegular
       ] as unknown) as React.CSSProperties
+    }
+  },
+  MuiListItem: {
+    root: {
+      paddingTop: 0,
+      paddingBottom: 0
+    },
+    gutters: {
+      paddingLeft: 0,
+      paddingRight: 0
+    },
+    button: {
+      '&:hover': {
+        backgroundColor: 'none'
+      }
     }
   },
   MuiDialog: {

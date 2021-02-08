@@ -19,6 +19,8 @@ import {
   Button,
   createStyles,
   Drawer,
+  List,
+  ListItem,
   makeStyles
 } from '@material-ui/core';
 import {
@@ -90,85 +92,92 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
       }}
       variant="permanent"
     >
-      <nav aria-label="Tribe Bar" className={classes.nav}>
-        <div role="list">
-          {tribes.map((tribe) => (
-            <Box
-              key={tribe.id}
-              aria-label={tribe.name}
-              display="flex"
-              justifyContent="center"
-              marginBottom={2}
-              role="listitem"
-              onClick={() => setNavigation({ ...navigation, tribe })}
+      <List aria-label="Tribe Bar" className={classes.nav} component="nav">
+        {tribes.map((tribe) => (
+          <ListItem
+            key={tribe.id}
+            button
+            disableRipple
+            aria-label={tribe.name}
+            style={{ justifyContent: 'center', marginBottom: '2rem' }}
+            onClick={() => setNavigation({ ...navigation, tribe })}
+          >
+            <Badge
+              badgeContent={tribe.notificationNumber}
+              classes={{
+                badge: classes.badge
+              }}
+              color="error"
             >
-              <Badge
-                badgeContent={tribe.notificationNumber}
+              <Avatar
+                alt={tribe.name}
                 classes={{
-                  badge: classes.badge
+                  root: classes.avatar
                 }}
-                color="error"
+                imgProps={{
+                  width: '4rem',
+                  height: '4rem'
+                }}
+                style={{
+                  borderColor:
+                    tribe.id === navigation?.tribe?.id ? white : darkPurple
+                }}
+                variant="square"
               >
-                <Avatar
+                <Image
                   alt={tribe.name}
-                  classes={{
-                    root: classes.avatar
-                  }}
-                  imgProps={{
-                    width: '4rem',
-                    height: '4rem'
-                  }}
-                  style={{
-                    borderColor:
-                      tribe.id === navigation?.tribe?.id ? white : darkPurple
-                  }}
-                  variant="square"
-                >
-                  <Image
-                    alt={tribe.name}
-                    className={classes.avatarImage}
-                    height={40}
-                    src={tribe.image}
-                    width={40}
-                  />
-                </Avatar>
-              </Badge>
-            </Box>
-          ))}
-        </div>
-        <div style={{ display: 'grid', gap: '20px', justifyContent: 'center' }}>
-          <Button aria-label="Discover Tribes" onClick={() => {}}>
-            <Avatar
-              alt="Discover Tribe"
-              classes={{
-                root: classes.avatarItems
-              }}
-              imgProps={{
-                width: '4rem',
-                height: '4rem'
-              }}
-              variant="square"
-            >
-              <ExploreIcon />
-            </Avatar>
-          </Button>
-          <Button aria-label="Create Tribe" onClick={setShowCreateTribeModal}>
-            <Avatar
-              alt="Create Tribe"
-              classes={{
-                root: classes.avatarItems
-              }}
-              imgProps={{
-                width: '4rem',
-                height: '4rem'
-              }}
-              variant="square"
-            >
-              <AddIcon aria-label="" />
-            </Avatar>
-          </Button>
-        </div>
-      </nav>
+                  className={classes.avatarImage}
+                  height={40}
+                  src={tribe.image}
+                  width={40}
+                />
+              </Avatar>
+            </Badge>
+          </ListItem>
+        ))}
+        <ListItem
+          button
+          disableRipple
+          aria-label="Discover Tribes"
+          style={{ justifyContent: 'center', marginBottom: '2rem' }}
+          onClick={() => {}}
+        >
+          <Avatar
+            alt="Discover Tribe"
+            classes={{
+              root: classes.avatarItems
+            }}
+            imgProps={{
+              width: '4rem',
+              height: '4rem'
+            }}
+            variant="square"
+          >
+            <ExploreIcon />
+          </Avatar>
+        </ListItem>
+        <ListItem
+          button
+          disableRipple
+          aria-label="Create Tribe"
+          style={{ justifyContent: 'center', marginBottom: '2rem' }}
+          onClick={setShowCreateTribeModal}
+        >
+          <Avatar
+            alt="Create Tribe"
+            classes={{
+              root: classes.avatarItems
+            }}
+            imgProps={{
+              width: '4rem',
+              height: '4rem'
+            }}
+            variant="square"
+          >
+            <AddIcon aria-label="" />
+          </Avatar>
+        </ListItem>
+      </List>
     </Drawer>
   );
 };

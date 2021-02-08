@@ -14,6 +14,8 @@ import {
   Collapse,
   Drawer,
   IconButton,
+  List,
+  ListItem,
   makeStyles,
   Typography
 } from '@material-ui/core';
@@ -85,104 +87,112 @@ const TribeNavigation: React.FC = () => {
       }}
       variant="permanent"
     >
-      <nav aria-label="Tribe Navigation" className={classes.nav}>
-        <Box display="flex" padding={2}>
+      <List aria-label="Tribe Navigation" className={classes.nav} component="nav">
+        <ListItem button disableRipple style={{ display: 'flex', padding: '2rem' }}>
           <TribeName />
           <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             {navigation?.tribe?.name}
           </Typography>
-        </Box>
-        <Box display="flex" padding={2}>
+        </ListItem>
+        <ListItem button disableRipple style={{ display: 'flex', padding: '2rem' }}>
           <BadgeStore />
           <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             Badge Store
           </Typography>
-        </Box>
-        <Box
-          alignItems="center"
-          display="flex"
-          justifyContent="space-between"
-          px={2}
-          py={1}
-        >
-          <Box alignItems="center" display="flex">
-            <Typography variant="h5">Channels</Typography>
+        </ListItem>
+        <ListItem>
+          <Box
+            alignItems="center"
+            display="flex"
+            justifyContent="space-between"
+            px={2}
+            py={1}
+            width="100%"
+          >
+            <Box alignItems="center" display="flex">
+              <Typography variant="h5">Channels</Typography>
+              <IconButton
+                aria-label="add channels"
+                classes={{
+                  root: classes.addChannelButton
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
             <IconButton
-              aria-label="add channels"
+              disableRipple
+              aria-label="show channels"
               classes={{
-                root: classes.addChannelButton
+                root: classes.collapseButton
               }}
+              style={{
+                transform: showChannels ? '' : 'rotate(180deg)'
+              }}
+              onClick={() => setShowChannels(!showChannels)}
             >
-              <AddIcon />
+              <ArrowIcon />
             </IconButton>
           </Box>
-          <IconButton
-            disableRipple
-            aria-label="show channels"
-            classes={{
-              root: classes.collapseButton
-            }}
-            style={{
-              transform: showChannels ? '' : 'rotate(180deg)'
-            }}
-            onClick={() => setShowChannels(!showChannels)}
-          >
-            <ArrowIcon />
-          </IconButton>
-        </Box>
+        </ListItem>
         <Collapse unmountOnExit in={showChannels} timeout="auto">
-          <div role="list">
+          <List>
             {navigation?.tribe?.channels.map((channel) => (
-              <Box
+              <ListItem
                 key={channel.id}
-                aria-label={channel.name}
-                display="flex"
-                justifyContent="space-between"
-                px={2}
-                py={1}
-                role="listitem"
+                button
+                disableRipple
                 onClick={() => setNavigation({ ...navigation, channel })}
               >
-                <Box display="flex">
-                  <Avatar
-                    alt={channel.name}
-                    classes={{
-                      root: classes.avatar
-                    }}
-                    imgProps={{
-                      height: '4rem',
-                      width: '4rem'
-                    }}
-                    variant="square"
-                  >
-                    <Image
+                <Box
+                  aria-label={channel.name}
+                  display="flex"
+                  justifyContent="space-between"
+                  px={2}
+                  py={1}
+                  role="listitem"
+                >
+                  <Box display="flex">
+                    <Avatar
                       alt={channel.name}
-                      className={classes.avatarImage}
-                      height={40}
-                      src={channel.image}
-                      width={40}
-                    />
-                  </Avatar>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    marginLeft={1.2}
-                  >
-                    <Typography variant="body1">{channel.name}</Typography>
-                    <Typography variant="body2">
-                      {channel.memberCount} members
-                    </Typography>
+                      classes={{
+                        root: classes.avatar
+                      }}
+                      imgProps={{
+                        height: '4rem',
+                        width: '4rem'
+                      }}
+                      variant="square"
+                    >
+                      <Image
+                        alt={channel.name}
+                        className={classes.avatarImage}
+                        height={40}
+                        src={channel.image}
+                        width={40}
+                      />
+                    </Avatar>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                      marginLeft={1.2}
+                    >
+                      <Typography variant="body1">{channel.name}</Typography>
+                      <Typography variant="body2">
+                        {channel.memberCount} members
+                      </Typography>
+                    </Box>
                   </Box>
+                  <Typography variant="body2">
+                    {formatTimestampToRelative(channel.lastUpdate)}
+                  </Typography>
                 </Box>
-                <Typography variant="body2">
-                  {formatTimestampToRelative(channel.lastUpdate)}
-                </Typography>
-              </Box>
+              </ListItem>
             ))}
-          </div>
+          </List>
         </Collapse>
-      </nav>
+      </List>
     </Drawer>
   );
 };
