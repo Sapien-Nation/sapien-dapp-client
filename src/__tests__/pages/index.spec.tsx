@@ -1,3 +1,5 @@
+import preloadAll from 'jest-next-dynamic';
+
 // utils
 import { render, screen, user, waitFor, within } from 'utils/tests';
 
@@ -13,6 +15,7 @@ const getTribeNavigation = () =>
 
 beforeEach(() => {
   jest.clearAllMocks();
+  preloadAll();
 });
 
 test('render', async () => {

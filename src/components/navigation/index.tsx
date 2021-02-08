@@ -3,8 +3,17 @@ import { useState } from 'react';
 // types
 import type { Tribe } from 'types/tribe';
 
+// next
+import dynamic from 'next/dynamic';
+
 // components
-import { CreateTribeModal } from 'components/tribe/modals';
+const CreateTribeModal = dynamic(
+  () => import('components/tribe/modals').then((mod) => mod.CreateTribeModal),
+  {
+    ssr: false
+  }
+);
+
 import TribeBar from 'components/navigation/TribeBar';
 import TribeNavigation from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
@@ -18,7 +27,7 @@ const Navbar: React.FC = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   return (
-    <Query apiUrl="api/tribes">
+    <Query apiUrl="api/tribes" loader={null}>
       {({ tribes }: { tribes: Array<Tribe> }) => (
         <>
           <TribeBar
