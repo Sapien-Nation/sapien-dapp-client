@@ -10,13 +10,8 @@
     "lint": "eslint --fix .",
     "test": "jest --watch",
     "test:badges": "npm run test:coverage  && jest-coverage-badges --output ./badges",
-    "test:coverage": "jest --colors --coverage --forceExit"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
+    "test:coverage": "jest --colors --coverage --forceExit",
+    "postinstall": "husky install"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
