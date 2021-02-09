@@ -18,7 +18,7 @@ import { NavigationProvider } from 'context/tribes';
 
 // components
 import Layout from 'pages/Layout';
-import Navbar from 'components/navigation';
+import { Navbar, Sidebar } from 'components/navigation';
 
 interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
@@ -45,9 +45,12 @@ const AllTheProviders = ({ children, isPage = false }: CustomRenderOptions) => {
             {isPage ? (
               <Layout>
                 <NoSsr>
-                  <Navbar />
+                  <Sidebar />
                 </NoSsr>
-                <main>{children}</main>
+                <main>
+                  <Navbar />
+                  {children}
+                </main>
               </Layout>
             ) : (
               <>{children}</>

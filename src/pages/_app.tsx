@@ -28,7 +28,7 @@ import { NavigationProvider } from 'context/tribes';
 
 // components
 import Layout from './Layout';
-import Navbar from 'components/navigation';
+import { Navbar, Sidebar } from 'components/navigation';
 
 initSentry();
 
@@ -69,9 +69,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             <NavigationProvider>
               <Layout>
                 <NoSsr>
-                  <Navbar />
+                  <Sidebar />
                 </NoSsr>
                 <main>
+                  <Navbar />
                   <Component {...pageProps} />
                 </main>
               </Layout>
