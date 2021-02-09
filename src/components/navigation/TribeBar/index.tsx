@@ -98,7 +98,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             disableRipple
             aria-label={tribe.name}
             style={{ justifyContent: 'center', marginBottom: '2rem' }}
-            onClick={() => setNavigation({ ...navigation, tribe })}
+            onClick={() => setNavigation({ tribe, tribePage: tribe.name })}
           >
             <Badge
               badgeContent={tribe.notificationNumber}

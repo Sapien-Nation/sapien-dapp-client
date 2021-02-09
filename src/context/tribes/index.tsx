@@ -10,7 +10,8 @@ import { mockTribe } from 'mocks/tribe';
 
 interface Navigation {
   tribe: Tribe | null;
-  channel: Channel | null;
+  tribePage?: string | null;
+  channel?: Channel | null;
 }
 
 export const NavigationContext = createContext<Navigation | null>(null);
@@ -28,7 +29,11 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     if (navigation === null || navigation?.tribe === null) {
       // TODO fetch call to set always 1 tribe
-      setNavigation({ ...navigation, tribe: mockTribe() });
+      setNavigation({
+        ...navigation,
+        tribe: mockTribe(),
+        tribePage: mockTribe().name
+      });
     }
   }, []);
 
