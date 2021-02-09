@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     nav: {
       cursor: 'pointer',
-      gridArea: 'sidebar',
       marginTop: `${theme.spacing(1.5)}`
     },
     avatar: {

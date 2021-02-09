@@ -27,20 +27,22 @@ const Navbar: React.FC = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   return (
-    <Query apiUrl="api/tribes" loader={null}>
-      {({ tribes }: { tribes: Array<Tribe> }) => (
-        <>
-          <TribeBar
-            setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
-            tribes={tribes}
-          />
-          <TribeNavigation />
-          {dialog === Dialog.CreateTribe && (
-            <CreateTribeModal onClose={() => setDialog(null)} />
-          )}
-        </>
-      )}
-    </Query>
+    <div style={{ gridArea: 'sidebar' }}>
+      <Query apiUrl="api/tribes" loader={null}>
+        {({ tribes }: { tribes: Array<Tribe> }) => (
+          <>
+            <TribeBar
+              setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
+              tribes={tribes}
+            />
+            <TribeNavigation />
+            {dialog === Dialog.CreateTribe && (
+              <CreateTribeModal onClose={() => setDialog(null)} />
+            )}
+          </>
+        )}
+      </Query>
+    </div>
   );
 };
 

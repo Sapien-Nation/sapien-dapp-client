@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     nav: {
       cursor: 'pointer',
-      gridArea: 'sidebar',
       marginTop: `${theme.spacing(2)}`
     },
     avatar: {
@@ -136,8 +135,8 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
         ))}
         <ListItem
           button
-          disableRipple
           disableGutters
+          disableRipple
           aria-label="Discover Tribes"
           style={{ justifyContent: 'center', marginBottom: '2rem' }}
           onClick={() => {}}
