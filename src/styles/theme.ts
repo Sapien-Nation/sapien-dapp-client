@@ -80,10 +80,6 @@ theme.overrides = {
       paddingTop: 0,
       paddingBottom: 0
     },
-    gutters: {
-      paddingLeft: 0,
-      paddingRight: 0
-    },
     button: {
       '&:hover': {
         backgroundColor: 'none'

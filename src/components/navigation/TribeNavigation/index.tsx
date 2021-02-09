@@ -88,19 +88,29 @@ const TribeNavigation: React.FC = () => {
       variant="permanent"
     >
       <List aria-label="Tribe Navigation" className={classes.nav} component="nav">
-        <ListItem button disableRipple style={{ display: 'flex', padding: '2rem' }}>
+        <ListItem
+          button
+          disableGutters
+          disableRipple
+          style={{ display: 'flex', padding: '2rem' }}
+        >
           <TribeName />
           <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             {navigation?.tribe?.name}
           </Typography>
         </ListItem>
-        <ListItem button disableRipple style={{ display: 'flex', padding: '2rem' }}>
+        <ListItem
+          button
+          disableGutters
+          disableRipple
+          style={{ display: 'flex', padding: '2rem' }}
+        >
           <BadgeStore />
           <Typography style={{ marginLeft: '1.5rem' }} variant="h5">
             Badge Store
           </Typography>
         </ListItem>
-        <ListItem>
+        <ListItem disableGutters>
           <Box
             alignItems="center"
             display="flex"
@@ -141,6 +151,7 @@ const TribeNavigation: React.FC = () => {
               <ListItem
                 key={channel.id}
                 button
+                disableGutters
                 disableRipple
                 onClick={() => setNavigation({ ...navigation, channel })}
               >

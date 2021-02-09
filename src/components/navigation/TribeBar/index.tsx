@@ -95,6 +95,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           <ListItem
             key={tribe.id}
             button
+            disableGutters
             disableRipple
             aria-label={tribe.name}
             style={{ justifyContent: 'center', marginBottom: '2rem' }}
@@ -136,6 +137,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
         <ListItem
           button
           disableRipple
+          disableGutters
           aria-label="Discover Tribes"
           style={{ justifyContent: 'center', marginBottom: '2rem' }}
           onClick={() => {}}
