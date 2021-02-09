@@ -1,13 +1,13 @@
 // Use the SentryWebpack plugin to upload the source maps during build step
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 
 const {
-  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
-  NEXT_PUBLIC_RELEASE_NAME: RELEASE,
-  SENTRY_ORG,
-  SENTRY_PROJECT,
-  SENTRY_AUTH_TOKEN,
-  NODE_ENV
+  NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN
+  //   NEXT_PUBLIC_RELEASE_NAME: RELEASE,
+  //   SENTRY_ORG,
+  //   SENTRY_PROJECT,
+  //   SENTRY_AUTH_TOKEN,
+  //   NODE_ENV
 } = process.env;
 
 process.env.SENTRY_DSN = SENTRY_DSN;
@@ -47,24 +47,25 @@ module.exports = {
     // and upload the source maps to sentry.
     // This is an alternative to manually uploading the source maps
     // Note: This is disabled in development mode.
-    if (
-      SENTRY_DSN &&
-      SENTRY_ORG &&
-      SENTRY_PROJECT &&
-      SENTRY_AUTH_TOKEN &&
-      RELEASE &&
-      NODE_ENV === 'production'
-    ) {
-      config.plugins.push(
-        new SentryWebpackPlugin({
-          include: '.next',
-          ignore: ['node_modules'],
-          stripPrefix: ['webpack://_N_E/'],
-          urlPrefix: `~${basePath}/_next`,
-          release: RELEASE
-        })
-      );
-    }
+    //     if (
+    //       SENTRY_DSN &&
+    //       SENTRY_ORG &&
+    //       SENTRY_PROJECT &&
+    //       SENTRY_AUTH_TOKEN &&
+    //       RELEASE &&
+    //       NODE_ENV === 'production'
+    //     ) {
+    //       console.log(`~${basePath}/_next`);
+    //       config.plugins.push(
+    //         new SentryWebpackPlugin({
+    //           include: '.next',
+    //           ignore: ['node_modules'],
+    //           stripPrefix: ['webpack://_N_E/'],
+    //           urlPrefix: `~${basePath}/_next`,
+    //           release: RELEASE
+    //         })
+    //       );
+    //     }
     return config;
   },
   basePath
