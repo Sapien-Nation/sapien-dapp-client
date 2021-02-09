@@ -14,21 +14,19 @@ const getTribeNavigation = () =>
   });
 
 beforeEach(() => {
-  jest.clearAllMocks();
   preloadAll();
+  jest.clearAllMocks();
 });
 
-test('render', async () => {
+test('render tribe bar and navigation', async () => {
   const mockDate = new Date('2021-02-08T00:00:00.943Z');
   jest.spyOn(Date.prototype, 'toISOString').mockReturnValue(mockDate.toISOString());
 
-  await waitFor(() => {
-    renderComponent();
-  });
+  await waitFor(() => renderComponent());
 
-  // content
-  expect(screen.getByRole('heading', { name: /index page/i })).toBeInTheDocument();
-  await waitFor(() => {});
+  await waitFor(() => {
+    expect(screen.getByRole('heading', { name: /index page/i })).toBeInTheDocument();
+  });
 
   // Tribe bar
   const tribeBar = screen.getByRole('navigation', { name: /tribe bar/i });
@@ -63,69 +61,6 @@ test('render', async () => {
   expect(
     within(tribeBar).getByRole('button', { name: /messages/i })
   ).toHaveTextContent('0');
-
-  // create tribe
-  user.click(within(tribeBar).getByRole('button', { name: /create tribe/i }));
-
-  expect(
-    screen.getByRole('dialog', { name: 'New Tribe Step 1 / 2' })
-  ).toBeInTheDocument();
-
-  user.click(screen.getByRole('button', { name: /next/i }));
-  expect(
-    screen.getByRole('dialog', { name: 'New Tribe Step 1 / 2' })
-  ).toBeInTheDocument();
-
-  const chartCount = screen.getAllByTestId('chart-count');
-  expect(chartCount[0]).toHaveTextContent('0 / 36');
-  expect(chartCount[1]).toHaveTextContent('0 / 15');
-  expect(chartCount[2]).toHaveTextContent('0 / 60');
-
-  await waitFor(() => {
-    user.type(screen.getByRole('textbox', { name: /name/i }), 'new tribe');
-    user.type(screen.getByRole('textbox', { name: /unique identifier/i }), 'tribe');
-    user.type(
-      screen.getByRole('textbox', { name: /description/i }),
-      'some description'
-    );
-  });
-
-  await waitFor(() => {
-    expect(chartCount[0]).toHaveTextContent('9 / 36');
-    expect(chartCount[1]).toHaveTextContent('5 / 15');
-    expect(chartCount[2]).toHaveTextContent('16 / 60');
-  });
-
-  user.click(screen.getByRole('button', { name: /next/i }));
-  await waitFor(() => {
-    expect(
-      screen.getByRole('dialog', { name: 'New Tribe Step 2 / 2' })
-    ).toBeInTheDocument();
-  });
-
-  // back/next
-  // user.click(screen.getByRole('button', { name: /back/i }));
-  // await waitFor(() => {
-  //   expect(
-  //     screen.getByRole('dialog', { name: 'New Tribe Step 1 / 2' })
-  //   ).toBeInTheDocument();
-  // });
-
-  // user.click(screen.getByRole('button', { name: /next/i }));
-  // await waitFor(() => {
-  //   expect(
-  //     screen.getByRole('dialog', { name: 'New Tribe Step 2 / 2' })
-  //   ).toBeInTheDocument();
-  // });
-
-  // submit
-  // TODO test axios call
-  user.click(screen.getByRole('button', { name: /create/i }));
-  await waitFor(() => {
-    expect(
-      screen.queryByRole('dialog', { name: 'New Tribe Step 2 / 2' })
-    ).not.toBeInTheDocument();
-  });
 
   // Tribe navigation
   let tribeNavigation = getTribeNavigation();
@@ -174,4 +109,74 @@ test('render', async () => {
   expect(gamingChannel).toHaveTextContent('Gaming');
   expect(gamingChannel).toHaveTextContent('200 members');
   expect(socialChannel).toHaveTextContent('2 days');
+});
+
+test('create tribe', async () => {
+  await waitFor(() => renderComponent());
+
+  await waitFor(() => {
+    expect(screen.getByRole('heading', { name: /index page/i })).toBeInTheDocument();
+  });
+
+  user.click(screen.getByRole('button', { name: /create tribe/i }));
+
+  expect(
+    screen.getByRole('dialog', { name: /new tribe step 1 \/ 2/i })
+  ).toBeInTheDocument();
+
+  user.click(screen.getByRole('button', { name: /next/i }));
+  expect(
+    screen.getByRole('dialog', { name: /new tribe step 1 \/ 2/i })
+  ).toBeInTheDocument();
+
+  const chartCount = screen.getAllByTestId('chart-count');
+  expect(chartCount[0]).toHaveTextContent('0 / 36');
+  expect(chartCount[1]).toHaveTextContent('0 / 15');
+  expect(chartCount[2]).toHaveTextContent('0 / 60');
+
+  await waitFor(() => {
+    user.type(screen.getByRole('textbox', { name: /name/i }), 'new tribe');
+    user.type(screen.getByRole('textbox', { name: /unique identifier/i }), 'tribe');
+    user.type(
+      screen.getByRole('textbox', { name: /description/i }),
+      'some description'
+    );
+  });
+
+  await waitFor(() => {
+    expect(chartCount[0]).toHaveTextContent('9 / 36');
+    expect(chartCount[1]).toHaveTextContent('5 / 15');
+    expect(chartCount[2]).toHaveTextContent('16 / 60');
+  });
+
+  user.click(screen.getByRole('button', { name: /next/i }));
+  await waitFor(() => {
+    expect(
+      screen.getByRole('dialog', { name: /new tribe step 2 \/ 2/i })
+    ).toBeInTheDocument();
+  });
+});
+
+test('tribe navigation', async () => {
+  await waitFor(() => renderComponent());
+
+  await waitFor(() => {
+    expect(screen.getByRole('heading', { name: /index page/i })).toBeInTheDocument();
+  });
+
+  let tribeNavigation = getTribeNavigation();
+  expect(
+    within(tribeNavigation).getByRole('heading', { name: /settings/i })
+  ).toBeInTheDocument();
+
+  user.click(
+    within(
+      screen.getByRole('navigation', { name: /tribe bar/i })
+    ).getByRole('button', { name: /sapien/i })
+  );
+
+  tribeNavigation = getTribeNavigation();
+  expect(
+    within(tribeNavigation).getByRole('heading', { name: /sapien/i })
+  ).toBeInTheDocument();
 });
