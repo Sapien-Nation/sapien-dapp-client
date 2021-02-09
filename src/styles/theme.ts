@@ -9,8 +9,7 @@ import {
   darker,
   darkGrey,
   inputBG,
-  lightGrey,
-  background
+  lightGrey
 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 

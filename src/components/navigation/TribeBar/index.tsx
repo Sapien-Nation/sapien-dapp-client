@@ -15,8 +15,6 @@ import { dark, darkPurple, white } from 'styles/colors';
 import {
   Avatar,
   Badge,
-  Box,
-  Button,
   createStyles,
   Drawer,
   List,
