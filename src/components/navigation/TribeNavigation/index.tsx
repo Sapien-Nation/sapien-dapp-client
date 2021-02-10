@@ -6,6 +6,9 @@ import type { Theme } from '@material-ui/core/styles';
 // next
 import Image from 'next/image';
 
+// constants
+import { NavigationTypes } from 'context/tribes';
+
 // mui
 import {
   Avatar,
@@ -98,30 +101,29 @@ const TribeNavigation: React.FC = () => {
             display: 'flex',
             padding: '1.5rem',
             backgroundColor:
-              navigation?.tribePage === navigation?.tribe?.name ? purple : white,
+              navigation?.secondary === navigation?.main?.id ? purple : white,
             borderRadius: '1rem'
           }}
           onClick={() =>
             setNavigation({
-              tribe: navigation.tribe,
-              tribePage: navigation?.tribe?.name
+              secondary: navigation?.main?.id,
+              type: NavigationTypes.Tribe
             })
           }
         >
           <TribeName
-            fill={
-              navigation?.tribePage === navigation?.tribe?.name ? white : darkGrey
-            }
+            // @ts-ignore
+            fill={navigation?.secondary === navigation?.main?.id ? white : darkGrey}
           />
           <Typography
             style={{
               marginLeft: '1.5rem',
               color:
-                navigation?.tribePage === navigation?.tribe?.name ? white : darkGrey
+                navigation?.secondary === navigation?.main?.id ? white : darkGrey
             }}
             variant="h5"
           >
-            {navigation?.tribe?.name}
+            {navigation?.main?.name}
           </Typography>
         </ListItem>
         <ListItem
@@ -133,20 +135,21 @@ const TribeNavigation: React.FC = () => {
             display: 'flex',
             padding: '1.5rem',
             backgroundColor:
-              navigation?.tribePage === 'Badge Store' ? purple : white,
+              navigation?.secondary === 'Badge Store' ? purple : white,
             borderRadius: '1rem'
           }}
           onClick={() =>
-            setNavigation({ tribe: navigation.tribe, tribePage: 'Badge Store' })
+            setNavigation({ secondary: 'Badge Store', type: NavigationTypes.Badge })
           }
         >
           <BadgeStore
-            fill={navigation?.tribePage === 'Badge Store' ? white : darkGrey}
+            // @ts-ignore
+            fill={navigation?.secondary === 'Badge Store' ? white : darkGrey}
           />
           <Typography
             style={{
               marginLeft: '1.5rem',
-              color: navigation?.tribePage === 'Badge Store' ? white : darkGrey
+              color: navigation?.secondary === 'Badge Store' ? white : darkGrey
             }}
             variant="h5"
           >
@@ -194,14 +197,19 @@ const TribeNavigation: React.FC = () => {
           style={{ width: '100%' }}
           timeout="auto"
         >
-          <List>
-            {navigation?.tribe?.channels.map((channel) => (
+          <List aria-label="Channels list" role="list">
+            {navigation?.main?.channels.map((channel) => (
               <ListItem
                 key={channel.id}
                 button
                 disableGutters
                 disableRipple
-                onClick={() => setNavigation({ tribe: navigation.tribe, channel })}
+                onClick={() =>
+                  setNavigation({
+                    secondary: channel.id,
+                    type: NavigationTypes.Channel
+                  })
+                }
               >
                 <Box
                   aria-label={channel.name}
@@ -212,10 +220,9 @@ const TribeNavigation: React.FC = () => {
                     margin: '0 .65rem',
                     padding: '1rem',
                     width: '100%',
-                    color:
-                      navigation?.channel?.name === channel.name ? white : darkGrey,
+                    color: navigation?.secondary === channel.id ? white : darkGrey,
                     backgroundColor:
-                      navigation?.channel?.name === channel.name ? purple : white,
+                      navigation?.secondary === channel.id ? purple : white,
                     borderRadius: '1rem'
                   }}
                 >
@@ -247,10 +254,7 @@ const TribeNavigation: React.FC = () => {
                     >
                       <Typography
                         style={{
-                          color:
-                            navigation?.channel?.name === channel.name
-                              ? white
-                              : black
+                          color: navigation?.secondary === channel.id ? white : black
                         }}
                         variant="body1"
                       >
@@ -259,9 +263,7 @@ const TribeNavigation: React.FC = () => {
                       <Typography
                         style={{
                           color:
-                            navigation?.channel?.name === channel.name
-                              ? white
-                              : darkGrey
+                            navigation?.secondary === channel.id ? white : darkGrey
                         }}
                         variant="body2"
                       >
@@ -271,8 +273,7 @@ const TribeNavigation: React.FC = () => {
                   </Box>
                   <Typography
                     style={{
-                      color:
-                        navigation?.channel?.name === channel.name ? white : darkGrey
+                      color: navigation?.secondary === channel.id ? white : darkGrey
                     }}
                     variant="body2"
                   >

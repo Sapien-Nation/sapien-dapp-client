@@ -8,10 +8,16 @@ import type { Tribe } from 'types/tribe';
 // mocks
 import { mockTribe } from 'mocks/tribe';
 
+export enum NavigationTypes {
+  Badge,
+  Channel,
+  Tribe
+}
+
 interface Navigation {
-  tribe: Tribe | null;
-  tribePage?: string | null;
-  channel?: Channel | null;
+  main?: Tribe | null;
+  secondary?: Tribe | Channel | string;
+  type: NavigationTypes;
 }
 
 export const NavigationContext = createContext<Navigation | null>(null);
@@ -30,16 +36,19 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
     if (navigation === null || navigation?.tribe === null) {
       // TODO fetch call to set always 1 tribe
       setNavigation({
-        ...navigation,
-        tribe: mockTribe(),
-        tribePage: mockTribe().name
+        main: mockTribe(),
+        secondary: mockTribe().id,
+        type: NavigationTypes.Tribe
       });
     }
   }, []);
 
+  const handleSetNavigation = (newNavigation) =>
+    setNavigation({ ...navigation, ...newNavigation });
+
   return (
     <NavigationContext.Provider value={navigation}>
-      <NavigationDispatcher.Provider value={setNavigation}>
+      <NavigationDispatcher.Provider value={handleSetNavigation}>
         {children}
       </NavigationDispatcher.Provider>
     </NavigationContext.Provider>

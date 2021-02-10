@@ -133,6 +133,7 @@ test('create tribe', async () => {
   expect(chartCount[0]).toHaveTextContent('0 / 36');
   expect(chartCount[1]).toHaveTextContent('0 / 15');
   expect(chartCount[2]).toHaveTextContent('0 / 60');
+  expect(screen.getByRole('checkbox', { name: /tribe type/i })).not.toBeChecked();
 
   await waitFor(() => {
     user.type(screen.getByRole('textbox', { name: /name/i }), 'new tribe');
@@ -141,12 +142,14 @@ test('create tribe', async () => {
       screen.getByRole('textbox', { name: /description/i }),
       'some description'
     );
+    user.click(screen.getByRole('checkbox', { name: /tribe type/i }));
   });
 
   await waitFor(() => {
     expect(chartCount[0]).toHaveTextContent('9 / 36');
     expect(chartCount[1]).toHaveTextContent('5 / 15');
     expect(chartCount[2]).toHaveTextContent('16 / 60');
+    expect(screen.getByRole('checkbox', { name: /tribe type/i })).toBeChecked();
   });
 
   user.click(screen.getByRole('button', { name: /next/i }));
@@ -179,4 +182,16 @@ test('tribe navigation', async () => {
   expect(
     within(tribeNavigation).getByRole('heading', { name: /sapien/i })
   ).toBeInTheDocument();
+
+  // click channel
+  const channels = within(tribeNavigation).getByRole('button', {
+    name: /gaming/i
+  });
+  user.click(channels);
+
+  // click badge store
+  user.click(screen.getByRole('button', { name: /badge store/i }));
+
+  // click tribe name
+  user.click(within(tribeNavigation).getByRole('button', { name: /sapien/i }));
 });

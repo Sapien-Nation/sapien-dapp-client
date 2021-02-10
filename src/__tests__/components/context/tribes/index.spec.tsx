@@ -7,14 +7,14 @@ import { NavigationProvider, useNavigation } from 'context/tribes';
 // mocks
 import { mockTribe } from 'mocks/tribe';
 
-const tribe = mockTribe({ id: '2' });
+const main = mockTribe({ id: '2' });
 
 const Consumer = () => {
   const [navigation, setNavigation] = useNavigation();
   return (
     <>
-      <button onClick={() => setNavigation({ tribe })}>Set Tribe</button>
-      <h1>{navigation?.tribe.id}</h1>
+      <button onClick={() => setNavigation({ main })}>Set Tribe</button>
+      <h1>{navigation?.main.id}</h1>
     </>
   );
 };

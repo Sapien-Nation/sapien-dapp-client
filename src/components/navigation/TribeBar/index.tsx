@@ -8,6 +8,9 @@ import Image from 'next/image';
 // context
 import { useNavigation } from 'context/tribes';
 
+// constants
+import { NavigationTypes } from 'context/tribes';
+
 // styles
 import { dark, darkPurple, white } from 'styles/colors';
 
@@ -98,7 +101,13 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             disableRipple
             aria-label={tribe.name}
             style={{ justifyContent: 'center', marginBottom: '2rem' }}
-            onClick={() => setNavigation({ tribe, tribePage: tribe.name })}
+            onClick={() =>
+              setNavigation({
+                main: tribe,
+                secondary: tribe.id,
+                type: NavigationTypes.Tribe
+              })
+            }
           >
             <Badge
               badgeContent={tribe.notificationNumber}
@@ -117,8 +126,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                   height: '4rem'
                 }}
                 style={{
-                  borderColor:
-                    tribe.id === navigation?.tribe?.id ? white : darkPurple
+                  borderColor: tribe.id === navigation?.main?.id ? white : darkPurple
                 }}
                 variant="square"
               >
