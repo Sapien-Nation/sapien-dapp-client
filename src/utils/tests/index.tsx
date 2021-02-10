@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 import axios from 'axios';
-import { ReactElement, ReactNode } from 'react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { SnackbarProvider } from 'notistack';
+import { ReactElement, ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 // mui
@@ -37,22 +38,24 @@ const queryClient = new QueryClient({
 });
 const AllTheProviders = ({ children, isPage = false }: CustomRenderOptions) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <NavigationProvider>
-          {isPage ? (
-            <Layout>
-              <NoSsr>
-                <Navbar />
-              </NoSsr>
-              <main>{children}</main>
-            </Layout>
-          ) : (
-            <>{children}</>
-          )}
-        </NavigationProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <SnackbarProvider maxSnack={1}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <NavigationProvider>
+            {isPage ? (
+              <Layout>
+                <NoSsr>
+                  <Navbar />
+                </NoSsr>
+                <main>{children}</main>
+              </Layout>
+            ) : (
+              <>{children}</>
+            )}
+          </NavigationProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </SnackbarProvider>
   );
 };
 

@@ -1,5 +1,6 @@
 /* istanbul ignore file */
 import { useEffect } from 'react';
+import { SnackbarProvider } from 'notistack';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
@@ -60,22 +61,24 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           name="viewport"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <NavigationProvider>
-            <Layout>
-              <NoSsr>
-                <Navbar />
-              </NoSsr>
-              <main>
-                <Component {...pageProps} />
-              </main>
-            </Layout>
-          </NavigationProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <SnackbarProvider maxSnack={2}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools initialIsOpen={false} />
+            <NavigationProvider>
+              <Layout>
+                <NoSsr>
+                  <Navbar />
+                </NoSsr>
+                <main>
+                  <Component {...pageProps} />
+                </main>
+              </Layout>
+            </NavigationProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </SnackbarProvider>
     </>
   );
 };
