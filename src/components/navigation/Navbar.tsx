@@ -3,10 +3,15 @@ import { useState } from 'react';
 // next
 import Image from 'next/image';
 
+// context
+import { useAuth } from 'context/user';
+
 // mui
 import {
   AppBar,
   Avatar,
+  Box,
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -15,22 +20,31 @@ import {
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { me, logout, login } = useAuth();
 
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar variant="dense">
-        <IconButton
-          aria-controls="user profile"
-          aria-haspopup="true"
-          aria-label="account of current user"
-          color="inherit"
-          edge="end"
-          onClick={(event) => setAnchorEl(event.currentTarget)}
-        >
-          <Avatar>
-            <Image height={40} src="/fixtures/normal/slowpoke.jpg" width={40} />
-          </Avatar>
-        </IconButton>
+        <Box marginLeft="auto">
+          {me ? (
+            <IconButton
+              aria-controls="user profile"
+              aria-haspopup="true"
+              aria-label={me.username}
+              color="inherit"
+              edge="end"
+              onClick={(event) => setAnchorEl(event.currentTarget)}
+            >
+              <Avatar alt={me.username}>
+                <Image alt={me.username} height={40} src={me.avatar} width={40} />
+              </Avatar>
+            </IconButton>
+          ) : (
+            <Button color="primary" variant="contained" onClick={login}>
+              Login
+            </Button>
+          )}
+        </Box>
       </Toolbar>
       <Menu
         keepMounted
@@ -41,7 +55,14 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={() => setAnchorEl(null)}
       >
-        <MenuItem onClick={() => {}}>Logout</MenuItem>
+        <MenuItem
+          onClick={() => {
+            setAnchorEl(null);
+            logout();
+          }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </AppBar>
   );

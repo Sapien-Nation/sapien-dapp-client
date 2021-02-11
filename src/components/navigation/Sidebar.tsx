@@ -6,6 +6,9 @@ import type { Tribe } from 'types/tribe';
 // next
 import dynamic from 'next/dynamic';
 
+// context
+import { useAuth } from 'context/user';
+
 // components
 const CreateTribeModal = dynamic(
   () => import('components/tribe/modals').then((mod) => mod.CreateTribeModal),
@@ -25,10 +28,13 @@ export enum Dialog {
 
 const Sidebar: React.FC = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+  const { me } = useAuth();
+
+  if (me === null) return null;
 
   return (
     <div style={{ gridArea: 'sidebar' }}>
-      <Query apiUrl="api/tribes" loader={null}>
+      <Query apiUrl="/api/tribes/followed" loader={null}>
         {({ tribes }: { tribes: Array<Tribe> }) => (
           <>
             <TribeBar

@@ -6,6 +6,9 @@ import { SnackbarProvider } from 'notistack';
 import { ReactElement, ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+// types
+import { User } from 'types/user';
+
 // mui
 import { NoSsr } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
@@ -14,6 +17,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'styles/theme';
 
 // context
+import { AuthenticationContext } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
 
 // components
@@ -24,6 +28,11 @@ interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
   container?: Element;
   isPage?: boolean;
+  user?: {
+    logout: () => void;
+    login: () => Promise<unknown>;
+    me: null | User;
+  } | null;
 }
 
 const queryClient = new QueryClient({
@@ -36,37 +45,45 @@ const queryClient = new QueryClient({
     }
   }
 });
-const AllTheProviders = ({ children, isPage = false }: CustomRenderOptions) => {
+const AllTheProviders = ({
+  children,
+  isPage = false,
+  user = null
+}: CustomRenderOptions) => {
   return (
     <SnackbarProvider maxSnack={1}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <NavigationProvider>
-            {isPage ? (
-              <Layout>
-                <NoSsr>
-                  <Sidebar />
-                </NoSsr>
-                <main>
-                  <Navbar />
-                  {children}
-                </main>
-              </Layout>
-            ) : (
-              <>{children}</>
-            )}
-          </NavigationProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+      <AuthenticationContext.Provider value={user}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <NavigationProvider>
+              {isPage ? (
+                <Layout>
+                  <NoSsr>
+                    <Sidebar />
+                  </NoSsr>
+                  <main>
+                    <Navbar />
+                    {children}
+                  </main>
+                </Layout>
+              ) : (
+                <>{children}</>
+              )}
+            </NavigationProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </AuthenticationContext.Provider>
     </SnackbarProvider>
   );
 };
 
 const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
-  const { isPage, ...rest } = options;
+  const { isPage, user, ...rest } = options;
   const rtl = render(ui, {
     wrapper: ({ children }) => (
-      <AllTheProviders isPage={isPage}>{children}</AllTheProviders>
+      <AllTheProviders isPage={isPage} user={user}>
+        {children}
+      </AllTheProviders>
     ),
     ...rest
   });

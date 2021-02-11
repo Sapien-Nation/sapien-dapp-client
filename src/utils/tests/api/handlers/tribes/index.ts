@@ -4,7 +4,7 @@ import { rest } from 'msw';
 import { mockTribes } from 'mocks/tribe';
 
 const handlers = [
-  rest.get('/api/tribes', async (req, res, ctx) => {
+  rest.get('/api/tribes/followed', async (req, res, ctx) => {
     return res(ctx.json({ tribes: mockTribes() }));
   })
 ];

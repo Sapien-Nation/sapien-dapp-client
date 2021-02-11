@@ -30,10 +30,13 @@ interface Props {
 }
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
-  const [navigation, setNavigation] = useLocalStorage('navigation', null);
+  const [navigation, setNavigation] = useLocalStorage<Navigation | null>(
+    'navigation',
+    null
+  );
 
   useEffect(() => {
-    if (navigation === null || navigation?.tribe === null) {
+    if (!navigation?.main) {
       // TODO fetch call to set always 1 tribe
       setNavigation({
         main: mockTribe(),

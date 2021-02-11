@@ -24,6 +24,7 @@ import { init as initSentry } from 'utils/sentry';
 import theme from 'styles/theme';
 
 // context
+import { AuthenticationProvider } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
 
 // components
@@ -62,23 +63,27 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <SnackbarProvider maxSnack={2}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <NavigationProvider>
-              <Layout>
-                <NoSsr>
-                  <Sidebar />
-                </NoSsr>
-                <main>
-                  <Navbar />
-                  <Component {...pageProps} />
-                </main>
-              </Layout>
-            </NavigationProvider>
-          </QueryClientProvider>
-        </ThemeProvider>
+        <AuthenticationProvider>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <QueryClientProvider client={queryClient}>
+              <ReactQueryDevtools initialIsOpen={false} />
+              <NavigationProvider>
+                <Layout>
+                  <NoSsr>
+                    <Sidebar />
+                  </NoSsr>
+                  <main>
+                    <Navbar />
+                    <div>
+                      <Component {...pageProps} />
+                    </div>
+                  </main>
+                </Layout>
+              </NavigationProvider>
+            </QueryClientProvider>
+          </ThemeProvider>
+        </AuthenticationProvider>
       </SnackbarProvider>
     </>
   );
