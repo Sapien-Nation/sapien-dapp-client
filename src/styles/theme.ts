@@ -93,6 +93,10 @@ theme.overrides = {
     paperWidthXs: {
       maxWidth: '49rem',
       width: '100%'
+    },
+    paperWidthSm: {
+      maxWidth: '51.8rem',
+      width: '100%'
     }
   },
   MuiDialogTitle: {
