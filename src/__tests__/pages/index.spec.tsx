@@ -30,7 +30,7 @@ beforeEach(() => {
 });
 
 describe('tribe bar', () => {
-  test.only('render tribe bar and navigation', async () => {
+  test('render tribe bar and navigation', async () => {
     const mockDate = new Date('2021-02-08T00:00:00.943Z');
     jest
       .spyOn(Date.prototype, 'toISOString')
