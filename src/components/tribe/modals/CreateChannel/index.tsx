@@ -29,7 +29,7 @@ import {
   Search,
   SingleBadge,
   SubscriptionBadge
-} from '../assets/svg';
+} from '../../assets/svg';
 
 //components
 import Dialog from 'components/dialog';
@@ -89,14 +89,15 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+const tribeBadges = mockTribeBadges();
+const subscriptionBadges = mockSubscriptionBadges();
+
 interface Props {
   onClose: () => void;
 }
 
 const CreateChannelModal: React.FC<Props> = ({ onClose }) => {
   const [step, setStep] = useState(Step.ChannelSummary);
-  const tribeBadges = mockTribeBadges();
-  const subscriptionBadges = mockSubscriptionBadges();
   const theme = useTheme();
   const methods = useForm({
     defaultValues,
@@ -294,9 +295,9 @@ const CreateChannelModal: React.FC<Props> = ({ onClose }) => {
                   marginBottom="3.5rem"
                   marginTop="2rem"
                 >
-                  {tribeBadges.map((badge, index) => (
+                  {tribeBadges.map((badge) => (
                     <Chip
-                      key={index}
+                      key={badge.id}
                       avatar={
                         <Avatar style={{ backgroundColor: 'transparent' }}>
                           <SingleBadge color={badge.color} />

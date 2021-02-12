@@ -15,3 +15,7 @@ export const mockTribeBadges = () => {
 export const mockSubscriptionBadges = () => {
   return [badge7, badge8];
 };
+
+export const mockTribeBadge = () => badge1;
+
+export const mockSubscriptionBadge = () => badge7;

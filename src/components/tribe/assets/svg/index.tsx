@@ -103,7 +103,7 @@ export const MultipleBadges = () => (
   </svg>
 );
 
-export const SingleBadge = ({ color = '#6200EA' }) => (
+export const SingleBadge = ({ color = '#6200EA' }: { color: string }) => (
   <svg
     fill="none"
     height="22"
@@ -136,7 +136,7 @@ export const SingleBadge = ({ color = '#6200EA' }) => (
   </svg>
 );
 
-export const SubscriptionBadge = ({ color = '#0BC4DD' }) => (
+export const SubscriptionBadge = ({ color = '#0BC4DD' }: { color: string }) => (
   <svg
     fill="none"
     height="22"
