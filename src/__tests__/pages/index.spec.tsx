@@ -127,6 +127,38 @@ describe('tribe bar', () => {
     expect(socialChannel).toHaveTextContent('2 days');
   });
 
+  test('discovery', async () => {
+    await waitFor(() => renderComponent());
+
+    await waitFor(() => {});
+
+    user.click(screen.getByRole('button', { name: /discover tribes/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('TOPICS')).toBeInTheDocument();
+      expect(screen.getByText('All Topics')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {});
+    await waitFor(() => {
+      expect(
+        screen.getByRole('listitem', { name: /topic: humor/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('listitem', { name: /topic: travel/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('listitem', { name: /topic: business/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('listitem', { name: /topic: style/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('listitem', { name: /topic: animals/i })
+      ).toBeInTheDocument();
+    });
+  });
+
   test('create tribe', async () => {
     await waitFor(() => renderComponent());
 
@@ -194,7 +226,7 @@ describe('tribe navigation', () => {
 
     let tribeNavigation = getTribeNavigation();
     expect(
-      within(tribeNavigation).getByRole('heading', { name: /settings/i })
+      within(tribeNavigation).getByRole('heading', { name: /sapien/i })
     ).toBeInTheDocument();
 
     user.click(

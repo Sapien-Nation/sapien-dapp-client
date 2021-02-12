@@ -58,9 +58,7 @@ const AllTheProviders = ({
             <NavigationProvider>
               {isPage ? (
                 <Layout>
-                  <NoSsr>
-                    <Sidebar />
-                  </NoSsr>
+                  <Sidebar />
                   <main>
                     <Navbar />
                     {children}

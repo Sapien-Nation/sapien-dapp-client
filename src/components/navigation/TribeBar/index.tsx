@@ -147,21 +147,41 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           disableRipple
           aria-label="Discover Tribes"
           style={{ justifyContent: 'center', marginBottom: '2rem' }}
-          onClick={() => {}}
+          onClick={() =>
+            setNavigation({
+              main: null,
+              secondary: null,
+              type: NavigationTypes.Discovery
+            })
+          }
         >
-          <Avatar
-            alt="Discover Tribe"
+          <Badge
+            badgeContent={0}
             classes={{
-              root: classes.avatarItems
+              badge: classes.badge
             }}
-            imgProps={{
-              width: '4rem',
-              height: '4rem'
-            }}
-            variant="square"
+            color="error"
           >
-            <ExploreIcon />
-          </Avatar>
+            <Avatar
+              alt="Discover Tribe"
+              classes={{
+                root: classes.avatar
+              }}
+              imgProps={{
+                width: '4rem',
+                height: '4rem'
+              }}
+              style={{
+                borderColor:
+                  navigation.type === NavigationTypes.Discovery ? white : darkPurple,
+                borderRadius: '9px',
+                padding: '0.9rem'
+              }}
+              variant="square"
+            >
+              <ExploreIcon />
+            </Avatar>
+          </Badge>
         </ListItem>
         <ListItem
           button

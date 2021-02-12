@@ -6,8 +6,12 @@ import type { Tribe } from 'types/tribe';
 // next
 import dynamic from 'next/dynamic';
 
+// constants
+import { NavigationTypes } from 'context/tribes';
+
 // context
 import { useAuth } from 'context/user';
+import { useNavigation } from 'context/tribes';
 
 // components
 const CreateTribeModal = dynamic(
@@ -16,9 +20,11 @@ const CreateTribeModal = dynamic(
     ssr: false
   }
 );
-
 import TribeBar from 'components/navigation/TribeBar';
-import TribeNavigation from 'components/navigation/TribeNavigation';
+import {
+  DiscoverNavigation,
+  TribeNavigation
+} from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
 
 export enum Dialog {
@@ -29,6 +35,7 @@ export enum Dialog {
 const Sidebar: React.FC = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { me } = useAuth();
+  const [navigation] = useNavigation();
 
   if (me === null) return null;
 
@@ -41,7 +48,12 @@ const Sidebar: React.FC = () => {
               setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
               tribes={tribes}
             />
-            <TribeNavigation />
+            {navigation?.type === NavigationTypes.Discovery ? (
+              <DiscoverNavigation />
+            ) : (
+              <TribeNavigation />
+            )}
+
             {dialog === Dialog.CreateTribe && (
               <CreateTribeModal onClose={() => setDialog(null)} />
             )}

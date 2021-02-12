@@ -9,8 +9,9 @@ import type { Tribe } from 'types/tribe';
 import { mockTribe } from 'mocks/tribe';
 
 export enum NavigationTypes {
-  Badge,
+  BadgeStore,
   Channel,
+  Discovery,
   Tribe
 }
 
