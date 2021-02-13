@@ -1,4 +1,7 @@
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE
+});
 
 const {
   NEXT_PUBLIC_SENTRY_DSN: SENTRY_DSN,
@@ -12,7 +15,7 @@ const {
 process.env.SENTRY_DSN = SENTRY_DSN;
 const basePath = '';
 
-module.exports = {
+module.exports = withBundleAnalyzer({
   productionBrowserSourceMaps: true,
   webpack: (config, options) => {
     if (!options.isServer) {
@@ -45,4 +48,4 @@ module.exports = {
     return config;
   },
   basePath
-};
+});

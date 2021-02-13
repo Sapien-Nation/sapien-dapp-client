@@ -4,6 +4,7 @@
   "description": "Web V3",
   "main": "index.js",
   "scripts": {
+    "analyze": "ANALYZE=1 npm run build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
+    "@next/bundle-analyzer": "^10.0.6",
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
