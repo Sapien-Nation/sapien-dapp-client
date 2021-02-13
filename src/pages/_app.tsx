@@ -11,6 +11,7 @@ import type { AppProps } from 'next/app';
 import axios from 'api';
 
 // next
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 // mui
@@ -28,6 +29,7 @@ import { AuthenticationProvider } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
 
 // components
+const General = dynamic(() => import('./general'), { ssr: false });
 import Layout from './Layout';
 import { Navbar, Sidebar } from 'components/navigation';
 
@@ -69,6 +71,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             <QueryClientProvider client={queryClient}>
               <ReactQueryDevtools initialIsOpen={false} />
               <NavigationProvider>
+                <General />
                 <Layout>
                   <NoSsr>
                     <Sidebar />
