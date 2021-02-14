@@ -4,18 +4,15 @@ import cookie from 'cookie';
 // types
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-// mocks
-import { mockUser } from 'mocks/user';
-
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     res.setHeader(
       'Set-Cookie',
-      cookie.serialize('sapien_v3_12', '123456', {
-        httpOnly: true
+      cookie.serialize('sapien_v3_12', '', {
+        maxAge: 0
       })
     );
-    return res.status(200).json(mockUser());
+    return res.status(200).json(true);
   } else {
     return res.status(500).send('Weirdo');
   }

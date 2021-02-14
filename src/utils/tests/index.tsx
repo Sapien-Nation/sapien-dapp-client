@@ -1,85 +1,64 @@
 /* istanbul ignore file */
-import axios from 'axios';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SnackbarProvider } from 'notistack';
 import { ReactElement, ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { SWRConfig } from 'swr';
 
 // types
-import { User } from 'types/user';
+import type { NextRouter } from 'next/router';
 
 // mui
-import { NoSsr } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 // styles
 import theme from 'styles/theme';
 
-// context
-import { AuthenticationContext } from 'context/user';
-import { NavigationProvider } from 'context/tribes';
+// mocks
+import { mockRouter } from 'mocks/routes';
 
-// components
-import Layout from 'pages/Layout';
-import { Navbar, Sidebar } from 'components/navigation';
+// providers
+import { NavigationProvider } from 'context/tribes';
+import { RouterContext } from 'next/dist/next-server/lib/router-context';
+import { AuthenticationProvider } from 'context/user';
 
 interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
   container?: Element;
-  isPage?: boolean;
-  user?: {
-    logout: () => void;
-    login: () => Promise<unknown>;
-    me: null | User;
-  } | null;
+  fetcher?: (...args: any) => any;
+  router?: NextRouter | null;
 }
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: async ({ queryKey }: { queryKey: Array<string> }) => {
-        const { data } = await axios.get(queryKey[0]);
-        return data;
-      }
-    }
-  }
-});
 const AllTheProviders = ({
   children,
-  isPage = false,
-  user = null
-}: CustomRenderOptions) => {
-  return (
-    <SnackbarProvider maxSnack={1}>
-      <AuthenticationContext.Provider value={user}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <NavigationProvider>
-              {isPage ? (
-                <Layout>
-                  <Sidebar />
-                  <main>
-                    <Navbar />
-                    {children}
-                  </main>
-                </Layout>
-              ) : (
-                <>{children}</>
-              )}
-            </NavigationProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </AuthenticationContext.Provider>
-    </SnackbarProvider>
-  );
-};
+  fetcher,
+  router = null
+}: CustomRenderOptions) => (
+  <SnackbarProvider maxSnack={1}>
+    <SWRConfig
+      value={{
+        dedupingInterval: 0,
+        errorRetryCount: 0,
+        fetcher,
+        revalidateOnFocus: false
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <RouterContext.Provider value={mockRouter(router)}>
+          <AuthenticationProvider>
+            <NavigationProvider>{children}</NavigationProvider>
+          </AuthenticationProvider>
+        </RouterContext.Provider>
+      </ThemeProvider>
+    </SWRConfig>
+  </SnackbarProvider>
+);
 
 const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
-  const { isPage, user, ...rest } = options;
+  const { fetcher, router, ...rest } = options;
   const rtl = render(ui, {
     wrapper: ({ children }) => (
-      <AllTheProviders isPage={isPage} user={user}>
+      <AllTheProviders fetcher={fetcher} router={router}>
         {children}
       </AllTheProviders>
     ),

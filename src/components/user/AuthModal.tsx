@@ -22,14 +22,17 @@ const AuthModal: React.FC<Props> = ({ handleLogin, onClose, open }) => {
       case View.Login:
         return {
           confirmLabel: 'Login',
-          onConfirm: handleLogin
+          onConfirm: handleLogin,
+          title: 'Login'
         };
       default:
-        return {};
+        return {
+          title: ''
+        };
     }
   };
 
-  return <Dialog open={open} title="" onClose={onClose} {...getDialogProps()} />;
+  return <Dialog open={open} onClose={onClose} {...getDialogProps()} />;
 };
 
 export default AuthModal;

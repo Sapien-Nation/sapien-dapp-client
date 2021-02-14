@@ -29,7 +29,7 @@ const General = () => {
     }
   };
 
-  events.on('hashChangeComplete', (url) => {
+  events?.on('hashChangeComplete', (url) => {
     setIsAuthModalOpen(url.includes('#signup'));
   });
 

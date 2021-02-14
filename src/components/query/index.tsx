@@ -1,4 +1,7 @@
-import { useQuery } from 'react-query';
+import useSWR, { mutate } from 'swr';
+
+// types
+import type { keyInterface } from 'swr';
 
 // mui
 import { Skeleton } from '@material-ui/lab';
@@ -7,11 +10,10 @@ import { Skeleton } from '@material-ui/lab';
 import { ErrorView } from 'components/general';
 
 interface Props {
-  apiUrl: string | Array<string>;
+  apiUrl: keyInterface;
   // eslint-disable-next-line @typescript-eslint/ban-types
-  children: Function | null;
+  children?: Function | null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fetcher?: () => Promise<any> | null;
   loader?: React.ReactElement;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: any;
@@ -24,20 +26,15 @@ export type Error = {
 const Query: React.FC<Props> = ({
   apiUrl,
   children,
-  fetcher = null,
   loader = <Skeleton />,
   options = {}
 }) => {
-  const { data, error, isLoading, isError, refetch } = useQuery(
-    apiUrl,
-    fetcher,
-    options
-  );
+  const { data, error } = useSWR(apiUrl, options);
 
-  if (isLoading) return loader;
+  if (apiUrl !== null && !data && !error) return loader;
 
-  if (isError) {
-    return <ErrorView error={error as Error} onClick={refetch} />;
+  if (error) {
+    return <ErrorView error={error as Error} onClick={() => mutate(apiUrl)} />;
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types

@@ -1,5 +1,6 @@
+import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
-import { useLocalStorage } from 'react-use';
+import { useSnackbar } from 'notistack';
 
 // api
 import axios from 'api';
@@ -7,7 +8,7 @@ import axios from 'api';
 // types
 import type { User } from 'types/user';
 
-interface Authentication {
+export interface Authentication {
   me: User | null;
   login: () => void;
   logout: () => void;
@@ -20,23 +21,29 @@ interface Props {
 }
 
 const AuthenticationProvider: React.FC<Props> = ({ children }) => {
-  const [me, setMe] = useLocalStorage<User | null>('me', null);
+  const { enqueueSnackbar } = useSnackbar();
+  const { data } = useSWR('/api/users/me');
 
-  const logout = () => {
-    setMe(null);
+  const logout = async () => {
+    try {
+      await axios.post('/api/users/logout');
+      mutate('/api/users/me');
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
   };
 
   const login = async () => {
     try {
-      const { data } = await axios.post('/api/users/login');
-      setMe(data);
+      await axios.post('/api/users/login');
+      mutate('/api/users/me');
     } catch (err) {
-      //
+      enqueueSnackbar(err.message);
     }
   };
 
   return (
-    <AuthenticationContext.Provider value={{ me, login, logout }}>
+    <AuthenticationContext.Provider value={{ me: data?.me, login, logout }}>
       {children}
     </AuthenticationContext.Provider>
   );

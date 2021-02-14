@@ -1,8 +1,7 @@
 /* istanbul ignore file */
 import { useEffect } from 'react';
+import { SWRConfig } from 'swr';
 import { SnackbarProvider } from 'notistack';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 // types
 import type { AppProps } from 'next/app';
@@ -35,17 +34,6 @@ import { Navbar, Sidebar } from 'components/navigation';
 
 initSentry();
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: async ({ queryKey }: { queryKey: Array<string> }) => {
-        const { data } = await axios.get(queryKey[0]);
-        return data;
-      }
-    }
-  }
-});
-
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -65,12 +53,20 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <SnackbarProvider maxSnack={2}>
-        <AuthenticationProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <QueryClientProvider client={queryClient}>
-              <ReactQueryDevtools initialIsOpen={false} />
+        <ThemeProvider theme={theme}>
+          <SWRConfig
+            value={{
+              errorRetryCount: 0,
+              fetcher: (url: string) =>
+                axios(url)
+                  .then(({ data }) => data)
+                  .catch(({ response }) => Promise.reject(response.data.error)),
+              revalidateOnFocus: false
+            }}
+          >
+            <AuthenticationProvider>
               <NavigationProvider>
+                <CssBaseline />
                 <General />
                 <Layout>
                   <NoSsr>
@@ -84,9 +80,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                   </main>
                 </Layout>
               </NavigationProvider>
-            </QueryClientProvider>
-          </ThemeProvider>
-        </AuthenticationProvider>
+            </AuthenticationProvider>
+          </SWRConfig>
+        </ThemeProvider>
       </SnackbarProvider>
     </>
   );

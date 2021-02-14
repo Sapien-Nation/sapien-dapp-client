@@ -15,13 +15,19 @@ export enum NavigationTypes {
   Tribe
 }
 
-interface Navigation {
+export interface Navigation {
   main?: Tribe | null;
   secondary?: Tribe | Channel | string;
   type: NavigationTypes;
 }
 
-export const NavigationContext = createContext<Navigation | null>(null);
+const defaultValues = {
+  main: null,
+  secondary: '',
+  type: NavigationTypes.Tribe
+};
+
+export const NavigationContext = createContext<Navigation | null>(defaultValues);
 const NavigationDispatcher = createContext<(navigation: Navigation) => void | null>(
   null
 );
@@ -31,19 +37,15 @@ interface Props {
 }
 
 const NavigationProvider: React.FC<Props> = ({ children }) => {
-  const [navigation, setNavigation] = useLocalStorage<Navigation | null>(
+  const [navigation, setNavigation] = useLocalStorage<Navigation>(
     'navigation',
-    null
+    defaultValues
   );
 
   useEffect(() => {
-    if (!navigation?.main) {
+    if (navigation.main === null) {
       // TODO fetch call to set always 1 tribe
-      setNavigation({
-        main: mockTribe(),
-        secondary: mockTribe().id,
-        type: NavigationTypes.Tribe
-      });
+      setNavigation({ ...navigation, main: mockTribe() });
     }
   }, []);
 

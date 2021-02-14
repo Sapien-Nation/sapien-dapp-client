@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
   const { me } = useAuth();
   const [navigation] = useNavigation();
 
-  if (me === null) return null;
+  if (me === undefined) return null;
 
   return (
     <div style={{ gridArea: 'sidebar' }}>
