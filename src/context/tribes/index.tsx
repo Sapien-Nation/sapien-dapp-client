@@ -1,12 +1,14 @@
-import { createContext, useContext, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { cache, mutate } from 'swr';
 import { useLocalStorage } from 'react-use';
+import { createContext, useContext, useEffect } from 'react';
+
+// api
+import axios from 'api';
 
 // types
 import type { Channel } from 'types/channel';
 import type { Tribe } from 'types/tribe';
-
-// mocks
-import { mockTribe } from 'mocks/tribe';
 
 export enum NavigationTypes {
   BadgeStore,
@@ -41,16 +43,47 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
     'navigation',
     defaultValues
   );
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
+    const fetchDefaultTribe = async () => {
+      const cachedTribes = cache.get('/api/tribes/followed')?.tribes;
+
+      if (cachedTribes?.length) {
+        setNavigation({ ...navigation, main: cachedTribes[0] });
+      } else {
+        const { tribes } = await mutate('/api/tribes/followed');
+        setNavigation({ ...navigation, main: tribes[0] });
+      }
+    };
+
     if (navigation.main === null) {
-      // TODO fetch call to set always 1 tribe
-      setNavigation({ ...navigation, main: mockTribe() });
+      fetchDefaultTribe();
     }
   }, []);
 
-  const handleSetNavigation = (newNavigation) =>
-    setNavigation({ ...navigation, ...newNavigation });
+  const handleSetNavigation = async (newNavigation) => {
+    try {
+      setNavigation({ ...navigation, ...newNavigation });
+
+      if (newNavigation.main) {
+        await axios.post('/api/tribes/visit');
+        mutate(
+          '/api/tribes/followed',
+          ({ tribes }: { tribes: Array<Tribe> }) => ({
+            tribes: tribes.map((tribe) =>
+              tribe.id === newNavigation.main.id
+                ? { ...tribe, notificationNumber: 0 }
+                : tribe
+            )
+          }),
+          false
+        );
+      }
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
 
   return (
     <NavigationContext.Provider value={navigation}>

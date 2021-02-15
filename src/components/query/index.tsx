@@ -1,7 +1,7 @@
 import useSWR, { mutate } from 'swr';
 
 // types
-import type { keyInterface } from 'swr';
+import type { keyInterface, ConfigInterface } from 'swr';
 
 // mui
 import { Skeleton } from '@material-ui/lab';
@@ -13,10 +13,8 @@ interface Props {
   apiUrl: keyInterface;
   // eslint-disable-next-line @typescript-eslint/ban-types
   children?: Function | null;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   loader?: React.ReactElement;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  options?: any;
+  options?: ConfigInterface;
 }
 
 export type Error = {
