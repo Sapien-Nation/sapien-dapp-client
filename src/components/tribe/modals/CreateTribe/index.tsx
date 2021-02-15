@@ -24,6 +24,7 @@ import { background, lightGrey } from 'styles/colors';
 //components
 import Dialog from 'components/dialog';
 import DropZone from 'components/dropzone';
+import ChartCount from 'components/general/form';
 
 const defaultValues = {
   name: '',
@@ -70,7 +71,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
     shouldUnregister: false
   });
 
-  const { control, handleSubmit, register, watch } = methods;
+  const { control, handleSubmit, register } = methods;
 
   const classes = useStyles();
 
@@ -101,15 +102,6 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
 
   const form = 'create-tribe';
 
-  const getChartCount = (field: string, maxCount: string) => {
-    const val = watch(field) as string;
-    return (
-      <Typography data-testid="chart-count" variant="caption">
-        {val?.length || 0} / {maxCount}
-      </Typography>
-    );
-  };
-
   const renderForm = () => {
     switch (step) {
       case Step.TribeSummary: {
@@ -124,7 +116,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1}
               >
                 <InputLabel htmlFor="name">Name</InputLabel>
-                {getChartCount('name', '36')}
+                <ChartCount control={control} field="name" maxCount="36" />
               </Box>
               <Input
                 fullWidth
@@ -145,7 +137,11 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 <InputLabel htmlFor="unique_identifier">
                   Unique Identifier
                 </InputLabel>
-                {getChartCount('unique_identifier', '15')}
+                <ChartCount
+                  control={control}
+                  field="unique_identifier"
+                  maxCount="15"
+                />
               </Box>
               <Input
                 fullWidth
@@ -164,7 +160,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1.6}
               >
                 <InputLabel htmlFor="description">Description</InputLabel>
-                {getChartCount('description', '60')}
+                <ChartCount control={control} field="description" maxCount="60" />
               </Box>
               <Input
                 fullWidth
