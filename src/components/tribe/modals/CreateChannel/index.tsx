@@ -34,9 +34,9 @@ import {
 import { AddIcon, RssIcon } from 'components/assets/svg';
 
 //components
+import ChartCount from 'components/general/form';
 import Dialog from 'components/dialog';
 import DropZone from 'components/dropzone';
-import ChartCount from 'components/general/form';
 
 // mocks
 import { mockTribeBadges, mockSubscriptionBadges } from 'mocks/badges';
@@ -173,7 +173,7 @@ const CreateChannelModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1}
               >
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <ChartCount control={control} field="name" maxCount="36" />
+                <ChartCount field="name" maxCount="36" />
               </Box>
               <Input
                 fullWidth
@@ -192,7 +192,7 @@ const CreateChannelModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1.6}
               >
                 <InputLabel htmlFor="description">Description</InputLabel>
-                <ChartCount control={control} field="description" maxCount="60" />
+                <ChartCount field="description" maxCount="60" />
               </Box>
               <Input
                 fullWidth

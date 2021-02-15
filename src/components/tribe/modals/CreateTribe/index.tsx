@@ -22,9 +22,9 @@ import { HelpOutlineOutlined as HelpIcon, Add as AddIcon } from '@material-ui/ic
 import { background, lightGrey } from 'styles/colors';
 
 //components
+import ChartCount from 'components/general/form';
 import Dialog from 'components/dialog';
 import DropZone from 'components/dropzone';
-import ChartCount from 'components/general/form';
 
 const defaultValues = {
   name: '',
@@ -116,7 +116,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1}
               >
                 <InputLabel htmlFor="name">Name</InputLabel>
-                <ChartCount control={control} field="name" maxCount="36" />
+                <ChartCount field="name" maxCount="36" />
               </Box>
               <Input
                 fullWidth
@@ -137,11 +137,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 <InputLabel htmlFor="unique_identifier">
                   Unique Identifier
                 </InputLabel>
-                <ChartCount
-                  control={control}
-                  field="unique_identifier"
-                  maxCount="15"
-                />
+                <ChartCount field="unique_identifier" maxCount="15" />
               </Box>
               <Input
                 fullWidth
@@ -160,7 +156,7 @@ const CreateTribeModal: React.FC<Props> = ({ onClose }) => {
                 marginBottom={1.6}
               >
                 <InputLabel htmlFor="description">Description</InputLabel>
-                <ChartCount control={control} field="description" maxCount="60" />
+                <ChartCount field="description" maxCount="60" />
               </Box>
               <Input
                 fullWidth

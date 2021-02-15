@@ -1,4 +1,4 @@
-import { useWatch } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 // mui
 import { Typography } from '@material-ui/core';
@@ -6,13 +6,11 @@ import { Typography } from '@material-ui/core';
 interface Props {
   field: string;
   maxCount: string;
-  control: string | any;
 }
-const ChartCount: React.FC<Props> = ({ control, field, maxCount }) => {
-  const val = useWatch({
-    control,
-    name: field
-  }) as string;
+
+const ChartCount: React.FC<Props> = ({ field, maxCount }) => {
+  const { watch } = useFormContext();
+  const val = watch(field) as string;
   return (
     <Typography data-testid="chart-count" variant="caption">
       {val?.length || 0} / {maxCount}
