@@ -42,7 +42,10 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     nav: {
       cursor: 'pointer',
-      marginTop: `${theme.spacing(2)}`
+      '& > *': {
+        minHeight: theme.spacing(7),
+        justifyContent: 'center'
+      }
     },
     avatar: {
       height: theme.spacing(4.5),
@@ -100,7 +103,6 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             disableGutters
             disableRipple
             aria-label={tribe.name}
-            style={{ justifyContent: 'center', marginBottom: '2rem' }}
             onClick={() =>
               setNavigation({
                 main: tribe,
@@ -146,7 +148,6 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           disableGutters
           disableRipple
           aria-label="Discover Tribes"
-          style={{ justifyContent: 'center', marginBottom: '2rem' }}
           onClick={() =>
             setNavigation({
               main: null,
@@ -187,7 +188,6 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           button
           disableRipple
           aria-label="Create Tribe"
-          style={{ justifyContent: 'center', marginBottom: '2rem' }}
           onClick={setShowCreateTribeModal}
         >
           <Avatar
