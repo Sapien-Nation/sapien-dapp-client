@@ -75,16 +75,16 @@ describe('TribeBar', () => {
     ).toHaveAttribute('alt', 'Messages');
     expect(
       within(tribeBar).getByRole('button', { name: /sapien/i })
-    ).toHaveTextContent('10');
+    ).toHaveTextContent('47');
     expect(
       within(tribeBar).getByRole('button', { name: /general/i })
-    ).toHaveTextContent('0');
+    ).toHaveTextContent('18');
     expect(
       within(tribeBar).getByRole('button', { name: /settings/i })
-    ).toHaveTextContent('0');
+    ).toHaveTextContent('19');
     expect(
       within(tribeBar).getByRole('button', { name: /messages/i })
-    ).toHaveTextContent('0');
+    ).toHaveTextContent('99');
 
     // Tribe navigation
     let tribeNavigation = getTribeNavigation();
@@ -100,19 +100,7 @@ describe('TribeBar', () => {
       within(tribeNavigation).getByRole('heading', { name: /channels/i })
     ).toBeInTheDocument();
 
-    const socialChannel = within(tribeNavigation).getByRole('button', {
-      name: /social/i
-    });
-
-    expect(within(socialChannel).getByRole('img', { hidden: true })).toHaveAttribute(
-      'alt',
-      'Social'
-    );
-    expect(socialChannel).toHaveTextContent('Social');
-    expect(socialChannel).toHaveTextContent('123 members');
-    expect(socialChannel).toHaveTextContent('2 days');
-
-    let gamingChannel = within(tribeNavigation).getByRole('button', {
+    const gamingChannel = within(tribeNavigation).getByRole('button', {
       name: /gaming/i
     });
 
@@ -122,7 +110,7 @@ describe('TribeBar', () => {
     );
     expect(gamingChannel).toHaveTextContent('Gaming');
     expect(gamingChannel).toHaveTextContent('200 members');
-    expect(socialChannel).toHaveTextContent('2 days');
+    expect(gamingChannel).toHaveTextContent('2 days');
 
     // select tribe
     user.click(within(tribeBar).getByRole('button', { name: /settings/i }));
@@ -130,18 +118,6 @@ describe('TribeBar', () => {
     expect(
       within(tribeNavigation).getByRole('heading', { name: /settings/i })
     ).toBeInTheDocument();
-
-    gamingChannel = within(tribeNavigation).getByRole('button', {
-      name: /gaming/i
-    });
-
-    expect(within(gamingChannel).getByRole('img', { hidden: true })).toHaveAttribute(
-      'alt',
-      'Gaming'
-    );
-    expect(gamingChannel).toHaveTextContent('Gaming');
-    expect(gamingChannel).toHaveTextContent('200 members');
-    expect(socialChannel).toHaveTextContent('2 days');
   });
 
   test('discovery', async () => {
