@@ -48,12 +48,15 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const fetchDefaultTribe = async () => {
       const cachedTribes = cache.get('/api/tribes/followed')?.tribes;
-
       if (cachedTribes?.length) {
         setNavigation({ ...navigation, main: cachedTribes[0] });
       } else {
-        const { tribes } = await mutate('/api/tribes/followed');
-        setNavigation({ ...navigation, main: tribes[0] });
+        try {
+          const { tribes } = await mutate('/api/tribes/followed');
+          setNavigation({ ...navigation, main: tribes[0] });
+        } catch (err) {
+          //
+        }
       }
     };
 
