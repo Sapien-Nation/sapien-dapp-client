@@ -10,7 +10,7 @@ const IndexPage: React.FC = () => {
 
   const handleError = async () => {
     try {
-      await axios.post('/api/tribes/create');
+      await axios.post('/api/tribes/error');
     } catch (err) {
       console.log(err);
       //
