@@ -48,23 +48,24 @@ const useStyles = makeStyles((theme: Theme) => {
       }
     },
     avatar: {
-      height: theme.spacing(4.5),
-      width: theme.spacing(4.5),
       color: white,
       backgroundColor: 'inherit',
-      borderRadius: 10,
-      border: '2px solid'
+      borderRadius: 15,
+      border: '2px solid',
+      boxSizing: 'content-box',
+      padding: '3px'
     },
     avatarImage: {
-      padding: `${theme.spacing(0.3)} !important`,
-      borderRadius: '9px'
+      borderRadius: '10px'
     },
     badge: {
-      top: '4px',
-      height: theme.spacing(1.9),
-      width: theme.spacing(2),
       fontSize: theme.spacing(1),
-      border: `3px solid ${dark}`
+      top: '6px',
+      minWidth: theme.spacing(1.5),
+      border: `3px solid ${dark}`,
+      height: theme.spacing(1.3),
+      boxSizing: 'content-box',
+      padding: 0
     },
     avatarItems: {
       color: white,
@@ -123,10 +124,6 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 classes={{
                   root: classes.avatar
                 }}
-                imgProps={{
-                  width: '4rem',
-                  height: '4rem'
-                }}
                 style={{
                   borderColor: tribe.id === navigation?.main?.id ? white : darkPurple
                 }}
@@ -136,6 +133,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                   alt={tribe.name}
                   className={classes.avatarImage}
                   height={40}
+                  quality={100}
                   src={tribe.image}
                   width={40}
                 />
@@ -166,7 +164,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             <Avatar
               alt="Discover Tribe"
               classes={{
-                root: classes.avatar
+                root: classes.avatarItems
               }}
               imgProps={{
                 width: '4rem',
