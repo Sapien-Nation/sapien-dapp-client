@@ -1,2 +1,2 @@
-export { default as CreateTribeModal } from './CreateTribe';
-export { default as CreateChannelModal } from './CreateChannel';
+export { default as CreateTribe } from './CreateTribe';
+export { default as CreateChannel } from './CreateChannel';

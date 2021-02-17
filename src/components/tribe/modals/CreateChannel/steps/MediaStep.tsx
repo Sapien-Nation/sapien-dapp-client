@@ -1,30 +1,30 @@
 // mui
 import {
-  Box,
   FormControl,
-  Input,
   IconButton,
   InputLabel,
   makeStyles,
   Typography,
   useTheme
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+
+// assets
+import { AddIcon } from 'components/assets/svg';
 
 // styles
 import { background, lightGrey } from 'styles/colors';
 
-//components
+// components
 import DropZone from 'components/dropzone';
 
 const useStyles = makeStyles(() => ({
-  dropzone: () => ({
+  dropzone: {
     background: background,
     border: `1px dashed ${lightGrey}`,
     borderRadius: `1.6rem`,
     cursor: 'pointer',
     margin: '1.6rem 0'
-  }),
+  },
   avatar: {
     width: '6.4rem',
     height: '6.4rem'
@@ -36,8 +36,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MediaStep = () => {
-  const classes = useStyles();
   const theme = useTheme();
+  const classes = useStyles();
 
   return (
     <>
@@ -52,10 +52,10 @@ const MediaStep = () => {
           render={() => {
             return (
               <IconButton
-                aria-label="tribe type"
+                aria-label="channel type"
                 style={{ color: theme.palette.infoIcon.main }}
               >
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}
@@ -79,10 +79,10 @@ const MediaStep = () => {
           render={() => {
             return (
               <IconButton
-                aria-label="tribe type"
+                aria-label="channel type"
                 style={{ color: theme.palette.infoIcon.main }}
               >
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}

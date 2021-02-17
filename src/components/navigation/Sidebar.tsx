@@ -14,8 +14,14 @@ import { useAuth } from 'context/user';
 import { useNavigation } from 'context/tribes';
 
 // components
-const CreateTribeModal = dynamic(
-  () => import('components/tribe/modals').then((mod) => mod.CreateTribeModal),
+const CreateChannel = dynamic(
+  () => import('components/tribe/modals').then((mod) => mod.CreateChannel),
+  {
+    ssr: false
+  }
+);
+const CreateTribe = dynamic(
+  () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
   {
     ssr: false
   }
@@ -28,8 +34,8 @@ import {
 import Query from 'components/query';
 
 export enum Dialog {
-  CreateTribe,
-  DiscoverTribes
+  CreateChannel,
+  CreateTribe
 }
 
 const Sidebar: React.FC = () => {
@@ -51,11 +57,17 @@ const Sidebar: React.FC = () => {
             {navigation?.type === NavigationTypes.Discovery ? (
               <DiscoverNavigation />
             ) : (
-              <TribeNavigation />
+              <TribeNavigation
+                createChanel={() => setDialog(Dialog.CreateChannel)}
+              />
             )}
 
             {dialog === Dialog.CreateTribe && (
-              <CreateTribeModal onClose={() => setDialog(null)} />
+              <CreateTribe onClose={() => setDialog(null)} />
+            )}
+
+            {dialog === Dialog.CreateChannel && (
+              <CreateChannel onClose={() => setDialog(null)} />
             )}
           </>
         )}

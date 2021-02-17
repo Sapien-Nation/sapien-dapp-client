@@ -77,7 +77,11 @@ const useStyles = makeStyles((theme: Theme) => {
   });
 });
 
-const TribeNavigation: React.FC = () => {
+interface Props {
+  createChanel: () => void;
+}
+
+const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
   const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
 
@@ -175,6 +179,7 @@ const TribeNavigation: React.FC = () => {
                 classes={{
                   root: classes.addChannelButton
                 }}
+                onClick={createChanel}
               >
                 <AddIcon />
               </IconButton>
