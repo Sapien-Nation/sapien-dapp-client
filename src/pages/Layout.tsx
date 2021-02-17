@@ -2,10 +2,13 @@
 import type { Theme } from '@material-ui/core';
 
 // mui
-import { makeStyles } from '@material-ui/core';
+import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
 // context
 import { useAuth } from 'context/user';
+
+// components
+import { Navbar, Sidebar } from 'components/navigation';
 
 interface Props {
   children: React.ReactNode;
@@ -28,7 +31,19 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Layout: React.FC<Props> = ({ children }) => {
   const { me } = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
-  return <div className={classes.root}>{children}</div>;
+
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <NoSsr>
+        <Sidebar />
+      </NoSsr>
+      <main>
+        <Navbar />
+        <div>{children}</div>
+      </main>
+    </div>
+  );
 };
 
 export default Layout;

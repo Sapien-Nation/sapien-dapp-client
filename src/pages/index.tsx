@@ -5,6 +5,9 @@ import axios from 'api';
 // context
 import { useAuth } from 'context/user';
 
+// components
+import Layout from './Layout';
+
 const IndexPage: React.FC = () => {
   const { me } = useAuth();
 
@@ -18,12 +21,12 @@ const IndexPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <Layout>
       <div style={{ borderRadius: '24px', backgroundColor: '#F9F9FA', padding: 40 }}>
         <h1>Index Page</h1>
         {me && <button onClick={handleError}>Try Error</button>}
       </div>
-    </div>
+    </Layout>
   );
 };
 

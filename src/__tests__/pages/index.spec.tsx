@@ -8,28 +8,13 @@ import { render, screen, user, waitFor, within } from 'utils/tests';
 import { mockTopics } from 'mocks/topics';
 import { mockTribes } from 'mocks/tribe';
 import { mockUser } from 'mocks/user';
-import { mockRouter } from 'mocks/routes';
 
 // components
-import General from 'pages/general';
 import IndexPage from 'pages/index';
-import { Navbar, Sidebar } from 'components/navigation';
-import Layout from 'pages/Layout';
-
 const renderComponent = (options = {}) =>
-  render(
-    <Layout>
-      <General />
-      <Sidebar />
-      <main>
-        <Navbar />
-        <IndexPage />
-      </main>
-    </Layout>,
-    {
-      ...options
-    }
-  );
+  render(<IndexPage />, {
+    ...options
+  });
 
 const getTribeNavigation = () =>
   screen.getByRole('navigation', {
@@ -120,7 +105,7 @@ describe('TribeBar', () => {
     ).toBeInTheDocument();
   });
 
-  test('discovery', async () => {
+  test('discovery', () => {
     renderComponent();
 
     user.click(screen.getByRole('button', { name: /discover tribes/i }));
@@ -243,70 +228,15 @@ describe('Navbar', () => {
     // logout
     cache.set('/api/users/me', undefined);
     user.click(logoutItem);
-    rerender(
-      <Layout>
-        <Sidebar />
-        <main>
-          <Navbar />
-          <IndexPage />
-        </main>
-      </Layout>
-    );
-    expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+    rerender(<IndexPage />);
+    expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument();
   });
 
-  test('logged out', async () => {
+  test('logged out' () => {
     cache.set('/api/users/me', undefined);
-    const push = jest.fn();
 
-    const { rerender } = renderComponent();
+    renderComponent();
 
-    // Show Dialog
-    user.click(screen.getByRole('button', { name: /login/i }));
-
-    rerender(
-      <Layout>
-        <General />
-        <Sidebar />
-        <main>
-          <Navbar />
-          <IndexPage />
-        </main>
-      </Layout>,
-      {
-        router: { ...mockRouter(), asPath: 'http:localhost:3000/#signup', push }
-      }
-    );
-
-    expect(screen.getByRole('dialog', { name: /login/i })).toBeInTheDocument();
-
-    // login the user
-    cache.set('/api/users/me', { me: mockUser() });
-    user.click(screen.getByRole('button', { name: /login/i }));
-
-    await waitFor(() => {
-      expect(push).toHaveBeenCalledWith('http:localhost:3000/', undefined, {
-        shallow: false
-      });
-    });
-
-    rerender(
-      <Layout>
-        <General />
-        <Sidebar />
-        <main>
-          <Navbar />
-          <IndexPage />
-        </main>
-      </Layout>,
-      {
-        router: { ...mockRouter(), asPath: 'http:localhost:3000' }
-      }
-    );
-
-    expect(screen.queryByRole('dialog', { name: /login/i })).not.toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /slowpoke rodriguez/i })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument();
   });
 });

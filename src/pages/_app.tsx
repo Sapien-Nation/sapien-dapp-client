@@ -10,12 +10,10 @@ import type { AppProps } from 'next/app';
 import axios from 'api';
 
 // next
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';
-import { CssBaseline, NoSsr } from '@material-ui/core';
 
 // utils
 import { init as initSentry } from 'utils/sentry';
@@ -26,11 +24,6 @@ import theme from 'styles/theme';
 // context
 import { AuthenticationProvider } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
-
-// components
-const General = dynamic(() => import('./general'), { ssr: false });
-import Layout from './Layout';
-import { Navbar, Sidebar } from 'components/navigation';
 
 initSentry();
 
@@ -66,19 +59,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           >
             <AuthenticationProvider>
               <NavigationProvider>
-                <CssBaseline />
-                <General />
-                <Layout>
-                  <NoSsr>
-                    <Sidebar />
-                  </NoSsr>
-                  <main>
-                    <Navbar />
-                    <div>
-                      <Component {...pageProps} />
-                    </div>
-                  </main>
-                </Layout>
+                <Component {...pageProps} />
               </NavigationProvider>
             </AuthenticationProvider>
           </SWRConfig>

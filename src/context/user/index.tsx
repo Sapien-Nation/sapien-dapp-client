@@ -2,6 +2,9 @@ import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
 import { useSnackbar } from 'notistack';
 
+// next
+import { useRouter } from 'next/router';
+
 // api
 import axios from 'api';
 
@@ -21,6 +24,7 @@ interface Props {
 }
 
 const AuthenticationProvider: React.FC<Props> = ({ children }) => {
+  const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useSWR('/api/users/me');
 
@@ -28,6 +32,7 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
     try {
       await axios.post('/api/users/logout');
       mutate('/api/users/me');
+      push('/auth#login');
     } catch (err) {
       enqueueSnackbar(err.message);
     }
@@ -37,6 +42,7 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
     try {
       await axios.post('/api/users/login');
       mutate('/api/users/me');
+      push('/');
     } catch (err) {
       enqueueSnackbar(err.message);
     }

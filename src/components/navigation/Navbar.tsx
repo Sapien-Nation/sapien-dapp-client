@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // next
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';
@@ -22,7 +22,6 @@ import {
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { me, logout } = useAuth();
-  const { asPath, push } = useRouter();
 
   return (
     <AppBar color="inherit" elevation={0} position="relative">
@@ -42,13 +41,11 @@ const Navbar = () => {
               </Avatar>
             </IconButton>
           ) : (
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => push(`${asPath}#signup`, undefined, { shallow: false })}
-            >
-              Login
-            </Button>
+            <Link passHref href="/auth#login">
+              <Button color="primary" variant="contained">
+                Login
+              </Button>
+            </Link>
           )}
         </Box>
       </Toolbar>
