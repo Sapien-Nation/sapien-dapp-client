@@ -30,7 +30,7 @@ const Navbar = () => {
         <Box marginLeft="auto">
           {me ? (
             <IconButton
-              aria-controls="user profile"
+              aria-controls="user-profile"
               aria-haspopup="true"
               aria-label={me.username}
               color="inherit"
@@ -56,7 +56,7 @@ const Navbar = () => {
         keepMounted
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id="user profile"
+        id="user-profile"
         open={Boolean(anchorEl)}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={() => setAnchorEl(null)}

@@ -46,7 +46,7 @@ const Sidebar: React.FC = () => {
   if (me === undefined) return null;
 
   return (
-    <div style={{ gridArea: 'sidebar' }}>
+    <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
       <Query apiUrl="/api/tribes/followed" loader={null}>
         {({ tribes }: { tribes: Array<Tribe> }) => (
           <>
@@ -72,7 +72,7 @@ const Sidebar: React.FC = () => {
           </>
         )}
       </Query>
-    </div>
+    </nav>
   );
 };
 

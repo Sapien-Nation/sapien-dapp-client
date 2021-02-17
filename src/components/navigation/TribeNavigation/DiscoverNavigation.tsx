@@ -50,17 +50,18 @@ const DiscoverNavigation: React.FC = () => {
       }}
       variant="permanent"
     >
-      <List aria-label="Discover Navigation" className={classes.nav} component="nav">
+      <List aria-label="Discover Navigation" className={classes.nav}>
         <ListItem aria-label="topics title" style={{ marginBottom: 16 }}>
           <Typography variant="body2">TOPICS</Typography>
         </ListItem>
-        <Box marginBottom={0.9} marginTop={2.5}>
-          <ListItem>
+        <ListItem>
+          <Box marginBottom={0.9} marginTop={2.5}>
             <Typography aria-label="all topics" variant="body1">
               All Topics
             </Typography>
-          </ListItem>
-        </Box>
+          </Box>
+        </ListItem>
+
         <Query apiUrl="/api/topics/all" loader={null}>
           {({ topics }: { topics: Array<Topic> }) => (
             <>

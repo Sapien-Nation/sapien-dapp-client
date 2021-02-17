@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 // styles
 import {
+  red,
   black,
   green,
   purple,
@@ -44,6 +45,11 @@ const theme = createMuiTheme({
       light: lightGrey,
       main: lightGrey,
       dark: lightGrey
+    },
+    error: {
+      light: red,
+      main: red,
+      dark: red
     }
   },
   typography: {

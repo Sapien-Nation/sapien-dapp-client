@@ -163,7 +163,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
             Badge Store
           </Typography>
         </ListItem>
-        <ListItem disableGutters>
+        <ListItem disableGutters component="div">
           <Box
             alignItems="center"
             display="flex"
@@ -201,7 +201,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
         </ListItem>
         <Collapse
           unmountOnExit
-          in={showChannels}
+          in={showChannels && Boolean(navigation?.main?.channels?.length)}
           style={{ width: '100%' }}
           timeout="auto"
         >
@@ -212,6 +212,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
                 button
                 disableGutters
                 disableRipple
+                component="li"
                 onClick={() =>
                   setNavigation({
                     secondary: channel.id,
