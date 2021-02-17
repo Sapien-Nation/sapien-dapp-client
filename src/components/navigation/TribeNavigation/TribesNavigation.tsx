@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 // types
 import type { Theme } from '@material-ui/core/styles';
+import type { Tribe } from 'types/tribe';
 
 // next
 import Image from 'next/image';
@@ -79,13 +80,19 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   createChanel: () => void;
+  tribes: Array<Tribe>;
 }
 
-const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
+const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
   const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
 
   const classes = useStyles();
+
+  const tribe: Tribe = tribes.find(({ id }) => id === navigation.main?.id);
+
+  if (tribe === undefined) return null;
+
   return (
     <Drawer
       anchor="left"
@@ -201,12 +208,12 @@ const TribeNavigation: React.FC<Props> = ({ createChanel }) => {
         </ListItem>
         <Collapse
           unmountOnExit
-          in={showChannels && Boolean(navigation?.main?.channels?.length)}
+          in={showChannels && Boolean(tribe.channels?.length)}
           style={{ width: '100%' }}
           timeout="auto"
         >
           <List aria-label="Channels list" role="list">
-            {navigation?.main?.channels.map((channel) => (
+            {tribe.channels.map((channel) => (
               <ListItem
                 key={channel.id}
                 button

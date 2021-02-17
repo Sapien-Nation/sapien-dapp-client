@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import { cache, mutate } from 'swr';
 import { useLocalStorage } from 'react-use';
 import { createContext, useContext, useEffect } from 'react';
+import * as Sentry from '@sentry/node';
 
 // api
 import axios from 'api';
@@ -49,13 +50,13 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
     const fetchDefaultTribe = async () => {
       const cachedTribes = cache.get('/api/tribes/followed')?.tribes;
       if (cachedTribes?.length) {
-        setNavigation({ ...navigation, main: cachedTribes[0] });
+        handleSetNavigation({ ...navigation, main: cachedTribes[0] });
       } else {
         try {
           const { tribes } = await mutate('/api/tribes/followed');
-          setNavigation({ ...navigation, main: tribes[0] });
+          handleSetNavigation({ ...navigation, main: tribes[0] });
         } catch (err) {
-          //
+          Sentry.captureException(err);
         }
       }
     };

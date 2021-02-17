@@ -1,8 +1,23 @@
 import { useState } from 'react';
+import { mutate } from 'swr';
+import { useSnackbar } from 'notistack';
 import { FormProvider, useForm } from 'react-hook-form';
+
+// types
+import type { Channel } from 'types/channel';
+import type { Tribe } from 'types/tribe';
 
 // mui
 import { Typography } from '@material-ui/core';
+
+// api
+import axios from 'axios';
+
+// constants
+import { NavigationTypes } from 'context/tribes';
+
+// context
+import { useNavigation } from 'context/tribes';
 
 //components
 import Dialog from 'components/dialog';
@@ -30,6 +45,8 @@ interface Props {
 
 const CreateChannel: React.FC<Props> = ({ onClose }) => {
   const [step, setStep] = useState(Step.ChannelSummary);
+  const { enqueueSnackbar } = useSnackbar();
+  const [navigation, setNativation] = useNavigation();
   const methods = useForm({
     defaultValues,
     shouldUnregister: false
@@ -37,7 +54,7 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
 
   const { handleSubmit } = methods;
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async (values) => {
     switch (step) {
       case Step.ChannelSummary: {
         setStep(Step.ChannelBadges);
@@ -52,7 +69,44 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
         break;
       }
       default:
-        onClose();
+        try {
+          // Creating Channel
+          const update = await axios.post('/api/channels/create', values);
+
+          // New Channel placeholder
+          const channel: Channel = {
+            id: String(update),
+            name: values.name,
+            image: '/fixtures/40x40/cars.png',
+            memberCount: 0,
+            lastUpdate: new Date().toISOString()
+          };
+
+          // UI update
+          mutate(
+            '/api/tribes/followed',
+            ({ tribes }: { tribes: Array<Tribe> }) => ({
+              tribes: tribes.map((tribe) => {
+                if (tribe.id === navigation.main.id) {
+                  return {
+                    ...tribe,
+                    channels: [...tribe.channels, channel]
+                  };
+                }
+                return tribe;
+              })
+            }),
+            false
+          );
+          setNativation({
+            ...navigation,
+            secondary: channel.id,
+            type: NavigationTypes.Channel
+          });
+          onClose();
+        } catch (err) {
+          enqueueSnackbar(err.message);
+        }
         break;
     }
   };

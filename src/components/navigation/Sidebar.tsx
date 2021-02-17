@@ -59,6 +59,7 @@ const Sidebar: React.FC = () => {
             ) : (
               <TribeNavigation
                 createChanel={() => setDialog(Dialog.CreateChannel)}
+                tribes={tribes}
               />
             )}
 
