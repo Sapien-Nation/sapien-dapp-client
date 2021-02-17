@@ -7,7 +7,7 @@ import type { Theme } from '@material-ui/core/styles';
 import { AddIcon, RssIcon } from 'components/assets/svg';
 
 // styles
-import { background, darkGrey, lightGrey, purple } from 'styles/colors';
+import { background, darkGrey, purple } from 'styles/colors';
 
 // mui
 import {

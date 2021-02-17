@@ -232,7 +232,7 @@ describe('Navbar', () => {
     expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument();
   });
 
-  test('logged out' () => {
+  test('logged out', () => {
     cache.set('/api/users/me', undefined);
 
     renderComponent();
