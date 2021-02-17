@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
         {({ tribes }: { tribes: Array<Tribe> }) => (
           <>
             <TribeBar
-              setShowCreateTribeModal={() => setDialog(Dialog.CreateTribe)}
+              createTribe={() => setDialog(Dialog.CreateTribe)}
               tribes={tribes}
             />
             {navigation?.type === NavigationTypes.Discovery ? (

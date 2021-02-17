@@ -80,10 +80,10 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   tribes: Array<Tribe>;
-  setShowCreateTribeModal: () => void;
+  createTribe: () => void;
 }
 
-const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
+const TribeBar: React.FC<Props> = ({ tribes, createTribe }) => {
   const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 
@@ -186,7 +186,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
           button
           disableRipple
           aria-label="Create Tribe"
-          onClick={setShowCreateTribeModal}
+          onClick={createTribe}
         >
           <Avatar
             alt="Create Tribe"

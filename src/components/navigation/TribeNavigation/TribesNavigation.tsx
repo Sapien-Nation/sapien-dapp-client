@@ -56,16 +56,15 @@ const useStyles = makeStyles((theme: Theme) => {
       marginTop: `${theme.spacing(1.5)}`
     },
     avatar: {
-      background: 'inherit',
-      height: theme.spacing(4.5),
-      width: theme.spacing(4.5),
       color: white,
-      borderRadius: 10,
-      border: `2px solid ${outline}`
+      backgroundColor: 'inherit',
+      borderRadius: 15,
+      border: `2px solid ${outline}`,
+      boxSizing: 'content-box',
+      padding: '3px'
     },
     avatarImage: {
-      padding: `${theme.spacing(0.3)} !important`,
-      borderRadius: '9px'
+      borderRadius: '10px'
     },
     collapseButton: {
       padding: 0
@@ -248,16 +247,13 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                       classes={{
                         root: classes.avatar
                       }}
-                      imgProps={{
-                        height: '4rem',
-                        width: '4rem'
-                      }}
                       variant="square"
                     >
                       <Image
                         alt={channel.name}
                         className={classes.avatarImage}
                         height={40}
+                        quality={100}
                         src={channel.image}
                         width={40}
                       />

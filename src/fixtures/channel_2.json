@@ -1,7 +1,7 @@
 {
   "id": "100",
   "name": "Gaming",
-  "image": "/fixtures/40x40/food.png",
+  "image": "/fixtures/256x256/battery.png",
   "memberCount": 200,
   "lastUpdate": "2021-02-06T03:14:49.943Z"
 }
