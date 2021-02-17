@@ -1,6 +1,7 @@
 import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
 import { useSnackbar } from 'notistack';
+import { useLocalStorage } from 'react-use';
 
 // next
 import { useRouter } from 'next/router';
@@ -26,12 +27,14 @@ interface Props {
 const AuthenticationProvider: React.FC<Props> = ({ children }) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const [, , clear] = useLocalStorage('navigation');
   const { data } = useSWR('/api/users/me');
 
   const logout = async () => {
     try {
       await axios.post('/api/users/logout');
       mutate('/api/users/me');
+      clear();
       push('/auth#login');
     } catch (err) {
       enqueueSnackbar(err.message);
