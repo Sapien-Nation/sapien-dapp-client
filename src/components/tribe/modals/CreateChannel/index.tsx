@@ -11,7 +11,7 @@ import type { Tribe } from 'types/tribe';
 import { Typography } from '@material-ui/core';
 
 // api
-import axios from 'axios';
+import axios from 'api';
 
 // constants
 import { NavigationTypes } from 'context/tribes';
@@ -104,8 +104,8 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
             type: NavigationTypes.Channel
           });
           onClose();
-        } catch (err) {
-          enqueueSnackbar(err.message);
+        } catch ({ response }) {
+          enqueueSnackbar(response.data.message);
         }
         break;
     }

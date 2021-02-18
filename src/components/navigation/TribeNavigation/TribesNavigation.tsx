@@ -181,7 +181,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
             <Box alignItems="center" display="flex">
               <Typography variant="h5">Channels</Typography>
               <IconButton
-                aria-label="add channels"
+                aria-label="Create Channel"
                 classes={{
                   root: classes.addChannelButton
                 }}
