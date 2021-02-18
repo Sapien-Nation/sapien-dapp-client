@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // context
 import { useAuth } from 'context/user';
 
