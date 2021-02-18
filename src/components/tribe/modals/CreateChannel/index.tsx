@@ -71,11 +71,11 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
       default:
         try {
           // Creating Channel
-          const update = await axios.post('/api/channels/create', values);
+          const { data } = await axios.post('/api/channels/create', values);
 
           // New Channel placeholder
           const channel: Channel = {
-            id: String(update),
+            id: String(data),
             name: values.name,
             image: '/fixtures/40x40/cars.png',
             memberCount: 0,
