@@ -1,7 +1,7 @@
 {
-  "id": "1",
+  "id": "99",
   "name": "Social",
-  "image": "/fixtures/40x40/cars.png",
+  "image": "/fixtures/256x256/message.png",
   "memberCount": 123,
   "lastUpdate": "2021-02-06T03:14:49.943Z"
 }

@@ -6,7 +6,8 @@ import { useFormContext } from 'react-hook-form';
 import type { DropzoneProps, DropzoneOptions } from 'react-dropzone';
 
 // mui
-import { Box } from '@material-ui/core';
+import { Box, IconButton } from '@material-ui/core';
+import { CloseOutlined as CloseIcon } from '@material-ui/icons';
 
 interface Props extends DropzoneProps {
   className?: string;
@@ -23,8 +24,7 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
     [setValue, name]
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const files = watch(name); // TODO preview this image, use files.map, supposed it can display 1...n
+  const files: File[] = watch(name);
 
   useEffect(() => {
     register(name);
@@ -39,16 +39,41 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
   });
 
   return (
-    <Box
-      alignItems="center"
-      className={className}
-      display="flex"
-      justifyContent="center"
-      {...getRootProps()}
-    >
-      <input {...getInputProps()} />
-      {render(isDragActive)}
-    </Box>
+    <>
+      <Box
+        alignItems="center"
+        className={className}
+        display="flex"
+        justifyContent="center"
+        {...getRootProps()}
+      >
+        <input {...getInputProps()} />
+        {render(isDragActive)}
+      </Box>
+      {Array.isArray(files) &&
+        files?.map((file) => (
+          <div key={file.name}>
+            <IconButton
+              color="primary"
+              style={{
+                position: 'absolute',
+                marginLeft: '35px',
+                marginTop: '-20px'
+              }}
+              onClick={() => setValue(name, null)}
+            >
+              <CloseIcon />
+            </IconButton>
+            <img
+              alt={`${name} preview`}
+              height={55}
+              src={URL.createObjectURL(file)}
+              style={{ borderRadius: 15 }}
+              width={55}
+            />
+          </div>
+        ))}
+    </>
   );
 };
 

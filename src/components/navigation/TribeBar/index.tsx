@@ -8,6 +8,9 @@ import Image from 'next/image';
 // context
 import { useNavigation } from 'context/tribes';
 
+// constants
+import { NavigationTypes } from 'context/tribes';
+
 // styles
 import { dark, darkPurple, white } from 'styles/colors';
 
@@ -39,27 +42,30 @@ const useStyles = makeStyles((theme: Theme) => {
     },
     nav: {
       cursor: 'pointer',
-      gridArea: 'sidebar',
-      marginTop: `${theme.spacing(2)}`
+      '& > *': {
+        minHeight: theme.spacing(7),
+        justifyContent: 'center'
+      }
     },
     avatar: {
-      height: theme.spacing(4.5),
-      width: theme.spacing(4.5),
       color: white,
       backgroundColor: 'inherit',
-      borderRadius: 10,
-      border: '2px solid'
+      borderRadius: 15,
+      border: '2px solid',
+      boxSizing: 'content-box',
+      padding: '3px'
     },
     avatarImage: {
-      padding: `${theme.spacing(0.3)} !important`,
-      borderRadius: '9px'
+      borderRadius: '10px'
     },
     badge: {
-      top: '4px',
-      height: theme.spacing(1.9),
-      width: theme.spacing(2),
       fontSize: theme.spacing(1),
-      border: `3px solid ${dark}`
+      top: '6px',
+      minWidth: theme.spacing(1.5),
+      border: `3px solid ${dark}`,
+      height: theme.spacing(1.3),
+      boxSizing: 'content-box',
+      padding: 0
     },
     avatarItems: {
       color: white,
@@ -74,10 +80,10 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   tribes: Array<Tribe>;
-  setShowCreateTribeModal: () => void;
+  createTribe: () => void;
 }
 
-const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
+const TribeBar: React.FC<Props> = ({ tribes, createTribe }) => {
   const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 
@@ -98,8 +104,13 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
             disableGutters
             disableRipple
             aria-label={tribe.name}
-            style={{ justifyContent: 'center', marginBottom: '2rem' }}
-            onClick={() => setNavigation({ ...navigation, tribe })}
+            onClick={() =>
+              setNavigation({
+                main: tribe,
+                secondary: tribe.id,
+                type: NavigationTypes.Tribe
+              })
+            }
           >
             <Badge
               badgeContent={tribe.notificationNumber}
@@ -113,13 +124,8 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                 classes={{
                   root: classes.avatar
                 }}
-                imgProps={{
-                  width: '4rem',
-                  height: '4rem'
-                }}
                 style={{
-                  borderColor:
-                    tribe.id === navigation?.tribe?.id ? white : darkPurple
+                  borderColor: tribe.id === navigation?.main?.id ? white : darkPurple
                 }}
                 variant="square"
               >
@@ -127,6 +133,7 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
                   alt={tribe.name}
                   className={classes.avatarImage}
                   height={40}
+                  quality={100}
                   src={tribe.image}
                   width={40}
                 />
@@ -136,32 +143,50 @@ const TribeBar: React.FC<Props> = ({ tribes, setShowCreateTribeModal }) => {
         ))}
         <ListItem
           button
-          disableRipple
           disableGutters
+          disableRipple
           aria-label="Discover Tribes"
-          style={{ justifyContent: 'center', marginBottom: '2rem' }}
-          onClick={() => {}}
+          onClick={() =>
+            setNavigation({
+              main: null,
+              secondary: null,
+              type: NavigationTypes.Discovery
+            })
+          }
         >
-          <Avatar
-            alt="Discover Tribe"
+          <Badge
+            badgeContent={0}
             classes={{
-              root: classes.avatarItems
+              badge: classes.badge
             }}
-            imgProps={{
-              width: '4rem',
-              height: '4rem'
-            }}
-            variant="square"
+            color="error"
           >
-            <ExploreIcon />
-          </Avatar>
+            <Avatar
+              alt="Discover Tribe"
+              classes={{
+                root: classes.avatarItems
+              }}
+              imgProps={{
+                width: '4rem',
+                height: '4rem'
+              }}
+              style={{
+                borderColor:
+                  navigation.type === NavigationTypes.Discovery ? white : darkPurple,
+                borderRadius: '9px',
+                padding: '0.9rem'
+              }}
+              variant="square"
+            >
+              <ExploreIcon />
+            </Avatar>
+          </Badge>
         </ListItem>
         <ListItem
           button
           disableRipple
           aria-label="Create Tribe"
-          style={{ justifyContent: 'center', marginBottom: '2rem' }}
-          onClick={setShowCreateTribeModal}
+          onClick={createTribe}
         >
           <Avatar
             alt="Create Tribe"

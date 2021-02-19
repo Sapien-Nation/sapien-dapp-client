@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 
 // styles
 import {
+  red,
   black,
   green,
   purple,
@@ -44,6 +45,11 @@ const theme = createMuiTheme({
       light: lightGrey,
       main: lightGrey,
       dark: lightGrey
+    },
+    error: {
+      light: red,
+      main: red,
+      dark: red
     }
   },
   typography: {
@@ -92,6 +98,10 @@ theme.overrides = {
     },
     paperWidthXs: {
       maxWidth: '49rem',
+      width: '100%'
+    },
+    paperWidthSm: {
+      maxWidth: '51.8rem',
       width: '100%'
     }
   },

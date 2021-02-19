@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { SWRConfig } from 'swr';
+import { SnackbarProvider } from 'notistack';
 
 // types
 import type { AppProps } from 'next/app';
@@ -14,7 +14,6 @@ import Head from 'next/head';
 
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';
-import { CssBaseline, NoSsr } from '@material-ui/core';
 
 // utils
 import { init as initSentry } from 'utils/sentry';
@@ -23,24 +22,10 @@ import { init as initSentry } from 'utils/sentry';
 import theme from 'styles/theme';
 
 // context
+import { AuthenticationProvider } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
 
-// components
-import Layout from './Layout';
-import Navbar from 'components/navigation';
-
 initSentry();
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: async ({ queryKey }: { queryKey: Array<string> }) => {
-        const { data } = await axios.get(queryKey[0]);
-        return data;
-      }
-    }
-  }
-});
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -60,22 +45,26 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           name="viewport"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <NavigationProvider>
-            <Layout>
-              <NoSsr>
-                <Navbar />
-              </NoSsr>
-              <main>
+      <SnackbarProvider maxSnack={2}>
+        <ThemeProvider theme={theme}>
+          <SWRConfig
+            value={{
+              errorRetryCount: 0,
+              fetcher: (url: string) =>
+                axios(url)
+                  .then(({ data }) => data)
+                  .catch(({ response }) => Promise.reject(response.data.error)),
+              revalidateOnFocus: false
+            }}
+          >
+            <AuthenticationProvider>
+              <NavigationProvider>
                 <Component {...pageProps} />
-              </main>
-            </Layout>
-          </NavigationProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+              </NavigationProvider>
+            </AuthenticationProvider>
+          </SWRConfig>
+        </ThemeProvider>
+      </SnackbarProvider>
     </>
   );
 };
