@@ -157,12 +157,10 @@ describe('TribeBar', () => {
     mock.onPost('/api/tribes/create').reply(200, { data: '1000' });
     user.click(screen.getByRole('button', { name: /create/i }));
 
-    await waitFor(() => {
-      const tribeBar = getTribeBar();
-      expect(
-        within(tribeBar).getByRole('button', { name: newTribe })
-      ).toHaveTextContent('0');
-    });
+    await waitFor(() => {});
+    expect(
+      within(getTribeBar()).getByRole('button', { name: newTribe })
+    ).toHaveTextContent('0');
   });
 });
 

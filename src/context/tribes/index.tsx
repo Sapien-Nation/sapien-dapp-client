@@ -49,15 +49,13 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     const fetchDefaultTribe = async () => {
       const cachedTribes = cache.get('/api/tribes/followed')?.tribes;
+
       if (cachedTribes?.length) {
-        handleSetNavigation({ ...navigation, main: cachedTribes[0] });
-      } else {
-        try {
-          const { tribes } = await mutate('/api/tribes/followed');
-          handleSetNavigation({ ...navigation, main: tribes[0] });
-        } catch (err) {
-          Sentry.captureException(err);
-        }
+        handleSetNavigation({
+          main: cachedTribes[0],
+          secondary: cachedTribes[0].id,
+          type: NavigationTypes.Tribe
+        });
       }
     };
 

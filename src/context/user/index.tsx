@@ -27,14 +27,12 @@ interface Props {
 const AuthenticationProvider: React.FC<Props> = ({ children }) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [, , clear] = useLocalStorage('navigation');
   const { data } = useSWR('/api/users/me');
 
   const logout = async () => {
     try {
       await axios.post('/api/users/logout');
       mutate('/api/users/me');
-      clear();
       push('/auth#login');
     } catch (err) {
       enqueueSnackbar(err.message);
@@ -45,6 +43,7 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
     try {
       await axios.post('/api/users/login');
       mutate('/api/users/me');
+      mutate('/api/tribes/followed');
       push('/');
     } catch (err) {
       enqueueSnackbar(err.message);
