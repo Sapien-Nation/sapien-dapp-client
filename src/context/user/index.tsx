@@ -1,7 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
 import { useSnackbar } from 'notistack';
-import { useLocalStorage } from 'react-use';
 
 // next
 import { useRouter } from 'next/router';
@@ -16,6 +15,7 @@ export interface Authentication {
   me: User | null;
   login: () => void;
   logout: () => void;
+  isLoggingIn: boolean;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -28,6 +28,8 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useSWR('/api/users/me');
+
+  const isLoggingIn = data === undefined;
 
   const logout = async () => {
     try {
@@ -51,7 +53,9 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <AuthenticationContext.Provider value={{ me: data?.me, login, logout }}>
+    <AuthenticationContext.Provider
+      value={{ me: data?.me, login, logout, isLoggingIn }}
+    >
       {children}
     </AuthenticationContext.Provider>
   );
