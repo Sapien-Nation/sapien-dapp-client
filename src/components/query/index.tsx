@@ -21,12 +21,7 @@ export type Error = {
   message: string;
 };
 
-const Query: React.FC<Props> = ({
-  apiUrl,
-  children,
-  loader = <Skeleton />,
-  options = {}
-}) => {
+const Query = ({ apiUrl, children, loader = <Skeleton />, options = {} }) => {
   const { data, error } = useSWR(apiUrl, options);
 
   if (apiUrl !== null && !data && !error) return loader;

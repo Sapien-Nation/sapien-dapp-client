@@ -82,7 +82,7 @@ interface Props {
   tribes: Array<Tribe>;
 }
 
-const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
+const TribeNavigation = ({ createChanel, tribes }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
 

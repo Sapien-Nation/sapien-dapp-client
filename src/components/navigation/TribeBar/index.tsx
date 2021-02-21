@@ -83,7 +83,7 @@ interface Props {
   createTribe: () => void;
 }
 
-const TribeBar: React.FC<Props> = ({ tribes, createTribe }) => {
+const TribeBar = ({ tribes, createTribe }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 

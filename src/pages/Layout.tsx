@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   })
 }));
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout = ({ children }: Props) => {
   const { me } = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) => {
   });
 });
 
-const DiscoverNavigation: React.FC = () => {
+const DiscoverNavigation = () => {
   const classes = useStyles();
   return (
     <Drawer

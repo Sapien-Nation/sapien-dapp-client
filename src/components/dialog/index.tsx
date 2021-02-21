@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const Dialog: React.FC<Props> = ({
+const Dialog = ({
   form,
   isFetching,
   onClose,
@@ -86,7 +86,7 @@ const Dialog: React.FC<Props> = ({
     </>
   ),
   ...rest
-}) => {
+}: Props) => {
   const classes = useStyles();
   return (
     <MUIDialog aria-labelledby="dialog-title" {...rest}>

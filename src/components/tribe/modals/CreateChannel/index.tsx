@@ -43,7 +43,7 @@ interface Props {
   onClose: () => void;
 }
 
-const CreateChannel: React.FC<Props> = ({ onClose }) => {
+const CreateChannel = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.ChannelSummary);
   const { enqueueSnackbar } = useSnackbar();
   const [navigation, setNativation] = useNavigation();

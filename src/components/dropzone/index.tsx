@@ -15,7 +15,7 @@ interface Props extends DropzoneProps {
   render: (isDragActive: boolean) => React.ReactElement;
 }
 
-const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
+const Dropzone = ({ className, name, render, ...rest }: Props) => {
   const { register, unregister, setValue, watch } = useFormContext();
   const onDrop = useCallback<DropzoneOptions['onDrop']>(
     (droppedFiles) => {

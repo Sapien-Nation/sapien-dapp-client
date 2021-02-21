@@ -39,7 +39,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const NavigationProvider: React.FC<Props> = ({ children }) => {
+const NavigationProvider = ({ children }: Props) => {
   const [navigation, setNavigation] = useLocalStorage<Navigation>(
     'navigation',
     defaultValues

@@ -24,7 +24,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const AuthenticationProvider: React.FC<Props> = ({ children }) => {
+const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useSWR('/api/users/me');

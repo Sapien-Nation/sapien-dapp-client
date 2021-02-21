@@ -12,7 +12,7 @@ import { useNavigation } from 'context/tribes';
 // components
 import Layout from './Layout';
 
-const IndexPage: React.FC = () => {
+const IndexPage = () => {
   const { me } = useAuth();
   const [navigation] = useNavigation();
 

@@ -8,7 +8,7 @@ interface Props {
   maxCount: string;
 }
 
-const ChartCount: React.FC<Props> = ({ field, maxCount }) => {
+const ChartCount = ({ field, maxCount }: Props) => {
   const { watch } = useFormContext();
   const val = watch(field) as string;
   return (

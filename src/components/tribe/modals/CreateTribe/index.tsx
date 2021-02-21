@@ -40,7 +40,7 @@ interface Props {
   onClose: () => void;
 }
 
-const CreateTribe: React.FC<Props> = ({ onClose }) => {
+const CreateTribe = ({ onClose }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState(Step.TribeSummary);
   const [, setNavigation] = useNavigation();

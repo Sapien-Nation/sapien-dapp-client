@@ -38,7 +38,7 @@ export enum Dialog {
   CreateTribe
 }
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { me } = useAuth();
   const [navigation] = useNavigation();

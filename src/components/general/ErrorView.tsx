@@ -9,7 +9,7 @@ interface Props {
   onClick: () => void;
 }
 
-const ErrorView: React.FC<Props> = ({ error, onClick }) => (
+const ErrorView = ({ error, onClick }: Props) => (
   <Card style={{ height: '100% ' }}>
     <Box alignItems="center" display="flex" justifyContent="center">
       <CardContent>
