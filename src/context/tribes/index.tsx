@@ -2,7 +2,6 @@ import { useSnackbar } from 'notistack';
 import { cache, mutate } from 'swr';
 import { useLocalStorage } from 'react-use';
 import { createContext, useContext, useEffect } from 'react';
-import * as Sentry from '@sentry/node';
 
 // api
 import axios from 'api';

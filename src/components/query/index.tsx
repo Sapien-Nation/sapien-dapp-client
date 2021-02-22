@@ -21,7 +21,7 @@ export type Error = {
   message: string;
 };
 
-const Query = ({ apiUrl, children, loader = <Skeleton />, options = {} }) => {
+const Query = ({ apiUrl, children, loader = <Skeleton />, options = {} }: Props) => {
   const { data, error } = useSWR(apiUrl, options);
 
   if (apiUrl !== null && !data && !error) return loader;
