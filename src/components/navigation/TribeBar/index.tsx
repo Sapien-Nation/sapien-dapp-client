@@ -68,9 +68,11 @@ const useStyles = makeStyles((theme: Theme) => {
       padding: 0
     },
     avatarItems: {
-      color: white,
-      backgroundColor: 'rgba(249, 249, 250, 0.1)',
-      borderRadius: '9px',
+      backgroundColor: 'inherit',
+      borderRadius: 15,
+      border: `2px ${darkPurple} solid`,
+      boxSizing: 'content-box',
+      padding: '3px',
       '& svg': {
         padding: `${theme.spacing(0.3)}`
       }
@@ -172,9 +174,7 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
               }}
               style={{
                 borderColor:
-                  navigation.type === NavigationTypes.Discovery ? white : darkPurple,
-                borderRadius: '9px',
-                padding: '0.9rem'
+                  navigation.type === NavigationTypes.Discovery ? white : darkPurple
               }}
               variant="square"
             >
