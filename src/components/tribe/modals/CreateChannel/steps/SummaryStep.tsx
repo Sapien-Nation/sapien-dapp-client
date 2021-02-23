@@ -24,7 +24,6 @@ const SummaryStep = () => {
           <PasswordInput
             inputRef={register({
               validate: (value) => {
-                console.log('entro?');
                 return (
                   value === getValues('password') || 'The passwords do not match'
                 );
