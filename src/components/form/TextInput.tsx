@@ -1,49 +1,54 @@
-import { useFormContext } from 'react-hook-form';
+import { useState } from 'react';
+import { ErrorMessage } from '@hookform/error-message';
 
-// styles
-import { red, error } from 'styles/colors';
+// types
+import type { FieldErrors } from 'react-hook-form';
+import type { InputProps } from '@material-ui/core';
 
 // mui
-import { Box, FormControl, Input as MuiInput, InputLabel } from '@material-ui/core';
+import {
+  Box,
+  Input as MuiInput,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
+import {
+  VisibilityOutlined as EyeOpen,
+  VisibilityOffOutlined as EyeOff,
+} from '@material-ui/icons';
 
 //components
 import ChartCount from 'components/form/ChartCount';
-import FormErrors from 'components/form/FormErrors';
 
-export interface Props {
-  chartCount?: boolean;
-  fullWidth?: boolean;
+export interface Props extends InputProps {
+  chartCount?: string;
+  errors: FieldErrors;
   label: string;
-  maxLength?: number;
   name: string;
-  placeholder?: string;
-  required?: boolean;
-  multiline?: boolean;
-  rows?: number;
-  rowsMax?: number;
 }
 
 const TextInput = ({
-  chartCount = false,
-  fullWidth = true,
+  chartCount,
+  errors,
   label,
-  maxLength = 36,
   name,
-  placeholder,
-  required = false,
-  multiline = false,
-  rows = 3,
-  rowsMax = 5
+  type,
+  ...rest
 }: Props) => {
-  const {
-    register,
-    formState: { errors }
-  } = useFormContext();
-  const errorState = errors[name];
+  const [showPassword, setShowPassword] = useState(false);
+
+  const getInputType = () => {
+    if (type === 'password') {
+      return showPassword ? 'text' : 'password';
+    }
+    return type;
+  };
 
   return (
     <>
-      <FormControl fullWidth={fullWidth} required={required}>
+      <div>
         <Box
           alignItems="center"
           display="flex"
@@ -52,24 +57,48 @@ const TextInput = ({
           marginBottom={1}
         >
           <InputLabel htmlFor={name}>{label}</InputLabel>
-          {chartCount && <ChartCount maxCount={maxLength.toString()} name={name} />}
+          {chartCount && <ChartCount maxCount={chartCount} name={name} />}
         </Box>
         <MuiInput
-          fullWidth={fullWidth}
+          endAdornment={
+            type === 'password' && (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(event: React.MouseEvent<HTMLButtonElement>) =>
+                    event.preventDefault()
+                  }
+                >
+                  {showPassword ? <EyeOpen /> : <EyeOff />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }
           id={name}
-          inputRef={register({ required, maxLength })}
-          multiline={multiline}
           name={name}
-          placeholder={placeholder}
-          rows={rows}
-          rowsMax={rowsMax}
-          style={{
-            backgroundColor: Object.keys(errorState || []).length ? error : null,
-            borderColor: Object.keys(errorState || []).length ? red : null
-          }}
+          type={getInputType()}
+          {...rest}
         />
-      </FormControl>
-      <FormErrors type={errorState?.type ?? ''} />
+      </div>
+      <ErrorMessage
+        errors={errors}
+        name={name}
+        render={({ message }) => (
+          <Typography
+            color="secondary"
+            role="alert"
+            style={{
+              textAlign: 'right',
+              fontSize: '1.2rem',
+              fontWeight: 600,
+            }}
+            variant="body1"
+          >
+            {message}
+          </Typography>
+        )}
+      />
     </>
   );
 };

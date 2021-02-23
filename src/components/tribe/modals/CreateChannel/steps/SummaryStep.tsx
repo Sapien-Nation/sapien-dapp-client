@@ -1,41 +1,36 @@
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 // mui
 import { Box, FormControl, Input, InputLabel, useTheme } from '@material-ui/core';
 
 //components
-import { ChartCount, PasswordStrengthInput, PasswordInput } from 'components/form';
+import { ChartCount } from 'components/form';
 
 const SummaryStep = () => {
-  const { control, getValues, register } = useFormContext();
+  const { register } = useFormContext();
   const theme = useTheme();
 
   return (
     <>
-      <PasswordStrengthInput
-        label="Password"
-        name="password"
-        tooltipText="Minimum length is 8 characters, Must include at least 1 alpha, 1 numeric, 1 lowercase and 1 uppercase"
-      />
-      <Controller
-        control={control}
-        name="confirmPassword"
-        render={({ onChange, name, value }) => (
-          <PasswordInput
-            inputRef={register({
-              validate: (value) => {
-                return (
-                  value === getValues('password') || 'The passwords do not match'
-                );
-              }
-            })}
-            label="Confirm Password"
-            name={name}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        )}
-      />
+      <FormControl fullWidth required>
+        <Box
+          alignItems="center"
+          display="flex"
+          flexDirection="row"
+          justifyContent="space-between"
+          marginBottom={1}
+        >
+          <InputLabel htmlFor="name">Name</InputLabel>
+          <ChartCount maxCount="36" name="name" />
+        </Box>
+        <Input
+          fullWidth
+          id="name"
+          inputRef={register({ required: true, maxLength: 36 })}
+          name="name"
+          placeholder="Name"
+        />
+      </FormControl>
       <FormControl fullWidth style={{ marginBottom: theme.spacing(0.5) }}>
         <Box
           alignItems="center"

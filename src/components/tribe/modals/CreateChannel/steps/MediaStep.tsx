@@ -5,7 +5,7 @@ import {
   InputLabel,
   makeStyles,
   Typography,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 
 // assets
@@ -23,16 +23,16 @@ const useStyles = makeStyles(() => ({
     border: `1px dashed ${lightGrey}`,
     borderRadius: `1.6rem`,
     cursor: 'pointer',
-    margin: '1.6rem 0'
+    margin: '1.6rem 0',
   },
   avatar: {
     width: '6.4rem',
-    height: '6.4rem'
+    height: '6.4rem',
   },
   cover: {
     width: '100%',
-    height: '10rem'
-  }
+    height: '10rem',
+  },
 }));
 
 const MediaStep = () => {

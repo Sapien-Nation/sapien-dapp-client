@@ -10,7 +10,7 @@ import {
   InputAdornment,
   Switch,
   useTheme,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { HelpOutlineOutlined as HelpIcon } from '@material-ui/icons';
 
