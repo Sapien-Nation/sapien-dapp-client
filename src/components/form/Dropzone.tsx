@@ -32,7 +32,7 @@ const Dropzone = ({
     (droppedFiles) => {
       setValue(name, droppedFiles, { shouldValidate: true });
     },
-    [setValue, name]
+    [setValue, name],
   );
 
   const files: File[] = watch(name);

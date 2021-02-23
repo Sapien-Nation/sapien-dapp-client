@@ -1,9 +1,27 @@
 /* istanbul ignore file */
+import { FormProvider, useForm } from 'react-hook-form';
+
 // api
 import axios from 'api';
 
 // constants
 import { NavigationTypes } from 'context/tribes';
+
+// styles
+import { background, lightGrey } from 'styles/colors';
+
+// mui
+import {
+  Button,
+  Box,
+  FormControl,
+  useTheme,
+  makeStyles,
+  IconButton,
+} from '@material-ui/core';
+
+// assets
+import { AddIcon } from 'components/assets/svg';
 
 // context
 import { useAuth } from 'context/user';
@@ -11,9 +29,31 @@ import { useNavigation } from 'context/tribes';
 
 // components
 import Layout from './Layout';
+import { Checkbox, TextInput, Dropzone, Switch } from 'components/form';
+
+const useStyles = makeStyles(() => ({
+  dropzone: {
+    background: background,
+    border: `1px dashed ${lightGrey}`,
+    borderRadius: `1.6rem`,
+    cursor: 'pointer',
+    margin: '1.6rem 0',
+  },
+  avatar: {
+    width: '6.4rem',
+    height: '6.4rem',
+  },
+  cover: {
+    width: '100%',
+    height: '10rem',
+  },
+}));
 
 const IndexPage = () => {
   const { me } = useAuth();
+  const theme = useTheme();
+  const methods = useForm();
+  const classes = useStyles();
   const [navigation] = useNavigation();
 
   const handleError = async () => {
@@ -38,6 +78,13 @@ const IndexPage = () => {
     }
   };
 
+  const { register, handleSubmit, getValues, errors } = methods;
+  console.log(errors);
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <Layout>
       <div
@@ -50,6 +97,123 @@ const IndexPage = () => {
         <h1>{renderView()}</h1>
         {me && <button onClick={handleError}>Try Error</button>}
       </div>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <FormControl fullWidth>
+            <TextInput
+              fullWidth
+              chartCount="36"
+              errors={errors}
+              inputProps={{
+                autoComplete: 'text',
+              }}
+              inputRef={register({
+                required: 'Text is required',
+              })}
+              label="Some Label"
+              name="text"
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <TextInput
+              fullWidth
+              errors={errors}
+              inputProps={{
+                autoComplete: 'new-password',
+              }}
+              inputRef={register({
+                required: 'Password is required',
+                validate: (value) =>
+                  value === getValues('password') || 'Password not match',
+              })}
+              label="Repeat Password"
+              name="password"
+              type="password"
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <Dropzone
+              accept="image/*"
+              className={`${classes.dropzone} ${classes.cover}`}
+              errors={errors}
+              maxFiles={1}
+              maxSize={41943040}
+              name="cover"
+              render={() => {
+                return (
+                  <IconButton
+                    aria-label="channel type"
+                    style={{ color: theme.palette.infoIcon.main }}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                );
+              }}
+              rules={{ required: 'Upload at least one image' }}
+            />
+          </FormControl>
+          <FormControl>
+            <Switch
+              errors={errors}
+              inputRef={register({
+                validate: (value) => value || 'Should be switched LOL',
+              })}
+              label="Public Tribe"
+              name="public"
+            />
+          </FormControl>
+          <FormControl>
+            <Checkbox
+              errors={errors}
+              inputRef={register({
+                validate: (value) => value || 'Please check',
+              })}
+              label="Remember me"
+              name="remember"
+            />
+          </FormControl>
+          {/* <FormControl fullWidth>
+            <Controller
+              control={control}
+              defaultValue=""
+              name="password"
+              render={({ value, name, onChange }) => (
+                <PasswordStrengthInput
+                  fullWidth
+                  inputProps={{
+                    autoComplete: 'new-password',
+                  }}
+                  label="Password"
+                  name={name}
+                  tooltipText="Password Strength bla bla bla"
+                  value={value}
+                  onChange={(e) => onChange(e.target.value)}
+                />
+              )}
+              rules={{
+                validate: {
+                  isGreaterThan: (value) => {
+                    return value?.length >= 8 || 'Weak';
+                  },
+                  haveADigit: (value) => {
+                    return value.match(/\d/) || 'Weak';
+                  },
+                  oneLowerCase: (value) => {
+                    return value.match(/[a-z]/) || 'Medium';
+                  },
+                  oneUpperCase: (value) => {
+                    return value.match(/[A-Z]/) || 'Medium';
+                  },
+                },
+              }}
+            />
+          </FormControl>
+           */}
+          <Box marginTop={5}>
+            <Button type="submit">Submit</Button>
+          </Box>
+        </form>
+      </FormProvider>
     </Layout>
   );
 };
