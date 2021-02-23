@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 // styles
@@ -24,7 +23,7 @@ export interface Props {
   rowsMax?: number;
 }
 
-const Input: React.FC<Props> = ({
+const Input = ({
   chartCount = false,
   fullWidth = true,
   label,
@@ -35,15 +34,13 @@ const Input: React.FC<Props> = ({
   multiline = false,
   rows = 3,
   rowsMax = 5
-}) => {
-  const { register, formState } = useFormContext();
-  const [errors, setErrors] = useState<null | any>(null);
+}: Props) => {
+  const {
+    register,
+    formState: { errors }
+  } = useFormContext();
+  const errorState = errors[name];
 
-  useEffect(() => {
-    if (formState.errors) {
-      setErrors(formState.errors);
-    }
-  }, [formState]);
   return (
     <>
       <FormControl fullWidth={fullWidth} required={required}>
@@ -55,26 +52,24 @@ const Input: React.FC<Props> = ({
           marginBottom={1}
         >
           <InputLabel htmlFor={name}>{label}</InputLabel>
-          {chartCount ? (
-            <ChartCount field={name} maxCount={maxLength.toString()} />
-          ) : null}
+          {chartCount && <ChartCount field={name} maxCount={maxLength.toString()} />}
         </Box>
         <MuiInput
           fullWidth={fullWidth}
           id={name}
-          inputRef={register({ required, maxLength: maxLength })}
+          inputRef={register({ required, maxLength })}
           multiline={multiline}
           name={name}
           placeholder={placeholder}
           rows={rows}
           rowsMax={rowsMax}
           style={{
-            backgroundColor: errors && Object.keys(errors).length ? error : null,
-            borderColor: errors && Object.keys(errors).length ? red : null
+            backgroundColor: Object.keys(errorState || []).length ? error : null,
+            borderColor: Object.keys(errorState || []).length ? red : null
           }}
         />
       </FormControl>
-      <FormErrors name={errors && errors[name] && errors[name].type} />
+      <FormErrors type={errorState?.type ?? ''} />
     </>
   );
 };
