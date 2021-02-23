@@ -1,7 +1,6 @@
 /* istanbul ignore file */
-
-import { FormProvider, useForm } from 'react-hook-form';
 import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 // next
 import { useRouter } from 'next/router';
@@ -21,25 +20,10 @@ enum View {
 }
 
 const useStyles = makeStyles({
-  layout: {
-    display: 'grid',
-    height: '100vh',
-    gridTemplateColumns: '1fr 560px',
-  },
   image: {
     backgroundImage: 'url(static/auth.jpg)',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-  },
-  content: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '39rem',
   },
 });
 
@@ -70,17 +54,23 @@ const AuthPage = () => {
   return (
     <>
       <CssBaseline />
-      <Box className={classes.layout}>
+      <div
+        style={{
+          display: 'grid',
+          height: '100vh',
+          gridTemplateColumns: '1fr 560px',
+        }}
+      >
         <Box className={classes.image}></Box>
-        <Box className={classes.content}>
-          <Box className={classes.form}>
+        <Box alignItems="center" display="flex" justifyContent="center">
+          <Box display="flex" flexDirection="column" width="39rem">
             <FullLogo />
             <FormProvider {...methods}>
               <form id={form}>{renderView()}</form>
             </FormProvider>
           </Box>
         </Box>
-      </Box>
+      </div>
     </>
   );
 };
