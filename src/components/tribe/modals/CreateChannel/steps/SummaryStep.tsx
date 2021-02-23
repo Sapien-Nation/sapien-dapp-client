@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 // mui
 import {
@@ -13,7 +13,7 @@ import {
 import { ChartCount } from 'components/form';
 
 const SummaryStep = () => {
-  const { register } = useFormContext();
+  const { control, getValues, register } = useFormContext();
   const theme = useTheme();
 
   return (
