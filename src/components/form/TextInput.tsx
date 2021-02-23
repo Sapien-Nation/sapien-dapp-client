@@ -23,7 +23,7 @@ export interface Props {
   rowsMax?: number;
 }
 
-const Input = ({
+const TextInput = ({
   chartCount = false,
   fullWidth = true,
   label,
@@ -52,7 +52,7 @@ const Input = ({
           marginBottom={1}
         >
           <InputLabel htmlFor={name}>{label}</InputLabel>
-          {chartCount && <ChartCount name={name} maxCount={maxLength.toString()} />}
+          {chartCount && <ChartCount maxCount={maxLength.toString()} name={name} />}
         </Box>
         <MuiInput
           fullWidth={fullWidth}
@@ -74,4 +74,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default TextInput;
