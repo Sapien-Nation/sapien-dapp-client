@@ -15,7 +15,7 @@ import { AddIcon } from 'components/assets/svg';
 import { background, lightGrey } from 'styles/colors';
 
 // components
-import DropZone from 'components/dropzone';
+import { Dropzone } from 'components/form';
 
 const useStyles = makeStyles(() => ({
   dropzone: {
@@ -43,7 +43,7 @@ const MediaStep = () => {
     <>
       <FormControl fullWidth>
         <InputLabel htmlFor="description">Avatar</InputLabel>
-        <DropZone
+        <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.avatar}`}
           maxFiles={1}
@@ -70,7 +70,7 @@ const MediaStep = () => {
       </FormControl>
       <FormControl fullWidth>
         <InputLabel htmlFor="description">Cover image</InputLabel>
-        <DropZone
+        <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.cover}`}
           maxFiles={1}

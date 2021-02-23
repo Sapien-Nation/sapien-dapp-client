@@ -29,7 +29,9 @@ const defaultValues = {
   cover: '',
   avatar: '',
   description: '',
-  unique_identifier: ''
+  unique_identifier: '',
+  confirmPassword: '',
+  password: ''
 };
 
 enum Step {
