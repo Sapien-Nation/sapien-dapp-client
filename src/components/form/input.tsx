@@ -52,7 +52,7 @@ const Input = ({
           marginBottom={1}
         >
           <InputLabel htmlFor={name}>{label}</InputLabel>
-          {chartCount && <ChartCount field={name} maxCount={maxLength.toString()} />}
+          {chartCount && <ChartCount name={name} maxCount={maxLength.toString()} />}
         </Box>
         <MuiInput
           fullWidth={fullWidth}

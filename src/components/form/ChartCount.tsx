@@ -4,13 +4,13 @@ import { useFormContext } from 'react-hook-form';
 import { Typography } from '@material-ui/core';
 
 interface Props {
-  field: string;
+  name: string;
   maxCount: string;
 }
 
-const ChartCount = ({ field, maxCount }: Props) => {
+const ChartCount = ({ name, maxCount }: Props) => {
   const { watch } = useFormContext();
-  const val = watch(field) as string;
+  const val = watch(name) as string;
   return (
     <Typography data-testid="chart-count" variant="caption">
       {val?.length || 0} / {maxCount}
