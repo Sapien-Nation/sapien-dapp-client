@@ -29,7 +29,7 @@ interface Props {
 const FormErrors = ({ type }: Props) => {
   const classes = useStyles();
 
-  let error = (() => {
+  const error = (() => {
     if (type === ErrorsType.Required) {
       return 'This is required';
     } else if (type === ErrorsType.MaxLength) {
