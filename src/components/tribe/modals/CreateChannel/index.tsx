@@ -31,14 +31,14 @@ const defaultValues = {
   description: '',
   unique_identifier: '',
   confirmPassword: '',
-  password: ''
+  password: '',
 };
 
 enum Step {
   ChannelSummary = 1,
   ChannelBadges,
   ChannelMedia,
-  ChannelRss
+  ChannelRss,
 }
 
 interface Props {
@@ -51,7 +51,7 @@ const CreateChannel = ({ onClose }: Props) => {
   const [navigation, setNativation] = useNavigation();
   const methods = useForm({
     defaultValues,
-    shouldUnregister: false
+    shouldUnregister: false,
   });
 
   const { handleSubmit } = methods;
@@ -81,7 +81,7 @@ const CreateChannel = ({ onClose }: Props) => {
             name: values.name,
             image: '/fixtures/40x40/cars.png',
             memberCount: 0,
-            lastUpdate: new Date().toISOString()
+            lastUpdate: new Date().toISOString(),
           };
 
           // UI update
@@ -92,18 +92,18 @@ const CreateChannel = ({ onClose }: Props) => {
                 if (tribe.id === navigation.main.id) {
                   return {
                     ...tribe,
-                    channels: [...tribe.channels, channel]
+                    channels: [...tribe.channels, channel],
                   };
                 }
                 return tribe;
-              })
+              }),
             }),
             false
           );
           setNativation({
             ...navigation,
             secondary: channel.id,
-            type: NavigationTypes.Channel
+            type: NavigationTypes.Channel,
           });
           onClose();
         } catch ({ response }) {
@@ -163,7 +163,7 @@ const CreateChannel = ({ onClose }: Props) => {
             <Typography
               color="primary"
               style={{
-                fontWeight: 600
+                fontWeight: 600,
               }}
               variant="caption"
             >

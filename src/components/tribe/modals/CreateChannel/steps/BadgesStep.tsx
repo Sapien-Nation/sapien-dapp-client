@@ -3,7 +3,7 @@ import {
   MultipleBadges,
   Search,
   SingleBadge,
-  SubscriptionBadge
+  SubscriptionBadge,
 } from 'components/tribe/assets/svg';
 
 // mocks
@@ -20,7 +20,7 @@ import {
   InputAdornment,
   makeStyles,
   Typography,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 
 // styles
@@ -31,22 +31,22 @@ const subscriptionBadges = mockSubscriptionBadges();
 
 const useStyles = makeStyles(() => ({
   badgeHeader: {
-    marginRight: '1rem'
+    marginRight: '1rem',
   },
   search: {
-    borderRadius: '9rem'
+    borderRadius: '9rem',
   },
   searchFocus: {
-    borderRadius: '9rem !important'
+    borderRadius: '9rem !important',
   },
   badgeChip: {
     backgroundColor: '#f5f5f5',
     marginTop: '.5rem',
-    marginRight: '.5rem'
+    marginRight: '.5rem',
   },
   badgeLabel: {
-    padding: '0 .8rem'
-  }
+    padding: '0 .8rem',
+  },
 }));
 
 const BadgesStep = () => {
@@ -132,7 +132,12 @@ const BadgesStep = () => {
           <Typography classes={{ root: classes.badgeHeader }} variant="h5">
             Tribe Badges
           </Typography>
-          <Box display="flex" flexWrap="wrap" marginBottom="3.5rem" marginTop="2rem">
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            marginBottom="3.5rem"
+            marginTop="2rem"
+          >
             {tribeBadges.map((badge) => (
               <Chip
                 key={badge.id}
@@ -143,7 +148,7 @@ const BadgesStep = () => {
                 }
                 classes={{
                   root: classes.badgeChip,
-                  label: classes.badgeLabel
+                  label: classes.badgeLabel,
                 }}
                 label={badge.name}
               />
@@ -163,7 +168,7 @@ const BadgesStep = () => {
                 }
                 classes={{
                   root: classes.badgeChip,
-                  label: classes.badgeLabel
+                  label: classes.badgeLabel,
                 }}
                 label={badge.name}
               />
@@ -174,7 +179,7 @@ const BadgesStep = () => {
               style={{
                 marginRight: theme.spacing(2),
                 color: purple,
-                marginTop: '2rem'
+                marginTop: '2rem',
               }}
             >
               + New Badge

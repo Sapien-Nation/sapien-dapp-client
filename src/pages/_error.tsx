@@ -10,7 +10,7 @@ const MyError: NextPage<NextPageContext> = ({
   statusCode,
   // @ts-ignore
   hasGetInitialPropsRun,
-  err
+  err,
 }) => {
   if (!hasGetInitialPropsRun && err) {
     // getInitialProps is not called in case of
@@ -28,7 +28,7 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   // @ts-ignore
   const errorInitialProps = await NextErrorComponent.getInitialProps({
     res,
-    err
+    err,
   });
 
   // Workaround for https://github.com/vercel/next.js/issues/8592, mark when

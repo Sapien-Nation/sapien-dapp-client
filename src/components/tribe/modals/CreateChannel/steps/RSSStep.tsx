@@ -19,15 +19,15 @@ import {
   InputLabel,
   makeStyles,
   Typography,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) => ({
   addRssButton: {
     padding: `${theme.spacing(0.6)}`,
     marginLeft: `${theme.spacing(1)}`,
-    backgroundColor: `${darkGrey}15`
-  }
+    backgroundColor: `${darkGrey}15`,
+  },
 }));
 
 const RSSStep = () => {
@@ -57,7 +57,7 @@ const RSSStep = () => {
           <Button
             style={{
               color: purple,
-              marginTop: theme.spacing(2)
+              marginTop: theme.spacing(2),
             }}
           >
             + Add More
@@ -85,7 +85,7 @@ const RSSStep = () => {
         <IconButton
           aria-label="add rss"
           classes={{
-            root: classes.addRssButton
+            root: classes.addRssButton,
           }}
         >
           <AddIcon />

@@ -26,6 +26,8 @@ export const formatTimestampToRelative = (
     }`;
   } else {
     const years = Math.round(elapsed / msPerYear);
-    return `${Math.round(elapsed / msPerYear)} ${years === 1 ? 'year' : 'years'}`;
+    return `${Math.round(elapsed / msPerYear)} ${
+      years === 1 ? 'year' : 'years'
+    }`;
   }
 };

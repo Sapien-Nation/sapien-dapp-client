@@ -37,7 +37,8 @@ MyDocument.getInitialProps = async (ctx) => {
 
   ctx.renderPage = () =>
     originalRenderPage({
-      enhanceApp: (App) => (props) => materialUiSheets.collect(<App {...props} />)
+      enhanceApp: (App) => (props) =>
+        materialUiSheets.collect(<App {...props} />),
     });
 
   const initialProps = await Document.getInitialProps(ctx);
@@ -45,7 +46,7 @@ MyDocument.getInitialProps = async (ctx) => {
     ...initialProps,
     styles: [
       ...Children.toArray(initialProps.styles),
-      materialUiSheets.getStyleElement()
-    ]
+      materialUiSheets.getStyleElement(),
+    ],
   };
 };

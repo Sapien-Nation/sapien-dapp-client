@@ -26,15 +26,16 @@ const topics: Array<Topic> = mockTopics();
 
 const renderComponent = (options = {}) =>
   render(<IndexPage />, {
-    ...options
+    ...options,
   });
 
 const getTribeNavigation = () =>
   screen.getByRole('navigation', {
-    name: /tribe navigation/i
+    name: /tribe navigation/i,
   });
 
-const getTribeBar = () => screen.getByRole('navigation', { name: /tribe bar/i });
+const getTribeBar = () =>
+  screen.getByRole('navigation', { name: /tribe bar/i });
 
 beforeEach(() => {
   localStorage?.clear();
@@ -104,7 +105,9 @@ describe('TribeBar', () => {
     expect(chartCount[0]).toHaveTextContent('0 / 36');
     expect(chartCount[1]).toHaveTextContent('0 / 15');
     expect(chartCount[2]).toHaveTextContent('0 / 60');
-    expect(screen.getByRole('checkbox', { name: /tribe type/i })).not.toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: /tribe type/i })
+    ).not.toBeChecked();
 
     // validation
     user.click(screen.getByRole('button', { name: /next/i }));
@@ -186,7 +189,7 @@ describe('TribeNavigation', () => {
     // render channels
     tribeToClick.channels.forEach((channel) => {
       const channelButton = within(tribeNavigation).getByRole('button', {
-        name: channel.name
+        name: channel.name,
       });
       expect(channelButton).toHaveTextContent(
         `${channel.name}${channel.memberCount} members`
@@ -289,7 +292,7 @@ describe('TribeNavigation', () => {
     await waitFor(() => {
       expect(
         within(getTribeNavigation()).getByRole('button', {
-          name: newChannel
+          name: newChannel,
         })
       ).toHaveTextContent(`${newChannel}0 members`);
     });
@@ -300,7 +303,9 @@ describe('Navbar', () => {
   test('logged in', () => {
     const { rerender } = renderComponent();
 
-    const userMenu = screen.getByRole('button', { name: /slowpoke rodriguez/i });
+    const userMenu = screen.getByRole('button', {
+      name: /slowpoke rodriguez/i,
+    });
     expect(userMenu).toBeInTheDocument();
     expect(
       within(userMenu).getByRole('img', { hidden: true }, { hidden: true })

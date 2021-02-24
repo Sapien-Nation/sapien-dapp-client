@@ -54,7 +54,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 axios(url)
                   .then(({ data }) => data)
                   .catch(({ response }) => Promise.reject(response.data.error)),
-              revalidateOnFocus: false
+              revalidateOnFocus: false,
             }}
           >
             <AuthenticationProvider>

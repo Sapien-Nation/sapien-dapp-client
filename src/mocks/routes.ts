@@ -17,9 +17,9 @@ export const mockRouter = (router: Partial<NextRouter> = {}): NextRouter => ({
   events: {
     on: jest.fn(),
     off: jest.fn(),
-    emit: jest.fn()
+    emit: jest.fn(),
   },
   isFallback: false,
   isLocaleDomain: false,
-  ...router
+  ...router,
 });

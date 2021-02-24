@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100vw',
     backgroundColor: '#fff',
     '& main > div': {
-      padding: theme.spacing(3.6)
-    }
-  })
+      padding: theme.spacing(3.6),
+    },
+  }),
 }));
 
 const Layout = ({ children }: Props) => {

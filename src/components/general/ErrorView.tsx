@@ -19,7 +19,12 @@ const ErrorView = ({ error, onClick }: Props) => (
         </Box>
 
         <Box marginTop={4}>
-          <Button fullWidth color="secondary" variant="contained" onClick={onClick}>
+          <Button
+            fullWidth
+            color="secondary"
+            variant="contained"
+            onClick={onClick}
+          >
             Retry
           </Button>
         </Box>

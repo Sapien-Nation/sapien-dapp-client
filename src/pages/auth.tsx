@@ -15,7 +15,7 @@ import { Login, Signup } from 'components/auth';
 
 enum View {
   Login,
-  Signup
+  Signup,
 }
 
 const AuthPage = () => {
@@ -41,7 +41,11 @@ const AuthPage = () => {
     <>
       <CssBaseline />
       <div
-        style={{ display: 'grid', height: '100vh', gridTemplateColumns: '1fr 1fr' }}
+        style={{
+          display: 'grid',
+          height: '100vh',
+          gridTemplateColumns: '1fr 1fr',
+        }}
       >
         <div style={{ backgroundColor: darkPurple }}></div>
         <div>{renderView()}</div>

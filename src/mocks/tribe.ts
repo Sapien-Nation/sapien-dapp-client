@@ -11,7 +11,7 @@ import channel4 from 'fixtures/channel_4.json';
 export const mockTribe = ({ ...rest } = {}) => ({
   ...tribe1,
   channels: [channel1, channel2],
-  ...rest
+  ...rest,
 });
 
 export const mockTribes = () => {
@@ -19,6 +19,6 @@ export const mockTribes = () => {
     { ...tribe1, channels: [channel2] },
     { ...tribe2, channels: [channel1, channel3] },
     { ...tribe3, channels: [channel2, channel4] },
-    tribe4
+    tribe4,
   ];
 };

@@ -17,25 +17,25 @@ import { useNavigation } from 'context/tribes';
 const CreateChannel = dynamic(
   () => import('components/tribe/modals').then((mod) => mod.CreateChannel),
   {
-    ssr: false
+    ssr: false,
   }
 );
 const CreateTribe = dynamic(
   () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
   {
-    ssr: false
+    ssr: false,
   }
 );
 import TribeBar from 'components/navigation/TribeBar';
 import {
   DiscoverNavigation,
-  TribeNavigation
+  TribeNavigation,
 } from 'components/navigation/TribeNavigation';
 import Query from 'components/query';
 
 export enum Dialog {
   CreateChannel,
-  CreateTribe
+  CreateTribe,
 }
 
 const Sidebar = () => {

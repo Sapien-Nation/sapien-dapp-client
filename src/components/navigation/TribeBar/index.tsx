@@ -22,11 +22,11 @@ import {
   Drawer,
   List,
   ListItem,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   AddRounded as AddIcon,
-  ExploreRounded as ExploreIcon
+  ExploreRounded as ExploreIcon,
 } from '@material-ui/icons';
 
 const drawerWidth = 72;
@@ -34,18 +34,18 @@ const drawerWidth = 72;
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     drawer: {
-      width: drawerWidth
+      width: drawerWidth,
     },
     drawerPaper: {
       width: drawerWidth,
-      backgroundColor: dark
+      backgroundColor: dark,
     },
     nav: {
       cursor: 'pointer',
       '& > *': {
         minHeight: theme.spacing(7),
-        justifyContent: 'center'
-      }
+        justifyContent: 'center',
+      },
     },
     avatar: {
       color: white,
@@ -53,10 +53,10 @@ const useStyles = makeStyles((theme: Theme) => {
       borderRadius: 15,
       border: '2px solid',
       boxSizing: 'content-box',
-      padding: '3px'
+      padding: '3px',
     },
     avatarImage: {
-      borderRadius: '10px'
+      borderRadius: '10px',
     },
     badge: {
       fontSize: theme.spacing(1),
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) => {
       border: `3px solid ${dark}`,
       height: theme.spacing(1.3),
       boxSizing: 'content-box',
-      padding: 0
+      padding: 0,
     },
     avatarItems: {
       backgroundColor: 'inherit',
@@ -74,9 +74,9 @@ const useStyles = makeStyles((theme: Theme) => {
       boxSizing: 'content-box',
       padding: '3px',
       '& svg': {
-        padding: `${theme.spacing(0.3)}`
-      }
-    }
+        padding: `${theme.spacing(0.3)}`,
+      },
+    },
   });
 });
 
@@ -94,7 +94,7 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
       anchor="left"
       className={classes.drawer}
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
       variant="permanent"
     >
@@ -110,24 +110,25 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
               setNavigation({
                 main: tribe,
                 secondary: tribe.id,
-                type: NavigationTypes.Tribe
+                type: NavigationTypes.Tribe,
               })
             }
           >
             <Badge
               badgeContent={tribe.notificationNumber}
               classes={{
-                badge: classes.badge
+                badge: classes.badge,
               }}
               color="error"
             >
               <Avatar
                 alt={tribe.name}
                 classes={{
-                  root: classes.avatar
+                  root: classes.avatar,
                 }}
                 style={{
-                  borderColor: tribe.id === navigation?.main?.id ? white : darkPurple
+                  borderColor:
+                    tribe.id === navigation?.main?.id ? white : darkPurple,
                 }}
                 variant="square"
               >
@@ -152,29 +153,31 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
             setNavigation({
               main: null,
               secondary: null,
-              type: NavigationTypes.Discovery
+              type: NavigationTypes.Discovery,
             })
           }
         >
           <Badge
             badgeContent={0}
             classes={{
-              badge: classes.badge
+              badge: classes.badge,
             }}
             color="error"
           >
             <Avatar
               alt="Discover Tribe"
               classes={{
-                root: classes.avatarItems
+                root: classes.avatarItems,
               }}
               imgProps={{
                 width: '4rem',
-                height: '4rem'
+                height: '4rem',
               }}
               style={{
                 borderColor:
-                  navigation.type === NavigationTypes.Discovery ? white : darkPurple
+                  navigation.type === NavigationTypes.Discovery
+                    ? white
+                    : darkPurple,
               }}
               variant="square"
             >
@@ -191,11 +194,11 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
           <Avatar
             alt="Create Tribe"
             classes={{
-              root: classes.avatarItems
+              root: classes.avatarItems,
             }}
             imgProps={{
               width: '4rem',
-              height: '4rem'
+              height: '4rem',
             }}
             variant="square"
           >

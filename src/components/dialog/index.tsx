@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Dialog as MUIDialog
+  Dialog as MUIDialog,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: '#ccc',
     cursor: 'pointer',
     padding: 0,
-    position: 'absolute'
+    position: 'absolute',
   }),
   marginRight: {
-    marginRight: theme.spacing(1.6)
-  }
+    marginRight: theme.spacing(1.6),
+  },
 }));
 
 const Dialog = ({

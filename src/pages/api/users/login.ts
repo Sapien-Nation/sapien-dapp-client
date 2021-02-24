@@ -12,7 +12,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('sapien_v3_12', '123456', {
-        httpOnly: true
+        httpOnly: true,
       })
     );
     return res.status(200).json(mockUser());

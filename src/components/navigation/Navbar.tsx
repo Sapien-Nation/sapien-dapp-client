@@ -16,7 +16,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Toolbar
+  Toolbar,
 } from '@material-ui/core';
 
 const Navbar = () => {
@@ -37,7 +37,12 @@ const Navbar = () => {
               onClick={(event) => setAnchorEl(event.currentTarget)}
             >
               <Avatar alt={me.username}>
-                <Image alt={me.username} height={40} src={me.avatar} width={40} />
+                <Image
+                  alt={me.username}
+                  height={40}
+                  src={me.avatar}
+                  width={40}
+                />
               </Avatar>
             </IconButton>
           ) : (
