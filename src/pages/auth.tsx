@@ -79,7 +79,12 @@ const AuthPage = () => {
       >
         <Box className={classes.image}></Box>
         <Box alignItems="center" display="flex" justifyContent="center">
-          <Box display="flex" flexDirection="column" width="39rem">
+          <Box
+            display="flex"
+            flexDirection="column"
+            margin="5rem 0"
+            width="39rem"
+          >
             <FullLogo />
             <FormProvider {...methods}>
               <form id={form} onSubmit={handleSubmit(onSubmit)}>
