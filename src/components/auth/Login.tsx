@@ -31,7 +31,7 @@ const Login = () => {
       <TextInput
         fullWidth
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({ required: 'Email is required', maxLength: 36 })}
         label="Email, phone number, or username"
         name="username"
         placeholder="myemailaddress@email.com"
@@ -39,7 +39,7 @@ const Login = () => {
       <TextInput
         fullWidth
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({ required: 'Password is required', maxLength: 36 })}
         label="Password"
         name="password"
         placeholder="mypassword123*"

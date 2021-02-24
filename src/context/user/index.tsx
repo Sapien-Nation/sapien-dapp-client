@@ -47,8 +47,8 @@ const AuthenticationProvider = ({ children }: Props) => {
       mutate('/api/users/me');
       mutate('/api/tribes/followed');
       push('/');
-    } catch (err) {
-      enqueueSnackbar(err.message);
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
     }
   };
 
