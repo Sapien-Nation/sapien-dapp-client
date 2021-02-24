@@ -29,7 +29,13 @@ import { useNavigation } from 'context/tribes';
 
 // components
 import Layout from './Layout';
-import { Checkbox, TextInput, Dropzone, Switch } from 'components/form';
+import {
+  Checkbox,
+  TextInput,
+  Dropzone,
+  Switch,
+  PasswordStrengthInput,
+} from 'components/form';
 
 const useStyles = makeStyles(() => ({
   dropzone: {
@@ -115,6 +121,28 @@ const IndexPage = () => {
             />
           </FormControl>
           <FormControl fullWidth>
+            <PasswordStrengthInput
+              fullWidth
+              autoComplete="new-password"
+              errors={errors}
+              inputProps={{
+                autoComplete: 'new-password',
+              }}
+              inputRef={register({
+                validate: {
+                  required: (value) => value.length || 'Weak',
+                  noWords: (value) => /\W/.test(value) || 'Weak',
+                  upperCase: (value) => /[A-Z]/.test(value) || 'Medium',
+                  lowerCase: (value) => /[a-z]/.test(value) || 'Medium',
+                  digitCase: (value) => /\d/.test(value) || 'Medium',
+                },
+              })}
+              label="Password"
+              name="password"
+              tooltipText="This is a tooltip text example"
+            />
+          </FormControl>
+          <FormControl fullWidth>
             <TextInput
               fullWidth
               errors={errors}
@@ -127,7 +155,7 @@ const IndexPage = () => {
                   value === getValues('password') || 'Password not match',
               })}
               label="Repeat Password"
-              name="password"
+              name="repeatPassword"
               type="password"
             />
           </FormControl>
@@ -172,43 +200,6 @@ const IndexPage = () => {
               name="remember"
             />
           </FormControl>
-          {/* <FormControl fullWidth>
-            <Controller
-              control={control}
-              defaultValue=""
-              name="password"
-              render={({ value, name, onChange }) => (
-                <PasswordStrengthInput
-                  fullWidth
-                  inputProps={{
-                    autoComplete: 'new-password',
-                  }}
-                  label="Password"
-                  name={name}
-                  tooltipText="Password Strength bla bla bla"
-                  value={value}
-                  onChange={(e) => onChange(e.target.value)}
-                />
-              )}
-              rules={{
-                validate: {
-                  isGreaterThan: (value) => {
-                    return value?.length >= 8 || 'Weak';
-                  },
-                  haveADigit: (value) => {
-                    return value.match(/\d/) || 'Weak';
-                  },
-                  oneLowerCase: (value) => {
-                    return value.match(/[a-z]/) || 'Medium';
-                  },
-                  oneUpperCase: (value) => {
-                    return value.match(/[A-Z]/) || 'Medium';
-                  },
-                },
-              }}
-            />
-          </FormControl>
-           */}
           <Box marginTop={5}>
             <Button type="submit">Submit</Button>
           </Box>

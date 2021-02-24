@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 // types
+import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
 // mui
@@ -26,6 +26,7 @@ import {
 import { darkGrey, green, orange, outline, red, white } from 'styles/colors';
 
 export interface Props extends InputProps {
+  errors: FieldErrors;
   label: string;
   name: string;
   tooltipText?: string;
@@ -40,13 +41,50 @@ const Tooltip = withStyles(() => ({
 }))(MUITooltip);
 
 const PasswordStrengthInput = ({
+  errors,
   label,
   name,
   tooltipText = '',
   ...rest
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
-  const errorState = undefined;
+
+  const type = errors[name]?.type;
+
+  const { color, points, text } = (() => {
+    let color;
+    let points = 0;
+    let text = '';
+    switch (type) {
+      case 'required':
+        color = red;
+        points = 0;
+        text = 'Type Something';
+        break;
+      case 'noWords':
+        color = red;
+        points = 25;
+        text = 'Keep going';
+        break;
+      case 'lowerCase':
+      case 'upperCase':
+        color = orange;
+        points = 50;
+        text = 'Almost';
+        break;
+      case 'digitCase':
+        color = orange;
+        points = 75;
+        text = 'Going Well';
+        break;
+      case undefined:
+        color = green;
+        points = 100;
+        text = 'Nice Password!';
+        break;
+    }
+    return { color, points, text };
+  })();
 
   return (
     <div>
@@ -82,7 +120,7 @@ const PasswordStrengthInput = ({
         type={showPassword ? 'text' : 'password'}
         {...rest}
       />
-      {/* <div
+      <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
@@ -91,31 +129,45 @@ const PasswordStrengthInput = ({
         }}
       >
         <LinearProgress
-          style={{ backgroundColor: passwordScore >= 1 ? red : outline }}
+          color="primary"
+          style={{ backgroundColor: points >= 25 ? color : outline }}
           value={0}
           variant="determinate"
         />
         <LinearProgress
+          color="primary"
+          style={{ backgroundColor: points >= 50 ? color : outline }}
+          value={0}
+          variant="determinate"
+        />
+        <LinearProgress
+          color="primary"
+          style={{ backgroundColor: points >= 75 ? color : outline }}
+          value={0}
+          variant="determinate"
+        />
+        <LinearProgress
+          color="primary"
+          style={{ backgroundColor: points >= 100 ? color : outline }}
+          value={0}
+          variant="determinate"
+        />
+      </div>
+      {text && (
+        <Typography
+          color="secondary"
+          role="alert"
           style={{
-            backgroundColor: passwordScore >= 2 ? orange : outline,
+            color,
+            textAlign: 'right',
+            fontSize: '1.2rem',
+            fontWeight: 600,
           }}
-          value={0}
-          variant="determinate"
-        />
-        <LinearProgress
-          style={{
-            backgroundColor: passwordScore >= 3 ? orange : outline,
-          }}
-          value={0}
-          variant="determinate"
-        />
-        <LinearProgress
-          style={{ backgroundColor: passwordScore === 5 ? green : outline }}
-          value={0}
-          variant="determinate"
-        />
-      </div>*/}
-      {/* <FormErrors message={errorState?.message ?? 'Strong'} type={errorState?.type ?? ''} /> */}
+          variant="body1"
+        >
+          {text}
+        </Typography>
+      )}
     </div>
   );
 };
