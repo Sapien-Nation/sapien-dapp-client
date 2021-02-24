@@ -7,7 +7,6 @@ import {
   black,
   green,
   purple,
-  orange,
   darker,
   darkGrey,
   inputBG,

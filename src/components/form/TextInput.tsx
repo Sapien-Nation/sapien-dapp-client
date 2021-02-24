@@ -5,6 +5,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
+// styles
+import { error, red } from 'styles/colors';
+
 // mui
 import {
   Box,
@@ -35,6 +38,7 @@ const TextInput = ({
   label,
   name,
   type,
+  style,
   ...rest
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -77,6 +81,15 @@ const TextInput = ({
           }
           id={name}
           name={name}
+          style={{
+            ...style,
+            backgroundColor: Object.keys(errors[name] || []).length
+              ? error
+              : style?.backgroundColor ?? null,
+            borderColor: Object.keys(errors[name] || []).length
+              ? red
+              : style?.backgroundColor ?? null,
+          }}
           type={getInputType()}
           {...rest}
         />

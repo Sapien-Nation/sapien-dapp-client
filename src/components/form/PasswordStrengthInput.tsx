@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 // types
 import type { FieldErrors } from 'react-hook-form';
@@ -48,6 +49,21 @@ const PasswordStrengthInput = ({
   ...rest
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
+  const { register, unregister, watch, setValue } = useFormContext();
+  const password = watch(name);
+
+  useEffect(() => {
+    register(name, {
+      validate: {
+        required: (value = '') => value.length || 'Weak',
+        noWords: (value = '') => /\W/.test(value) || 'Weak',
+        upperCase: (value = '') => /[A-Z]/.test(value) || 'Medium',
+        lowerCase: (value = '') => /[a-z]/.test(value) || 'Medium',
+        digitCase: (value = '') => /\d/.test(value) || 'Medium',
+      },
+    });
+    return () => unregister(name);
+  }, [name, register, unregister]);
 
   const type = errors[name]?.type;
 
@@ -55,10 +71,11 @@ const PasswordStrengthInput = ({
     let color;
     let points = 0;
     let text = '';
+
+    if (type === undefined && !password) {
+      return { color: '', points: 0, text: '' };
+    }
     switch (type) {
-      case undefined:
-        color = outline;
-        break;
       case 'required':
         color = red;
         points = 0;
@@ -121,6 +138,9 @@ const PasswordStrengthInput = ({
         id={name}
         name={name}
         type={showPassword ? 'text' : 'password'}
+        onChange={(event) =>
+          setValue(name, event.target.value, { shouldValidate: true })
+        }
         {...rest}
       />
       <div
