@@ -75,6 +75,9 @@ const PasswordStrengthInput = ({
       return { color: '', points: 0, text: '' };
     }
     switch (type) {
+      case undefined:
+        color = outline;
+        break;
       case 'required':
         color = red;
         points = 0;
