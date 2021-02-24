@@ -51,7 +51,7 @@ const TextInput = ({
     }
     return type;
   };
-  console.log('errros', errors);
+
   return (
     <div style={{ marginBottom: separation }}>
       <Box

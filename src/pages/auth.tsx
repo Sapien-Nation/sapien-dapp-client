@@ -11,6 +11,9 @@ import { Box, CssBaseline, makeStyles } from '@material-ui/core';
 // assets
 import { FullLogo } from 'components/assets/svg';
 
+// context
+import { useAuth } from 'context/user';
+
 // components
 import { Login, Signup } from 'components/auth';
 
@@ -28,6 +31,7 @@ const useStyles = makeStyles({
 });
 
 const AuthPage = () => {
+  const { login } = useAuth();
   const { asPath, events } = useRouter();
 
   const [view, setView] = useState(() =>
@@ -49,12 +53,19 @@ const AuthPage = () => {
     setView(url.includes('#signup') ? View.Signup : View.Login);
   });
   const form = 'auth';
-  const methods = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  });
+  const methods = useForm();
 
   const { handleSubmit } = methods;
+
+  const onSubmit = async () => {
+    try {
+      if (view === View.Login) {
+        await login();
+      }
+    } catch (err) {
+      //
+    }
+  };
 
   return (
     <>
@@ -71,10 +82,7 @@ const AuthPage = () => {
           <Box display="flex" flexDirection="column" width="39rem">
             <FullLogo />
             <FormProvider {...methods}>
-              <form
-                id={form}
-                onSubmit={handleSubmit(() => console.log('Log in'))}
-              >
+              <form id={form} onSubmit={handleSubmit(onSubmit)}>
                 {renderView()}
               </form>
             </FormProvider>

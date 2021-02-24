@@ -2,9 +2,6 @@
 
 import { useFormContext } from 'react-hook-form';
 
-// context
-import { useAuth } from 'context/user';
-
 // next
 import Link from 'next/link';
 
@@ -18,9 +15,7 @@ import { black, purple } from 'styles/colors';
 import { TextInput, Checkbox } from 'components/form';
 
 const Login = () => {
-  const { login } = useAuth();
   const { register, errors } = useFormContext();
-  console.log('errors', errors);
 
   return (
     <>
@@ -35,7 +30,6 @@ const Login = () => {
       </Typography>
       <TextInput
         fullWidth
-        required
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Email, phone number, or username"
@@ -44,7 +38,6 @@ const Login = () => {
       />
       <TextInput
         fullWidth
-        required
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Password"
@@ -73,7 +66,7 @@ const Login = () => {
         </Link>
       </Box>
 
-      <Button fullWidth color="primary" variant="contained" onClick={login}>
+      <Button fullWidth color="primary" type="submit" variant="contained">
         Log In
       </Button>
       <Box
