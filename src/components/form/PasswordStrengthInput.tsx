@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 // types
 import type { FieldErrors } from 'react-hook-form';
@@ -75,9 +76,6 @@ const PasswordStrengthInput = ({
       return { color: '', points: 0, text: '' };
     }
     switch (type) {
-      case undefined:
-        color = outline;
-        break;
       case 'required':
         color = red;
         points = 0;

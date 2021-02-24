@@ -58,7 +58,10 @@ const useStyles = makeStyles(() => ({
 const IndexPage = () => {
   const { me } = useAuth();
   const theme = useTheme();
-  const methods = useForm();
+  const methods1 = useForm();
+  const methods2 = useForm({
+    defaultValues: { password: '', repeatPassword: '' },
+  });
   const classes = useStyles();
   const [navigation] = useNavigation();
 
@@ -84,13 +87,25 @@ const IndexPage = () => {
     }
   };
 
-  const { register, handleSubmit, getValues, errors } = methods;
-  console.log(errors);
+  const {
+    register: register1,
+    handleSubmit: handleSubmit1,
+    errors: errors1,
+  } = methods1;
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    getValues,
+    errors: errors2,
+  } = methods2;
 
   const onSubmit = (data) => {
     console.log(data);
   };
-
+  const onSubmit2 = (data) => {
+    console.log('second form');
+    console.log(data);
+  };
   return (
     <Layout>
       <div
@@ -103,40 +118,16 @@ const IndexPage = () => {
         <h1>{renderView()}</h1>
         {me && <button onClick={handleError}>Try Error</button>}
       </div>
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FormControl fullWidth>
-            <TextInput
-              fullWidth
-              chartCount="36"
-              errors={errors}
-              inputProps={{
-                autoComplete: 'text',
-              }}
-              inputRef={register({
-                required: 'Text is required',
-              })}
-              label="Some Label"
-              name="text"
-            />
-          </FormControl>
+      <FormProvider {...methods2}>
+        <form onSubmit={handleSubmit2(onSubmit2)}>
           <FormControl fullWidth>
             <PasswordStrengthInput
               fullWidth
               autoComplete="new-password"
-              errors={errors}
+              errors={errors2}
               inputProps={{
                 autoComplete: 'new-password',
               }}
-              inputRef={register({
-                validate: {
-                  required: (value) => value.length || 'Weak',
-                  noWords: (value) => /\W/.test(value) || 'Weak',
-                  upperCase: (value) => /[A-Z]/.test(value) || 'Medium',
-                  lowerCase: (value) => /[a-z]/.test(value) || 'Medium',
-                  digitCase: (value) => /\d/.test(value) || 'Medium',
-                },
-              })}
               label="Password"
               name="password"
               tooltipText="This is a tooltip text example"
@@ -145,11 +136,11 @@ const IndexPage = () => {
           <FormControl fullWidth>
             <TextInput
               fullWidth
-              errors={errors}
+              errors={errors2}
               inputProps={{
                 autoComplete: 'new-password',
               }}
-              inputRef={register({
+              inputRef={register2({
                 required: 'Password is required',
                 validate: (value) =>
                   value === getValues('password') || 'Password not match',
@@ -159,11 +150,33 @@ const IndexPage = () => {
               type="password"
             />
           </FormControl>
+          <Box marginTop={5}>
+            <Button type="submit">Submit</Button>
+          </Box>
+        </form>
+      </FormProvider>
+      <FormProvider {...methods1}>
+        <form onSubmit={handleSubmit1(onSubmit)}>
+          <FormControl fullWidth>
+            <TextInput
+              fullWidth
+              chartCount="36"
+              errors={errors1}
+              inputProps={{
+                autoComplete: 'text',
+              }}
+              inputRef={register1({
+                required: 'Text is required',
+              })}
+              label="Some Label"
+              name="text"
+            />
+          </FormControl>
           <FormControl fullWidth>
             <Dropzone
               accept="image/*"
               className={`${classes.dropzone} ${classes.cover}`}
-              errors={errors}
+              errors={errors1}
               maxFiles={1}
               maxSize={41943040}
               name="cover"
@@ -182,8 +195,8 @@ const IndexPage = () => {
           </FormControl>
           <FormControl>
             <Switch
-              errors={errors}
-              inputRef={register({
+              errors={errors1}
+              inputRef={register1({
                 validate: (value) => value || 'Should be switched LOL',
               })}
               label="Public Tribe"
@@ -192,8 +205,8 @@ const IndexPage = () => {
           </FormControl>
           <FormControl>
             <Checkbox
-              errors={errors}
-              inputRef={register({
+              errors={errors1}
+              inputRef={register1({
                 validate: (value) => value || 'Please check',
               })}
               label="Remember me"
