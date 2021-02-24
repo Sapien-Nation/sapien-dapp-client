@@ -56,6 +56,9 @@ const PasswordStrengthInput = ({
     let points = 0;
     let text = '';
     switch (type) {
+      case undefined:
+        color = outline;
+        break;
       case 'required':
         color = red;
         points = 0;
@@ -153,21 +156,19 @@ const PasswordStrengthInput = ({
           variant="determinate"
         />
       </div>
-      {text && (
-        <Typography
-          color="secondary"
-          role="alert"
-          style={{
-            color,
-            textAlign: 'right',
-            fontSize: '1.2rem',
-            fontWeight: 600,
-          }}
-          variant="body1"
-        >
-          {text}
-        </Typography>
-      )}
+      <Typography
+        color="secondary"
+        role="alert"
+        style={{
+          color,
+          textAlign: 'right',
+          fontSize: '1.2rem',
+          fontWeight: 600,
+        }}
+        variant="body1"
+      >
+        {text}
+      </Typography>
     </div>
   );
 };
