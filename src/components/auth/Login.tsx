@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 // context
 import { useAuth } from 'context/user';
@@ -9,70 +9,49 @@ import { useAuth } from 'context/user';
 import Link from 'next/link';
 
 // mui
-import {
-  Box,
-  Button,
-  Checkbox,
-  CheckboxProps,
-  FormControlLabel,
-  Typography,
-  withStyles
-} from '@material-ui/core';
-
+import { Box, Button, Typography } from '@material-ui/core';
 
 // styles
 import { black, purple } from 'styles/colors';
 
 //components
-import { PasswordInput, TextInput } from 'components/form';
-
-const PurpleCheckbox = withStyles({
-  root: {
-    color: purple,
-    '&$checked': {
-      color: purple,
-    },
-  },
-  checked: {},
-})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
-
+import { TextInput, Checkbox } from 'components/form';
 
 const Login = () => {
   const { login } = useAuth();
-  const { control, register } = useFormContext();
+  const { register, errors } = useFormContext();
+  console.log('errors', errors);
 
   return (
     <>
       <Typography
         style={{
           margin: '5rem 0',
-          fontSize: '3.2rem'
+          fontSize: '3.2rem',
         }}
         variant="h2"
       >
         Log in
       </Typography>
       <TextInput
+        fullWidth
         required
+        errors={errors}
+        inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Email, phone number, or username"
-        maxLength={36}
         name="username"
         placeholder="myemailaddress@email.com"
       />
-      <Controller
-        control={control}
+      <TextInput
+        fullWidth
+        required
+        errors={errors}
+        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        label="Password"
         name="password"
-        render={({ onChange, name, value }) => (
-          <PasswordInput
-            inputRef={register()}
-            label="Password"
-            name={name}
-            placeholder="Password"
-            style={{ marginBottom: '0' }}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        )}
+        placeholder="mypassword123*"
+        separation="6px"
+        type="password"
       />
       <Box
         alignItems="center"
@@ -80,34 +59,13 @@ const Login = () => {
         justifyContent="space-between"
         marginBottom="2rem"
       >
-        <FormControlLabel
-          control={
-            <Controller
-              control={control}
-              name="remember"
-              render={(props) => (
-                <PurpleCheckbox
-                  {...props}
-                  checked={props.value}
-                  onChange={(e) => props.onChange(e.target.checked)}
-                />
-              )}
-            />
-          }
-          label={
-            <Typography
-              style={{
-              fontSize: '1.2rem',
-              fontWeight: 600
-            }}>Remember me</Typography>
-          }
-        />
+        <Checkbox errors={errors} label="Remember me" name="remember" />
         <Link passHref href="/auth#forgot">
           <Typography
             style={{
               color: purple,
               fontWeight: 600,
-              cursor: 'pointer'
+              cursor: 'pointer',
             }}
           >
             Forgot password?
@@ -115,19 +73,15 @@ const Login = () => {
         </Link>
       </Box>
 
-      <Button
-        fullWidth
-        color="primary"
-        variant="contained"
-        onClick={login}
-      >
+      <Button fullWidth color="primary" variant="contained" onClick={login}>
         Log In
       </Button>
       <Box
         alignItems="center"
         display="flex"
         justifyContent="center"
-        marginTop="2rem">
+        marginTop="2rem"
+      >
         <Link passHref href="/auth#signup">
           <>
             <Typography
@@ -135,8 +89,9 @@ const Login = () => {
                 fontSize: '1.2rem',
                 color: black,
                 fontWeight: 400,
-                cursor: 'pointer'
-              }}>
+                cursor: 'pointer',
+              }}
+            >
               Don’t have an account?
             </Typography>
             <Typography
@@ -145,8 +100,9 @@ const Login = () => {
                 color: black,
                 fontWeight: 700,
                 cursor: 'pointer',
-                marginLeft: '4px'
-              }}>
+                marginLeft: '4px',
+              }}
+            >
               Sign up
             </Typography>
           </>

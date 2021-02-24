@@ -49,7 +49,12 @@ const AuthPage = () => {
     setView(url.includes('#signup') ? View.Signup : View.Login);
   });
   const form = 'auth';
-  const methods = useForm();
+  const methods = useForm({
+    mode: 'onChange',
+    reValidateMode: 'onChange',
+  });
+
+  const { handleSubmit } = methods;
 
   return (
     <>
@@ -66,7 +71,12 @@ const AuthPage = () => {
           <Box display="flex" flexDirection="column" width="39rem">
             <FullLogo />
             <FormProvider {...methods}>
-              <form id={form}>{renderView()}</form>
+              <form
+                id={form}
+                onSubmit={handleSubmit(() => console.log('Log in'))}
+              >
+                {renderView()}
+              </form>
             </FormProvider>
           </Box>
         </Box>
