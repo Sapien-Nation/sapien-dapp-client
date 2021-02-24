@@ -32,9 +32,9 @@ const useStyles = makeStyles({
 
 const AuthPage = () => {
   const { asPath, events } = useRouter();
-  const [view, setView] = useState(() =>
-    asPath?.includes('#signup') ? View.Signup : View.Login
-  );
+  const [view, setView] = useState(() => {
+    return asPath?.includes('#signup') ? View.Signup : View.Login;
+  });
   const { login } = useAuth();
   const methods = useForm();
   const classes = useStyles();

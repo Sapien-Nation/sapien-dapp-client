@@ -66,7 +66,7 @@ test('LoginForm', async () => {
     expect(screen.getByText(error.message)).toBeInTheDocument();
   });
 
-  // onError
+  // onSuccess
   mock.onPost('/api/users/login').reply(200);
   user.click(screen.getByRole('button', { name: /log in/i }));
 
