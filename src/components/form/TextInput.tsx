@@ -30,7 +30,7 @@ export interface Props extends InputProps {
   errors: FieldErrors;
   label: string;
   name: string;
-  separation?: string;
+  spacing?: string;
 }
 
 const TextInput = ({
@@ -38,7 +38,7 @@ const TextInput = ({
   errors,
   label,
   name,
-  separation = '2rem',
+  spacing = '2rem',
   style,
   type,
   ...rest
@@ -53,7 +53,7 @@ const TextInput = ({
   };
 
   return (
-    <div style={{ marginBottom: separation }}>
+    <div style={{ marginBottom: spacing }}>
       <Box
         alignItems="center"
         display="flex"

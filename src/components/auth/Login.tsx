@@ -43,7 +43,7 @@ const Login = () => {
         label="Password"
         name="password"
         placeholder="mypassword123*"
-        separation="6px"
+        spacing="6px"
         type="password"
       />
       <Box
