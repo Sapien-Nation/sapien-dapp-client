@@ -30,6 +30,7 @@ const Signup = () => {
       </Typography>
       <TextInput
         fullWidth
+        autoComplete="email"
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Email or phone number"
@@ -38,6 +39,7 @@ const Signup = () => {
       />
       <TextInput
         fullWidth
+        autoComplete="username"
         chartCount="20"
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 20 })}
@@ -48,6 +50,7 @@ const Signup = () => {
       />
       <TextInput
         fullWidth
+        autoComplete="name"
         chartCount="20"
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 20 })}
@@ -57,6 +60,7 @@ const Signup = () => {
       />
       <PasswordStrengthInput
         fullWidth
+        autoComplete="new-password"
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Password"
@@ -67,6 +71,7 @@ const Signup = () => {
       />
       <TextInput
         fullWidth
+        autoComplete="new-password"
         errors={errors}
         inputRef={register({ required: 'This is required', maxLength: 36 })}
         label="Confirm password"

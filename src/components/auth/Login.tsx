@@ -30,6 +30,7 @@ const Login = () => {
       </Typography>
       <TextInput
         fullWidth
+        autoComplete="email"
         errors={errors}
         inputRef={register({ required: 'Email is required', maxLength: 36 })}
         label="Email, phone number, or username"
@@ -38,6 +39,7 @@ const Login = () => {
       />
       <TextInput
         fullWidth
+        autoComplete="new-password"
         errors={errors}
         inputRef={register({ required: 'Password is required', maxLength: 36 })}
         label="Password"

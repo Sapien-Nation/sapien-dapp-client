@@ -13,8 +13,9 @@ import type { User } from 'types/user';
 
 export interface Authentication {
   me: User | null;
-  login: () => void;
-  logout: () => void;
+  login: () => Promise<any>;
+  logout: () => Promise<any>;
+  register: () => Promise<any>;
   isLoggingIn: boolean;
 }
 
@@ -52,9 +53,20 @@ const AuthenticationProvider = ({ children }: Props) => {
     }
   };
 
+  const register = async () => {
+    try {
+      await axios.post('/api/users/register');
+      mutate('/api/users/me');
+      mutate('/api/tribes/followed');
+      push('/');
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
+    }
+  };
+
   return (
     <AuthenticationContext.Provider
-      value={{ me: data?.me, login, logout, isLoggingIn }}
+      value={{ me: data?.me, login, logout, isLoggingIn, register }}
     >
       {children}
     </AuthenticationContext.Provider>

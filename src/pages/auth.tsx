@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import * as Sentry from '@sentry/node';
 
 // next
 import { useRouter } from 'next/router';
@@ -35,7 +37,8 @@ const AuthPage = () => {
   const [view, setView] = useState(() => {
     return asPath?.includes('#signup') ? View.Signup : View.Login;
   });
-  const { login } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const { login, register } = useAuth();
   const methods = useForm();
   const classes = useStyles();
 
@@ -49,8 +52,13 @@ const AuthPage = () => {
   };
 
   events?.on('hashChangeComplete', (url) => {
-    setView(url.includes('#signup') ? View.Signup : View.Login);
+    if (url.includes('#signup') && view === View.Login) {
+      setView(View.Signup);
+    } else if (url.includes('#login') && view === View.Signup) {
+      setView(View.Login);
+    }
   });
+
   const form = 'auth';
 
   const { handleSubmit } = methods;
@@ -59,9 +67,16 @@ const AuthPage = () => {
     try {
       if (view === View.Login) {
         await login();
+      } else {
+        await register();
       }
     } catch (err) {
-      //
+      Sentry.captureException(err);
+      enqueueSnackbar(
+        view === View.Login
+          ? 'Login Error Please try again later'
+          : 'Signup Error Please try again later'
+      );
     }
   };
 
