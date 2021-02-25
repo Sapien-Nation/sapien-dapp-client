@@ -6,7 +6,7 @@ import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
 // styles
-import { error, red } from 'styles/colors';
+import { error, red, lightGrey } from 'styles/colors';
 
 // mui
 import {
@@ -17,13 +17,16 @@ import {
   IconButton,
   Typography,
 } from '@material-ui/core';
+
 import {
   VisibilityOutlined as EyeOpen,
   VisibilityOffOutlined as EyeOff,
+  ErrorOutline as Help,
 } from '@material-ui/icons';
 
 //components
 import ChartCount from 'components/form/ChartCount';
+import Tooltip from 'components/form/Tooltip';
 
 export interface Props extends InputProps {
   chartCount?: string;
@@ -31,6 +34,7 @@ export interface Props extends InputProps {
   label: string;
   name: string;
   spacing?: string;
+  tooltipText?: string;
 }
 
 const TextInput = ({
@@ -40,6 +44,7 @@ const TextInput = ({
   name,
   spacing = '2rem',
   style,
+  tooltipText,
   type,
   ...rest
 }: Props) => {
@@ -61,7 +66,17 @@ const TextInput = ({
         justifyContent="space-between"
         marginBottom={1}
       >
-        <InputLabel htmlFor={name}>{label}</InputLabel>
+        <Box alignItems="center" display="flex">
+          <InputLabel htmlFor={name}>{label}</InputLabel>
+          {tooltipText && (
+            <Tooltip interactive title={<Typography>{tooltipText}</Typography>}>
+              <Help
+                fontSize="small"
+                style={{ marginLeft: 5, color: lightGrey }}
+              />
+            </Tooltip>
+          )}
+        </Box>
         {chartCount && <ChartCount maxCount={chartCount} name={name} />}
       </Box>
       <MuiInput

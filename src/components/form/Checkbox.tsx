@@ -19,18 +19,27 @@ import {
 const useStyles = makeStyles(() => {
   return createStyles({
     root: {
+      padding: '0',
+      paddingRight: '6px',
       color: purple,
       '&$checked': {
         color: purple,
       },
     },
     checked: {},
+    label: {
+      display: 'flex',
+    },
+    controlLabel: {
+      marginBottom: '1rem',
+      marginLeft: '0',
+    },
   });
 });
 
 interface Props extends CheckboxProps {
   errors: FieldErrors;
-  label: string;
+  label: React.ReactNode;
   name: string;
 }
 const Checkbox = ({ errors, name, label, ...rest }: Props) => {
@@ -39,6 +48,7 @@ const Checkbox = ({ errors, name, label, ...rest }: Props) => {
   return (
     <>
       <FormControlLabel
+        classes={{ root: classes.controlLabel, label: classes.label }}
         control={
           <MUICheckbox
             classes={{ root: classes.root, checked: classes.checked }}
@@ -47,16 +57,7 @@ const Checkbox = ({ errors, name, label, ...rest }: Props) => {
             {...rest}
           />
         }
-        label={
-          <Typography
-            style={{
-              fontSize: '1.2rem',
-              fontWeight: 600,
-            }}
-          >
-            {label}
-          </Typography>
-        }
+        label={label}
       />
       <ErrorMessage
         errors={errors}

@@ -12,19 +12,21 @@ import {
   InputAdornment,
   InputLabel,
   IconButton,
-  Tooltip as MUITooltip,
-  withStyles,
   LinearProgress,
   Typography,
 } from '@material-ui/core';
+
 import {
   VisibilityOutlined as EyeOpen,
   VisibilityOffOutlined as EyeOff,
-  HelpOutlineOutlined as Help,
+  ErrorOutline as Help,
 } from '@material-ui/icons';
 
 // styles
-import { darkGrey, green, orange, outline, red, white } from 'styles/colors';
+import { green, orange, outline, red, lightGrey } from 'styles/colors';
+
+// components
+import Tooltip from 'components/form/Tooltip';
 
 export interface Props extends InputProps {
   errors: FieldErrors;
@@ -32,14 +34,6 @@ export interface Props extends InputProps {
   name: string;
   tooltipText?: string;
 }
-
-const Tooltip = withStyles(() => ({
-  tooltip: {
-    backgroundColor: white,
-    maxWidth: 320,
-    boxShadow: `2px 3px 2px 2px ${darkGrey}`,
-  },
-}))(MUITooltip);
 
 const PasswordStrengthInput = ({
   errors,
@@ -107,7 +101,7 @@ const PasswordStrengthInput = ({
   })();
 
   return (
-    <div>
+    <div style={{ marginBottom: '2rem' }}>
       <Box
         alignItems="center"
         display="flex"
@@ -117,7 +111,10 @@ const PasswordStrengthInput = ({
         <InputLabel htmlFor={name}>{label}</InputLabel>
         {tooltipText && (
           <Tooltip interactive title={<Typography>{tooltipText}</Typography>}>
-            <Help color="primary" fontSize="small" style={{ marginLeft: 5 }} />
+            <Help
+              fontSize="small"
+              style={{ marginLeft: 5, color: lightGrey }}
+            />
           </Tooltip>
         )}
       </Box>

@@ -52,7 +52,20 @@ const Login = () => {
         justifyContent="space-between"
         marginBottom="2rem"
       >
-        <Checkbox errors={errors} label="Remember me" name="remember" />
+        <Checkbox
+          errors={errors}
+          label={
+            <Typography
+              style={{
+                fontSize: '1.2rem',
+                fontWeight: 600,
+              }}
+            >
+              Remember me
+            </Typography>
+          }
+          name="remember"
+        />
         <Link passHref href="/auth#forgot">
           <Typography
             style={{
@@ -75,18 +88,18 @@ const Login = () => {
         justifyContent="center"
         marginTop="2rem"
       >
-        <Link passHref href="/auth#signup">
-          <>
-            <Typography
-              style={{
-                fontSize: '1.2rem',
-                color: black,
-                fontWeight: 400,
-                cursor: 'pointer',
-              }}
-            >
-              Don’t have an account?
-            </Typography>
+        <>
+          <Typography
+            style={{
+              fontSize: '1.2rem',
+              color: black,
+              fontWeight: 400,
+              cursor: 'pointer',
+            }}
+          >
+            Don’t have an account?
+          </Typography>
+          <Link href="/auth#signup">
             <Typography
               style={{
                 fontSize: '1.2rem',
@@ -98,8 +111,8 @@ const Login = () => {
             >
               Sign up
             </Typography>
-          </>
-        </Link>
+          </Link>
+        </>
       </Box>
     </>
   );

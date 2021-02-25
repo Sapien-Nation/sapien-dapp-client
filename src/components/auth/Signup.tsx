@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Box, Button, Typography } from '@material-ui/core';
 
 // styles
-import { black, purple } from 'styles/colors';
+import { black } from 'styles/colors';
 
 //components
 import { TextInput, Checkbox, PasswordStrengthInput } from 'components/form';
@@ -38,16 +38,19 @@ const Signup = () => {
       />
       <TextInput
         fullWidth
+        chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({ required: 'This is required', maxLength: 20 })}
         label="Username"
         name="username"
         placeholder="johniedoe"
+        tooltipText="Set a username"
       />
       <TextInput
         fullWidth
+        chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({ required: 'This is required', maxLength: 20 })}
         label="Name"
         name="name"
         placeholder="Jonathan Doe"
@@ -69,24 +72,49 @@ const Signup = () => {
         label="Confirm password"
         name="confirm"
         placeholder="mypassword123*"
-        spacing="6px"
         type="password"
       />
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        marginBottom="2rem"
-      >
+      <Box display="flex" flexDirection="column" marginBottom="2rem">
         <Checkbox
           errors={errors}
-          label="I have read and agree to the Terms & Conditions"
+          label={
+            <>
+              <Typography
+                style={{
+                  fontSize: '1.2rem',
+                  fontWeight: 400,
+                }}
+              >
+                I have read and agree to the
+              </Typography>
+              <Link passHref href="/auth#signup">
+                <Typography
+                  style={{
+                    fontSize: '1.2rem',
+                    fontWeight: 600,
+                    color: '#4bd0df',
+                    marginLeft: '4px',
+                  }}
+                >
+                  Terms & Conditions
+                </Typography>
+              </Link>
+            </>
+          }
           name="agree"
         />
         <Checkbox
           errors={errors}
-          label="I understand that a wallet will be created for me"
+          label={
+            <Typography
+              style={{
+                fontSize: '1.2rem',
+                fontWeight: 400,
+              }}
+            >
+              I understand that a wallet will be created for me
+            </Typography>
+          }
           name="wallet"
         />
       </Box>
@@ -100,30 +128,28 @@ const Signup = () => {
         justifyContent="center"
         marginTop="2rem"
       >
-        <Link passHref href="/auth#signup">
-          <>
-            <Typography
-              style={{
-                fontSize: '1.2rem',
-                color: black,
-                fontWeight: 400,
-                cursor: 'pointer',
-              }}
-            >
-              Already have an account?
-            </Typography>
-            <Typography
-              style={{
-                fontSize: '1.2rem',
-                color: black,
-                fontWeight: 700,
-                cursor: 'pointer',
-                marginLeft: '4px',
-              }}
-            >
-              Log in
-            </Typography>
-          </>
+        <Typography
+          style={{
+            fontSize: '1.2rem',
+            color: black,
+            fontWeight: 400,
+            cursor: 'pointer',
+          }}
+        >
+          Already have an account?
+        </Typography>
+        <Link passHref href="/auth#login">
+          <Typography
+            style={{
+              fontSize: '1.2rem',
+              color: black,
+              fontWeight: 700,
+              cursor: 'pointer',
+              marginLeft: '4px',
+            }}
+          >
+            Log in
+          </Typography>
         </Link>
       </Box>
     </>
