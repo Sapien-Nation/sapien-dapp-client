@@ -15,7 +15,7 @@ import { black } from 'styles/colors';
 import { TextInput, Checkbox, PasswordStrengthInput } from 'components/form';
 
 const Signup = () => {
-  const { register, errors } = useFormContext();
+  const { register, errors, getValues } = useFormContext();
 
   return (
     <>
@@ -32,7 +32,7 @@ const Signup = () => {
         fullWidth
         autoComplete="email"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({ required: 'Email is required', maxLength: 36 })}
         label="Email or phone number"
         name="email"
         placeholder="myemailaddress@email.com"
@@ -42,7 +42,7 @@ const Signup = () => {
         autoComplete="username"
         chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 20 })}
+        inputRef={register({ required: 'Username is required', maxLength: 20 })}
         label="Username"
         name="username"
         placeholder="johniedoe"
@@ -53,7 +53,7 @@ const Signup = () => {
         autoComplete="name"
         chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 20 })}
+        inputRef={register({ required: 'Name is required', maxLength: 20 })}
         label="Name"
         name="name"
         placeholder="Jonathan Doe"
@@ -62,7 +62,7 @@ const Signup = () => {
         fullWidth
         autoComplete="new-password"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register}
         label="Password"
         name="password"
         placeholder="mypassword123*"
@@ -73,7 +73,12 @@ const Signup = () => {
         fullWidth
         autoComplete="new-password"
         errors={errors}
-        inputRef={register({ required: 'This is required', maxLength: 36 })}
+        inputRef={register({
+          required: 'Password is required',
+          maxLength: 36,
+          validate: (val = '') =>
+            val === getValues('password') || 'Passwords don"t match',
+        })}
         label="Confirm password"
         name="confirm"
         placeholder="mypassword123*"
