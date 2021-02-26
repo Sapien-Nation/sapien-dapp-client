@@ -1,3 +1,5 @@
+import { useFormContext } from 'react-hook-form';
+
 // mui
 import {
   FormControl,
@@ -38,6 +40,7 @@ const useStyles = makeStyles(() => ({
 const MediaStep = () => {
   const theme = useTheme();
   const classes = useStyles();
+  const { errors } = useFormContext();
 
   return (
     <>
@@ -46,6 +49,7 @@ const MediaStep = () => {
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.avatar}`}
+          errors={errors}
           maxFiles={1}
           maxSize={20971520}
           name="avatar"
@@ -59,6 +63,7 @@ const MediaStep = () => {
               </IconButton>
             );
           }}
+          rules={{ required: 'Upload at least one image' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}
@@ -73,6 +78,7 @@ const MediaStep = () => {
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.cover}`}
+          errors={errors}
           maxFiles={1}
           maxSize={41943040}
           name="cover"

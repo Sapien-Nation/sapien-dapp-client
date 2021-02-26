@@ -11,6 +11,9 @@ import type { RegisterOptions, FieldErrors } from 'react-hook-form';
 import { Box, IconButton, Typography } from '@material-ui/core';
 import { CloseOutlined as CloseIcon } from '@material-ui/icons';
 
+// styles
+import { error, red } from 'styles/colors';
+
 interface Props extends DropzoneProps {
   className?: string;
   errors: FieldErrors;
@@ -56,10 +59,18 @@ const Dropzone = ({
         className={className}
         display="flex"
         justifyContent="center"
+        style={{
+          backgroundColor: Object.keys(errors[name] || []).length
+            ? error
+            : null,
+          borderColor: Object.keys(errors[name] || []).length ? red : null,
+        }}
         {...getRootProps()}
       >
         <input {...getInputProps()} />
         {render(isDragActive)}
+      </Box>
+      <Box alignItems="center" display="flex" justifyContent="flex-start">
         <ErrorMessage
           errors={errors}
           name={name}

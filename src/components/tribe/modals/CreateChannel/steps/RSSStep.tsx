@@ -22,6 +22,9 @@ import {
   useTheme,
 } from '@material-ui/core';
 
+//components
+import { TextInput } from 'components/form';
+
 const useStyles = makeStyles((theme: Theme) => ({
   addRssButton: {
     padding: `${theme.spacing(0.6)}`,
@@ -31,13 +34,41 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const RSSStep = () => {
-  const { register } = useFormContext();
+  const { errors, register } = useFormContext();
   const classes = useStyles();
   const theme = useTheme();
 
   return (
     <>
-      <FormControl fullWidth>
+      <TextInput
+        fullWidth
+        autoComplete="label"
+        chartCount="36"
+        errors={errors}
+        inputRef={register({ required: 'Label is required', maxLength: 36 })}
+        label="Label"
+        name="label"
+        placeholder="Label"
+        spacing="1rem"
+      />
+      <Typography style={{ marginTop: theme.spacing(1.5) }} variant="caption">
+        Enter a URL or{' '}
+        <Typography color="primary" variant="caption">
+          Browse{' '}
+        </Typography>
+        to import RSS feeds (max 150MB)
+      </Typography>
+      <Box marginBottom="2rem" width="100%">
+        <Button
+          style={{
+            color: purple,
+            marginTop: theme.spacing(2),
+          }}
+        >
+          + Add More
+        </Button>
+      </Box>
+      {/* <FormControl fullWidth>
         <InputLabel htmlFor="label">Label</InputLabel>
         <Input
           fullWidth
@@ -63,7 +94,7 @@ const RSSStep = () => {
             + Add More
           </Button>
         </Box>
-      </FormControl>
+      </FormControl> */}
       <Typography style={{ marginBottom: '2.2rem' }} variant="h5">
         Popular Feeds
       </Typography>
