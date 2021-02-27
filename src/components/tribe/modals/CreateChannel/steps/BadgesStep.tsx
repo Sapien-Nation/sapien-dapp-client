@@ -1,61 +1,62 @@
 // assets
-import {
-  MultipleBadges,
-  Search,
-  SingleBadge,
-  SubscriptionBadge,
-} from 'components/tribe/assets/svg';
+// import {
+//   MultipleBadges,
+//   Search,
+//   SingleBadge,
+//   SubscriptionBadge,
+// } from 'components/tribe/assets/svg';
 
 // mocks
-import { mockTribeBadges, mockSubscriptionBadges } from 'mocks/badges';
+// import { mockTribeBadges, mockSubscriptionBadges } from 'mocks/badges';
 
 // mui
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  FormControl,
-  Input,
-  InputAdornment,
-  makeStyles,
-  Typography,
-  useTheme,
-} from '@material-ui/core';
+// import {
+//   Avatar,
+//   Box,
+//   Button,
+//   Chip,
+//   FormControl,
+//   Input,
+//   InputAdornment,
+//   makeStyles,
+//   Typography,
+//   useTheme,
+// } from '@material-ui/core';
 
 // styles
-import { background, purple, white } from 'styles/colors';
+// import { background, purple, white } from 'styles/colors';
 
-const tribeBadges = mockTribeBadges();
-const subscriptionBadges = mockSubscriptionBadges();
+// const tribeBadges = mockTribeBadges();
+// const subscriptionBadges = mockSubscriptionBadges();
 
-const useStyles = makeStyles(() => ({
-  badgeHeader: {
-    marginRight: '1rem',
-  },
-  search: {
-    borderRadius: '9rem',
-  },
-  searchFocus: {
-    borderRadius: '9rem !important',
-  },
-  badgeChip: {
-    backgroundColor: '#f5f5f5',
-    marginTop: '.5rem',
-    marginRight: '.5rem',
-  },
-  badgeLabel: {
-    padding: '0 .8rem',
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   badgeHeader: {
+//     marginRight: '1rem',
+//   },
+//   search: {
+//     borderRadius: '9rem',
+//   },
+//   searchFocus: {
+//     borderRadius: '9rem !important',
+//   },
+//   badgeChip: {
+//     backgroundColor: '#f5f5f5',
+//     marginTop: '.5rem',
+//     marginRight: '.5rem',
+//   },
+//   badgeLabel: {
+//     padding: '0 .8rem',
+//   },
+// }));
 
 const BadgesStep = () => {
-  const theme = useTheme();
-  const classes = useStyles();
+  // const theme = useTheme();
+  // const classes = useStyles();
 
   return (
     <>
-      <Box
+      <h1>TODO</h1>
+      {/* <Box
         bgcolor={background}
         borderRadius="1.6rem"
         display="flex"
@@ -186,7 +187,7 @@ const BadgesStep = () => {
             </Button>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </>
   );
 };

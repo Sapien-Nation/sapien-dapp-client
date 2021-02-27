@@ -76,6 +76,9 @@ const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
   };
 };
 
+export const createRandomString = (length: number) =>
+  Array.from({ length }, () => 'w').join('');
+
 export { renderHook, act as actHook } from '@testing-library/react-hooks';
 export * from '@testing-library/react';
 

@@ -1,23 +1,23 @@
 import { useFormContext } from 'react-hook-form';
 
 // types
-import type { Theme } from '@material-ui/core/styles';
+// import type { Theme } from '@material-ui/core/styles';
 
 // assets
-import { AddIcon, RssIcon } from 'components/assets/svg';
+// import { AddIcon, RssIcon } from 'components/assets/svg';
 
 // styles
-import { background, darkGrey, purple } from 'styles/colors';
+// import { background, darkGrey, purple } from 'styles/colors';
 
 // mui
 import {
-  Box,
-  Button,
-  FormControl,
-  IconButton,
-  Input,
-  InputLabel,
-  makeStyles,
+  // Box,
+  // Button,
+  // FormControl,
+  // IconButton,
+  // Input,
+  // InputLabel,
+  // makeStyles,
   Typography,
   useTheme,
 } from '@material-ui/core';
@@ -25,17 +25,17 @@ import {
 //components
 import { TextInput } from 'components/form';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  addRssButton: {
-    padding: `${theme.spacing(0.6)}`,
-    marginLeft: `${theme.spacing(1)}`,
-    backgroundColor: `${darkGrey}15`,
-  },
-}));
+// const useStyles = makeStyles((theme: Theme) => ({
+//   addRssButton: {
+//     padding: `${theme.spacing(0.6)}`,
+//     marginLeft: `${theme.spacing(1)}`,
+//     backgroundColor: `${darkGrey}15`,
+//   },
+// }));
 
 const RSSStep = () => {
   const { errors, register } = useFormContext();
-  const classes = useStyles();
+  // const classes = useStyles();
   const theme = useTheme();
 
   return (
@@ -45,7 +45,12 @@ const RSSStep = () => {
         autoComplete="label"
         chartCount="36"
         errors={errors}
-        inputRef={register({ required: 'Label is required', maxLength: 36 })}
+        inputRef={register({
+          required: 'Label is required',
+          validate: {
+            maxLength: (val = '') => val.length <= 36 || 'label is to long',
+          },
+        })}
         label="Label"
         name="label"
         placeholder="Label"
@@ -58,7 +63,7 @@ const RSSStep = () => {
         </Typography>
         to import RSS feeds (max 150MB)
       </Typography>
-      <Box marginBottom="2rem" width="100%">
+      {/* <Box marginBottom="2rem" width="100%">
         <Button
           style={{
             color: purple,
@@ -67,7 +72,7 @@ const RSSStep = () => {
         >
           + Add More
         </Button>
-      </Box>
+      </Box> */}
       {/* <FormControl fullWidth>
         <InputLabel htmlFor="label">Label</InputLabel>
         <Input
@@ -95,7 +100,7 @@ const RSSStep = () => {
           </Button>
         </Box>
       </FormControl> */}
-      <Typography style={{ marginBottom: '2.2rem' }} variant="h5">
+      {/* <Typography style={{ marginBottom: '2.2rem' }} variant="h5">
         Popular Feeds
       </Typography>
       <Box
@@ -121,7 +126,7 @@ const RSSStep = () => {
         >
           <AddIcon />
         </IconButton>
-      </Box>
+      </Box> */}
     </>
   );
 };

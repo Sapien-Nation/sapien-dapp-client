@@ -67,7 +67,7 @@ const Dropzone = ({
         }}
         {...getRootProps()}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} id={name} />
         {render(isDragActive)}
       </Box>
       <Box alignItems="center" display="flex" justifyContent="flex-start">

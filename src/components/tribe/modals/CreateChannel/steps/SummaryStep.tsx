@@ -12,7 +12,12 @@ const SummaryStep = () => {
         autoComplete="name"
         chartCount="36"
         errors={errors}
-        inputRef={register({ required: 'Name is required', maxLength: 36 })}
+        inputRef={register({
+          required: 'Name is required',
+          validate: {
+            maxLength: (val = '') => val.length <= 36 || 'name is to long',
+          },
+        })}
         label="Name"
         name="name"
         placeholder="Name"
@@ -25,7 +30,10 @@ const SummaryStep = () => {
         errors={errors}
         inputRef={register({
           required: 'Description is required',
-          maxLength: 60,
+          validate: {
+            maxLength: (val = '') =>
+              val.length <= 60 || 'description is to long',
+          },
         })}
         label="Description"
         name="description"

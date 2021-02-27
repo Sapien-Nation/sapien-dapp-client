@@ -48,13 +48,13 @@ interface Props {
 const CreateChannel = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.ChannelSummary);
   const { enqueueSnackbar } = useSnackbar();
-  const [navigation, setNativation] = useNavigation();
+  const [navigation, setNavigation] = useNavigation();
   const methods = useForm({
     defaultValues,
     shouldUnregister: false,
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, clearErrors } = methods;
 
   const handleFormSubmit = async (values) => {
     switch (step) {
@@ -100,7 +100,7 @@ const CreateChannel = ({ onClose }: Props) => {
             }),
             false
           );
-          setNativation({
+          setNavigation({
             ...navigation,
             secondary: channel.id,
             type: NavigationTypes.Channel,
@@ -114,6 +114,7 @@ const CreateChannel = ({ onClose }: Props) => {
   };
 
   const handleBack = () => {
+    clearErrors();
     switch (step) {
       case Step.ChannelSummary: {
         onClose();

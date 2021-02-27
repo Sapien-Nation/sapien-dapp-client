@@ -45,20 +45,18 @@ const MediaStep = () => {
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Avatar</InputLabel>
+        <InputLabel htmlFor="avatar">Avatar</InputLabel>
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.avatar}`}
           errors={errors}
           maxFiles={1}
           maxSize={20971520}
+          multiple={false}
           name="avatar"
           render={() => {
             return (
-              <IconButton
-                aria-label="channel type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon />
               </IconButton>
             );
@@ -74,7 +72,7 @@ const MediaStep = () => {
         </Typography>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Cover image</InputLabel>
+        <InputLabel htmlFor="cover">Cover image</InputLabel>
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.cover}`}
@@ -84,10 +82,7 @@ const MediaStep = () => {
           name="cover"
           render={() => {
             return (
-              <IconButton
-                aria-label="channel type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon />
               </IconButton>
             );
