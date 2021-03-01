@@ -87,6 +87,7 @@ const MediaStep = () => {
               </IconButton>
             );
           }}
+          rules={{ required: 'Upload at least one image' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}

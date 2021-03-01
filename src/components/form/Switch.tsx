@@ -16,7 +16,7 @@ import {
 import { HelpOutlineOutlined as HelpIcon } from '@material-ui/icons';
 
 export interface Props extends SwitchProps {
-  errors: FieldErrors;
+  errors?: FieldErrors;
   label: string;
   name: string;
 }

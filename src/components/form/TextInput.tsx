@@ -34,6 +34,7 @@ export interface Props extends InputProps {
   label: string;
   name: string;
   spacing?: string;
+  startAdornment: React.ReactNode | null;
   tooltipText?: string;
 }
 
@@ -43,6 +44,7 @@ const TextInput = ({
   label,
   name,
   spacing = '2rem',
+  startAdornment,
   style,
   tooltipText,
   type,
@@ -97,6 +99,7 @@ const TextInput = ({
         }
         id={name}
         name={name}
+        startAdornment={startAdornment}
         style={{
           ...style,
           backgroundColor: Object.keys(errors[name] || []).length

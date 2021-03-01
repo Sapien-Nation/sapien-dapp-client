@@ -1,3 +1,5 @@
+import { useFormContext } from 'react-hook-form';
+
 // mui
 import {
   FormControl,
@@ -36,23 +38,22 @@ const useStyles = makeStyles(() => ({
 const MediaStep = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const { errors } = useFormContext();
 
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Avatar</InputLabel>
+        <InputLabel htmlFor="avatar">Avatar</InputLabel>
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.avatar}`}
+          errors={errors}
           maxFiles={1}
           maxSize={20971520}
           name="avatar"
           render={() => {
             return (
-              <IconButton
-                aria-label="tribe type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon fontSize="small" />
               </IconButton>
             );
@@ -67,23 +68,22 @@ const MediaStep = () => {
         </Typography>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Cover image</InputLabel>
+        <InputLabel htmlFor="cover">Cover image</InputLabel>
         <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.cover}`}
+          errors={errors}
           maxFiles={1}
           maxSize={41943040}
           name="cover"
           render={() => {
             return (
-              <IconButton
-                aria-label="tribe type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon fontSize="small" />
               </IconButton>
             );
           }}
+          rules={{ required: 'Upload at least one image' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}
