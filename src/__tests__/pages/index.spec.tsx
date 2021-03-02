@@ -303,9 +303,13 @@ describe('TribeNavigation', () => {
       user.click(screen.getByRole('button', { name: /next/i }));
     });
 
-    expect(screen.getByText('Upload at least one image')).toBeInTheDocument();
+    expect(screen.getByText('Avatar is required')).toBeInTheDocument();
+    expect(screen.getByText('Cover is required')).toBeInTheDocument();
     await waitFor(() => {
-      user.upload(screen.getByLabelText(/avatar/i), mockFile());
+      user.upload(
+        within(screen.getByRole('dialog')).getByLabelText(/avatar/i),
+        mockFile()
+      );
       // There are multiple cover roles in the screen
       user.upload(
         within(screen.getByRole('dialog')).getByLabelText(/cover/i),
@@ -313,9 +317,8 @@ describe('TribeNavigation', () => {
       );
     });
 
-    expect(
-      screen.queryByText('Upload at least one image')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Avatar is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cover is required')).not.toBeInTheDocument();
 
     await waitFor(() => {
       user.click(screen.getByRole('button', { name: /next/i }));
