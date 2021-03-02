@@ -58,6 +58,7 @@ const MediaStep = () => {
               </IconButton>
             );
           }}
+          rules={{ required: 'Avatar is required' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}
@@ -83,7 +84,7 @@ const MediaStep = () => {
               </IconButton>
             );
           }}
-          rules={{ required: 'Upload at least one image' }}
+          rules={{ required: 'Cover is required' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}

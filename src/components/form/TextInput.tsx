@@ -34,7 +34,7 @@ export interface Props extends InputProps {
   label: string;
   name: string;
   spacing?: string;
-  startAdornment: React.ReactNode | null;
+  startAdornment?: React.ReactNode | null;
   tooltipText?: string;
 }
 
