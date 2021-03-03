@@ -228,6 +228,13 @@ theme.overrides = {
     },
     checked: {},
   },
+  MuiSelect: {
+    select: {
+      '&:focus': {
+        backgroundColor: 'none',
+      },
+    },
+  },
 };
 
 // Global button props
