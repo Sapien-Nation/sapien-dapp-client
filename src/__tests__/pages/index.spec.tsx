@@ -101,6 +101,123 @@ describe('TribeBar', () => {
       ).toBeInTheDocument();
     });
   });
+
+  test('Create Tribe', async () => {
+    const mock = new MockAdapter(axios);
+    renderComponent();
+
+    const tribeBar = getTribeBar();
+    user.click(within(tribeBar).getByRole('button', { name: /create tribe/i }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog', { name: /new tribe step 1 \/ 2/i })
+      ).toBeInTheDocument();
+    });
+
+    // SummaryStep
+    // validation
+
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
+
+    // required
+    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/unique identifier is required/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/description is required/i)).toBeInTheDocument();
+
+    // maxLength
+    await waitFor(() => {
+      user.type(
+        screen.getByRole('textbox', { name: /name/i }),
+        createRandomString(37)
+      );
+      user.type(
+        screen.getByRole('textbox', { name: /unique identifier/i }),
+        createRandomString(16)
+      );
+      user.type(
+        screen.getByRole('textbox', { name: /description/i }),
+        createRandomString(61)
+      );
+    });
+
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
+
+    expect(screen.getByText(/name its to long/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/unique identifier its to long/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/description its to long/i)).toBeInTheDocument();
+
+    const newTribe = createRandomString(36);
+    await waitFor(() => {
+      user.clear(screen.getByRole('textbox', { name: /name/i }));
+      user.clear(screen.getByRole('textbox', { name: /unique identifier/i }));
+      user.clear(screen.getByRole('textbox', { name: /description/i }));
+      user.type(screen.getByRole('textbox', { name: /name/i }), newTribe);
+      user.type(
+        screen.getByRole('textbox', { name: /unique identifier/i }),
+        createRandomString(15)
+      );
+      user.type(
+        screen.getByRole('textbox', { name: /description/i }),
+        createRandomString(60)
+      );
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
+
+    // Media Step
+    await waitFor(() => {
+      expect(
+        screen.getByRole('dialog', { name: /new tribe step 2 \/ 2/i })
+      ).toBeInTheDocument();
+    });
+
+    // validation
+    // required
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /create/i }));
+    });
+
+    expect(screen.getByText('Avatar is required')).toBeInTheDocument();
+    expect(screen.getByText('Cover is required')).toBeInTheDocument();
+
+    await waitFor(() => {
+      user.upload(screen.getByLabelText(/avatar/i), mockFile());
+      // There are multiple cover roles in the screen
+      user.upload(
+        within(screen.getByRole('dialog')).getByLabelText(/cover/i),
+        mockFile()
+      );
+    });
+
+    expect(screen.queryByText('Cover is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('Avatar is required')).not.toBeInTheDocument();
+
+    // onError
+    const error = { message: 'Create Tribe Error' };
+    mock.onPost('/api/tribes/create').reply(400, error);
+    user.click(screen.getByRole('button', { name: /create/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(error.message)).toBeInTheDocument();
+    });
+
+    // onSuccess
+    mock.onPost('/api/tribes/create').reply(200, { data: '1000' });
+    user.click(screen.getByRole('button', { name: /create/i }));
+
+    await waitFor(() => {});
+    expect(
+      within(getTribeBar()).getByRole('button', { name: newTribe })
+    ).toHaveTextContent('0');
+  });
 });
 
 describe('TribeNavigation', () => {
@@ -299,127 +416,6 @@ describe('TribeNavigation', () => {
       ).toHaveTextContent(`${newChannel}0 members`);
     });
   });
-});
-
-test('Create Tribe', async () => {
-  const mock = new MockAdapter(axios);
-  renderComponent();
-
-  const tribeNavigation = getTribeNavigation();
-
-  user.click(
-    within(tribeNavigation).getByRole('button', { name: /create tribe/i })
-  );
-
-  await waitFor(() => {
-    expect(
-      screen.getByRole('dialog', { name: /new tribe step 1 \/ 2/i })
-    ).toBeInTheDocument();
-  });
-
-  // SummaryStep
-  // validation
-
-  await waitFor(() =>
-    user.click(screen.getByRole('button', { name: /next/i }))
-  );
-
-  // required
-  expect(screen.getByText(/name is required/i)).toBeInTheDocument();
-  expect(
-    screen.getByText(/unique identifier is required/i)
-  ).toBeInTheDocument();
-  expect(screen.getByText(/description is required/i)).toBeInTheDocument();
-
-  // maxLength
-  const newTribe = createRandomString(36);
-  await waitFor(() => {
-    user.type(screen.getByRole('textbox', { name: /name/i }), newTribe);
-    user.type(
-      screen.getByRole('textbox', { name: /unique_identifier/i }),
-      createRandomString(16)
-    );
-    user.type(
-      screen.getByRole('textbox', { name: /description/i }),
-      createRandomString(61)
-    );
-  });
-
-  await waitFor(() =>
-    user.click(screen.getByRole('button', { name: /next/i }))
-  );
-
-  expect(screen.getByText(/name is to long/i)).toBeInTheDocument();
-  expect(
-    screen.getByText(/unique identifier its to long/i)
-  ).toBeInTheDocument();
-  expect(screen.getByText(/description is to long/i)).toBeInTheDocument();
-
-  await waitFor(() => {
-    user.clear(screen.getByRole('textbox', { name: /name/i }));
-    user.clear(screen.getByRole('textbox', { name: /unique_identifier/i }));
-    user.clear(screen.getByRole('textbox', { name: /description/i }));
-    user.type(
-      screen.getByRole('textbox', { name: /name/i }),
-      createRandomString(36)
-    );
-    user.type(
-      screen.getByRole('textbox', { name: /unique_identifier/i }),
-      createRandomString(15)
-    );
-    user.type(
-      screen.getByRole('textbox', { name: /description/i }),
-      createRandomString(60)
-    );
-    user.click(screen.getByRole('button', { name: /next/i }));
-  });
-
-  // Media Step
-  await waitFor(() => {
-    user.click(screen.getByRole('button', { name: /next/i }));
-  });
-
-  await waitFor(() => {
-    expect(
-      screen.getByRole('dialog', { name: /new tribe step 2 \/ 2/i })
-    ).toBeInTheDocument();
-  });
-
-  // validation
-  // required
-  await waitFor(() => {
-    user.click(screen.getByRole('button', { name: /create/i }));
-  });
-
-  expect(screen.getByText('Avatar is required')).toBeInTheDocument();
-  await waitFor(() => {
-    user.upload(screen.getByLabelText(/avatar/i), mockFile());
-    // There are multiple cover roles in the screen
-    user.upload(
-      within(screen.getByRole('dialog')).getByLabelText(/cover/i),
-      mockFile()
-    );
-  });
-
-  expect(screen.queryByText('Cover is required')).not.toBeInTheDocument();
-
-  // onError
-  const error = { message: 'Create Tribe Error' };
-  mock.onPost('/api/tribes/create').reply(400, error);
-  user.click(screen.getByRole('button', { name: /create/i }));
-
-  await waitFor(() => {
-    expect(screen.getByText(error.message)).toBeInTheDocument();
-  });
-
-  // onSuccess
-  mock.onPost('/api/tribes/create').reply(200, { data: '1000' });
-  user.click(screen.getByRole('button', { name: /create/i }));
-
-  await waitFor(() => {});
-  expect(
-    within(getTribeBar()).getByRole('button', { name: newTribe })
-  ).toHaveTextContent('0');
 });
 
 describe('Navbar', () => {

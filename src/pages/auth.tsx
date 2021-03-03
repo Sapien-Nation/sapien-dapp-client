@@ -5,10 +5,17 @@ import { useSnackbar } from 'notistack';
 import * as Sentry from '@sentry/node';
 
 // next
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // mui
-import { Box, CssBaseline, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  CssBaseline,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'components/assets/svg';
@@ -22,6 +29,8 @@ import { Login, Signup } from 'components/auth';
 enum View {
   Login,
   Signup,
+  Forgot,
+  Success,
 }
 
 const useStyles = makeStyles({
@@ -42,20 +51,28 @@ const AuthPage = () => {
   const methods = useForm();
   const classes = useStyles();
 
-  const renderView = () => {
+  const renderForm = () => {
     switch (view) {
       case View.Login:
         return <Login />;
+      case View.Forgot:
+        return (
+          <Button type="submit" variant="contained">
+            Forgot
+          </Button>
+        );
       default:
         return <Signup />;
     }
   };
 
   events?.on('hashChangeComplete', (url) => {
-    if (url.includes('#signup') && view === View.Login) {
+    if (url.includes('#signup') && view !== View.Login) {
       setView(View.Signup);
-    } else if (url.includes('#login') && view === View.Signup) {
+    } else if (url.includes('#login') && view !== View.Signup) {
       setView(View.Login);
+    } else if (url.includes('#forgot') && view !== View.Forgot) {
+      setView(View.Forgot);
     }
   });
 
@@ -67,8 +84,10 @@ const AuthPage = () => {
     try {
       if (view === View.Login) {
         await login();
-      } else {
+      } else if (view === View.Signup) {
         await register();
+      } else if (view === View.Forgot) {
+        setView(View.Success);
       }
     } catch (err) {
       Sentry.captureException(err);
@@ -99,11 +118,17 @@ const AuthPage = () => {
             width="39rem"
           >
             <FullLogo />
-            <FormProvider {...methods}>
-              <form id={form} onSubmit={handleSubmit(onSubmit)}>
-                {renderView()}
-              </form>
-            </FormProvider>
+            {view === View.Success ? (
+              <Link href="/auth#login">
+                <Typography>Back to Login</Typography>
+              </Link>
+            ) : (
+              <FormProvider {...methods}>
+                <form id={form} onSubmit={handleSubmit(onSubmit)}>
+                  {renderForm()}
+                </form>
+              </FormProvider>
+            )}
           </Box>
         </Box>
       </div>
