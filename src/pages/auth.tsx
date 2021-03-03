@@ -67,9 +67,9 @@ const AuthPage = () => {
   };
 
   events?.on('hashChangeComplete', (url) => {
-    if (url.includes('#signup') && view !== View.Login) {
+    if (url.includes('#signup') && view !== View.Signup) {
       setView(View.Signup);
-    } else if (url.includes('#login') && view !== View.Signup) {
+    } else if (url.includes('#login') && view !== View.Login) {
       setView(View.Login);
     } else if (url.includes('#forgot') && view !== View.Forgot) {
       setView(View.Forgot);
