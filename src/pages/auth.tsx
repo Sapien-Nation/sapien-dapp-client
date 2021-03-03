@@ -9,13 +9,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // mui
-import {
-  Box,
-  Button,
-  CssBaseline,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, Button, CssBaseline, makeStyles } from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'components/assets/svg';
@@ -24,12 +18,12 @@ import { FullLogo } from 'components/assets/svg';
 import { useAuth } from 'context/user';
 
 // components
-import { Login, Signup } from 'components/auth';
+import { Forgot, Login, Signup } from 'components/auth';
 
 enum View {
+  Forgot,
   Login,
   Signup,
-  Forgot,
   Success,
 }
 
@@ -44,10 +38,14 @@ const useStyles = makeStyles({
 const AuthPage = () => {
   const { asPath, events } = useRouter();
   const [view, setView] = useState(() => {
-    return asPath?.includes('#signup') ? View.Signup : View.Login;
+    return asPath?.includes('#signup')
+      ? View.Signup
+      : asPath?.includes('#login')
+      ? View.Login
+      : View.Forgot;
   });
   const { enqueueSnackbar } = useSnackbar();
-  const { login, register } = useAuth();
+  const { login, register, forgotten } = useAuth();
   const methods = useForm();
   const classes = useStyles();
 
@@ -56,11 +54,7 @@ const AuthPage = () => {
       case View.Login:
         return <Login />;
       case View.Forgot:
-        return (
-          <Button type="submit" variant="contained">
-            Forgot
-          </Button>
-        );
+        return <Forgot />;
       default:
         return <Signup />;
     }
@@ -87,6 +81,7 @@ const AuthPage = () => {
       } else if (view === View.Signup) {
         await register();
       } else if (view === View.Forgot) {
+        await forgotten();
         setView(View.Success);
       }
     } catch (err) {
@@ -94,7 +89,9 @@ const AuthPage = () => {
       enqueueSnackbar(
         view === View.Login
           ? 'Login Error Please try again later'
-          : 'Signup Error Please try again later'
+          : view === View.Signup
+          ? 'Signup Error Please try again later'
+          : 'Forgot Error Please try again later'
       );
     }
   };
@@ -120,7 +117,7 @@ const AuthPage = () => {
             <FullLogo />
             {view === View.Success ? (
               <Link href="/auth#login">
-                <Typography>Back to Login</Typography>
+                <Button>Back to Login</Button>
               </Link>
             ) : (
               <FormProvider {...methods}>

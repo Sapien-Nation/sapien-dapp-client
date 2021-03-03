@@ -180,3 +180,48 @@ test('Signup Form', async () => {
     expect(push).toHaveBeenCalledWith('/');
   });
 });
+
+test('Forgot Password', async () => {
+  const mock = new MockAdapter(axios);
+  renderComponent({
+    router: {
+      ...router,
+      asPath: '/#forgot',
+    },
+  });
+
+  expect(
+    screen.getByRole('heading', { name: /forgotten password/i })
+  ).toBeInTheDocument();
+
+  // validation
+  user.click(screen.getByRole('button', { name: /send request/i }));
+
+  await waitFor(() => expect(push).not.toHaveBeenCalled());
+  expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+
+  user.type(
+    screen.getByRole('textbox', {
+      name: /email, phone number, or username/i,
+    }),
+    'kanyewest'
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument();
+  });
+
+  // onError
+  const error = { message: 'Forgot Error' };
+  mock.onPost('/api/users/forgot').reply(400, error);
+  user.click(screen.getByRole('button', { name: /send request/i }));
+
+  await waitFor(() => {
+    expect(push).not.toHaveBeenCalled();
+    expect(screen.getByText(error.message)).toBeInTheDocument();
+  });
+
+  // onSuccess
+  mock.onPost('/api/users/forgot').reply(200);
+  user.click(screen.getByRole('button', { name: /back to login/i }));
+});
