@@ -179,8 +179,20 @@ theme.overrides = {
       color: theme.palette.caption.main,
       fontSize: '1.4rem',
     },
+    h1: {
+      fontSize: '3.2rem',
+      fontWeight: 600,
+    },
     h2: {
       fontSize: '2.2rem',
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: '1.8rem',
+      fontWeight: 600,
+    },
+    h4: {
+      fontSize: '1.6rem',
       fontWeight: 600,
     },
     body1: {
@@ -190,6 +202,14 @@ theme.overrides = {
     body2: {
       color: darkGrey,
       fontSize: '1.2rem',
+    },
+    subtitle1: {
+      fontSize: '1.2rem',
+      fontWeight: 600,
+    },
+    subtitle2: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
     },
   },
   MuiInputAdornment: {

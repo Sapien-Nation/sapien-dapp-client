@@ -68,10 +68,8 @@ const Checkbox = ({ errors, name, label, ...rest }: Props) => {
             role="alert"
             style={{
               textAlign: 'right',
-              fontSize: '1.2rem',
-              fontWeight: 600,
             }}
-            variant="body1"
+            variant="subtitle1"
           >
             {message}
           </Typography>

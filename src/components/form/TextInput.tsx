@@ -121,11 +121,8 @@ const TextInput = ({
             role="alert"
             style={{
               textAlign: 'right',
-              fontSize: '1.2rem',
-              fontWeight: 600,
-              marginTop: '6px',
             }}
-            variant="body1"
+            variant="subtitle1"
           >
             {message}
           </Typography>

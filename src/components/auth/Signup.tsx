@@ -19,15 +19,9 @@ const Signup = () => {
 
   return (
     <>
-      <Typography
-        style={{
-          margin: '5rem 0',
-          fontSize: '3.2rem',
-        }}
-        variant="h2"
-      >
-        Sign up
-      </Typography>
+      <Box marginY="5rem">
+        <Typography variant="h1">Sign up</Typography>
+      </Box>
       <TextInput
         fullWidth
         autoComplete="email"
@@ -89,22 +83,16 @@ const Signup = () => {
           errors={errors}
           label={
             <>
-              <Typography
-                style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 400,
-                }}
-              >
+              <Typography variant="subtitle2">
                 I have read and agree to the
               </Typography>
               <Link passHref href="/auth#signup">
                 <Typography
                   style={{
-                    fontSize: '1.2rem',
-                    fontWeight: 600,
                     color: '#4bd0df',
                     marginLeft: '4px',
                   }}
+                  variant="subtitle1"
                 >
                   Terms & Conditions
                 </Typography>
@@ -116,12 +104,7 @@ const Signup = () => {
         <Checkbox
           errors={errors}
           label={
-            <Typography
-              style={{
-                fontSize: '1.2rem',
-                fontWeight: 400,
-              }}
-            >
+            <Typography variant="subtitle2">
               I understand that a wallet will be created for me
             </Typography>
           }
@@ -140,23 +123,19 @@ const Signup = () => {
       >
         <Typography
           style={{
-            fontSize: '1.2rem',
-            color: black,
-            fontWeight: 400,
             cursor: 'pointer',
           }}
+          variant="subtitle2"
         >
           Already have an account?
         </Typography>
-        <Link passHref href="/auth#login">
+        <Link href="/auth#login">
           <Typography
             style={{
-              fontSize: '1.2rem',
-              color: black,
-              fontWeight: 700,
               cursor: 'pointer',
               marginLeft: '4px',
             }}
+            variant="subtitle1"
           >
             Log in
           </Typography>

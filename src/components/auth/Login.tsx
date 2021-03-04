@@ -8,9 +8,6 @@ import Link from 'next/link';
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
-// styles
-import { black, purple } from 'styles/colors';
-
 //components
 import { TextInput, Checkbox } from 'components/form';
 
@@ -19,15 +16,9 @@ const Login = () => {
 
   return (
     <>
-      <Typography
-        style={{
-          margin: '5rem 0',
-          fontSize: '3.2rem',
-        }}
-        variant="h2"
-      >
-        Log in
-      </Typography>
+      <Box marginY="5rem">
+        <Typography variant="h1">Log in</Typography>
+      </Box>
       <TextInput
         fullWidth
         autoComplete="email"
@@ -56,26 +47,11 @@ const Login = () => {
       >
         <Checkbox
           errors={errors}
-          label={
-            <Typography
-              style={{
-                fontSize: '1.2rem',
-                fontWeight: 600,
-              }}
-            >
-              Remember me
-            </Typography>
-          }
+          label={<Typography variant="subtitle1">Remember me</Typography>}
           name="remember"
         />
         <Link passHref href="/auth#forgot">
-          <Typography
-            style={{
-              color: purple,
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-          >
+          <Typography color="primary" variant="h4">
             Forgot password?
           </Typography>
         </Link>
@@ -91,25 +67,14 @@ const Login = () => {
         marginTop="2rem"
       >
         <>
-          <Typography
-            style={{
-              fontSize: '1.2rem',
-              color: black,
-              fontWeight: 400,
-              cursor: 'pointer',
-            }}
-          >
-            Don’t have an account?
-          </Typography>
+          <Typography variant="subtitle2">Don’t have an account?</Typography>
           <Link href="/auth#signup">
             <Typography
               style={{
-                fontSize: '1.2rem',
-                color: black,
-                fontWeight: 700,
                 cursor: 'pointer',
                 marginLeft: '4px',
               }}
+              variant="subtitle1"
             >
               Sign up
             </Typography>

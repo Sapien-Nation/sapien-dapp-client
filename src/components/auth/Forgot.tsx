@@ -18,15 +18,9 @@ const Forgot = () => {
 
   return (
     <>
-      <Typography
-        style={{
-          margin: '5rem 0',
-          fontSize: '3.2rem',
-        }}
-        variant="h2"
-      >
-        Forgotten Password
-      </Typography>
+      <Box marginY="5rem">
+        <Typography variant="h1">Forgotten Password</Typography>
+      </Box>
       <TextInput
         fullWidth
         autoComplete="email"
@@ -47,25 +41,16 @@ const Forgot = () => {
         marginTop="2rem"
       >
         <>
-          <Typography
-            style={{
-              fontSize: '1.2rem',
-              color: black,
-              fontWeight: 400,
-              cursor: 'pointer',
-            }}
-          >
+          <Typography color="textPrimary" variant="subtitle2">
             Remembered your password?
           </Typography>
           <Link href="/auth#login">
             <Typography
               style={{
-                fontSize: '1.2rem',
-                color: black,
-                fontWeight: 700,
                 cursor: 'pointer',
                 marginLeft: '4px',
               }}
+              variant="subtitle1"
             >
               Log in
             </Typography>
