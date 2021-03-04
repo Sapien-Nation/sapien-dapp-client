@@ -223,6 +223,14 @@ test('Forgot Password', async () => {
   // onSuccess
   mock.onPost('/api/users/forgot').reply(200);
   expect(
-    screen.getByRole('button', { name: /back to login/i })
+    screen.getByRole('heading', { name: /request sent successfully/i })
+  ).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /got it!/i })).toBeInTheDocument();
+
+  // resend
+  user.click(screen.getByRole('button', { name: /resend/i }));
+
+  expect(
+    screen.getByRole('heading', { name: /forgotten password/i })
   ).toBeInTheDocument();
 });

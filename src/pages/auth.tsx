@@ -12,7 +12,13 @@ import { useRouter } from 'next/router';
 import axios from 'api';
 
 // mui
-import { Box, Button, CssBaseline, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  CssBaseline,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'components/assets/svg';
@@ -123,9 +129,45 @@ const AuthPage = () => {
           >
             <FullLogo />
             {view === View.Success ? (
-              <Link href="/auth#login">
-                <Button>Back to Login</Button>
-              </Link>
+              <Box marginTop={2}>
+                <Box marginBottom={4}>
+                  <Typography variant="h5">
+                    Request sent successfully
+                  </Typography>
+                </Box>
+                <Box marginBottom={4}>
+                  <Typography variant="caption">
+                    If the email and username provided match, you will receive
+                    instructions to set a new password shortly.
+                  </Typography>
+                </Box>
+                <Link href="/auth#login">
+                  <Button
+                    fullWidth
+                    color="primary"
+                    type="submit"
+                    variant="contained"
+                  >
+                    Got it!
+                  </Button>
+                </Link>
+                <Box
+                  alignItems="center"
+                  display="flex"
+                  justifyContent="center"
+                  marginTop="2rem"
+                >
+                  <Button
+                    aria-label="resend email"
+                    onClick={() => setView(View.Forgot)}
+                  >
+                    <Typography>Haven’t received an email?</Typography>
+                    <Link href="/auth#login">
+                      <Typography>Resend</Typography>
+                    </Link>
+                  </Button>
+                </Box>
+              </Box>
             ) : (
               <FormProvider {...methods}>
                 <form id={form} onSubmit={handleSubmit(onSubmit)}>
