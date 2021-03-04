@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-
 import { useFormContext } from 'react-hook-form';
 
 // next
@@ -32,7 +31,7 @@ const Forgot = () => {
         fullWidth
         autoComplete="email"
         errors={errors}
-        inputRef={register({ required: 'Email is required', maxLength: 36 })}
+        inputRef={register({ required: 'Email is required' })}
         label="Email, phone number, or username"
         name="username"
         placeholder="Enter your email, phone number, or username"

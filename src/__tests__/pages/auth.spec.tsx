@@ -200,16 +200,16 @@ test('Forgot Password', async () => {
   await waitFor(() => expect(push).not.toHaveBeenCalled());
   expect(screen.getByText(/email is required/i)).toBeInTheDocument();
 
-  user.type(
-    screen.getByRole('textbox', {
-      name: /email, phone number, or username/i,
-    }),
-    'kanyewest'
-  );
-
   await waitFor(() => {
-    expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument();
+    user.type(
+      screen.getByRole('textbox', {
+        name: /email, phone number, or username/i,
+      }),
+      'kanyewest'
+    );
   });
+
+  expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument();
 
   // onError
   const error = { message: 'Forgot Error' };
@@ -223,5 +223,7 @@ test('Forgot Password', async () => {
 
   // onSuccess
   mock.onPost('/api/users/forgot').reply(200);
-  user.click(screen.getByRole('button', { name: /back to login/i }));
+  expect(
+    screen.getByRole('button', { name: /back to login/i })
+  ).toBeInTheDocument();
 });

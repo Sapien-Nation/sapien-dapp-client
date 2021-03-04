@@ -8,6 +8,9 @@ import * as Sentry from '@sentry/node';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+// api
+import axios from 'api';
+
 // mui
 import { Box, Button, CssBaseline, makeStyles } from '@material-ui/core';
 
@@ -38,14 +41,16 @@ const useStyles = makeStyles({
 const AuthPage = () => {
   const { asPath, events } = useRouter();
   const [view, setView] = useState(() => {
-    return asPath?.includes('#signup')
-      ? View.Signup
-      : asPath?.includes('#login')
-      ? View.Login
-      : View.Forgot;
+    if (asPath?.includes('#signup')) {
+      return View.Signup;
+    } else if (asPath?.includes('#login')) {
+      return View.Login;
+    } else {
+      return View.Forgot;
+    }
   });
   const { enqueueSnackbar } = useSnackbar();
-  const { login, register, forgotten } = useAuth();
+  const { login, register } = useAuth();
   const methods = useForm();
   const classes = useStyles();
 
@@ -74,6 +79,14 @@ const AuthPage = () => {
 
   const { handleSubmit } = methods;
 
+  const forgotten = async () => {
+    try {
+      await axios.post('/api/users/forgot');
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
+    }
+  };
+
   const onSubmit = async () => {
     try {
       if (view === View.Login) {
@@ -86,13 +99,7 @@ const AuthPage = () => {
       }
     } catch (err) {
       Sentry.captureException(err);
-      enqueueSnackbar(
-        view === View.Login
-          ? 'Login Error Please try again later'
-          : view === View.Signup
-          ? 'Signup Error Please try again later'
-          : 'Forgot Error Please try again later'
-      );
+      enqueueSnackbar('An error occurred, please try again');
     }
   };
 
