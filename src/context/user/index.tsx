@@ -16,7 +16,6 @@ export interface Authentication {
   login: () => Promise<any>;
   logout: () => Promise<any>;
   register: () => Promise<any>;
-  forgotten: () => Promise<any>;
   isLoggingIn: boolean;
 }
 
@@ -65,17 +64,9 @@ const AuthenticationProvider = ({ children }: Props) => {
     }
   };
 
-  const forgotten = async () => {
-    try {
-      await axios.post('/api/users/forgot');
-    } catch ({ response }) {
-      enqueueSnackbar(response.data.message);
-    }
-  };
-
   return (
     <AuthenticationContext.Provider
-      value={{ me: data?.me, login, logout, isLoggingIn, register, forgotten }}
+      value={{ me: data?.me, login, logout, isLoggingIn, register }}
     >
       {children}
     </AuthenticationContext.Provider>
