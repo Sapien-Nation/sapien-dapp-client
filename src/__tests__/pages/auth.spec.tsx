@@ -89,7 +89,6 @@ test('Signup Form', async () => {
   });
 
   expect(screen.getByRole('heading', { name: /sign up/i })).toBeInTheDocument();
-  expect(screen.getByText(/log in/i)).toHaveAttribute('href', '/auth#login');
 
   user.click(screen.getByRole('button', { name: /sign up/i }));
 
