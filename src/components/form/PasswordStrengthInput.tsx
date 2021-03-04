@@ -177,6 +177,7 @@ const PasswordStrengthInput = ({
         color="secondary"
         role="alert"
         style={{
+          color,
           textAlign: 'right',
         }}
         variant="subtitle1"
