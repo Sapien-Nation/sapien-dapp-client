@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { SnackbarProvider } from 'notistack';
+import { ErrorBoundary } from 'react-error-boundary';
 
 // types
 import type { AppProps } from 'next/app';
@@ -25,6 +26,9 @@ import theme from 'styles/theme';
 import { AuthenticationProvider } from 'context/user';
 import { NavigationProvider } from 'context/tribes';
 
+// components
+import ErrorFallback from 'components/general/ErrorView';
+
 initSentry();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
@@ -45,26 +49,30 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           name="viewport"
         />
       </Head>
-      <SnackbarProvider maxSnack={2}>
-        <ThemeProvider theme={theme}>
-          <SWRConfig
-            value={{
-              errorRetryCount: 0,
-              fetcher: (url: string) =>
-                axios(url)
-                  .then(({ data }) => data)
-                  .catch(({ response }) => Promise.reject(response.data.error)),
-              revalidateOnFocus: false,
-            }}
-          >
-            <AuthenticationProvider>
-              <NavigationProvider>
-                <Component {...pageProps} />
-              </NavigationProvider>
-            </AuthenticationProvider>
-          </SWRConfig>
-        </ThemeProvider>
-      </SnackbarProvider>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <SnackbarProvider maxSnack={2}>
+          <ThemeProvider theme={theme}>
+            <SWRConfig
+              value={{
+                errorRetryCount: 0,
+                fetcher: (url: string) =>
+                  axios(url)
+                    .then(({ data }) => data)
+                    .catch(({ response }) =>
+                      Promise.reject(response.data.error)
+                    ),
+                revalidateOnFocus: false,
+              }}
+            >
+              <AuthenticationProvider>
+                <NavigationProvider>
+                  <Component {...pageProps} />
+                </NavigationProvider>
+              </AuthenticationProvider>
+            </SWRConfig>
+          </ThemeProvider>
+        </SnackbarProvider>
+      </ErrorBoundary>
     </>
   );
 };
