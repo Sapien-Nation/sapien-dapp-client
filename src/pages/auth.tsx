@@ -42,6 +42,18 @@ const useStyles = makeStyles({
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
+  buttonLink: {
+    minHeight: 0,
+    minWidth: 0,
+    padding: 0,
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  successButton: {
+    minWidth: '14rem',
+    minHeight: '4.6rem',
+  },
 });
 
 const AuthPage = () => {
@@ -129,21 +141,21 @@ const AuthPage = () => {
           >
             <FullLogo />
             {view === View.Success ? (
-              <Box marginTop={2}>
+              <Box marginTop={2} textAlign="center">
                 <Box marginBottom={4}>
-                  <Typography variant="h5">
+                  <Typography variant="h2">
                     Request sent successfully
                   </Typography>
                 </Box>
                 <Box marginBottom={4}>
-                  <Typography variant="caption">
+                  <Typography variant="h4">
                     If the email and username provided match, you will receive
                     instructions to set a new password shortly.
                   </Typography>
                 </Box>
                 <Link href="/auth#login">
                   <Button
-                    fullWidth
+                    classes={{ root: classes.successButton }}
                     color="primary"
                     type="submit"
                     variant="contained"
@@ -157,14 +169,27 @@ const AuthPage = () => {
                   justifyContent="center"
                   marginTop="2rem"
                 >
+                  <Typography
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    variant="subtitle2"
+                  >
+                    Haven’t received an email?
+                  </Typography>
                   <Button
-                    aria-label="resend email"
+                    classes={{ root: classes.buttonLink }}
                     onClick={() => setView(View.Forgot)}
                   >
-                    <Typography>Haven’t received an email?</Typography>
-                    <Link href="/auth#login">
-                      <Typography>Resend</Typography>
-                    </Link>
+                    <Typography
+                      style={{
+                        cursor: 'pointer',
+                        marginLeft: '4px',
+                      }}
+                      variant="subtitle1"
+                    >
+                      Resend
+                    </Typography>
                   </Button>
                 </Box>
               </Box>

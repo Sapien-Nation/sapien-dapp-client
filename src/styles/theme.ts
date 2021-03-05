@@ -88,7 +88,7 @@ theme.overrides = {
     },
     button: {
       '&:hover': {
-        backgroundColor: 'none',
+        backgroundColor: 'transparent',
       },
     },
   },
@@ -193,7 +193,8 @@ theme.overrides = {
     },
     h4: {
       fontSize: '1.6rem',
-      fontWeight: 600,
+      fontWeight: 400,
+      lineHeight: '2.4rem',
     },
     body1: {
       color: black,
