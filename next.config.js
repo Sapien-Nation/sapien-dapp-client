@@ -1,6 +1,6 @@
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true'
+  enabled: process.env.ANALYZE === 'true',
 });
 
 const {
@@ -9,7 +9,7 @@ const {
   SENTRY_ORG,
   SENTRY_PROJECT,
   SENTRY_AUTH_TOKEN,
-  NODE_ENV
+  NODE_ENV,
 } = process.env;
 
 process.env.SENTRY_DSN = SENTRY_DSN;
@@ -23,7 +23,9 @@ module.exports = withBundleAnalyzer({
     }
     config.plugins.push(
       new options.webpack.DefinePlugin({
-        'process.env.NEXT_IS_SERVER': JSON.stringify(options.isServer.toString())
+        'process.env.NEXT_IS_SERVER': JSON.stringify(
+          options.isServer.toString()
+        ),
       })
     );
 
@@ -41,11 +43,11 @@ module.exports = withBundleAnalyzer({
           ignore: ['node_modules'],
           stripPrefix: ['webpack://_N_E/'],
           urlPrefix: `~${basePath}/_next`,
-          release: RELEASE
+          release: RELEASE,
         })
       );
     }
     return config;
   },
-  basePath
+  basePath,
 });

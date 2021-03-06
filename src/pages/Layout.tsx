@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100vw',
     backgroundColor: '#fff',
     '& main > div': {
-      padding: theme.spacing(3.6)
-    }
-  })
+      padding: theme.spacing(3.6),
+    },
+  }),
 }));
 
-const Layout: React.FC<Props> = ({ children }) => {
+const Layout = ({ children }: Props) => {
   const { me } = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 

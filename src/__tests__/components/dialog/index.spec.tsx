@@ -17,7 +17,7 @@ const defaultProps = {
   open: true,
   onClose,
   onCancel,
-  onConfirm
+  onConfirm,
 };
 
 const renderComponent = (props = {}) =>
@@ -40,7 +40,9 @@ test('default', () => {
   expect(closeButton).toBeInTheDocument();
 
   // children
-  expect(screen.getByRole('heading', { name: /children/i })).toBeInTheDocument();
+  expect(
+    screen.getByRole('heading', { name: /children/i })
+  ).toBeInTheDocument();
 
   // onClose
   user.click(closeButton);
@@ -83,7 +85,7 @@ describe('actions', () => {
           <button>Back</button>
           <button>Next</button>
         </form>
-      )
+      ),
     });
     expect(screen.getByRole('form', { name: /actions/i })).toBeInTheDocument();
   });

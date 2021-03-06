@@ -10,7 +10,7 @@ import {
   darker,
   darkGrey,
   inputBG,
-  lightGrey
+  lightGrey,
 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
@@ -19,38 +19,38 @@ const theme = createMuiTheme({
   palette: {
     type: 'light',
     common: {
-      black: black
+      black: black,
     },
     primary: {
       light: purple,
       main: purple,
-      dark: purple
+      dark: purple,
     },
     formLabel: {
       light: black,
       main: black,
-      dark: black
+      dark: black,
     },
     caption: {
       light: darkGrey,
       main: darkGrey,
-      dark: darkGrey
+      dark: darkGrey,
     },
     input: {
       light: inputBG,
       main: inputBG,
-      dark: inputBG
+      dark: inputBG,
     },
     infoIcon: {
       light: lightGrey,
       main: lightGrey,
-      dark: lightGrey
+      dark: lightGrey,
     },
     error: {
       light: red,
       main: red,
-      dark: red
-    }
+      dark: red,
+    },
   },
   typography: {
     htmlFontSize: 10,
@@ -60,9 +60,9 @@ const theme = createMuiTheme({
       fontSize: '1.2rem',
       fontWeight: 600,
       textTransform: 'uppercase',
-      letterSpacing: '1.5px'
-    }
-  }
+      letterSpacing: '1.5px',
+    },
+  },
 });
 
 // Override default styles
@@ -71,54 +71,54 @@ theme.overrides = {
     '@global': {
       html: {
         WebkitFontSmoothing: 'auto',
-        fontSize: '62.5%'
+        fontSize: '62.5%',
       },
       '@font-face': ([
         avertaBold,
         avertaItalic,
         avertaMedium,
-        avertaRegular
-      ] as unknown) as React.CSSProperties
-    }
+        avertaRegular,
+      ] as unknown) as React.CSSProperties,
+    },
   },
   MuiListItem: {
     root: {
       paddingTop: 0,
-      paddingBottom: 0
+      paddingBottom: 0,
     },
     button: {
       '&:hover': {
-        backgroundColor: 'none'
-      }
-    }
+        backgroundColor: 'transparent',
+      },
+    },
   },
   MuiDialog: {
     paper: {
-      borderRadius: '1rem'
+      borderRadius: '1rem',
     },
     paperWidthXs: {
       maxWidth: '49rem',
-      width: '100%'
+      width: '100%',
     },
     paperWidthSm: {
       maxWidth: '51.8rem',
-      width: '100%'
-    }
+      width: '100%',
+    },
   },
   MuiDialogTitle: {
     root: {
-      padding: '5rem 5rem 0 5rem'
-    }
+      padding: '5rem 5rem 0 5rem',
+    },
   },
   MuiDialogContent: {
     root: {
-      padding: '1rem 5rem'
-    }
+      padding: '1rem 5rem',
+    },
   },
   MuiDialogActions: {
     root: {
-      padding: '1rem 5rem 5rem 5rem'
-    }
+      padding: '1rem 5rem 5rem 5rem',
+    },
   },
   MuiButton: {
     root: {
@@ -126,30 +126,30 @@ theme.overrides = {
       textTransform: 'none',
       minHeight: '4rem',
       minWidth: '8rem',
-      fontWeight: 600
+      fontWeight: 600,
     },
     containedSecondary: {
-      fontWeight: 700
-    }
+      fontWeight: 700,
+    },
   },
   MuiInputLabel: {
     root: {
       fontSize: '1.4rem',
       fontWeight: 600,
       transform: 'translate(0, 0) scale(1)',
-      color: theme.palette.formLabel.main
+      color: theme.palette.formLabel.main,
     },
     shrink: {
-      transform: 'translate(0, 0) scale(1)'
+      transform: 'translate(0, 0) scale(1)',
     },
     formControl: {
-      position: 'static'
-    }
+      position: 'static',
+    },
   },
   MuiFormControl: {
     root: {
-      marginBottom: `${theme.spacing(1.6)}`
-    }
+      marginBottom: `${theme.spacing(1.6)}`,
+    },
   },
   MuiInput: {
     root: {
@@ -162,46 +162,67 @@ theme.overrides = {
       '&$focused': {
         borderRadius: '0.6rem',
         border: `2px solid ${theme.palette.primary.main}`,
-        boxSizing: 'border-box'
-      }
+        boxSizing: 'border-box',
+      },
     },
     formControl: {
       'label + &': {
-        marginTop: theme.spacing(1.6)
-      }
+        marginTop: theme.spacing(1.6),
+      },
     },
     input: {
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   MuiTypography: {
     caption: {
       color: theme.palette.caption.main,
-      fontSize: '1.4rem'
+      fontSize: '1.4rem',
+    },
+    h1: {
+      fontSize: '3.2rem',
+      fontWeight: 600,
     },
     h2: {
       fontSize: '2.2rem',
-      fontWeight: 600
+      fontWeight: 600,
+    },
+    h3: {
+      fontSize: '1.8rem',
+      fontWeight: 600,
+    },
+    h4: {
+      fontSize: '1.6rem',
+      fontWeight: 400,
+      lineHeight: '2.4rem',
     },
     body1: {
       color: black,
-      fontSize: '1.4rem'
+      fontSize: '1.4rem',
     },
     body2: {
       color: darkGrey,
-      fontSize: '1.2rem'
-    }
+      fontSize: '1.2rem',
+    },
+    subtitle1: {
+      fontSize: '1.2rem',
+      fontWeight: 600,
+    },
+    subtitle2: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
+    },
   },
   MuiInputAdornment: {
     positionStart: {
-      color: theme.palette.caption.main
-    }
+      color: theme.palette.caption.main,
+    },
   },
   MuiSwitch: {
     root: {
       width: 38,
       height: 20,
-      padding: 0
+      padding: 0,
     },
     switchBase: {
       padding: 2,
@@ -211,43 +232,50 @@ theme.overrides = {
         '& + $track': {
           backgroundColor: green,
           opacity: 1,
-          border: 'none'
-        }
-      }
+          border: 'none',
+        },
+      },
     },
     thumb: {
       width: 15,
-      height: 15
+      height: 15,
     },
     track: {
       borderRadius: 26 / 2,
       border: `1px solid ${theme.palette.input.main}`,
       backgroundColor: darker,
       opacity: 1,
-      transition: theme.transitions.create(['background-color', 'border'])
+      transition: theme.transitions.create(['background-color', 'border']),
     },
-    checked: {}
-  }
+    checked: {},
+  },
+  MuiSelect: {
+    select: {
+      '&:focus': {
+        backgroundColor: 'none',
+      },
+    },
+  },
 };
 
 // Global button props
 theme.props = {
   MuiIconButton: {
-    disableRipple: true
+    disableRipple: true,
   },
   MuiButton: {
     disableRipple: true,
-    disableElevation: true
+    disableElevation: true,
   },
   MuiInputLabel: {
-    shrink: true
+    shrink: true,
   },
   MuiInput: {
-    disableUnderline: true
+    disableUnderline: true,
   },
   MuiSwitch: {
-    disableRipple: true
-  }
+    disableRipple: true,
+  },
 };
 
 export default theme;

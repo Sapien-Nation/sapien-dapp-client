@@ -1,8 +1,5 @@
 {
-  "semi": true,
-  "tabWidth": 2,
-  "printWidth": 85,
+  "parser": "typescript",
   "singleQuote": true,
-  "trailingComma": "none",
-  "jsxBracketSameLine": false
+  "trailingComma": "es5"
 }

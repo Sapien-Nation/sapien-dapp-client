@@ -6,10 +6,21 @@ interface Props {
   error: {
     message: string;
   };
-  onClick: () => void;
+  onClick?: () => void;
+  resetErrorBoundary?: () => void;
 }
 
-const ErrorView: React.FC<Props> = ({ error, onClick }) => (
+const ErrorView = ({
+  error,
+  onClick,
+  resetErrorBoundary = onClick ||
+    (() => {
+      if (process.browser) {
+        return window.location.reload();
+      }
+      return null;
+    }),
+}: Props) => (
   <Card style={{ height: '100% ' }}>
     <Box alignItems="center" display="flex" justifyContent="center">
       <CardContent>
@@ -19,7 +30,12 @@ const ErrorView: React.FC<Props> = ({ error, onClick }) => (
         </Box>
 
         <Box marginTop={4}>
-          <Button fullWidth color="secondary" variant="contained" onClick={onClick}>
+          <Button
+            fullWidth
+            color="secondary"
+            variant="contained"
+            onClick={resetErrorBoundary}
+          >
             Retry
           </Button>
         </Box>

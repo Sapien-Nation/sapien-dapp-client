@@ -1,7 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
 import { useSnackbar } from 'notistack';
-import { useLocalStorage } from 'react-use';
 
 // next
 import { useRouter } from 'next/router';
@@ -14,8 +13,10 @@ import type { User } from 'types/user';
 
 export interface Authentication {
   me: User | null;
-  login: () => void;
-  logout: () => void;
+  login: () => Promise<any>;
+  logout: () => Promise<any>;
+  register: () => Promise<any>;
+  isLoggingIn: boolean;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -24,10 +25,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-const AuthenticationProvider: React.FC<Props> = ({ children }) => {
+const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { data } = useSWR('/api/users/me');
+
+  const isLoggingIn = data === undefined;
 
   const logout = async () => {
     try {
@@ -45,13 +48,26 @@ const AuthenticationProvider: React.FC<Props> = ({ children }) => {
       mutate('/api/users/me');
       mutate('/api/tribes/followed');
       push('/');
-    } catch (err) {
-      enqueueSnackbar(err.message);
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
+    }
+  };
+
+  const register = async () => {
+    try {
+      await axios.post('/api/users/register');
+      mutate('/api/users/me');
+      mutate('/api/tribes/followed');
+      push('/');
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
     }
   };
 
   return (
-    <AuthenticationContext.Provider value={{ me: data?.me, login, logout }}>
+    <AuthenticationContext.Provider
+      value={{ me: data?.me, login, logout, isLoggingIn, register }}
+    >
       {children}
     </AuthenticationContext.Provider>
   );

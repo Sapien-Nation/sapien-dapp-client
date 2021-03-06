@@ -1,3 +1,5 @@
+import { useFormContext } from 'react-hook-form';
+
 // mui
 import {
   FormControl,
@@ -5,7 +7,7 @@ import {
   InputLabel,
   makeStyles,
   Typography,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
@@ -13,7 +15,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { background, lightGrey } from 'styles/colors';
 
 //components
-import DropZone from 'components/dropzone';
+import { Dropzone } from 'components/form';
 
 const useStyles = makeStyles(() => ({
   dropzone: () => ({
@@ -21,42 +23,42 @@ const useStyles = makeStyles(() => ({
     border: `1px dashed ${lightGrey}`,
     borderRadius: `1.6rem`,
     cursor: 'pointer',
-    margin: '1.6rem 0'
+    margin: '1.6rem 0',
   }),
   avatar: {
     width: '6.4rem',
-    height: '6.4rem'
+    height: '6.4rem',
   },
   cover: {
     width: '100%',
-    height: '10rem'
-  }
+    height: '10rem',
+  },
 }));
 
 const MediaStep = () => {
   const classes = useStyles();
   const theme = useTheme();
+  const { errors } = useFormContext();
 
   return (
     <>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Avatar</InputLabel>
-        <DropZone
+        <InputLabel htmlFor="avatar">Avatar</InputLabel>
+        <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.avatar}`}
+          errors={errors}
           maxFiles={1}
           maxSize={20971520}
           name="avatar"
           render={() => {
             return (
-              <IconButton
-                aria-label="tribe type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon fontSize="small" />
               </IconButton>
             );
           }}
+          rules={{ required: 'Avatar is required' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}
@@ -67,23 +69,22 @@ const MediaStep = () => {
         </Typography>
       </FormControl>
       <FormControl fullWidth>
-        <InputLabel htmlFor="description">Cover image</InputLabel>
-        <DropZone
+        <InputLabel htmlFor="cover">Cover image</InputLabel>
+        <Dropzone
           accept="image/*"
           className={`${classes.dropzone} ${classes.cover}`}
+          errors={errors}
           maxFiles={1}
           maxSize={41943040}
           name="cover"
           render={() => {
             return (
-              <IconButton
-                aria-label="tribe type"
-                style={{ color: theme.palette.infoIcon.main }}
-              >
+              <IconButton style={{ color: theme.palette.infoIcon.main }}>
                 <AddIcon fontSize="small" />
               </IconButton>
             );
           }}
+          rules={{ required: 'Cover is required' }}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}

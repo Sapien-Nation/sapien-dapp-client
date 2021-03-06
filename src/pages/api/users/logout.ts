@@ -9,7 +9,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     res.setHeader(
       'Set-Cookie',
       cookie.serialize('sapien_v3_12', '', {
-        maxAge: 0
+        maxAge: 0,
       })
     );
     return res.status(200).json(true);

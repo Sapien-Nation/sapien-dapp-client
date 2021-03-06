@@ -28,26 +28,26 @@ const defaultValues = {
   public: false,
   avatar: '',
   description: '',
-  unique_identifier: ''
+  unique_identifier: '',
 };
 
 enum Step {
   TribeSummary = 1,
-  TribeMedia
+  TribeMedia,
 }
 
 interface Props {
   onClose: () => void;
 }
 
-const CreateTribe: React.FC<Props> = ({ onClose }) => {
+const CreateTribe = ({ onClose }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState(Step.TribeSummary);
   const [, setNavigation] = useNavigation();
 
   const methods = useForm({
     defaultValues,
-    shouldUnregister: false
+    shouldUnregister: false,
   });
 
   const { handleSubmit } = methods;
@@ -69,21 +69,21 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
             name: values.name,
             channels: [],
             image: '/fixtures/256x256/stonks.png',
-            notificationNumber: 0
+            notificationNumber: 0,
           };
 
           // UI updates
           mutate(
             '/api/tribes/followed',
             ({ tribes }: { tribes: Array<Tribe> }) => ({
-              tribes: [...tribes, tribe]
+              tribes: [...tribes, tribe],
             }),
             false
           );
           setNavigation({
             main: tribe,
             secondary: tribe.id,
-            type: NavigationTypes.Tribe
+            type: NavigationTypes.Tribe,
           });
           onClose();
         } catch ({ response }) {
@@ -133,7 +133,7 @@ const CreateTribe: React.FC<Props> = ({ onClose }) => {
             <Typography
               color="primary"
               style={{
-                fontWeight: 600
+                fontWeight: 600,
               }}
               variant="caption"
             >

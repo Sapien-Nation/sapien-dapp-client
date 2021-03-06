@@ -2,7 +2,6 @@ import { useSnackbar } from 'notistack';
 import { cache, mutate } from 'swr';
 import { useLocalStorage } from 'react-use';
 import { createContext, useContext, useEffect } from 'react';
-import * as Sentry from '@sentry/node';
 
 // api
 import axios from 'api';
@@ -15,7 +14,7 @@ export enum NavigationTypes {
   BadgeStore,
   Channel,
   Discovery,
-  Tribe
+  Tribe,
 }
 
 export interface Navigation {
@@ -27,19 +26,21 @@ export interface Navigation {
 const defaultValues = {
   main: null,
   secondary: '',
-  type: NavigationTypes.Tribe
+  type: NavigationTypes.Tribe,
 };
 
-export const NavigationContext = createContext<Navigation | null>(defaultValues);
-const NavigationDispatcher = createContext<(navigation: Navigation) => void | null>(
-  null
+export const NavigationContext = createContext<Navigation | null>(
+  defaultValues
 );
+const NavigationDispatcher = createContext<
+  (navigation: Navigation) => void | null
+>(null);
 
 interface Props {
   children: React.ReactNode;
 }
 
-const NavigationProvider: React.FC<Props> = ({ children }) => {
+const NavigationProvider = ({ children }: Props) => {
   const [navigation, setNavigation] = useLocalStorage<Navigation>(
     'navigation',
     defaultValues
@@ -54,7 +55,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
         handleSetNavigation({
           main: cachedTribes[0],
           secondary: cachedTribes[0].id,
-          type: NavigationTypes.Tribe
+          type: NavigationTypes.Tribe,
         });
       }
     };
@@ -77,7 +78,7 @@ const NavigationProvider: React.FC<Props> = ({ children }) => {
               tribe.id === newNavigation.main.id
                 ? { ...tribe, notificationNumber: 0 }
                 : tribe
-            )
+            ),
           }),
           false
         );
@@ -100,7 +101,9 @@ function useNavigationState() {
   const context = useContext(NavigationContext);
 
   if (context === undefined) {
-    throw new Error('useNavigationState must be used within a NavigationProvider');
+    throw new Error(
+      'useNavigationState must be used within a NavigationProvider'
+    );
   }
   return context;
 }

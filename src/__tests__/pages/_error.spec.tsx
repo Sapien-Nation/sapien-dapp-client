@@ -15,7 +15,7 @@ const defaultProps = {
   hasGetInitialPropsRun: false,
   statusCode: 400,
   pathname: '/',
-  query: {}
+  query: {},
 };
 
 const renderComponent = (props = {}) =>
@@ -47,7 +47,7 @@ test('getInitialProps with err', async () => {
   const response = await ErrorPage.getInitialProps({
     res: {},
     err,
-    asPath: '/'
+    asPath: '/',
   });
 
   expect(Sentry.captureException).toHaveBeenCalledWith(err);
@@ -59,7 +59,7 @@ test('getInitialProps no err', async () => {
   const response = await ErrorPage.getInitialProps({
     res: {},
     err: null,
-    asPath: '/'
+    asPath: '/',
   });
 
   expect(Sentry.captureException).toHaveBeenCalled();

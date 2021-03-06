@@ -8,18 +8,18 @@ export const mockRouter = (router: Partial<NextRouter> = {}): NextRouter => ({
   asPath: '/',
   query: {},
   isReady: false,
-  push: jest.fn(),
-  replace: jest.fn(),
+  push: jest.fn().mockResolvedValue(true),
+  replace: jest.fn().mockResolvedValue(true),
   reload: jest.fn(),
   back: jest.fn(),
-  prefetch: jest.fn(),
+  prefetch: jest.fn().mockResolvedValue(undefined),
   beforePopState: jest.fn(),
   events: {
     on: jest.fn(),
     off: jest.fn(),
-    emit: jest.fn()
+    emit: jest.fn(),
   },
   isFallback: false,
   isLocaleDomain: false,
-  ...router
+  ...router,
 });

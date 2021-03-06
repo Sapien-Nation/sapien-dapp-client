@@ -7,7 +7,7 @@ import topic5 from 'fixtures/topic_5.json';
 
 export const mockTopic = ({ ...rest } = {}) => ({
   ...topic1,
-  ...rest
+  ...rest,
 });
 
 export const mockTopics = () => {

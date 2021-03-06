@@ -16,7 +16,7 @@ export const init = () => {
             frame.filename = frame.filename.replace(__dirname, 'app:///');
             frame.filename = frame.filename.replace('.next', '_next');
             return frame;
-          }
+          },
         })
       );
     }
@@ -25,7 +25,7 @@ export const init = () => {
       enabled: process.env.NODE_ENV === 'production',
       integrations,
       dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-      release: process.env.NEXT_PUBLIC_RELEASE_NAME
+      release: process.env.NEXT_PUBLIC_RELEASE_NAME,
     });
   }
 };

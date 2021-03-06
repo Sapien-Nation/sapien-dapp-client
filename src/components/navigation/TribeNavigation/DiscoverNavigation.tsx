@@ -10,7 +10,7 @@ import {
   List,
   ListItem,
   makeStyles,
-  Typography
+  Typography,
 } from '@material-ui/core';
 
 // components
@@ -21,32 +21,32 @@ const drawerWidth = 228;
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     drawer: {
-      width: drawerWidth
+      width: drawerWidth,
     },
     drawerPaper: {
       left: '72px',
       width: drawerWidth,
       backgroundColor: 'white',
-      borderRight: 'none'
+      borderRight: 'none',
     },
     nav: {
       cursor: 'pointer',
       display: 'flex',
       flexWrap: 'wrap',
       marginTop: theme.spacing(3.7),
-      marginLeft: theme.spacing(2.2)
-    }
+      marginLeft: theme.spacing(2.2),
+    },
   });
 });
 
-const DiscoverNavigation: React.FC = () => {
+const DiscoverNavigation = () => {
   const classes = useStyles();
   return (
     <Drawer
       anchor="left"
       className={classes.drawer}
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
       variant="permanent"
     >

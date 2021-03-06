@@ -1,21 +1,35 @@
 import { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 // types
 import type { DropzoneProps, DropzoneOptions } from 'react-dropzone';
+import type { RegisterOptions, FieldErrors } from 'react-hook-form';
 
 // mui
-import { Box, IconButton } from '@material-ui/core';
+import { Box, IconButton, Typography } from '@material-ui/core';
 import { CloseOutlined as CloseIcon } from '@material-ui/icons';
+
+// styles
+import { error, red } from 'styles/colors';
 
 interface Props extends DropzoneProps {
   className?: string;
+  errors: FieldErrors;
   name: string;
   render: (isDragActive: boolean) => React.ReactElement;
+  rules?: RegisterOptions;
 }
 
-const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
+const Dropzone = ({
+  className,
+  name,
+  render,
+  errors,
+  rules,
+  ...rest
+}: Props) => {
   const { register, unregister, setValue, watch } = useFormContext();
   const onDrop = useCallback<DropzoneOptions['onDrop']>(
     (droppedFiles) => {
@@ -27,7 +41,7 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
   const files: File[] = watch(name);
 
   useEffect(() => {
-    register(name);
+    register(name, rules);
     return () => {
       unregister(name);
     };
@@ -35,7 +49,7 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    ...rest
+    ...rest,
   });
 
   return (
@@ -45,10 +59,34 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
         className={className}
         display="flex"
         justifyContent="center"
+        style={{
+          backgroundColor: Object.keys(errors[name] || []).length
+            ? error
+            : null,
+          borderColor: Object.keys(errors[name] || []).length ? red : null,
+        }}
         {...getRootProps()}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} id={name} />
         {render(isDragActive)}
+      </Box>
+      <Box alignItems="center" display="flex" justifyContent="flex-start">
+        <ErrorMessage
+          errors={errors}
+          name={name}
+          render={({ message }) => (
+            <Typography
+              color="secondary"
+              role="alert"
+              style={{
+                textAlign: 'right',
+              }}
+              variant="subtitle1"
+            >
+              {message}
+            </Typography>
+          )}
+        />
       </Box>
       {Array.isArray(files) &&
         files?.map((file) => (
@@ -58,7 +96,7 @@ const Dropzone: React.FC<Props> = ({ className, name, render, ...rest }) => {
               style={{
                 position: 'absolute',
                 marginLeft: '35px',
-                marginTop: '-20px'
+                marginTop: '-20px',
               }}
               onClick={() => setValue(name, null)}
             >

@@ -21,14 +21,21 @@ import {
   List,
   ListItem,
   makeStyles,
-  Typography
+  Typography,
 } from '@material-ui/core';
 
 // context
 import { useNavigation } from 'context/tribes';
 
 // styles
-import { background, black, darkGrey, outline, purple, white } from 'styles/colors';
+import {
+  background,
+  black,
+  darkGrey,
+  outline,
+  purple,
+  white,
+} from 'styles/colors';
 
 // assets
 import { AddIcon, ArrowIcon, BadgeStore, TribeName } from '../assets/svg';
@@ -41,19 +48,19 @@ const drawerWidth = 228;
 const useStyles = makeStyles((theme: Theme) => {
   return createStyles({
     drawer: {
-      width: drawerWidth
+      width: drawerWidth,
     },
     drawerPaper: {
       left: '72px',
       width: drawerWidth,
       backgroundColor: 'white',
-      borderRight: 'none'
+      borderRight: 'none',
     },
     nav: {
       cursor: 'pointer',
       display: 'flex',
       flexWrap: 'wrap',
-      marginTop: `${theme.spacing(1.5)}`
+      marginTop: `${theme.spacing(1.5)}`,
     },
     avatar: {
       color: white,
@@ -61,19 +68,19 @@ const useStyles = makeStyles((theme: Theme) => {
       borderRadius: 15,
       border: `2px solid ${outline}`,
       boxSizing: 'content-box',
-      padding: '3px'
+      padding: '3px',
     },
     avatarImage: {
-      borderRadius: '10px'
+      borderRadius: '10px',
     },
     collapseButton: {
-      padding: 0
+      padding: 0,
     },
     addChannelButton: {
       padding: `${theme.spacing(0.6)}`,
       marginLeft: `${theme.spacing(1)}`,
-      backgroundColor: background
-    }
+      backgroundColor: background,
+    },
   });
 });
 
@@ -82,7 +89,7 @@ interface Props {
   tribes: Array<Tribe>;
 }
 
-const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
+const TribeNavigation = ({ createChanel, tribes }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
 
@@ -97,11 +104,15 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
       anchor="left"
       className={classes.drawer}
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
       variant="permanent"
     >
-      <List aria-label="Tribe Navigation" className={classes.nav} component="nav">
+      <List
+        aria-label="Tribe Navigation"
+        className={classes.nav}
+        component="nav"
+      >
         <ListItem
           button
           disableGutters
@@ -112,24 +123,28 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
             padding: '1.5rem',
             backgroundColor:
               navigation?.secondary === navigation?.main?.id ? purple : white,
-            borderRadius: '1rem'
+            borderRadius: '1rem',
           }}
           onClick={() =>
             setNavigation({
               secondary: navigation?.main?.id,
-              type: NavigationTypes.Tribe
+              type: NavigationTypes.Tribe,
             })
           }
         >
           <TribeName
             // @ts-ignore
-            fill={navigation?.secondary === navigation?.main?.id ? white : darkGrey}
+            fill={
+              navigation?.secondary === navigation?.main?.id ? white : darkGrey
+            }
           />
           <Typography
             style={{
               marginLeft: '1.5rem',
               color:
-                navigation?.secondary === navigation?.main?.id ? white : darkGrey
+                navigation?.secondary === navigation?.main?.id
+                  ? white
+                  : darkGrey,
             }}
             variant="h5"
           >
@@ -146,12 +161,12 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
             padding: '1.5rem',
             backgroundColor:
               navigation?.secondary === 'Badge Store' ? purple : white,
-            borderRadius: '1rem'
+            borderRadius: '1rem',
           }}
           onClick={() =>
             setNavigation({
               secondary: 'Badge Store',
-              type: NavigationTypes.BadgeStore
+              type: NavigationTypes.BadgeStore,
             })
           }
         >
@@ -162,7 +177,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
           <Typography
             style={{
               marginLeft: '1.5rem',
-              color: navigation?.secondary === 'Badge Store' ? white : darkGrey
+              color: navigation?.secondary === 'Badge Store' ? white : darkGrey,
             }}
             variant="h5"
           >
@@ -183,7 +198,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
               <IconButton
                 aria-label="Create Channel"
                 classes={{
-                  root: classes.addChannelButton
+                  root: classes.addChannelButton,
                 }}
                 onClick={createChanel}
               >
@@ -194,10 +209,10 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
               disableRipple
               aria-label="show channels"
               classes={{
-                root: classes.collapseButton
+                root: classes.collapseButton,
               }}
               style={{
-                transform: showChannels ? '' : 'rotate(180deg)'
+                transform: showChannels ? '' : 'rotate(180deg)',
               }}
               onClick={() => setShowChannels(!showChannels)}
             >
@@ -222,7 +237,7 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                 onClick={() =>
                   setNavigation({
                     secondary: channel.id,
-                    type: NavigationTypes.Channel
+                    type: NavigationTypes.Channel,
                   })
                 }
               >
@@ -235,17 +250,18 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                     margin: '0 .65rem',
                     padding: '1rem',
                     width: '100%',
-                    color: navigation?.secondary === channel.id ? white : darkGrey,
+                    color:
+                      navigation?.secondary === channel.id ? white : darkGrey,
                     backgroundColor:
                       navigation?.secondary === channel.id ? purple : white,
-                    borderRadius: '1rem'
+                    borderRadius: '1rem',
                   }}
                 >
                   <Box display="flex">
                     <Avatar
                       alt={channel.name}
                       classes={{
-                        root: classes.avatar
+                        root: classes.avatar,
                       }}
                       variant="square"
                     >
@@ -266,7 +282,10 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                     >
                       <Typography
                         style={{
-                          color: navigation?.secondary === channel.id ? white : black
+                          color:
+                            navigation?.secondary === channel.id
+                              ? white
+                              : black,
                         }}
                         variant="body1"
                       >
@@ -275,7 +294,9 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                       <Typography
                         style={{
                           color:
-                            navigation?.secondary === channel.id ? white : darkGrey
+                            navigation?.secondary === channel.id
+                              ? white
+                              : darkGrey,
                         }}
                         variant="body2"
                       >
@@ -285,7 +306,8 @@ const TribeNavigation: React.FC<Props> = ({ createChanel, tribes }) => {
                   </Box>
                   <Typography
                     style={{
-                      color: navigation?.secondary === channel.id ? white : darkGrey
+                      color:
+                        navigation?.secondary === channel.id ? white : darkGrey,
                     }}
                     variant="body2"
                   >

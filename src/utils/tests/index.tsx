@@ -32,7 +32,7 @@ interface CustomRenderOptions {
 const AllTheProviders = ({
   children,
   fetcher,
-  router = null
+  router = null,
 }: CustomRenderOptions) => (
   <SnackbarProvider maxSnack={1}>
     <SWRConfig
@@ -40,7 +40,7 @@ const AllTheProviders = ({
         dedupingInterval: 0,
         errorRetryCount: 0,
         fetcher,
-        revalidateOnFocus: false
+        revalidateOnFocus: false,
       }}
     >
       <ThemeProvider theme={theme}>
@@ -62,7 +62,7 @@ const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
         {children}
       </AllTheProviders>
     ),
-    ...rest
+    ...rest,
   });
 
   return {
@@ -71,10 +71,13 @@ const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
       customRender(ui, {
         container: rtl.container,
         ...options,
-        ...rerenderOptions
-      })
+        ...rerenderOptions,
+      }),
   };
 };
+
+export const createRandomString = (length: number) =>
+  Array.from({ length }, () => 'w').join('');
 
 export { renderHook, act as actHook } from '@testing-library/react-hooks';
 export * from '@testing-library/react';

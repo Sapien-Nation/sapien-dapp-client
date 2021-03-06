@@ -29,30 +29,32 @@ const defaultValues = {
   cover: '',
   avatar: '',
   description: '',
-  unique_identifier: ''
+  unique_identifier: '',
+  confirmPassword: '',
+  password: '',
 };
 
 enum Step {
   ChannelSummary = 1,
   ChannelBadges,
   ChannelMedia,
-  ChannelRss
+  ChannelRss,
 }
 
 interface Props {
   onClose: () => void;
 }
 
-const CreateChannel: React.FC<Props> = ({ onClose }) => {
+const CreateChannel = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.ChannelSummary);
   const { enqueueSnackbar } = useSnackbar();
-  const [navigation, setNativation] = useNavigation();
+  const [navigation, setNavigation] = useNavigation();
   const methods = useForm({
     defaultValues,
-    shouldUnregister: false
+    shouldUnregister: false,
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, clearErrors } = methods;
 
   const handleFormSubmit = async (values) => {
     switch (step) {
@@ -79,7 +81,7 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
             name: values.name,
             image: '/fixtures/40x40/cars.png',
             memberCount: 0,
-            lastUpdate: new Date().toISOString()
+            lastUpdate: new Date().toISOString(),
           };
 
           // UI update
@@ -90,18 +92,18 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
                 if (tribe.id === navigation.main.id) {
                   return {
                     ...tribe,
-                    channels: [...tribe.channels, channel]
+                    channels: [...tribe.channels, channel],
                   };
                 }
                 return tribe;
-              })
+              }),
             }),
             false
           );
-          setNativation({
+          setNavigation({
             ...navigation,
             secondary: channel.id,
-            type: NavigationTypes.Channel
+            type: NavigationTypes.Channel,
           });
           onClose();
         } catch ({ response }) {
@@ -112,6 +114,7 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
   };
 
   const handleBack = () => {
+    clearErrors();
     switch (step) {
       case Step.ChannelSummary: {
         onClose();
@@ -161,7 +164,7 @@ const CreateChannel: React.FC<Props> = ({ onClose }) => {
             <Typography
               color="primary"
               style={{
-                fontWeight: 600
+                fontWeight: 600,
               }}
               variant="caption"
             >

@@ -2,7 +2,7 @@
 // api
 import axios from 'api';
 
-// contants
+// constants
 import { NavigationTypes } from 'context/tribes';
 
 // context
@@ -12,7 +12,7 @@ import { useNavigation } from 'context/tribes';
 // components
 import Layout from './Layout';
 
-const IndexPage: React.FC = () => {
+const IndexPage = () => {
   const { me } = useAuth();
   const [navigation] = useNavigation();
 
@@ -40,7 +40,13 @@ const IndexPage: React.FC = () => {
 
   return (
     <Layout>
-      <div style={{ borderRadius: '24px', backgroundColor: '#F9F9FA', padding: 40 }}>
+      <div
+        style={{
+          borderRadius: '24px',
+          backgroundColor: '#F9F9FA',
+          padding: 40,
+        }}
+      >
         <h1>{renderView()}</h1>
         {me && <button onClick={handleError}>Try Error</button>}
       </div>

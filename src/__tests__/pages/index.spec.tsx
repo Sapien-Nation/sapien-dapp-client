@@ -10,9 +10,17 @@ import type { Topic } from 'types/topic';
 import axios from 'api';
 
 // utils
-import { render, screen, user, waitFor, within } from 'utils/tests';
+import {
+  createRandomString,
+  render,
+  screen,
+  user,
+  waitFor,
+  within,
+} from 'utils/tests';
 
 // mocks
+import { mockFile } from 'mocks/file';
 import { mockTopics } from 'mocks/topics';
 import { mockTribes } from 'mocks/tribe';
 import { mockUser } from 'mocks/user';
@@ -26,15 +34,22 @@ const topics: Array<Topic> = mockTopics();
 
 const renderComponent = (options = {}) =>
   render(<IndexPage />, {
-    ...options
+    ...options,
   });
 
 const getTribeNavigation = () =>
   screen.getByRole('navigation', {
-    name: /tribe navigation/i
+    name: /tribe navigation/i,
   });
 
-const getTribeBar = () => screen.getByRole('navigation', { name: /tribe bar/i });
+const getTribeBar = () =>
+  screen.getByRole('navigation', { name: /tribe bar/i });
+
+window.URL.createObjectURL = jest.fn();
+
+afterEach(() => {
+  (window as any).URL.createObjectURL.mockReset();
+});
 
 beforeEach(() => {
   localStorage?.clear();
@@ -87,11 +102,12 @@ describe('TribeBar', () => {
     });
   });
 
-  test('create tribe', async () => {
+  test('Create Tribe', async () => {
     const mock = new MockAdapter(axios);
     renderComponent();
 
-    user.click(screen.getByRole('button', { name: /create tribe/i }));
+    const tribeBar = getTribeBar();
+    user.click(within(tribeBar).getByRole('button', { name: /create tribe/i }));
 
     await waitFor(() => {
       expect(
@@ -99,50 +115,90 @@ describe('TribeBar', () => {
       ).toBeInTheDocument();
     });
 
-    // Summary Step
-    const chartCount = screen.getAllByTestId('chart-count');
-    expect(chartCount[0]).toHaveTextContent('0 / 36');
-    expect(chartCount[1]).toHaveTextContent('0 / 15');
-    expect(chartCount[2]).toHaveTextContent('0 / 60');
-    expect(screen.getByRole('checkbox', { name: /tribe type/i })).not.toBeChecked();
-
+    // SummaryStep
     // validation
-    user.click(screen.getByRole('button', { name: /next/i }));
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('dialog', { name: /new tribe step 1 \/ 2/i })
-      ).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
 
-    // onChange
-    const newTribe = 'Sports';
+    // required
+    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/unique identifier is required/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/description is required/i)).toBeInTheDocument();
+
+    // maxLength
     await waitFor(() => {
-      user.type(screen.getByRole('textbox', { name: /name/i }), newTribe);
+      user.type(
+        screen.getByRole('textbox', { name: /name/i }),
+        createRandomString(37)
+      );
       user.type(
         screen.getByRole('textbox', { name: /unique identifier/i }),
-        'tribe'
+        createRandomString(16)
       );
       user.type(
         screen.getByRole('textbox', { name: /description/i }),
-        'some description'
+        createRandomString(61)
       );
     });
-    user.click(screen.getByRole('checkbox', { name: /tribe type/i }));
 
-    expect(chartCount[0]).toHaveTextContent('6 / 36');
-    expect(chartCount[1]).toHaveTextContent('5 / 15');
-    expect(chartCount[2]).toHaveTextContent('16 / 60');
-    expect(screen.getByRole('checkbox', { name: /tribe type/i })).toBeChecked();
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
 
-    // MediaStep
-    user.click(screen.getByRole('button', { name: /next/i }));
+    expect(screen.getByText(/name its to long/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/unique identifier its to long/i)
+    ).toBeInTheDocument();
+    expect(screen.getByText(/description its to long/i)).toBeInTheDocument();
 
+    const newTribe = createRandomString(36);
+    await waitFor(() => {
+      user.clear(screen.getByRole('textbox', { name: /name/i }));
+      user.clear(screen.getByRole('textbox', { name: /unique identifier/i }));
+      user.clear(screen.getByRole('textbox', { name: /description/i }));
+      user.type(screen.getByRole('textbox', { name: /name/i }), newTribe);
+      user.type(
+        screen.getByRole('textbox', { name: /unique identifier/i }),
+        createRandomString(15)
+      );
+      user.type(
+        screen.getByRole('textbox', { name: /description/i }),
+        createRandomString(60)
+      );
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
+
+    // Media Step
     await waitFor(() => {
       expect(
         screen.getByRole('dialog', { name: /new tribe step 2 \/ 2/i })
       ).toBeInTheDocument();
     });
+
+    // validation
+    // required
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /create/i }));
+    });
+
+    expect(screen.getByText('Avatar is required')).toBeInTheDocument();
+    expect(screen.getByText('Cover is required')).toBeInTheDocument();
+
+    await waitFor(() => {
+      user.upload(screen.getByLabelText(/avatar/i), mockFile());
+      // There are multiple cover roles in the screen
+      user.upload(
+        within(screen.getByRole('dialog')).getByLabelText(/cover/i),
+        mockFile()
+      );
+    });
+
+    expect(screen.queryByText('Cover is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('Avatar is required')).not.toBeInTheDocument();
 
     // onError
     const error = { message: 'Create Tribe Error' };
@@ -186,7 +242,7 @@ describe('TribeNavigation', () => {
     // render channels
     tribeToClick.channels.forEach((channel) => {
       const channelButton = within(tribeNavigation).getByRole('button', {
-        name: channel.name
+        name: channel.name,
       });
       expect(channelButton).toHaveTextContent(
         `${channel.name}${channel.memberCount} members`
@@ -220,43 +276,59 @@ describe('TribeNavigation', () => {
     });
 
     // SummaryStep
-    const chartCount = screen.getAllByTestId('chart-count');
-    expect(chartCount[0]).toHaveTextContent('0 / 36');
-    expect(chartCount[1]).toHaveTextContent('0 / 60');
-
     // validation
-    user.click(screen.getByRole('button', { name: /next/i }));
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('dialog', { name: /new channel step 1 \/ 4/i })
-      ).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
 
-    // onChange
-    const newChannel = 'tibia';
+    // required
+    expect(screen.getByText(/name is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/description is required/i)).toBeInTheDocument();
+
+    // maxLength
     await waitFor(() => {
-      user.type(screen.getByRole('textbox', { name: /name/i }), newChannel);
+      user.type(
+        screen.getByRole('textbox', { name: /name/i }),
+        createRandomString(37)
+      );
       user.type(
         screen.getByRole('textbox', { name: /description/i }),
-        'some channel'
+        createRandomString(61)
       );
     });
 
-    expect(chartCount[0]).toHaveTextContent('5 / 36');
-    expect(chartCount[1]).toHaveTextContent('12 / 60');
+    await waitFor(() =>
+      user.click(screen.getByRole('button', { name: /next/i }))
+    );
 
-    // Badges Step
-    user.click(screen.getByRole('button', { name: /next/i }));
+    expect(screen.getByText(/name is to long/i)).toBeInTheDocument();
+    expect(screen.getByText(/description is to long/i)).toBeInTheDocument();
 
+    const newChannel = createRandomString(36);
+    await waitFor(() => {
+      user.clear(screen.getByRole('textbox', { name: /name/i }));
+      user.clear(screen.getByRole('textbox', { name: /description/i }));
+      user.type(screen.getByRole('textbox', { name: /name/i }), newChannel);
+      user.type(
+        screen.getByRole('textbox', { name: /description/i }),
+        createRandomString(60)
+      );
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
+
+    // TODO Badges Step
     await waitFor(() => {
       expect(
         screen.getByRole('dialog', { name: /new channel step 2 \/ 4/i })
       ).toBeInTheDocument();
     });
+    expect(screen.getByRole('heading', { name: /todo/i })).toBeInTheDocument();
 
     // Media Step
-    user.click(screen.getByRole('button', { name: /next/i }));
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
 
     await waitFor(() => {
       expect(
@@ -264,13 +336,63 @@ describe('TribeNavigation', () => {
       ).toBeInTheDocument();
     });
 
-    // RSS Step
-    user.click(screen.getByRole('button', { name: /next/i }));
+    // validation
+    // required
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
 
+    expect(screen.getByText('Avatar is required')).toBeInTheDocument();
+    expect(screen.getByText('Cover is required')).toBeInTheDocument();
+    await waitFor(() => {
+      user.upload(
+        within(screen.getByRole('dialog')).getByLabelText(/avatar/i),
+        mockFile()
+      );
+      // There are multiple cover roles in the screen
+      user.upload(
+        within(screen.getByRole('dialog')).getByLabelText(/cover/i),
+        mockFile()
+      );
+    });
+
+    expect(screen.queryByText('Avatar is required')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cover is required')).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /next/i }));
+    });
+
+    // RSS Step
     await waitFor(() => {
       expect(
         screen.getByRole('dialog', { name: /new channel step 4 \/ 4/i })
       ).toBeInTheDocument();
+    });
+
+    // validation
+    // required
+    await waitFor(() => {
+      user.click(screen.getByRole('button', { name: /create/i }));
+    });
+
+    expect(screen.getByText(/label is required/i)).toBeInTheDocument();
+    await waitFor(() => {
+      user.type(
+        screen.getByRole('textbox', { name: /label/i }),
+        createRandomString(37)
+      );
+    });
+
+    // maxLength
+    expect(screen.getByText(/label is to long/i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      user.clear(screen.getByRole('textbox', { name: /label/i }));
+      user.type(
+        screen.getByRole('textbox', { name: /label/i }),
+        createRandomString(36)
+      );
     });
 
     // onError
@@ -289,7 +411,7 @@ describe('TribeNavigation', () => {
     await waitFor(() => {
       expect(
         within(getTribeNavigation()).getByRole('button', {
-          name: newChannel
+          name: newChannel,
         })
       ).toHaveTextContent(`${newChannel}0 members`);
     });
@@ -300,7 +422,9 @@ describe('Navbar', () => {
   test('logged in', () => {
     const { rerender } = renderComponent();
 
-    const userMenu = screen.getByRole('button', { name: /slowpoke rodriguez/i });
+    const userMenu = screen.getByRole('button', {
+      name: /slowpoke rodriguez/i,
+    });
     expect(userMenu).toBeInTheDocument();
     expect(
       within(userMenu).getByRole('img', { hidden: true }, { hidden: true })
