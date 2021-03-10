@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 // mui
-import { Tabs, Tab, Typography } from '@material-ui/core';
+import { Tabs, Tab as MUITab, Typography } from '@material-ui/core';
 
 //components
 import Dialog from 'components/dialog';
 
-enum TabList {
+enum Tab {
   Settings,
   Badges,
   RSS,
@@ -18,7 +18,7 @@ interface Props {
 }
 
 const EditChannel = ({ onClose }: Props) => {
-  const [tab, setTab] = useState(TabList.Settings);
+  const [tab, setTab] = useState(Tab.Settings);
   const methods = useForm({
     shouldUnregister: false,
   });
@@ -38,44 +38,17 @@ const EditChannel = ({ onClose }: Props) => {
   const form = 'edit-channel';
 
   const renderForm = () => {
-    let view;
     switch (tab) {
-      case TabList.Settings:
-        view = 'TODO SETTINGS';
+      case Tab.Settings:
+        return 'TODO SETTINGS';
         break;
-      case TabList.Badges:
-        view = 'TODO BADGES';
+      case Tab.Badges:
+        return 'TODO BADGES';
         break;
-      case TabList.RSS:
-        view = 'TODO RSS';
+      case Tab.RSS:
+        return 'TODO RSS';
         break;
     }
-    return (
-      <>
-        <Tabs
-          aria-label="Edit-Channel-Tabs"
-          value={tab}
-          onChange={(event: React.ChangeEvent<Event>, value) => setTab(value)}
-        >
-          <Tab
-            aria-controls="edit-channel-tabpanel-0"
-            id="edit-channel-tab-0"
-            label="Channel Settings"
-          />
-          <Tab
-            aria-controls="edit-channel-tabpanel-1"
-            id="edit-channel-tab-1"
-            label="Badges"
-          />
-          <Tab
-            aria-controls="edit-channel-tabpanel-2"
-            id="edit-channel-tab-2"
-            label="RSS Feeds"
-          />
-        </Tabs>
-        {view}
-      </>
-    );
   };
 
   return (
@@ -88,6 +61,27 @@ const EditChannel = ({ onClose }: Props) => {
       onCancel={onCancel}
       onClose={onClose}
     >
+      <Tabs
+        aria-label="Edit-Channel-Tabs"
+        value={tab}
+        onChange={(_: unknown, value) => setTab(value)}
+      >
+        <MUITab
+          aria-controls="edit-channel-tabpanel-0"
+          id="edit-channel-tab-0"
+          label="Channel Settings"
+        />
+        <MUITab
+          aria-controls="edit-channel-tabpanel-1"
+          id="edit-channel-tab-1"
+          label="Badges"
+        />
+        <MUITab
+          aria-controls="edit-channel-tabpanel-2"
+          id="edit-channel-tab-2"
+          label="RSS Feeds"
+        />
+      </Tabs>
       <FormProvider {...methods}>
         <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
           {renderForm()}

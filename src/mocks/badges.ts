@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // fixtures
 import badge1 from 'fixtures/badge_1.json';
 import badge2 from 'fixtures/badge_2.json';
