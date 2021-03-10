@@ -195,15 +195,17 @@ const TribeNavigation = ({ createChanel, tribes }: Props) => {
           >
             <Box alignItems="center" display="flex">
               <Typography variant="h5">Channels</Typography>
-              <IconButton
-                aria-label="Create Channel"
-                classes={{
-                  root: classes.addChannelButton,
-                }}
-                onClick={createChanel}
-              >
-                <AddIcon />
-              </IconButton>
+              {tribe.permissions.canAddChannel && (
+                <IconButton
+                  aria-label="Create Channel"
+                  classes={{
+                    root: classes.addChannelButton,
+                  }}
+                  onClick={createChanel}
+                >
+                  <AddIcon />
+                </IconButton>
+              )}
             </Box>
             <IconButton
               disableRipple

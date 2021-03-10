@@ -7,6 +7,7 @@ import channel1 from 'fixtures/channel_1.json';
 import channel2 from 'fixtures/channel_2.json';
 import channel3 from 'fixtures/channel_3.json';
 import channel4 from 'fixtures/channel_4.json';
+import tribe1Permissions from 'fixtures/permissions_tribe_1.json';
 
 export const mockTribe = ({ ...rest } = {}) => ({
   ...tribe1,
@@ -16,7 +17,7 @@ export const mockTribe = ({ ...rest } = {}) => ({
 
 export const mockTribes = () => {
   return [
-    { ...tribe1, channels: [channel2] },
+    { ...tribe1, channels: [channel2], permissions: tribe1Permissions },
     { ...tribe2, channels: [channel1, channel3] },
     { ...tribe3, channels: [channel2, channel4] },
     tribe4,

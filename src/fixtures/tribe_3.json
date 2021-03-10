@@ -3,5 +3,6 @@
   "name": "Settings",
   "channels": [],
   "image": "/fixtures/256x256/dinner.png",
-  "notificationNumber": 19
+  "notificationNumber": 19,
+  "permissions": { "canAddChannel": false }
 }

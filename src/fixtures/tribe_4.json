@@ -3,5 +3,6 @@
   "name": "Messages",
   "channels": [],
   "image": "/fixtures/256x256/horizon.png",
-  "notificationNumber": 99
+  "notificationNumber": 99,
+  "permissions": { "canAddChannel": false }
 }
