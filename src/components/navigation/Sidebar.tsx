@@ -14,13 +14,13 @@ import { useAuth } from 'context/user';
 import { useNavigation } from 'context/tribes';
 
 // components
-const CreateChannel = dynamic(
+const CreateChannel = dynamic<any>(
   () => import('components/tribe/modals').then((mod) => mod.CreateChannel),
   {
     ssr: false,
   }
 );
-const CreateTribe = dynamic(
+const CreateTribe = dynamic<any>(
   () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
   {
     ssr: false,
