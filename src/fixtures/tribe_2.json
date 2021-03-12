@@ -1,8 +1,0 @@
-{
-  "id": "2",
-  "name": "General",
-  "channels": [],
-  "image": "/fixtures/256x256/bob.png",
-  "notificationNumber": 18,
-  "permissions": { "canAddChannel": false }
-}

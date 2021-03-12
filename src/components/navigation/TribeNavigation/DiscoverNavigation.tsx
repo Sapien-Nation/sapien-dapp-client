@@ -1,6 +1,6 @@
 // types
 import type { Theme } from '@material-ui/core/styles';
-import type { Topic } from 'types/topic';
+import type { Topic } from 'tools/types/topic';
 
 // mui
 import {

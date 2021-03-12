@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // types
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 
 // next
 import dynamic from 'next/dynamic';

@@ -3,7 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // mocks
-import { mockUser } from 'mocks/user';
+import { mockUser } from 'tools/mocks/user';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   return (

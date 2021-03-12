@@ -4,8 +4,8 @@ import { useSnackbar } from 'notistack';
 import { FormProvider, useForm } from 'react-hook-form';
 
 // types
-import type { Channel } from 'types/channel';
-import type { Tribe } from 'types/tribe';
+import type { Channel } from 'tools/types/channel';
+import type { Tribe } from 'tools/types/tribe';
 
 // mui
 import { Typography } from '@material-ui/core';

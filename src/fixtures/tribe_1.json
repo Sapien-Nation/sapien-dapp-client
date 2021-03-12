@@ -1,8 +1,0 @@
-{
-  "id": "1",
-  "name": "Sapien",
-  "channels": [],
-  "image": "/fixtures/256x256/general.png",
-  "notificationNumber": 47,
-  "permissions": { "canAddChannel": false }
-}

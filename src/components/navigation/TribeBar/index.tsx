@@ -1,5 +1,5 @@
 // types
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 import type { Theme } from '@material-ui/core/styles';
 
 // next

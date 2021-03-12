@@ -1,8 +1,0 @@
-{
-  "id": "3",
-  "name": "Settings",
-  "channels": [],
-  "image": "/fixtures/256x256/dinner.png",
-  "notificationNumber": 19,
-  "permissions": { "canAddChannel": false }
-}

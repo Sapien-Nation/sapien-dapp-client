@@ -3,8 +3,8 @@ import preloadAll from 'jest-next-dynamic';
 import MockAdapter from 'axios-mock-adapter';
 
 // types
-import type { Tribe } from 'types/tribe';
-import type { Topic } from 'types/topic';
+import type { Tribe } from 'tools/types/tribe';
+import type { Topic } from 'tools/types/topic';
 
 // api
 import axios from 'api';
@@ -21,9 +21,9 @@ import {
 
 // mocks
 import { mockFile } from 'mocks/file';
-import { mockTopics } from 'mocks/topics';
-import { mockTribes } from 'mocks/tribe';
-import { mockUser } from 'mocks/user';
+import { mockTopics } from 'tools/mocks/topics';
+import { mockTribes } from 'tools/mocks/tribe';
+import { mockUser } from 'tools/mocks/user';
 
 // components
 import IndexPage from 'pages/index';

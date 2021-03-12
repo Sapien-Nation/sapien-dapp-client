@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import axios from 'api';
 
 // types
-import type { User } from 'types/user';
+import type { User } from 'tools/types/user';
 
 export interface Authentication {
   me: User | null;

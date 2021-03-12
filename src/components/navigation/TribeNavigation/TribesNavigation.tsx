@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 // types
 import type { Theme } from '@material-ui/core/styles';
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 
 // next
 import Image from 'next/image';

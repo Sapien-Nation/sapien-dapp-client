@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { FormProvider, useForm } from 'react-hook-form';
 
 // types
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 
 // api
 import axios from 'api';

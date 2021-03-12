@@ -7,8 +7,8 @@ import { createContext, useContext, useEffect } from 'react';
 import axios from 'api';
 
 // types
-import type { Channel } from 'types/channel';
-import type { Tribe } from 'types/tribe';
+import type { Channel } from 'tools/types/channel';
+import type { Tribe } from 'tools/types/tribe';
 
 export enum NavigationTypes {
   BadgeStore,
