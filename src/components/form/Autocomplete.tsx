@@ -7,6 +7,8 @@ import axios from 'api';
 // types
 import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
+import type { Tribe } from 'types/tribe';
+import type { Channel } from 'types/channel';
 
 // mui
 import {
@@ -17,19 +19,6 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { Autocomplete as MuiAutocomplete } from '@material-ui/lab';
-
-// types
-import type { Tribe } from 'types/tribe';
-
-export interface Props extends InputProps {
-  endAdornment?: React.ReactNode | null;
-  errors?: FieldErrors;
-  defaultValue: Tribe;
-  getCurrentValue: Dispatch<SetStateAction<Tribe>>;
-  label?: string;
-  name: string;
-  spacing?: string;
-}
 
 const useStyles = makeStyles(() => ({
   image: () => ({
@@ -55,28 +44,28 @@ const useStyles = makeStyles(() => ({
   }),
 }));
 
-const TribeOption = ({ option }) => {
-  const classes = useStyles();
-  return (
-    <Box display="flex" flexDirection="row">
-      <img alt={option.name} className={classes.image} src={option.image} />
-      <Box display="flex" flexDirection="column" marginLeft="1rem">
-        <Typography style={{ fontWeight: 600 }} variant="body1">
-          {option.name}
-        </Typography>
-        <Typography variant="body2">@{option.name}</Typography>
-      </Box>
-    </Box>
-  );
-};
+export interface Props extends InputProps {
+  apiString: string;
+  // we can update this type to allow something like Tribe | Channel | User etc.
+  defaultValue: Tribe | Channel;
+  endAdornment?: React.ReactNode | null;
+  errors?: FieldErrors;
+  getCurrentValue: Dispatch<SetStateAction<Tribe | Channel>>;
+  label?: string;
+  name: string;
+  OptionComponent: React.ComponentType<any>;
+  spacing?: string;
+}
 
 const Autocomplete = ({
+  apiString,
   defaultValue,
   endAdornment,
   errors,
   getCurrentValue,
   label,
   name,
+  OptionComponent,
   spacing = '0',
   ...rest
 }: Props) => {
@@ -95,7 +84,7 @@ const Autocomplete = ({
     (async () => {
       const {
         data: { tribes },
-      } = await axios.get('/api/tribes/followed');
+      } = await axios.get(`/api/${apiString}`);
       if (active) {
         setOptions(tribes);
       }
@@ -110,7 +99,7 @@ const Autocomplete = ({
     (async () => {
       const {
         data: { tribes },
-      } = await axios.get('/api/tribes/followed');
+      } = await axios.get(`/api/${apiString}`);
       setOptions(tribes);
       setOpen(true);
     })();
@@ -179,7 +168,7 @@ const Autocomplete = ({
           />
         </div>
       )}
-      renderOption={(option) => <TribeOption option={option} />}
+      renderOption={(option) => <OptionComponent option={option} />}
       style={{ width: 271 }}
       onChange={(_, value: Tribe) => getCurrentValue(value)}
       onOpen={() => {
