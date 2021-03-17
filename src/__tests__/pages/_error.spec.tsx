@@ -45,7 +45,9 @@ test('should call capture Exception on normal render', () => {
 test('getInitialProps with err', async () => {
   const err = 'Custom Error';
   const response = await ErrorPage.getInitialProps({
+    // @ts-ignore
     res: {},
+    // @ts-ignore
     err,
     asPath: '/',
   });
@@ -57,6 +59,7 @@ test('getInitialProps with err', async () => {
 
 test('getInitialProps no err', async () => {
   const response = await ErrorPage.getInitialProps({
+    // @ts-ignore
     res: {},
     err: null,
     asPath: '/',

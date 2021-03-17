@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     label: {
       marginRight: theme.spacing(0.8),
-      color: theme.palette.caption.main,
+      color: (theme as any).palette.caption.main,
       fontWeight: 'normal',
     },
   })

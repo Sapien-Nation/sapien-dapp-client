@@ -55,7 +55,9 @@ const MediaStep = () => {
           name="avatar"
           render={() => {
             return (
-              <IconButton style={{ color: theme.palette.infoIcon.main }}>
+              <IconButton
+                style={{ color: (theme as any).palette.infoIcon.main }}
+              >
                 <AddIcon fontSize="small" />
               </IconButton>
             );
@@ -81,7 +83,9 @@ const MediaStep = () => {
           name="cover"
           render={() => {
             return (
-              <IconButton style={{ color: theme.palette.infoIcon.main }}>
+              <IconButton
+                style={{ color: (theme as any).palette.infoIcon.main }}
+              >
                 <AddIcon fontSize="small" />
               </IconButton>
             );

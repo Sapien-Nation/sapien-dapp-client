@@ -42,7 +42,7 @@ const Switch = ({ errors, label, name, ...rest }: Props) => {
             <Box component="span">{label}</Box>
             <IconButton
               aria-label={name}
-              style={{ color: theme.palette.infoIcon.main }}
+              style={{ color: (theme as any).palette.infoIcon.main }}
             >
               <HelpIcon fontSize="small" />
             </IconButton>

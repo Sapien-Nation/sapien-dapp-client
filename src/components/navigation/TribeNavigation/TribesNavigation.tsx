@@ -92,7 +92,6 @@ interface Props {
 const TribeNavigation = ({ createChanel, tribes }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const [showChannels, setShowChannels] = useState(true);
-
   const classes = useStyles();
 
   const tribe: Tribe = tribes.find(({ id }) => id === navigation.main?.id);

@@ -70,6 +70,7 @@ const CreateTribe = ({ onClose }: Props) => {
             channels: [],
             image: '/fixtures/256x256/stonks.png',
             notificationNumber: 0,
+            permissions: { canAddChannel: false },
           };
 
           // UI updates

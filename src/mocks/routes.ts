@@ -1,13 +1,12 @@
 // types
 import type { NextRouter } from 'next/router';
 
-export const mockRouter = (router: Partial<NextRouter> = {}): NextRouter => ({
+export const mockRouter = (props: any = {}): NextRouter => ({
   basePath: '',
   pathname: '/',
   route: '/',
   asPath: '/',
   query: {},
-  isReady: false,
   push: jest.fn().mockResolvedValue(true),
   replace: jest.fn().mockResolvedValue(true),
   reload: jest.fn(),
@@ -20,6 +19,7 @@ export const mockRouter = (router: Partial<NextRouter> = {}): NextRouter => ({
     emit: jest.fn(),
   },
   isFallback: false,
-  isLocaleDomain: false,
-  ...router,
+  isReady: false,
+  isPreview: false,
+  ...props,
 });

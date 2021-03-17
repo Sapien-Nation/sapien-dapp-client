@@ -26,6 +26,7 @@ const theme = createMuiTheme({
       main: purple,
       dark: purple,
     },
+    // @ts-ignore
     formLabel: {
       light: black,
       main: black,
@@ -137,7 +138,7 @@ theme.overrides = {
       fontSize: '1.4rem',
       fontWeight: 600,
       transform: 'translate(0, 0) scale(1)',
-      color: theme.palette.formLabel.main,
+      color: (theme as any).palette.formLabel.main,
     },
     shrink: {
       transform: 'translate(0, 0) scale(1)',
@@ -154,14 +155,14 @@ theme.overrides = {
   MuiInput: {
     root: {
       border: `2px solid transparent`,
-      background: theme.palette.input.main,
+      background: (theme as any).palette.input.main,
       padding: theme.spacing(1, 2),
       borderRadius: '0.6rem',
       minHeight: '4.6rem',
       fontSize: '1.4rem',
       '&$focused': {
         borderRadius: '0.6rem',
-        border: `2px solid ${theme.palette.primary.main}`,
+        border: `2px solid ${(theme as any).palette.primary.main}`,
         boxSizing: 'border-box',
       },
     },
@@ -176,7 +177,7 @@ theme.overrides = {
   },
   MuiTypography: {
     caption: {
-      color: theme.palette.caption.main,
+      color: (theme as any).palette.caption.main,
       fontSize: '1.4rem',
     },
     h1: {
@@ -215,7 +216,7 @@ theme.overrides = {
   },
   MuiInputAdornment: {
     positionStart: {
-      color: theme.palette.caption.main,
+      color: (theme as any).palette.caption.main,
     },
   },
   MuiSwitch: {
@@ -242,7 +243,7 @@ theme.overrides = {
     },
     track: {
       borderRadius: 26 / 2,
-      border: `1px solid ${theme.palette.input.main}`,
+      border: `1px solid ${(theme as any).palette.input.main}`,
       backgroundColor: darker,
       opacity: 1,
       transition: theme.transitions.create(['background-color', 'border']),
