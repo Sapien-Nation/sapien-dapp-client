@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 // api
@@ -69,6 +69,10 @@ const IndexPage = () => {
   const { me } = useAuth();
   const [navigation] = useNavigation();
   const [dialog, setDialog] = useState<Dialog | null>(null);
+  const [options, setOptions] = useState<any[]>([]);
+  const [autocompleteOpen, setAutocompleteOpen] = useState(false);
+  const loading = open && options.length === 0;
+
   const { errors } = useForm();
   const handleError = async () => {
     try {
@@ -78,6 +82,30 @@ const IndexPage = () => {
       //
     }
   };
+
+  const fetchOptions = async () => {
+    try {
+      const {
+        data: { tribes },
+      } = await axios.get('/api/tribes/followed');
+      setOptions(tribes);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (loading === false) {
+      return;
+    }
+
+    fetchOptions();
+  }, [loading]);
+
+  useEffect(() => {
+    fetchOptions();
+    setAutocompleteOpen(true);
+  }, []);
 
   const renderView = () => {
     switch (navigation.type) {
@@ -118,7 +146,6 @@ const IndexPage = () => {
         {me && <button onClick={handleError}>Try Error</button>}
         <AutocompleteSelect
           OptionComponent={TribeOption}
-          apiString="tribes/followed"
           defaultValue={mockTribe()}
           endAdornment={
             <InputAdornment position="start">
@@ -127,7 +154,11 @@ const IndexPage = () => {
           }
           errors={errors}
           label="Tribe"
+          loading={loading}
           name="select-tribe"
+          open={autocompleteOpen}
+          options={options}
+          setOpen={setAutocompleteOpen}
         />
       </div>
     </Layout>

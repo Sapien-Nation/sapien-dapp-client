@@ -1,14 +1,9 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
-
-// api
-import axios from 'api';
 
 // types
 import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
-import type { Tribe } from 'types/tribe';
-import type { Channel } from 'types/channel';
 
 // mui
 import {
@@ -45,71 +40,38 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface Props extends InputProps {
-  apiString: string;
-  // we can update this type to allow something like Tribe | Channel | User etc.
-  defaultValue: Tribe | Channel;
+  defaultValue: any;
   endAdornment?: React.ReactNode | null;
   errors?: FieldErrors;
-  getCurrentValue: Dispatch<SetStateAction<Tribe | Channel>>;
+  getCurrentValue: Dispatch<SetStateAction<any>>;
   label?: string;
+  loading: boolean;
   name: string;
+  open: boolean;
   OptionComponent: React.ComponentType<any>;
+  options: any;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   spacing?: string;
 }
 
 const Autocomplete = ({
-  apiString,
   defaultValue,
   endAdornment,
   errors,
   getCurrentValue,
   label,
+  loading,
   name,
+  open,
   OptionComponent,
+  options,
+  setOpen,
   spacing = '0',
   ...rest
 }: Props) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<Tribe[]>([]);
-  const loading = open && options.length === 0;
-
-  useEffect(() => {
-    let active = true;
-
-    if (!loading) {
-      return undefined;
-    }
-
-    (async () => {
-      const {
-        data: { tribes },
-      } = await axios.get(`/api/${apiString}`);
-      if (active) {
-        setOptions(tribes);
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, [loading]);
-
-  useEffect(() => {
-    (async () => {
-      const {
-        data: { tribes },
-      } = await axios.get(`/api/${apiString}`);
-      setOptions(tribes);
-      setOpen(true);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
+  // const [open, setOpen] = useState(false);
+  // const loading = open && options.length === 0;
 
   return (
     <MuiAutocomplete
@@ -120,8 +82,8 @@ const Autocomplete = ({
         option: classes.option,
       }}
       defaultValue={defaultValue}
-      getOptionLabel={(option: Tribe) => option.name}
-      getOptionSelected={(option: Tribe, value: Tribe) =>
+      getOptionLabel={(option: any) => option.name}
+      getOptionSelected={(option: any, value: any) =>
         option.name === value.name
       }
       id={name}
@@ -170,7 +132,7 @@ const Autocomplete = ({
       )}
       renderOption={(option) => <OptionComponent option={option} />}
       style={{ width: 271 }}
-      onChange={(_, value: Tribe) => getCurrentValue(value)}
+      onChange={(_, value: any) => getCurrentValue(value)}
       onOpen={() => {
         setOpen(true);
       }}

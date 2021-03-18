@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 
 // components
 import Autocomplete from 'components/form/Autocomplete';
@@ -10,8 +10,6 @@ import { Button, Popover, makeStyles } from '@material-ui/core';
 // types
 import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
-import type { Tribe } from 'types/tribe';
-import type { Channel } from 'types/channel';
 
 const useStyles = makeStyles(() => ({
   paper: () => ({
@@ -23,24 +21,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 export interface Props extends InputProps {
-  apiString: string;
-  // we can update this type to allow something like Tribe | Channel | User etc.
-  defaultValue: Tribe | Channel;
+  defaultValue: any;
   endAdornment?: React.ReactNode | null;
   errors?: FieldErrors;
   label?: string;
+  loading: boolean;
   name: string;
+  open: boolean;
   OptionComponent: React.ComponentType<any>;
+  options: any;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   spacing?: string;
 }
 
 const AutocompleteSelect = ({
-  apiString,
   defaultValue,
   endAdornment,
   errors,
+  loading,
   name,
+  open,
   OptionComponent,
+  options,
+  setOpen,
   spacing = '0',
   ...rest
 }: Props) => {
@@ -54,9 +57,9 @@ const AutocompleteSelect = ({
     setAnchorEl(null);
   };
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'select' : undefined;
-  const [selectLabel, setSelectLabel] = useState<Tribe | Channel>(defaultValue);
+  const isOpen = Boolean(anchorEl);
+  const id = isOpen ? 'select' : undefined;
+  const [selectLabel, setSelectLabel] = useState<any>(defaultValue);
 
   return (
     <div>
@@ -85,12 +88,15 @@ const AutocompleteSelect = ({
       >
         <Autocomplete
           OptionComponent={OptionComponent}
-          apiString={apiString}
           defaultValue={defaultValue}
           endAdornment={endAdornment}
           errors={errors}
           getCurrentValue={setSelectLabel}
+          loading={loading}
           name={name}
+          open={open}
+          options={options}
+          setOpen={setOpen}
           spacing={spacing}
           {...rest}
         />
