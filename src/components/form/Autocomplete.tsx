@@ -70,8 +70,6 @@ const Autocomplete = ({
   ...rest
 }: Props) => {
   const classes = useStyles();
-  // const [open, setOpen] = useState(false);
-  // const loading = open && options.length === 0;
 
   return (
     <MuiAutocomplete
@@ -92,18 +90,6 @@ const Autocomplete = ({
       options={options}
       renderInput={(params) => (
         <div ref={params.InputProps.ref} style={{ marginBottom: spacing }}>
-          <Box
-            alignItems="center"
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            <Box alignItems="center" display="flex">
-              <InputLabel {...params.InputLabelProps} htmlFor={name}>
-                {label}
-              </InputLabel>
-            </Box>
-          </Box>
           <MuiInput
             id={name}
             name={name}

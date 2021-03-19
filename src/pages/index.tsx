@@ -71,7 +71,7 @@ const IndexPage = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [options, setOptions] = useState<any[]>([]);
   const [autocompleteOpen, setAutocompleteOpen] = useState(false);
-  const loading = open && options.length === 0;
+  const loading = autocompleteOpen && options.length === 0;
 
   const { errors } = useForm();
   const handleError = async () => {
@@ -104,7 +104,6 @@ const IndexPage = () => {
 
   useEffect(() => {
     fetchOptions();
-    setAutocompleteOpen(true);
   }, []);
 
   const renderView = () => {

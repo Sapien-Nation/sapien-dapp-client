@@ -51,10 +51,12 @@ const AutocompleteSelect = ({
   const classes = useStyles();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    setOpen(true);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    setOpen(false);
   };
 
   const isOpen = Boolean(anchorEl);
