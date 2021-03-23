@@ -39,12 +39,12 @@ export interface Props extends InputProps {
   errors?: FieldErrors;
   getCurrentValue: Dispatch<SetStateAction<any>>;
   label?: string;
-  loading: boolean;
+  loading?: boolean;
   name: string;
   open: boolean;
   OptionComponent: React.ComponentType<any>;
   options: any;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
   spacing?: string;
 }
 
@@ -53,7 +53,6 @@ const Autocomplete = ({
   endAdornment,
   errors,
   getCurrentValue,
-  label,
   loading,
   name,
   open,
@@ -92,22 +91,24 @@ const Autocomplete = ({
             style={{ width: '100%', borderRadius: '0.8rem' }}
             {...rest}
           />
-          <ErrorMessage
-            errors={errors}
-            name={name}
-            render={({ message }) => (
-              <Typography
-                color="secondary"
-                role="alert"
-                style={{
-                  textAlign: 'right',
-                }}
-                variant="subtitle1"
-              >
-                {message}
-              </Typography>
-            )}
-          />
+          {errors && (
+            <ErrorMessage
+              errors={errors}
+              name={name}
+              render={({ message }) => (
+                <Typography
+                  color="secondary"
+                  role="alert"
+                  style={{
+                    textAlign: 'right',
+                  }}
+                  variant="subtitle1"
+                >
+                  {message}
+                </Typography>
+              )}
+            />
+          )}
         </div>
       )}
       renderOption={(option) => <OptionComponent option={option} />}

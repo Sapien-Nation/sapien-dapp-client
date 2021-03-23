@@ -50,7 +50,7 @@ const useStyles = makeStyles(() => ({
   }),
 }));
 
-const TribeOption = ({ option }) => {
+export const TribeOption = ({ option }) => {
   const classes = useStyles();
   return (
     <Box display="flex" flexDirection="row">
