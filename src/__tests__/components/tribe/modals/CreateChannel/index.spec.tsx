@@ -120,8 +120,14 @@ test('Create Channel', async () => {
   expect(screen.getByText('Avatar is required')).toBeInTheDocument();
   expect(screen.getByText('Cover is required')).toBeInTheDocument();
   await waitFor(() => {
-    user.upload(screen.getByLabelText(/avatar/i), mockFile());
-    user.upload(screen.getByLabelText(/cover/i), mockFile());
+    user.upload(
+      screen.getByLabelText(/avatar/i) as HTMLInputElement,
+      mockFile()
+    );
+    user.upload(
+      screen.getByLabelText(/cover/i) as HTMLInputElement,
+      mockFile()
+    );
   });
 
   expect(screen.queryByText('Avatar is required')).not.toBeInTheDocument();
