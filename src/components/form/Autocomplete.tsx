@@ -113,7 +113,10 @@ const Autocomplete = ({
       )}
       renderOption={(option) => <OptionComponent option={option} />}
       style={{ width: 271 }}
-      onChange={(_, value: any) => getCurrentValue(value)}
+      onChange={(_, value: any) => {
+        if (value === null) return;
+        getCurrentValue(value);
+      }}
       onOpen={() => {
         setOpen(true);
       }}

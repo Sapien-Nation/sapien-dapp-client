@@ -90,7 +90,7 @@ const AutocompleteSelect = ({
       >
         <Autocomplete
           OptionComponent={OptionComponent}
-          defaultValue={defaultValue}
+          defaultValue={selectLabel}
           endAdornment={endAdornment}
           errors={errors}
           getCurrentValue={setSelectLabel}
