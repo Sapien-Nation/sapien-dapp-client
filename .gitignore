@@ -108,3 +108,8 @@ dist
 
 # Desktop Store files
 *.DS_Store
+
+# Deployment files
+.terraform
+terraform.tfstate
+terraform.tfstate.backup

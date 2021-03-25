@@ -1,0 +1,24 @@
+# Node modules
+node_modules
+
+# Environment files
+*.env*
+local
+
+# Readme
+README.md
+
+# Test files
+coverage
+
+# Dockerfile
+*Dockerfile*
+
+# Git files
+.git
+.gitignore
+
+# Deployment files
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
