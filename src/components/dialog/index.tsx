@@ -26,6 +26,7 @@ interface Props extends Omit<DialogProps, 'title'> {
   onCancel?: (data?: unknown) => void;
   onConfirm?: (event?: unknown) => void;
   cancelLabel?: string;
+  confirmDisabled?: boolean;
   confirmLabel?: string;
   showCancel?: boolean;
   showConfirm?: boolean;
@@ -57,6 +58,7 @@ const Dialog = ({
   showConfirm = true,
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
+  confirmDisabled = false,
   children,
   title,
   subtitle,
@@ -74,7 +76,7 @@ const Dialog = ({
       {showConfirm && (
         <Button
           color="primary"
-          disabled={isFetching}
+          disabled={isFetching || confirmDisabled}
           form={form}
           type={form ? 'submit' : 'button'}
           variant="contained"
