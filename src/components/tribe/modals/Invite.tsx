@@ -6,6 +6,9 @@ import { useSnackbar } from 'notistack';
 // types
 import { User } from 'tools/types/user';
 
+// api
+import axios from 'api';
+
 // next
 import Image from 'next/image';
 
@@ -48,9 +51,19 @@ const Invite = ({ link, onClose }: Props) => {
 
   useEffect(() => {
     if (state.value) {
-      enqueueSnackbar('Copied to cliboard');
+      enqueueSnackbar('Copied to clipboard');
     }
   }, [state]);
+
+  const apiUrl = '/api/tribes/invite';
+  const fetchUsers = async () => {
+    try {
+      const { data } = await axios.get(apiUrl);
+      return data;
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
 
   const handleSearch = (search) => {
     setSearchTerm(search);
@@ -69,13 +82,7 @@ const Invite = ({ link, onClose }: Props) => {
   const handleSubmit = async () => {
     setIsFetching(true);
     try {
-      await (() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true);
-          }, 1500);
-        });
-      })();
+      // TODO make call
       enqueueSnackbar('Invites Sent');
       onClose();
     } catch (err) {
@@ -108,7 +115,10 @@ const Invite = ({ link, onClose }: Props) => {
             width={350}
           >
             {link}
-            <IconButton onClick={() => copyToClipboard(link)}>
+            <IconButton
+              aria-label="copy url"
+              onClick={() => copyToClipboard(link)}
+            >
               <FileCopyIcon color="primary" />
             </IconButton>
           </Box>
@@ -118,10 +128,12 @@ const Invite = ({ link, onClose }: Props) => {
       onConfirm={handleSubmit}
     >
       <Query
-        apiUrl="/api/tribes/invite"
+        apiUrl={apiUrl}
         options={{
-          onSuccess: ({ users }: { users: Array<User> }) =>
-            setUsersToInvite(users),
+          fetcher: fetchUsers,
+          onSuccess: ({ users }: { users: Array<User> }) => {
+            setUsersToInvite(users);
+          },
         }}
       >
         {() => {
@@ -145,7 +157,7 @@ const Invite = ({ link, onClose }: Props) => {
                   />
                 </Box>
                 <Box marginTop={3}>
-                  <List>
+                  <List aria-label="users to invite">
                     {filteredUsers.map((user) => (
                       <ListItem key={user.id}>
                         <ListItemAvatar>
@@ -165,7 +177,11 @@ const Invite = ({ link, onClose }: Props) => {
                         <ListItemSecondaryAction
                           onClick={() => handleInvite(user)}
                         >
-                          <Fab aria-label="add" color="primary" size="small">
+                          <Fab
+                            aria-label="add user"
+                            color="primary"
+                            size="small"
+                          >
                             <AddIcon />
                           </Fab>
                         </ListItemSecondaryAction>
@@ -181,7 +197,7 @@ const Invite = ({ link, onClose }: Props) => {
                   </Typography>
                 )}
                 <Box marginTop={3}>
-                  <List>
+                  <List aria-label="users selected to invite">
                     {invited.map((user) => (
                       <ListItem key={user.id}>
                         <ListItemAvatar>
@@ -200,7 +216,7 @@ const Invite = ({ link, onClose }: Props) => {
                         />
                         <ListItemSecondaryAction>
                           <IconButton
-                            aria-label="remove"
+                            aria-label="remove user"
                             onClick={() => handleRemove(user)}
                           >
                             <CloseIcon />

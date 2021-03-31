@@ -3,10 +3,13 @@ import { render, user, screen, within } from 'utils/tests';
 
 // components
 import { Autocomplete } from 'components/form';
-import { TribeOption as OptionComponent } from 'pages/index';
 
 // mock data
 import { mockTribe, mockTribes } from 'tools/mocks/tribe';
+
+const OptionComponent = ({ option }) => {
+  return <span>{option.name}</span>;
+};
 
 const defaultValue = mockTribe();
 const getCurrentValue = jest.fn();
