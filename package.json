@@ -45,7 +45,7 @@
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@sentry/browser": "^6.2.3",
     "@sentry/integrations": "^6.2.3",
-    "@sentry/node": "^6.2.3",
+    "@sentry/node": "^6.2.4",
     "@sentry/webpack-plugin": "^1.14.2",
     "axios": "^0.21.1",
     "cookie": "^0.4.1",
