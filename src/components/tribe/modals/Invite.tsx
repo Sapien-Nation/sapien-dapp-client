@@ -1,10 +1,10 @@
-import { matchSorter } from 'match-sorter';
-import { useEffect, useState } from 'react';
-import { useCopyToClipboard } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
+import { matchSorter } from 'match-sorter';
+import { useCopyToClipboard } from 'react-use';
 
 // types
-import { User } from 'tools/types/user';
+import type { User } from 'tools/types/user';
 
 // api
 import axios from 'api';
@@ -57,6 +57,7 @@ const Invite = ({ link, onClose }: Props) => {
 
   const apiUrl = '/api/tribes/invite';
   const fetchUsers = async () => {
+    // TODO remove this and let swr handle this
     try {
       const { data } = await axios.get(apiUrl);
       return data;

@@ -2,7 +2,7 @@ import { cache } from 'swr';
 import MockAdapter from 'axios-mock-adapter';
 
 // types
-import { User } from 'tools/types/user';
+import type { User } from 'tools/types/user';
 
 // api
 import axios from 'api';
@@ -34,7 +34,6 @@ const fetcher = () => Promise.resolve({ users });
 window.prompt = jest.fn();
 beforeEach(() => {
   cache.clear();
-  // cache.set('/api/tribes/invite', { users });
 
   jest.clearAllMocks();
 });
@@ -42,6 +41,7 @@ beforeEach(() => {
 test('works correctly', async () => {
   const mock = new MockAdapter(axios);
   mock.onGet('/api/tribes/invite').reply(200, { users });
+
   await waitFor(() => {
     renderComponent({ fetcher });
   });
@@ -52,21 +52,19 @@ test('works correctly', async () => {
       name: /invite friends to tribe http:\/\//i,
     })
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole('button', { name: 'Send Invites (0)' })
+  ).toBeInTheDocument();
 
   // copy link
   user.click(screen.getByRole('button', { name: /copy url/i }));
   expect(await screen.getByText('Copied to clipboard')).toBeInTheDocument();
 
-  // select user
-  expect(
-    screen.getByRole('button', { name: 'Send Invites (0)' })
-  ).toBeInTheDocument();
-
+  // users to invite list
   const usersToInviteList = screen.getByRole('list', {
     name: /users to invite/i,
   });
 
-  // Add Users to invite
   expect(
     within(usersToInviteList).getByText('@Slowpoke Rodriguez')
   ).toBeInTheDocument();
@@ -81,7 +79,7 @@ test('works correctly', async () => {
   ).toBeInTheDocument();
   expect(screen.getByText(/1 sapiens selected/i)).toBeInTheDocument();
 
-  // Remove users to invite
+  // invited users list
   const usersSelectedToInviteList = screen.getByRole('list', {
     name: /users selected to invite/i,
   });
@@ -96,7 +94,7 @@ test('works correctly', async () => {
     screen.getByRole('button', { name: 'Send Invites (0)' })
   ).toBeInTheDocument();
 
-  // adding again
+  // handle submit
   user.click(screen.getAllByRole('button', { name: /add user/i })[0]);
   user.click(screen.getByRole('button', { name: 'Send Invites (1)' }));
 
