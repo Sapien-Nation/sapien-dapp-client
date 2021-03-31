@@ -1,194 +1,197 @@
-// assets
-// import {
-//   MultipleBadges,
-//   Search,
-//   SingleBadge,
-//   SubscriptionBadge,
-// } from 'components/tribe/assets/svg';
+import { useState } from 'react';
+import { matchSorter } from 'match-sorter';
 
-// mocks
-// import { mockTribeBadges, mockSubscriptionBadges } from 'mocks/badges';
+// assets
+import {
+  MultipleBadges,
+  Search,
+  SingleBadge,
+  SubscriptionBadge,
+} from 'components/tribe/assets/svg';
 
 // mui
-// import {
-//   Avatar,
-//   Box,
-//   Button,
-//   Chip,
-//   FormControl,
-//   Input,
-//   InputAdornment,
-//   makeStyles,
-//   Typography,
-//   useTheme,
-// } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  InputAdornment,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+
+// components
+import { DebounceSearch } from 'components/general';
+import Query from 'components/query';
 
 // styles
-// import { background, purple, white } from 'styles/colors';
+import { white } from 'styles/colors';
 
-// const tribeBadges = mockTribeBadges();
-// const subscriptionBadges = mockSubscriptionBadges();
+// TODO move this to tools
+interface Badge {
+  id: string;
+  color: string;
+  name: string;
+}
 
-// const useStyles = makeStyles(() => ({
-//   badgeHeader: {
-//     marginRight: '1rem',
-//   },
-//   search: {
-//     borderRadius: '9rem',
-//   },
-//   searchFocus: {
-//     borderRadius: '9rem !important',
-//   },
-//   badgeChip: {
-//     backgroundColor: '#f5f5f5',
-//     marginTop: '.5rem',
-//     marginRight: '.5rem',
-//   },
-//   badgeLabel: {
-//     padding: '0 .8rem',
-//   },
-// }));
+const useStyles = makeStyles(() => ({
+  badgeChip: {
+    backgroundColor: '#f5f5f5',
+    marginTop: '.5rem',
+    marginRight: '.5rem',
+  },
+  badgeLabel: {
+    padding: '0 .8rem',
+  },
+}));
 
 const BadgesStep = () => {
-  // const theme = useTheme();
-  // const classes = useStyles();
+  const [searchTerm, setSearchTerm] = useState('');
+  const classes = useStyles();
+
+  const handleSearch = (search) => {
+    setSearchTerm(search);
+  };
+  const handleAddNewBadge = () => {};
+  const handleChangeViewers = () => {};
+  const handleChangeContributors = () => {};
 
   return (
-    <>
-      <h1>TODO</h1>
-      {/* <Box
-        bgcolor={background}
-        borderRadius="1.6rem"
-        display="flex"
-        justifyContent="space-between"
-        marginBottom="1.5rem"
-        padding="3.1rem"
-      >
-        <Box alignItems="center" display="flex">
-          <Typography classes={{ root: classes.badgeHeader }} variant="h5">
-            Viewers
-          </Typography>
-          <MultipleBadges />
-        </Box>
-        <Typography color="primary" style={{ fontWeight: 600 }}>
-          Change badge
-        </Typography>
-      </Box>
-      <Box
-        bgcolor={background}
-        borderRadius="1.6rem"
-        display="flex"
-        justifyContent="space-between"
-        marginBottom="1.5rem"
-        padding="3rem"
-      >
-        <Box alignItems="center" display="flex">
-          <Typography classes={{ root: classes.badgeHeader }} variant="h5">
-            Contributors
-          </Typography>
-          <SingleBadge color="#6200EA" />
-        </Box>
-        <Typography color="primary" style={{ fontWeight: 600 }}>
-          Change badge
-        </Typography>
-      </Box>
-      <Box
-        bgcolor={background}
-        borderRadius="1.6rem"
-        display="flex"
-        flexDirection="column"
-        padding="3rem"
-      >
-        <Box alignItems="center" display="flex" marginBottom="1.5rem">
-          <Typography classes={{ root: classes.badgeHeader }} variant="h5">
-            Subscription
-          </Typography>
-          <SubscriptionBadge />
-        </Box>
-        <Typography style={{ marginRight: '2rem' }} variant="caption">
-          Select at least 1 badge to be granted to the channel’s subscribers
-        </Typography>
-        <Box
-          bgcolor={white}
-          borderRadius="1.6rem"
-          display="flex"
-          flexWrap="wrap"
-          marginTop="3rem"
-          padding="3rem"
-        >
-          <FormControl fullWidth style={{ marginBottom: theme.spacing(3) }}>
-            <Input
-              fullWidth
-              classes={{ root: classes.search, focused: classes.searchFocus }}
-              id="search"
-              name="search"
-              placeholder="Search for badge"
-              startAdornment={
-                <InputAdornment position="start">
-                  <Search />
-                </InputAdornment>
-              }
-            />
-          </FormControl>
-          <Typography classes={{ root: classes.badgeHeader }} variant="h5">
-            Tribe Badges
-          </Typography>
+    <Query apiUrl="/api/tribes/badges">
+      {({
+        tribeBadges,
+        subscriptionBadges,
+      }: {
+        tribeBadges: Array<Badge>;
+        subscriptionBadges: Array<Badge>;
+      }) => (
+        <Box display="grid" style={{ gap: '16px' }}>
           <Box
-            display="flex"
-            flexWrap="wrap"
-            marginBottom="3.5rem"
-            marginTop="2rem"
+            alignItems="center"
+            className="card--rounded"
+            display="grid"
+            gridTemplateColumns="repeat(2, 1fr)"
+            padding={3}
           >
-            {tribeBadges.map((badge) => (
-              <Chip
-                key={badge.id}
-                avatar={
-                  <Avatar style={{ backgroundColor: 'transparent' }}>
-                    <SingleBadge color={badge.color} />
-                  </Avatar>
-                }
-                classes={{
-                  root: classes.badgeChip,
-                  label: classes.badgeLabel,
-                }}
-                label={badge.name}
-              />
-            ))}
-          </Box>
-          <Typography classes={{ root: classes.badgeHeader }} variant="h5">
-            Subscription Badges
-          </Typography>
-          <Box display="flex" flexWrap="wrap" marginTop="2rem">
-            {subscriptionBadges.map((badge, index) => (
-              <Chip
-                key={index}
-                avatar={
-                  <Avatar style={{ backgroundColor: 'transparent' }}>
-                    <SubscriptionBadge color={badge.color} />
-                  </Avatar>
-                }
-                classes={{
-                  root: classes.badgeChip,
-                  label: classes.badgeLabel,
-                }}
-                label={badge.name}
-              />
-            ))}
-          </Box>
-          <Box width="100%">
-            <Button
-              style={{
-                marginRight: theme.spacing(2),
-                color: purple,
-                marginTop: '2rem',
-              }}
-            >
-              + New Badge
+            <Box alignItems="center" display="flex">
+              <Typography style={{ marginRight: '1rem' }} variant="h5">
+                Viewers
+              </Typography>
+              <MultipleBadges />
+            </Box>
+            <Button onClick={handleChangeViewers}>
+              <Typography color="primary" style={{ fontWeight: 600 }}>
+                Change badge
+              </Typography>
             </Button>
           </Box>
+          <Box
+            alignItems="center"
+            className="card--rounded"
+            display="grid"
+            gridTemplateColumns="repeat(2, 1fr)"
+            padding={3}
+          >
+            <Box alignItems="center" display="flex">
+              <Typography style={{ marginRight: '1rem' }} variant="h5">
+                Contributors
+              </Typography>
+              <SingleBadge color="#6200EA" />
+            </Box>
+            <Button onClick={handleChangeContributors}>
+              <Typography color="primary" style={{ fontWeight: 600 }}>
+                Change badge
+              </Typography>
+            </Button>
+          </Box>
+          <Box
+            alignItems="center"
+            className="card--rounded"
+            display="grid"
+            padding={3}
+            style={{ gap: '17px' }}
+          >
+            <Box alignItems="center" display="flex">
+              <Typography style={{ marginRight: '1rem' }} variant="h5">
+                Subscription
+              </Typography>
+              <SubscriptionBadge />
+            </Box>
+            <Typography variant="caption">
+              Select at least 1 badge to be granted to the channel’s subscribers
+            </Typography>
+            <Box
+              bgcolor={white}
+              borderRadius="1.6rem"
+              display="grid"
+              padding={3}
+              style={{ gap: '20px' }}
+            >
+              <DebounceSearch
+                fullWidth
+                placeholder="Search for badge"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                }
+                timeout={0}
+                onSearch={handleSearch}
+              />
+              <Typography variant="h5">Tribe Badges</Typography>
+              <div>
+                {matchSorter(tribeBadges, searchTerm, {
+                  keys: ['name'],
+                }).map((badge) => (
+                  <Chip
+                    key={badge.id}
+                    avatar={
+                      <Avatar style={{ backgroundColor: 'transparent' }}>
+                        <SingleBadge color={badge.color} />
+                      </Avatar>
+                    }
+                    classes={{
+                      root: classes.badgeChip,
+                      label: classes.badgeLabel,
+                    }}
+                    data-testid="tribe-badges"
+                    label={badge.name}
+                  />
+                ))}
+              </div>
+              <Typography variant="h5">Subscription Badges</Typography>
+              <div>
+                {matchSorter(subscriptionBadges, searchTerm, {
+                  keys: ['name'],
+                }).map((badge, index) => (
+                  <Chip
+                    key={index}
+                    avatar={
+                      <Avatar style={{ backgroundColor: 'transparent' }}>
+                        <SubscriptionBadge color={badge.color} />
+                      </Avatar>
+                    }
+                    classes={{
+                      root: classes.badgeChip,
+                      label: classes.badgeLabel,
+                    }}
+                    data-testid="tribe-subscription-badges"
+                    label={badge.name}
+                  />
+                ))}
+              </div>
+              <Button
+                color="primary"
+                style={{ justifyContent: 'flex-start' }}
+                onClick={handleAddNewBadge}
+              >
+                + New Badge
+              </Button>
+            </Box>
+          </Box>
         </Box>
-      </Box> */}
-    </>
+      )}
+    </Query>
   );
 };
 

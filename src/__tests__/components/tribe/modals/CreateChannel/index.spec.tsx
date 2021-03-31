@@ -14,13 +14,15 @@ import { createRandomString, render, screen, user, waitFor } from 'utils/tests';
 // mocks
 import { mockFile } from 'mocks/file';
 import { mockTribes } from 'tools/mocks/tribe';
+import { mockTribeBadges, mockSubscriptionBadges } from 'tools/mocks/badges';
 
 // components
 import CreateChannel from 'components/tribe/modals/CreateChannel';
 
 // mock data
 const tribes: Array<Tribe> = mockTribes();
-
+const tribeBadges = mockTribeBadges();
+const subscriptionBadges = mockSubscriptionBadges();
 const onClose = jest.fn();
 const defaultProps = {
   onClose,
@@ -36,7 +38,10 @@ afterEach(() => {
 
 beforeEach(() => {
   cache.set('/api/tribes/followed', { tribes });
-
+  cache.set('/api/tribes/badges', {
+    tribeBadges,
+    subscriptionBadges,
+  });
   jest.clearAllMocks();
 });
 
@@ -92,13 +97,28 @@ test('Create Channel', async () => {
     user.click(screen.getByRole('button', { name: /next/i }));
   });
 
-  // TODO Badges Step
   await waitFor(() => {
     expect(
       screen.getByRole('dialog', { name: /new channel step 2 \/ 4/i })
     ).toBeInTheDocument();
   });
-  expect(screen.getByRole('heading', { name: /todo/i })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /viewers/i })).toBeInTheDocument();
+  expect(
+    screen.getByRole('heading', { name: /contributors/i })
+  ).toBeInTheDocument();
+  expect(screen.getByText('Subscription')).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      'Select at least 1 badge to be granted to the channel’s subscribers'
+    )
+  ).toBeInTheDocument();
+
+  expect(screen.getAllByTestId('tribe-badges')).toHaveLength(
+    tribeBadges.length
+  );
+  expect(screen.getAllByTestId('tribe-subscription-badges')).toHaveLength(
+    subscriptionBadges.length
+  );
 
   // Media Step
   await waitFor(() => {
