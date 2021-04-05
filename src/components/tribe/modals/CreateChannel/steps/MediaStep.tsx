@@ -40,7 +40,9 @@ const useStyles = makeStyles(() => ({
 const MediaStep = () => {
   const theme = useTheme();
   const classes = useStyles();
-  const { errors } = useFormContext();
+  const {
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <>

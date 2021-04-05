@@ -7,15 +7,18 @@ import Link from 'next/link';
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
-// styles
-import { black } from 'styles/colors';
-
 //components
 import { TextInput } from 'components/form';
 
 const Forgot = () => {
-  const { register, errors } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
 
+  const { ref, ...rest } = register('username', {
+    required: 'Email is required',
+  });
   return (
     <>
       <Box marginY="5rem">
@@ -25,10 +28,10 @@ const Forgot = () => {
         fullWidth
         autoComplete="email"
         errors={errors}
-        inputRef={register({ required: 'Email is required' })}
+        inputRef={ref}
         label="Email, phone number, or username"
-        name="username"
         placeholder="Enter your email, phone number, or username"
+        {...rest}
       />
 
       <Button fullWidth color="primary" type="submit" variant="contained">

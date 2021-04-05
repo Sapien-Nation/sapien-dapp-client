@@ -7,7 +7,29 @@ import { InputAdornment } from '@material-ui/core';
 import { TextInput, Switch } from 'components/form';
 
 const SummaryStep = () => {
-  const { register, errors } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const { ref: nameRef, ...nameRest } = register('name', {
+    required: 'Name is required',
+    validate: {
+      maxLength: (val = '') => val.length <= 36 || 'Name its to long',
+    },
+  });
+  const { ref: uniqueRef, ...uniqueRest } = register('unique_identifier', {
+    required: 'Unique Identifier is required',
+    validate: {
+      maxLength: (val = '') =>
+        val.length <= 15 || 'Unique Identifier its to long',
+    },
+  });
+  const { ref: descriptionRef, ...descriptionRest } = register('description', {
+    required: 'Description is required',
+    validate: {
+      maxLength: (val = '') => val.length <= 60 || 'Description its to long',
+    },
+  });
 
   return (
     <>
@@ -15,48 +37,31 @@ const SummaryStep = () => {
         fullWidth
         chartCount="36"
         errors={errors}
-        inputRef={register({
-          required: 'Name is required',
-          validate: {
-            maxLength: (val = '') => val.length <= 36 || 'Name its to long',
-          },
-        })}
+        inputRef={nameRef}
         label="Name"
-        name="name"
         placeholder="Name"
+        {...nameRest}
       />
       <TextInput
         fullWidth
         chartCount="15"
         errors={errors}
-        inputRef={register({
-          required: 'Unique Identifier is required',
-          validate: {
-            maxLength: (val = '') =>
-              val.length <= 15 || 'Unique Identifier its to long',
-          },
-        })}
+        inputRef={uniqueRef}
         label="Unique Identifier"
-        name="unique_identifier"
         startAdornment={<InputAdornment position="start">@</InputAdornment>}
+        {...uniqueRest}
       />
       <TextInput
         fullWidth
         multiline
         chartCount="60"
         errors={errors}
-        inputRef={register({
-          required: 'Description is required',
-          validate: {
-            maxLength: (val = '') =>
-              val.length <= 60 || 'Description its to long',
-          },
-        })}
+        inputRef={descriptionRef}
         label="Description"
-        name="description"
         placeholder="Set brief description"
         rows={3}
         rowsMax={5}
+        {...descriptionRest}
       />
       <Switch errors={errors} label="Public tribe" name="public" />
     </>

@@ -34,9 +34,18 @@ import { TextInput } from 'components/form';
 // }));
 
 const RSSStep = () => {
-  const { errors, register } = useFormContext();
+  const {
+    formState: { errors },
+    register,
+  } = useFormContext();
   // const classes = useStyles();
   const theme = useTheme();
+  const { ref, ...rest } = register('label', {
+    required: 'Label is required',
+    validate: {
+      maxLength: (val = '') => val.length <= 36 || 'label is to long',
+    },
+  });
 
   return (
     <>
@@ -45,16 +54,12 @@ const RSSStep = () => {
         autoComplete="label"
         chartCount="36"
         errors={errors}
-        inputRef={register({
-          required: 'Label is required',
-          validate: {
-            maxLength: (val = '') => val.length <= 36 || 'label is to long',
-          },
-        })}
+        inputRef={ref}
         label="Label"
         name="label"
         placeholder="Label"
         spacing="1rem"
+        {...rest}
       />
       <Typography style={{ marginTop: theme.spacing(1.5) }} variant="caption">
         Enter a URL or{' '}

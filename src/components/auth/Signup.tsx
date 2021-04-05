@@ -8,14 +8,36 @@ import Link from 'next/link';
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
-// styles
-import { black } from 'styles/colors';
-
 //components
 import { TextInput, Checkbox, PasswordStrengthInput } from 'components/form';
 
 const Signup = () => {
-  const { register, errors, getValues } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+    getValues,
+  } = useFormContext();
+  const { ref: emailRef, ...emailRest } = register('email', {
+    required: 'Email is required',
+    maxLength: 36,
+  });
+  const { ref: usernameRef, ...usernameRest } = register('username', {
+    required: 'Username is required',
+    maxLength: 20,
+  });
+  const { ref: nameRef, ...nameRest } = register('name', {
+    required: 'Name is required',
+    maxLength: 20,
+  });
+  const { ref: confirmPasswordRef, ...confirmPasswordRest } = register(
+    'confirm',
+    {
+      required: 'Password is required',
+      maxLength: 36,
+      validate: (val = '') =>
+        val === getValues('password') || 'Passwords don"t match',
+    }
+  );
 
   return (
     <>
@@ -26,37 +48,36 @@ const Signup = () => {
         fullWidth
         autoComplete="email"
         errors={errors}
-        inputRef={register({ required: 'Email is required', maxLength: 36 })}
+        inputRef={emailRef}
         label="Email or phone number"
-        name="email"
         placeholder="myemailaddress@email.com"
+        {...emailRest}
       />
       <TextInput
         fullWidth
         autoComplete="username"
         chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'Username is required', maxLength: 20 })}
+        inputRef={usernameRef}
         label="Username"
-        name="username"
         placeholder="johniedoe"
         tooltipText="Set a username"
+        {...usernameRest}
       />
       <TextInput
         fullWidth
         autoComplete="name"
         chartCount="20"
         errors={errors}
-        inputRef={register({ required: 'Name is required', maxLength: 20 })}
+        inputRef={nameRef}
         label="Name"
-        name="name"
         placeholder="Jonathan Doe"
+        {...nameRest}
       />
       <PasswordStrengthInput
         fullWidth
         autoComplete="new-password"
         errors={errors}
-        inputRef={register}
         label="Password"
         name="password"
         placeholder="mypassword123*"
@@ -67,16 +88,12 @@ const Signup = () => {
         fullWidth
         autoComplete="new-password"
         errors={errors}
-        inputRef={register({
-          required: 'Password is required',
-          maxLength: 36,
-          validate: (val = '') =>
-            val === getValues('password') || 'Passwords don"t match',
-        })}
+        inputRef={confirmPasswordRef}
         label="Confirm password"
         name="confirm"
         placeholder="mypassword123*"
         type="password"
+        {...confirmPasswordRest}
       />
       <Box display="flex" flexDirection="column" marginBottom="2rem">
         <Checkbox
