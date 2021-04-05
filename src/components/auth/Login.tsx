@@ -12,7 +12,19 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { TextInput, Checkbox } from 'components/form';
 
 const Login = () => {
-  const { register, errors } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+
+  const { ref: usernameRef, ...restUsername } = register('username', {
+    required: 'Email is required',
+  });
+
+  const { ref: passwordRef, ...restPassword } = register('password', {
+    required: 'Password is required',
+    maxLength: 36,
+  });
 
   return (
     <>
@@ -23,21 +35,21 @@ const Login = () => {
         fullWidth
         autoComplete="email"
         errors={errors}
-        inputRef={register({ required: 'Email is required', maxLength: 36 })}
+        inputRef={usernameRef}
         label="Email, phone number, or username"
-        name="username"
         placeholder="myemailaddress@email.com"
+        {...restUsername}
       />
       <TextInput
         fullWidth
         autoComplete="new-password"
         errors={errors}
-        inputRef={register({ required: 'Password is required', maxLength: 36 })}
+        inputRef={passwordRef}
         label="Password"
-        name="password"
         placeholder="mypassword123*"
         spacing="6px"
         type="password"
+        {...restPassword}
       />
       <Box
         alignItems="center"

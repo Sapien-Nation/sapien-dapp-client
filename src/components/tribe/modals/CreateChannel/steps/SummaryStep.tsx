@@ -4,7 +4,23 @@ import { useFormContext } from 'react-hook-form';
 import { TextInput } from 'components/form';
 
 const SummaryStep = () => {
-  const { errors, register } = useFormContext();
+  const {
+    formState: { errors },
+    register,
+  } = useFormContext();
+  const { ref: nameRef, ...nameRest } = register('name', {
+    required: 'Name is required',
+    validate: {
+      maxLength: (val = '') => val.length <= 36 || 'name is to long',
+    },
+  });
+  const { ref: descriptionRef, ...descriptionRest } = register('description', {
+    required: 'Description is required',
+    validate: {
+      maxLength: (val = '') => val.length <= 60 || 'description is to long',
+    },
+  });
+
   return (
     <>
       <TextInput
@@ -12,15 +28,10 @@ const SummaryStep = () => {
         autoComplete="name"
         chartCount="36"
         errors={errors}
-        inputRef={register({
-          required: 'Name is required',
-          validate: {
-            maxLength: (val = '') => val.length <= 36 || 'name is to long',
-          },
-        })}
+        inputRef={nameRef}
         label="Name"
-        name="name"
         placeholder="Name"
+        {...nameRest}
       />
       <TextInput
         fullWidth
@@ -28,18 +39,12 @@ const SummaryStep = () => {
         autoComplete="description"
         chartCount="60"
         errors={errors}
-        inputRef={register({
-          required: 'Description is required',
-          validate: {
-            maxLength: (val = '') =>
-              val.length <= 60 || 'description is to long',
-          },
-        })}
+        inputRef={descriptionRef}
         label="Description"
-        name="description"
         placeholder="Description"
         rows={3}
         rowsMax={5}
+        {...descriptionRest}
       />
     </>
   );

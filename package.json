@@ -28,10 +28,7 @@
   "license": "ISC",
   "lint-staged": {
     "./**/*.{ts,tsx}": [
-      "npm run test:badges",
-      "prettier --write",
-      "eslint --fix --max-warnings=0",
-      "jest --forceExit --findRelatedTests --maxWorkers=2"
+      "prettier --write"
     ]
   },
   "bugs": {
