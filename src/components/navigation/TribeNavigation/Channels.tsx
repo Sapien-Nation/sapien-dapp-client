@@ -120,7 +120,7 @@ const Channels = ({ channels }: Props) => {
                   }}
                   variant="body2"
                 >
-                  {channel.memberCount} members
+                  {channel.membersCount} members
                 </Typography>
               </Box>
             </Box>
@@ -130,7 +130,7 @@ const Channels = ({ channels }: Props) => {
               }}
               variant="body2"
             >
-              {formatTimestampToRelative(channel.lastUpdate)}
+              {formatTimestampToRelative(channel.lastUpdateAt)}
             </Typography>
           </Box>
         </ListItem>

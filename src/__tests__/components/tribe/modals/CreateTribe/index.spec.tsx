@@ -1,9 +1,6 @@
 import { cache } from 'swr';
 import MockAdapter from 'axios-mock-adapter';
 
-// types
-import type { Tribe } from 'tools/types/tribe';
-
 // api
 import axios from 'api';
 
@@ -12,13 +9,14 @@ import { createRandomString, render, screen, user, waitFor } from 'utils/tests';
 
 // mocks
 import { mockFile } from 'mocks/file';
-import { mockTribes } from 'tools/mocks/tribe';
+import { mockTribe, mockTribePermission } from 'tools/mocks/tribe';
 
 // components
 import CreateTribe from 'components/tribe/modals/CreateTribe';
 
 // mocks
-const tribes: Array<Tribe> = mockTribes();
+const permissions = mockTribePermission();
+const tribes = [mockTribe({ permissions })];
 
 const onClose = jest.fn();
 const defaultProps = {

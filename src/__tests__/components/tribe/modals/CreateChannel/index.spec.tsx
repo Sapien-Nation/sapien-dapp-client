@@ -2,9 +2,6 @@ import { cache } from 'swr';
 
 import MockAdapter from 'axios-mock-adapter';
 
-// types
-import type { Tribe } from 'tools/types/tribe';
-
 // api
 import axios from 'api';
 
@@ -20,7 +17,7 @@ import { mockTribeBadges, mockSubscriptionBadges } from 'tools/mocks/badges';
 import CreateChannel from 'components/tribe/modals/CreateChannel';
 
 // mock data
-const tribes: Array<Tribe> = mockTribes();
+const tribes = mockTribes();
 const tribeBadges = mockTribeBadges();
 const subscriptionBadges = mockSubscriptionBadges();
 const onClose = jest.fn();

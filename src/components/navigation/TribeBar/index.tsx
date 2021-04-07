@@ -115,7 +115,7 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
             }
           >
             <Badge
-              badgeContent={tribe.notificationNumber}
+              badgeContent="0"
               classes={{
                 badge: classes.badge,
               }}

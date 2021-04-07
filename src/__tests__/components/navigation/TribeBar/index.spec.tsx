@@ -1,8 +1,5 @@
 import { cache } from 'swr';
 
-// types
-import type { Tribe } from 'tools/types/tribe';
-
 // utils
 import { render, screen, user } from 'utils/tests';
 
@@ -14,7 +11,7 @@ import { mockUser } from 'tools/mocks/user';
 import TribeBar from 'components/navigation/TribeBar';
 
 // mocks
-const tribes: Array<Tribe> = mockTribes();
+const tribes = mockTribes();
 
 const createTribe = jest.fn();
 const defaultProps = {
@@ -49,7 +46,7 @@ test('render correctly', () => {
 
   tribes.forEach((tribe) => {
     expect(screen.getByRole('button', { name: tribe.name })).toHaveTextContent(
-      String(tribe.notificationNumber)
+      '0'
     );
   });
 

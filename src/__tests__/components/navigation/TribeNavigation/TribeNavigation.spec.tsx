@@ -1,19 +1,17 @@
 import { cache } from 'swr';
 
-// types
-import type { Tribe } from 'tools/types/tribe';
-
 // utils
 import { render, screen, user } from 'utils/tests';
 
 // mocks
-import { mockTribe, mockTribes } from 'tools/mocks/tribe';
+import { mockTribe, mockTribePermission } from 'tools/mocks/tribe';
 
 // components
 import { TribeNavigation } from 'components/navigation/TribeNavigation';
 
 // mocks
-const tribes: Array<Tribe> = mockTribes();
+const permissions = mockTribePermission();
+const tribes = [mockTribe({ permissions })];
 
 const createChanel = jest.fn();
 const defaultProps = {
@@ -53,7 +51,9 @@ test('render correctly', () => {
 });
 
 test('cant see add channel button', () => {
-  const newTribes = [mockTribe({ permissions: { canAddChannel: false } })];
+  const newTribes = [
+    mockTribe({ permissions: { canAddChannel: false, canAddSquare: false } }),
+  ];
   cache.set('/api/tribes/followed', {
     tribes: [newTribes],
   });

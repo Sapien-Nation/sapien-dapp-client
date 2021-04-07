@@ -76,11 +76,17 @@ const CreateChannel = ({ onClose }: Props) => {
 
           // New Channel placeholder
           const channel: Channel = {
+            contributorsBadges: [],
+            cover: '',
+            description: values.description,
             id: String(data),
             name: values.name,
             image: '/fixtures/40x40/cars.png',
-            memberCount: 0,
-            lastUpdate: new Date().toISOString(),
+            membersCount: 0,
+            lastUpdateAt: new Date().toISOString(),
+            subscriptionBadges: [],
+            rss: [],
+            viewersBadges: [],
           };
 
           // UI update

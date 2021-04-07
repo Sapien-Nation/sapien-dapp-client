@@ -1,10 +1,7 @@
 import { useSnackbar } from 'notistack';
-import { cache, mutate } from 'swr';
+import { cache } from 'swr';
 import { useLocalStorage } from 'react-use';
 import { createContext, useContext, useEffect } from 'react';
-
-// api
-import axios from 'api';
 
 // types
 import type { Channel } from 'tools/types/channel';
@@ -68,21 +65,6 @@ const NavigationProvider = ({ children }: Props) => {
   const handleSetNavigation = async (newNavigation) => {
     try {
       setNavigation({ ...navigation, ...newNavigation });
-
-      if (newNavigation.main) {
-        await axios.post('/api/tribes/visit');
-        mutate(
-          '/api/tribes/followed',
-          ({ tribes }: { tribes: Array<Tribe> }) => ({
-            tribes: tribes.map((tribe) =>
-              tribe.id === newNavigation.main.id
-                ? { ...tribe, notificationNumber: 0 }
-                : tribe
-            ),
-          }),
-          false
-        );
-      }
     } catch (err) {
       enqueueSnackbar(err.message);
     }
