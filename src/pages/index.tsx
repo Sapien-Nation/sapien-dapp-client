@@ -20,10 +20,15 @@ import EditIcon from '@material-ui/icons/Edit';
 const EditChannel = dynamic<any>(() =>
   import('components/tribe/modals').then((mod) => mod.EditChannel)
 );
+const CreateSquare = dynamic<any>(
+  () => import('components/tribe/modals/CreateSquare')
+);
 const Invite = dynamic<any>(() => import('components/tribe/modals/Invite'));
+
 import Layout from './Layout';
 
 export enum Dialog {
+  CreateSquare,
   EditChannel,
   Invite,
 }
@@ -61,11 +66,17 @@ const IndexPage = () => {
           <Box>
             TRIBES FEED TODO{' '}
             <Button onClick={() => setDialog(Dialog.Invite)}>Invite</Button>
+            <Button onClick={() => setDialog(Dialog.CreateSquare)}>
+              Create Square
+            </Button>
             {dialog === Dialog.Invite && (
               <Invite
                 link="https://sapien.com/tribes/Hx28h7atP1Y"
                 onClose={() => setDialog(null)}
               />
+            )}
+            {dialog === Dialog.CreateSquare && (
+              <CreateSquare onClose={() => setDialog(null)} />
             )}
           </Box>
         );
