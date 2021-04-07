@@ -55,17 +55,6 @@ const Invite = ({ link, onClose }: Props) => {
     }
   }, [state]);
 
-  const apiUrl = '/api/tribes/invite';
-  const fetchUsers = async () => {
-    // TODO remove this and let swr handle this
-    try {
-      const { data } = await axios.get(apiUrl);
-      return data;
-    } catch (err) {
-      enqueueSnackbar(err.message);
-    }
-  };
-
   const handleSearch = (search) => {
     setSearchTerm(search);
   };
@@ -83,11 +72,11 @@ const Invite = ({ link, onClose }: Props) => {
   const handleSubmit = async () => {
     setIsFetching(true);
     try {
-      // TODO make call
+      await axios.post('/api/tribes/invite');
       enqueueSnackbar('Invites Sent');
       onClose();
-    } catch (err) {
-      enqueueSnackbar(err.message);
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
     }
     setIsFetching(false);
   };
@@ -129,12 +118,10 @@ const Invite = ({ link, onClose }: Props) => {
       onConfirm={handleSubmit}
     >
       <Query
-        apiUrl={apiUrl}
+        apiUrl="/api/tribes/invite"
         options={{
-          fetcher: fetchUsers,
-          onSuccess: ({ users }: { users: Array<User> }) => {
-            setUsersToInvite(users);
-          },
+          onSuccess: ({ users }: { users: Array<User> }) =>
+            setUsersToInvite(users),
         }}
       >
         {() => {

@@ -2,7 +2,7 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SnackbarProvider } from 'notistack';
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode, Suspense } from 'react';
 import { SWRConfig } from 'swr';
 
 // types
@@ -35,22 +35,24 @@ const AllTheProviders = ({
   router = null,
 }: CustomRenderOptions) => (
   <SnackbarProvider maxSnack={1}>
-    <SWRConfig
-      value={{
-        dedupingInterval: 0,
-        errorRetryCount: 0,
-        fetcher,
-        revalidateOnFocus: false,
-      }}
-    >
-      <ThemeProvider theme={theme}>
-        <RouterContext.Provider value={mockRouter(router)}>
-          <AuthenticationProvider>
-            <NavigationProvider>{children}</NavigationProvider>
-          </AuthenticationProvider>
-        </RouterContext.Provider>
-      </ThemeProvider>
-    </SWRConfig>
+    <Suspense fallback={null}>
+      <SWRConfig
+        value={{
+          dedupingInterval: 0,
+          errorRetryCount: 0,
+          fetcher,
+          revalidateOnFocus: false,
+        }}
+      >
+        <ThemeProvider theme={theme}>
+          <RouterContext.Provider value={mockRouter(router)}>
+            <AuthenticationProvider>
+              <NavigationProvider>{children}</NavigationProvider>
+            </AuthenticationProvider>
+          </RouterContext.Provider>
+        </ThemeProvider>
+      </SWRConfig>
+    </Suspense>
   </SnackbarProvider>
 );
 

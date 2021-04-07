@@ -1,4 +1,3 @@
-import { cache } from 'swr';
 import MockAdapter from 'axios-mock-adapter';
 
 // types
@@ -26,24 +25,20 @@ const defaultProps = {
   onClose,
 };
 
+const fetcher = () => Promise.resolve({ users });
 const renderComponent = (props = {}, opts = {}) =>
   render(<Invite {...defaultProps} {...props} />, opts);
 
-const fetcher = () => Promise.resolve({ users });
-
 window.prompt = jest.fn();
 beforeEach(() => {
-  cache.clear();
-
   jest.clearAllMocks();
 });
 
 test('works correctly', async () => {
   const mock = new MockAdapter(axios);
-  mock.onGet('/api/tribes/invite').reply(200, { users });
 
   await waitFor(() => {
-    renderComponent({ fetcher });
+    renderComponent({}, { fetcher });
   });
 
   // render
@@ -96,9 +91,23 @@ test('works correctly', async () => {
 
   // handle submit
   user.click(screen.getAllByRole('button', { name: /add user/i })[0]);
+
+  // onError
+  const error = { message: 'Create Tribe Error' };
+  mock.onPost('/api/tribes/invite').reply(400, error);
+  user.click(screen.getByRole('button', { name: 'Send Invites (1)' }));
+
+  await waitFor(() => {
+    expect(screen.getByText(error.message)).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  // onSuccess
+  mock.onPost('/api/tribes/invite').reply(200);
   user.click(screen.getByRole('button', { name: 'Send Invites (1)' }));
 
   await waitFor(() => {
     expect(screen.getByText('Invites Sent')).toBeInTheDocument();
+    expect(onClose).toHaveBeenCalled();
   });
 });

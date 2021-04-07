@@ -1,7 +1,7 @@
 import useSWR, { mutate } from 'swr';
 
 // types
-import type { keyInterface, ConfigInterface } from 'swr';
+import type { SWRConfiguration, Key } from 'swr';
 
 // mui
 import { Skeleton } from '@material-ui/lab';
@@ -10,23 +10,18 @@ import { Skeleton } from '@material-ui/lab';
 import { ErrorView } from 'components/general';
 
 interface Props {
-  apiUrl: keyInterface;
+  apiUrl: Key;
   // eslint-disable-next-line @typescript-eslint/ban-types
   children?: Function | null;
   loader?: React.ReactElement;
-  options?: ConfigInterface;
+  options?: SWRConfiguration;
 }
 
 export type Error = {
   message: string;
 };
 
-const Query = ({
-  apiUrl,
-  children,
-  loader = <Skeleton />,
-  options = {},
-}: Props) => {
+const Query = ({ apiUrl, children, loader = <Skeleton />, options }: Props) => {
   const { data, error } = useSWR(apiUrl, options);
 
   if (apiUrl !== null && !data && !error) return loader;

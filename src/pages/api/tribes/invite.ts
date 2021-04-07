@@ -1,11 +1,16 @@
 /* istanbul ignore file */
 // types
-import type { NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 // mocks
 import { mockUsers } from 'tools/mocks/user';
 
-const handler = (_: unknown, res: NextApiResponse) =>
-  res.status(200).json({ users: mockUsers() });
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'POST') {
+    return res.status(200).send('Success');
+  } else if (req.method === 'GET') {
+    res.status(200).json({ users: mockUsers() });
+  }
+};
 
 export default handler;
