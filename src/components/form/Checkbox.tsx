@@ -31,7 +31,6 @@ const useStyles = makeStyles(() => {
       display: 'flex',
     },
     controlLabel: {
-      marginBottom: '1rem',
       marginLeft: '0',
     },
   });

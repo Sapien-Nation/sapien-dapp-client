@@ -5,11 +5,20 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import Autocomplete from 'components/form/Autocomplete';
 
 // mui
-import { Button, Popover, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Popover,
+  makeStyles,
+  IconButton,
+  Typography,
+} from '@material-ui/core';
 
 // types
 import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
+
+// assets
+import { RoundedArrow } from 'components/assets/svg';
 
 const useStyles = makeStyles(() => ({
   paper: () => ({
@@ -18,6 +27,9 @@ const useStyles = makeStyles(() => ({
     boxShadow: '-20px 0px 40px rgb(51 51 51 / 10%)',
     borderRadius: '1.6rem',
   }),
+  collapseButton: {
+    padding: 0,
+  },
 }));
 
 export interface Props extends InputProps {
@@ -25,7 +37,7 @@ export interface Props extends InputProps {
   endAdornment?: React.ReactNode | null;
   errors?: FieldErrors;
   label?: string;
-  loading: boolean;
+  loading?: boolean;
   name: string;
   open: boolean;
   OptionComponent: React.ComponentType<any>;
@@ -64,15 +76,30 @@ const AutocompleteSelect = ({
   const [selectLabel, setSelectLabel] = useState<any>(defaultValue);
 
   return (
-    <div>
-      <Button
-        aria-describedby={id}
-        color="primary"
-        variant="contained"
+    <>
+      <Box
+        display="flex"
+        fontWeight={700}
+        role="presentation"
+        style={{ cursor: 'pointer' }}
         onClick={handleClick}
       >
         {selectLabel?.name}
-      </Button>
+        {''}
+        <IconButton
+          disableRipple
+          aria-label="show channels"
+          classes={{
+            root: classes.collapseButton,
+          }}
+          name={name}
+          style={{
+            transform: isOpen ? '' : 'rotate(180deg)',
+          }}
+        >
+          <RoundedArrow />
+        </IconButton>
+      </Box>
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
@@ -103,7 +130,7 @@ const AutocompleteSelect = ({
           {...rest}
         />
       </Popover>
-    </div>
+    </>
   );
 };
 

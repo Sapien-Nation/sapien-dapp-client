@@ -17,6 +17,9 @@ import { useNavigation } from 'context/tribes';
 import EditIcon from '@material-ui/icons/Edit';
 
 // components
+const DeleteChannel = dynamic<any>(() =>
+  import('components/tribe/modals').then((mod) => mod.DeleteChannel)
+);
 const EditChannel = dynamic<any>(() =>
   import('components/tribe/modals').then((mod) => mod.EditChannel)
 );
@@ -29,6 +32,7 @@ import Layout from './Layout';
 
 export enum Dialog {
   CreateSquare,
+  DeleteChannel,
   EditChannel,
   Invite,
 }
@@ -49,6 +53,12 @@ const IndexPage = () => {
           <Box>
             CHANNELS FEED TODO{' '}
             <IconButton
+              aria-label="Delete Channel"
+              onClick={() => setDialog(Dialog.DeleteChannel)}
+            >
+              Delete channel
+            </IconButton>
+            <IconButton
               aria-label="Edit Channel"
               onClick={() => setDialog(Dialog.EditChannel)}
             >
@@ -56,6 +66,9 @@ const IndexPage = () => {
             </IconButton>
             {dialog === Dialog.EditChannel && (
               <EditChannel onClose={() => setDialog(null)} />
+            )}
+            {dialog === Dialog.DeleteChannel && (
+              <DeleteChannel onClose={() => setDialog(null)} />
             )}
           </Box>
         );

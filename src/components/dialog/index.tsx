@@ -18,6 +18,9 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
+// styles 
+import { red } from 'styles/colors';
+
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
   form?: string;
@@ -67,7 +70,10 @@ const Dialog = ({
       {showCancel && (
         <Button
           disabled={isFetching}
-          style={{ marginRight: useTheme().spacing(2) }}
+          style={{
+            marginRight: useTheme().spacing(2),
+            color: cancelLabel.includes('Delete') && red,
+          }}
           onClick={onCancel}
         >
           {cancelLabel}

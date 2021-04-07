@@ -21,6 +21,7 @@ const useStyles = makeStyles(() => ({
   }),
   popper: () => ({
     height: '29.2 rem',
+    position: 'relative',
   }),
   option: () => ({
     paddingTop: '8px',
