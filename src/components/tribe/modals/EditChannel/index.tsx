@@ -19,9 +19,7 @@ interface Props {
 
 const EditChannel = ({ onClose }: Props) => {
   const [tab, setTab] = useState(Tab.Settings);
-  const methods = useForm({
-    shouldUnregister: false,
-  });
+  const methods = useForm();
 
   const { handleSubmit, clearErrors } = methods;
 

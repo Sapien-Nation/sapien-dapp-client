@@ -47,7 +47,6 @@ const CreateTribe = ({ onClose }: Props) => {
 
   const methods = useForm({
     defaultValues,
-    shouldUnregister: false,
   });
 
   const { handleSubmit } = methods;

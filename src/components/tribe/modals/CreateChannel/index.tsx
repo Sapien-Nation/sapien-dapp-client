@@ -51,7 +51,6 @@ const CreateChannel = ({ onClose }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const methods = useForm({
     defaultValues,
-    shouldUnregister: false,
   });
 
   const { handleSubmit, clearErrors } = methods;

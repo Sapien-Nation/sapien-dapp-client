@@ -37,6 +37,7 @@ const RSSStep = () => {
   const {
     formState: { errors },
     register,
+    watch,
   } = useFormContext();
   // const classes = useStyles();
   const theme = useTheme();
@@ -47,12 +48,14 @@ const RSSStep = () => {
     },
   });
 
+  const currentLabel = watch('label');
   return (
     <>
       <TextInput
         fullWidth
         autoComplete="label"
         chartCount="36"
+        currentChartCount={currentLabel?.length}
         errors={errors}
         inputRef={ref}
         label="Label"

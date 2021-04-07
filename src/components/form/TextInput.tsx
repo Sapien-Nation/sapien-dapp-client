@@ -30,6 +30,7 @@ import Tooltip from 'components/form/Tooltip';
 
 export interface Props extends InputProps {
   chartCount?: string;
+  currentChartCount?: number;
   errors: FieldErrors;
   label: string;
   name: string;
@@ -40,6 +41,7 @@ export interface Props extends InputProps {
 
 const TextInput = ({
   chartCount,
+  currentChartCount,
   errors,
   label,
   name,
@@ -79,7 +81,12 @@ const TextInput = ({
             </Tooltip>
           )}
         </Box>
-        {chartCount && <ChartCount maxCount={chartCount} name={name} />}
+        {chartCount && (
+          <ChartCount
+            currentCount={currentChartCount}
+            maxCount={Number(chartCount)}
+          />
+        )}
       </Box>
       <MuiInput
         endAdornment={

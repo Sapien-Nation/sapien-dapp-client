@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 
-import { useFormContext } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
+import * as Sentry from '@sentry/node';
 
 // next
 import Link from 'next/link';
@@ -8,15 +10,25 @@ import Link from 'next/link';
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
-//components
+// context
+import { useAuth } from 'context/user';
+
+// components
 import { TextInput, Checkbox, PasswordStrengthInput } from 'components/form';
 
 const Signup = () => {
   const {
-    register,
+    handleSubmit,
     formState: { errors },
     getValues,
-  } = useFormContext();
+    unregister,
+    register,
+    setValue,
+    watch,
+  } = useForm();
+  const { register: signup } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+
   const { ref: emailRef, ...emailRest } = register('email', {
     required: 'Email is required',
     maxLength: 36,
@@ -39,8 +51,20 @@ const Signup = () => {
     }
   );
 
+  const onSubmit = async () => {
+    try {
+      await signup();
+    } catch (err) {
+      Sentry.captureException(err);
+      enqueueSnackbar('An error occurred, please try again');
+    }
+  };
+
+  const currentUsername = watch('username');
+  const currentName = watch('name');
+
   return (
-    <>
+    <form id="signup-form" onSubmit={handleSubmit(onSubmit)}>
       <Box marginY="5rem">
         <Typography variant="h1">Sign up</Typography>
       </Box>
@@ -57,6 +81,7 @@ const Signup = () => {
         fullWidth
         autoComplete="username"
         chartCount="20"
+        currentChartCount={currentUsername?.length}
         errors={errors}
         inputRef={usernameRef}
         label="Username"
@@ -68,6 +93,7 @@ const Signup = () => {
         fullWidth
         autoComplete="name"
         chartCount="20"
+        currentChartCount={currentName?.length}
         errors={errors}
         inputRef={nameRef}
         label="Name"
@@ -81,8 +107,12 @@ const Signup = () => {
         label="Password"
         name="password"
         placeholder="mypassword123*"
+        register={register}
+        setValue={setValue}
         tooltipText="Minimum length is 8 characters. Must include at least 
         1 alpha, 1 numeric, 1 lowercaps,  and 1 highercaps."
+        unregister={unregister}
+        watch={watch}
       />
       <TextInput
         fullWidth
@@ -158,7 +188,7 @@ const Signup = () => {
           </Typography>
         </Link>
       </Box>
-    </>
+    </form>
   );
 };
 

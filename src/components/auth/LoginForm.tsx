@@ -1,6 +1,7 @@
 /* istanbul ignore file */
-
-import { useFormContext } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
+import * as Sentry from '@sentry/node';
 
 // next
 import Link from 'next/link';
@@ -8,14 +9,20 @@ import Link from 'next/link';
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
+// context
+import { useAuth } from 'context/user';
+
 //components
 import { TextInput, Checkbox } from 'components/form';
 
 const Login = () => {
   const {
+    handleSubmit,
     register,
     formState: { errors },
-  } = useFormContext();
+  } = useForm();
+  const { login } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const { ref: usernameRef, ...restUsername } = register('username', {
     required: 'Email is required',
@@ -26,8 +33,17 @@ const Login = () => {
     maxLength: 36,
   });
 
+  const onSubmit = async () => {
+    try {
+      await login();
+    } catch (err) {
+      Sentry.captureException(err);
+      enqueueSnackbar('An error occurred, please try again');
+    }
+  };
+
   return (
-    <>
+    <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
       <Box marginY="5rem">
         <Typography variant="h1">Log in</Typography>
       </Box>
@@ -93,7 +109,7 @@ const Login = () => {
           </Link>
         </>
       </Box>
-    </>
+    </form>
   );
 };
 

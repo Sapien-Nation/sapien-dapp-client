@@ -7,6 +7,7 @@ const SummaryStep = () => {
   const {
     formState: { errors },
     register,
+    watch,
   } = useFormContext();
   const { ref: nameRef, ...nameRest } = register('name', {
     required: 'Name is required',
@@ -21,12 +22,16 @@ const SummaryStep = () => {
     },
   });
 
+  const currentName = watch('name');
+  const currentDescription = watch('description');
+
   return (
     <>
       <TextInput
         fullWidth
         autoComplete="name"
         chartCount="36"
+        currentChartCount={currentName?.length}
         errors={errors}
         inputRef={nameRef}
         label="Name"
@@ -38,6 +43,7 @@ const SummaryStep = () => {
         multiline
         autoComplete="description"
         chartCount="60"
+        currentChartCount={currentDescription?.length}
         errors={errors}
         inputRef={descriptionRef}
         label="Description"

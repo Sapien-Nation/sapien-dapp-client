@@ -10,6 +10,7 @@ const SummaryStep = () => {
   const {
     register,
     formState: { errors },
+    watch,
   } = useFormContext();
   const { ref: nameRef, ...nameRest } = register('name', {
     required: 'Name is required',
@@ -31,11 +32,16 @@ const SummaryStep = () => {
     },
   });
 
+  const currentName = watch('name');
+  const currentDescription = watch('description');
+  const currentUniqueIdentifier = watch('unique_identifier');
+
   return (
     <>
       <TextInput
         fullWidth
         chartCount="36"
+        currentChartCount={currentName?.length}
         errors={errors}
         inputRef={nameRef}
         label="Name"
@@ -45,6 +51,7 @@ const SummaryStep = () => {
       <TextInput
         fullWidth
         chartCount="15"
+        currentChartCount={currentUniqueIdentifier?.length}
         errors={errors}
         inputRef={uniqueRef}
         label="Unique Identifier"
@@ -55,6 +62,7 @@ const SummaryStep = () => {
         fullWidth
         multiline
         chartCount="60"
+        currentChartCount={currentDescription?.length}
         errors={errors}
         inputRef={descriptionRef}
         label="Description"
