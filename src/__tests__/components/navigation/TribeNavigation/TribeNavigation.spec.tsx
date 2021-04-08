@@ -13,9 +13,11 @@ import { TribeNavigation } from 'components/navigation/TribeNavigation';
 const permissions = mockTribePermission();
 const tribes = [mockTribe({ permissions })];
 
-const createChanel = jest.fn();
+const createChannel = jest.fn();
+const createSquare = jest.fn();
 const defaultProps = {
-  createChanel,
+  createChannel,
+  createSquare,
   tribes,
 };
 
@@ -47,7 +49,7 @@ test('render correctly', () => {
       name: /create channel/i,
     })
   );
-  expect(createChanel).toHaveBeenCalled();
+  expect(createChannel).toHaveBeenCalled();
 });
 
 test('cant see add channel button', () => {

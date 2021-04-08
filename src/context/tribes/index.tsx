@@ -6,17 +6,19 @@ import { createContext, useContext, useEffect } from 'react';
 // types
 import type { Channel } from 'tools/types/channel';
 import type { Tribe } from 'tools/types/tribe';
+import type { Square } from 'tools/types/square';
 
 export enum NavigationTypes {
   BadgeStore,
   Channel,
   Discovery,
+  Square,
   Tribe,
 }
 
 export interface Navigation {
   main?: Tribe | null;
-  secondary?: Tribe | Channel | string;
+  secondary?: Tribe | Channel | Square | string;
   type: NavigationTypes;
 }
 

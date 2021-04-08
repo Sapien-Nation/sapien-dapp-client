@@ -20,6 +20,12 @@ const CreateChannel = dynamic<any>(
     ssr: false,
   }
 );
+const CreateSquare = dynamic<any>(
+  () => import('components/tribe/modals').then((mod) => mod.CreateSquare),
+  {
+    ssr: false,
+  }
+);
 const CreateTribe = dynamic<any>(
   () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
   {
@@ -35,6 +41,7 @@ import Query from 'components/query';
 
 export enum Dialog {
   CreateChannel,
+  CreateSquare,
   CreateTribe,
 }
 
@@ -58,7 +65,8 @@ const Sidebar = () => {
               <DiscoverNavigation />
             ) : (
               <TribeNavigation
-                createChanel={() => setDialog(Dialog.CreateChannel)}
+                createChannel={() => setDialog(Dialog.CreateChannel)}
+                createSquare={() => setDialog(Dialog.CreateSquare)}
                 tribes={tribes}
               />
             )}
@@ -69,6 +77,9 @@ const Sidebar = () => {
 
             {dialog === Dialog.CreateChannel && (
               <CreateChannel onClose={() => setDialog(null)} />
+            )}
+            {dialog === Dialog.CreateSquare && (
+              <CreateSquare onClose={() => setDialog(null)} />
             )}
           </>
         )}

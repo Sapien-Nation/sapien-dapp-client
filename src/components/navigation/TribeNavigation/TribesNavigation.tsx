@@ -25,6 +25,7 @@ import { BadgeStore, TribeName } from '../assets/svg';
 
 // components
 import Channels from './Channels';
+import Squares from './Squares';
 import NavigationItem from './NavigationItem';
 import NavigationList from './NavigationList';
 
@@ -51,18 +52,19 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 interface Props {
-  createChanel: () => void;
+  createChannel: () => void;
+  createSquare: () => void;
   tribes: Array<Tribe>;
 }
 
-const TribeNavigation = ({ createChanel, tribes }: Props) => {
+const TribeNavigation = ({ createChannel, createSquare, tribes }: Props) => {
   const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 
   const tribe: Tribe = tribes.find(({ id }) => id === navigation.main?.id);
 
   if (tribe === undefined) return null;
-
+  console.log('tribe', tribe);
   return (
     <Drawer
       anchor="left"
@@ -141,9 +143,16 @@ const TribeNavigation = ({ createChanel, tribes }: Props) => {
           </>
         </NavigationItem>
         <NavigationList
+          showAddButton={tribe.permissions.canAddSquare}
+          title="Squares"
+          onAdd={createSquare}
+        >
+          <Squares squares={tribe.squares} />
+        </NavigationList>
+        <NavigationList
           showAddButton={tribe.permissions.canAddChannel}
           title="Channels"
-          onAdd={createChanel}
+          onAdd={createChannel}
         >
           <Channels channels={tribe.channels} />
         </NavigationList>

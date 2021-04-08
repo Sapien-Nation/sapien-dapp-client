@@ -4,7 +4,7 @@
 import { NavigationTypes } from 'context/tribes';
 
 // context
-import { useNavigation } from 'context/tribes';
+import { NavigationTypes, useNavigation } from 'context/tribes';
 
 import Layout from './Layout';
 import EditSquare from 'components/tribe/modals/Squares/EditSquare';
