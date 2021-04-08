@@ -11,6 +11,7 @@ const OptionComponent = ({ option }) => {
   return <span>{option.name}</span>;
 };
 
+const onChange = jest.fn();
 const defaultValue = mockTribe();
 const getCurrentValue = jest.fn();
 const name = 'autocomplete-test';
@@ -23,6 +24,7 @@ const defaultProps = {
   open,
   OptionComponent,
   options,
+  onChange,
 };
 
 const renderComponent = () => render(<Autocomplete {...defaultProps} />);

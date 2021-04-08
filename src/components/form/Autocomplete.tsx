@@ -61,6 +61,7 @@ const Autocomplete = ({
   options,
   setOpen,
   spacing = '0',
+  onChange,
   ...rest
 }: Props) => {
   const classes = useStyles();
@@ -117,6 +118,7 @@ const Autocomplete = ({
       onChange={(_, value: any) => {
         if (value === null) return;
         getCurrentValue(value);
+        onChange(value);
       }}
       onOpen={() => {
         setOpen(true);

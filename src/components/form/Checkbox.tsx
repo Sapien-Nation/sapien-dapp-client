@@ -37,7 +37,7 @@ const useStyles = makeStyles(() => {
 });
 
 interface Props extends CheckboxProps {
-  errors: FieldErrors;
+  errors?: FieldErrors;
   label: React.ReactNode;
   name: string;
 }
@@ -58,22 +58,24 @@ const Checkbox = ({ errors, name, label, ...rest }: Props) => {
         }
         label={label}
       />
-      <ErrorMessage
-        errors={errors}
-        name={name}
-        render={({ message }) => (
-          <Typography
-            color="secondary"
-            role="alert"
-            style={{
-              textAlign: 'right',
-            }}
-            variant="subtitle1"
-          >
-            {message}
-          </Typography>
-        )}
-      />
+      {errors && (
+        <ErrorMessage
+          errors={errors}
+          name={name}
+          render={({ message }) => (
+            <Typography
+              color="secondary"
+              role="alert"
+              style={{
+                textAlign: 'right',
+              }}
+              variant="subtitle1"
+            >
+              {message}
+            </Typography>
+          )}
+        />
+      )}
     </>
   );
 };

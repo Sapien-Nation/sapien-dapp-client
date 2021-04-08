@@ -5,13 +5,7 @@ import { useState, Dispatch, SetStateAction } from 'react';
 import Autocomplete from 'components/form/Autocomplete';
 
 // mui
-import {
-  Box,
-  Popover,
-  makeStyles,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
+import { Box, Popover, makeStyles, IconButton } from '@material-ui/core';
 
 // types
 import type { FieldErrors } from 'react-hook-form';

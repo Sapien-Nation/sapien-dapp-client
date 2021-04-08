@@ -17,3 +17,4 @@ export const darker = '#F4F7F9';
 export const error = '#FEF9F9';
 export const inputBG = 'rgba(143, 146, 161, 0.05)';
 export const darkPurple = '#322837';
+export const lightGrayishViolet = '#f1edf9';
