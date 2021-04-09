@@ -42,6 +42,10 @@ const MediaStep = () => {
   const classes = useStyles();
   const {
     formState: { errors },
+    register,
+    unregister,
+    setValue,
+    watch,
   } = useFormContext();
 
   return (
@@ -56,6 +60,7 @@ const MediaStep = () => {
           maxSize={20971520}
           multiple={false}
           name="avatar"
+          register={register}
           render={() => {
             return (
               <IconButton
@@ -66,6 +71,9 @@ const MediaStep = () => {
             );
           }}
           rules={{ required: 'Avatar is required' }}
+          setValue={setValue}
+          unregister={unregister}
+          watch={watch}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}
@@ -84,6 +92,7 @@ const MediaStep = () => {
           maxFiles={1}
           maxSize={41943040}
           name="cover"
+          register={register}
           render={() => {
             return (
               <IconButton
@@ -94,6 +103,9 @@ const MediaStep = () => {
             );
           }}
           rules={{ required: 'Cover is required' }}
+          setValue={setValue}
+          unregister={unregister}
+          watch={watch}
         />
         <Typography variant="caption">
           Drag and Drop or{' '}

@@ -7,6 +7,7 @@ export const orange = '#FFA16D';
 export const purple = '#6200EA';
 export const blue = '#42D1E0';
 export const red = '#FF4279';
+export const darkerGrey = '#F5F5F5';
 export const darkGrey = '#8F92A1';
 export const lightGrey = '#CCCCCC';
 export const offWhite = '#F3F3F5';

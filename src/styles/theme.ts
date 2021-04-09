@@ -108,7 +108,11 @@ theme.overrides = {
   },
   MuiDialogTitle: {
     root: {
-      padding: '5rem 5rem 0 5rem',
+      padding: 0,
+      '&> h2': {
+        fontWeight: 600,
+        fontSize: '2.2rem',
+      },
     },
   },
   MuiDialogContent: {
@@ -257,6 +261,33 @@ theme.overrides = {
       },
     },
   },
+  MuiTabs: {
+    root: {
+      color: darkGrey,
+    },
+    indicator: {
+      display: 'none',
+    },
+  },
+  MuiTab: {
+    root: {
+      paddingLeft: 0,
+      paddingRight: theme.spacing(2.5),
+      paddingTop: 0,
+      paddingBottom: 0,
+      minWidth: 'auto !important',
+      fontSize: '1.6rem',
+      fontWeight: 600,
+      opacity: '1 !important',
+      '&$selected': {
+        color: black,
+      },
+    },
+    wrapper: {
+      alignItems: 'flex-start',
+      textTransform: 'capitalize',
+    },
+  },
 };
 
 // Global button props
@@ -275,6 +306,9 @@ theme.props = {
     disableUnderline: true,
   },
   MuiSwitch: {
+    disableRipple: true,
+  },
+  MuiTab: {
     disableRipple: true,
   },
 };

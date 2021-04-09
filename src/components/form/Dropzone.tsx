@@ -1,11 +1,14 @@
 import { useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 // types
 import type { DropzoneProps, DropzoneOptions } from 'react-dropzone';
-import type { RegisterOptions, FieldErrors } from 'react-hook-form';
+import type {
+  RegisterOptions,
+  FieldErrors,
+  FieldValues,
+} from 'react-hook-form';
 
 // mui
 import { Box, IconButton, Typography } from '@material-ui/core';
@@ -14,7 +17,7 @@ import { CloseOutlined as CloseIcon } from '@material-ui/icons';
 // styles
 import { error, red } from 'styles/colors';
 
-interface Props extends DropzoneProps {
+interface Props extends DropzoneProps, FieldValues {
   className?: string;
   errors: FieldErrors;
   name: string;
@@ -28,15 +31,20 @@ const Dropzone = ({
   render,
   errors,
   rules,
+  maxFiles,
+  register,
+  unregister,
+  setValue,
+  watch,
   ...rest
 }: Props) => {
-  const { register, unregister, setValue, watch } = useFormContext();
   const onDrop = useCallback<DropzoneOptions['onDrop']>(
     (droppedFiles) => {
       setValue(name, droppedFiles, { shouldValidate: true });
     },
     [setValue, name]
   );
+  const isMultiple = maxFiles > 1;
 
   const files: File[] = watch(name);
 
@@ -67,6 +75,23 @@ const Dropzone = ({
         }}
         {...getRootProps()}
       >
+        {!isMultiple && files && (
+          <img
+            alt={`${name}`}
+            src={
+              typeof files === 'string'
+                ? String(files)
+                : URL.createObjectURL(files[0])
+            }
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              position: 'absolute',
+            }}
+          />
+        )}
+
         <input {...getInputProps()} id={name} />
         {render(isDragActive)}
       </Box>
@@ -89,6 +114,7 @@ const Dropzone = ({
         />
       </Box>
       {Array.isArray(files) &&
+        isMultiple &&
         files?.map((file) => (
           <div key={file.name}>
             <IconButton

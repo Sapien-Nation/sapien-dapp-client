@@ -1,15 +1,20 @@
 import { useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+
+// types
+import type { Channel } from 'tools/types/channel';
 
 // mui
-import { Tabs, Tab as MUITab, Typography } from '@material-ui/core';
+import { makeStyles, Tabs, Tab as MUITab } from '@material-ui/core';
 
 //components
 import Dialog from 'components/dialog';
+import RSS from './tabs/RSS';
+import Settings from './tabs/Settings';
+import Query from 'components/query';
 
-enum Tab {
-  Settings,
+enum View {
   Badges,
+  Settings,
   RSS,
 }
 
@@ -17,35 +22,27 @@ interface Props {
   onClose: () => void;
 }
 
+const useStyles = makeStyles((theme) => ({
+  tabs: {
+    marginBottom: theme.spacing(1.6),
+  },
+}));
+
+export const formKey = 'edit-channel';
 const EditChannel = ({ onClose }: Props) => {
-  const [tab, setTab] = useState(Tab.Settings);
-  const methods = useForm();
+  const [view, setView] = useState(View.Settings);
+  const classes = useStyles();
 
-  const { handleSubmit, clearErrors } = methods;
-
-  const handleFormSubmit = async () => {
-    console.log('Channel Edited!');
-    onClose();
-  };
-
-  const onCancel = () => {
-    clearErrors();
-    onClose();
-  };
-
-  const form = 'edit-channel';
-
-  const renderForm = () => {
-    switch (tab) {
-      case Tab.Settings:
-        return 'TODO SETTINGS';
-        break;
-      case Tab.Badges:
-        return 'TODO BADGES';
-        break;
-      case Tab.RSS:
-        return 'TODO RSS';
-        break;
+  const renderForm = ({ channel }: { channel: Channel }) => {
+    switch (view) {
+      case View.Settings:
+        return (
+          <Settings channel={channel} formKey={formKey} onClose={onClose} />
+        );
+      case View.Badges:
+        return 'TODO';
+      case View.RSS:
+        return <RSS channel={channel} formKey={formKey} onClose={onClose} />;
     }
   };
 
@@ -53,38 +50,43 @@ const EditChannel = ({ onClose }: Props) => {
     <Dialog
       open
       confirmLabel="Save Changes"
-      form={form}
+      form={formKey}
       maxWidth="sm"
-      title={<Typography variant="h2">Edit Channel</Typography>}
-      onCancel={onCancel}
+      title="Edit Channel"
       onClose={onClose}
     >
-      <Tabs
-        aria-label="Edit-Channel-Tabs"
-        value={tab}
-        onChange={(_: unknown, value) => setTab(value)}
-      >
-        <MUITab
-          aria-controls="edit-channel-tabpanel-0"
-          id="edit-channel-tab-0"
-          label="Channel Settings"
-        />
-        <MUITab
-          aria-controls="edit-channel-tabpanel-1"
-          id="edit-channel-tab-1"
-          label="Badges"
-        />
-        <MUITab
-          aria-controls="edit-channel-tabpanel-2"
-          id="edit-channel-tab-2"
-          label="RSS Feeds"
-        />
-      </Tabs>
-      <FormProvider {...methods}>
-        <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
-          {renderForm()}
-        </form>
-      </FormProvider>
+      <Query apiUrl="/api/channels/details">
+        {({ channel }: { channel: Channel }) => (
+          <>
+            <Tabs
+              aria-label="Edit-Channel-Tabs"
+              className={classes.tabs}
+              value={view}
+              onChange={(_: unknown, value: View | null) => setView(value)}
+            >
+              <MUITab
+                aria-controls="edit-channel-tabpanel-0"
+                id="edit-channel-tab-0"
+                label="Channel Settings"
+                value={View.Settings}
+              />
+              <MUITab
+                aria-controls="edit-channel-tabpanel-1"
+                id="edit-channel-tab-1"
+                label="Badges"
+                value={View.Badges}
+              />
+              <MUITab
+                aria-controls="edit-channel-tabpanel-2"
+                id="edit-channel-tab-2"
+                label="RSS Feeds"
+                value={View.RSS}
+              />
+            </Tabs>
+            {renderForm({ channel })}
+          </>
+        )}
+      </Query>
     </Dialog>
   );
 };
