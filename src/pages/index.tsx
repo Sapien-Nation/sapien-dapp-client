@@ -7,6 +7,8 @@ import { NavigationTypes } from 'context/tribes';
 import { useNavigation } from 'context/tribes';
 
 import Layout from './Layout';
+import EditSquare from 'components/tribe/modals/Squares/EditSquare';
+import { mockSquare } from 'tools/mocks/square';
 
 const IndexPage = () => {
   const [navigation] = useNavigation();
@@ -33,6 +35,10 @@ const IndexPage = () => {
           padding: 40,
         }}
       >
+        <EditSquare
+          square={mockSquare({ topics: ['#ethan', '#escareno'] })}
+          onClose={() => {}}
+        />
         <h1>{renderView()}</h1>
       </div>
     </Layout>

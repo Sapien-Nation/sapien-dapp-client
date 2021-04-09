@@ -7,7 +7,7 @@ import axios from 'api';
 import { createRandomString, render, screen, user, waitFor } from 'utils/tests';
 
 // components
-import CreateSquare from 'components/tribe/modals/CreateSquare';
+import CreateSquare from 'components/tribe/modals/Squares/CreateSquare';
 
 // mock data
 const onClose = jest.fn();
@@ -15,7 +15,8 @@ const defaultProps = {
   onClose,
 };
 
-const renderComponent = () => render(<CreateSquare {...defaultProps} />);
+const renderComponent = (props = {}) =>
+  render(<CreateSquare {...defaultProps} {...props} />);
 
 test('Create Square', async () => {
   const mock = new MockAdapter(axios);
@@ -60,9 +61,7 @@ test('Create Square', async () => {
     user.click(screen.getByRole('button', { name: /confirm/i }))
   );
 
-  expect(
-    screen.getByText('Please enter valid topics (start with #)')
-  ).toBeInTheDocument();
+  expect(screen.getByText('Topic should start with #')).toBeInTheDocument();
 
   // valid data
   await waitFor(() => {
