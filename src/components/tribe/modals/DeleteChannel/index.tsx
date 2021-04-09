@@ -10,9 +10,6 @@ import axios from 'api';
 // mui
 import { Box, Typography } from '@material-ui/core';
 
-// context
-import { useNavigation } from 'context/tribes';
-
 // types
 import type { Tribe } from 'tools/types/tribe';
 
@@ -23,13 +20,15 @@ import { Switch } from 'components/form';
 import Query from 'components/query';
 
 interface Props {
+  channel: Channel;
   onClose: () => void;
 }
 
-const DeleteChannel = ({ onClose }: Props) => {
+const DeleteChannel = ({ channel, onClose }: Props) => {
   const [showMigrate, setShowMigrate] = useState(false);
-  const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
-  const [navigation] = useNavigation();
+  const [channelToMigrate, setChannelToMigrate] = useState<Channel | null>(
+    null
+  );
   const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,8 +38,8 @@ const DeleteChannel = ({ onClose }: Props) => {
   const handleSubmit = async () => {
     try {
       await axios.post('/api/channels/delete', {
-        channelID: navigation.secondary,
-        channelToMigrate: selectedChannel.id,
+        channelID: channel.id,
+        channelToMigrate: channelToMigrate?.id ?? null,
       });
       onClose();
     } catch ({ response }) {
@@ -52,12 +51,11 @@ const DeleteChannel = ({ onClose }: Props) => {
   return (
     <Dialog
       open
-      cancelLabel="Delete Channel"
-      confirmDisabled={showMigrate ? selectedChannel === null : false}
-      confirmLabel="Migrate and Delete"
+      confirmDisabled={showMigrate ? channelToMigrate === null : false}
+      confirmLabel={showMigrate ? 'Migrate and Delete' : 'Delete'}
       form={form}
       maxWidth="sm"
-      title={<Typography variant="h2">Deleting “Our Trips”</Typography>}
+      title={`Deleting "${channel.name}"`}
       onClose={onClose}
       onConfirm={handleSubmit}
     >
@@ -71,6 +69,7 @@ const DeleteChannel = ({ onClose }: Props) => {
             </Typography>
             <Box paddingX={0} paddingY={2.6}>
               <Switch
+                aria-label="Migrate Content"
                 label="Migrate content"
                 name="migrate"
                 onChange={handleChange}
@@ -78,8 +77,8 @@ const DeleteChannel = ({ onClose }: Props) => {
             </Box>
             {showMigrate && (
               <MigrateContent
-                selectedChannel={selectedChannel}
-                setSelectedChannel={setSelectedChannel}
+                channelToMigrate={channelToMigrate}
+                setChannelToMigrate={setChannelToMigrate}
                 tribes={tribes}
               />
             )}

@@ -43,25 +43,32 @@ const useStyles = makeStyles(() => ({
 
 const ChannelOption = ({
   channel,
-  selectedChannel,
-  setSelectedChannel,
+  channelToMigrate,
+  setChannelToMigrate,
 }: {
   channel: Channel;
-  selectedChannel: Channel;
-  setSelectedChannel: (channel: Channel | null) => void;
+  channelToMigrate: Channel;
+  setChannelToMigrate: (channel: Channel | null) => void;
 }) => {
   const classes = useStyles();
   return (
     <Box
-      bgcolor={selectedChannel?.id === channel.id ? '#f1edf9' : undefined}
+      bgcolor={channelToMigrate?.id === channel.id ? '#f1edf9' : undefined}
       borderRadius="1rem"
+      data-testid={
+        channelToMigrate?.id === channel.id
+          ? `Unselect channel ${channel.name} to migrate`
+          : `Select channel ${channel.name} to migrate`
+      }
       display="flex"
       flexDirection="row"
       style={{
         cursor: 'pointer',
       }}
       onClick={() =>
-        setSelectedChannel(selectedChannel?.id === channel.id ? null : channel)
+        setChannelToMigrate(
+          channelToMigrate?.id === channel.id ? null : channel
+        )
       }
     >
       <Box
@@ -83,7 +90,7 @@ const ChannelOption = ({
           </Box>
         </Box>
         <Box display="flex">
-          {selectedChannel?.id === channel.id ? (
+          {channelToMigrate?.id === channel.id ? (
             <Checkbox checked label="" name="channel" />
           ) : (
             <Box alignItems="center" display="flex">
@@ -112,15 +119,15 @@ const TribeOption = ({ option }: { option: Tribe }) => {
   );
 };
 interface Props {
-  selectedChannel: Channel;
-  setSelectedChannel: (channel: Channel | null) => void;
+  channelToMigrate: Channel;
+  setChannelToMigrate: (channel: Channel | null) => void;
   tribes: Array<Tribe>;
 }
 
 const MigrateContent = ({
   tribes,
-  selectedChannel,
-  setSelectedChannel,
+  channelToMigrate,
+  setChannelToMigrate,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTribe, setSelectedTribe] = useState(tribes[0]);
@@ -164,8 +171,8 @@ const MigrateContent = ({
               <ChannelOption
                 key={channel.id}
                 channel={channel}
-                selectedChannel={selectedChannel}
-                setSelectedChannel={setSelectedChannel}
+                channelToMigrate={channelToMigrate}
+                setChannelToMigrate={setChannelToMigrate}
               />
             ))}
           </>

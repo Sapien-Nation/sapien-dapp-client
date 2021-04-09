@@ -82,7 +82,7 @@ const AutocompleteSelect = ({
         {''}
         <IconButton
           disableRipple
-          aria-label="show channels"
+          aria-label="show menu"
           classes={{
             root: classes.collapseButton,
           }}

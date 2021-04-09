@@ -1,11 +1,4 @@
 /* istanbul ignore file */
-import { useState } from 'react';
-
-// next
-import dynamic from 'next/dynamic';
-
-// mui
-import { Button } from '@material-ui/core';
 
 // constants
 import { NavigationTypes } from 'context/tribes';
@@ -13,86 +6,21 @@ import { NavigationTypes } from 'context/tribes';
 // context
 import { useNavigation } from 'context/tribes';
 
-// icons
-import EditIcon from '@material-ui/icons/Edit';
-
-// components
-const DeleteChannel = dynamic<any>(() =>
-  import('components/tribe/modals').then((mod) => mod.DeleteChannel)
-);
-const EditChannel = dynamic<any>(() =>
-  import('components/tribe/modals').then((mod) => mod.EditChannel)
-);
-const CreateSquare = dynamic<any>(
-  () => import('components/tribe/modals/CreateSquare')
-);
-const Invite = dynamic<any>(() => import('components/tribe/modals/Invite'));
-
 import Layout from './Layout';
-
-export enum Dialog {
-  CreateSquare,
-  DeleteChannel,
-  EditChannel,
-  Invite,
-}
-
-// mui
-import { Box, IconButton } from '@material-ui/core';
 
 const IndexPage = () => {
   const [navigation] = useNavigation();
-  const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const renderView = () => {
     switch (navigation.type) {
       case NavigationTypes.BadgeStore:
         return 'BADGE STORE TODO';
       case NavigationTypes.Channel:
-        return (
-          <Box>
-            CHANNELS FEED TODO{' '}
-            <IconButton
-              aria-label="Delete Channel"
-              onClick={() => setDialog(Dialog.DeleteChannel)}
-            >
-              Delete channel
-            </IconButton>
-            <IconButton
-              aria-label="Edit Channel"
-              onClick={() => setDialog(Dialog.EditChannel)}
-            >
-              <EditIcon />
-            </IconButton>
-            {dialog === Dialog.EditChannel && (
-              <EditChannel onClose={() => setDialog(null)} />
-            )}
-            {dialog === Dialog.DeleteChannel && (
-              <DeleteChannel onClose={() => setDialog(null)} />
-            )}
-          </Box>
-        );
+        return 'CHANNELS FEED TODO';
       case NavigationTypes.Discovery:
         return 'DISCOVERY TODO';
       case NavigationTypes.Tribe:
-        return (
-          <Box>
-            TRIBES FEED TODO{' '}
-            <Button onClick={() => setDialog(Dialog.Invite)}>Invite</Button>
-            <Button onClick={() => setDialog(Dialog.CreateSquare)}>
-              Create Square
-            </Button>
-            {dialog === Dialog.Invite && (
-              <Invite
-                link="https://sapien.com/tribes/Hx28h7atP1Y"
-                onClose={() => setDialog(null)}
-              />
-            )}
-            {dialog === Dialog.CreateSquare && (
-              <CreateSquare onClose={() => setDialog(null)} />
-            )}
-          </Box>
-        );
+        return 'TRIBES FEED TODO';
     }
   };
 
