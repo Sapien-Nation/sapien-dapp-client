@@ -29,7 +29,7 @@ const Squares = ({ squares }: Props) => {
           onClick={() =>
             setNavigation({
               secondary: square.id,
-              type: NavigationTypes.Channel,
+              type: NavigationTypes.Square,
             })
           }
         >

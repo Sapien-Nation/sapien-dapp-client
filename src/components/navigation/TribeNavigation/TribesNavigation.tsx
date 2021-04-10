@@ -64,7 +64,7 @@ const TribeNavigation = ({ createChannel, createSquare, tribes }: Props) => {
   const tribe: Tribe = tribes.find(({ id }) => id === navigation.main?.id);
 
   if (tribe === undefined) return null;
-  console.log('tribe', tribe);
+
   return (
     <Drawer
       anchor="left"

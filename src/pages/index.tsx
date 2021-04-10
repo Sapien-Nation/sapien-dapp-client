@@ -1,14 +1,9 @@
 /* istanbul ignore file */
 
-// constants
-import { NavigationTypes } from 'context/tribes';
-
 // context
 import { NavigationTypes, useNavigation } from 'context/tribes';
 
 import Layout from './Layout';
-import EditSquare from 'components/tribe/modals/Squares/EditSquare';
-import { mockSquare } from 'tools/mocks/square';
 
 const IndexPage = () => {
   const [navigation] = useNavigation();
@@ -17,6 +12,8 @@ const IndexPage = () => {
     switch (navigation.type) {
       case NavigationTypes.BadgeStore:
         return 'BADGE STORE TODO';
+      case NavigationTypes.Square:
+        return 'SQUARES FEED TODO';
       case NavigationTypes.Channel:
         return 'CHANNELS FEED TODO';
       case NavigationTypes.Discovery:
@@ -35,10 +32,6 @@ const IndexPage = () => {
           padding: 40,
         }}
       >
-        <EditSquare
-          square={mockSquare({ topics: ['#ethan', '#escareno'] })}
-          onClose={() => {}}
-        />
         <h1>{renderView()}</h1>
       </div>
     </Layout>
