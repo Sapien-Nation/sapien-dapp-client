@@ -23,6 +23,10 @@ const defaultProps = {
 const renderComponent = (props = {}) =>
   render(<EditSquare {...defaultProps} {...props} />);
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 test('Edit Square', async () => {
   const mock = new MockAdapter(axios);
   renderComponent({ square });
@@ -107,6 +111,29 @@ test('Edit Square', async () => {
   // onSuccess
   mock.onPut(`/api/squares/edit/${square.id}`).reply(200);
   user.click(screen.getByRole('button', { name: /save changes/i }));
+
+  await waitFor(() => {
+    expect(onClose).toHaveBeenCalled();
+  });
+});
+
+test('delete', async () => {
+  const mock = new MockAdapter(axios);
+  renderComponent({ square });
+
+  // onError
+  const error = { message: 'Delete Square Error' };
+  mock.onPost('/api/squares/delete').reply(400, error);
+  user.click(screen.getByRole('button', { name: /delete square/i }));
+
+  await waitFor(() => {
+    expect(screen.getByText(error.message)).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  // onSuccess
+  mock.onPost('/api/squares/delete').reply(200);
+  user.click(screen.getByRole('button', { name: /delete square/i }));
 
   await waitFor(() => {
     expect(onClose).toHaveBeenCalled();
