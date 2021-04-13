@@ -60,6 +60,7 @@ const Channels = ({ channels }: Props) => {
           disableGutters
           disableRipple
           component="li"
+          role="listitem"
           onClick={() =>
             setNavigation({
               secondary: channel.id,
@@ -71,7 +72,7 @@ const Channels = ({ channels }: Props) => {
             aria-label={channel.name}
             display="flex"
             justifyContent="space-between"
-            role="listitem"
+            role="button"
             style={{
               margin: '0 .65rem',
               padding: '1rem',

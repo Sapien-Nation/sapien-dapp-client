@@ -26,6 +26,7 @@ const Squares = ({ squares }: Props) => {
           disableGutters
           disableRipple
           component="li"
+          role="listitem"
           onClick={() =>
             setNavigation({
               secondary: square.id,
@@ -37,7 +38,7 @@ const Squares = ({ squares }: Props) => {
             aria-label={square.name}
             display="flex"
             justifyContent="space-between"
-            role="listitem"
+            role="button"
             style={{
               margin: '0 .65rem',
               padding: '1rem',
