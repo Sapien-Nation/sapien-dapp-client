@@ -7,7 +7,7 @@ import axios from 'api';
 import { createRandomString, render, screen, user, waitFor } from 'utils/tests';
 
 // components
-import CreateSquare from 'components/tribe/modals/Squares/CreateSquare';
+import CreateSquare from 'components/squares/CreateSquare';
 
 // mock data
 const onClose = jest.fn();

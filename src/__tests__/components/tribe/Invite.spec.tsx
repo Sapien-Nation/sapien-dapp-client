@@ -13,7 +13,7 @@ import { render, screen, user, waitFor, within } from 'utils/tests';
 import { mockUsers } from 'tools/mocks/user';
 
 // components
-import Invite from 'components/tribe/modals/Invite';
+import Invite from 'components/tribe/Invite';
 
 // mocks
 const users: Array<User> = mockUsers();

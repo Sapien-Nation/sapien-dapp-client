@@ -11,7 +11,7 @@ import axios from 'api';
 import type { Tribe } from 'tools/types/tribe';
 
 // components
-import DeleteChannel from 'components/tribe/modals/DeleteChannel';
+import DeleteChannel from 'components/channels/DeleteChannel';
 
 // mocks
 import { mockTribes } from 'tools/mocks/tribe';

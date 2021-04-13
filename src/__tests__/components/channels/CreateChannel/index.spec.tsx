@@ -14,7 +14,7 @@ import { mockTribes } from 'tools/mocks/tribe';
 import { mockTribeBadges, mockSubscriptionBadges } from 'tools/mocks/badges';
 
 // components
-import CreateChannel from 'components/tribe/modals/CreateChannel';
+import CreateChannel from 'components/channels/CreateChannel';
 
 // mock data
 const tribes = mockTribes();

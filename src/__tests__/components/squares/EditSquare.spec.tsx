@@ -10,7 +10,7 @@ import { createRandomString, render, screen, user, waitFor } from 'utils/tests';
 import { mockSquare } from 'tools/mocks/square';
 
 // components
-import EditSquare from 'components/tribe/modals/Squares/EditSquare';
+import EditSquare from 'components/squares/EditSquare';
 
 // mock data
 const onClose = jest.fn();

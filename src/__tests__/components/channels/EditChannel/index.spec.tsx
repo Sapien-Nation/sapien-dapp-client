@@ -12,7 +12,7 @@ import { mockFile } from 'mocks/file';
 import { mockChannel } from 'tools/mocks/channel';
 
 // components
-import EditChannel from 'components/tribe/modals/EditChannel';
+import EditChannel from 'components/channels/EditChannel';
 
 const onClose = jest.fn();
 const defaultProps = {

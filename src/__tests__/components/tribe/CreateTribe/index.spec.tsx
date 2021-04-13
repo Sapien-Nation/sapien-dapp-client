@@ -12,7 +12,7 @@ import { mockFile } from 'mocks/file';
 import { mockTribe, mockTribePermission } from 'tools/mocks/tribe';
 
 // components
-import CreateTribe from 'components/tribe/modals/CreateTribe';
+import CreateTribe from 'components/tribe/CreateTribe';
 
 // mocks
 const permissions = mockTribePermission();
