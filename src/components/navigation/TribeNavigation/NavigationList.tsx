@@ -35,12 +35,12 @@ const useStyles = makeStyles((theme: Theme) => {
 
 interface Props {
   children: React.ReactElement;
-  showAddButton: boolean;
+  showAction: boolean;
   title: string;
-  onAdd: () => void;
+  onClick: () => void;
 }
 
-const NavigationList = ({ children, showAddButton, title, onAdd }: Props) => {
+const NavigationList = ({ children, showAction, title, onClick }: Props) => {
   const [show, setShow] = useState(true);
 
   const classes = useStyles();
@@ -58,13 +58,13 @@ const NavigationList = ({ children, showAddButton, title, onAdd }: Props) => {
         >
           <Box alignItems="center" display="flex">
             <Typography variant="h5">{title}</Typography>
-            {showAddButton && (
+            {showAction && (
               <IconButton
                 aria-label={`Create ${title}`}
                 classes={{
                   root: classes.addButton,
                 }}
-                onClick={onAdd}
+                onClick={onClick}
               >
                 <AddIcon />
               </IconButton>

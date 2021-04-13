@@ -1,9 +1,14 @@
+import { useState } from 'react';
+
 // types
 import type { Theme } from '@material-ui/core/styles';
 import type { Tribe } from 'tools/types/tribe';
 
 // constants
 import { NavigationTypes } from 'context/tribes';
+
+// next
+import dynamic from 'next/dynamic';
 
 // mui
 import {
@@ -24,6 +29,18 @@ import { darkGrey, white } from 'styles/colors';
 import { BadgeStore, TribeName } from '../assets/svg';
 
 // components
+const CreateChannel = dynamic<any>(
+  () => import('components/channels/CreateChannel'),
+  {
+    ssr: false,
+  }
+);
+const CreateSquare = dynamic<any>(
+  () => import('components/squares/CreateSquare'),
+  {
+    ssr: false,
+  }
+);
 import Channels from './Channels';
 import Squares from './Squares';
 import NavigationItem from './NavigationItem';
@@ -51,13 +68,16 @@ const useStyles = makeStyles((theme: Theme) => {
   });
 });
 
+enum Dialog {
+  CreateChannel,
+  CreateSquare,
+}
 interface Props {
-  createChannel: () => void;
-  createSquare: () => void;
   tribes: Array<Tribe>;
 }
 
-const TribeNavigation = ({ createChannel, createSquare, tribes }: Props) => {
+const TribeNavigation = ({ tribes }: Props) => {
+  const [dialog, setDialog] = useState<null | Dialog>(null);
   const [navigation, setNavigation] = useNavigation();
   const classes = useStyles();
 
@@ -143,20 +163,26 @@ const TribeNavigation = ({ createChannel, createSquare, tribes }: Props) => {
           </>
         </NavigationItem>
         <NavigationList
-          showAddButton={tribe.permissions.canAddSquare}
+          showAction={tribe.permissions.canAddSquare}
           title="Squares"
-          onAdd={createSquare}
+          onClick={() => setDialog(Dialog.CreateSquare)}
         >
           <Squares squares={tribe.squares} />
         </NavigationList>
         <NavigationList
-          showAddButton={tribe.permissions.canAddChannel}
+          showAction={tribe.permissions.canAddChannel}
           title="Channels"
-          onAdd={createChannel}
+          onClick={() => setDialog(Dialog.CreateChannel)}
         >
           <Channels channels={tribe.channels} />
         </NavigationList>
       </List>
+      {dialog === Dialog.CreateChannel && (
+        <CreateChannel onClose={() => setDialog(null)} />
+      )}
+      {dialog === Dialog.CreateSquare && (
+        <CreateSquare onClose={() => setDialog(null)} />
+      )}
     </Drawer>
   );
 };

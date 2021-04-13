@@ -13,11 +13,7 @@ import { TribeNavigation } from 'components/navigation/TribeNavigation';
 const permissions = mockTribePermission();
 const tribes = [mockTribe({ permissions })];
 
-const createChannel = jest.fn();
-const createSquare = jest.fn();
 const defaultProps = {
-  createChannel,
-  createSquare,
   tribes,
 };
 
@@ -44,12 +40,16 @@ test('render correctly', () => {
   user.click(screen.getByRole('button', { name: 'Sapien' }));
 
   // create channel
-  user.click(
+  expect(
     screen.queryByRole('button', {
       name: /create channel/i,
     })
-  );
-  expect(createChannel).toHaveBeenCalled();
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', {
+      name: /create square/i,
+    })
+  ).toBeInTheDocument();
 });
 
 test('cant see add channel button', () => {
@@ -65,6 +65,11 @@ test('cant see add channel button', () => {
   expect(
     screen.queryByRole('button', {
       name: /create channel/i,
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole('button', {
+      name: /create square/i,
     })
   ).not.toBeInTheDocument();
 });

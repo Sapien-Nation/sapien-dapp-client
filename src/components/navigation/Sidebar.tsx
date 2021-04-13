@@ -14,24 +14,9 @@ import { useAuth } from 'context/user';
 import { useNavigation } from 'context/tribes';
 
 // components
-const CreateChannel = dynamic<any>(
-  () => import('components/tribe/modals').then((mod) => mod.CreateChannel),
-  {
-    ssr: false,
-  }
-);
-const CreateSquare = dynamic<any>(
-  () => import('components/tribe/modals').then((mod) => mod.CreateSquare),
-  {
-    ssr: false,
-  }
-);
-const CreateTribe = dynamic<any>(
-  () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
-  {
-    ssr: false,
-  }
-);
+const CreateTribe = dynamic<any>(() => import('components/tribe/CreateTribe'), {
+  ssr: false,
+});
 import TribeBar from 'components/navigation/TribeBar';
 import {
   DiscoverNavigation,
@@ -40,8 +25,6 @@ import {
 import Query from 'components/query';
 
 export enum Dialog {
-  CreateChannel,
-  CreateSquare,
   CreateTribe,
 }
 
@@ -64,26 +47,14 @@ const Sidebar = () => {
             {navigation?.type === NavigationTypes.Discovery ? (
               <DiscoverNavigation />
             ) : (
-              <TribeNavigation
-                createChannel={() => setDialog(Dialog.CreateChannel)}
-                createSquare={() => setDialog(Dialog.CreateSquare)}
-                tribes={tribes}
-              />
-            )}
-
-            {dialog === Dialog.CreateTribe && (
-              <CreateTribe onClose={() => setDialog(null)} />
-            )}
-
-            {dialog === Dialog.CreateChannel && (
-              <CreateChannel onClose={() => setDialog(null)} />
-            )}
-            {dialog === Dialog.CreateSquare && (
-              <CreateSquare onClose={() => setDialog(null)} />
+              <TribeNavigation tribes={tribes} />
             )}
           </>
         )}
       </Query>
+      {dialog === Dialog.CreateTribe && (
+        <CreateTribe onClose={() => setDialog(null)} />
+      )}
     </nav>
   );
 };

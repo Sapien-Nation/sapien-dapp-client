@@ -31,7 +31,7 @@ const CreateSquare = ({ onClose }: Props) => {
       open
       form={formKey}
       maxWidth="sm"
-      title="'New Square"
+      title="New Square"
       onClose={onClose}
     >
       <SquareForm action={handleFormSubmit} />
