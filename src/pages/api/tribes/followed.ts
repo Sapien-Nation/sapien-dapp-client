@@ -4,7 +4,7 @@ import type { NextApiResponse } from 'next';
 
 // mocks
 import { mockChannel } from 'tools/mocks/channel';
-import { mockTribes } from 'tools/mocks/tribe';
+import { mockTribes, mockTribePermission } from 'tools/mocks/tribe';
 import { mockSquare } from 'tools/mocks/square';
 
 const handler = (_: unknown, res: NextApiResponse) =>
@@ -15,6 +15,7 @@ const handler = (_: unknown, res: NextApiResponse) =>
           ...tribe,
           channels: [mockChannel()],
           squares: [mockSquare()],
+          permissions: mockTribePermission(),
         };
       }
       return tribe;
