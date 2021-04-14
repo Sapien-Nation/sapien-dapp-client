@@ -1,25 +1,24 @@
 import { useSnackbar } from 'notistack';
-import { cache, mutate } from 'swr';
+import { cache } from 'swr';
 import { useLocalStorage } from 'react-use';
 import { createContext, useContext, useEffect } from 'react';
 
-// api
-import axios from 'api';
-
 // types
-import type { Channel } from 'types/channel';
-import type { Tribe } from 'types/tribe';
+import type { Channel } from 'tools/types/channel';
+import type { Tribe } from 'tools/types/tribe';
+import type { Square } from 'tools/types/square';
 
 export enum NavigationTypes {
   BadgeStore,
   Channel,
   Discovery,
+  Square,
   Tribe,
 }
 
 export interface Navigation {
   main?: Tribe | null;
-  secondary?: Tribe | Channel | string;
+  secondary?: Tribe | Channel | Square | string;
   type: NavigationTypes;
 }
 
@@ -68,21 +67,6 @@ const NavigationProvider = ({ children }: Props) => {
   const handleSetNavigation = async (newNavigation) => {
     try {
       setNavigation({ ...navigation, ...newNavigation });
-
-      if (newNavigation.main) {
-        await axios.post('/api/tribes/visit');
-        mutate(
-          '/api/tribes/followed',
-          ({ tribes }: { tribes: Array<Tribe> }) => ({
-            tribes: tribes.map((tribe) =>
-              tribe.id === newNavigation.main.id
-                ? { ...tribe, notificationNumber: 0 }
-                : tribe
-            ),
-          }),
-          false
-        );
-      }
     } catch (err) {
       enqueueSnackbar(err.message);
     }

@@ -1,19 +1,19 @@
-import { useFormContext } from 'react-hook-form';
-
 // mui
 import { Typography } from '@material-ui/core';
 
 interface Props {
-  name: string;
-  maxCount: string;
+  currentCount: number;
+  maxCount: number;
 }
 
-const ChartCount = ({ name, maxCount }: Props) => {
-  const { watch } = useFormContext();
-  const val = watch(name) as string;
+const ChartCount = ({ currentCount = 0, maxCount }: Props) => {
   return (
-    <Typography data-testid="chart-count" variant="caption">
-      {val?.length || 0} / {maxCount}
+    <Typography
+      color={currentCount > maxCount ? 'secondary' : 'inherit'}
+      data-testid="chart-count"
+      variant="caption"
+    >
+      {currentCount} / {maxCount}
     </Typography>
   );
 };

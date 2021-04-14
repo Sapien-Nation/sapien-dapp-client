@@ -222,10 +222,15 @@ test('Forgot Password', async () => {
 
   // onSuccess
   mock.onPost('/api/users/forgot').reply(200);
-  expect(
-    screen.getByRole('heading', { name: /request sent successfully/i })
-  ).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /got it!/i })).toBeInTheDocument();
+  user.click(screen.getByRole('button', { name: /send request/i }));
+  await waitFor(() => {
+    expect(
+      screen.getByRole('heading', { name: /request sent successfully/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /got it!/i })
+    ).toBeInTheDocument();
+  });
 
   // resend
   user.click(screen.getByRole('button', { name: /resend/i }));

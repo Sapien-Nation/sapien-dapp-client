@@ -42,7 +42,7 @@ const Switch = ({ errors, label, name, ...rest }: Props) => {
             <Box component="span">{label}</Box>
             <IconButton
               aria-label={name}
-              style={{ color: theme.palette.infoIcon.main }}
+              style={{ color: (theme as any).palette.infoIcon.main }}
             >
               <HelpIcon fontSize="small" />
             </IconButton>
@@ -50,22 +50,24 @@ const Switch = ({ errors, label, name, ...rest }: Props) => {
         </InputLabel>
         <MUISwitch disableRipple color="default" name={name} {...rest} />
       </Box>
-      <ErrorMessage
-        errors={errors}
-        name={name}
-        render={({ message }) => (
-          <Typography
-            color="secondary"
-            role="alert"
-            style={{
-              textAlign: 'right',
-            }}
-            variant="subtitle1"
-          >
-            {message}
-          </Typography>
-        )}
-      />
+      {errors && (
+        <ErrorMessage
+          errors={errors}
+          name={name}
+          render={({ message }) => (
+            <Typography
+              color="secondary"
+              role="alert"
+              style={{
+                textAlign: 'right',
+              }}
+              variant="subtitle1"
+            >
+              {message}
+            </Typography>
+          )}
+        />
+      )}
     </>
   );
 };

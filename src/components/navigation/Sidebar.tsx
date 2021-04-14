@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // types
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 
 // next
 import dynamic from 'next/dynamic';
@@ -14,18 +14,9 @@ import { useAuth } from 'context/user';
 import { useNavigation } from 'context/tribes';
 
 // components
-const CreateChannel = dynamic(
-  () => import('components/tribe/modals').then((mod) => mod.CreateChannel),
-  {
-    ssr: false,
-  }
-);
-const CreateTribe = dynamic(
-  () => import('components/tribe/modals').then((mod) => mod.CreateTribe),
-  {
-    ssr: false,
-  }
-);
+const CreateTribe = dynamic<any>(() => import('components/tribe/CreateTribe'), {
+  ssr: false,
+});
 import TribeBar from 'components/navigation/TribeBar';
 import {
   DiscoverNavigation,
@@ -34,7 +25,6 @@ import {
 import Query from 'components/query';
 
 export enum Dialog {
-  CreateChannel,
   CreateTribe,
 }
 
@@ -57,22 +47,14 @@ const Sidebar = () => {
             {navigation?.type === NavigationTypes.Discovery ? (
               <DiscoverNavigation />
             ) : (
-              <TribeNavigation
-                createChanel={() => setDialog(Dialog.CreateChannel)}
-                tribes={tribes}
-              />
-            )}
-
-            {dialog === Dialog.CreateTribe && (
-              <CreateTribe onClose={() => setDialog(null)} />
-            )}
-
-            {dialog === Dialog.CreateChannel && (
-              <CreateChannel onClose={() => setDialog(null)} />
+              <TribeNavigation tribes={tribes} />
             )}
           </>
         )}
       </Query>
+      {dialog === Dialog.CreateTribe && (
+        <CreateTribe onClose={() => setDialog(null)} />
+      )}
     </nav>
   );
 };

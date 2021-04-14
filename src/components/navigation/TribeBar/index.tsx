@@ -1,5 +1,5 @@
 // types
-import type { Tribe } from 'types/tribe';
+import type { Tribe } from 'tools/types/tribe';
 import type { Theme } from '@material-ui/core/styles';
 
 // next
@@ -115,7 +115,7 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
             }
           >
             <Badge
-              badgeContent={tribe.notificationNumber}
+              badgeContent="0"
               classes={{
                 badge: classes.badge,
               }}

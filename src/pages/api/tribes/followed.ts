@@ -3,9 +3,23 @@
 import type { NextApiResponse } from 'next';
 
 // mocks
-import { mockTribes } from 'mocks/tribe';
+import { mockChannel } from 'tools/mocks/channel';
+import { mockTribes, mockTribePermission } from 'tools/mocks/tribe';
+import { mockSquare } from 'tools/mocks/square';
 
 const handler = (_: unknown, res: NextApiResponse) =>
-  res.status(200).json({ tribes: mockTribes() });
+  res.status(200).json({
+    tribes: mockTribes().map((tribe, index) => {
+      if (index === 0) {
+        return {
+          ...tribe,
+          channels: [mockChannel()],
+          squares: [mockSquare()],
+          permissions: mockTribePermission(),
+        };
+      }
+      return tribe;
+    }),
+  });
 
 export default handler;

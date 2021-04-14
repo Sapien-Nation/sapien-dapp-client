@@ -1,4 +1,14 @@
 module.exports = {
+  preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      tsconfig: 'jest-tsconfig.json',
+    },
+  },
+  transform: {
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
+  },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleDirectories: ['node_modules', 'src'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
@@ -6,17 +16,20 @@ module.exports = {
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname',
   ],
-  transform: {
-    '^.+\\.(ts|tsx)$': '<rootDir>/node_modules/babel-jest',
-  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
   coverageReporters: ['json-summary', 'lcov', 'text-summary'],
-  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!<rootDir>/node_modules/'],
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!<rootDir>/node_modules/',
+    '!<rootDir>/pages/api/**',
+  ],
   coverageThreshold: {
     global: {
-      statements: 80,
-      branches: 80,
-      functions: 79,
-      lines: 80,
+      statements: 69,
+      branches: 69,
+      functions: 69,
+      lines: 69,
     },
   },
+  verbose: true,
 };

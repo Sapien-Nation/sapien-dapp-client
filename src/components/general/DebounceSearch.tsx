@@ -25,7 +25,8 @@ interface Props extends InputProps {
 
 const useStyles = makeStyles(() => ({
   root: () => ({
-    borderRadius: 90,
+    borderRadius: '9rem !important',
+    width: '100%',
   }),
 }));
 

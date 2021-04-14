@@ -3,7 +3,7 @@
 import type { NextApiResponse } from 'next';
 
 // mocks
-import { mockTopics } from 'mocks/topics';
+import { mockTopics } from 'tools/mocks/topics';
 
 const handler = (_: unknown, res: NextApiResponse) =>
   res.status(200).json({ topics: mockTopics() });

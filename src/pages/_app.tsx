@@ -29,6 +29,9 @@ import { NavigationProvider } from 'context/tribes';
 // components
 import ErrorFallback from 'components/general/ErrorView';
 
+// styles
+import '../styles/index.css';
+
 initSentry();
 
 const MyApp = ({ Component, pageProps }: AppProps) => {

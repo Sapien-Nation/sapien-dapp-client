@@ -5,7 +5,7 @@ import cookie from 'cookie';
 import type { NextApiResponse, NextApiRequest } from 'next';
 
 // mocks
-import { mockUser } from 'mocks/user';
+import { mockUser } from 'tools/mocks/user';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {

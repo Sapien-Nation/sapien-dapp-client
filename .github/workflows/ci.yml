@@ -21,6 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          submodules: recursive
           token: ${{secrets.GIT_PAT}}
 
       - name: Setup Node

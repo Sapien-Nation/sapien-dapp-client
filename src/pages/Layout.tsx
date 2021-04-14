@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // types
 import type { Theme } from '@material-ui/core';
 

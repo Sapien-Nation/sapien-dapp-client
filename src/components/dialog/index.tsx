@@ -18,6 +18,9 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
+// styles 
+import { red } from 'styles/colors';
+
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
   form?: string;
@@ -26,6 +29,7 @@ interface Props extends Omit<DialogProps, 'title'> {
   onCancel?: (data?: unknown) => void;
   onConfirm?: (event?: unknown) => void;
   cancelLabel?: string;
+  confirmDisabled?: boolean;
   confirmLabel?: string;
   showCancel?: boolean;
   showConfirm?: boolean;
@@ -57,6 +61,7 @@ const Dialog = ({
   showConfirm = true,
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
+  confirmDisabled = false,
   children,
   title,
   subtitle,
@@ -65,7 +70,10 @@ const Dialog = ({
       {showCancel && (
         <Button
           disabled={isFetching}
-          style={{ marginRight: useTheme().spacing(2) }}
+          style={{
+            marginRight: useTheme().spacing(2),
+            color: cancelLabel.includes('Delete') && red,
+          }}
           onClick={onCancel}
         >
           {cancelLabel}
@@ -74,7 +82,7 @@ const Dialog = ({
       {showConfirm && (
         <Button
           color="primary"
-          disabled={isFetching}
+          disabled={isFetching || confirmDisabled}
           form={form}
           type={form ? 'submit' : 'button'}
           variant="contained"

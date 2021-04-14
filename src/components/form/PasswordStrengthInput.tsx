@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 // types
-import type { FieldErrors } from 'react-hook-form';
+import type { FieldErrors, FieldValues } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
 // mui
@@ -27,8 +26,7 @@ import { green, orange, outline, red, lightGrey } from 'styles/colors';
 
 // components
 import Tooltip from 'components/form/Tooltip';
-
-export interface Props extends InputProps {
+export interface Props extends InputProps, FieldValues {
   errors: FieldErrors;
   label: string;
   name: string;
@@ -39,11 +37,14 @@ const PasswordStrengthInput = ({
   errors,
   label,
   name,
+  register,
+  setValue,
   tooltipText = '',
+  unregister,
+  watch,
   ...rest
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { register, unregister, watch, setValue } = useFormContext();
   const password = watch(name);
 
   useEffect(() => {
