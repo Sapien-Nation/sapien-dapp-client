@@ -41,6 +41,7 @@ const CreateSquare = dynamic<any>(
     ssr: false,
   }
 );
+
 import Channels from './Channels';
 import Squares from './Squares';
 import NavigationItem from './NavigationItem';

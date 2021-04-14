@@ -12,13 +12,18 @@ import axios from 'api';
 // next
 import Image from 'next/image';
 
+// styles
+import { background, purple } from 'styles/colors';
+
 // mui
 import {
   Avatar,
   Box,
+  Button,
   Fab,
   IconButton,
   Typography,
+  makeStyles,
   List,
   ListItemAvatar,
   ListItem,
@@ -39,8 +44,17 @@ interface Props {
   link: string;
   onClose: () => void;
 }
+const useStyles = makeStyles(() => ({
+  listItem: {
+    '&:hover': {
+      borderRadius: '1rem',
+      backgroundColor: 'rgba(143, 146, 161, 0.1)',
+    },
+  },
+}));
 
 const Invite = ({ link, onClose }: Props) => {
+  const classes = useStyles();
   const [invited, setInvited] = useState<Array<User>>([]);
   const [state, copyToClipboard] = useCopyToClipboard();
   const [searchTerm, setSearchTerm] = useState('');
@@ -91,28 +105,7 @@ const Invite = ({ link, onClose }: Props) => {
       confirmDisabled={invited.length === 0}
       confirmLabel={`Send Invites (${invited.length})`}
       isFetching={isFetching}
-      maxWidth="lg"
-      title={
-        <Box display="flex" justifyContent="space-between" width="100%">
-          <Typography variant="h1">Invite friends to tribe</Typography>
-          <Box
-            alignItems="center"
-            className="card--rounded"
-            display="flex"
-            justifyContent="space-between"
-            padding={1.7}
-            width={350}
-          >
-            {link}
-            <IconButton
-              aria-label="copy url"
-              onClick={() => copyToClipboard(link)}
-            >
-              <FileCopyIcon color="primary" />
-            </IconButton>
-          </Box>
-        </Box>
-      }
+      maxWidth="md"
       onClose={onClose}
       onConfirm={handleSubmit}
     >
@@ -130,83 +123,141 @@ const Invite = ({ link, onClose }: Props) => {
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
                 gap: '24px',
+                marginTop: '5rem',
               }}
             >
-              <Box className="card--rounded" padding={2.4} paddingTop={3}>
-                <Typography variant="body2">
-                  CHOOSE SAPIENS TO INVITE
-                </Typography>
-                <Box marginTop={3}>
-                  <DebounceSearch
-                    fullWidth
-                    placeholder="Search for tribe members"
-                    onSearch={handleSearch}
-                  />
+              <Box maxWidth="40.6rem">
+                <Box
+                  display="flex"
+                  height={2.6}
+                  justifyContent="space-between"
+                  marginBottom={5}
+                >
+                  <Typography variant="h2">Invite to tribe</Typography>
                 </Box>
-                <Box marginTop={3}>
-                  <List aria-label="users to invite">
-                    {filteredUsers.map((user) => (
-                      <ListItem key={user.id}>
-                        <ListItemAvatar>
-                          <Avatar alt={user.username}>
-                            <Image
-                              alt={user.username}
-                              height={40}
-                              src={user.avatar}
-                              width={40}
-                            />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={user.email}
-                          secondary={`@${user.username}`}
-                        />
-                        <Fab
-                          aria-label="add user"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleInvite(user)}
+                <Box className="card--rounded" padding={3}>
+                  <Typography variant="body2">
+                    CHOOSE SAPIENS TO INVITE
+                  </Typography>
+                  <Box marginTop={3}>
+                    <DebounceSearch
+                      fullWidth
+                      placeholder="Search for tribe members"
+                      style={{
+                        backgroundColor: 'white',
+                      }}
+                      onSearch={handleSearch}
+                    />
+                  </Box>
+                  <Box marginTop={3}>
+                    <List aria-label="users to invite">
+                      {filteredUsers.map((user) => (
+                        <ListItem
+                          key={user.id}
+                          classes={{
+                            container: classes.listItem,
+                          }}
                         >
-                          <AddIcon />
-                        </Fab>
-                      </ListItem>
-                    ))}
-                  </List>
+                          <ListItemAvatar>
+                            <Avatar alt={user.username}>
+                              <Image
+                                alt={user.username}
+                                height={40}
+                                src={user.avatar}
+                                width={40}
+                              />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={user.displayName}
+                            secondary={`@${user.username}`}
+                          />
+                          <ListItemSecondaryAction
+                            onClick={() => handleInvite(user)}
+                          >
+                            <Fab
+                              aria-label="add user"
+                              color="primary"
+                              size="small"
+                              style={{
+                                width: '2.2rem',
+                                height: '2.2rem',
+                                minHeight: '2.2rem',
+                              }}
+                            >
+                              <AddIcon fontSize="small" />
+                            </Fab>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
                 </Box>
               </Box>
-              <Box className="card--rounded" padding={2.4} paddingTop={3}>
-                {invited.length > 0 && (
-                  <Typography variant="body2">
-                    {invited.length} SAPIENS SELECTED
-                  </Typography>
-                )}
-                <Box marginTop={3}>
-                  <List aria-label="users selected to invite">
-                    {invited.map((user) => (
-                      <ListItem key={user.id}>
-                        <ListItemAvatar>
-                          <Avatar alt={user.username}>
-                            <Image
-                              alt={user.username}
-                              height={40}
-                              src={user.avatar}
-                              width={40}
-                            />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={user.email}
-                          secondary={`@${user.username}`}
-                        />
-                        <IconButton
-                          aria-label="remove user"
-                          onClick={() => handleRemove(user)}
+              <Box maxWidth="40.6rem">
+                <Box
+                  alignItems="center"
+                  bgcolor={background}
+                  borderRadius="1rem"
+                  display="flex"
+                  height="4.6rem"
+                  justifyContent="space-between"
+                  marginBottom={3}
+                  paddingLeft="1.6rem"
+                  paddingRight="1rem"
+                  width="100%"
+                >
+                  {link}
+                  <Button
+                    aria-label="copy url"
+                    startIcon={<FileCopyIcon color="primary" />}
+                    style={{
+                      color: purple,
+                    }}
+                    onClick={() => copyToClipboard(link)}
+                  >
+                    Copy Link
+                  </Button>
+                </Box>
+                <Box className="card--rounded" padding={3}>
+                  {invited.length > 0 && (
+                    <Typography variant="body2">
+                      {invited.length} SAPIENS SELECTED
+                    </Typography>
+                  )}
+                  <Box marginTop={3}>
+                    <List aria-label="users selected to invite">
+                      {invited.map((user) => (
+                        <ListItem
+                          key={user.id}
+                          style={{ paddingRight: 0, paddingLeft: 0 }}
                         >
-                          <CloseIcon />
-                        </IconButton>
-                      </ListItem>
-                    ))}
-                  </List>
+                          <ListItemAvatar>
+                            <Avatar alt={user.username}>
+                              <Image
+                                alt={user.username}
+                                height={40}
+                                src={user.avatar}
+                                width={40}
+                              />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={user.displayName}
+                            secondary={`@${user.username}`}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              aria-label="remove user"
+                              onClick={() => handleRemove(user)}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Box>
                 </Box>
               </Box>
             </Box>

@@ -34,7 +34,7 @@ interface Props extends Omit<DialogProps, 'title'> {
   showCancel?: boolean;
   showConfirm?: boolean;
   subtitle?: string | React.ReactNode;
-  title: string | React.ReactNode;
+  title?: string | React.ReactNode;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -101,22 +101,24 @@ const Dialog = ({
       <IconButton aria-label="close" className={classes.root} onClick={onClose}>
         <CloseIcon />
       </IconButton>
-      <Box
-        alignItems="center"
-        display="flex"
-        flexDirection="row"
-        id="dialog-title"
-        justifyContent="space-between"
-        paddingBottom={2.5}
-        paddingTop={5}
-        paddingX={5}
-      >
-        {isValidElement(title) ? (
-          title
-        ) : (
-          <DialogTitle id="dialog-title">{title}</DialogTitle>
-        )}
-      </Box>
+      {title && (
+        <Box
+          alignItems="center"
+          display="flex"
+          flexDirection="row"
+          id="dialog-title"
+          justifyContent="space-between"
+          paddingBottom={2.5}
+          paddingTop={5}
+          paddingX={5}
+        >
+          {isValidElement(title) ? (
+            title
+          ) : (
+            <DialogTitle id="dialog-title">{title}</DialogTitle>
+          )}
+        </Box>
+      )}
       {subtitle}
       <DialogContent>{children}</DialogContent>
       <DialogActions disableSpacing>{actions}</DialogActions>

@@ -48,6 +48,9 @@ const DebounceSearch = ({ onSearch, timeout = 250, ...rest }: Props) => {
         <InputAdornment position="end">
           <IconButton
             aria-label="clear search"
+            style={{
+              padding: 0,
+            }}
             onClick={() => {
               ref.current.value = '';
             }}

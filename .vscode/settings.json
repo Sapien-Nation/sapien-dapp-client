@@ -4,5 +4,6 @@
     "dropzone",
     "rerender"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "god.tsconfig": "./tsconfig.json"
 }

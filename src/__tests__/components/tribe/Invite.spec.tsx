@@ -43,8 +43,8 @@ test('works correctly', async () => {
 
   // render
   expect(
-    screen.getByRole('dialog', {
-      name: /invite friends to tribe http:\/\//i,
+    screen.getByRole('heading', {
+      name: /invite to tribe/i,
     })
   ).toBeInTheDocument();
   expect(
@@ -60,13 +60,11 @@ test('works correctly', async () => {
     name: /users to invite/i,
   });
 
-  expect(
-    within(usersToInviteList).getByText('@Slowpoke Rodriguez')
-  ).toBeInTheDocument();
+  expect(within(usersToInviteList).getByText('@slowpoke')).toBeInTheDocument();
   user.click(screen.getAllByRole('button', { name: /add user/i })[0]);
 
   expect(
-    within(usersToInviteList).queryByRole('@Slowpoke Rodriguez')
+    within(usersToInviteList).queryByRole('@slowpoke')
   ).not.toBeInTheDocument();
 
   expect(
@@ -79,11 +77,11 @@ test('works correctly', async () => {
     name: /users selected to invite/i,
   });
   expect(
-    within(usersSelectedToInviteList).getByText('@Slowpoke Rodriguez')
+    within(usersSelectedToInviteList).getByText('@slowpoke')
   ).toBeInTheDocument();
   user.click(screen.getAllByRole('button', { name: /remove user/i })[0]);
   expect(
-    within(usersSelectedToInviteList).queryByText('@Slowpoke Rodriguez')
+    within(usersSelectedToInviteList).queryByText('@slowpoke')
   ).not.toBeInTheDocument();
   expect(
     screen.getByRole('button', { name: 'Send Invites (0)' })
