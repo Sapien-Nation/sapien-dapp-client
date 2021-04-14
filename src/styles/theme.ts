@@ -369,6 +369,19 @@ theme.components = {
       },
     },
   },
+  MuiInputBase: {
+    adornedStart: {
+      padding: '1rem !important',
+    },
+    adornedEnd: {
+      padding: '1rem !important',
+    },
+  },
+  MuiFab: {
+    root: {
+      boxShadow: 'none',
+    },
+  },
   MuiSwitch: {
     defaultProps: {
       disableRipple: true,
