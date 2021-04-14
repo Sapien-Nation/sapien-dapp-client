@@ -1,5 +1,11 @@
 /* istanbul ignore file */
 
+// next
+import dynamic from 'next/dynamic';
+
+// components
+const Discovery = dynamic<any>(() => import('components/discovery'));
+
 // context
 import { NavigationTypes, useNavigation } from 'context/tribes';
 
@@ -17,7 +23,7 @@ const IndexPage = () => {
       case NavigationTypes.Channel:
         return 'CHANNELS FEED TODO';
       case NavigationTypes.Discovery:
-        return 'DISCOVERY TODO';
+        return <Discovery />;
       case NavigationTypes.Tribe:
         return 'TRIBES FEED TODO';
     }
@@ -32,7 +38,7 @@ const IndexPage = () => {
           padding: 40,
         }}
       >
-        <h1>{renderView()}</h1>
+        {renderView()}
       </div>
     </Layout>
   );
