@@ -1,4 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
+import { cache } from 'swr';
 
 // types
 import type { User } from 'tools/types/user';
@@ -10,50 +11,45 @@ import axios from 'api';
 import { render, screen, user, waitFor, within } from 'utils/tests';
 
 // mocks
+import { mockChannel } from 'tools/mocks/channel';
 import { mockUsers } from 'tools/mocks/user';
 
 // components
-import Invite from 'components/tribe/Invite';
+import InviteToChannel from 'components/channels/InviteToChannel';
 
 // mocks
 const users: Array<User> = mockUsers();
+const channel = mockChannel();
 
 const onClose = jest.fn();
-const link = 'http://';
 const defaultProps = {
-  link,
+  channel,
   onClose,
 };
 
-const fetcher = () => Promise.resolve({ users });
-const renderComponent = (props = {}, opts = {}) =>
-  render(<Invite {...defaultProps} {...props} />, opts);
+const renderComponent = (props = {}) =>
+  render(<InviteToChannel {...defaultProps} {...props} />);
 
 window.prompt = jest.fn();
 beforeEach(() => {
   jest.clearAllMocks();
+
+  cache.set(`/api/channels/invite/${channel.id}`, { users });
 });
 
 test('works correctly', async () => {
   const mock = new MockAdapter(axios);
-
-  await waitFor(() => {
-    renderComponent({}, { fetcher });
-  });
+  renderComponent();
 
   // render
   expect(
     screen.getByRole('heading', {
-      name: /invite to tribe/i,
+      name: /invite members to channel/i,
     })
   ).toBeInTheDocument();
   expect(
     screen.getByRole('button', { name: 'Send Invites (0)' })
   ).toBeInTheDocument();
-
-  // copy link
-  user.click(screen.getByRole('button', { name: /copy url/i }));
-  expect(await screen.getByText('Copied to clipboard')).toBeInTheDocument();
 
   // users to invite list
   const usersToInviteList = screen.getByRole('list', {
@@ -70,7 +66,7 @@ test('works correctly', async () => {
   expect(
     screen.getByRole('button', { name: 'Send Invites (1)' })
   ).toBeInTheDocument();
-  expect(screen.getByText(/1 sapiens selected/i)).toBeInTheDocument();
+  expect(screen.getByText(/1 tribe members selected/i)).toBeInTheDocument();
 
   // invited users list
   const usersSelectedToInviteList = screen.getByRole('list', {
@@ -91,8 +87,8 @@ test('works correctly', async () => {
   user.click(screen.getAllByRole('button', { name: /add user/i })[0]);
 
   // onError
-  const error = { message: 'Create Tribe Error' };
-  mock.onPost('/api/tribes/invite').reply(400, error);
+  const error = { message: 'Invite to Channel Error' };
+  mock.onPost('/api/channels/invite').reply(400, error);
   user.click(screen.getByRole('button', { name: 'Send Invites (1)' }));
 
   await waitFor(() => {
@@ -101,7 +97,7 @@ test('works correctly', async () => {
   });
 
   // onSuccess
-  mock.onPost('/api/tribes/invite').reply(200);
+  mock.onPost('/api/channels/invite').reply(200);
   user.click(screen.getByRole('button', { name: 'Send Invites (1)' }));
 
   await waitFor(() => {

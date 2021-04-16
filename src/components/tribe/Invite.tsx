@@ -44,6 +44,7 @@ interface Props {
   link: string;
   onClose: () => void;
 }
+
 const useStyles = makeStyles(() => ({
   listItem: {
     '&:hover': {
@@ -106,6 +107,7 @@ const Invite = ({ link, onClose }: Props) => {
       confirmLabel={`Send Invites (${invited.length})`}
       isFetching={isFetching}
       maxWidth="md"
+      title="Invite to tribe"
       onClose={onClose}
       onConfirm={handleSubmit}
     >
@@ -127,14 +129,6 @@ const Invite = ({ link, onClose }: Props) => {
               }}
             >
               <Box maxWidth="40.6rem">
-                <Box
-                  display="flex"
-                  height={2.6}
-                  justifyContent="space-between"
-                  marginBottom={5}
-                >
-                  <Typography variant="h2">Invite to tribe</Typography>
-                </Box>
                 <Box className="card--rounded" padding={3}>
                   <Typography variant="body2">
                     CHOOSE SAPIENS TO INVITE
