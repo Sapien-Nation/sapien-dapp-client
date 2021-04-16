@@ -35,7 +35,7 @@ const IndexPage = () => {
         style={{
           borderRadius: '24px',
           backgroundColor: '#F9F9FA',
-          padding: 40,
+          padding: 28,
         }}
       >
         {renderView()}

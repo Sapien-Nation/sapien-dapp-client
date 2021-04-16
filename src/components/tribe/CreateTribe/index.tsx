@@ -67,7 +67,10 @@ const CreateTribe = ({ onClose }: Props) => {
             id: String(data),
             name: values.name,
             channels: [],
+            cover: '/fixtures/general/1920x200.png',
             image: '/fixtures/256x256/stonks.png',
+            membersCount: 0,
+            description: '',
             permissions: { canAddChannel: false, canAddSquare: false },
           };
 
