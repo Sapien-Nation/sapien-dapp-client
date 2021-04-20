@@ -53,7 +53,7 @@ const Squares = ({ squares }: Props) => {
               style={{
                 color: navigation?.secondary === square.id ? white : black,
               }}
-              variant="body1"
+              variant="body4"
             >
               #{square.name}
             </Typography>

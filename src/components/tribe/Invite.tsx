@@ -23,7 +23,6 @@ import {
   ListItemAvatar,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
 } from '@material-ui/core';
 import {
   Add as AddIcon,
@@ -162,17 +161,14 @@ const Invite = ({ link, onClose }: Props) => {
                           primary={user.email}
                           secondary={`@${user.username}`}
                         />
-                        <ListItemSecondaryAction
+                        <Fab
+                          aria-label="add user"
+                          color="primary"
+                          size="small"
                           onClick={() => handleInvite(user)}
                         >
-                          <Fab
-                            aria-label="add user"
-                            color="primary"
-                            size="small"
-                          >
-                            <AddIcon />
-                          </Fab>
-                        </ListItemSecondaryAction>
+                          <AddIcon />
+                        </Fab>
                       </ListItem>
                     ))}
                   </List>
@@ -202,14 +198,12 @@ const Invite = ({ link, onClose }: Props) => {
                           primary={user.email}
                           secondary={`@${user.username}`}
                         />
-                        <ListItemSecondaryAction>
-                          <IconButton
-                            aria-label="remove user"
-                            onClick={() => handleRemove(user)}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
+                        <IconButton
+                          aria-label="remove user"
+                          onClick={() => handleRemove(user)}
+                        >
+                          <CloseIcon />
+                        </IconButton>
                       </ListItem>
                     ))}
                   </List>

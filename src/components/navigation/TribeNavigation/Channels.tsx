@@ -110,7 +110,7 @@ const Channels = ({ channels }: Props) => {
                   style={{
                     color: navigation?.secondary === channel.id ? white : black,
                   }}
-                  variant="body1"
+                  variant="body4"
                 >
                   {channel.name}
                 </Typography>
@@ -119,7 +119,7 @@ const Channels = ({ channels }: Props) => {
                     color:
                       navigation?.secondary === channel.id ? white : darkGrey,
                   }}
-                  variant="body2"
+                  variant="tooltip"
                 >
                   {channel.membersCount} members
                 </Typography>
@@ -129,7 +129,7 @@ const Channels = ({ channels }: Props) => {
               style={{
                 color: navigation?.secondary === channel.id ? white : darkGrey,
               }}
-              variant="body2"
+              variant="tooltip"
             >
               {formatTimestampToRelative(channel.lastUpdateAt)}
             </Typography>

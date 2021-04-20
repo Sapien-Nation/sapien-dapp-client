@@ -66,9 +66,9 @@ const SummaryStep = () => {
         errors={errors}
         inputRef={descriptionRef}
         label="Description"
+        maxRows={5}
+        minRows={3}
         placeholder="Set brief description"
-        rows={3}
-        rowsMax={5}
         {...descriptionRest}
       />
       <Switch errors={errors} label="Public tribe" name="public" />
