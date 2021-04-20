@@ -57,7 +57,7 @@ const NavigationList = ({ children, showAction, title, onClick }: Props) => {
           width="100%"
         >
           <Box alignItems="center" display="flex">
-            <Typography variant="h5">{title}</Typography>
+            <Typography variant="captionItem">{title}</Typography>
             {showAction && (
               <IconButton
                 aria-label={`Create ${title}`}

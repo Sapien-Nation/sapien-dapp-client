@@ -6,8 +6,12 @@ import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
 // mui
-import { Input as MuiInput, Typography, makeStyles } from '@material-ui/core';
-import { Autocomplete as MuiAutocomplete } from '@material-ui/lab';
+import {
+  Autocomplete as MuiAutocomplete,
+  Input as MuiInput,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   image: () => ({
@@ -65,7 +69,6 @@ const Autocomplete = ({
   ...rest
 }: Props) => {
   const classes = useStyles();
-
   return (
     <MuiAutocomplete
       disablePortal
@@ -86,10 +89,10 @@ const Autocomplete = ({
       renderInput={(params) => (
         <div ref={params.InputProps.ref} style={{ marginBottom: spacing }}>
           <MuiInput
-            id={name}
-            name={name}
-            {...params.inputProps}
             endAdornment={endAdornment}
+            id={name}
+            {...params}
+            name={name}
             style={{ width: '100%', borderRadius: '0.8rem' }}
             {...rest}
           />
@@ -113,7 +116,11 @@ const Autocomplete = ({
           )}
         </div>
       )}
-      renderOption={(option) => <OptionComponent option={option} />}
+      renderOption={(props, option) => (
+        <li {...props}>
+          <OptionComponent option={option} />
+        </li>
+      )}
       style={{ width: 271 }}
       onChange={(_, value: any) => {
         if (value === null) return;

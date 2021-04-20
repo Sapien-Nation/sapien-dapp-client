@@ -107,7 +107,7 @@ const ChannelOption = ({
 const TribeOption = ({ option }: { option: Tribe }) => {
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="row">
+    <Box key={option.id} display="flex" flexDirection="row">
       <img alt={option.name} className={classes.image} src={option.image} />
       <Box display="flex" flexDirection="column" marginLeft={1}>
         <Typography style={{ fontWeight: 600 }} variant="body1">

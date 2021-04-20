@@ -76,7 +76,6 @@ const AutocompleteSelect = ({
         fontWeight={700}
         role="presentation"
         style={{ cursor: 'pointer' }}
-        onClick={handleClick}
       >
         {selectLabel?.name}
         {''}
@@ -90,6 +89,7 @@ const AutocompleteSelect = ({
           style={{
             transform: isOpen ? '' : 'rotate(180deg)',
           }}
+          onClick={handleClick}
         >
           <RoundedArrow />
         </IconButton>

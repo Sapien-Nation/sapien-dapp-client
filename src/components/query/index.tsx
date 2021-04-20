@@ -4,7 +4,7 @@ import useSWR, { mutate } from 'swr';
 import type { SWRConfiguration, Key } from 'swr';
 
 // mui
-import { Skeleton } from '@material-ui/lab';
+import { Skeleton } from '@material-ui/core';
 
 // components
 import { ErrorView } from 'components/general';

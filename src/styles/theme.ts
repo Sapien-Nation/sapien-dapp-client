@@ -1,5 +1,6 @@
 // mui
 import { createMuiTheme } from '@material-ui/core';
+import * as React from 'react';
 
 // styles
 import {
@@ -14,10 +15,52 @@ import {
 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
+declare module '@material-ui/core/styles' {
+  interface TypographyVariants {
+    body3: React.CSSProperties;
+    body4: React.CSSProperties;
+    buttonLarge: React.CSSProperties;
+    buttonMedium: React.CSSProperties;
+    buttonSemiMedium: React.CSSProperties;
+    buttonSmall: React.CSSProperties;
+    caption: React.CSSProperties;
+    captionItem: React.CSSProperties;
+    tooltip: React.CSSProperties;
+  }
+
+  // allow configuration using `createMuiTheme`
+  interface TypographyVariantsOptions {
+    body3?: React.CSSProperties;
+    body4?: React.CSSProperties;
+    buttonLarge?: React.CSSProperties;
+    buttonMedium?: React.CSSProperties;
+    buttonSemiMedium?: React.CSSProperties;
+    buttonSmall?: React.CSSProperties;
+    caption?: React.CSSProperties;
+    captionItem?: React.CSSProperties;
+    tooltip?: React.CSSProperties;
+  }
+}
+
+// Update the Typography's variant prop options
+declare module '@material-ui/core/Typography' {
+  interface TypographyPropsVariantOverrides {
+    body3: true;
+    body4: true;
+    buttonLarge: true;
+    buttonMedium: true;
+    buttonSemiMedium: true;
+    buttonSmall: true;
+    caption: true;
+    captionItem: true;
+    tooltip: true;
+  }
+}
+
 const theme = createMuiTheme({
   spacing: (factor) => `${parseFloat((1 * factor).toFixed(2))}rem`,
   palette: {
-    type: 'light',
+    // type: 'light',
     common: {
       black: black,
     },
@@ -56,20 +99,86 @@ const theme = createMuiTheme({
   typography: {
     htmlFontSize: 10,
     fontFamily: ['averta', 'Calibri', 'Arial', 'sans-serif'].join(','),
-    h5: {
-      color: darkGrey,
+    h1: {
+      fontSize: '3.2rem',
+      fontWeight: 600,
+      lineHeight: '4.48rem',
+    },
+    h2: {
+      fontSize: '2.2rem',
+      fontWeight: 600,
+      lineHeight: '3.08rem',
+    },
+    h3: {
+      fontSize: '1.8rem',
+      fontWeight: 600,
+      lineHeight: '2.52rem',
+    },
+    body1: {
+      fontSize: '1.8rem',
+      fontWeight: 400,
+      lineHeight: '2.52rem',
+    },
+    body2: {
+      fontSize: '1.6rem',
+      fontWeight: 400,
+      lineHeight: '2.24rem',
+    },
+    body3: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
+      lineHeight: '2.1rem',
+    },
+    body4: {
+      fontSize: '1.4rem',
+      fontWeight: 400,
+      lineHeight: '1.96rem',
+    },
+    buttonLarge: {
+      fontSize: '1.6rem',
+      fontWeight: 600,
+      lineHeight: '2.24rem',
+    },
+    buttonMedium: {
+      fontSize: '1.4rem',
+      fontWeight: 600,
+      lineHeight: '1.96rem',
+    },
+    buttonSemiMedium: {
+      fontSize: '1.3rem',
+      fontWeight: 600,
+      lineHeight: '1.82rem',
+    },
+    buttonSmall: {
       fontSize: '1.2rem',
       fontWeight: 600,
+      lineHeight: '1.68rem',
+    },
+    caption: {
+      fontSize: '1.2rem',
+      fontWeight: 700,
+      lineHeight: '1.68rem',
+    },
+    captionItem: {
+      fontSize: '1.2rem',
+      fontWeight: 700,
+      lineHeight: '1.68rem',
+      letterSpacing: '1px',
       textTransform: 'uppercase',
-      letterSpacing: '1.5px',
+      color: darkGrey,
+    },
+    tooltip: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
+      lineHeight: '1.68rem',
     },
   },
 });
 
 // Override default styles
-theme.overrides = {
+theme.components = {
   MuiCssBaseline: {
-    '@global': {
+    styleOverrides: {
       html: {
         WebkitFontSmoothing: 'auto',
         fontSize: '62.5%',
@@ -83,233 +192,223 @@ theme.overrides = {
     },
   },
   MuiListItem: {
-    root: {
-      paddingTop: 0,
-      paddingBottom: 0,
-    },
-    button: {
-      '&:hover': {
-        backgroundColor: 'transparent',
+    styleOverrides: {
+      root: {
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
+      button: {
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
       },
     },
   },
   MuiDialog: {
-    paper: {
-      borderRadius: '1rem',
-    },
-    paperWidthXs: {
-      maxWidth: '49rem',
-      width: '100%',
-    },
-    paperWidthSm: {
-      maxWidth: '51.8rem',
-      width: '100%',
+    styleOverrides: {
+      paper: {
+        borderRadius: '1rem',
+        width: '100%',
+      },
+      paperWidthXs: {
+        maxWidth: '49rem',
+        width: '100%',
+      },
+      paperWidthSm: {
+        maxWidth: '51.8rem',
+        width: '100%',
+      },
     },
   },
   MuiDialogTitle: {
-    root: {
-      padding: 0,
-      '&> h2': {
-        fontWeight: 600,
-        fontSize: '2.2rem',
+    styleOverrides: {
+      root: {
+        padding: 0,
+        '&> h2': {
+          fontWeight: 600,
+          fontSize: '2.2rem',
+        },
       },
     },
   },
   MuiDialogContent: {
-    root: {
-      padding: '1rem 5rem',
+    styleOverrides: {
+      root: {
+        padding: '1rem 5rem',
+      },
     },
   },
   MuiDialogActions: {
-    root: {
-      padding: '1rem 5rem 5rem 5rem',
+    styleOverrides: {
+      root: {
+        padding: '1rem 5rem 5rem 5rem',
+      },
     },
   },
   MuiButton: {
-    root: {
-      borderRadius: '0.6rem',
-      textTransform: 'none',
-      minHeight: '4rem',
-      minWidth: '8rem',
-      fontWeight: 600,
+    defaultProps: {
+      disableRipple: true,
+      disableElevation: true,
     },
-    containedSecondary: {
-      fontWeight: 700,
+    styleOverrides: {
+      root: {
+        borderRadius: '0.6rem',
+        textTransform: 'none',
+        minHeight: '4rem',
+        minWidth: '8rem',
+        fontWeight: 600,
+      },
+      containedSecondary: {
+        fontWeight: 700,
+      },
     },
   },
   MuiInputLabel: {
-    root: {
-      fontSize: '1.4rem',
-      fontWeight: 600,
-      transform: 'translate(0, 0) scale(1)',
-      color: (theme as any).palette.formLabel.main,
+    defaultProps: {
+      shrink: true,
     },
-    shrink: {
-      transform: 'translate(0, 0) scale(1)',
-    },
-    formControl: {
-      position: 'static',
+    styleOverrides: {
+      root: {
+        fontSize: '1.4rem',
+        fontWeight: 600,
+        transform: 'translate(0, 0) scale(1)',
+        color: (theme as any).palette.formLabel.main,
+      },
+      shrink: {
+        transform: 'translate(0, 0) scale(1)',
+      },
+      formControl: {
+        position: 'static',
+      },
     },
   },
   MuiFormControl: {
-    root: {
-      marginBottom: `${theme.spacing(1.6)}`,
+    styleOverrides: {
+      root: {
+        marginBottom: `${theme.spacing(1.6)}`,
+      },
     },
   },
   MuiInput: {
-    root: {
-      border: `2px solid transparent`,
-      background: (theme as any).palette.input.main,
-      padding: theme.spacing(1, 2),
-      borderRadius: '0.6rem',
-      minHeight: '4.6rem',
-      fontSize: '1.4rem',
-      '&$focused': {
+    defaultProps: {
+      disableUnderline: true,
+    },
+    styleOverrides: {
+      root: {
+        border: `2px solid transparent`,
+        background: (theme as any).palette.input.main,
+        padding: theme.spacing(1, 2),
         borderRadius: '0.6rem',
-        border: `2px solid ${(theme as any).palette.primary.main}`,
-        boxSizing: 'border-box',
+        minHeight: '4.6rem',
+        fontSize: '1.4rem',
+        '&$focused': {
+          borderRadius: '0.6rem',
+          border: `2px solid ${(theme as any).palette.primary.main}`,
+          boxSizing: 'border-box',
+        },
       },
-    },
-    formControl: {
-      'label + &': {
-        marginTop: theme.spacing(1.6),
+      formControl: {
+        'label + &': {
+          marginTop: theme.spacing(1.6),
+        },
       },
-    },
-    input: {
-      padding: 0,
-    },
-  },
-  MuiTypography: {
-    caption: {
-      color: (theme as any).palette.caption.main,
-      fontSize: '1.4rem',
-    },
-    h1: {
-      fontSize: '3.2rem',
-      fontWeight: 600,
-    },
-    h2: {
-      fontSize: '2.2rem',
-      fontWeight: 600,
-    },
-    h3: {
-      fontSize: '1.8rem',
-      fontWeight: 600,
-    },
-    h4: {
-      fontSize: '1.6rem',
-      fontWeight: 400,
-      lineHeight: '2.4rem',
-    },
-    body1: {
-      color: black,
-      fontSize: '1.4rem',
-    },
-    body2: {
-      color: darkGrey,
-      fontSize: '1.2rem',
-    },
-    subtitle1: {
-      fontSize: '1.2rem',
-      fontWeight: 600,
-    },
-    subtitle2: {
-      fontSize: '1.2rem',
-      fontWeight: 400,
-    },
-  },
-  MuiInputAdornment: {
-    positionStart: {
-      color: (theme as any).palette.caption.main,
-    },
-  },
-  MuiSwitch: {
-    root: {
-      width: 38,
-      height: 20,
-      padding: 0,
-    },
-    switchBase: {
-      padding: 2,
-      '&$checked': {
-        transform: 'translateX(18px)',
-        color: theme.palette.common.white,
-        '& + $track': {
-          backgroundColor: green,
-          opacity: 1,
-          border: 'none',
+      input: {
+        padding: 0,
+      },
+      inputTypeSearch: {
+        '&::-webkit-search-decoration': {
+          '-webkit-appearance': 'none',
+        },
+        '&::-webkit-search-cancel-button': {
+          '-webkit-appearance': 'none',
+        },
+        '&::-webkit-search-results-button': {
+          '-webkit-appearance': 'none',
+        },
+        '&::-webkit-search-results-decoration': {
+          '-webkit-appearance': 'none',
         },
       },
     },
-    thumb: {
-      width: 15,
-      height: 15,
-    },
-    track: {
-      borderRadius: 26 / 2,
-      border: `1px solid ${(theme as any).palette.input.main}`,
-      backgroundColor: darker,
-      opacity: 1,
-      transition: theme.transitions.create(['background-color', 'border']),
-    },
-    checked: {},
   },
-  MuiSelect: {
-    select: {
-      '&:focus': {
-        backgroundColor: 'none',
+  MuiInputAdornment: {
+    styleOverrides: {
+      positionStart: {
+        color: (theme as any).palette.caption.main,
       },
     },
   },
-  MuiTabs: {
-    root: {
-      color: darkGrey,
-    },
-    indicator: {
-      display: 'none',
-    },
-  },
-  MuiTab: {
-    root: {
-      paddingLeft: 0,
-      paddingRight: theme.spacing(2.5),
-      paddingTop: 0,
-      paddingBottom: 0,
-      minWidth: 'auto !important',
-      fontSize: '1.6rem',
-      fontWeight: 600,
-      opacity: '1 !important',
-      '&$selected': {
-        color: black,
+  MuiInputBase: {
+    styleOverrides: {
+      adornedStart: {
+        padding: '1rem !important',
+      },
+      adornedEnd: {
+        padding: '1rem !important',
       },
     },
-    wrapper: {
-      alignItems: 'flex-start',
-      textTransform: 'capitalize',
+  },
+  MuiFab: {
+    styleOverrides: {
+      root: {
+        boxShadow: 'none',
+      },
     },
-  },
-};
-
-// Global button props
-theme.props = {
-  MuiIconButton: {
-    disableRipple: true,
-  },
-  MuiButton: {
-    disableRipple: true,
-    disableElevation: true,
-  },
-  MuiInputLabel: {
-    shrink: true,
-  },
-  MuiInput: {
-    disableUnderline: true,
   },
   MuiSwitch: {
-    disableRipple: true,
+    defaultProps: {
+      disableRipple: true,
+    },
+    styleOverrides: {
+      root: {
+        width: 38,
+        height: 20,
+        padding: 0,
+      },
+      switchBase: {
+        padding: 2,
+        '&$checked': {
+          transform: 'translateX(18px)',
+          color: theme.palette.common.white,
+          '& + $track': {
+            backgroundColor: green,
+            opacity: 1,
+            border: 'none',
+          },
+        },
+      },
+      thumb: {
+        width: 15,
+        height: 15,
+      },
+      track: {
+        borderRadius: 26 / 2,
+        border: `1px solid ${(theme as any).palette.input.main}`,
+        backgroundColor: darker,
+        opacity: 1,
+        transition: theme.transitions.create(['background-color', 'border']),
+      },
+      checked: {},
+    },
+  },
+  MuiSelect: {
+    styleOverrides: {
+      select: {
+        '&:focus': {
+          backgroundColor: 'none',
+        },
+      },
+    },
+  },
+  MuiIconButton: {
+    defaultProps: {
+      disableRipple: true,
+    },
   },
   MuiTab: {
-    disableRipple: true,
+    defaultProps: {
+      disableRipple: true,
+    },
   },
 };
 

@@ -31,7 +31,7 @@ test('render correctly', () => {
   renderComponent();
 
   // default render
-  expect(screen.getByRole('heading', { name: 'Sapien' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Sapien' })).toBeInTheDocument();
 
   // click badge store
   user.click(screen.getByRole('button', { name: /badge store/i }));

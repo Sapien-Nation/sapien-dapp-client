@@ -47,9 +47,9 @@ const SummaryStep = () => {
         errors={errors}
         inputRef={descriptionRef}
         label="Description"
+        maxRows={5}
+        minRows={3}
         placeholder="Description"
-        rows={3}
-        rowsMax={5}
         {...descriptionRest}
       />
     </>

@@ -153,10 +153,10 @@ const Settings = ({ channel, formKey, onClose }: Props) => {
         errors={errors}
         inputRef={descriptionRef}
         label="Description"
+        maxRows={5}
+        minRows={3}
         name="description"
         placeholder="Set brief description"
-        rows={3}
-        rowsMax={5}
         {...descriptionRest}
       />
       <FormControl fullWidth>

@@ -111,7 +111,7 @@ const PasswordStrengthInput = ({
       >
         <InputLabel htmlFor={name}>{label}</InputLabel>
         {tooltipText && (
-          <Tooltip interactive title={<Typography>{tooltipText}</Typography>}>
+          <Tooltip title={<Typography>{tooltipText}</Typography>}>
             <Help
               fontSize="small"
               style={{ marginLeft: 5, color: lightGrey }}

@@ -125,7 +125,7 @@ const TribeNavigation = ({ tribes }: Props) => {
                     ? white
                     : darkGrey,
               }}
-              variant="h5"
+              variant="captionItem"
             >
               {navigation?.main?.name}
             </Typography>
@@ -156,7 +156,7 @@ const TribeNavigation = ({ tribes }: Props) => {
                     ? white
                     : darkGrey,
               }}
-              variant="h5"
+              variant="captionItem"
             >
               Badge Store
             </Typography>

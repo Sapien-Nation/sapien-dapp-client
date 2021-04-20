@@ -73,7 +73,7 @@ const TextInput = ({
         <Box alignItems="center" display="flex">
           <InputLabel htmlFor={name}>{label}</InputLabel>
           {tooltipText && (
-            <Tooltip interactive title={<Typography>{tooltipText}</Typography>}>
+            <Tooltip title={<Typography>{tooltipText}</Typography>}>
               <Help
                 fontSize="small"
                 style={{ marginLeft: 5, color: lightGrey }}
@@ -127,9 +127,11 @@ const TextInput = ({
             color="secondary"
             role="alert"
             style={{
-              textAlign: 'right',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'flex-end',
             }}
-            variant="subtitle1"
+            variant="tooltip"
           >
             {message}
           </Typography>
