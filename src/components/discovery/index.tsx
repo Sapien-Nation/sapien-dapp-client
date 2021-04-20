@@ -72,7 +72,7 @@ const Discovery = () => {
               container
               alignItems="flex-start"
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               spacing={2}
             >
               {suggested.map((tribe) => (
@@ -85,7 +85,7 @@ const Discovery = () => {
             <Box display="flex" justifyContent="space-between" marginY={3}>
               <div>
                 <Typography style={{ margin: 0 }} variant="h2">
-                  Friends’ Tribes
+                  Friends Tribes
                 </Typography>
                 <Typography variant="caption">
                   Tribes your friends are in
@@ -99,7 +99,7 @@ const Discovery = () => {
               container
               alignItems="flex-start"
               direction="row"
-              justify="flex-start"
+              justifyContent="flex-start"
               spacing={2}
             >
               {tribes.map((tribe) => (

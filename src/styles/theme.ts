@@ -330,20 +330,6 @@ theme.components = {
         },
       },
     },
-    inputTypeSearch: {
-      '&::-webkit-search-decoration': {
-        '-webkit-appearance': 'none',
-      },
-      '&::-webkit-search-cancel-button': {
-        '-webkit-appearance': 'none',
-      },
-      '&::-webkit-search-results-button': {
-        '-webkit-appearance': 'none',
-      },
-      '&::-webkit-search-results-decoration': {
-        '-webkit-appearance': 'none',
-      },
-    },
   },
   MuiInputAdornment: {
     styleOverrides: {
@@ -367,19 +353,6 @@ theme.components = {
       root: {
         boxShadow: 'none',
       },
-    },
-  },
-  MuiInputBase: {
-    adornedStart: {
-      padding: '1rem !important',
-    },
-    adornedEnd: {
-      padding: '1rem !important',
-    },
-  },
-  MuiFab: {
-    root: {
-      boxShadow: 'none',
     },
   },
   MuiSwitch: {

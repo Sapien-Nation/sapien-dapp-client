@@ -23,11 +23,13 @@ test('Discovery', async () => {
   renderComponent();
 
   expect(screen.getByText(/Discovery/i)).toBeInTheDocument();
+
   let searchTerm = createRandomString(10);
 
   await waitFor(() => {
     user.type(screen.getByRole('searchbox'), searchTerm);
   });
+
   expect(screen.getByRole('searchbox')).toHaveValue(searchTerm);
   await waitFor(() => user.click(screen.getByLabelText(/clear search/i)));
   expect(screen.getByRole('searchbox')).toHaveValue('');
@@ -35,9 +37,11 @@ test('Discovery', async () => {
   // Search a tribe
   searchTerm = 'Sapien';
   cache.set(`/api/discovery/tribe?search=${searchTerm}`, { suggested, tribes });
+
   await waitFor(() => {
     user.type(screen.getByRole('searchbox'), searchTerm);
   });
+
   await waitFor(() => {
     expect(screen.getAllByText(/Sapien/i)[0]).toBeInTheDocument();
   });
