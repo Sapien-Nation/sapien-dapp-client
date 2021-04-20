@@ -25,7 +25,6 @@ import {
   ListItemAvatar,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
 } from '@material-ui/core';
 import {
   Add as AddIcon,
@@ -159,20 +158,19 @@ const Invite = ({
                       primary={user.displayName}
                       secondary={`@${user.username}`}
                     />
-                    <ListItemSecondaryAction onClick={() => handleInvite(user)}>
-                      <Fab
-                        aria-label="add user"
-                        color="primary"
-                        size="small"
-                        style={{
-                          width: '2.2rem',
-                          height: '2.2rem',
-                          minHeight: '2.2rem',
-                        }}
-                      >
-                        <AddIcon fontSize="small" />
-                      </Fab>
-                    </ListItemSecondaryAction>
+                    <Fab
+                      aria-label="add user"
+                      color="primary"
+                      size="small"
+                      style={{
+                        width: '2.2rem',
+                        height: '2.2rem',
+                        minHeight: '2.2rem',
+                      }}
+                      onClick={() => handleInvite(user)}
+                    >
+                      <AddIcon fontSize="small" />
+                    </Fab>
                   </ListItem>
                 ))}
               </List>
@@ -233,14 +231,12 @@ const Invite = ({
                       primary={user.displayName}
                       secondary={`@${user.username}`}
                     />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="remove user"
-                        onClick={() => handleRemove(user)}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
+                    <IconButton
+                      aria-label="remove user"
+                      onClick={() => handleRemove(user)}
+                    >
+                      <CloseIcon />
+                    </IconButton>
                   </ListItem>
                 ))}
               </List>
