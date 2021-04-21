@@ -317,16 +317,16 @@ theme.components = {
       },
       inputTypeSearch: {
         '&::-webkit-search-decoration': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
         },
         '&::-webkit-search-cancel-button': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
         },
         '&::-webkit-search-results-button': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
         },
         '&::-webkit-search-results-decoration': {
-          '-webkit-appearance': 'none',
+          WebkitAppearance: 'none',
         },
       },
     },

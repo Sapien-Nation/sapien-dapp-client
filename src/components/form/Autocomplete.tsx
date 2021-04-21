@@ -8,7 +8,7 @@ import type { InputProps } from '@material-ui/core';
 // mui
 import {
   Autocomplete as MuiAutocomplete,
-  Input as MuiInput,
+  TextField as MuiInput,
   Typography,
   makeStyles,
 } from '@material-ui/core';
@@ -89,12 +89,15 @@ const Autocomplete = ({
       renderInput={(params) => (
         <div ref={params.InputProps.ref} style={{ marginBottom: spacing }}>
           <MuiInput
-            endAdornment={endAdornment}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: endAdornment,
+              ...rest,
+            }}
             id={name}
             {...params}
             name={name}
             style={{ width: '100%', borderRadius: '0.8rem' }}
-            {...rest}
           />
           {errors && (
             <ErrorMessage
