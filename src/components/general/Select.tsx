@@ -1,62 +1,73 @@
+import { useState } from 'react';
+
 // types
-import type { SelectProps } from '@material-ui/core';
+import type { InputProps } from '@material-ui/core';
 
 // mui
-import {
-  Box,
-  createStyles,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-  Select,
-  Theme,
-} from '@material-ui/core';
+import { Box, Select, MenuItem, InputLabel, useTheme } from '@material-ui/core';
 
-interface Props extends SelectProps {
-  id: string;
+interface Props extends InputProps {
+  defaultValue: any;
+  name: string;
   options: Array<{
     name: string;
     value: string;
   }>;
+  label: string;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    select: {
-      background: 'none',
-      border: 'none !important',
-      padding: theme.spacing(0),
-      '&:focus': {
-        backgroundColor: 'none',
-      },
-    },
-    label: {
-      marginRight: theme.spacing(0.8),
-      color: (theme as any).palette.caption.main,
-      fontWeight: 'normal',
-    },
-  })
-);
-
-const SelectInput = ({ id, options, label, ...rest }: Props) => {
-  const classes = useStyles();
+const SelectInput = ({
+  defaultValue,
+  name,
+  onChange,
+  options,
+  label,
+  ...rest
+}: Props) => {
+  const theme = useTheme();
+  const [selected, setSelect] = useState(defaultValue);
 
   return (
-    <Box alignItems="center" display="flex" justifyContent="flex-start">
-      <InputLabel className={classes.label} id={`${id}-label`}>
-        {label}:
+    <Box
+      alignItems="center"
+      display="flex"
+      flexDirection="row"
+      style={{
+        background: (theme as any).palette.input.main,
+        borderRadius: '0.6rem',
+        padding: `0 ${theme.spacing(1)}`,
+      }}
+    >
+      <InputLabel
+        color="secondary"
+        htmlFor={name}
+        style={{
+          color: (theme as any).palette.caption.main,
+        }}
+      >
+        {label}
       </InputLabel>
-
       <Select
-        displayEmpty
-        className={classes.select}
-        id={id}
-        labelId={`${id}-label`}
+        displayEmpty={true}
+        id={name}
+        inputProps={{ 'aria-label': `${name} label` }}
+        name={name}
+        style={{
+          background: 'transparent',
+          flex: 1,
+          minHeight: '4rem',
+          fontWeight: 600,
+        }}
+        value={selected}
+        onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
+          setSelect(event.target.value as string);
+          onChange(event.target.value as any);
+        }}
         {...rest}
       >
-        {options.map((data) => (
-          <MenuItem key={data.name} value={data.value}>
-            {data.name}
+        {options.map((option) => (
+          <MenuItem key={option.name} value={option.value}>
+            {option.name}
           </MenuItem>
         ))}
       </Select>
