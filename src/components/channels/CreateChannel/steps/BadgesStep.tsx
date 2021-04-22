@@ -7,7 +7,7 @@ import {
   Search,
   SingleBadge,
   SubscriptionBadge,
-} from 'components/tribe/assets/svg';
+} from 'components/assets/svg';
 
 // mui
 import {

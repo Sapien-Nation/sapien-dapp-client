@@ -1,6 +1,13 @@
 export { AddIcon } from './AddIcon';
+export { Community } from './Community';
 export { DeleteIcon } from './DeleteIcon';
 export { FullLogo } from './FullLogo';
 export { Globe } from './Globe';
+export { MultipleBadges } from './MultipleBadges';
+export { NextArrow } from './NextArrow';
 export { RoundedArrow } from './RoundedArrow';
 export { RssIcon } from './RssIcon';
+export { Search } from './Search';
+export { SingleBadge } from './SingleBadge';
+export { SubscriptionBadge } from './SubscriptionBadge';
+export { ThreeDots } from './ThreeDots';

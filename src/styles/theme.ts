@@ -12,6 +12,7 @@ import {
   darkGrey,
   inputBG,
   lightGrey,
+  purpleOpacity,
 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
@@ -60,7 +61,6 @@ declare module '@material-ui/core/Typography' {
 const theme = createMuiTheme({
   spacing: (factor) => `${parseFloat((1 * factor).toFixed(2))}rem`,
   palette: {
-    // type: 'light',
     common: {
       black: black,
     },
@@ -68,6 +68,16 @@ const theme = createMuiTheme({
       light: purple,
       main: purple,
       dark: purple,
+    },
+    secondary: {
+      light: purpleOpacity,
+      main: purpleOpacity,
+      dark: purpleOpacity,
+    },
+    info: {
+      light: darkGrey,
+      main: darkGrey,
+      dark: darkGrey,
     },
     // @ts-ignore
     formLabel: {
