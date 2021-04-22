@@ -24,7 +24,6 @@ import theme from 'styles/theme';
 
 // context
 import { AuthenticationProvider } from 'context/user';
-import { NavigationProvider } from 'context/tribes';
 
 // components
 import ErrorFallback from 'components/general/ErrorView';
@@ -33,6 +32,8 @@ import ErrorFallback from 'components/general/ErrorView';
 import '../styles/index.css';
 
 initSentry();
+
+const Noop = ({ children }) => children;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -43,6 +44,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     }
   }, []);
 
+  // @ts-ignore
+  const Layout = Component.Layout || Noop;
   return (
     <>
       <Head>
@@ -68,9 +71,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
               }}
             >
               <AuthenticationProvider>
-                <NavigationProvider>
+                <Layout>
                   <Component {...pageProps} />
-                </NavigationProvider>
+                </Layout>
               </AuthenticationProvider>
             </SWRConfig>
           </ThemeProvider>

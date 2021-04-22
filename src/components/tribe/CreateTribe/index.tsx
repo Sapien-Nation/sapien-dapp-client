@@ -12,12 +12,6 @@ import axios from 'api';
 // mui
 import { Typography } from '@material-ui/core';
 
-// constants
-import { NavigationTypes } from 'context/tribes';
-
-// context
-import { useNavigation } from 'context/tribes';
-
 //components
 import Dialog from 'components/dialog';
 import { MediaStep, TribeSummary } from './steps';
@@ -43,7 +37,6 @@ interface Props {
 const CreateTribe = ({ onClose }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const [step, setStep] = useState(Step.TribeSummary);
-  const [, setNavigation] = useNavigation();
 
   const methods = useForm({
     defaultValues,
@@ -82,11 +75,6 @@ const CreateTribe = ({ onClose }: Props) => {
             }),
             false
           );
-          setNavigation({
-            main: tribe,
-            secondary: tribe.id,
-            type: NavigationTypes.Tribe,
-          });
           onClose();
         } catch ({ response }) {
           enqueueSnackbar(response.data.message);

@@ -1,8 +1,8 @@
 // types
 import type { Channel } from 'tools/types/channel';
 
-// context
-import { useNavigation } from 'context/tribes';
+// next
+import { useRouter } from 'next/router';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -13,11 +13,12 @@ import Header from './Header';
 import Query from 'components/query';
 
 const ChannelView = () => {
-  const [navigation] = useNavigation();
+  const { query } = useRouter();
+  const { id } = query;
 
   return (
     <>
-      <Query apiUrl={`/api/channels/channel/${navigation.secondary}`}>
+      <Query apiUrl={`/api/channel/${id}`}>
         {({ channel }: { channel: Channel }) => <Header channel={channel} />}
       </Query>
       <Box marginTop={3}>

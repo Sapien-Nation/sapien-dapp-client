@@ -1,17 +1,11 @@
 import { useState } from 'react';
 
-// types
-import type { Tribe } from 'tools/types/tribe';
-
 // next
 import dynamic from 'next/dynamic';
-
-// constants
-import { NavigationTypes } from 'context/tribes';
+import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
-import { useNavigation } from 'context/tribes';
 
 // components
 const CreateTribe = dynamic<any>(() => import('components/tribe/CreateTribe'), {
@@ -31,23 +25,20 @@ export enum Dialog {
 const Sidebar = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { me } = useAuth();
-  const [navigation] = useNavigation();
+  const { asPath } = useRouter();
 
   if (me === undefined) return null;
 
   return (
     <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
       <Query apiUrl="/api/tribes/followed" loader={null}>
-        {({ tribes }: { tribes: Array<Tribe> }) => (
+        {() => (
           <>
-            <TribeBar
-              createTribe={() => setDialog(Dialog.CreateTribe)}
-              tribes={tribes}
-            />
-            {navigation?.type === NavigationTypes.Discovery ? (
+            <TribeBar createTribe={() => setDialog(Dialog.CreateTribe)} />
+            {asPath === '/discovery' ? (
               <DiscoverNavigation />
             ) : (
-              <TribeNavigation tribes={tribes} />
+              <TribeNavigation />
             )}
           </>
         )}

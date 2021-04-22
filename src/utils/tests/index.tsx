@@ -18,7 +18,6 @@ import theme from 'styles/theme';
 import { mockRouter } from 'mocks/routes';
 
 // providers
-import { NavigationProvider } from 'context/tribes';
 import { RouterContext } from 'next/dist/next-server/lib/router-context';
 import { AuthenticationProvider } from 'context/user';
 
@@ -46,9 +45,7 @@ const AllTheProviders = ({
       >
         <ThemeProvider theme={theme}>
           <RouterContext.Provider value={mockRouter(router)}>
-            <AuthenticationProvider>
-              <NavigationProvider>{children}</NavigationProvider>
-            </AuthenticationProvider>
+            <AuthenticationProvider>{children}</AuthenticationProvider>
           </RouterContext.Provider>
         </ThemeProvider>
       </SWRConfig>

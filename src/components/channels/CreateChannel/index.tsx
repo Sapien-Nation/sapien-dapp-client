@@ -13,11 +13,8 @@ import { Typography } from '@material-ui/core';
 // api
 import axios from 'api';
 
-// constants
-import { NavigationTypes } from 'context/tribes';
-
-// context
-import { useNavigation } from 'context/tribes';
+// next
+import { useRouter } from 'next/router';
 
 //components
 import Dialog from 'components/dialog';
@@ -48,7 +45,9 @@ interface Props {
 const CreateChannel = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.ChannelSummary);
   const { enqueueSnackbar } = useSnackbar();
-  const [navigation, setNavigation] = useNavigation();
+  const { query } = useRouter();
+  const { id } = query;
+
   const methods = useForm({
     defaultValues,
   });
@@ -94,7 +93,7 @@ const CreateChannel = ({ onClose }: Props) => {
             '/api/tribes/followed',
             ({ tribes }: { tribes: Array<Tribe> }) => ({
               tribes: tribes.map((tribe) => {
-                if (tribe.id === navigation.main.id) {
+                if (tribe.id === id) {
                   return {
                     ...tribe,
                     channels: [...tribe.channels, channel],
@@ -105,11 +104,6 @@ const CreateChannel = ({ onClose }: Props) => {
             }),
             false
           );
-          setNavigation({
-            ...navigation,
-            secondary: channel.id,
-            type: NavigationTypes.Channel,
-          });
           onClose();
         } catch ({ response }) {
           enqueueSnackbar(response.data.message);
