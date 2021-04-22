@@ -33,7 +33,7 @@ import {
 } from '@material-ui/icons';
 
 // components
-import { DebounceSearch } from 'components/general';
+import { DebounceSearch } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   listItem: {

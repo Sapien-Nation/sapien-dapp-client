@@ -2,7 +2,7 @@
 import { render, screen, user } from 'utils/tests';
 
 // components
-import ErrorView from 'components/general/ErrorView';
+import { ErrorView } from 'components/common';
 
 const onClick = jest.fn();
 

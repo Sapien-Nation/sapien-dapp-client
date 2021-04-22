@@ -17,7 +17,7 @@ import type { Tribe } from 'tools/types/tribe';
 import Dialog from 'components/dialog';
 import MigrateContent from './MigrateContent';
 import { Switch } from 'components/form';
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 interface Props {
   channel: Channel;

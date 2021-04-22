@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 
 // components
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 const drawerWidth = 228;
 

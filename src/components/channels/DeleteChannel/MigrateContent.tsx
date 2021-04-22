@@ -16,9 +16,8 @@ import { offWhite } from 'styles/colors';
 import { Globe } from 'components/assets/svg';
 
 // components
-import { AutocompleteSelect, DebounceSearch } from 'components/general';
 import { Checkbox } from 'components/form';
-import Query from 'components/query';
+import { AutocompleteSelect, DebounceSearch, Query } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   image: () => ({

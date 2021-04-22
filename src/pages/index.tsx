@@ -2,7 +2,7 @@
 
 // components
 import Layout from './Layout';
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 // types
 import { Tribe } from 'tools/types/tribe';

@@ -2,7 +2,7 @@
 import { render, user, screen, waitFor } from 'utils/tests';
 
 // components
-import { DebounceSearch } from 'components/general';
+import { DebounceSearch } from 'components/common';
 
 // mock data
 jest.useFakeTimers();

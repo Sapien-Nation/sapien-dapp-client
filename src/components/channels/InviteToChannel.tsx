@@ -11,7 +11,7 @@ import axios from 'api';
 // components
 import Dialog from 'components/dialog';
 import Invite, { formKey } from 'components/invite';
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 interface Props {
   onClose: () => void;

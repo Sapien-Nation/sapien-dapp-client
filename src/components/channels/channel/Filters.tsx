@@ -2,7 +2,7 @@
 import { Grid } from '@material-ui/core';
 
 // components
-import { Select } from 'components/general';
+import { Select } from 'components/common';
 
 const sortOptions = [
   { name: 'All', value: 'all' },

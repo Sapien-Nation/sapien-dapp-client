@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 
-interface Props {
+export interface Props {
   hasNextPage: boolean;
   height: number;
   itemSize: number;

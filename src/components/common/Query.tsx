@@ -7,7 +7,7 @@ import type { SWRConfiguration, Key } from 'swr';
 import { Skeleton } from '@material-ui/core';
 
 // components
-import { ErrorView } from 'components/general';
+import { ErrorView } from 'components/common';
 
 interface Props {
   apiUrl: Key;

@@ -16,7 +16,7 @@ import {
   DiscoverNavigation,
   TribeNavigation,
 } from 'components/navigation/TribeNavigation';
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 export enum Dialog {
   CreateTribe,

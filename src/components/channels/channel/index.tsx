@@ -10,7 +10,7 @@ import { Box } from '@material-ui/core';
 // components
 import Filters from './Filters';
 import Header from './Header';
-import Query from 'components/query';
+import { Query } from 'components/common';
 
 const ChannelView = () => {
   const { query } = useRouter();

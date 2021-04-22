@@ -26,7 +26,7 @@ import theme from 'styles/theme';
 import { AuthenticationProvider } from 'context/user';
 
 // components
-import ErrorFallback from 'components/general/ErrorView';
+import { ErrorView } from 'components/common';
 
 // styles
 import '../styles/index.css';
@@ -55,7 +55,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           name="viewport"
         />
       </Head>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <ErrorBoundary FallbackComponent={ErrorView}>
         <SnackbarProvider maxSnack={2}>
           <ThemeProvider theme={theme}>
             <SWRConfig

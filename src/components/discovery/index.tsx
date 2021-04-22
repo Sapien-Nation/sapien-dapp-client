@@ -14,9 +14,8 @@ import {
 import { Search as SearchIcon } from '@material-ui/icons';
 
 // components
-import { DebounceSearch } from 'components/general';
 import TribeTile from './TribeTile';
-import Query from 'components/query';
+import { DebounceSearch, Query } from 'components/common';
 
 const Discovery = () => {
   const [searchTerm, setSearchTerm] = useState('');
