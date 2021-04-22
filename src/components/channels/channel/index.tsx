@@ -12,7 +12,7 @@ const ChannelView = () => {
   const [navigation] = useNavigation();
 
   return (
-    <Query apiUrl={`/api/channels/channel/${navigation.secondary}`}>
+    <Query apiUrl={`/api/channel/${navigation.secondary}`}>
       {({ channel }: { channel: Channel }) => <Header channel={channel} />}
     </Query>
   );
