@@ -44,7 +44,7 @@ const ChannelPage = () => {
               itemSize={540}
               loadingComponent={<span>LOADING....</span>}
               renderItem={(post: PostType) => <Post post={post} />}
-              width={1240}
+              width="100%"
             />
           </Page>
         )}

@@ -10,7 +10,7 @@ export interface Props {
   loadMore: () => Promise<any>;
   loadingComponent: React.ReactElement;
   renderItem: (data: any) => React.ReactElement;
-  width: number;
+  width: number | string;
 }
 
 const InfiniteScroll = ({
