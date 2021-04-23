@@ -1,5 +1,6 @@
 export * from './fields';
 export * from './layout';
+export * from './svg';
 
 export { default as AutocompleteSelect } from './AutocompleteSelect';
 export { default as CursorQuery } from './CursorQuery';

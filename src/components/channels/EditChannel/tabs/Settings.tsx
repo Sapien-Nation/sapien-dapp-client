@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 
 // assets
-import { AddIcon } from 'components/common/assets/svg';
+import { AddIcon } from 'components/common';
 
 // styles
 import { black, background, lightGrey, white } from 'styles/colors';

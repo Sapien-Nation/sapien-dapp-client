@@ -15,12 +15,7 @@ import {
 import Image from 'next/image';
 
 // assets
-import {
-  MultipleBadges,
-  NextArrow,
-  Globe,
-  ThreeDots,
-} from 'components/common/assets/svg';
+import { MultipleBadges, NextArrow, Globe, ThreeDots } from 'components/common';
 
 import { Community } from './assets/svg';
 

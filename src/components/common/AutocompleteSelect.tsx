@@ -12,7 +12,7 @@ import type { FieldErrors } from 'react-hook-form';
 import type { InputProps } from '@material-ui/core';
 
 // assets
-import { RoundedArrow } from 'components/common/assets/svg';
+import { RoundedArrow } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   paper: () => ({

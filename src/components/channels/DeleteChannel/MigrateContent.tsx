@@ -13,7 +13,7 @@ import { SearchOutlined as Search } from '@material-ui/icons';
 import { offWhite } from 'styles/colors';
 
 // assets
-import { Globe } from 'components/common/assets/svg';
+import { Globe } from 'components/common';
 
 // components
 import {

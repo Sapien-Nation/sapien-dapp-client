@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { Box, CssBaseline, makeStyles } from '@material-ui/core';
 
 // assets
-import { FullLogo } from 'components/common/assets/svg';
+import { FullLogo } from 'components/common';
 
 // components
 import { ForgotForm, LoginForm, SignupForm } from 'components/auth';
