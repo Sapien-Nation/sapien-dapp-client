@@ -23,7 +23,7 @@ import { Add as AddIcon } from '@material-ui/icons';
 import { black, background, lightGrey, white } from 'styles/colors';
 
 //components
-import { Dropzone, TextInput } from 'components/form';
+import { Dropzone, TextInput } from 'components/common';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropzone: {

@@ -25,7 +25,8 @@ import {
 import { green, orange, outline, red, lightGrey } from 'styles/colors';
 
 // components
-import Tooltip from 'components/form/Tooltip';
+import Tooltip from './Tooltip';
+
 export interface Props extends InputProps, FieldValues {
   errors: FieldErrors;
   label: string;

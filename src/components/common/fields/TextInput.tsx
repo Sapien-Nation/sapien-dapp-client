@@ -25,8 +25,7 @@ import {
 } from '@material-ui/icons';
 
 //components
-import ChartCount from 'components/form/ChartCount';
-import Tooltip from 'components/form/Tooltip';
+import { ChartCount, Tooltip } from 'components/common';
 
 export interface Props extends InputProps {
   chartCount?: string;

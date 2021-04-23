@@ -2,7 +2,7 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
 // components
-import Autocomplete from 'components/form/Autocomplete';
+import { Autocomplete } from 'components/common';
 
 // mui
 import { Box, Popover, makeStyles, IconButton } from '@material-ui/core';

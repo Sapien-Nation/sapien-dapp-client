@@ -1,3 +1,5 @@
+export * from './fields';
+
 export { default as AutocompleteSelect } from './AutocompleteSelect';
 export { default as CursorQuery } from './CursorQuery';
 export { default as DebounceSearch } from './DebounceSearch';

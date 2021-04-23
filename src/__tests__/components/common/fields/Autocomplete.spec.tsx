@@ -2,7 +2,7 @@
 import { render, user, screen, within } from 'utils/tests';
 
 // components
-import { Autocomplete } from 'components/form';
+import { Autocomplete } from 'components/common/fields';
 
 // mock data
 import { mockTribe, mockTribes } from 'tools/mocks/tribe';
