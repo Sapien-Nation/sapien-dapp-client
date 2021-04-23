@@ -1,32 +1,55 @@
-/* istanbul ignore file */
-import { useState } from 'react';
+// types
+import type { Channel } from 'tools/types/channel';
+import type { Post as PostType } from 'tools/types/post';
 
 // next
 import { useRouter } from 'next/router';
 
-// types
-import type { Post } from 'tools/types/post';
+// mui
+import { Box } from '@material-ui/core';
 
 // components
 import Layout from 'pages/Layout';
-import { CursorQuery } from 'components/common';
-import { default as PostComponent } from 'components/post';
+import { Container, CursorQuery, Page, Query } from 'components/common';
+import { Filters, Header } from 'components/channels/channel';
+import Post from 'components/post';
 
 const ChannelPage = () => {
   const { query } = useRouter();
   const { id } = query;
-
-  const baseApiUrl = `/api/channel/feed/${id}`;
   return (
-    <CursorQuery
-      hasNextPage
-      baseApiUrl={baseApiUrl}
-      height={900}
-      itemSize={540}
-      loadingComponent={<span>LOADING....</span>}
-      renderItem={(post: Post) => <PostComponent post={post} />}
-      width={1240}
-    />
+    <Container
+      secondary={
+        <Box>
+          <h1>TODO</h1>
+        </Box>
+      }
+    >
+      <Query apiUrl={`/api/channel/${id}`} loader={null}>
+        {({ channel }: { channel: Channel }) => (
+          <Page
+            filters={
+              <Filters
+                onSort={() => {}}
+                onSortCreator={() => {}}
+                onSortDate={() => {}}
+              />
+            }
+            header={<Header channel={channel} />}
+          >
+            <CursorQuery
+              hasNextPage
+              baseApiUrl={`/api/channel/feed/${id}`}
+              height={900}
+              itemSize={540}
+              loadingComponent={<span>LOADING....</span>}
+              renderItem={(post: PostType) => <Post post={post} />}
+              width={1240}
+            />
+          </Page>
+        )}
+      </Query>
+    </Container>
   );
 };
 

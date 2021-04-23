@@ -13,7 +13,11 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     });
   } else if (req.method === 'GET') {
     return res.status(200).json({
-      channel: mockChannel(),
+      channel: mockChannel({
+        membersCount: 420,
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis purus elit, quis eleifend nunc ullamcor per id. liquam molestie orci et gravida mollis.',
+      }),
     });
   } else {
     return res.status(500).send('Weirdo');
