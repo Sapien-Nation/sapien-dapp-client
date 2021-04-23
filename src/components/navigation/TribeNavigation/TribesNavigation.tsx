@@ -112,7 +112,7 @@ const TribeNavigation = () => {
               }}
               variant="captionItem"
             >
-              TODO
+              {tribe.name}
             </Typography>
           </>
         </NavigationItem>

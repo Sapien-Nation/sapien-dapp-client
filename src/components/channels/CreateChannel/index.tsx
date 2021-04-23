@@ -17,7 +17,7 @@ import axios from 'api';
 import { useRouter } from 'next/router';
 
 //components
-import Dialog from 'components/dialog';
+import { Dialog } from 'components/common';
 import { BadgesStep, MediaStep, RSSStep, SummaryStep } from './steps';
 
 const defaultValues = {

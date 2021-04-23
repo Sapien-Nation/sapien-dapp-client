@@ -5,7 +5,7 @@ import { render, screen, user } from 'utils/tests';
 import { Typography } from '@material-ui/core';
 
 // components
-import Dialog from 'components/dialog';
+import { Dialog } from 'components/common';
 
 // mocks
 const onClose = jest.fn();

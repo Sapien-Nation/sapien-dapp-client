@@ -9,9 +9,8 @@ import type { Tribe } from 'tools/types/tribe';
 import axios from 'api';
 
 // components
-import Dialog from 'components/dialog';
 import Invite, { formKey } from 'components/invite';
-import { Query } from 'components/common';
+import { Dialog, Query } from 'components/common';
 
 interface Props {
   link: string;

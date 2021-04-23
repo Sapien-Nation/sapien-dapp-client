@@ -37,9 +37,9 @@ const generatePosts = () => {
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req;
-  const { cursor, count } = generateCursor(query.cursor);
+  const { cursor } = generateCursor(query.cursor);
   return res.status(200).json({
-    posts: generatePosts(count),
+    posts: generatePosts(),
     cursor,
     hasMore: true,
   });

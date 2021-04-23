@@ -4,6 +4,7 @@ import { cache } from 'swr';
 import { render, screen, user } from 'utils/tests';
 
 // mocks
+import { mockRouter } from 'mocks/routes';
 import { mockTribe, mockTribePermission } from 'tools/mocks/tribe';
 
 // components
@@ -12,22 +13,20 @@ import { TribeNavigation } from 'components/navigation/TribeNavigation';
 // mocks
 const permissions = mockTribePermission();
 const tribes = [mockTribe({ permissions })];
-
-const defaultProps = {
-  tribes,
-};
-
-const renderComponent = (props = {}) =>
-  render(<TribeNavigation {...defaultProps} {...props} />);
+const mockRoute = mockRouter({
+  query: {
+    tribeid: tribes[0].id,
+  },
+});
+const renderComponent = (router = mockRoute) =>
+  render(<TribeNavigation />, { router });
 
 beforeEach(() => {
-  localStorage?.clear();
-
-  cache.set('/api/tribes/followed', { tribes });
   jest.clearAllMocks();
 });
 
 test('render correctly', () => {
+  cache.set('/api/tribes/followed', { tribes });
   renderComponent();
 
   // default render
@@ -57,10 +56,15 @@ test('cant see add channel button', () => {
     mockTribe({ permissions: { canAddChannel: false, canAddSquare: false } }),
   ];
   cache.set('/api/tribes/followed', {
-    tribes: [newTribes],
+    tribes: newTribes,
   });
 
-  renderComponent({ tribes: newTribes });
+  renderComponent({
+    ...mockRoute,
+    query: {
+      tribeid: newTribes[0].id,
+    },
+  });
 
   expect(
     screen.queryByRole('button', {

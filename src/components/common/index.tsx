@@ -1,6 +1,7 @@
 export { default as AutocompleteSelect } from './AutocompleteSelect';
 export { default as CursorQuery } from './CursorQuery';
 export { default as DebounceSearch } from './DebounceSearch';
+export { default as Dialog } from './Dialog';
 export { default as ErrorView } from './ErrorView';
 export { default as InfiniteScroll } from './InfiniteScroll';
 export { default as Select } from './Select';

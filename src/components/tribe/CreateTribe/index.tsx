@@ -13,7 +13,7 @@ import axios from 'api';
 import { Typography } from '@material-ui/core';
 
 //components
-import Dialog from 'components/dialog';
+import { Dialog } from 'components/common';
 import { MediaStep, TribeSummary } from './steps';
 
 const defaultValues = {
