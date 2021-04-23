@@ -17,7 +17,9 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+
+// assets
+import { AddIcon } from 'components/common/assets/svg';
 
 // styles
 import { black, background, lightGrey, white } from 'styles/colors';
@@ -172,7 +174,7 @@ const Settings = ({ channel, formKey, onClose }: Props) => {
           render={() => {
             return (
               <IconButton className={classes.addIcon}>
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}
@@ -201,7 +203,7 @@ const Settings = ({ channel, formKey, onClose }: Props) => {
           render={() => {
             return (
               <IconButton className={classes.addIcon}>
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}

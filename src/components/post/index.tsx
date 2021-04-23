@@ -17,11 +17,12 @@ import Image from 'next/image';
 // assets
 import {
   MultipleBadges,
-  Community,
   NextArrow,
   Globe,
   ThreeDots,
-} from 'components/assets/svg';
+} from 'components/common/assets/svg';
+
+import { Community } from './assets/svg';
 
 // types
 import type { Post } from 'tools/types/post';

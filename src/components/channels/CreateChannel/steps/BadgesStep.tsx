@@ -7,7 +7,7 @@ import {
   Search,
   SingleBadge,
   SubscriptionBadge,
-} from 'components/assets/svg';
+} from 'components/common/assets/svg';
 
 // mui
 import {

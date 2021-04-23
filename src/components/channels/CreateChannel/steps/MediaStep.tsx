@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 
 // assets
-import { AddIcon } from 'components/assets/svg';
+import { AddIcon } from 'components/common/assets/svg';
 
 // styles
 import { background, lightGrey } from 'styles/colors';
