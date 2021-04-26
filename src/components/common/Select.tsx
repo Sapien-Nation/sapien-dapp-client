@@ -52,13 +52,14 @@ const SelectInput = ({
         id={name}
         inputProps={{ 'aria-label': `${name} label` }}
         name={name}
-        style={{
+        sx={{
           background: 'transparent',
           flex: 1,
           minHeight: '4rem',
           fontWeight: 600,
         }}
         value={selected}
+        variant="standard"
         onChange={(event: React.ChangeEvent<{ value: unknown }>) => {
           setSelect(event.target.value as string);
           onChange(event.target.value as any);

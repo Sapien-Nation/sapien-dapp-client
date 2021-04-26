@@ -43,15 +43,15 @@ const Filters = ({ onSort, onSortDate, onSortCreator }: Props) => {
       />
       <Select
         defaultValue={dateOptions[0].value}
-        label="Sort by"
-        name="sortBy"
+        label="Date"
+        name="date"
         options={dateOptions}
         onChange={onSortDate}
       />
       <Select
         defaultValue={creatorOptions[0].value}
-        label="Sort by"
-        name="sortBy"
+        label="Creator"
+        name="creator"
         options={creatorOptions}
         onChange={onSortCreator}
       />

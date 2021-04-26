@@ -11,7 +11,7 @@ import { Box } from '@material-ui/core';
 // components
 import Layout from 'pages/Layout';
 import { Container, CursorQuery, Page, Query } from 'components/common';
-import { Header } from 'components/channels/channel';
+import { Filters, Header } from 'components/channels/channel';
 import Post from 'components/post';
 
 const ChannelPage = () => {
@@ -27,7 +27,16 @@ const ChannelPage = () => {
     >
       <Query apiUrl={`/api/channel/${id}`} loader={null}>
         {({ channel }: { channel: Channel }) => (
-          <Page filters={<></>} header={<Header channel={channel} />}>
+          <Page
+            filters={
+              <Filters
+                onSort={() => {}}
+                onSortCreator={() => {}}
+                onSortDate={() => {}}
+              />
+            }
+            header={<Header channel={channel} />}
+          >
             <CursorQuery
               hasNextPage
               baseApiUrl={`/api/channel/feed/${id}`}
