@@ -76,7 +76,12 @@ const PostCard = ({
   const isOpen = Boolean(anchorEl);
 
   return (
-    <Box bgcolor={white} borderRadius={1.6} padding={1.5}>
+    <Box
+      bgcolor={white}
+      borderRadius={1.6}
+      data-testid="post-card"
+      padding={1.5}
+    >
       <Box
         alignItems="center"
         display="flex"
@@ -85,7 +90,7 @@ const PostCard = ({
       >
         <Box alignItems="center" display="flex">
           <Avatar
-            alt="Tribe Name"
+            alt="Post Image"
             style={{
               width: '3.2rem',
               height: '3.2rem',
@@ -93,7 +98,7 @@ const PostCard = ({
             }}
             variant="rounded"
           >
-            <Image alt="Tribe name" height={110} src={avatar} width={110} />
+            <Image alt={tribeName} height={110} src={avatar} width={110} />
           </Avatar>
           <Typography marginLeft={1} marginRight={1} variant="buttonMedium">
             {displayName}

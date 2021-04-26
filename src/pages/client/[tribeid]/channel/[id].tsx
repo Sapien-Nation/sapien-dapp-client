@@ -21,7 +21,7 @@ const ChannelPage = () => {
     <Container
       secondary={
         <Box>
-          <h1>TODO</h1>
+          <h1>Todo Panel</h1>
         </Box>
       }
     >

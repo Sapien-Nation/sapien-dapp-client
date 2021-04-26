@@ -66,7 +66,7 @@ const Header = ({
             marginBottom={3}
           >
             <Avatar
-              alt="Tribe Name"
+              alt={name}
               style={{
                 width: '11.1rem',
                 height: '11.1rem',
@@ -75,7 +75,7 @@ const Header = ({
               }}
               variant="rounded"
             >
-              <Image alt="Tribe name" height={110} src={image} width={110} />
+              <Image alt={name} height={110} src={image} width={110} />
             </Avatar>
             <Box marginLeft={3}>
               <Typography gutterBottom variant="h2">
