@@ -10,8 +10,8 @@ import { Box } from '@material-ui/core';
 
 // components
 import Layout from 'pages/Layout';
-import { Container, CursorQuery, Page, Query } from 'components/common';
 import { Filters, Header } from 'components/channels/channel';
+import { Container, CursorQuery, Page, Query } from 'components/common';
 import Post from 'components/post';
 
 const ChannelPage = () => {
