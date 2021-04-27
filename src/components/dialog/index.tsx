@@ -18,7 +18,7 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
-// styles 
+// styles
 import { red } from 'styles/colors';
 
 interface Props extends Omit<DialogProps, 'title'> {
