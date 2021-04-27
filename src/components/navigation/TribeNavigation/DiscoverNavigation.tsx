@@ -1,3 +1,6 @@
+// next
+import Link from 'next/link';
+
 // types
 import type { Theme } from '@material-ui/core/styles';
 import type { Topic } from 'tools/types/topic';
@@ -5,7 +8,6 @@ import type { Topic } from 'tools/types/topic';
 // mui
 import {
   Box,
-  createStyles,
   Drawer,
   List,
   ListItem,
@@ -18,26 +20,35 @@ import { Query } from 'components/common';
 
 const drawerWidth = 228;
 
-const useStyles = makeStyles((theme: Theme) => {
-  return createStyles({
-    drawer: {
-      width: drawerWidth,
+const useStyles = makeStyles((theme: Theme) => ({
+  drawer: {
+    width: drawerWidth,
+  },
+  drawerPaper: {
+    left: '72px',
+    width: drawerWidth,
+    backgroundColor: 'white',
+    borderRight: 'none',
+    paddingLeft: theme.spacing(2.2),
+    marginTop: theme.spacing(3.7),
+  },
+  nav: {
+    cursor: 'pointer',
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  listItem: {
+    padding: 0,
+    fontSize: '1.4rem',
+    '&.Mui-selected': {
+      background: 'transparent',
+      fontWeight: 600,
     },
-    drawerPaper: {
-      left: '72px',
-      width: drawerWidth,
-      backgroundColor: 'white',
-      borderRight: 'none',
-    },
-    nav: {
-      cursor: 'pointer',
-      display: 'flex',
-      flexWrap: 'wrap',
-      marginTop: theme.spacing(3.7),
-      marginLeft: theme.spacing(2.2),
-    },
-  });
-});
+  },
+  link: {
+    color: 'inherit',
+  },
+}));
 
 const DiscoverNavigation = () => {
   const classes = useStyles();
@@ -50,28 +61,28 @@ const DiscoverNavigation = () => {
       }}
       variant="permanent"
     >
+      <Typography component="h2" variant="captionItem">
+        Topics
+      </Typography>
+      <Typography sx={{ marginTop: '2.5rem' }} variant="h4">
+        All Topics
+      </Typography>
       <List aria-label="Discover Navigation" className={classes.nav}>
-        <ListItem aria-label="topics title" style={{ marginBottom: 16 }}>
-          <Typography variant="body2">TOPICS</Typography>
-        </ListItem>
-        <ListItem>
-          <Box marginBottom={0.9} marginTop={2.5}>
-            <Typography aria-label="all topics" variant="body1">
-              All Topics
-            </Typography>
-          </Box>
-        </ListItem>
-
         <Query apiUrl="/api/topics/all" loader={null}>
           {({ topics }: { topics: Array<Topic> }) => (
             <>
               {topics.map(({ id, name }) => (
                 <ListItem
                   key={id}
+                  // selected={condition to apply the selected style}
                   aria-label={`topic: ${name}`}
-                  style={{ marginBottom: 0.9 }}
+                  className={classes.listItem}
                 >
-                  <Typography variant="caption">#{name}</Typography>
+                  <Box paddingY={0.8}>
+                    <Link href="/">
+                      <a className={classes.link}>#{name}</a>
+                    </Link>
+                  </Box>
                 </ListItem>
               ))}
             </>

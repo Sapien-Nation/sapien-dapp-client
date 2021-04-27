@@ -25,7 +25,7 @@ beforeEach(() => {
 test('discovery', () => {
   renderComponent();
 
-  expect(screen.getByText('TOPICS')).toBeInTheDocument();
+  expect(screen.getByText('Topics')).toBeInTheDocument();
   expect(screen.getByText('All Topics')).toBeInTheDocument();
 
   topics.forEach((topic) => {

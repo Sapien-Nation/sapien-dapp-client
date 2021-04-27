@@ -65,6 +65,7 @@ const CreateTribe = ({ onClose }: Props) => {
             membersCount: 0,
             description: '',
             permissions: { canAddChannel: false, canAddSquare: false },
+            topics: [],
           };
 
           // UI updates
