@@ -1,5 +1,6 @@
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // types
 import type { Theme } from '@material-ui/core/styles';
@@ -51,7 +52,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const DiscoverNavigation = () => {
+  const { pathname, query } = useRouter();
   const classes = useStyles();
+
   return (
     <Drawer
       anchor="left"
@@ -74,12 +77,12 @@ const DiscoverNavigation = () => {
               {topics.map(({ id, name }) => (
                 <ListItem
                   key={id}
-                  // selected={condition to apply the selected style}
                   aria-label={`topic: ${name}`}
                   className={classes.listItem}
+                  selected={query.topic === name}
                 >
                   <Box paddingY={0.8}>
-                    <Link href="/">
+                    <Link href={`${pathname}?topic=${name}`}>
                       <a className={classes.link}>#{name}</a>
                     </Link>
                   </Box>
