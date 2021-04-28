@@ -67,7 +67,7 @@ const DiscoverNavigation = () => {
       <Typography component="h2" variant="captionItem">
         Topics
       </Typography>
-      <Typography sx={{ marginTop: '2.5rem' }} variant="h4">
+      <Typography sx={{ marginTop: '2.5rem' }} variant="buttonMedium">
         All Topics
       </Typography>
       <List aria-label="Discover Navigation" className={classes.nav}>

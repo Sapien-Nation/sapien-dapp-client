@@ -79,20 +79,21 @@ const TribeTile = ({
           </Avatar>
         </div>
         <CardContent className={classes.content}>
-          <Typography gutterBottom variant="h2">
-            {name}
-          </Typography>
-          <Typography
-            className={classes.description}
-            color="textSecondary"
-            variant="body1"
-          >
-            {description}
-          </Typography>
+          <Box display="grid" gap={2.4}>
+            <Typography variant="buttonLarge">{name}</Typography>
+            <Typography
+              className={classes.description}
+              color="textSecondary"
+              lineHeight="21px"
+              variant="body4"
+            >
+              {description}
+            </Typography>
+          </Box>
         </CardContent>
       </Box>
       <CardActions className={classes.action}>
-        <Typography component="span">{membersCount} Members</Typography>
+        <Typography variant="tooltip">{membersCount} Members</Typography>
         <Button color="primary" variant="contained">
           Join Tribe
         </Button>

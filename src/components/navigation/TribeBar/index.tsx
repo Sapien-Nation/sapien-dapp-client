@@ -144,7 +144,7 @@ const TribeBar = ({ createTribe }: Props) => {
           disableRipple
           aria-label="Discover Tribes"
         >
-          <Link href="/discovery">
+          <Link href="/discover">
             <Badge
               badgeContent={0}
               classes={{
@@ -162,7 +162,7 @@ const TribeBar = ({ createTribe }: Props) => {
                   height: '4rem',
                 }}
                 style={{
-                  borderColor: asPath === '/discovery' ? white : darkPurple,
+                  borderColor: asPath === '/discover' ? white : darkPurple,
                 }}
                 variant="square"
               >
