@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
+import { WindowScroller } from 'react-virtualized';
 
 export interface Props {
   hasNextPage: boolean;
@@ -10,6 +11,7 @@ export interface Props {
   loadMore: () => Promise<any>;
   loadingComponent: React.ReactElement;
   renderItem: (data: any) => React.ReactElement;
+  useWindowScroll?: boolean;
   width: number | string;
 }
 
@@ -21,6 +23,7 @@ const InfiniteScroll = ({
   loadMore,
   loadingComponent,
   renderItem,
+  useWindowScroll = false,
   width,
 }: Props) => {
   const infiniteLoaderRef = useRef(null);
@@ -35,6 +38,12 @@ const InfiniteScroll = ({
     );
   };
 
+  const handleScroll = ({ scrollTop }) => {
+    if (infiniteLoaderRef?.current?._listRef) {
+      infiniteLoaderRef.current._listRef.scrollTo(scrollTop);
+    }
+  };
+
   return (
     <InfiniteLoader
       ref={infiniteLoaderRef}
@@ -43,16 +52,25 @@ const InfiniteScroll = ({
       loadMoreItems={loadMore}
     >
       {({ onItemsRendered, ref }) => (
-        <List
-          ref={ref}
-          height={height}
-          itemCount={itemCount}
-          itemSize={itemSize}
-          width={width}
-          onItemsRendered={onItemsRendered}
-        >
-          {Item}
-        </List>
+        <>
+          {useWindowScroll && (
+            <WindowScroller onScroll={handleScroll}>
+              {() => <div />}
+            </WindowScroller>
+          )}
+
+          <List
+            ref={ref}
+            height={useWindowScroll ? window.innerHeight : height}
+            itemCount={itemCount}
+            itemSize={itemSize}
+            style={useWindowScroll ? { height: '100%' } : null}
+            width={width}
+            onItemsRendered={onItemsRendered}
+          >
+            {Item}
+          </List>
+        </>
       )}
     </InfiniteLoader>
   );

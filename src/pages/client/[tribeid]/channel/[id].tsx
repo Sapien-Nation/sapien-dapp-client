@@ -39,6 +39,7 @@ const ChannelPage = () => {
           >
             <CursorQuery
               hasNextPage
+              useWindowScroll
               baseApiUrl={`/api/channel/feed/${id}`}
               height={900}
               itemSize={540}
