@@ -21,42 +21,35 @@ import { mockTribe } from 'tools/mocks/tribe';
 const description =
   'Lorem ipsum dolor sit ame, consectetur adipiscing elit. Ut mattis purus elit, quis elei fend consectetur adipiscing elit sit ame...';
 
-const tribes = [
+const tribes: Array<any> = [
   mockTribe({ ...tribe1, description, topics: [topic1.name] }),
   mockTribe({ ...tribe2, description, topics: [] }),
   mockTribe({ ...tribe3, description, topics: [topic3.name] }),
-];
-
-const suggested = [
   mockTribe({ ...tribe4, description, topics: [topic2.name] }),
-  mockTribe({ ...tribe1, description, topics: [topic2.name] }),
-  mockTribe({ ...tribe3, description, topics: [topic1.name] }),
 ];
 
-const handler = (req: NextApiRequest, res: NextApiResponse) => {
+const handler = (
+  req: NextApiRequest,
+  res: NextApiResponse<{ cursor: null; hasMore: boolean; tribes: Array<Tribe> }>
+) => {
   const { query } = req;
   const { searchTerm, topic } = query;
 
-  const getTribes = (data: Array<Tribe>) => {
-    let response = data;
-    if (searchTerm) {
-      response = matchSorter(data, String(searchTerm), {
-        keys: ['name'],
-      });
-    }
+  let response = tribes;
+  if (searchTerm) {
+    response = matchSorter(tribes, String(searchTerm), {
+      keys: ['name'],
+    });
+  }
 
-    if (topic) {
-      response = response.filter(({ topics }) =>
-        topics.includes(String(topic))
-      );
-    }
-
-    return response;
-  };
+  if (topic) {
+    response = tribes.filter(({ topics }) => topics.includes(String(topic)));
+  }
 
   res.status(200).json({
-    suggested: getTribes(suggested),
-    tribes: getTribes(tribes),
+    cursor: null,
+    hasMore: false,
+    tribes: response,
   });
 };
 
