@@ -4,17 +4,15 @@ import { useState } from 'react';
 import type { InfiniteScrollProps } from 'components/common';
 
 // components
-import { InfiniteScroll, Query } from 'components/common';
+import { Query } from 'components/common';
 
 interface Props extends Omit<InfiniteScrollProps, 'items' | 'loadMore'> {
   baseApiUrl: string;
 }
 
-const CursorQuery = ({ baseApiUrl, ...rest }: Props) => {
+const CursorQuery = ({ baseApiUrl }: Props) => {
   const [items, setItems] = useState<Array<any>>([]);
-  const [cursor, setCursor] = useState('');
-  const [tempCursor, setTempCursor] = useState('');
-
+  const [cursor] = useState('');
   const params = cursor ? `?cursor=${cursor}` : '';
   const apiUrl = `${baseApiUrl}${params}`;
 
@@ -24,20 +22,12 @@ const CursorQuery = ({ baseApiUrl, ...rest }: Props) => {
         apiUrl={apiUrl}
         loader={null}
         options={{
-          onSuccess: ({ cursor, posts }: any) => {
-            setTempCursor(cursor);
+          onSuccess: ({ posts }: any) => {
             setItems([...items, ...posts]);
           },
         }}
       />
-      <InfiniteScroll
-        items={items}
-        loadMore={() => {
-          setCursor(tempCursor);
-          return Promise.resolve();
-        }}
-        {...rest}
-      />
+      <>TODO Infinte Scroll</>
     </>
   );
 };
