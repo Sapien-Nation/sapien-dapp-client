@@ -22,10 +22,10 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test('discovery', () => {
+test('discover', () => {
   renderComponent();
 
-  expect(screen.getByText('TOPICS')).toBeInTheDocument();
+  expect(screen.getByText('Topics')).toBeInTheDocument();
   expect(screen.getByText('All Topics')).toBeInTheDocument();
 
   topics.forEach((topic) => {

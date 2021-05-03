@@ -1,3 +1,6 @@
+/* istanbul ignore file */
+import Layout from './Layout';
+
 import { useState } from 'react';
 
 // types
@@ -8,16 +11,16 @@ import {
   Box,
   Button,
   Grid,
-  InputAdornment,
   Typography,
+  InputAdornment,
 } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 
 // components
-import TribeTile from './TribeTile';
-import { DebounceSearch, Query } from 'components/common';
+import { TribeTile } from 'components/discover';
+import { DebounceSearch, Page, Query } from 'components/common';
 
-const Discovery = () => {
+const DiscoveryPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = async (search: string) => {
@@ -25,27 +28,29 @@ const Discovery = () => {
   };
 
   return (
-    <Box>
-      <Typography style={{ margin: 0 }} variant="h1">
-        Discovery
-      </Typography>
-      <Box marginTop={3}>
-        <DebounceSearch
-          fullWidth
-          placeholder="Search for badge"
-          startAdornment={
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          }
-          style={{
-            minHeight: '5.6rem',
-            borderRadius: '1.6rem',
-          }}
-          onSearch={handleSearch}
-        />
-      </Box>
-      <Query apiUrl={`/api/discovery/tribe?search=${searchTerm}`}>
+    <Page
+      userWrapper
+      actions={
+        <Box borderRadius="1.6">
+          <DebounceSearch
+            fullWidth
+            placeholder="Search for badge"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+            style={{
+              minHeight: '5.6rem',
+              borderRadius: '1.6rem',
+            }}
+            onSearch={handleSearch}
+          />
+        </Box>
+      }
+      title="Discover"
+    >
+      <Query apiUrl={`/api/discover/search?searchTerm=${searchTerm}`}>
         {({
           suggested,
           tribes,
@@ -54,15 +59,15 @@ const Discovery = () => {
           tribes: Array<Tribe>;
         }) => (
           <>
-            <Box display="flex" justifyContent="space-between" marginY={3}>
-              <div>
-                <Typography style={{ margin: 0 }} variant="h2">
+            <Box display="flex" justifyContent="space-between" marginBottom={3}>
+              <Box display="flex" flexDirection="column" marginLeft={3.2}>
+                <Typography variant="buttonLarge">
                   Tribes Suggested for You
                 </Typography>
-                <Typography variant="caption">
+                <Typography color="textSecondary" variant="caption">
                   Tribes you might be interested in
                 </Typography>
-              </div>
+              </Box>
               <Button color="primary" variant="text">
                 See All
               </Button>
@@ -82,14 +87,12 @@ const Discovery = () => {
             </Grid>
 
             <Box display="flex" justifyContent="space-between" marginY={3}>
-              <div>
-                <Typography style={{ margin: 0 }} variant="h2">
-                  Friends Tribes
-                </Typography>
-                <Typography variant="caption">
+              <Box display="flex" flexDirection="column" marginLeft={3.2}>
+                <Typography variant="buttonLarge">Friends Tribes</Typography>
+                <Typography color="textSecondary" variant="caption">
                   Tribes your friends are in
                 </Typography>
-              </div>
+              </Box>
               <Button color="primary" variant="text">
                 See All
               </Button>
@@ -110,8 +113,10 @@ const Discovery = () => {
           </>
         )}
       </Query>
-    </Box>
+    </Page>
   );
 };
 
-export default Discovery;
+DiscoveryPage.Layout = Layout;
+
+export default DiscoveryPage;

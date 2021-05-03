@@ -51,8 +51,6 @@
     "@sentry/node": "^6.3.3",
     "@sentry/webpack-plugin": "^1.15.1",
     "@types/match-sorter": "^6.0.0",
-    "@types/react-window": "^1.8.2",
-    "@types/react-window-infinite-loader": "^1.0.3",
     "axios": "^0.21.1",
     "cookie": "^0.4.1",
     "lodash": "^4.17.21",
@@ -65,8 +63,6 @@
     "react-error-boundary": "^3.1.1",
     "react-hook-form": "^7.3.5",
     "react-use": "^17.2.4",
-    "react-window": "^1.8.6",
-    "react-window-infinite-loader": "^1.0.7",
     "swr": "^0.5.5"
   },
   "devDependencies": {

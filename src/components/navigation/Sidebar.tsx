@@ -35,7 +35,7 @@ const Sidebar = () => {
         {() => (
           <>
             <TribeBar createTribe={() => setDialog(Dialog.CreateTribe)} />
-            {asPath === '/discovery' ? (
+            {asPath.includes('/discover') ? (
               <DiscoverNavigation />
             ) : (
               <TribeNavigation />
