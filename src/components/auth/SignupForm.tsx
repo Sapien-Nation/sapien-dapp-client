@@ -14,7 +14,7 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { useAuth } from 'context/user';
 
 // components
-import { TextInput, Checkbox, PasswordStrengthInput } from 'components/form';
+import { TextInput, Checkbox, PasswordStrengthInput } from 'components/common';
 
 const Signup = () => {
   const {

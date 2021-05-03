@@ -1,41 +1,31 @@
 /* istanbul ignore file */
 
-// context
-import { NavigationTypes, useNavigation } from 'context/tribes';
-
+// components
 import Layout from './Layout';
+import { Query } from 'components/common';
+
+// types
+import { Tribe } from 'tools/types/tribe';
+
+// next
+import { useRouter } from 'next/router';
 
 const IndexPage = () => {
-  const [navigation] = useNavigation();
-
-  const renderView = () => {
-    switch (navigation.type) {
-      case NavigationTypes.BadgeStore:
-        return 'BADGE STORE TODO';
-      case NavigationTypes.Square:
-        return 'SQUARES FEED TODO';
-      case NavigationTypes.Channel:
-        return 'CHANNELS FEED TODO';
-      case NavigationTypes.Discovery:
-        return 'DISCOVERY TODO';
-      case NavigationTypes.Tribe:
-        return 'TRIBES FEED TODO';
-    }
-  };
+  const { push } = useRouter();
 
   return (
-    <Layout>
-      <div
-        style={{
-          borderRadius: '24px',
-          backgroundColor: '#F9F9FA',
-          padding: 40,
-        }}
-      >
-        <h1>{renderView()}</h1>
-      </div>
-    </Layout>
+    <Query
+      apiUrl="/api/tribes/followed"
+      loader={null}
+      options={{
+        onSuccess: ({ tribes }: { tribes: Array<Tribe> }) => {
+          push(`/client/${tribes[0].id}`);
+        },
+      }}
+    />
   );
 };
+
+IndexPage.Layout = Layout;
 
 export default IndexPage;

@@ -7,10 +7,9 @@ import type { Channel } from 'tools/types/channel';
 import { makeStyles, Tabs, Tab as MUITab } from '@material-ui/core';
 
 //components
-import Dialog from 'components/dialog';
 import RSS from './tabs/RSS';
 import Settings from './tabs/Settings';
-import Query from 'components/query';
+import { Dialog, Query } from 'components/common';
 
 enum View {
   Badges,

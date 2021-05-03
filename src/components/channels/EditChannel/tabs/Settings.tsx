@@ -17,13 +17,15 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+
+// assets
+import { AddIcon } from 'components/common';
 
 // styles
 import { black, background, lightGrey, white } from 'styles/colors';
 
 //components
-import { Dropzone, TextInput } from 'components/form';
+import { Dropzone, TextInput } from 'components/common';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropzone: {
@@ -172,7 +174,7 @@ const Settings = ({ channel, formKey, onClose }: Props) => {
           render={() => {
             return (
               <IconButton className={classes.addIcon}>
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}
@@ -201,7 +203,7 @@ const Settings = ({ channel, formKey, onClose }: Props) => {
           render={() => {
             return (
               <IconButton className={classes.addIcon}>
-                <AddIcon fontSize="small" />
+                <AddIcon />
               </IconButton>
             );
           }}

@@ -1,7 +1,4 @@
 /* istanbul ignore file */
-// types
-import type { Theme } from '@material-ui/core';
-
 // mui
 import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
@@ -15,17 +12,13 @@ interface Props {
   children: React.ReactNode;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   root: ({ isLoggedIn }: { isLoggedIn: boolean }) => ({
     display: isLoggedIn ? 'grid' : 'block',
     gridTemplateAreas: "'sidebar sidebar main'",
     gridTemplateColumns: '72px 228px auto',
-    height: '100vh',
-    width: '100vw',
+    minHeight: '100vh',
     backgroundColor: '#fff',
-    '& main > div': {
-      padding: theme.spacing(3.6),
-    },
   }),
 }));
 

@@ -1,0 +1,1 @@
+export { useFollowedTribes } from './tribe';

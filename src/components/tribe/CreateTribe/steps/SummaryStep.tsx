@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { InputAdornment } from '@material-ui/core';
 
 //components
-import { TextInput, Switch } from 'components/form';
+import { TextInput, Switch } from 'components/common';
 
 const SummaryStep = () => {
   const {

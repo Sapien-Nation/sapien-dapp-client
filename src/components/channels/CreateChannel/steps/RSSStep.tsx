@@ -23,7 +23,7 @@ import {
 } from '@material-ui/core';
 
 //components
-import { TextInput } from 'components/form';
+import { TextInput } from 'components/common';
 
 // const useStyles = makeStyles((theme: Theme) => ({
 //   addRssButton: {

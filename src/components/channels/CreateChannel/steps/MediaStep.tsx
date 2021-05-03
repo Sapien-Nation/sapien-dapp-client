@@ -11,13 +11,13 @@ import {
 } from '@material-ui/core';
 
 // assets
-import { AddIcon } from 'components/assets/svg';
+import { AddIcon } from 'components/common';
 
 // styles
 import { background, lightGrey } from 'styles/colors';
 
 // components
-import { Dropzone } from 'components/form';
+import { Dropzone } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   dropzone: {

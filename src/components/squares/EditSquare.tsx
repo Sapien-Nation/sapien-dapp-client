@@ -10,7 +10,7 @@ import { Button, Typography } from '@material-ui/core';
 import axios from 'api';
 
 // components
-import Dialog from 'components/dialog';
+import { Dialog } from 'components/common';
 import SquareForm, { formKey, FormValues } from './SquareForm';
 
 interface Props {

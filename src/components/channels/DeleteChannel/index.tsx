@@ -14,10 +14,8 @@ import { Box, Typography } from '@material-ui/core';
 import type { Tribe } from 'tools/types/tribe';
 
 //components
-import Dialog from 'components/dialog';
 import MigrateContent from './MigrateContent';
-import { Switch } from 'components/form';
-import Query from 'components/query';
+import { Dialog, Switch, Query } from 'components/common';
 
 interface Props {
   channel: Channel;

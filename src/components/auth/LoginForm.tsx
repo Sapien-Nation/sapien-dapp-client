@@ -13,7 +13,7 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { useAuth } from 'context/user';
 
 //components
-import { TextInput, Checkbox } from 'components/form';
+import { TextInput, Checkbox } from 'components/common';
 
 const Login = () => {
   const {

@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 // types
 import type { Theme } from '@material-ui/core/styles';
-import type { Tribe } from 'tools/types/tribe';
-
-// constants
-import { NavigationTypes } from 'context/tribes';
 
 // next
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+
+// hooks
+import { useFollowedTribes } from 'hooks';
 
 // mui
 import {
@@ -18,9 +18,6 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-
-// context
-import { useNavigation } from 'context/tribes';
 
 // styles
 import { darkGrey, white } from 'styles/colors';
@@ -41,6 +38,7 @@ const CreateSquare = dynamic<any>(
     ssr: false,
   }
 );
+
 import Channels from './Channels';
 import Squares from './Squares';
 import NavigationItem from './NavigationItem';
@@ -72,18 +70,17 @@ enum Dialog {
   CreateChannel,
   CreateSquare,
 }
-interface Props {
-  tribes: Array<Tribe>;
-}
 
-const TribeNavigation = ({ tribes }: Props) => {
+const TribeNavigation = () => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
-  const [navigation, setNavigation] = useNavigation();
+  const { asPath, query } = useRouter();
+  const { tribes } = useFollowedTribes();
+  const { tribeid } = query;
   const classes = useStyles();
 
-  const tribe: Tribe = tribes.find(({ id }) => id === navigation.main?.id);
+  if (!tribeid) return null;
 
-  if (tribe === undefined) return null;
+  const tribe = tribes.find(({ id }) => id === tribeid);
 
   return (
     <Drawer
@@ -100,61 +97,37 @@ const TribeNavigation = ({ tribes }: Props) => {
         component="nav"
       >
         <NavigationItem
-          isSelected={navigation?.secondary === navigation?.main?.id}
-          onClick={() =>
-            setNavigation({
-              secondary: navigation?.main?.id,
-              type: NavigationTypes.Tribe,
-            })
-          }
+          isSelected={asPath === `/client/${tribeid}`}
+          to={`/client/${tribeid}`}
         >
           <>
             <TribeName
               // @ts-ignore
-              fill={
-                navigation?.secondary === navigation?.main?.id
-                  ? white
-                  : darkGrey
-              }
+              fill={asPath === `/client/${tribeid}` ? white : darkGrey}
             />
             <Typography
               style={{
                 marginLeft: '1.5rem',
-                color:
-                  navigation?.secondary === navigation?.main?.id
-                    ? white
-                    : darkGrey,
+                color: asPath === `/client/${tribeid}` ? white : darkGrey,
               }}
               variant="captionItem"
             >
-              {navigation?.main?.name}
+              {tribe.name}
             </Typography>
           </>
         </NavigationItem>
         <NavigationItem
-          isSelected={navigation?.type === NavigationTypes.BadgeStore}
-          onClick={() =>
-            setNavigation({
-              secondary: 'Badge Store',
-              type: NavigationTypes.BadgeStore,
-            })
-          }
+          isSelected={asPath === `/client/${tribeid}/store`}
+          to={`/client/${tribeid}/store`}
         >
           <>
             <BadgeStore
-              fill={
-                navigation?.type === NavigationTypes.BadgeStore
-                  ? white
-                  : darkGrey
-              }
+              fill={asPath === `/client/${tribeid}/store` ? white : darkGrey}
             />
             <Typography
               style={{
                 marginLeft: '1.5rem',
-                color:
-                  navigation?.type === NavigationTypes.BadgeStore
-                    ? white
-                    : darkGrey,
+                color: asPath === `/client/${tribeid}/store` ? white : darkGrey,
               }}
               variant="captionItem"
             >

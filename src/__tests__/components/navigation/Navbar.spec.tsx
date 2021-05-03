@@ -21,12 +21,12 @@ test('logged in', () => {
   const { rerender } = renderComponent();
 
   const userMenu = screen.getByRole('button', {
-    name: /slowpoke rodriguez/i,
+    name: /slowpoke/i,
   });
   expect(userMenu).toBeInTheDocument();
   expect(within(userMenu).getByRole('img', { hidden: true })).toHaveAttribute(
     'alt',
-    'Slowpoke Rodriguez'
+    'slowpoke'
   );
 
   // menu

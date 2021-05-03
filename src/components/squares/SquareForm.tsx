@@ -8,7 +8,7 @@ import { Square } from 'tools/types/square';
 import { purple } from 'styles/colors';
 
 // components
-import { TextInput } from 'components/form';
+import { TextInput } from 'components/common';
 
 export interface FormValues {
   topics: string;

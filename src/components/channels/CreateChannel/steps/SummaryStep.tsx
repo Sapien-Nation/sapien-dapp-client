@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 
 //components
-import { TextInput } from 'components/form';
+import { TextInput } from 'components/common';
 
 const SummaryStep = () => {
   const {

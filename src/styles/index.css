@@ -2,3 +2,11 @@
   border-radius: 24px;
   background-color: #F9F9FA;
 }
+
+.image--rounded {
+  border-radius: 10px;
+}
+
+a {
+  text-decoration: none;
+}

@@ -14,7 +14,7 @@ import axios from 'api';
 import { isUrl } from 'utils/url';
 
 // assets
-import { RssIcon, DeleteIcon } from 'components/assets/svg';
+import { RssIcon, DeleteIcon } from 'components/channels/assets/svg';
 
 // styles
 import { background, purple } from 'styles/colors';
@@ -29,7 +29,7 @@ import {
 } from '@material-ui/core';
 
 //components
-import { TextInput } from 'components/form';
+import { TextInput } from 'components/common';
 
 const useStyles = makeStyles((theme: Theme) => ({
   removeRssButton: {

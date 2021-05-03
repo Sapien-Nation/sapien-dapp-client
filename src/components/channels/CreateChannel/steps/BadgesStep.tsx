@@ -7,7 +7,7 @@ import {
   Search,
   SingleBadge,
   SubscriptionBadge,
-} from 'components/tribe/assets/svg';
+} from 'components/common';
 
 // mui
 import {
@@ -21,8 +21,7 @@ import {
 } from '@material-ui/core';
 
 // components
-import { DebounceSearch } from 'components/general';
-import Query from 'components/query';
+import { DebounceSearch, Query } from 'components/common';
 
 // styles
 import { white } from 'styles/colors';

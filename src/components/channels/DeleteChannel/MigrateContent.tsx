@@ -13,12 +13,15 @@ import { SearchOutlined as Search } from '@material-ui/icons';
 import { offWhite } from 'styles/colors';
 
 // assets
-import { Globe } from 'components/assets/svg';
+import { Globe } from 'components/common';
 
 // components
-import { AutocompleteSelect, DebounceSearch } from 'components/general';
-import { Checkbox } from 'components/form';
-import Query from 'components/query';
+import {
+  AutocompleteSelect,
+  Checkbox,
+  DebounceSearch,
+  Query,
+} from 'components/common';
 
 const useStyles = makeStyles(() => ({
   image: () => ({

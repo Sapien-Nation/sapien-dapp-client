@@ -1,15 +1,13 @@
 // types
-import type { Tribe } from 'tools/types/tribe';
 import type { Theme } from '@material-ui/core/styles';
 
 // next
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-// context
-import { useNavigation } from 'context/tribes';
-
-// constants
-import { NavigationTypes } from 'context/tribes';
+// hooks
+import { useFollowedTribes } from 'hooks';
 
 // styles
 import { dark, darkPurple, white } from 'styles/colors';
@@ -81,12 +79,14 @@ const useStyles = makeStyles((theme: Theme) => {
 });
 
 interface Props {
-  tribes: Array<Tribe>;
   createTribe: () => void;
 }
 
-const TribeBar = ({ tribes, createTribe }: Props) => {
-  const [navigation, setNavigation] = useNavigation();
+const TribeBar = ({ createTribe }: Props) => {
+  const { asPath, query } = useRouter();
+  const { tribeid } = query;
+  const { tribes } = useFollowedTribes();
+
   const classes = useStyles();
 
   return (
@@ -106,42 +106,36 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
             disableGutters
             disableRipple
             aria-label={tribe.name}
-            onClick={() =>
-              setNavigation({
-                main: tribe,
-                secondary: tribe.id,
-                type: NavigationTypes.Tribe,
-              })
-            }
           >
-            <Badge
-              badgeContent="0"
-              classes={{
-                badge: classes.badge,
-              }}
-              color="error"
-            >
-              <Avatar
-                alt={tribe.name}
+            <Link href={`/client/${tribe.id}`}>
+              <Badge
+                badgeContent="0"
                 classes={{
-                  root: classes.avatar,
+                  badge: classes.badge,
                 }}
-                style={{
-                  borderColor:
-                    tribe.id === navigation?.main?.id ? white : darkPurple,
-                }}
-                variant="square"
+                color="error"
               >
-                <Image
+                <Avatar
                   alt={tribe.name}
-                  className={classes.avatarImage}
-                  height={40}
-                  quality={100}
-                  src={tribe.image}
-                  width={40}
-                />
-              </Avatar>
-            </Badge>
+                  classes={{
+                    root: classes.avatar,
+                  }}
+                  style={{
+                    borderColor: tribe.id === tribeid ? white : darkPurple,
+                  }}
+                  variant="square"
+                >
+                  <Image
+                    alt={tribe.name}
+                    className={classes.avatarImage}
+                    height={40}
+                    quality={100}
+                    src={tribe.image}
+                    width={40}
+                  />
+                </Avatar>
+              </Badge>
+            </Link>
           </ListItem>
         ))}
         <ListItem
@@ -149,41 +143,33 @@ const TribeBar = ({ tribes, createTribe }: Props) => {
           disableGutters
           disableRipple
           aria-label="Discover Tribes"
-          onClick={() =>
-            setNavigation({
-              main: null,
-              secondary: null,
-              type: NavigationTypes.Discovery,
-            })
-          }
         >
-          <Badge
-            badgeContent={0}
-            classes={{
-              badge: classes.badge,
-            }}
-            color="error"
-          >
-            <Avatar
-              alt="Discover Tribe"
+          <Link href="/discover">
+            <Badge
+              badgeContent={0}
               classes={{
-                root: classes.avatarItems,
+                badge: classes.badge,
               }}
-              imgProps={{
-                width: '4rem',
-                height: '4rem',
-              }}
-              style={{
-                borderColor:
-                  navigation.type === NavigationTypes.Discovery
-                    ? white
-                    : darkPurple,
-              }}
-              variant="square"
+              color="error"
             >
-              <ExploreIcon />
-            </Avatar>
-          </Badge>
+              <Avatar
+                alt="Discover Tribe"
+                classes={{
+                  root: classes.avatarItems,
+                }}
+                imgProps={{
+                  width: '4rem',
+                  height: '4rem',
+                }}
+                style={{
+                  borderColor: asPath === '/discover' ? white : darkPurple,
+                }}
+                variant="square"
+              >
+                <ExploreIcon />
+              </Avatar>
+            </Badge>
+          </Link>
         </ListItem>
         <ListItem
           button

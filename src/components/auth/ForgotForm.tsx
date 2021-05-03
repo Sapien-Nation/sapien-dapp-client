@@ -13,7 +13,7 @@ import axios from 'api';
 import { Box, Button, makeStyles, Typography } from '@material-ui/core';
 
 //components
-import { TextInput } from 'components/form';
+import { TextInput } from 'components/common';
 
 const useStyles = makeStyles({
   buttonLink: {
