@@ -22,7 +22,7 @@ import {
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { me, logout } = useAuth();
-
+  console.log(me);
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar variant="dense">
