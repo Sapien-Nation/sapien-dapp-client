@@ -1,5 +1,3 @@
-/* istanbul ignore file */
-
 import * as Sentry from '@sentry/node';
 import { RewriteFrames } from '@sentry/integrations';
 

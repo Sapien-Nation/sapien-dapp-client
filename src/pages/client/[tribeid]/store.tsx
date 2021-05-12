@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import Layout from 'pages/Layout';
 
 const StorePage = () => {

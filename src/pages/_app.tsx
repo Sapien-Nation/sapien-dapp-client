@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { SnackbarProvider } from 'notistack';
@@ -22,9 +21,6 @@ import { init as initSentry } from 'utils/sentry';
 // styles
 import theme from 'styles/theme';
 
-// context
-import { AuthenticationProvider } from 'context/user';
-
 // components
 import { ErrorView } from 'components/common';
 
@@ -46,6 +42,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
 
   // @ts-ignore
   const Layout = Component.Layout || Noop;
+
   return (
     <>
       <Head>
@@ -70,11 +67,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 revalidateOnFocus: false,
               }}
             >
-              <AuthenticationProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </AuthenticationProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
             </SWRConfig>
           </ThemeProvider>
         </SnackbarProvider>

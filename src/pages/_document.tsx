@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { Children } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
