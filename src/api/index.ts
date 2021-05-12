@@ -2,10 +2,15 @@
 import axios from 'axios';
 import { mutate } from 'swr';
 
-const { NEXT_PUBLIC_API_URL: API_URL } = process.env;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_AUTH_URL = process.env.API_AUTH_URL;
 
 const instance = axios.create({
   baseURL: API_URL,
+});
+
+export const authInstance = axios.create({
+  baseURL: API_AUTH_URL,
 });
 
 instance.interceptors.response.use(undefined, async (error) => {
