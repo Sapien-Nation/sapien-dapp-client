@@ -195,7 +195,7 @@ theme.components = {
         avertaItalic,
         avertaMedium,
         avertaRegular,
-      ] as unknown) as React.CSSProperties,
+      ] as unknown as React.CSSProperties,
     },
   },
   MuiListItem: {
