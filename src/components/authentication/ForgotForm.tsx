@@ -9,10 +9,13 @@ import Link from 'next/link';
 import axios from 'api';
 
 // mui
-import { Box, Button, makeStyles, Typography } from '@material-ui/core';
-
-//components
-import { TextInput } from 'components/common';
+import {
+  Box,
+  Button,
+  makeStyles,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
 const useStyles = makeStyles({
   buttonLink: {
@@ -36,11 +39,7 @@ enum View {
 
 const Forgot = () => {
   const [view, setView] = useState(View.Form);
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
 
@@ -115,10 +114,9 @@ const Forgot = () => {
           <Box marginY="5rem">
             <Typography variant="h1">Forgotten Password</Typography>
           </Box>
-          <TextInput
+          <TextField
             fullWidth
             autoComplete="email"
-            errors={errors}
             inputRef={ref}
             label="Email, phone number, or username"
             placeholder="Enter your email, phone number, or username"

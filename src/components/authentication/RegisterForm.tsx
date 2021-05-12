@@ -5,50 +5,37 @@ import * as Sentry from '@sentry/node';
 // next
 import Link from 'next/link';
 
+// assets
+import {
+  Checkbox as CheckboxIcon,
+  CheckboxChecked as CheckboxCheckedIcon,
+} from 'assets';
+
 // mui
-import { Box, Button, Typography } from '@material-ui/core';
+import { ErrorOutline as Help } from '@material-ui/icons';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  TextField,
+  Tooltip,
+} from '@material-ui/core';
 
 // components
-import { TextInput, Checkbox, PasswordStrengthInput } from 'components/common';
+import { ChartCount } from 'components/common';
+
+// styles
+import { darkGrey, lightGrey, white } from 'styles/colors';
 
 const Signup = () => {
-  const {
-    handleSubmit,
-    formState: { errors },
-    getValues,
-    unregister,
-    register,
-    setValue,
-    watch,
-  } = useForm();
-  const signup = () => {};
+  const { handleSubmit, register, watch } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { ref: emailRef, ...emailRest } = register('email', {
-    required: 'Email is required',
-    maxLength: 36,
-  });
-  const { ref: usernameRef, ...usernameRest } = register('username', {
-    required: 'Username is required',
-    maxLength: 20,
-  });
-  const { ref: nameRef, ...nameRest } = register('name', {
-    required: 'Name is required',
-    maxLength: 20,
-  });
-  const { ref: confirmPasswordRef, ...confirmPasswordRest } = register(
-    'confirm',
-    {
-      required: 'Password is required',
-      maxLength: 36,
-      validate: (val = '') =>
-        val === getValues('password') || 'Passwords don"t match',
-    }
-  );
-
-  const onSubmit = async () => {
+  const onSubmit = async (values: any) => {
     try {
-      await signup();
+      console.log(values);
     } catch (err) {
       Sentry.captureException(err);
       enqueueSnackbar('An error occurred, please try again');
@@ -59,131 +46,154 @@ const Signup = () => {
   const currentName = watch('name');
 
   return (
-    <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
-      <Box marginY="5rem">
-        <Typography variant="h1">Sign up</Typography>
-      </Box>
-      <TextInput
-        fullWidth
-        autoComplete="email"
-        errors={errors}
-        inputRef={emailRef}
-        label="Email or phone number"
-        placeholder="myemailaddress@email.com"
-        {...emailRest}
-      />
-      <TextInput
-        fullWidth
-        autoComplete="username"
-        chartCount="20"
-        currentChartCount={currentUsername?.length}
-        errors={errors}
-        inputRef={usernameRef}
-        label="Username"
-        placeholder="johniedoe"
-        tooltipText="Set a username"
-        {...usernameRest}
-      />
-      <TextInput
-        fullWidth
-        autoComplete="name"
-        chartCount="20"
-        currentChartCount={currentName?.length}
-        errors={errors}
-        inputRef={nameRef}
-        label="Name"
-        placeholder="Jonathan Doe"
-        {...nameRest}
-      />
-      <PasswordStrengthInput
-        fullWidth
-        autoComplete="new-password"
-        errors={errors}
-        label="Password"
-        name="password"
-        placeholder="mypassword123*"
-        register={register}
-        setValue={setValue}
-        tooltipText="Minimum length is 8 characters. Must include at least 
-        1 alpha, 1 numeric, 1 lowercaps,  and 1 highercaps."
-        unregister={unregister}
-        watch={watch}
-      />
-      <TextInput
-        fullWidth
-        autoComplete="new-password"
-        errors={errors}
-        inputRef={confirmPasswordRef}
-        label="Confirm password"
-        name="confirm"
-        placeholder="mypassword123*"
-        type="password"
-        {...confirmPasswordRest}
-      />
-      <Box display="flex" flexDirection="column" marginBottom="2rem">
-        <Checkbox
-          errors={errors}
+    <>
+      <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          fullWidth
+          required
+          InputProps={{ ...register('email') }}
+          label="Email or phone number"
+          placeholder="myemailaddress@email.com"
+        />
+        <TextField
+          fullWidth
+          required
+          InputProps={{ ...register('username') }}
           label={
-            <>
-              <Typography variant="subtitle2">
-                I have read and agree to the
-              </Typography>
-              <Link passHref href="/auth#signup">
-                <Typography
-                  style={{
-                    color: '#4bd0df',
-                    marginLeft: '4px',
-                  }}
-                  variant="subtitle1"
-                >
-                  Terms & Conditions
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="buttonMedium">Username*</Typography>
+              <ChartCount
+                currentCount={currentUsername?.length}
+                maxCount={20}
+              />
+            </Box>
+          }
+          placeholder="johniedoe"
+        />
+        <TextField
+          fullWidth
+          required
+          InputProps={{ ...register('name') }}
+          label={
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="buttonMedium">Name</Typography>
+              <ChartCount currentCount={currentName?.length} maxCount={20} />
+            </Box>
+          }
+          placeholder="Jonathan Doe"
+        />
+        <TextField
+          fullWidth
+          required
+          InputLabelProps={{ style: { pointerEvents: 'auto' } }}
+          InputProps={{ ...register('password') }}
+          label={
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="buttonMedium">Password*</Typography>
+              <Tooltip
+                style={{
+                  padding: '1rem',
+                  color: darkGrey,
+                  backgroundColor: white,
+                  maxWidth: 320,
+                  boxShadow: '-20px 0px 40px rgba(51, 51, 51, 0.1)',
+                }}
+                title={
+                  <Typography>
+                    &quot;Minimum length is 8 characters. Must include at least
+                    1 alpha, 1 numeric, 1 lowercaps, and 1 highercaps.&quot;
+                  </Typography>
+                }
+              >
+                <Help
+                  fontSize="small"
+                  style={{ marginLeft: 5, color: lightGrey }}
+                />
+              </Tooltip>
+            </Box>
+          }
+          placeholder="mypassword123*"
+        />
+        <TextField
+          fullWidth
+          required
+          InputProps={{ ...register('confirmPassword') }}
+          label={
+            <Box display="flex" justifyContent="space-between">
+              <Typography variant="buttonMedium">Confirm Password*</Typography>
+            </Box>
+          }
+          placeholder="mypassword123*"
+        />
+        <Box marginBottom="2rem">
+          <FormControlLabel
+            control={
+              <Checkbox
+                disableRipple
+                checkedIcon={<CheckboxCheckedIcon />}
+                color="default"
+                icon={<CheckboxIcon />}
+                name="agree"
+              />
+            }
+            label={
+              <Box alignItems="baseline" display="flex">
+                <Typography variant="subtitle2">
+                  I have read and agree to the
                 </Typography>
-              </Link>
-            </>
-          }
-          name="agree"
-        />
-        <Checkbox
-          errors={errors}
-          label={
-            <Typography variant="subtitle2">
-              I understand that a wallet will be created for me
-            </Typography>
-          }
-          name="wallet"
-        />
-      </Box>
+                <Link passHref href="https://common.sapien.network/terms.html">
+                  <Typography
+                    component="a"
+                    style={{
+                      marginLeft: '4px',
+                    }}
+                    target="_blank"
+                    variant="buttonSmall"
+                  >
+                    Terms & Conditions
+                  </Typography>
+                </Link>
+              </Box>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disableRipple
+                checkedIcon={<CheckboxCheckedIcon />}
+                color="default"
+                icon={<CheckboxIcon />}
+                name="wallet"
+              />
+            }
+            label={
+              <Typography variant="subtitle2">
+                I understand that a wallet will be created for me
+              </Typography>
+            }
+          />
+        </Box>
 
-      <Button fullWidth color="primary" type="submit" variant="contained">
-        Sign up
-      </Button>
-      <Box
-        alignItems="center"
-        display="flex"
-        justifyContent="center"
-        marginTop="2rem"
-      >
-        <Typography
-          style={{
-            cursor: 'pointer',
-          }}
-          variant="subtitle2"
-        >
+        <Button fullWidth color="primary" type="submit" variant="contained">
+          Sign up
+        </Button>
+      </form>
+      <span style={{ alignContent: 'center' }}>
+        <Typography component="span" variant="subtitle2">
           Already have an account?
         </Typography>
-        <Link href="/login">
+        <Link passHref href="/login">
           <Typography
-            style={{
-              cursor: 'pointer',
-              marginLeft: '4px',
-            }}
-            variant="subtitle1"
+            color="primary"
+            component="a"
+            style={{ marginLeft: '4px' }}
+            variant="caption"
           >
             Log in
           </Typography>
         </Link>
-      </Box>
-    </form>
+      </span>
+    </>
   );
 };
 

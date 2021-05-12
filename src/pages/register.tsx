@@ -1,8 +1,17 @@
+// mui
+import { Typography } from '@material-ui/core';
+
 // components
 import Layout from './AuthLayout';
+import { RegisterForm } from 'components/authentication';
 
 const RegisterPage = () => {
-  return <h1>TODO Register Page</h1>;
+  return (
+    <div>
+      <Typography variant="h1">Sign Up</Typography>
+      <RegisterForm />
+    </div>
+  );
 };
 
 RegisterPage.Layout = Layout;

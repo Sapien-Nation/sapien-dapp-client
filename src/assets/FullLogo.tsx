@@ -1,4 +1,4 @@
-export const FullLogo = () => (
+const FullLogo = () => (
   <svg
     fill="none"
     height="51"
@@ -252,3 +252,5 @@ export const FullLogo = () => (
     />
   </svg>
 );
+
+export default FullLogo;

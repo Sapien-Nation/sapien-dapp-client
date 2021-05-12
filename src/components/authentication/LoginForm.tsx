@@ -30,7 +30,6 @@ const LoginForm = () => {
 
   return (
     <>
-      <Typography variant="h1">Login</Typography>
       <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           fullWidth
@@ -68,16 +67,16 @@ const LoginForm = () => {
       </form>
       <span style={{ alignContent: 'center' }}>
         <Typography component="span" variant="subtitle2">
-          Already have an account?
+          Don’t have an account?
         </Typography>{' '}
-        <Link passHref href="/login">
+        <Link passHref href="/register">
           <Typography
             color="primary"
             component="a"
             style={{ marginLeft: '4px' }}
             variant="caption"
           >
-            Forgot password?
+            Sign up
           </Typography>
         </Link>
       </span>

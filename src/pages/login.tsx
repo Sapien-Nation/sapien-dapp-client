@@ -1,11 +1,14 @@
+// mui
+import { Typography } from '@material-ui/core';
+
 // components
 import Layout from './AuthLayout';
 import { LoginForm } from 'components/authentication';
 
-// TODO Best way to handle the logo
 const LoginPage = () => {
   return (
     <div>
+      <Typography variant="h1">Login</Typography>
       <LoginForm />
     </div>
   );
