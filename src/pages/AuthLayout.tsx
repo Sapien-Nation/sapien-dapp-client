@@ -1,6 +1,9 @@
 // mui
 import { Box, CssBaseline } from '@material-ui/core';
 
+// assets
+import { FullLogo } from 'assets/FullLogo';
+
 interface Props {
   children: React.ReactElement;
 }
@@ -24,12 +27,8 @@ const AuthLayout = ({ children }: Props) => {
           }}
         />
         <Box alignItems="center" display="flex" justifyContent="center">
-          <Box
-            display="flex"
-            flexDirection="column"
-            margin="5rem 0"
-            width="39rem"
-          >
+          <Box display="flex" flexDirection="column">
+            <FullLogo />
             {children}
           </Box>
         </Box>

@@ -1,5 +1,3 @@
-import { ErrorMessage } from '@hookform/error-message';
-
 // types
 import type { CheckboxProps } from '@material-ui/core';
 import type { FieldErrors } from 'react-hook-form';
@@ -11,7 +9,6 @@ import { purple } from 'styles/colors';
 import {
   Checkbox as MUICheckbox,
   FormControlLabel,
-  Typography,
   makeStyles,
   createStyles,
 } from '@material-ui/core';
@@ -41,7 +38,8 @@ interface Props extends CheckboxProps {
   label: React.ReactNode;
   name: string;
 }
-const Checkbox = ({ errors, name, label, ...rest }: Props) => {
+
+const Checkbox = ({ name, label, ...rest }: Props) => {
   const classes = useStyles();
 
   return (
@@ -58,24 +56,6 @@ const Checkbox = ({ errors, name, label, ...rest }: Props) => {
         }
         label={label}
       />
-      {errors && (
-        <ErrorMessage
-          errors={errors}
-          name={name}
-          render={({ message }) => (
-            <Typography
-              color="secondary"
-              role="alert"
-              style={{
-                textAlign: 'right',
-              }}
-              variant="subtitle1"
-            >
-              {message}
-            </Typography>
-          )}
-        />
-      )}
     </>
   );
 };

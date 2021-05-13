@@ -6,32 +6,22 @@ import * as Sentry from '@sentry/node';
 import Link from 'next/link';
 
 // mui
-import { Box, Button, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
-//components
-import { TextInput, Checkbox } from 'components/common';
-
-const Login = () => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-  } = useForm();
-  const login = () => {};
+const LoginForm = () => {
+  const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { ref: usernameRef, ...restUsername } = register('username', {
-    required: 'Email is required',
-  });
-
-  const { ref: passwordRef, ...restPassword } = register('password', {
-    required: 'Password is required',
-    maxLength: 36,
-  });
-
-  const onSubmit = async () => {
+  const onSubmit = async (values: any) => {
     try {
-      await login();
+      console.log(values);
     } catch (err) {
       Sentry.captureException(err);
       enqueueSnackbar('An error occurred, please try again');
@@ -39,74 +29,60 @@ const Login = () => {
   };
 
   return (
-    <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
-      <Box marginY="5rem">
-        <Typography variant="h1">Log in</Typography>
-      </Box>
-      <TextInput
-        fullWidth
-        autoComplete="email"
-        errors={errors}
-        inputRef={usernameRef}
-        label="Email, phone number, or username"
-        placeholder="myemailaddress@email.com"
-        {...restUsername}
-      />
-      <TextInput
-        fullWidth
-        autoComplete="new-password"
-        errors={errors}
-        inputRef={passwordRef}
-        label="Password"
-        placeholder="mypassword123*"
-        spacing="6px"
-        type="password"
-        {...restPassword}
-      />
-      <Box
-        alignItems="center"
-        display="flex"
-        justifyContent="space-between"
-        marginBottom="2rem"
-      >
-        <Checkbox
-          errors={errors}
-          label={<Typography variant="subtitle1">Remember me</Typography>}
-          name="remember"
+    <>
+      <Typography variant="h1">Login</Typography>
+      <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          fullWidth
+          required
+          autoComplete="email"
+          inputProps={{ ...register('email') }}
+          label="Email, phone number, or username"
+          placeholder="myemailaddress@email.com"
         />
-        <Link passHref href="/forgot">
-          <Typography color="primary" variant="h4">
+        <TextField
+          fullWidth
+          required
+          autoComplete="new-password"
+          inputProps={{ ...register('password') }}
+          label="Password"
+          placeholder="mypassword123*"
+          type="password"
+        />
+        <Box display="flex" justifyContent="space-between">
+          <FormControlLabel
+            control={
+              <Checkbox defaultChecked color="default" name="remember" />
+            }
+            label={<Typography variant="subtitle1">Remember me</Typography>}
+          />
+          <Link passHref href="/forgot">
+            <Typography color="primary" component="a" variant="caption">
+              Forgot password?
+            </Typography>
+          </Link>
+        </Box>
+        <Button fullWidth color="primary" type="submit" variant="contained">
+          Log In
+        </Button>
+      </form>
+      <span style={{ alignContent: 'center' }}>
+        <Typography component="span" variant="subtitle2">
+          Already have an account?
+        </Typography>{' '}
+        <Link passHref href="/login">
+          <Typography
+            color="primary"
+            component="a"
+            style={{ marginLeft: '4px' }}
+            variant="caption"
+          >
             Forgot password?
           </Typography>
         </Link>
-      </Box>
-
-      <Button fullWidth color="primary" type="submit" variant="contained">
-        Log In
-      </Button>
-      <Box
-        alignItems="center"
-        display="flex"
-        justifyContent="center"
-        marginTop="2rem"
-      >
-        <>
-          <Typography variant="subtitle2">Don’t have an account?</Typography>
-          <Link href="/register">
-            <Typography
-              style={{
-                cursor: 'pointer',
-                marginLeft: '4px',
-              }}
-              variant="subtitle1"
-            >
-              Sign up
-            </Typography>
-          </Link>
-        </>
-      </Box>
-    </form>
+      </span>
+    </>
   );
 };
 
-export default Login;
+export default LoginForm;
