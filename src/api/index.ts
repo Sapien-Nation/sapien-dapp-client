@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import axios from 'axios';
 import { mutate } from 'swr';
 

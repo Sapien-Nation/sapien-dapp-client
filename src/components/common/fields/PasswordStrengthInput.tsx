@@ -13,6 +13,7 @@ import {
   IconButton,
   LinearProgress,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
 
 import {
@@ -22,10 +23,15 @@ import {
 } from '@material-ui/icons';
 
 // styles
-import { green, orange, outline, red, lightGrey } from 'styles/colors';
-
-// components
-import Tooltip from './Tooltip';
+import {
+  darkGrey,
+  green,
+  orange,
+  outline,
+  red,
+  lightGrey,
+  white,
+} from 'styles/colors';
 
 export interface Props extends InputProps, FieldValues {
   errors: FieldErrors;
@@ -112,7 +118,16 @@ const PasswordStrengthInput = ({
       >
         <InputLabel htmlFor={name}>{label}</InputLabel>
         {tooltipText && (
-          <Tooltip title={<Typography>{tooltipText}</Typography>}>
+          <Tooltip
+            style={{
+              padding: '1rem',
+              color: darkGrey,
+              backgroundColor: white,
+              maxWidth: 320,
+              boxShadow: '-20px 0px 40px rgba(51, 51, 51, 0.1)',
+            }}
+            title={<Typography>{tooltipText}</Typography>}
+          >
             <Help
               fontSize="small"
               style={{ marginLeft: 5, color: lightGrey }}
