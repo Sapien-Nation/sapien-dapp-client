@@ -3,17 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 import * as React from 'react';
 
 // styles
-import {
-  red,
-  black,
-  green,
-  purple,
-  darker,
-  darkGrey,
-  inputBG,
-  lightGrey,
-  purpleOpacity,
-} from './colors';
+import { red, black, green, purple, darkGrey, gray1, gray4 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 declare module '@material-ui/core/styles' {
@@ -70,9 +60,9 @@ const theme = createMuiTheme({
       dark: purple,
     },
     secondary: {
-      light: purpleOpacity,
-      main: purpleOpacity,
-      dark: purpleOpacity,
+      light: gray1,
+      main: gray1,
+      dark: gray1,
     },
     info: {
       light: darkGrey,
@@ -91,14 +81,14 @@ const theme = createMuiTheme({
       dark: darkGrey,
     },
     input: {
-      light: inputBG,
-      main: inputBG,
-      dark: inputBG,
+      light: gray4,
+      main: gray4,
+      dark: gray4,
     },
     infoIcon: {
-      light: lightGrey,
-      main: lightGrey,
-      dark: lightGrey,
+      light: gray1,
+      main: gray1,
+      dark: gray1,
     },
     error: {
       light: red,
@@ -423,7 +413,7 @@ theme.components = {
       track: {
         borderRadius: 26 / 2,
         border: `1px solid ${(theme as any).palette.input.main}`,
-        backgroundColor: darker,
+        backgroundColor: '#F4F7F9',
         opacity: 1,
         transition: theme.transitions.create(['background-color', 'border']),
       },

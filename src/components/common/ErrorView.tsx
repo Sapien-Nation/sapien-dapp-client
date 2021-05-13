@@ -32,7 +32,7 @@ const ErrorView = ({
         <Box marginTop={4}>
           <Button
             fullWidth
-            color="secondary"
+            color="primary"
             variant="contained"
             onClick={resetErrorBoundary}
           >

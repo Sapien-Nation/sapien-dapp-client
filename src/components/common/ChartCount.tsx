@@ -9,7 +9,7 @@ interface Props {
 const ChartCount = ({ currentCount = 0, maxCount }: Props) => {
   return (
     <Typography
-      color={currentCount > maxCount ? 'secondary' : 'inherit'}
+      color={currentCount > maxCount ? 'primary' : 'inherit'}
       data-testid="chart-count"
       variant="caption"
     >

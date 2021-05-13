@@ -27,9 +27,9 @@ import {
   darkGrey,
   green,
   orange,
-  outline,
   red,
-  lightGrey,
+  gray1,
+  gray3,
   white,
 } from 'styles/colors';
 
@@ -128,10 +128,7 @@ const PasswordStrengthInput = ({
             }}
             title={<Typography>{tooltipText}</Typography>}
           >
-            <Help
-              fontSize="small"
-              style={{ marginLeft: 5, color: lightGrey }}
-            />
+            <Help fontSize="small" style={{ marginLeft: 5, color: gray1 }} />
           </Tooltip>
         )}
       </Box>
@@ -167,31 +164,31 @@ const PasswordStrengthInput = ({
       >
         <LinearProgress
           color="primary"
-          style={{ backgroundColor: points >= 25 ? color : outline }}
+          style={{ backgroundColor: points >= 25 ? color : gray3 }}
           value={0}
           variant="determinate"
         />
         <LinearProgress
           color="primary"
-          style={{ backgroundColor: points >= 50 ? color : outline }}
+          style={{ backgroundColor: points >= 50 ? color : gray3 }}
           value={0}
           variant="determinate"
         />
         <LinearProgress
           color="primary"
-          style={{ backgroundColor: points >= 75 ? color : outline }}
+          style={{ backgroundColor: points >= 75 ? color : gray3 }}
           value={0}
           variant="determinate"
         />
         <LinearProgress
           color="primary"
-          style={{ backgroundColor: points >= 100 ? color : outline }}
+          style={{ backgroundColor: points >= 100 ? color : gray3 }}
           value={0}
           variant="determinate"
         />
       </div>
       <Typography
-        color="secondary"
+        color="primary"
         role="alert"
         style={{
           color,
