@@ -193,12 +193,19 @@ theme.components = {
         WebkitFontSmoothing: 'auto',
         fontSize: '62.5%',
       },
-      '@font-face': ([
+      body: {
+        'overscroll-behavior-y': 'none',
+      },
+      '*, *::before, *::after': {
+        transition: 'none !important',
+        animation: 'none !important',
+      },
+      '@font-face': [
         avertaBold,
         avertaItalic,
         avertaMedium,
         avertaRegular,
-      ] as unknown) as React.CSSProperties,
+      ] as unknown as React.CSSProperties,
     },
   },
   MuiListItem: {
@@ -283,6 +290,8 @@ theme.components = {
         fontWeight: 600,
         transform: 'translate(0, 0) scale(1)',
         color: (theme as any).palette.formLabel.main,
+        position: 'relative',
+        top: '-1rem',
       },
       shrink: {
         transform: 'translate(0, 0) scale(1)',
@@ -295,7 +304,7 @@ theme.components = {
   MuiFormControl: {
     styleOverrides: {
       root: {
-        marginBottom: `${theme.spacing(1.6)}`,
+        marginBottom: `${theme.spacing(2.8)}`,
       },
     },
   },
@@ -337,6 +346,26 @@ theme.components = {
         },
         '&::-webkit-search-results-decoration': {
           WebkitAppearance: 'none',
+        },
+      },
+    },
+  },
+  MuiOutlinedInput: {
+    styleOverrides: {
+      root: {
+        background: (theme as any).palette.input.main,
+        borderRadius: '0.6rem',
+        fontSize: '1.4rem',
+        minHeight: '4.6rem',
+        input: {
+          padding: theme.spacing(1, 2),
+        },
+        fieldset: {
+          borderWidth: 0,
+          top: '-2px',
+          legend: {
+            display: 'none',
+          },
         },
       },
     },
@@ -413,6 +442,13 @@ theme.components = {
   MuiIconButton: {
     defaultProps: {
       disableRipple: true,
+    },
+    styleOverrides: {
+      root: {
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
     },
   },
   MuiTab: {

@@ -1,8 +1,14 @@
 // components
 import Layout from './AuthLayout';
+import { LoginForm } from 'components/authentication';
 
+// TODO Best way to handle the logo
 const LoginPage = () => {
-  return <h1>TODO Login Page</h1>;
+  return (
+    <div>
+      <LoginForm />
+    </div>
+  );
 };
 
 LoginPage.Layout = Layout;
