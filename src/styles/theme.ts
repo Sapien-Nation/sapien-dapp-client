@@ -190,12 +190,12 @@ theme.components = {
         transition: 'none !important',
         animation: 'none !important',
       },
-      '@font-face': [
+      '@font-face': ([
         avertaBold,
         avertaItalic,
         avertaMedium,
         avertaRegular,
-      ] as unknown as React.CSSProperties,
+      ] as unknown) as React.CSSProperties,
     },
   },
   MuiListItem: {
@@ -267,6 +267,13 @@ theme.components = {
       },
       containedSecondary: {
         fontWeight: 700,
+      },
+    },
+  },
+  MuiFormLabel: {
+    styleOverrides: {
+      asterisk: {
+        display: 'none',
       },
     },
   },

@@ -26,7 +26,15 @@ const AuthLayout = ({ children }: Props) => {
             backgroundSize: 'cover',
           }}
         />
-        <Box alignItems="center" display="flex" justifyContent="center">
+        <Box
+          alignSelf="center"
+          display="flex"
+          flexDirection="column"
+          gap={4}
+          justifySelf="center"
+          marginY={6}
+          maxWidth={390}
+        >
           <FullLogo />
           {children}
         </Box>

@@ -123,6 +123,7 @@ const Signup = () => {
           control={
             <Checkbox
               disableRipple
+              required
               checkedIcon={<CheckboxCheckedIcon />}
               color="default"
               icon={<CheckboxIcon />}
@@ -152,7 +153,9 @@ const Signup = () => {
         <FormControlLabel
           control={
             <Checkbox
+              defaultChecked
               disableRipple
+              required
               checkedIcon={<CheckboxCheckedIcon />}
               color="default"
               icon={<CheckboxIcon />}

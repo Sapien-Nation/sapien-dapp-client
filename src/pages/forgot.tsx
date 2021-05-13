@@ -1,10 +1,6 @@
 // components
-import Layout from './AuthLayout';
+import { ForgotForm } from 'components/authentication';
 
-const ForgotPage = () => {
-  return <h1>TODO Forgot Page</h1>;
-};
-
-ForgotPage.Layout = Layout;
+const ForgotPage = () => <ForgotForm />;
 
 export default ForgotPage;

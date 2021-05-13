@@ -1,5 +1,5 @@
 // mui
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // next
 import Link from 'next/link';
@@ -11,15 +11,21 @@ import { RegisterForm } from 'components/authentication';
 const RegisterPage = () => {
   return (
     <div>
-      <Typography variant="h1">Sign Up</Typography>
+      <Typography style={{ marginBottom: '4rem' }} variant="h1">
+        Sign Up
+      </Typography>
       <RegisterForm />
-      <span style={{ alignContent: 'center' }}>
+      <Box
+        alignItems="center"
+        display="flex"
+        justifyContent="center"
+        marginTop={2}
+      >
         <Typography component="span" variant="subtitle2">
           Already have an account?
         </Typography>
         <Link passHref href="/login">
           <Typography
-            color="primary"
             component="a"
             style={{ marginLeft: '4px' }}
             variant="caption"
@@ -27,7 +33,7 @@ const RegisterPage = () => {
             Log in
           </Typography>
         </Link>
-      </span>
+      </Box>
     </div>
   );
 };

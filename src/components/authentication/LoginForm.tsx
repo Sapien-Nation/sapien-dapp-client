@@ -45,12 +45,18 @@ const LoginForm = () => {
         inputProps={{ ...register('password') }}
         label="Password"
         placeholder="mypassword123*"
+        style={{ marginBottom: '1rem' }}
         type="password"
       />
-      <Box display="flex" justifyContent="space-between">
+      <Box
+        alignItems="center"
+        display="flex"
+        justifyContent="space-between"
+        marginBottom={2}
+      >
         <FormControlLabel
           control={<Checkbox defaultChecked color="default" name="remember" />}
-          label={<Typography variant="subtitle1">Remember me</Typography>}
+          label={<Typography variant="buttonSmall">Remember me</Typography>}
         />
         <Link passHref href="/forgot">
           <Typography color="primary" component="a" variant="caption">
