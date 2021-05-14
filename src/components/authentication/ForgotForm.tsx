@@ -1,32 +1,25 @@
-/* istanbul ignore file */
-import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
 // next
 import Link from 'next/link';
 
-// api
-import axios from 'api';
-
 // mui
 import { Box, Button, TextField, Typography } from '@material-ui/core';
 
-enum View {
-  Success,
-}
-
 interface Props {
-  setView: (view: View) => void;
+  setView: () => void;
 }
 
 const Forgot = ({ setView }: Props) => {
   const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = async () => {
+  const onSubmit = async (values: any) => {
     try {
-      await axios.post('/api/users/forgot');
-      setView(View.Success);
+      // TO DO connect to new endpoint
+      console.log(values);
+      setView();
     } catch ({ response }) {
       enqueueSnackbar(response.data.message);
     }
@@ -34,13 +27,12 @@ const Forgot = ({ setView }: Props) => {
 
   return (
     <form id="forgot-form" onSubmit={handleSubmit(onSubmit)}>
-      <Box marginY="5rem">
-        <Typography component="h1" variant="h2">
-          Forgotten Password
-        </Typography>
-      </Box>
+      <Typography component="h1" style={{ margin: '5rem 0' }} variant="h2">
+        Forgotten Password
+      </Typography>
       <TextField
         fullWidth
+        required
         InputProps={{ ...register('email') }}
         autoComplete="email"
         label="Email, phone number, or username"
