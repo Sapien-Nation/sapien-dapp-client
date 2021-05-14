@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -36,7 +37,6 @@ enum View {
   Form,
   Success,
 }
-
 const Forgot = () => {
   const [view, setView] = useState(View.Form);
   const { handleSubmit, register } = useForm();
@@ -59,12 +59,14 @@ const Forgot = () => {
   return (
     <>
       {view === View.Success ? (
-        <Box marginTop={2} textAlign="center">
+        <Box marginTop={4} textAlign="center">
           <Box marginBottom={4}>
-            <Typography variant="h2">Request sent successfully</Typography>
+            <Typography component="h1" variant="h2">
+              Request sent successfully
+            </Typography>
           </Box>
           <Box marginBottom={4}>
-            <Typography variant="h4">
+            <Typography variant="body2">
               If the email and username provided match, you will receive
               instructions to set a new password shortly.
             </Typography>
@@ -86,23 +88,23 @@ const Forgot = () => {
             marginTop="2rem"
           >
             <Typography
-              style={{
-                cursor: 'pointer',
-              }}
+              color="textPrimary"
+              component="span"
               variant="subtitle2"
             >
               Haven’t received an email?
             </Typography>
             <Button
               classes={{ root: classes.buttonLink }}
+              color="inherit"
               onClick={() => setView(View.Form)}
             >
               <Typography
+                component="a"
                 style={{
-                  cursor: 'pointer',
                   marginLeft: '4px',
                 }}
-                variant="subtitle1"
+                variant="caption"
               >
                 Resend
               </Typography>
@@ -112,7 +114,9 @@ const Forgot = () => {
       ) : (
         <form id="forgot-form" onSubmit={handleSubmit(onSubmit)}>
           <Box marginY="5rem">
-            <Typography variant="h1">Forgotten Password</Typography>
+            <Typography component="h1" variant="h2">
+              Forgotten Password
+            </Typography>
           </Box>
           <TextField
             fullWidth
@@ -133,16 +137,21 @@ const Forgot = () => {
             marginTop="2rem"
           >
             <>
-              <Typography color="textPrimary" variant="subtitle2">
+              <Typography
+                color="textPrimary"
+                component="span"
+                variant="subtitle2"
+              >
                 Remembered your password?
               </Typography>
-              <Link href="/login">
+              <Link passHref href="/login">
                 <Typography
+                  color="inherit"
+                  component="a"
                   style={{
-                    cursor: 'pointer',
                     marginLeft: '4px',
                   }}
-                  variant="subtitle1"
+                  variant="caption"
                 >
                   Log in
                 </Typography>
