@@ -12,22 +12,18 @@ import {
 } from 'assets';
 
 // mui
-import { ErrorOutline as Help } from '@material-ui/icons';
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
-  Typography,
+  FormHelperText,
   TextField,
-  Tooltip,
+  Typography,
 } from '@material-ui/core';
 
 // components
 import { ChartCount } from 'components/common';
-
-// styles
-import { darkGrey, gray1, white } from 'styles/colors';
 
 const Signup = () => {
   const { handleSubmit, register, watch } = useForm();
@@ -58,6 +54,7 @@ const Signup = () => {
         fullWidth
         required
         InputProps={{ ...register('username') }}
+        autoComplete="username"
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Username*</Typography>
@@ -70,6 +67,7 @@ const Signup = () => {
         fullWidth
         required
         InputProps={{ ...register('name') }}
+        autoComplete="name"
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Name</Typography>
@@ -83,40 +81,19 @@ const Signup = () => {
         required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         InputProps={{ ...register('password') }}
+        autoComplete="new-password"
         label={
-          <Box display="flex" justifyContent="space-between">
+          <>
             <Typography variant="buttonMedium">Password*</Typography>
-            <Tooltip
-              style={{
-                padding: '1rem',
-                color: darkGrey,
-                backgroundColor: white,
-                maxWidth: 320,
-                boxShadow: '-20px 0px 40px rgba(51, 51, 51, 0.1)',
-              }}
-              title={
-                <Typography>
-                  &quot;Minimum length is 8 characters. Must include at least 1
-                  alpha, 1 numeric, 1 lowercaps, and 1 highercaps.&quot;
-                </Typography>
-              }
-            >
-              <Help fontSize="small" style={{ marginLeft: 5, color: gray1 }} />
-            </Tooltip>
-          </Box>
+            <FormHelperText style={{ margin: 0 }}>
+              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
+              <br />
+              numeric, 1 lowercaps, and 1 highercaps.
+            </FormHelperText>
+          </>
         }
         placeholder="mypassword123*"
-      />
-      <TextField
-        fullWidth
-        required
-        InputProps={{ ...register('confirmPassword') }}
-        label={
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="buttonMedium">Confirm Password*</Typography>
-          </Box>
-        }
-        placeholder="mypassword123*"
+        type="password"
       />
       <Box marginBottom="2rem">
         <FormControlLabel
