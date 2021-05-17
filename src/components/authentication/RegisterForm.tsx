@@ -5,6 +5,9 @@ import * as Sentry from '@sentry/node';
 // next
 import Link from 'next/link';
 
+// context
+import { useAuth } from 'context/user';
+
 // assets
 import {
   Checkbox as CheckboxIcon,
@@ -26,12 +29,27 @@ import {
 import { ChartCount } from 'components/common';
 
 const Signup = () => {
-  const { handleSubmit, register, watch } = useForm();
+  const authMethods = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting },
+    watch,
+  } = useForm();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: {
+    email: string;
+    displayName: string;
+    password: string;
+    username: string;
+  }) => {
     try {
-      console.log(values);
+      await authMethods.register({
+        ...values,
+        client: window?.navigator.userAgent,
+        redirect: '/',
+      });
     } catch (err) {
       Sentry.captureException(err);
       enqueueSnackbar('An error occurred, please try again');
@@ -39,7 +57,7 @@ const Signup = () => {
   };
 
   const currentUsername = watch('username');
-  const currentName = watch('name');
+  const currentDisplayName = watch('displayName');
 
   return (
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
@@ -66,12 +84,15 @@ const Signup = () => {
       <TextField
         fullWidth
         required
-        InputProps={{ ...register('name') }}
+        InputProps={{ ...register('displayName') }}
         autoComplete="name"
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Name</Typography>
-            <ChartCount currentCount={currentName?.length} maxCount={20} />
+            <ChartCount
+              currentCount={currentDisplayName?.length}
+              maxCount={20}
+            />
           </Box>
         }
         placeholder="Jonathan Doe"
@@ -147,7 +168,13 @@ const Signup = () => {
         />
       </Box>
 
-      <Button fullWidth color="primary" type="submit" variant="contained">
+      <Button
+        fullWidth
+        color="primary"
+        disabled={isSubmitting}
+        type="submit"
+        variant="contained"
+      >
         Sign up
       </Button>
     </form>
