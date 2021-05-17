@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SnackbarProvider } from 'notistack';
 import { ReactElement, ReactNode, Suspense } from 'react';
-import { SWRConfig } from 'swr';
+import { SWRConfig, SWRConfiguration } from 'swr';
 
 // types
 import type { NextRouter } from 'next/router';
@@ -13,25 +13,27 @@ import { ThemeProvider } from '@material-ui/core/styles';
 // styles
 import theme from 'styles/theme';
 
-// mocks
-import { mockRouter } from 'mocks/routes';
-
 // providers
+import { Authentication, AuthenticationContext } from 'context/user';
 import { RouterContext } from 'next/dist/next-server/lib/router-context';
 
 interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
   container?: Element;
   fetcher?: (...args: any) => any;
+  user?: Authentication | null;
+  swrConfig?: SWRConfiguration;
   router?: NextRouter | null;
 }
 
-const AllTheProviders = ({
+const Providers = ({
   children,
   fetcher,
   router = null,
-}: CustomRenderOptions) => (
-  <SnackbarProvider maxSnack={1}>
+  user = null,
+  swrConfig = {},
+}: CustomRenderOptions) => {
+  let Wrapper = (
     <Suspense fallback={null}>
       <SWRConfig
         value={{
@@ -39,25 +41,40 @@ const AllTheProviders = ({
           errorRetryCount: 0,
           fetcher,
           revalidateOnFocus: false,
+          ...swrConfig,
         }}
       >
         <ThemeProvider theme={theme}>
-          <RouterContext.Provider value={mockRouter(router)}>
-            {children}
-          </RouterContext.Provider>
+          <SnackbarProvider maxSnack={1}>{children}</SnackbarProvider>
         </ThemeProvider>
       </SWRConfig>
     </Suspense>
-  </SnackbarProvider>
-);
+  );
+
+  if (router) {
+    Wrapper = (
+      <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
+    );
+  }
+
+  if (user) {
+    Wrapper = (
+      <AuthenticationContext.Provider value={user}>
+        {children}
+      </AuthenticationContext.Provider>
+    );
+  }
+
+  return Wrapper;
+};
 
 const customRender = (ui: ReactElement, options: CustomRenderOptions = {}) => {
-  const { fetcher, router, ...rest } = options;
+  const { fetcher, router, user, ...rest } = options;
   const rtl = render(ui, {
     wrapper: ({ children }) => (
-      <AllTheProviders fetcher={fetcher} router={router}>
+      <Providers fetcher={fetcher} router={router} user={user}>
         {children}
-      </AllTheProviders>
+      </Providers>
     ),
     ...rest,
   });
