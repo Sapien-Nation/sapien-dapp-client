@@ -18,7 +18,6 @@ import { mockRouter } from 'mocks/routes';
 
 // providers
 import { RouterContext } from 'next/dist/next-server/lib/router-context';
-import { AuthenticationProvider } from 'context/user';
 
 interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
@@ -44,7 +43,7 @@ const AllTheProviders = ({
       >
         <ThemeProvider theme={theme}>
           <RouterContext.Provider value={mockRouter(router)}>
-            <AuthenticationProvider>{children}</AuthenticationProvider>
+            {children}
           </RouterContext.Provider>
         </ThemeProvider>
       </SWRConfig>

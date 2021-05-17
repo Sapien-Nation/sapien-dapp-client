@@ -34,6 +34,7 @@ const LoginForm = () => {
         fullWidth
         required
         autoComplete="email"
+        id="email"
         inputProps={{ ...register('email') }}
         label="Email, phone number, or username"
         placeholder="myemailaddress@email.com"
@@ -42,6 +43,7 @@ const LoginForm = () => {
         fullWidth
         required
         autoComplete="new-password"
+        id="password"
         inputProps={{ ...register('password') }}
         label="Password"
         placeholder="mypassword123*"
