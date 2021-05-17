@@ -14,12 +14,10 @@ const SuccessScreen = ({ setView }: Props) => {
       <Typography component="h1" style={{ marginBottom: 30 }} variant="h2">
         Request sent successfully
       </Typography>
-      <Box marginBottom={3}>
-        <Typography variant="body2">
-          If the email and username provided match, you will receive
-          instructions to set a new password shortly.
-        </Typography>
-      </Box>
+      <Typography style={{ marginBottom: 30 }} variant="body2">
+        If the email and username provided match, you will receive instructions
+        to set a new password shortly.
+      </Typography>
       <Link href="/login">
         <Button color="primary" type="submit" variant="contained">
           Got it!
