@@ -2,6 +2,9 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import * as Sentry from '@sentry/node';
 
+// context
+import { useAuth } from 'context/user';
+
 // next
 import Link from 'next/link';
 
@@ -16,12 +19,21 @@ import {
 } from '@material-ui/core';
 
 const LoginForm = () => {
-  const { handleSubmit, register } = useForm();
+  const { login } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting },
+  } = useForm();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: { email: string; password: string }) => {
     try {
-      console.log(values);
+      await login({
+        ...values,
+        client: window?.navigator.userAgent,
+        redirect: '/',
+      });
     } catch (err) {
       Sentry.captureException(err);
       enqueueSnackbar('An error occurred, please try again');
@@ -33,18 +45,17 @@ const LoginForm = () => {
       <TextField
         fullWidth
         required
-        autoComplete="email"
         id="email"
-        inputProps={{ ...register('email') }}
+        inputProps={{ ...register('email'), autoComplete: 'email' }}
         label="Email, phone number, or username"
         placeholder="myemailaddress@email.com"
+        type="email"
       />
       <TextField
         fullWidth
         required
-        autoComplete="new-password"
         id="password"
-        inputProps={{ ...register('password') }}
+        inputProps={{ ...register('password'), autoComplete: 'new-password' }}
         label="Password"
         placeholder="mypassword123*"
         style={{ marginBottom: '1rem' }}
@@ -66,7 +77,13 @@ const LoginForm = () => {
           </Typography>
         </Link>
       </Box>
-      <Button fullWidth color="primary" type="submit" variant="contained">
+      <Button
+        fullWidth
+        color="primary"
+        disabled={isSubmitting}
+        type="submit"
+        variant="contained"
+      >
         Log In
       </Button>
     </form>

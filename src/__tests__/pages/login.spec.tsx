@@ -2,23 +2,20 @@
 import LoginPage from 'pages/login';
 
 // utils
-import { user, render, screen } from 'utils/testUtils';
+import { render, screen } from 'utils/testUtils';
 
-const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
+// const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
+
+const login = jest.fn();
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
 test('renders correctly', () => {
-  render(<LoginPage />);
+  render(<LoginPage />, { user: { login } });
 
   expect(screen.getByRole('heading', { name: 'Log in' })).toBeInTheDocument();
-
-  user.type(
-    screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
-    'jhon@doe.com'
-  );
-  // https://github.com/testing-library/dom-testing-library/issues/567
-  // screen.debug(screen.getAllByLabelText(/password/));
-  user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
-  user.click(getLoginButton());
 
   // links
   expect(
@@ -28,4 +25,13 @@ test('renders correctly', () => {
     'href',
     '/register'
   );
+
+  // user.type(
+  //   screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
+  //   'jhon@doe.com'
+  // );
+  // https://github.com/testing-library/dom-testing-library/issues/567
+  // screen.debug(screen.getAllByLabelText(/password/));
+  // user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
+  // user.click(getLoginButton());
 });

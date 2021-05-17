@@ -14,14 +14,13 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import theme from 'styles/theme';
 
 // providers
-import { Authentication, AuthenticationContext } from 'context/user';
+import { AuthenticationContext } from 'context/user';
 import { RouterContext } from 'next/dist/next-server/lib/router-context';
-
 interface CustomRenderOptions {
   children?: ReactElement | ReactNode;
   container?: Element;
   fetcher?: (...args: any) => any;
-  user?: Authentication | null;
+  user?: any | null;
   swrConfig?: SWRConfiguration;
   router?: NextRouter | null;
 }
@@ -60,7 +59,7 @@ const Providers = ({
   if (user) {
     Wrapper = (
       <AuthenticationContext.Provider value={user}>
-        {children}
+        <SnackbarProvider maxSnack={1}>{children}</SnackbarProvider>
       </AuthenticationContext.Provider>
     );
   }

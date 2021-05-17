@@ -67,7 +67,12 @@ const AuthenticationProvider = ({ children }: Props) => {
       mutate('/api/v3/users/me');
       push('/');
     } catch ({ response }) {
-      enqueueSnackbar(response.data.message);
+      enqueueSnackbar(response.data.message, {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
     }
   };
 
