@@ -34,9 +34,9 @@ const LoginForm = () => {
         client: window?.navigator.userAgent,
         redirect: '/',
       });
-    } catch (err) {
-      Sentry.captureException(err);
-      enqueueSnackbar('An error occurred, please try again');
+    } catch (error) {
+      Sentry.captureException(error);
+      enqueueSnackbar(error);
     }
   };
 
