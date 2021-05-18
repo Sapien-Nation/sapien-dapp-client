@@ -1,8 +1,14 @@
 import { useState } from 'react';
 
+// next
+import Link from 'next/link';
+
+// mui
+import { Box, Button, Typography } from '@material-ui/core';
+
 // components
 import Layout from './AuthLayout';
-import { ForgotForm, SuccessScreen } from 'components/authentication';
+import { ForgotForm } from 'components/authentication';
 
 enum View {
   Form,
@@ -15,9 +21,83 @@ const ForgotPage = () => {
   const renderView = () => {
     switch (view) {
       case View.Form:
-        return <ForgotForm setView={() => setView(View.Success)} />;
+        return (
+          <>
+            <Typography component="h1" variant="h2">
+              Forgotten Password
+            </Typography>
+            <ForgotForm changeView={() => setView(View.Success)} />
+            <Box alignItems="center" display="flex" justifyContent="center">
+              <>
+                <Typography
+                  color="textPrimary"
+                  component="span"
+                  variant="subtitle2"
+                >
+                  Remembered your password?
+                </Typography>
+                <Link passHref href="/login">
+                  <Typography
+                    color="inherit"
+                    component="a"
+                    style={{
+                      marginLeft: '4px',
+                    }}
+                    variant="caption"
+                  >
+                    Log in
+                  </Typography>
+                </Link>
+              </>
+            </Box>
+          </>
+        );
       case View.Success:
-        return <SuccessScreen setView={() => setView(View.Form)} />;
+        return (
+          <Box textAlign="center">
+            <Typography
+              component="h1"
+              style={{ marginBottom: 30 }}
+              variant="h2"
+            >
+              Request sent successfully
+            </Typography>
+            <Typography style={{ marginBottom: 30 }} variant="body2">
+              If the email and username provided match, you will receive
+              instructions to set a new password shortly.
+            </Typography>
+            <Link href="/login">
+              <Button color="primary" type="submit" variant="contained">
+                Got it!
+              </Button>
+            </Link>
+            <Box
+              alignItems="center"
+              display="flex"
+              justifyContent="center"
+              marginTop="2rem"
+            >
+              <Typography
+                color="textPrimary"
+                component="span"
+                variant="subtitle2"
+              >
+                Haven’t received an email?
+              </Typography>
+              <Button color="inherit" onClick={() => setView(View.Form)}>
+                <Typography
+                  component="a"
+                  style={{
+                    marginLeft: '4px',
+                  }}
+                  variant="caption"
+                >
+                  Resend
+                </Typography>
+              </Button>
+            </Box>
+          </Box>
+        );
     }
   };
 
