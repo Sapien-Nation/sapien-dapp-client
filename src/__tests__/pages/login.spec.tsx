@@ -1,19 +1,35 @@
+import { captureException } from '@sentry/node';
+
 // components
 import LoginPage from 'pages/login';
 
 // utils
-import { render, screen } from 'utils/testUtils';
+import { render, screen, user, waitFor } from 'utils/testUtils';
 
-// const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
-
+// mock data
+const email = 'jhon@doe.com';
+const password = '123456';
+const userAgent = 'user agent';
+const error = 'Error';
 const login = jest.fn();
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
-test('renders correctly', () => {
-  render(<LoginPage />, { user: { login } });
+const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
+const renderComponent = () => render(<LoginPage />, { user: { login } });
+
+(captureException as jest.Mock).mockImplementation(() => {});
+(global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
+(global as any).userAgent.mockReturnValue(userAgent);
+
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
+test('renders correctly', async () => {
+  renderComponent();
 
   expect(screen.getByRole('heading', { name: 'Log in' })).toBeInTheDocument();
 
@@ -26,12 +42,46 @@ test('renders correctly', () => {
     '/register'
   );
 
-  // user.type(
-  //   screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
-  //   'jhon@doe.com'
-  // );
-  // https://github.com/testing-library/dom-testing-library/issues/567
-  // screen.debug(screen.getAllByLabelText(/password/));
-  // user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
-  // user.click(getLoginButton());
+  // validation
+  user.click(getLoginButton());
+  await waitFor(() => {
+    expect(login).not.toHaveBeenCalled();
+  });
+
+  user.type(
+    screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
+    email
+  );
+  user.type(screen.getByLabelText(/password/i), password);
+  user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
+
+  // onError
+  login.mockRejectedValueOnce(error);
+  user.click(getLoginButton());
+
+  await waitFor(() => {
+    expect(login).toHaveBeenCalledWith({
+      email,
+      password,
+      redirect: '/',
+      client: userAgent,
+    });
+
+    expect(captureException).toHaveBeenCalledWith(error);
+    expect(screen.getByText(error)).toBeInTheDocument();
+  });
+
+  // onSuccess
+  jest.clearAllMocks();
+  user.click(getLoginButton());
+  await waitFor(() => {
+    expect(login).toHaveBeenCalledWith({
+      email,
+      password,
+      redirect: '/',
+      client: userAgent,
+    });
+
+    expect(captureException).not.toHaveBeenCalledWith(error);
+  });
 });
