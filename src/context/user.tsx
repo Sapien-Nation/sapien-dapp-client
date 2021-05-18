@@ -63,7 +63,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const login = async (body: PostBody) => {
     try {
       await authInstance.post('/api/v3/auth/login', body);
-      mutate('/api/v3/users/me');
+      mutate('/api/v3/user/me');
       push('/');
     } catch ({ response }) {
       enqueueSnackbar(response.data.message, {
