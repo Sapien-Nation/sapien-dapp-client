@@ -50,9 +50,9 @@ const Signup = () => {
         client: window?.navigator.userAgent,
         redirect: '/',
       });
-    } catch (err) {
-      Sentry.captureException(err);
-      enqueueSnackbar('An error occurred, please try again');
+    } catch (error) {
+      Sentry.captureException(error);
+      enqueueSnackbar(error);
     }
   };
 
@@ -64,15 +64,17 @@ const Signup = () => {
       <TextField
         fullWidth
         required
-        InputProps={{ ...register('email') }}
+        id="email"
+        inputProps={{ ...register('email'), autoComplete: 'email' }}
         label="Email or phone number"
         placeholder="myemailaddress@email.com"
+        type="email"
       />
       <TextField
         fullWidth
         required
-        InputProps={{ ...register('username') }}
-        autoComplete="username"
+        id="username"
+        inputProps={{ ...register('username'), autoComplete: 'username' }}
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Username*</Typography>
@@ -80,15 +82,16 @@ const Signup = () => {
           </Box>
         }
         placeholder="johniedoe"
+        type="text"
       />
       <TextField
         fullWidth
         required
-        InputProps={{ ...register('displayName') }}
-        autoComplete="name"
+        id="displayName"
+        inputProps={{ ...register('displayName'), autoComplete: 'name' }}
         label={
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="buttonMedium">Name</Typography>
+            <Typography variant="buttonMedium">Name*</Typography>
             <ChartCount
               currentCount={currentDisplayName?.length}
               maxCount={20}
@@ -96,13 +99,14 @@ const Signup = () => {
           </Box>
         }
         placeholder="Jonathan Doe"
+        type="text"
       />
       <TextField
         fullWidth
         required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
-        InputProps={{ ...register('password') }}
-        autoComplete="new-password"
+        id="password"
+        inputProps={{ ...register('password'), autoComplete: 'new-password' }}
         label={
           <>
             <Typography variant="buttonMedium">Password*</Typography>
@@ -175,7 +179,7 @@ const Signup = () => {
         type="submit"
         variant="contained"
       >
-        Sign up
+        Sign Up
       </Button>
     </form>
   );
