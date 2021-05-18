@@ -1,14 +1,31 @@
+import { useEffect } from 'react';
+
 // mui
 import { Box, CssBaseline } from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'assets';
 
+// next
+import { useRouter } from 'next/router';
+
+// context
+import { useAuth } from 'context/user';
+
 interface Props {
   children: React.ReactElement;
 }
 
 const AuthLayout = ({ children }: Props) => {
+  const router = useRouter();
+  const { me, isLoggingIn } = useAuth();
+
+  useEffect(() => {
+    if (isLoggingIn === false && me) {
+      router.push('/');
+    }
+  }, [isLoggingIn, me, router]);
+
   return (
     <>
       <CssBaseline />
