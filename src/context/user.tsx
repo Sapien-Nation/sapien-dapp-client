@@ -34,11 +34,10 @@ interface Props {
 
 const fetcher = async () => {
   try {
-    // const { data } = await authInstance.get('/api/v3/user/me', {
-    //   withCredentials: true,
-    // });
-    // return data;
-    return null;
+    const { data } = await authInstance.get('/api/v3/user/me', {
+      withCredentials: true,
+    });
+    return data;
   } catch (err) {
     Promise.reject(err);
   }
