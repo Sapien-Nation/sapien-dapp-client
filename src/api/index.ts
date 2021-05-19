@@ -10,6 +10,7 @@ const instance = axios.create({
 
 export const authInstance = axios.create({
   baseURL: API_AUTH_URL,
+  withCredentials: true,
 });
 
 instance.interceptors.response.use(undefined, async (error) => {
