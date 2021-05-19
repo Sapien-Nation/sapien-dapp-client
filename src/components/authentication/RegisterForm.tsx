@@ -1,6 +1,5 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import * as Sentry from '@sentry/node';
 
 // next
 import Link from 'next/link';
@@ -51,7 +50,6 @@ const Signup = () => {
         redirect: '/',
       });
     } catch (error) {
-      Sentry.captureException(error);
       enqueueSnackbar(error, {
         anchorOrigin: {
           vertical: 'bottom',

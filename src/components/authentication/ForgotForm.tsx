@@ -20,8 +20,13 @@ const Forgot = ({ changeView }: Props) => {
     try {
       await forgot(email);
       changeView();
-    } catch ({ response }) {
-      enqueueSnackbar(response.data.message);
+    } catch (error) {
+      enqueueSnackbar(error, {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
     }
   };
 

@@ -1,5 +1,3 @@
-import { captureException } from '@sentry/node';
-
 // components
 import RegisterPage from 'pages/register';
 
@@ -22,7 +20,6 @@ beforeEach(() => {
 const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
 const renderComponent = () => render(<RegisterPage />, { user: { register } });
 
-(captureException as jest.Mock).mockImplementation(() => {});
 (global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
 (global as any).userAgent.mockReturnValue(userAgent);
 
@@ -77,7 +74,6 @@ test('renders correctly', async () => {
       client: userAgent,
     });
 
-    expect(captureException).toHaveBeenCalledWith(error);
     expect(screen.getByText(error)).toBeInTheDocument();
   });
 
@@ -93,7 +89,5 @@ test('renders correctly', async () => {
       redirect: '/',
       client: userAgent,
     });
-
-    expect(captureException).not.toHaveBeenCalledWith(error);
   });
 });
