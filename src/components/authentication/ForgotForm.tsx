@@ -4,18 +4,22 @@ import { useSnackbar } from 'notistack';
 // mui
 import { Button, TextField } from '@material-ui/core';
 
+// context
+import { useAuth } from 'context/user';
+
 interface Props {
   changeView: () => void;
 }
 
 const Forgot = ({ changeView }: Props) => {
+  const { forgot } = useAuth();
   const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async (values: any) => {
     try {
-      // TO DO connect to new endpoint
-      console.log(values);
+      const { email } = values;
+      await forgot(email);
       changeView();
     } catch ({ response }) {
       enqueueSnackbar(response.data.message);
