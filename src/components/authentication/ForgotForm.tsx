@@ -16,9 +16,8 @@ const Forgot = ({ changeView }: Props) => {
   const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async ({ email }: { email: string }) => {
     try {
-      const { email } = values;
       await forgot(email);
       changeView();
     } catch ({ response }) {

@@ -81,12 +81,11 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const forgot = async (email: string) => {
     try {
-      const response = await authInstance.post('/api/v3/user/forgot-password', {
+      await authInstance.post('/api/v3/user/forgot-password', {
         email,
       });
-      return Promise.resolve(response);
     } catch ({ response }) {
-      return Promise.reject(new Error(response.data.message));
+      return Promise.reject(response.data.message);
     }
   };
 
