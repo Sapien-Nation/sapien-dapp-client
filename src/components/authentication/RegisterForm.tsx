@@ -52,7 +52,12 @@ const Signup = () => {
       });
     } catch (error) {
       Sentry.captureException(error);
-      enqueueSnackbar(error);
+      enqueueSnackbar(error, {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
     }
   };
 

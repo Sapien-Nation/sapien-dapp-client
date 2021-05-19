@@ -1,6 +1,5 @@
 import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
-import { useSnackbar } from 'notistack';
 
 // next
 import { useRouter } from 'next/router';
@@ -46,7 +45,6 @@ const fetcher = async () => {
 
 const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
   const { data } = useSWR<User>('/api/v3/user/me', { fetcher });
 
   const isLoggingIn = data === undefined;
@@ -56,8 +54,8 @@ const AuthenticationProvider = ({ children }: Props) => {
       await authInstance.post('/api/auth/logout', body);
       mutate('/api/v3/user/me');
       push('/login');
-    } catch (err) {
-      enqueueSnackbar(err.message);
+    } catch ({ response }) {
+      return Promise.reject(response.data.message);
     }
   };
 
@@ -67,12 +65,7 @@ const AuthenticationProvider = ({ children }: Props) => {
       mutate('/api/v3/user/me');
       push('/');
     } catch ({ response }) {
-      enqueueSnackbar(response.data.message, {
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right',
-        },
-      });
+      return Promise.reject(response.data.message);
     }
   };
 
@@ -82,7 +75,7 @@ const AuthenticationProvider = ({ children }: Props) => {
       mutate('/api/v3/user/me');
       push('/');
     } catch ({ response }) {
-      enqueueSnackbar(response.data.message);
+      return Promise.reject(response.data.message);
     }
   };
 
@@ -90,7 +83,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     try {
       await authInstance.post('/api/v3/auth/forgot', { email });
     } catch ({ response }) {
-      enqueueSnackbar(response.data.message);
+      return Promise.reject(response.data.message);
     }
   };
 
