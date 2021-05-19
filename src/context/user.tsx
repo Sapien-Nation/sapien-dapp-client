@@ -81,7 +81,9 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const forgot = async (email: string) => {
     try {
-      await authInstance.post('/api/v3/auth/forgot', { email });
+      await authInstance.post('/api/v3/user/forgot-password', {
+        email,
+      });
     } catch ({ response }) {
       return Promise.reject(response.data.message);
     }
