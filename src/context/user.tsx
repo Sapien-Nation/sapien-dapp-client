@@ -51,8 +51,8 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const logout = async (body: { email: string }) => {
     try {
-      await authInstance.post('/api/auth/logout', body);
-      mutate('/api/v3/user/me');
+      await authInstance.post('/api/v3/auth/logout', body);
+      mutate('/api/v3/user/me', null, false);
       push('/login');
     } catch ({ response }) {
       return Promise.reject(response.data.message);

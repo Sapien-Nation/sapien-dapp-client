@@ -21,6 +21,7 @@ import {
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { me, logout } = useAuth();
+
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar variant="dense">
@@ -36,7 +37,7 @@ const Navbar = () => {
             >
               <Avatar alt={me.username}>
                 {me.firstName[0]}
-                {me.lastName[0]}
+                {me.lastName?.[0]}
               </Avatar>
             </IconButton>
           ) : (
