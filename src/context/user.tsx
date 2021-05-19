@@ -20,6 +20,7 @@ interface PostBody {
 
 export interface Authentication {
   me: User | null;
+  forgot: (email: string) => Promise<unknown>;
   login: (values: PostBody) => Promise<unknown>;
   logout: (values: { email: string }) => Promise<unknown>;
   isLoggingIn: boolean;
@@ -85,9 +86,17 @@ const AuthenticationProvider = ({ children }: Props) => {
     }
   };
 
+  const forgot = async (email: string) => {
+    try {
+      await authInstance.post('/api/v3/auth/forgot', { email });
+    } catch ({ response }) {
+      enqueueSnackbar(response.data.message);
+    }
+  };
+
   return (
     <AuthenticationContext.Provider
-      value={{ me: data, isLoggingIn, login, logout, register }}
+      value={{ forgot, me: data, isLoggingIn, login, logout, register }}
     >
       {children}
     </AuthenticationContext.Provider>
