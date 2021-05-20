@@ -1,5 +1,5 @@
 // components
-import ForgotPage from 'pages/forgot';
+import ForgotPage from 'pages/forgot-password';
 
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
@@ -41,8 +41,7 @@ test('renders correctly', async () => {
 
   await waitFor(() => {
     expect(forgot).toHaveBeenCalledWith(email);
-
-    expect(screen.queryByText(error)).not.toBeInTheDocument();
+    expect(screen.getByText(error)).toBeInTheDocument();
   });
 
   // onSuccess

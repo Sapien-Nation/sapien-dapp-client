@@ -101,9 +101,10 @@ const AuthenticationProvider = ({ children }: Props) => {
     token: string;
   }) => {
     try {
-      // TODO API call
-      console.log({ password, token });
-      return true;
+      await authInstance.post('/api/v3/user/reset-password', {
+        password,
+        token,
+      });
     } catch ({ response }) {
       return Promise.reject(response.data.message);
     }

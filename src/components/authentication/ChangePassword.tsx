@@ -2,7 +2,12 @@ import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
 // mui
-import { Button, TextField } from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Typography,
+  FormHelperText,
+} from '@material-ui/core';
 
 // context
 import { useAuth } from 'context/user';
@@ -45,9 +50,19 @@ const Forgot = ({ changeView, token }: Props) => {
       <TextField
         fullWidth
         required
+        InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         InputProps={{ ...register('password'), autoComplete: 'password' }}
         autoComplete="password"
-        label="Password"
+        label={
+          <>
+            <Typography variant="buttonMedium">Password*</Typography>
+            <FormHelperText style={{ margin: 0 }}>
+              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
+              <br />
+              numeric, 1 lowercaps, and 1 highercaps.
+            </FormHelperText>
+          </>
+        }
         placeholder="New Password"
         type="password"
       />
