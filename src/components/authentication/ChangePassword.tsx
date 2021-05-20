@@ -17,7 +17,7 @@ interface Props {
   token: string;
 }
 
-const Forgot = ({ changeView, token }: Props) => {
+const ChangePassword = ({ changeView, token }: Props) => {
   const { changePassword } = useAuth();
   const { getValues, handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
@@ -46,13 +46,13 @@ const Forgot = ({ changeView, token }: Props) => {
   };
 
   return (
-    <form id="forgot-form" onSubmit={handleSubmit(onSubmit)}>
+    <form id="change-password-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
         required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
-        InputProps={{ ...register('password'), autoComplete: 'password' }}
-        autoComplete="password"
+        id="password"
+        inputProps={{ ...register('password'), autoComplete: 'password' }}
         label={
           <>
             <Typography variant="buttonMedium">Password*</Typography>
@@ -63,21 +63,20 @@ const Forgot = ({ changeView, token }: Props) => {
             </FormHelperText>
           </>
         }
-        placeholder="New Password"
+        placeholder="password"
         type="password"
       />
 
       <TextField
         fullWidth
         required
-        InputProps={{
+        id="repeat-password"
+        inputProps={{
           ...register('repeatPassword'),
           autoComplete: 'repat-password',
         }}
-        autoComplete="repeat-password"
-        id="repeat-password"
-        label="Repeat Password"
-        placeholder="Repeat Password"
+        label="Confirm password"
+        placeholder="password"
         type="password"
       />
 
@@ -88,4 +87,4 @@ const Forgot = ({ changeView, token }: Props) => {
   );
 };
 
-export default Forgot;
+export default ChangePassword;

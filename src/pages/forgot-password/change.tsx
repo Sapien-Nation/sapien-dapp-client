@@ -17,7 +17,7 @@ enum View {
 }
 
 const ChangePasswordPage = () => {
-  const { query } = useRouter();
+  const router = useRouter();
   const [view, setView] = useState(View.Form);
 
   const renderView = () => {
@@ -26,11 +26,11 @@ const ChangePasswordPage = () => {
         return (
           <>
             <Typography component="h1" variant="h2">
-              Change Password
+              Create New Password
             </Typography>
             <ChangePassword
               changeView={() => setView(View.Success)}
-              token={(query.token as string) || ''}
+              token={(router?.query?.token as string) || ''}
             />
           </>
         );
