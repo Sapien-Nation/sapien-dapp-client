@@ -2,12 +2,14 @@ import { useState } from 'react';
 
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
 // components
-import Layout from './AuthLayout';
+import ChangePassword from 'components/authentication/ChangePassword';
+import Layout from '../AuthLayout';
 
 enum View {
   Form,
@@ -15,7 +17,8 @@ enum View {
 }
 
 const ChangePasswordPage = () => {
-  const [view] = useState(View.Form);
+  const { query } = useRouter();
+  const [view, setView] = useState(View.Form);
 
   const renderView = () => {
     switch (view) {
@@ -25,7 +28,10 @@ const ChangePasswordPage = () => {
             <Typography component="h1" variant="h2">
               Change Password
             </Typography>
-            <h1>TODO FORM</h1>
+            <ChangePassword
+              changeView={() => setView(View.Success)}
+              token={(query.token as string) || ''}
+            />
           </>
         );
       case View.Success:

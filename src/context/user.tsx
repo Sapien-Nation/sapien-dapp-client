@@ -19,6 +19,10 @@ interface PostBody {
 
 export interface Authentication {
   me: User | null;
+  changePassword: (values: {
+    password: string;
+    token: string;
+  }) => Promise<unknown>;
   forgot: (email: string) => Promise<unknown>;
   login: (values: PostBody) => Promise<unknown>;
   logout: (values: { email: string }) => Promise<unknown>;
@@ -89,9 +93,33 @@ const AuthenticationProvider = ({ children }: Props) => {
     }
   };
 
+  const changePassword = async ({
+    password,
+    token,
+  }: {
+    password: string;
+    token: string;
+  }) => {
+    try {
+      // TODO API call
+      console.log({ password, token });
+      return true;
+    } catch ({ response }) {
+      return Promise.reject(response.data.message);
+    }
+  };
+
   return (
     <AuthenticationContext.Provider
-      value={{ forgot, me: data, isLoggingIn, login, logout, register }}
+      value={{
+        changePassword,
+        forgot,
+        me: data,
+        isLoggingIn,
+        login,
+        logout,
+        register,
+      }}
     >
       {children}
     </AuthenticationContext.Provider>
