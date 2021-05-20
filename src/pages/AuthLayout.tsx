@@ -22,8 +22,7 @@ const AuthLayout = ({ children }: Props) => {
 
   useEffect(() => {
     if (isLoggingIn === false && me) {
-      // TODO uncomment this as soon as /logout works correctly
-      // router.push('/');
+      router.push('/');
     }
   }, [isLoggingIn, me, router]);
 
