@@ -33,7 +33,7 @@ test('renders correctly', async () => {
   // links
   expect(
     screen.getByRole('link', { name: 'Forgot password?' })
-  ).toHaveAttribute('href', '/forgot');
+  ).toHaveAttribute('href', '/forgot-password');
   expect(screen.getByRole('link', { name: 'Sign up' })).toHaveAttribute(
     'href',
     '/register'

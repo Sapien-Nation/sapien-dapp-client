@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { Box, Button, Typography } from '@material-ui/core';
 
 // components
-import Layout from './AuthLayout';
+import Layout from '../AuthLayout';
 import { ForgotForm } from 'components/authentication';
 
 enum View {

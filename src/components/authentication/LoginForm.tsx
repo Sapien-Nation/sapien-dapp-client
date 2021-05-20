@@ -74,7 +74,7 @@ const LoginForm = () => {
           control={<Checkbox defaultChecked color="default" name="remember" />}
           label={<Typography variant="buttonSmall">Remember me</Typography>}
         />
-        <Link passHref href="/forgot">
+        <Link passHref href="/forgot-password">
           <Typography color="primary" component="a" variant="caption">
             Forgot password?
           </Typography>

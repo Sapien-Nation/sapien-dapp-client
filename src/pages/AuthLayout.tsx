@@ -39,7 +39,7 @@ const AuthLayout = ({ children }: Props) => {
       >
         <Box
           style={{
-            backgroundImage: 'url(static/auth.jpg)',
+            backgroundImage: 'url(/static/auth.jpg)',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}
