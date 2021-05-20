@@ -66,8 +66,8 @@ const ForgotPage = () => {
               If the email and username provided match, you will receive
               instructions to set a new password shortly.
             </Typography>
-            <Link href="/login">
-              <Button color="primary" type="submit" variant="contained">
+            <Link passHref href="/login">
+              <Button color="primary" variant="contained">
                 Got it!
               </Button>
             </Link>

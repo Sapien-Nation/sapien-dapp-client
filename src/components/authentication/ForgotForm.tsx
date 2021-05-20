@@ -35,10 +35,11 @@ const Forgot = ({ changeView }: Props) => {
       <TextField
         fullWidth
         required
-        InputProps={{ ...register('email') }}
-        autoComplete="email"
+        id="email"
+        inputProps={{ ...register('email'), autoComplete: 'email' }}
         label="Email, phone number, or username"
         placeholder="Enter your email, phone number, or username"
+        type="email"
       />
 
       <Button fullWidth color="primary" type="submit" variant="contained">
