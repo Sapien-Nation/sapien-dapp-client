@@ -1,5 +1,3 @@
-import { captureException } from '@sentry/node';
-
 // components
 import ForgotPage from 'pages/forgot';
 
@@ -19,8 +17,6 @@ const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
 const renderComponent = () => render(<ForgotPage />, { user: { forgot } });
 
-// (captureException as jest.Mock).mockImplementation(() => {});
-
 test('renders correctly', async () => {
   renderComponent();
 
@@ -34,35 +30,46 @@ test('renders correctly', async () => {
     '/login'
   );
 
-  // validation
-  user.click(getSendButton());
-  await waitFor(() => {
-    expect(forgot).not.toHaveBeenCalled();
-  });
-
-  user.type(screen.getByLabelText(/email/i), email);
+  user.type(
+    screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
+    email
+  );
 
   // onError
-  // forgot.mockRejectedValueOnce(error);
-  // user.click(getSendButton());
+  forgot.mockRejectedValueOnce(error);
+  user.click(getSendButton());
 
-  // await waitFor(() => {
-  //   expect(forgot).toHaveBeenCalledWith({
-  //     email,
-  //   });
+  await waitFor(() => {
+    expect(forgot).toHaveBeenCalledWith(email);
 
-  //   expect(captureException).toHaveBeenCalledWith(error);
-  //   expect(screen.getByText(error)).toBeInTheDocument();
-  // });
+    expect(screen.queryByText(error)).not.toBeInTheDocument();
+  });
 
   // onSuccess
   jest.clearAllMocks();
   user.click(getSendButton());
   await waitFor(() => {
-    expect(forgot).toHaveBeenCalledWith({
-      email,
-    });
-
-    expect(captureException).not.toHaveBeenCalledWith(error);
+    expect(forgot).toHaveBeenCalledWith(email);
   });
+
+  expect(screen.getByText('Request sent successfully')).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      /if the email and username provided match, you will receive instructions to set a new password shortly\./i
+    )
+  ).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: 'Got it!' })).toHaveAttribute(
+    'href',
+    '/login'
+  );
+
+  // resend
+  user.click(
+    screen.getByRole('button', {
+      name: /resend/i,
+    })
+  );
+  expect(
+    screen.getByRole('heading', { name: 'Forgotten Password' })
+  ).toBeInTheDocument();
 });

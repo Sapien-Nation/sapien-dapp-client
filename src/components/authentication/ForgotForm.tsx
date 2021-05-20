@@ -34,6 +34,7 @@ const Forgot = ({ changeView }: Props) => {
         inputProps={{ ...register('email'), autoComplete: 'email' }}
         label="Email, phone number, or username"
         placeholder="Enter your email, phone number, or username"
+        type="email"
       />
 
       <Button fullWidth color="primary" type="submit" variant="contained">
