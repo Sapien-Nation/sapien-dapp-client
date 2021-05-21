@@ -109,7 +109,11 @@ const Signup = () => {
         required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         id="password"
-        inputProps={{ ...register('password'), autoComplete: 'new-password' }}
+        inputProps={{
+          ...register('password'),
+          autoComplete: 'new-password',
+          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
+        }}
         label={
           <>
             <Typography variant="buttonMedium">Password*</Typography>
