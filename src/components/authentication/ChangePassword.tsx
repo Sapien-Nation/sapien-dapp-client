@@ -52,7 +52,11 @@ const ChangePassword = ({ changeView, token }: Props) => {
         required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         id="password"
-        inputProps={{ ...register('password'), autoComplete: 'password' }}
+        inputProps={{
+          ...register('password'),
+          autoComplete: 'password',
+          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
+        }}
         label={
           <>
             <Typography variant="buttonMedium">Password*</Typography>
