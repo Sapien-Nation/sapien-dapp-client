@@ -24,6 +24,9 @@ import theme from 'styles/theme';
 // components
 import { ErrorView } from 'components/common';
 
+// Providers
+import { AuthenticationProvider } from 'context/user';
+
 // styles
 import '../styles/index.css';
 
@@ -67,9 +70,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 revalidateOnFocus: false,
               }}
             >
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              <AuthenticationProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </AuthenticationProvider>
             </SWRConfig>
           </ThemeProvider>
         </SnackbarProvider>

@@ -1,14 +1,31 @@
+import { useEffect } from 'react';
+
 // mui
 import { Box, CssBaseline } from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'assets';
 
+// next
+import { useRouter } from 'next/router';
+
+// context
+import { useAuth } from 'context/user';
+
 interface Props {
   children: React.ReactElement;
 }
 
 const AuthLayout = ({ children }: Props) => {
+  const router = useRouter();
+  const { me, isLoggingIn } = useAuth();
+
+  useEffect(() => {
+    if (isLoggingIn === false && me) {
+      router.push('/');
+    }
+  }, [isLoggingIn, me, router]);
+
   return (
     <>
       <CssBaseline />
@@ -21,12 +38,20 @@ const AuthLayout = ({ children }: Props) => {
       >
         <Box
           style={{
-            backgroundImage: 'url(static/auth.jpg)',
+            backgroundImage: 'url(/static/auth.jpg)',
             backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}
         />
-        <Box alignItems="center" display="flex" justifyContent="center">
+        <Box
+          alignSelf="center"
+          display="flex"
+          flexDirection="column"
+          gap={4}
+          justifySelf="center"
+          marginY={6}
+          maxWidth={390}
+        >
           <FullLogo />
           {children}
         </Box>

@@ -1,9 +1,11 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import * as Sentry from '@sentry/node';
 
 // next
 import Link from 'next/link';
+
+// context
+import { useAuth } from 'context/user';
 
 // assets
 import {
@@ -12,188 +14,181 @@ import {
 } from 'assets';
 
 // mui
-import { ErrorOutline as Help } from '@material-ui/icons';
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
-  Typography,
+  FormHelperText,
   TextField,
-  Tooltip,
+  Typography,
 } from '@material-ui/core';
 
 // components
 import { ChartCount } from 'components/common';
 
-// styles
-import { darkGrey, lightGrey, white } from 'styles/colors';
-
 const Signup = () => {
-  const { handleSubmit, register, watch } = useForm();
+  const authMethods = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting },
+    watch,
+  } = useForm();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: {
+    email: string;
+    displayName: string;
+    password: string;
+    username: string;
+  }) => {
     try {
-      console.log(values);
-    } catch (err) {
-      Sentry.captureException(err);
-      enqueueSnackbar('An error occurred, please try again');
+      await authMethods.register({
+        ...values,
+        client: window?.navigator.userAgent,
+        redirect: '/',
+      });
+    } catch (error) {
+      enqueueSnackbar(error, {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
     }
   };
 
   const currentUsername = watch('username');
-  const currentName = watch('name');
+  const currentDisplayName = watch('displayName');
 
   return (
-    <>
-      <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          fullWidth
-          required
-          InputProps={{ ...register('email') }}
-          label="Email or phone number"
-          placeholder="myemailaddress@email.com"
-        />
-        <TextField
-          fullWidth
-          required
-          InputProps={{ ...register('username') }}
-          label={
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="buttonMedium">Username*</Typography>
-              <ChartCount
-                currentCount={currentUsername?.length}
-                maxCount={20}
-              />
-            </Box>
+    <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
+      <TextField
+        fullWidth
+        required
+        id="email"
+        inputProps={{ ...register('email'), autoComplete: 'email' }}
+        label="Email or phone number"
+        placeholder="myemailaddress@email.com"
+        type="email"
+      />
+      <TextField
+        fullWidth
+        required
+        id="username"
+        inputProps={{ ...register('username'), autoComplete: 'username' }}
+        label={
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="buttonMedium">Username*</Typography>
+            <ChartCount currentCount={currentUsername?.length} maxCount={20} />
+          </Box>
+        }
+        placeholder="johniedoe"
+        type="text"
+      />
+      <TextField
+        fullWidth
+        required
+        id="displayName"
+        inputProps={{ ...register('displayName'), autoComplete: 'name' }}
+        label={
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="buttonMedium">Name*</Typography>
+            <ChartCount
+              currentCount={currentDisplayName?.length}
+              maxCount={20}
+            />
+          </Box>
+        }
+        placeholder="Jonathan Doe"
+        type="text"
+      />
+      <TextField
+        fullWidth
+        required
+        InputLabelProps={{ style: { pointerEvents: 'auto' } }}
+        id="password"
+        inputProps={{
+          ...register('password'),
+          autoComplete: 'new-password',
+          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
+        }}
+        label={
+          <>
+            <Typography variant="buttonMedium">Password*</Typography>
+            <FormHelperText style={{ margin: 0 }}>
+              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
+              <br />
+              numeric, 1 lowercaps, and 1 highercaps.
+            </FormHelperText>
+          </>
+        }
+        placeholder="mypassword123*"
+        type="password"
+      />
+      <Box marginBottom="2rem">
+        <FormControlLabel
+          control={
+            <Checkbox
+              disableRipple
+              required
+              checkedIcon={<CheckboxCheckedIcon />}
+              color="default"
+              icon={<CheckboxIcon />}
+              name="agree"
+            />
           }
-          placeholder="johniedoe"
-        />
-        <TextField
-          fullWidth
-          required
-          InputProps={{ ...register('name') }}
           label={
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="buttonMedium">Name</Typography>
-              <ChartCount currentCount={currentName?.length} maxCount={20} />
-            </Box>
-          }
-          placeholder="Jonathan Doe"
-        />
-        <TextField
-          fullWidth
-          required
-          InputLabelProps={{ style: { pointerEvents: 'auto' } }}
-          InputProps={{ ...register('password') }}
-          label={
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="buttonMedium">Password*</Typography>
-              <Tooltip
-                style={{
-                  padding: '1rem',
-                  color: darkGrey,
-                  backgroundColor: white,
-                  maxWidth: 320,
-                  boxShadow: '-20px 0px 40px rgba(51, 51, 51, 0.1)',
-                }}
-                title={
-                  <Typography>
-                    &quot;Minimum length is 8 characters. Must include at least
-                    1 alpha, 1 numeric, 1 lowercaps, and 1 highercaps.&quot;
-                  </Typography>
-                }
-              >
-                <Help
-                  fontSize="small"
-                  style={{ marginLeft: 5, color: lightGrey }}
-                />
-              </Tooltip>
-            </Box>
-          }
-          placeholder="mypassword123*"
-        />
-        <TextField
-          fullWidth
-          required
-          InputProps={{ ...register('confirmPassword') }}
-          label={
-            <Box display="flex" justifyContent="space-between">
-              <Typography variant="buttonMedium">Confirm Password*</Typography>
-            </Box>
-          }
-          placeholder="mypassword123*"
-        />
-        <Box marginBottom="2rem">
-          <FormControlLabel
-            control={
-              <Checkbox
-                disableRipple
-                checkedIcon={<CheckboxCheckedIcon />}
-                color="default"
-                icon={<CheckboxIcon />}
-                name="agree"
-              />
-            }
-            label={
-              <Box alignItems="baseline" display="flex">
-                <Typography variant="subtitle2">
-                  I have read and agree to the
-                </Typography>
-                <Link passHref href="https://common.sapien.network/terms.html">
-                  <Typography
-                    component="a"
-                    style={{
-                      marginLeft: '4px',
-                    }}
-                    target="_blank"
-                    variant="buttonSmall"
-                  >
-                    Terms & Conditions
-                  </Typography>
-                </Link>
-              </Box>
-            }
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                disableRipple
-                checkedIcon={<CheckboxCheckedIcon />}
-                color="default"
-                icon={<CheckboxIcon />}
-                name="wallet"
-              />
-            }
-            label={
+            <Box alignItems="baseline" display="flex">
               <Typography variant="subtitle2">
-                I understand that a wallet will be created for me
+                I have read and agree to the
               </Typography>
-            }
-          />
-        </Box>
+              <Link passHref href="https://common.sapien.network/terms.html">
+                <Typography
+                  component="a"
+                  style={{
+                    marginLeft: '4px',
+                  }}
+                  target="_blank"
+                  variant="buttonSmall"
+                >
+                  Terms & Conditions
+                </Typography>
+              </Link>
+            </Box>
+          }
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              disableRipple
+              required
+              checkedIcon={<CheckboxCheckedIcon />}
+              color="default"
+              icon={<CheckboxIcon />}
+              name="wallet"
+            />
+          }
+          label={
+            <Typography variant="subtitle2">
+              I understand that a wallet will be created for me
+            </Typography>
+          }
+        />
+      </Box>
 
-        <Button fullWidth color="primary" type="submit" variant="contained">
-          Sign up
-        </Button>
-      </form>
-      <span style={{ alignContent: 'center' }}>
-        <Typography component="span" variant="subtitle2">
-          Already have an account?
-        </Typography>
-        <Link passHref href="/login">
-          <Typography
-            color="primary"
-            component="a"
-            style={{ marginLeft: '4px' }}
-            variant="caption"
-          >
-            Log in
-          </Typography>
-        </Link>
-      </span>
-    </>
+      <Button
+        fullWidth
+        color="primary"
+        disabled={isSubmitting}
+        type="submit"
+        variant="contained"
+      >
+        Sign Up
+      </Button>
+    </form>
   );
 };
 
