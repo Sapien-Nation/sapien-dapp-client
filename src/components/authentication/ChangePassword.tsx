@@ -19,7 +19,12 @@ interface Props {
 
 const ChangePassword = ({ changeView, token }: Props) => {
   const { changePassword } = useAuth();
-  const { getValues, handleSubmit, register } = useForm();
+  const {
+    formState: { isSubmitting },
+    getValues,
+    handleSubmit,
+    register,
+  } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async ({ password }: { password: string }) => {
@@ -84,7 +89,13 @@ const ChangePassword = ({ changeView, token }: Props) => {
         type="password"
       />
 
-      <Button fullWidth color="primary" type="submit" variant="contained">
+      <Button
+        fullWidth
+        color="primary"
+        disabled={isSubmitting}
+        type="submit"
+        variant="contained"
+      >
         Send request
       </Button>
     </form>

@@ -44,9 +44,6 @@ const ChangePasswordPage = () => {
             >
               Password Change successfully
             </Typography>
-            <Typography style={{ marginBottom: 30 }} variant="body2">
-              TODO TEXT
-            </Typography>
             <Link passHref href="/login">
               <Button color="primary" variant="contained">
                 Login
