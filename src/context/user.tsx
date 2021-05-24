@@ -28,6 +28,7 @@ export interface Authentication {
   logout: (values: { email: string }) => Promise<unknown>;
   isLoggingIn: boolean;
   register: (values: PostBody) => Promise<unknown>;
+  verifyUser: (token: string) => Promise<unknown>;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -110,6 +111,14 @@ const AuthenticationProvider = ({ children }: Props) => {
     }
   };
 
+  const verifyUser = async (token: string) => {
+    try {
+      await authInstance.post('/api/v3/user/verify-user-email', { token });
+    } catch ({ response }) {
+      return Promise.reject(response.data.message);
+    }
+  };
+
   return (
     <AuthenticationContext.Provider
       value={{
@@ -120,6 +129,7 @@ const AuthenticationProvider = ({ children }: Props) => {
         login,
         logout,
         register,
+        verifyUser,
       }}
     >
       {children}
