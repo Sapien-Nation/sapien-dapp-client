@@ -1,6 +1,9 @@
 // mui
 import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
+// context
+import { useAuth } from 'context/user';
+
 // components
 import { Navbar, Sidebar } from 'components/navigation';
 
@@ -19,7 +22,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Layout = ({ children }: Props) => {
-  const me = null;
+  const me = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   return (

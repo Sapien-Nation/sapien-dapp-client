@@ -1,10 +1,11 @@
-export enum Dialog {
-  CreateTribe,
-}
+// components
+import TribeBar from './TribeBar';
 
 const Sidebar = () => {
   return (
-    <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}></nav>
+    <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
+      <TribeBar />
+    </nav>
   );
 };
 
