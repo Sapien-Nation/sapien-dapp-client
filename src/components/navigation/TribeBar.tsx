@@ -27,7 +27,6 @@ const TribeBar = () => {
       classes={{
         paper: classes.drawerPaper,
       }}
-      style={{ width: 72 }}
       variant="permanent"
     >
       <nav
@@ -36,29 +35,28 @@ const TribeBar = () => {
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
           gap: '2rem',
           marginTop: '2rem',
         }}
       >
-        <Link href="login">
-          <Avatar
-            alt="Remy Sharp"
-            classes={{
-              img: classes.avatarImage,
-            }}
-            src="/fixtures/256x256/bob.png"
-            style={{
-              color: 'white',
-              backgroundColor: 'inherit',
-              borderRadius: 15,
-              border: '2px solid',
-              boxSizing: 'content-box',
-              padding: '3px',
-              cursor: 'pointer',
-            }}
-            variant="rounded"
-          />
+        <Link href="/client/1">
+          <a>
+            <Avatar
+              alt="Remy Sharp"
+              classes={{
+                img: classes.avatarImage,
+              }}
+              src="/fixtures/256x256/bob.png"
+              style={{
+                color: 'white',
+                borderRadius: 15,
+                border: '2px solid',
+                boxSizing: 'content-box',
+                padding: '3px',
+              }}
+              variant="rounded"
+            />
+          </a>
         </Link>
         <Avatar
           style={{
