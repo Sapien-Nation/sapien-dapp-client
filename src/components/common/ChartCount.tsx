@@ -18,7 +18,7 @@ const ChartCount = ({ control, maxCount, name }: Props) => {
     name,
   });
 
-  const currentCount = currentValue.length;
+  const currentCount = currentValue?.length || 0;
   return (
     <Typography
       color={currentCount > maxCount ? 'primary' : 'inherit'}

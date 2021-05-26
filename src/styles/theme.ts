@@ -184,7 +184,7 @@ theme.components = {
         fontSize: '62.5%',
       },
       body: {
-        'overscroll-behavior-y': 'none',
+        overscrollBehaviorY: 'none',
       },
       '*, *::before, *::after': {
         transition: 'none !important',

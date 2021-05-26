@@ -31,10 +31,10 @@ const Signup = () => {
   const authMethods = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
+    control,
     handleSubmit,
     register,
     formState: { isSubmitting },
-    watch,
   } = useForm();
 
   const onSubmit = async (values: {
@@ -59,9 +59,6 @@ const Signup = () => {
     }
   };
 
-  const currentUsername = watch('username');
-  const currentDisplayName = watch('displayName');
-
   return (
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -77,11 +74,15 @@ const Signup = () => {
         fullWidth
         required
         id="username"
-        inputProps={{ ...register('username'), autoComplete: 'username' }}
+        inputProps={{
+          ...register('username'),
+          autoComplete: 'username',
+          maxLength: '20',
+        }}
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Username*</Typography>
-            <ChartCount currentCount={currentUsername?.length} maxCount={20} />
+            <ChartCount control={control} maxCount={20} name="username" />
           </Box>
         }
         placeholder="johniedoe"
@@ -91,14 +92,15 @@ const Signup = () => {
         fullWidth
         required
         id="displayName"
-        inputProps={{ ...register('displayName'), autoComplete: 'name' }}
+        inputProps={{
+          ...register('displayName'),
+          autoComplete: 'name',
+          maxLength: '20',
+        }}
         label={
           <Box display="flex" justifyContent="space-between">
             <Typography variant="buttonMedium">Name*</Typography>
-            <ChartCount
-              currentCount={currentDisplayName?.length}
-              maxCount={20}
-            />
+            <ChartCount control={control} maxCount={20} name="displayName" />
           </Box>
         }
         placeholder="Jonathan Doe"
