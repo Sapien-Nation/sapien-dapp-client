@@ -1,12 +1,24 @@
+import { useWatch } from 'react-hook-form';
+
+// types
+import type { Control } from 'react-hook-form';
+
 // mui
 import { Typography } from '@material-ui/core';
 
 interface Props {
-  currentCount: number;
+  control: Control;
+  name: string;
   maxCount: number;
 }
 
-const ChartCount = ({ currentCount = 0, maxCount }: Props) => {
+const ChartCount = ({ control, maxCount, name }: Props) => {
+  const currentValue = useWatch({
+    control,
+    name,
+  });
+
+  const currentCount = currentValue.length;
   return (
     <Typography
       color={currentCount > maxCount ? 'primary' : 'inherit'}
