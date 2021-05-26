@@ -12,6 +12,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta charSet="utf-8" />
           <link href="/static/favicon.ico" rel="icon" type="image/png" />
           <meta content={theme.palette.primary.main} name="theme-color" />
           <meta
