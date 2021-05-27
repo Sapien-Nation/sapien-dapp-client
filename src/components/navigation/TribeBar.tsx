@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+// types
+import type { Tribe } from 'tools/types/tribeBar';
+
 // next
 import Link from 'next/link';
 
@@ -12,6 +15,7 @@ import { AddRounded as AddIcon } from '@material-ui/icons';
 
 // components
 import CreateTribeModal from './CreateTribeModal';
+import { Query } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -45,25 +49,33 @@ const TribeBar = () => {
           marginTop: '2rem',
         }}
       >
-        <Link href="/client/1">
-          <a>
-            <Avatar
-              alt="Remy Sharp"
-              classes={{
-                img: classes.avatarImage,
-              }}
-              src="/fixtures/256x256/bob.png"
-              style={{
-                color: 'white',
-                borderRadius: 15,
-                border: '2px solid',
-                boxSizing: 'content-box',
-                padding: '3px',
-              }}
-              variant="rounded"
-            />
-          </a>
-        </Link>
+        <Query apiUrl="/api/profile/c21e8bb0-ae58-4a3d-b02c-8e1a5ed2de6a/tribes?append_to_response=squares,channels">
+          {(tribes: Array<Tribe>) => (
+            <>
+              {tribes.map((tribe) => (
+                <Link key={tribe.id} href={`/client/${tribe.id}`}>
+                  <a>
+                    <Avatar
+                      alt={tribe.name}
+                      classes={{
+                        img: classes.avatarImage,
+                      }}
+                      src={tribe.avatar}
+                      style={{
+                        color: 'white',
+                        borderRadius: 15,
+                        border: '2px solid',
+                        boxSizing: 'content-box',
+                        padding: '3px',
+                      }}
+                      variant="rounded"
+                    />
+                  </a>
+                </Link>
+              ))}
+            </>
+          )}
+        </Query>
         <IconButton onClick={() => setShowModal(true)}>
           <Avatar
             style={{

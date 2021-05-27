@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Layout = ({ children }: Props) => {
-  const me = useAuth();
+  const { me } = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   return (
