@@ -14,3 +14,4 @@ export const gray1 = '#CCCCCC';
 export const gray2 = '#F9F9FA';
 export const gray3 = '#EDEEF0';
 export const gray4 = 'rgba(143, 146, 161, 0.05)';
+export const gray5 = '#fef9f9';

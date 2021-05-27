@@ -376,11 +376,20 @@ theme.components = {
   },
   MuiInputBase: {
     styleOverrides: {
+      inputAdornedStart: {
+        paddingLeft: '0.5rem',
+      },
+      inputAdornedEnd: {
+        paddingRight: '0.5rem',
+      },
       adornedStart: {
-        padding: '1rem !important',
+        paddingLeft: '2rem !important',
       },
       adornedEnd: {
-        padding: '1rem !important',
+        paddingRight: '2rem !important',
+      },
+      multiline: {
+        padding: `${theme.spacing(1, 2)} !important`,
       },
     },
   },
@@ -403,13 +412,12 @@ theme.components = {
       },
       switchBase: {
         padding: 2,
-        '&$checked': {
-          transform: 'translateX(18px)',
+        '&.Mui-checked': {
           color: theme.palette.common.white,
-          '& + $track': {
-            backgroundColor: green,
+          transform: 'translateX(18px)',
+          '& + .MuiSwitch-track': {
             opacity: 1,
-            border: 'none',
+            backgroundColor: green,
           },
         },
       },
