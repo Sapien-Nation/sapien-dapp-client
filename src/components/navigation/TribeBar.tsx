@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 // next
 import Link from 'next/link';
 
@@ -5,8 +7,11 @@ import Link from 'next/link';
 import { dark, darkPurple } from 'styles/colors';
 
 // mui
-import { Avatar, Drawer, makeStyles } from '@material-ui/core';
+import { Avatar, Drawer, IconButton, makeStyles } from '@material-ui/core';
 import { AddRounded as AddIcon } from '@material-ui/icons';
+
+// components
+import CreateTribeModal from './CreateTribeModal';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -19,6 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TribeBar = () => {
+  const [showModal, setShowModal] = useState(false);
   const classes = useStyles();
 
   return (
@@ -58,19 +64,23 @@ const TribeBar = () => {
             />
           </a>
         </Link>
-        <Avatar
-          style={{
-            backgroundColor: 'inherit',
-            borderRadius: 15,
-            border: `2px ${darkPurple} solid`,
-            boxSizing: 'content-box',
-            padding: '3px',
-          }}
-          variant="square"
-        >
-          <AddIcon aria-label="Create Tribe" style={{ padding: 0.3 }} />
-        </Avatar>
+        <IconButton onClick={() => setShowModal(true)}>
+          <Avatar
+            style={{
+              backgroundColor: 'inherit',
+              borderRadius: 15,
+              border: `2px ${darkPurple} solid`,
+              boxSizing: 'content-box',
+              padding: '3px',
+            }}
+            variant="square"
+          >
+            <AddIcon aria-label="Create Tribe" style={{ padding: 0.3 }} />
+          </Avatar>
+        </IconButton>
       </nav>
+
+      {showModal && <CreateTribeModal onClose={() => setShowModal(false)} />}
     </Drawer>
   );
 };
