@@ -26,12 +26,14 @@ interface Props {
   onClose: () => void;
 }
 
-const CreateTribe = ({ onClose }: Props) => {
+const form = 'create-tribe';
+
+const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
-  const methods = useForm();
-  const form = 'create-tribe';
-  const { control, handleSubmit, register } = methods;
   const theme = useTheme();
+  const methods = useForm();
+
+  const { control, handleSubmit, register } = methods;
 
   const handleFormSubmit = async () => {
     switch (step) {
@@ -174,4 +176,4 @@ const CreateTribe = ({ onClose }: Props) => {
   );
 };
 
-export default CreateTribe;
+export default CreateTribeModal;
