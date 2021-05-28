@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // mui
 import {
@@ -32,15 +33,10 @@ const useStyles = makeStyles(() => ({
     left: 72,
     width: 228,
   },
-  listItem: {
-    borderRadius: 10,
-    margin: '1rem .5rem',
-    padding: '1rem 1.5rem',
-    width: 'auto',
-  },
 }));
 
 const TribeNavigation = () => {
+  const { query } = useRouter();
   const classes = useStyles();
   const [showSquares, setShowSquares] = useState(true);
 
@@ -65,7 +61,7 @@ const TribeNavigation = () => {
             backgroundColor: purple,
           }}
         >
-          <Link href="/client/1">
+          <Link href={`/client/${query.tribeid}`}>
             <a style={{ display: 'flex', justifyContent: 'center' }}>
               <Group fontSize="small" style={{ color: white }} />
               <Typography
@@ -88,7 +84,7 @@ const TribeNavigation = () => {
             width: 'auto',
           }}
         >
-          <Link href="/client/1">
+          <Link href={`/client/${query.tribeid}/store`}>
             <a style={{ display: 'flex', justifyContent: 'center' }}>
               <ShoppingCart fontSize="small" style={{ color: darkGrey }} />
               <Typography style={{ marginLeft: 15 }} variant="captionItem">
