@@ -1,3 +1,3 @@
 export { default as Navbar } from './Navbar';
 export { default as Sidebar } from './Sidebar';
-export { default as CreateTribe } from './CreateTribeModal';
+export { default as CreateTribeModal } from './CreateTribeModal';
