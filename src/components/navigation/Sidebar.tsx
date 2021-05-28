@@ -3,6 +3,7 @@ import { useAuth } from 'context/user';
 
 // components
 import TribeBar from './TribeBar';
+import TribeNavigation from './TribeNavigation';
 
 const Sidebar = () => {
   const { me } = useAuth();
@@ -12,6 +13,7 @@ const Sidebar = () => {
   return (
     <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
       <TribeBar />
+      <TribeNavigation />
     </nav>
   );
 };
