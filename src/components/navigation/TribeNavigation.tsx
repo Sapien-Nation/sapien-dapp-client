@@ -33,10 +33,16 @@ const useStyles = makeStyles(() => ({
     left: 72,
     width: 228,
   },
+  listItemSelected: {
+    backgroundColor: `${purple} !important`,
+    '& .MuiTypography-root, & .MuiSvgIcon-root': {
+      color: `${white} !important`,
+    },
+  },
 }));
 
 const TribeNavigation = () => {
-  const { query } = useRouter();
+  const { asPath, query } = useRouter();
   const classes = useStyles();
   const [showSquares, setShowSquares] = useState(true);
 
@@ -53,21 +59,23 @@ const TribeNavigation = () => {
     >
       <List aria-label="Tribe Navigation">
         <ListItem
+          classes={{
+            selected: classes.listItemSelected,
+          }}
+          selected={asPath === `/client/${query.tribeid}`}
           style={{
             borderRadius: 10,
             margin: '1rem .5rem',
             padding: '1rem 1.5rem',
             width: 'auto',
-            backgroundColor: purple,
           }}
         >
           <Link href={`/client/${query.tribeid}`}>
-            <a style={{ display: 'flex', justifyContent: 'center' }}>
-              <Group fontSize="small" style={{ color: white }} />
+            <a style={{ alignItems: 'center', display: 'flex' }}>
+              <Group fontSize="small" style={{ color: darkGrey }} />
               <Typography
                 style={{
-                  marginLeft: '1.5rem',
-                  color: white,
+                  marginLeft: 15,
                 }}
                 variant="captionItem"
               >
@@ -77,6 +85,10 @@ const TribeNavigation = () => {
           </Link>
         </ListItem>
         <ListItem
+          classes={{
+            selected: classes.listItemSelected,
+          }}
+          selected={asPath === `/client/${query.tribeid}/store`}
           style={{
             borderRadius: 10,
             margin: '1rem .5rem',
@@ -85,7 +97,7 @@ const TribeNavigation = () => {
           }}
         >
           <Link href={`/client/${query.tribeid}/store`}>
-            <a style={{ display: 'flex', justifyContent: 'center' }}>
+            <a style={{ alignItems: 'center', display: 'flex' }}>
               <ShoppingCart fontSize="small" style={{ color: darkGrey }} />
               <Typography style={{ marginLeft: 15 }} variant="captionItem">
                 Badge Store
