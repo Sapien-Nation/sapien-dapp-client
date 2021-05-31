@@ -33,7 +33,7 @@ interface Props {
   onClose: () => void;
 }
 
-const form = 'create-tribe';
+const form = 'create-tribe-form';
 
 const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
@@ -51,30 +51,21 @@ const CreateTribeModal = ({ onClose }: Props) => {
   } = methods;
 
   const handleFormSubmit = async () => {
-    switch (step) {
-      case Step.TribeSummary: {
-        setStep(Step.TribeMedia);
-        break;
-      }
-      default:
-        break;
-    }
+    if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
   };
 
   const handleBack = () => {
     switch (step) {
-      case Step.TribeSummary: {
-        onClose();
-        break;
-      }
-      case Step.TribeMedia: {
-        setStep(Step.TribeSummary);
-        break;
-      }
+      case Step.TribeSummary:
+        return onClose();
+      case Step.TribeMedia:
+        return setStep(Step.TribeSummary);
+      default:
+        return null;
     }
   };
 
-  const renderForm = () => {
+  const renderFields = () => {
     switch (step) {
       case Step.TribeSummary: {
         return (
@@ -264,7 +255,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
       onClose={onClose}
     >
       <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
-        {renderForm()}
+        {renderFields()}
       </form>
     </Dialog>
   );
