@@ -1,13 +1,10 @@
 import { useWatch } from 'react-hook-form';
 
-// types
-import type { Control } from 'react-hook-form';
-
 // mui
 import { Typography } from '@material-ui/core';
 
 interface Props {
-  control: Control;
+  control: any;
   name: string;
   maxCount: number;
 }
