@@ -49,7 +49,7 @@ const TribeBar = () => {
           marginTop: '2rem',
         }}
       >
-        <Query apiUrl="/api/profile/c21e8bb0-ae58-4a3d-b02c-8e1a5ed2de6a/tribes?append_to_response=squares,channels">
+        <Query apiUrl="/api/profile/tribes">
           {(tribes: Array<Tribe>) => (
             <>
               {tribes.map((tribe) => (
@@ -76,7 +76,10 @@ const TribeBar = () => {
             </>
           )}
         </Query>
-        <IconButton onClick={() => setShowModal(true)}>
+        <IconButton
+          aria-label="Create Tribe"
+          onClick={() => setShowModal(true)}
+        >
           <Avatar
             style={{
               backgroundColor: 'inherit',
@@ -87,7 +90,7 @@ const TribeBar = () => {
             }}
             variant="square"
           >
-            <AddIcon aria-label="Create Tribe" style={{ padding: 0.3 }} />
+            <AddIcon style={{ padding: 0.3 }} />
           </Avatar>
         </IconButton>
       </nav>
