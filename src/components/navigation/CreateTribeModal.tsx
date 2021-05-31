@@ -1,5 +1,13 @@
+import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { mutate } from 'swr';
+
+// types
+import type { Tribe } from 'tools/types/tribeBar';
+
+// api
+import { createTribe } from 'api/tribeBar';
 
 // mui
 import {
@@ -37,8 +45,18 @@ const form = 'create-tribe-form';
 
 const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: {
+      avatar: null,
+      cover: null,
+      description: '',
+      identifier: '',
+      name: '',
+      private: false,
+    },
+  });
   const theme = useTheme();
+  const { enqueueSnackbar } = useSnackbar();
 
   const {
     control,
@@ -50,8 +68,28 @@ const CreateTribeModal = ({ onClose }: Props) => {
     watch,
   } = methods;
 
-  const handleFormSubmit = async () => {
-    if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
+  const handleFormSubmit = async (values) => {
+    try {
+      if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
+      const formData = new FormData();
+      formData.append('avatar', values.avatar);
+      formData.append('cover', values.cover);
+      formData.append('description', values.identifier);
+      formData.append('identifier', values.description);
+      formData.append('name', values.name);
+      formData.append('private', values.private);
+
+      const response = await createTribe(formData);
+      mutate('/api/profile/tribes', (tribes: Array<Tribe>) => [
+        ...tribes,
+        response,
+      ]);
+
+      onClose();
+      enqueueSnackbar('Tribe Created Successfully');
+    } catch (err) {
+      enqueueSnackbar(err);
+    }
   };
 
   const handleBack = () => {
@@ -95,8 +133,8 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 ),
               }}
               inputProps={{
-                ...register('unique_identifier'),
-                autoComplete: 'unique_identifier',
+                ...register('identifier'),
+                autoComplete: 'identifier',
                 maxLength: '15',
               }}
               label={
@@ -107,7 +145,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   <ChartCount
                     control={control}
                     maxCount={15}
-                    name="unique_identifier"
+                    name="identifier"
                   />
                 </Box>
               }
@@ -136,27 +174,39 @@ const CreateTribeModal = ({ onClose }: Props) => {
               placeholder="Set brief description"
             />
 
-            <Box
-              alignItems="start"
-              display="flex"
-              flexDirection="row"
-              justifyContent="space-between"
-            >
-              <InputLabel htmlFor="public">
+            <Controller
+              control={control}
+              name="private"
+              render={({ field: { onChange, value, ...rest } }) => (
                 <Box
-                  alignItems="center"
+                  alignItems="start"
                   display="flex"
                   flexDirection="row"
                   justifyContent="space-between"
                 >
-                  <span>Public tribe</span>
-                  <IconButton aria-label="public" style={{ color: darkGrey }}>
-                    <HelpIcon fontSize="small" />
-                  </IconButton>
+                  <InputLabel htmlFor="">
+                    <Box
+                      alignItems="center"
+                      display="flex"
+                      flexDirection="row"
+                      justifyContent="space-between"
+                    >
+                      <span> tribe</span>
+                      <IconButton aria-label="" style={{ color: darkGrey }}>
+                        <HelpIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </InputLabel>
+                  <Switch
+                    disableRipple
+                    checked={value as boolean}
+                    color="default"
+                    onChange={(e) => onChange(e.target.checked)}
+                    {...rest}
+                  />
                 </Box>
-              </InputLabel>
-              <Switch disableRipple color="default" name="public" />
-            </Box>
+              )}
+            />
           </>
         );
       }
