@@ -9,6 +9,9 @@ import type { Tribe } from 'tools/types/tribeBar';
 // api
 import { createTribe } from 'api/tribeBar';
 
+// utils
+import { FilePreview, MazSizeHelper } from 'utils/dropzone';
+
 // mui
 import {
   Box,
@@ -19,18 +22,11 @@ import {
   Switch,
   TextField,
   Typography,
-  useTheme,
 } from '@material-ui/core';
-import {
-  Add as AddIcon,
-  HelpOutlineOutlined as HelpIcon,
-} from '@material-ui/icons';
+import { Add as AddIcon } from '@material-ui/icons';
 
 //components
 import { Dialog, DropZone, ChartCount } from 'components/common';
-
-// styles
-import { darkGrey } from 'styles/colors';
 
 enum Step {
   TribeSummary = 1,
@@ -45,7 +41,13 @@ const form = 'create-tribe-form';
 
 const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
-  const methods = useForm({
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+    register,
+    watch,
+  } = useForm({
     defaultValues: {
       avatar: null,
       cover: null,
@@ -55,25 +57,14 @@ const CreateTribeModal = ({ onClose }: Props) => {
       private: false,
     },
   });
-  const theme = useTheme();
   const { enqueueSnackbar } = useSnackbar();
-
-  const {
-    control,
-    formState: { errors },
-    handleSubmit,
-    register,
-    setValue,
-    unregister,
-    watch,
-  } = methods;
 
   const handleFormSubmit = async (values) => {
     try {
       if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
       const formData = new FormData();
-      formData.append('avatar', values.avatar);
-      formData.append('cover', values.cover);
+      formData.append('avatar', values.avatar[0]);
+      formData.append('cover', values.cover[0]);
       formData.append('description', values.identifier);
       formData.append('identifier', values.description);
       formData.append('name', values.name);
@@ -86,9 +77,19 @@ const CreateTribeModal = ({ onClose }: Props) => {
       ]);
 
       onClose();
-      enqueueSnackbar('Tribe Created Successfully');
+      enqueueSnackbar('Tribe Created Successfully', {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     } catch (err) {
-      enqueueSnackbar(err);
+      enqueueSnackbar(err, {
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
   };
 
@@ -103,6 +104,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
     }
   };
 
+  const [avatar, cover] = watch(['avatar', 'cover']);
   const renderFields = () => {
     switch (step) {
       case Step.TribeSummary: {
@@ -178,25 +180,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
               control={control}
               name="private"
               render={({ field: { onChange, value, ...rest } }) => (
-                <Box
-                  alignItems="start"
-                  display="flex"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                >
-                  <InputLabel htmlFor="">
-                    <Box
-                      alignItems="center"
-                      display="flex"
-                      flexDirection="row"
-                      justifyContent="space-between"
-                    >
-                      <span> tribe</span>
-                      <IconButton aria-label="" style={{ color: darkGrey }}>
-                        <HelpIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
-                  </InputLabel>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography
+                    style={{ marginRight: 10 }}
+                    variant="buttonMedium"
+                  >
+                    Public tribe
+                  </Typography>
                   <Switch
                     disableRipple
                     checked={value as boolean}
@@ -216,66 +206,60 @@ const CreateTribeModal = ({ onClose }: Props) => {
             <FormControl fullWidth>
               <InputLabel htmlFor="avatar">Avatar</InputLabel>
               <Box height="6.4rem" marginY={1.6} width="6.4rem">
-                <DropZone
-                  accept="image/*"
-                  errors={errors}
-                  maxFiles={1}
-                  maxSize={20971520}
+                <Controller
+                  control={control}
                   name="avatar"
-                  register={register}
-                  render={() => {
-                    return (
-                      <IconButton style={{ color: darkGrey }}>
+                  render={({ field: { onChange } }) => (
+                    <DropZone
+                      accept="image/*"
+                      id="avatar"
+                      maxFiles={1}
+                      maxSize={20971520}
+                      onChange={onChange}
+                    >
+                      {avatar && (
+                        <FilePreview
+                          file={URL.createObjectURL(avatar[0])}
+                          name="avatar"
+                        />
+                      )}
+                      <IconButton>
                         <AddIcon fontSize="small" />
                       </IconButton>
-                    );
-                  }}
-                  rules={{ required: 'Avatar is required' }}
-                  setValue={setValue}
-                  unregister={unregister}
-                  watch={watch}
+                    </DropZone>
+                  )}
                 />
               </Box>
-              <Typography variant="caption">
-                Drag and Drop or{' '}
-                <Typography color="primary" variant="caption">
-                  Browse{' '}
-                </Typography>
-                to upload image (max 20MB)
-              </Typography>
+              <MazSizeHelper size="20MB" />
             </FormControl>
             <FormControl fullWidth>
               <InputLabel htmlFor="cover">Cover image</InputLabel>
               <Box height="10rem" marginY={1.6} width="100%">
-                <DropZone
-                  accept="image/*"
-                  errors={errors}
-                  maxFiles={1}
-                  maxSize={41943040}
+                <Controller
+                  control={control}
                   name="cover"
-                  register={register}
-                  render={() => {
-                    return (
-                      <IconButton
-                        style={{ color: (theme as any).palette.infoIcon.main }}
-                      >
+                  render={({ field: { onChange } }) => (
+                    <DropZone
+                      accept="image/*"
+                      id="cover"
+                      maxFiles={1}
+                      maxSize={20971520}
+                      onChange={onChange}
+                    >
+                      {cover && (
+                        <FilePreview
+                          file={URL.createObjectURL(cover[0])}
+                          name="cover"
+                        />
+                      )}
+                      <IconButton>
                         <AddIcon fontSize="small" />
                       </IconButton>
-                    );
-                  }}
-                  rules={{ required: 'Cover is required' }}
-                  setValue={setValue}
-                  unregister={unregister}
-                  watch={watch}
+                    </DropZone>
+                  )}
                 />
               </Box>
-              <Typography variant="caption">
-                Drag and Drop or{' '}
-                <Typography color="primary" variant="caption">
-                  Browse{' '}
-                </Typography>
-                to upload image (max 40MB)
-              </Typography>
+              <MazSizeHelper size="40MB" />
             </FormControl>
           </>
         );
@@ -287,6 +271,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
     <Dialog
       open
       cancelLabel={step == Step.TribeSummary ? 'Cancel' : 'Back'}
+      confirmDisabled={isSubmitting}
       confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
       form={form}
       maxWidth="xs"

@@ -17,11 +17,9 @@ test('createTribe', async () => {
 
   // on success
   mock.onPost('api/tribe/create', body).replyOnce(200, tribe);
-
   await expect(tribeBarAPI.createTribe(body)).resolves.toEqual(tribe);
 
   // on error
   mock.onPost('api/tribe/create', body).replyOnce(400, response);
-
   await expect(tribeBarAPI.createTribe(body)).rejects.toEqual(response.message);
 });
