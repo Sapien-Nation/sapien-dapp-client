@@ -52,7 +52,10 @@ const theme = createMuiTheme({
   spacing: (factor) => `${parseFloat((1 * factor).toFixed(2))}rem`,
   palette: {
     common: {
-      black: black,
+      black: red,
+    },
+    text: {
+      primary: black,
     },
     primary: {
       light: purple,
