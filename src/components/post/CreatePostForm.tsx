@@ -2,6 +2,9 @@ import { Editor, EditorState } from 'draft-js';
 import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
+//components
+import FilePreview from './FilePreview';
+
 //icons
 import {
   EmojiEmotionsOutlined,
@@ -32,7 +35,7 @@ const CreatePostForm = ({ user }: Props) => {
   const audioRef = useRef(null);
   const imagesRef = useRef(null);
 
-  const { control, getValues, handleSubmit } = useForm<FormValues>({
+  const { control, getValues, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
       audios: [],
       editorState: EditorState.createEmpty(),
@@ -42,7 +45,7 @@ const CreatePostForm = ({ user }: Props) => {
 
   const onSubmit = (values: FormValues) => console.log(values);
 
-  // const [audios, images] = watch(['audios', 'images']);
+  const [audios, images] = watch(['audios', 'images']);
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" padding={3} style={{ gap: 10 }}>
@@ -61,6 +64,7 @@ const CreatePostForm = ({ user }: Props) => {
           )}
         />
       </Box>
+      <FilePreview audios={audios} images={images} />
       <Divider />
       <Box
         display="flex"
