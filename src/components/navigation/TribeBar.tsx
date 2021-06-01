@@ -5,6 +5,7 @@ import type { Tribe } from 'tools/types/tribeBar';
 
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // styles
 import { dark, darkPurple } from 'styles/colors';
@@ -27,7 +28,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const colors = [
+  '#6b5b95',
+  '#d64161',
+  '#ff7b25',
+  '#6b5b95',
+  '#878f99',
+  '#3e4444',
+  '#f7786b',
+  '#c94c4c',
+  '#50394c',
+  '#f18973',
+  '#618685',
+  '#36486b',
+  '#4040a1',
+];
+
 const TribeBar = () => {
+  const { asPath } = useRouter();
   const [showModal, setShowModal] = useState(false);
   const classes = useStyles();
 
@@ -52,7 +70,7 @@ const TribeBar = () => {
         <Query apiUrl="/api/profile/tribes">
           {(tribes: Array<Tribe>) => (
             <>
-              {tribes.map((tribe) => (
+              {tribes.map((tribe, index) => (
                 <Link key={tribe.id} href={`/client/${tribe.id}`}>
                   <a>
                     <Avatar
@@ -63,13 +81,19 @@ const TribeBar = () => {
                       src={tribe.avatar}
                       style={{
                         color: 'white',
+                        backgroundColor:
+                          tribe.avatar === null ? colors[index] : '',
                         borderRadius: 15,
-                        border: '2px solid',
+                        border: asPath.includes(`/client/${tribe.id}`)
+                          ? '2px solid'
+                          : `2px solid #322837`,
                         boxSizing: 'content-box',
                         padding: '3px',
                       }}
                       variant="rounded"
-                    />
+                    >
+                      {tribe.name[0].toUpperCase()}
+                    </Avatar>
                   </a>
                 </Link>
               ))}
@@ -90,7 +114,7 @@ const TribeBar = () => {
             }}
             variant="square"
           >
-            <AddIcon style={{ padding: 0.3 }} />
+            <AddIcon />
           </Avatar>
         </IconButton>
       </nav>

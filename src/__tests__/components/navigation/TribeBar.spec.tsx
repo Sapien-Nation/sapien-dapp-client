@@ -5,11 +5,12 @@ import { render, screen } from 'utils/testUtils';
 
 // mocks
 import { mockTribe } from 'tools/mocks/tribeBar';
+import { mockRouter } from 'mocks/routes';
 
 // components
 import TribeBar from 'components/navigation/TribeBar';
 
-const renderComponent = () => render(<TribeBar />);
+const renderComponent = () => render(<TribeBar />, { router: mockRouter() });
 const tribes = [mockTribe(), mockTribe()];
 
 beforeEach(() => {

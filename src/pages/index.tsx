@@ -3,15 +3,21 @@ import { useEffect } from 'react';
 // next
 import { useRouter } from 'next/router';
 
+// hooks
+import { getTribes } from 'hooks/tribeBar';
+
 // components
 import Layout from './Layout';
 
 const IndexPage = () => {
+  const tribes = getTribes();
   const { push } = useRouter();
 
   useEffect(() => {
-    push('/client/1'); // TODO remove this with correct "Main" tribe logic
-  }, [push]);
+    if (tribes?.length) {
+      push(`/client/${tribes[0].id}`);
+    }
+  }, [tribes, push]);
 
   return null;
 };

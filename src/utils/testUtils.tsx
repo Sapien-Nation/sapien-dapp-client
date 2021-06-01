@@ -52,14 +52,14 @@ const Providers = ({
 
   if (router) {
     Wrapper = (
-      <RouterContext.Provider value={router}>{children}</RouterContext.Provider>
+      <RouterContext.Provider value={router}>{Wrapper}</RouterContext.Provider>
     );
   }
 
   if (user) {
     Wrapper = (
       <AuthenticationContext.Provider value={user}>
-        <SnackbarProvider maxSnack={1}>{children}</SnackbarProvider>
+        {Wrapper}
       </AuthenticationContext.Provider>
     );
   }

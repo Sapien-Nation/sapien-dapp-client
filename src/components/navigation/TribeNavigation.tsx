@@ -4,6 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+// hooks
+import { getTribes } from 'hooks/tribeBar';
+
 // mui
 import {
   Box,
@@ -42,9 +45,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 const TribeNavigation = () => {
-  const { asPath, query } = useRouter();
+  const tribes = getTribes();
   const classes = useStyles();
+  const { asPath, query } = useRouter();
   const [showSquares, setShowSquares] = useState(true);
+
+  const selectedTribe = tribes.find(({ id }) => id === query.tribeid);
+  if (!selectedTribe) return null;
 
   return (
     <Drawer
@@ -79,7 +86,7 @@ const TribeNavigation = () => {
                 }}
                 variant="captionItem"
               >
-                Tribe Name
+                {selectedTribe.name}
               </Typography>
             </a>
           </Link>
@@ -126,9 +133,15 @@ const TribeNavigation = () => {
       </Box>
       <Collapse unmountOnExit in={showSquares} timeout="auto">
         <List aria-label="Squares">
-          <ListItem style={{ padding: '0 2rem' }}>
-            <Typography variant="body4">#squares</Typography>
-          </ListItem>
+          {selectedTribe.squares.map(({ id, name }) => (
+            <ListItem key={id}>
+              <Link href={`/client/${query.tribeid}/square/${id}`}>
+                <a>
+                  <Typography variant="body4">#{name}</Typography>
+                </a>
+              </Link>
+            </ListItem>
+          ))}
         </List>
       </Collapse>
     </Drawer>
