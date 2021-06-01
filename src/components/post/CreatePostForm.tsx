@@ -3,7 +3,7 @@ import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 //components
-import FilePreview from './FilePreview';
+import FilesPreview from './FilesPreview';
 
 //icons
 import {
@@ -64,7 +64,10 @@ const CreatePostForm = ({ user }: Props) => {
           )}
         />
       </Box>
-      <FilePreview audios={audios} images={images} />
+      <Box display="flex" marginY={2}>
+        <FilesPreview files={audios} />
+        <FilesPreview files={images} />
+      </Box>
       <Divider />
       <Box
         display="flex"
