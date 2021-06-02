@@ -1,6 +1,7 @@
 import { Editor, EditorState } from 'draft-js';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import Picker from 'emoji-picker-react';
 
 //components
 import FilesPreview from './FilesPreview';
@@ -13,7 +14,14 @@ import {
 } from '@material-ui/icons';
 
 // mui
-import { Avatar, Box, Button, Divider, Typography } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Menu,
+  Typography,
+} from '@material-ui/core';
 
 // types
 import type { EditorState as EditorStateType } from 'draft-js';
@@ -32,6 +40,7 @@ interface Props {
 }
 
 const CreatePostForm = ({ user }: Props) => {
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const audioRef = useRef(null);
   const imagesRef = useRef(null);
 
@@ -44,6 +53,12 @@ const CreatePostForm = ({ user }: Props) => {
       },
     });
 
+  const closeEmojiMenu = () => setMenuAnchor(null);
+  const openEmojiMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(event.currentTarget);
+  };
+
+  const onEmojiClick = () => setMenuAnchor(null);
   const onSubmit = (values: FormValues) => console.log(values);
   const [audios, images] = watch(['audios', 'images']);
 
@@ -82,10 +97,22 @@ const CreatePostForm = ({ user }: Props) => {
         paddingX={10}
         paddingY={2}
       >
+        <Menu
+          keepMounted
+          anchorEl={menuAnchor}
+          id="emoji-menu"
+          open={Boolean(menuAnchor)}
+          onClose={closeEmojiMenu}
+        >
+          <Picker onEmojiClick={onEmojiClick} />
+        </Menu>
         <Button
+          aria-controls="emoji-menu"
+          aria-haspopup="true"
           startIcon={<EmojiEmotionsOutlined />}
           style={{ color: orange }}
           variant="text"
+          onClick={openEmojiMenu}
         >
           <Typography style={{ color: black }} variant="buttonMedium">
             Emotion
