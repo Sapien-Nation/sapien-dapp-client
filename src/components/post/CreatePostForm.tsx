@@ -35,17 +35,18 @@ const CreatePostForm = ({ user }: Props) => {
   const audioRef = useRef(null);
   const imagesRef = useRef(null);
 
-  const { control, getValues, handleSubmit, watch } = useForm<FormValues>({
-    defaultValues: {
-      audios: [],
-      editorState: EditorState.createEmpty(),
-      images: [],
-    },
-  });
+  const { control, getValues, handleSubmit, setValue, watch } =
+    useForm<FormValues>({
+      defaultValues: {
+        audios: [],
+        editorState: EditorState.createEmpty(),
+        images: [],
+      },
+    });
 
   const onSubmit = (values: FormValues) => console.log(values);
-
   const [audios, images] = watch(['audios', 'images']);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" padding={3} style={{ gap: 10 }}>
@@ -54,7 +55,7 @@ const CreatePostForm = ({ user }: Props) => {
           control={control}
           name="editorState"
           render={({ field: { value, ...rest } }) => (
-            <Box style={{ width: '100%', maxWidth: 680 }}>
+            <Box style={{ width: '100%', minWidth: 680 }}>
               <Editor
                 {...rest}
                 editorState={value}
@@ -64,9 +65,15 @@ const CreatePostForm = ({ user }: Props) => {
           )}
         />
       </Box>
-      <Box display="flex" marginY={2}>
-        <FilesPreview files={audios} />
-        <FilesPreview files={images} />
+      <Box display="flex" gap={1.5} margin={2}>
+        <FilesPreview
+          files={audios}
+          onRemove={(newFiles) => setValue('audios', newFiles)}
+        />
+        <FilesPreview
+          files={images}
+          onRemove={(newFiles) => setValue('images', newFiles)}
+        />
       </Box>
       <Divider />
       <Box

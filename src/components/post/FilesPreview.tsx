@@ -1,70 +1,72 @@
 // mui
+import { Box, IconButton, Typography } from '@material-ui/core';
 import {
-  Box,
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-} from '@material-ui/core';
-import { Close, MusicNote } from '@material-ui/icons';
+  Audiotrack as AudioIcon,
+  Close as CloseIcon,
+  Image as ImageIcon,
+  Videocam as VideoIcon,
+} from '@material-ui/icons';
 
 // styles
 import { blue, darkGrey, lightBlue } from 'styles/colors';
 
-//utils
+// utils
 import { formatBytes } from 'utils/formatBytes';
 
 interface Props {
   files?: Array<File>;
+  onRemove: (files: Array<File>) => void;
 }
 
-const FilesPreview = ({ files }: Props) => {
+const FilesPreview = ({ files, onRemove }: Props) => {
+  const renderIcon = (type: string) => {
+    if (type.includes('audio'))
+      return <AudioIcon fontSize="large" style={{ color: blue }} />;
+    else if (type.includes('image'))
+      return <ImageIcon fontSize="large" style={{ color: blue }} />;
+    else if (type.includes('video'))
+      return <VideoIcon fontSize="large" style={{ color: blue }} />;
+  };
+
+  const handleRemove = (index: number) =>
+    onRemove(files.filter((_, fileIndex) => fileIndex !== index));
+
   return (
-    <div>
-      {files?.map((file) => (
-        <Card key={file} elevation={0} style={{ borderRadius: 10, margin: 10 }}>
-          <CardContent
-            component="div"
-            style={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-between',
-              paddingBottom: '16px',
-            }}
+    <>
+      {files?.map((file, index) => (
+        <Box
+          key={file.name}
+          className="card--rounded"
+          display="flex"
+          gap={1}
+          padding={1}
+        >
+          <Box
+            alignItems="center"
+            borderRadius={2.5}
+            display="flex"
+            height={46}
+            justifyContent="center"
+            style={{ backgroundColor: lightBlue }}
+            width={46}
           >
-            <Box display="flex">
-              {file?.type.includes('audio') && (
-                <MusicNote
-                  style={{
-                    backgroundColor: lightBlue,
-                    borderRadius: 10,
-                    color: blue,
-                    fontSize: 27,
-                    marginRight: 16,
-                    padding: 10,
-                  }}
-                />
-              )}
-              <Box
-                alignItems="right"
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-              >
-                <Typography variant="buttonMedium">{file.name}</Typography>
-                <Typography color={darkGrey} variant="subtitle2">
-                  <span>{file?.type}</span> &bull;{' '}
-                  <span>{formatBytes(file?.size)}</span>
-                </Typography>
-              </Box>
-            </Box>
-            <IconButton aria-label="close" onClick={() => console.log('todo')}>
-              <Close style={{ color: darkGrey, fontSize: 16 }} />
-            </IconButton>
-          </CardContent>
-        </Card>
+            {renderIcon(file.type)}
+          </Box>
+          <Box display="grid">
+            <Typography variant="caption">{file.name}</Typography>
+            <Typography color={darkGrey} variant="captionItem">
+              <span>{file?.type}</span> <span>{formatBytes(file?.size)}</span>
+            </Typography>
+          </Box>
+          <IconButton
+            aria-label="remove file"
+            onClick={() => handleRemove(index)}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Box>
       ))}
-    </div>
+    </>
   );
 };
 
