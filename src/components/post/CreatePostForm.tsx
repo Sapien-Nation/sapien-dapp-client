@@ -1,12 +1,17 @@
 import { Editor, EditorState } from 'draft-js';
+import Picker from 'emoji-picker-react';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import Picker from 'emoji-picker-react';
 
-//components
+import type { Emoji } from 'types/draft';
+
+// utils
+import { addEmoji } from 'utils/draft';
+
+// components
 import FilesPreview from './FilesPreview';
 
-//icons
+// icons
 import {
   EmojiEmotionsOutlined,
   MusicNote,
@@ -53,13 +58,12 @@ const CreatePostForm = ({ user }: Props) => {
       },
     });
 
-  const closeEmojiMenu = () => setMenuAnchor(null);
-  const openEmojiMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setMenuAnchor(event.currentTarget);
+  const handleEmojiPick = (_: unknown, emoji: Emoji) => {
+    setValue('editorState', addEmoji(getValues('editorState'), emoji));
+    setMenuAnchor(null);
   };
-
-  const onEmojiClick = () => setMenuAnchor(null);
   const onSubmit = (values: FormValues) => console.log(values);
+
   const [audios, images] = watch(['audios', 'images']);
 
   return (
@@ -102,9 +106,9 @@ const CreatePostForm = ({ user }: Props) => {
           anchorEl={menuAnchor}
           id="emoji-menu"
           open={Boolean(menuAnchor)}
-          onClose={closeEmojiMenu}
+          onClose={() => setMenuAnchor(null)}
         >
-          <Picker onEmojiClick={onEmojiClick} />
+          <Picker onEmojiClick={handleEmojiPick} />
         </Menu>
         <Button
           aria-controls="emoji-menu"
@@ -112,7 +116,7 @@ const CreatePostForm = ({ user }: Props) => {
           startIcon={<EmojiEmotionsOutlined />}
           style={{ color: orange }}
           variant="text"
-          onClick={openEmojiMenu}
+          onClick={(event) => setMenuAnchor(event.currentTarget)}
         >
           <Typography style={{ color: black }} variant="buttonMedium">
             Emotion

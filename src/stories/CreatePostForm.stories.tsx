@@ -16,7 +16,7 @@ export default StoryMeta;
 export const ComposerStory = () => {
   // TODO use mocks
   return (
-    <div style={{ backgroundColor: '#F9F9FA', padding: 15 }}>
+    <div>
       <CreatePostForm
         user={{ avatar: 'https://i.pravatar.cc/300', username: 'Jhon Doe' }}
       />
