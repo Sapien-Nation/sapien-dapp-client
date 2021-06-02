@@ -63,18 +63,23 @@ const CreateTribeModal = ({ onClose }: Props) => {
     try {
       if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
       const formData = new FormData();
-      formData.append('avatar', values.avatar[0]);
-      formData.append('cover', values.cover[0]);
+      if (values.avatar) {
+        formData.append('avatar', values.avatar[0]);
+      }
+      if (values.cover) {
+        formData.append('cover', values.cover[0]);
+      }
       formData.append('description', values.identifier);
       formData.append('identifier', values.description);
       formData.append('name', values.name);
       formData.append('private', values.private);
 
       const response = await createTribe(formData);
-      mutate('/api/profile/tribes', (tribes: Array<Tribe>) => [
-        ...tribes,
-        response,
-      ]);
+      mutate(
+        '/api/profile/tribes',
+        (tribes: Array<Tribe>) => [...tribes, response],
+        false
+      );
 
       onClose();
       enqueueSnackbar('Tribe Created Successfully', {
@@ -116,12 +121,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
               inputProps={{
                 ...register('name'),
                 autoComplete: 'name',
-                maxLength: '36',
+                maxLength: 20,
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
                   <Typography variant="buttonMedium">Name*</Typography>
-                  <ChartCount control={control} maxCount={36} name="name" />
+                  <ChartCount control={control} maxCount={20} name="name" />
                 </Box>
               }
               placeholder="Name"
@@ -137,7 +142,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               inputProps={{
                 ...register('identifier'),
                 autoComplete: 'identifier',
-                maxLength: '15',
+                maxLength: 20,
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
@@ -146,7 +151,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   </Typography>
                   <ChartCount
                     control={control}
-                    maxCount={15}
+                    maxCount={20}
                     name="identifier"
                   />
                 </Box>
