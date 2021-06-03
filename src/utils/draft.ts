@@ -8,6 +8,16 @@ export enum Entities {
   Emoji = 'EMOJI',
 }
 
+export const emojiStrategy = (contentBlock, callback, contentState) => {
+  contentBlock.findEntityRanges((character) => {
+    const entityKey = character.getEntity();
+    return (
+      entityKey !== null &&
+      contentState.getEntity(entityKey).getType() === 'EMOJI'
+    );
+  }, callback);
+};
+
 export const addEmoji = (editorState: EditorStateType, emoji: Emoji) => {
   const contentState = editorState.getCurrentContent();
   const currentSelectionState = editorState.getSelection();

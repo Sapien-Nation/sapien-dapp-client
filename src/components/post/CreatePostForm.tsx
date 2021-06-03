@@ -6,7 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import type { Emoji } from 'types/draft';
 
 // utils
-import { addEmoji } from 'utils/draft';
+import { addEmoji, emojiStrategy } from 'utils/draft';
 
 // components
 import EmojiComponent from '../common/draftjs/Emoji';
@@ -48,21 +48,12 @@ interface Props {
 const CreatePostForm = ({ user }: Props) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const audioRef = useRef(null);
+  const editorRef = useRef(null);
   const imagesRef = useRef(null);
-
-  const findEmojiEntities = (contentBlock, callback, contentState) => {
-    contentBlock.findEntityRanges((character) => {
-      const entityKey = character.getEntity();
-      return (
-        entityKey !== null &&
-        contentState.getEntity(entityKey).getType() === 'EMOJI'
-      );
-    }, callback);
-  };
 
   const decorators = new CompositeDecorator([
     {
-      strategy: findEmojiEntities,
+      strategy: emojiStrategy,
       component: EmojiComponent,
     },
   ]);
@@ -79,6 +70,7 @@ const CreatePostForm = ({ user }: Props) => {
   const handleEmojiPick = (_: unknown, emoji: Emoji) => {
     setValue('editorState', addEmoji(getValues('editorState'), emoji));
     setMenuAnchor(null);
+    editorRef.current.focus();
   };
 
   const onSubmit = (values: FormValues) => console.log(values);
@@ -93,7 +85,7 @@ const CreatePostForm = ({ user }: Props) => {
           control={control}
           name="editorState"
           render={({ field: { value, ...rest } }) => (
-            <Box style={{ width: '100%', minWidth: 680 }}>
+            <Box ref={editorRef} style={{ width: '100%', minWidth: 680 }}>
               <Editor
                 {...rest}
                 editorState={value}

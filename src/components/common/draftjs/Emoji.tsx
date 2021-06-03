@@ -1,17 +1,22 @@
-// interface Props {
-//   label: string;
-//   symbol: string;
-// }
+import type { ContentState } from 'draft-js';
+import type { Emoji } from 'types/draft';
 
-const EmojiComponent = (props) => {
+interface Props {
+  contentState: ContentState;
+  decoratedText: string;
+  entityKey: string;
+}
+
+const EmojiComponent = ({ contentState, decoratedText, entityKey }: Props) => {
+  const data: Emoji = contentState.getEntity(entityKey).getData();
   return (
     <span
-      aria-hidden={props.decoratedText ? 'false' : 'true'}
-      aria-label={props.decoratedText ? props.decoratedText : ''}
+      aria-hidden={decoratedText ? 'false' : 'true'}
+      aria-label={decoratedText || ''}
       className="emoji"
       role="img"
     >
-      {props.decoratedText}
+      {data.emoji}
     </span>
   );
 };
