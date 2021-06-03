@@ -1,17 +1,19 @@
-interface Props {
-  label: string;
-  symbol: string;
-}
+// interface Props {
+//   label: string;
+//   symbol: string;
+// }
 
-const Emoji = ({ label, symbol }: Props) => (
-  <span
-    aria-hidden={label ? 'false' : 'true'}
-    aria-label={label ? label : ''}
-    className="emoji"
-    role="img"
-  >
-    {symbol}
-  </span>
-);
+const EmojiComponent = (props) => {
+  return (
+    <span
+      aria-hidden={props.decoratedText ? 'false' : 'true'}
+      aria-label={props.decoratedText ? props.decoratedText : ''}
+      className="emoji"
+      role="img"
+    >
+      {props.decoratedText}
+    </span>
+  );
+};
 
-export default Emoji;
+export default EmojiComponent;

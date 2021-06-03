@@ -1,4 +1,4 @@
-import { Editor, EditorState } from 'draft-js';
+import { CompositeDecorator, Editor, EditorState } from 'draft-js';
 import Picker from 'emoji-picker-react';
 import { useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import type { Emoji } from 'types/draft';
 import { addEmoji } from 'utils/draft';
 
 // components
+import EmojiComponent from '../common/draftjs/Emoji';
 import FilesPreview from './FilesPreview';
 
 // icons
@@ -49,11 +50,28 @@ const CreatePostForm = ({ user }: Props) => {
   const audioRef = useRef(null);
   const imagesRef = useRef(null);
 
+  const findEmojiEntities = (contentBlock, callback, contentState) => {
+    contentBlock.findEntityRanges((character) => {
+      const entityKey = character.getEntity();
+      return (
+        entityKey !== null &&
+        contentState.getEntity(entityKey).getType() === 'EMOJI'
+      );
+    }, callback);
+  };
+
+  const decorators = new CompositeDecorator([
+    {
+      strategy: findEmojiEntities,
+      component: EmojiComponent,
+    },
+  ]);
+
   const { control, getValues, handleSubmit, setValue, watch } =
     useForm<FormValues>({
       defaultValues: {
         audios: [],
-        editorState: EditorState.createEmpty(),
+        editorState: EditorState.createEmpty(decorators),
         images: [],
       },
     });
@@ -62,6 +80,7 @@ const CreatePostForm = ({ user }: Props) => {
     setValue('editorState', addEmoji(getValues('editorState'), emoji));
     setMenuAnchor(null);
   };
+
   const onSubmit = (values: FormValues) => console.log(values);
 
   const [audios, images] = watch(['audios', 'images']);
