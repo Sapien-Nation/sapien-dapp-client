@@ -70,7 +70,12 @@ const CreatePostForm = ({ user }: Props) => {
   const handleEmojiPick = (_: unknown, emoji: Emoji) => {
     setValue('editorState', addEmoji(getValues('editorState'), emoji));
     setMenuAnchor(null);
-    editorRef.current.focus();
+    setTimeout(() => focus(), 50);
+  };
+
+  const focus = () => {
+    const editor = editorRef?.current;
+    if (editor) editor.focus();
   };
 
   const onSubmit = (values: FormValues) => console.log(values);
@@ -85,9 +90,10 @@ const CreatePostForm = ({ user }: Props) => {
           control={control}
           name="editorState"
           render={({ field: { value, ...rest } }) => (
-            <Box ref={editorRef} style={{ width: '100%', minWidth: 680 }}>
+            <Box style={{ width: '100%', minWidth: 680 }}>
               <Editor
                 {...rest}
+                ref={editorRef}
                 editorState={value}
                 placeholder={`What’s on your mind, ${user.username}?`}
               />
