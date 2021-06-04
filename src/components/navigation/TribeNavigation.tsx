@@ -134,7 +134,20 @@ const TribeNavigation = () => {
       <Collapse unmountOnExit in={showSquares} timeout="auto">
         <List aria-label="Squares">
           {selectedTribe.squares.map(({ id, name }) => (
-            <ListItem key={id}>
+            <ListItem
+              key={id}
+              classes={{
+                selected: classes.listItemSelected,
+              }}
+              selected={id === query.id}
+              style={{
+                borderRadius: 10,
+                margin: '0 .5rem',
+                padding: '0 1.5rem',
+                width: 'auto',
+                minHeight: '4rem',
+              }}
+            >
               <Link href={`/client/${query.tribeid}/square/${id}`}>
                 <a>
                   <Typography variant="body4">#{name}</Typography>
