@@ -70,12 +70,9 @@ const CreatePostForm = ({ user }: Props) => {
   const handleEmojiPick = (_: unknown, emoji: Emoji) => {
     setValue('editorState', addEmoji(getValues('editorState'), emoji));
     setMenuAnchor(null);
-    setTimeout(() => focus(), 50);
-  };
-
-  const focus = () => {
-    const editor = editorRef?.current;
-    if (editor) editor.focus();
+    setTimeout(() => {
+      editorRef?.current?.focus();
+    }, 0);
   };
 
   const onSubmit = (values: FormValues) => console.log(values);
