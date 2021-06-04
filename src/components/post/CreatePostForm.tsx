@@ -1,15 +1,8 @@
-import { CompositeDecorator, Editor, EditorState } from 'draft-js';
-import Picker from 'emoji-picker-react';
-import { useRef, useState } from 'react';
+import { Editor, EditorState } from 'draft-js';
+import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import type { Emoji } from 'types/draft';
-
-// utils
-import { addEmoji, emojiStrategy } from 'utils/draft';
-
 // components
-import EmojiComponent from '../common/draftjs/Emoji';
 import FilesPreview from './FilesPreview';
 
 // icons
@@ -20,14 +13,7 @@ import {
 } from '@material-ui/icons';
 
 // mui
-import {
-  Avatar,
-  Box,
-  Button,
-  Divider,
-  Menu,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Button, Divider, Typography } from '@material-ui/core';
 
 // types
 import type { EditorState as EditorStateType } from 'draft-js';
@@ -46,34 +32,17 @@ interface Props {
 }
 
 const CreatePostForm = ({ user }: Props) => {
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const audioRef = useRef(null);
-  const editorRef = useRef(null);
   const imagesRef = useRef(null);
-
-  const decorators = new CompositeDecorator([
-    {
-      strategy: emojiStrategy,
-      component: EmojiComponent,
-    },
-  ]);
 
   const { control, getValues, handleSubmit, setValue, watch } =
     useForm<FormValues>({
       defaultValues: {
         audios: [],
-        editorState: EditorState.createEmpty(decorators),
+        editorState: EditorState.createEmpty(),
         images: [],
       },
     });
-
-  const handleEmojiPick = (_: unknown, emoji: Emoji) => {
-    setValue('editorState', addEmoji(getValues('editorState'), emoji));
-    setMenuAnchor(null);
-    setTimeout(() => {
-      editorRef?.current?.focus();
-    }, 0);
-  };
 
   const onSubmit = (values: FormValues) => console.log(values);
 
@@ -90,7 +59,6 @@ const CreatePostForm = ({ user }: Props) => {
             <Box style={{ width: '100%', minWidth: 680 }}>
               <Editor
                 {...rest}
-                ref={editorRef}
                 editorState={value}
                 placeholder={`What’s on your mind, ${user.username}?`}
               />
@@ -115,22 +83,12 @@ const CreatePostForm = ({ user }: Props) => {
         paddingX={10}
         paddingY={2}
       >
-        <Menu
-          keepMounted
-          anchorEl={menuAnchor}
-          id="emoji-menu"
-          open={Boolean(menuAnchor)}
-          onClose={() => setMenuAnchor(null)}
-        >
-          <Picker onEmojiClick={handleEmojiPick} />
-        </Menu>
         <Button
           aria-controls="emoji-menu"
           aria-haspopup="true"
           startIcon={<EmojiEmotionsOutlined />}
           style={{ color: orange }}
           variant="text"
-          onClick={(event) => setMenuAnchor(event.currentTarget)}
         >
           <Typography style={{ color: black }} variant="buttonMedium">
             Emotion
