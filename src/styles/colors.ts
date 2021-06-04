@@ -1,12 +1,8 @@
-export const dark = '#1B1021';
-export const white = '#fff';
-export const black = '#252326';
-export const green = '#8BC95A';
-export const orange = '#FFA16D';
-export const purple = '#6200EA';
-export const blue = '#42D1E0';
-export const lightBlue = 'rgba(66, 209, 224, 0.15)';
+export const primary = '#6200EA';
 export const red = '#FF4279';
+
+export const dark = '#1B1021';
+export const black = '#252326';
 
 export const darkGrey = '#8F92A1';
 export const darkPurple = '#322837';

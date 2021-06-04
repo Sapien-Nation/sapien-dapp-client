@@ -22,61 +22,37 @@ const ForgotPage = () => {
     switch (view) {
       case View.Form:
         return (
-          <>
-            <Typography component="h1" variant="h2">
-              Forgotten Password
-            </Typography>
+          <Box display="gird" gap={3}>
+            <Typography component="h1">Forgotten Password</Typography>
             <ForgotForm changeView={() => setView(View.Success)} />
-            <Box alignItems="center" display="flex" justifyContent="center">
-              <>
-                <Typography
-                  color="textPrimary"
-                  component="span"
-                  variant="subtitle2"
-                >
-                  Remembered your password?
-                </Typography>
-                <Link passHref href="/login">
-                  <Typography
-                    color="inherit"
-                    component="a"
-                    style={{
-                      marginLeft: '4px',
-                    }}
-                    variant="caption"
-                  >
-                    Log in
-                  </Typography>
-                </Link>
-              </>
-            </Box>
-          </>
+            <Typography paragraph>
+              <Typography component="span" variant="subtitle2">
+                Remembered your password?
+              </Typography>
+              <Link href="/login">
+                <a>
+                  <Typography variant="caption">Log in</Typography>
+                </a>
+              </Link>
+            </Typography>
+          </Box>
         );
       case View.Success:
         return (
-          <Box textAlign="center">
-            <Typography
-              component="h1"
-              style={{ marginBottom: 30 }}
-              variant="h2"
-            >
-              Request sent successfully
-            </Typography>
-            <Typography style={{ marginBottom: 30 }} variant="body2">
+          <Box display="gird" gap={3}>
+            <Typography component="h1">Request sent successfully</Typography>
+            <Typography variant="body2">
               If the email and username provided match, you will receive
               instructions to set a new password shortly.
             </Typography>
-            <Link passHref href="/login">
-              <Button color="primary" variant="contained">
-                Got it!
-              </Button>
-            </Link>
-            <Box
-              alignItems="center"
-              display="flex"
-              justifyContent="center"
-              marginTop="2rem"
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => console.log('todo login')}
             >
+              Got it!
+            </Button>
+            <Typography paragraph>
               <Typography
                 color="textPrimary"
                 component="span"
@@ -85,17 +61,9 @@ const ForgotPage = () => {
                 Haven’t received an email?
               </Typography>
               <Button color="inherit" onClick={() => setView(View.Form)}>
-                <Typography
-                  component="a"
-                  style={{
-                    marginLeft: '4px',
-                  }}
-                  variant="caption"
-                >
-                  Resend
-                </Typography>
+                Resend
               </Button>
-            </Box>
+            </Typography>
           </Box>
         );
     }

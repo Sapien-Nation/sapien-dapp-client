@@ -62,8 +62,5 @@ test('renders correctly', async () => {
   });
 
   expect(screen.getByText('Password Change successfully')).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute(
-    'href',
-    '/login'
-  );
+  expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument();
 });

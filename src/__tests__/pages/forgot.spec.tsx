@@ -57,10 +57,7 @@ test('renders correctly', async () => {
       /if the email and username provided match, you will receive instructions to set a new password shortly\./i
     )
   ).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: 'Got it!' })).toHaveAttribute(
-    'href',
-    '/login'
-  );
+  expect(screen.getByRole('button', { name: 'Got it!' })).toBeInTheDocument();
 
   // resend
   user.click(

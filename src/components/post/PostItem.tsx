@@ -9,14 +9,14 @@ import Link from 'next/link';
 import type { Content } from 'tools/types/content';
 
 // styles
-import { blackLight, purple, purpleHighLight } from 'styles/colors';
+import { blackLight, primary, purpleHighLight } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
 
 const useStyles = makeStyles(() => ({
   chipRoot: {
-    color: purple,
+    color: primary,
     backgroundColor: purpleHighLight,
   },
 }));
@@ -49,14 +49,14 @@ const PostCard = ({ post }: Props) => {
           <Avatar alt="Post Image" src={avatar} />
           <Link href="/">
             <a>
-              <Typography variant="buttonMedium">
+              <Typography>
                 {displayName} @{userName}
               </Typography>
             </a>
           </Link>
           <ArrowRight />
           <Globe fontSize="small" />
-          <Typography color={blackLight} marginRight={1} variant="buttonMedium">
+          <Typography color={blackLight} marginRight={1}>
             {groupName}
           </Typography>
           <Chip
@@ -70,9 +70,7 @@ const PostCard = ({ post }: Props) => {
           />
         </Box>
 
-        <Typography variant="body4">
-          {formatTimestampToRelative(createdAt)}
-        </Typography>
+        {formatTimestampToRelative(createdAt)}
       </Box>
 
       <div>

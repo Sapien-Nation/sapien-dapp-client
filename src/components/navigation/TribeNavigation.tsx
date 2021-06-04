@@ -27,7 +27,7 @@ import {
 } from '@material-ui/icons';
 
 // styles
-import { darkGrey, gray2, purple, white } from 'styles/colors';
+import { darkGrey, gray2, primary } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -37,9 +37,9 @@ const useStyles = makeStyles(() => ({
     width: 228,
   },
   listItemSelected: {
-    backgroundColor: `${purple} !important`,
+    backgroundColor: `${primary} !important`,
     '& .MuiTypography-root, & .MuiSvgIcon-root': {
-      color: `${white} !important`,
+      color: `#fff !important`,
     },
   },
 }));
