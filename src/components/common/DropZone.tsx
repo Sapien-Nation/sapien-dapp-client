@@ -48,7 +48,11 @@ const Dropzone = ({ children, className, id, onChange, ...rest }: Props) => {
       {...getRootProps()}
     >
       {children}
-      <input {...getInputProps()} id={id} />
+      <input
+        {...getInputProps()}
+        data-testid="dropzone-file-uploader"
+        id={id}
+      />
     </Box>
   );
 };
