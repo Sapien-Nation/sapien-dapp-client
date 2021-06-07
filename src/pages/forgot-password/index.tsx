@@ -22,8 +22,8 @@ const ForgotPage = () => {
     switch (view) {
       case View.Form:
         return (
-          <Box display="gird" gap={3}>
-            <Typography component="h1">Forgotten Password</Typography>
+          <Box display="grid" gap={3}>
+            <Typography variant="h2">Forgotten Password</Typography>
             <ForgotForm changeView={() => setView(View.Success)} />
             <Typography paragraph>
               <Typography component="span" variant="subtitle2">
@@ -39,8 +39,8 @@ const ForgotPage = () => {
         );
       case View.Success:
         return (
-          <Box display="gird" gap={3}>
-            <Typography component="h1">Request sent successfully</Typography>
+          <Box display="grid" gap={3}>
+            <Typography variant="h2">Request sent successfully</Typography>
             <Typography variant="body2">
               If the email and username provided match, you will receive
               instructions to set a new password shortly.

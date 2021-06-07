@@ -139,17 +139,21 @@ const Signup = () => {
             />
           }
           label={
-            <Typography paragraph>
-              <Typography variant="subtitle2">
+            <Typography>
+              <Typography component="span" variant="subtitle2">
                 I have read and agree to the
               </Typography>
-              <a
-                href="https://common.sapien.network/terms.html"
-                rel="noreferrer"
-                target="_blank"
-              >
-                Terms & Conditions
-              </a>
+              {" "}
+              <Typography component="span" variant="subtitle2">
+                <a
+                  href="https://common.sapien.network/terms.html"
+                  rel="noreferrer"
+                  style={{ color: "#42D1E0" }}
+                  target="_blank"
+                >
+                  Terms & Conditions
+                </a>
+              </Typography>
             </Typography>
           }
         />

@@ -3,7 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 import * as React from 'react';
 
 // styles
-import { black, red, primary, darkGrey, gray1, gray4 } from './colors';
+import { black, red, primary, darkGrey, gray1, gray2, gray4 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
@@ -13,16 +13,26 @@ const theme = createMuiTheme({
       primary: black,
     },
     primary: {
+      light: '#8133ee',
       main: primary,
+      dark: '#4400a3',
+      contrastText: '#fff',
     },
     secondary: {
+      light: '#d6d6d6',
       main: gray1,
+      dark: '#8e8e8e',
+      contrastText: '#fff',
     },
     info: {
       main: darkGrey,
+      contrastText: '#fff',
     },
     error: {
+      light: '#ff6793',
       main: red,
+      dark: '#b22e54',
+      contrastText: '#fff',
     },
   },
   typography: {
@@ -43,6 +53,13 @@ const theme = createMuiTheme({
       fontWeight: 600,
       lineHeight: '2.52rem',
     },
+    subtitle1: { fontSize: '1rem', lineHeight: '1.5rem' },
+    subtitle2: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
+      letterSpacing: '0.005em',
+      lineHeight: '1.25rem',
+    },
     body1: {
       fontSize: '1.8rem',
       fontWeight: 400,
@@ -52,6 +69,25 @@ const theme = createMuiTheme({
       fontSize: '1.6rem',
       fontWeight: 400,
       lineHeight: '2.24rem',
+    },
+    button: {
+      fontSize: '1.4rem',
+      letterSpacing: '0.01em',
+      textTransform: 'unset',
+      fontWeight: 600,
+    },
+    caption: {
+      fontSize: '1.2rem',
+      color: black,
+      fontWeight: 700,
+      letterSpacing: '0.01em',
+      lineHeight: '1.05rem',
+    },
+    overline: {
+      color: gray2,
+      fontWeight: 700,
+      letterSpacing: '0.5px',
+      lineHeight: '1rem',
     },
   },
 });
