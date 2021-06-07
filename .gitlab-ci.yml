@@ -1,0 +1,20 @@
+variables:
+  # this variable can be overriden by pipeline run variable
+  BRANCHE: "master"
+stages:
+ - build-deploy
+
+
+.dev_triggers: &dev_triggers
+  refs:
+    - master
+
+build-deploy-dev:
+  stage: build-deploy
+  tags:
+    - storybook
+  script:
+    - git checkout ${BRANCHE}
+    - ./deploy.sh docker_storybook
+  only:
+    <<: *dev_triggers  
