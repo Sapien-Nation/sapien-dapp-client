@@ -19,7 +19,6 @@ import {
   Typography,
 } from '@material-ui/core';
 import {
-  Add,
   ArrowDropUp,
   ArrowDropDown,
   Group,
@@ -27,7 +26,7 @@ import {
 } from '@material-ui/icons';
 
 // styles
-import { darkGrey, gray2, primary } from 'styles/colors';
+import { darkGrey, primary } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -50,8 +49,9 @@ const TribeNavigation = () => {
   const { asPath, query } = useRouter();
   const [showSquares, setShowSquares] = useState(true);
 
-  const selectedTribe = tribes.find(({ id }) => id === query.tribeid);
-  if (!selectedTribe) return null;
+  const selectedTribe = tribes.find(
+    ({ mainSquareId }) => mainSquareId === query.squareid
+  );
 
   return (
     <Drawer
@@ -65,20 +65,19 @@ const TribeNavigation = () => {
       variant="permanent"
     >
       <List aria-label="Tribe Navigation">
-        <ListItem
-          classes={{
-            selected: classes.listItemSelected,
-          }}
-          selected={asPath === `/client/${query.tribeid}`}
-          style={{
-            borderRadius: 10,
-            margin: '1rem .5rem',
-            padding: '1rem 1.5rem',
-            width: 'auto',
-          }}
-        >
-          <Link href={`/client/${query.tribeid}`}>
-            <a style={{ alignItems: 'center', display: 'flex' }}>
+        <Link href={`/client/${selectedTribe?.mainSquareId}`}>
+          <a style={{ alignItems: 'center', display: 'flex' }}>
+            <ListItem
+              classes={{
+                selected: classes.listItemSelected,
+              }}
+              selected={asPath === `/client/${query.squareid}`}
+              style={{
+                borderRadius: 10,
+                margin: '1rem .5rem',
+                padding: '1rem 1.5rem',
+              }}
+            >
               <Group fontSize="small" style={{ color: darkGrey }} />
               <Typography
                 style={{
@@ -86,44 +85,34 @@ const TribeNavigation = () => {
                 }}
                 variant="caption"
               >
-                {selectedTribe.name}
+                {selectedTribe?.name.toUpperCase()}
               </Typography>
-            </a>
-          </Link>
-        </ListItem>
-        <ListItem
-          classes={{
-            selected: classes.listItemSelected,
-          }}
-          selected={asPath === `/client/${query.tribeid}/store`}
-          style={{
-            borderRadius: 10,
-            margin: '1rem .5rem',
-            padding: '1rem 1.5rem',
-            width: 'auto',
-          }}
-        >
-          <Link href={`/client/${query.tribeid}/store`}>
-            <a style={{ alignItems: 'center', display: 'flex' }}>
+            </ListItem>
+          </a>
+        </Link>
+        <Link href={`/client/${query.squareid}/store`}>
+          <a style={{ alignItems: 'center', display: 'flex' }}>
+            <ListItem
+              classes={{
+                selected: classes.listItemSelected,
+              }}
+              selected={asPath === `/client/${query.squareid}/store`}
+              style={{
+                borderRadius: 10,
+                margin: '1rem .5rem',
+                padding: '1rem 1.5rem',
+              }}
+            >
               <ShoppingCart fontSize="small" style={{ color: darkGrey }} />
               <Typography style={{ marginLeft: 15 }} variant="caption">
                 Badge Store
               </Typography>
-            </a>
-          </Link>
-        </ListItem>
+            </ListItem>
+          </a>
+        </Link>
       </List>
       <Box alignItems="center" display="flex" paddingX={2}>
         <Typography variant="caption">Squares</Typography>
-        <IconButton
-          style={{
-            backgroundColor: gray2,
-            marginLeft: 10,
-            padding: 2,
-          }}
-        >
-          <Add fontSize="small" />
-        </IconButton>
         <IconButton
           style={{ marginLeft: 'auto' }}
           onClick={() => setShowSquares(!showSquares)}
@@ -133,7 +122,7 @@ const TribeNavigation = () => {
       </Box>
       <Collapse unmountOnExit in={showSquares} timeout="auto">
         <List aria-label="Squares">
-          {selectedTribe.squares.map(({ id, name }) => (
+          {selectedTribe?.squares.map(({ id, name }) => (
             <ListItem
               key={id}
               classes={{
@@ -148,7 +137,7 @@ const TribeNavigation = () => {
                 minHeight: '4rem',
               }}
             >
-              <Link href={`/client/${query.tribeid}/square/${id}`}>
+              <Link href={`/client/${query.squareid}/square/${id}`}>
                 <a>
                   <Typography variant="caption">#{name}</Typography>
                 </a>

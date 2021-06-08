@@ -38,8 +38,8 @@ test('works correctly', () => {
   const links = screen.getAllByRole('link');
   const images = screen.getAllByRole('img');
 
-  tribes.forEach(({ id, avatar }, index) => {
-    expect(links[index]).toHaveAttribute('href', `/client/${id}`);
+  tribes.forEach(({ mainSquareId, avatar }, index) => {
+    expect(links[index]).toHaveAttribute('href', `/client/${mainSquareId}`);
     expect(images[index]).toHaveAttribute('src', avatar);
   });
 
@@ -97,7 +97,7 @@ test('CreateTribe', async () => {
   // New tribe should be on the TribeBar
   expect(screen.getAllByRole('link')[2]).toHaveAttribute(
     'href',
-    `/client/${tribe.id}`
+    `/client/${tribe.mainSquareId}`
   );
   expect(screen.getAllByRole('img')[2]).toHaveAttribute('src', tribe.avatar);
 });

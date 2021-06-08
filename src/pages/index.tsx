@@ -15,7 +15,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     if (tribes?.length) {
-      push(`/client/${tribes[0].id}`);
+      push(`/client/${tribes[0].mainSquareId}`);
     }
   }, [tribes, push]);
 

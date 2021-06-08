@@ -71,7 +71,7 @@ const TribeBar = () => {
           {(tribes: Array<Tribe>) => (
             <>
               {tribes.map((tribe, index) => (
-                <Link key={tribe.id} href={`/client/${tribe.id}`}>
+                <Link key={tribe.id} href={`/client/${tribe.mainSquareId}`}>
                   <a>
                     <Avatar
                       alt={tribe.name}
@@ -84,7 +84,7 @@ const TribeBar = () => {
                         backgroundColor:
                           tribe.avatar === null ? colors[index] : '',
                         borderRadius: 15,
-                        border: asPath.includes(`/client/${tribe.id}`)
+                        border: asPath.includes(`/client/${tribe.mainSquareId}`)
                           ? '2px solid'
                           : `2px solid #322837`,
                         boxSizing: 'content-box',
