@@ -18,9 +18,6 @@ import { Avatar, Box, Button, Divider, Typography } from '@material-ui/core';
 // types
 import type { EditorState as EditorStateType } from 'draft-js';
 
-// styles
-import { black, blue, green, orange } from 'styles/colors';
-
 interface FormValues {
   audios?: Array<File>;
   editorState: EditorStateType;
@@ -87,23 +84,21 @@ const CreatePostForm = ({ user }: Props) => {
           aria-controls="emoji-menu"
           aria-haspopup="true"
           startIcon={<EmojiEmotionsOutlined />}
-          style={{ color: orange }}
           variant="text"
         >
-          <Typography style={{ color: black }} variant="buttonMedium">
+          <Typography variant="button">
             Emotion
           </Typography>
         </Button>
         <Button
           aria-label="Add Photo or Video"
           startIcon={<PanoramaOutlined />}
-          style={{ color: green }}
           variant="text"
           onClick={() => {
             imagesRef.current.click();
           }}
         >
-          <Typography style={{ color: black }} variant="buttonMedium">
+          <Typography variant="button">
             Photo/Video
           </Typography>
         </Button>
@@ -130,13 +125,12 @@ const CreatePostForm = ({ user }: Props) => {
         <Button
           aria-label="Add Recording or Music"
           startIcon={<MusicNote />}
-          style={{ color: blue }}
           variant="text"
           onClick={() => {
             audioRef.current.click();
           }}
         >
-          <Typography style={{ color: black }} variant="buttonMedium">
+          <Typography variant="button">
             Recording/Music
           </Typography>
         </Button>

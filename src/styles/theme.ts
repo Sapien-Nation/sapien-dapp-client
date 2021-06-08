@@ -3,100 +3,36 @@ import { createMuiTheme } from '@material-ui/core';
 import * as React from 'react';
 
 // styles
-import { red, black, green, purple, darkGrey, gray1, gray4 } from './colors';
+import { black, red, primary, darkGrey, gray1, gray2, gray4 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
-
-declare module '@material-ui/core/styles' {
-  interface TypographyVariants {
-    body3: React.CSSProperties;
-    body4: React.CSSProperties;
-    buttonLarge: React.CSSProperties;
-    buttonMedium: React.CSSProperties;
-    buttonSemiMedium: React.CSSProperties;
-    buttonSmall: React.CSSProperties;
-    caption: React.CSSProperties;
-    captionItem: React.CSSProperties;
-    tooltip: React.CSSProperties;
-  }
-
-  // allow configuration using `createMuiTheme`
-  interface TypographyVariantsOptions {
-    body3?: React.CSSProperties;
-    body4?: React.CSSProperties;
-    buttonLarge?: React.CSSProperties;
-    buttonMedium?: React.CSSProperties;
-    buttonSemiMedium?: React.CSSProperties;
-    buttonSmall?: React.CSSProperties;
-    caption?: React.CSSProperties;
-    captionItem?: React.CSSProperties;
-    tooltip?: React.CSSProperties;
-  }
-}
-
-// Update the Typography's variant prop options
-declare module '@material-ui/core/Typography' {
-  interface TypographyPropsVariantOverrides {
-    body3: true;
-    body4: true;
-    buttonLarge: true;
-    buttonMedium: true;
-    buttonSemiMedium: true;
-    buttonSmall: true;
-    caption: true;
-    captionItem: true;
-    tooltip: true;
-  }
-}
 
 const theme = createMuiTheme({
   spacing: (factor) => `${parseFloat((1 * factor).toFixed(2))}rem`,
   palette: {
-    common: {
-      black: red,
-    },
     text: {
       primary: black,
     },
     primary: {
-      light: purple,
-      main: purple,
-      dark: purple,
+      light: '#8133ee',
+      main: primary,
+      dark: '#4400a3',
+      contrastText: '#fff',
     },
     secondary: {
-      light: gray1,
+      light: '#d6d6d6',
       main: gray1,
-      dark: gray1,
+      dark: '#8e8e8e',
+      contrastText: '#fff',
     },
     info: {
-      light: darkGrey,
       main: darkGrey,
-      dark: darkGrey,
-    },
-    // @ts-ignore
-    formLabel: {
-      light: black,
-      main: black,
-      dark: black,
-    },
-    caption: {
-      light: darkGrey,
-      main: darkGrey,
-      dark: darkGrey,
-    },
-    input: {
-      light: gray4,
-      main: gray4,
-      dark: gray4,
-    },
-    infoIcon: {
-      light: gray1,
-      main: gray1,
-      dark: gray1,
+      contrastText: '#fff',
     },
     error: {
-      light: red,
+      light: '#ff6793',
       main: red,
-      dark: red,
+      dark: '#b22e54',
+      contrastText: '#fff',
     },
   },
   typography: {
@@ -117,6 +53,13 @@ const theme = createMuiTheme({
       fontWeight: 600,
       lineHeight: '2.52rem',
     },
+    subtitle1: { fontSize: '1rem', lineHeight: '1.5rem' },
+    subtitle2: {
+      fontSize: '1.2rem',
+      fontWeight: 400,
+      letterSpacing: '0.005em',
+      lineHeight: '1.25rem',
+    },
     body1: {
       fontSize: '1.8rem',
       fontWeight: 400,
@@ -127,58 +70,28 @@ const theme = createMuiTheme({
       fontWeight: 400,
       lineHeight: '2.24rem',
     },
-    body3: {
-      fontSize: '1.2rem',
-      fontWeight: 400,
-      lineHeight: '2.1rem',
-    },
-    body4: {
+    button: {
       fontSize: '1.4rem',
-      fontWeight: 400,
-      lineHeight: '1.96rem',
-    },
-    buttonLarge: {
-      fontSize: '1.6rem',
+      letterSpacing: '0.01em',
+      textTransform: 'unset',
       fontWeight: 600,
-      lineHeight: '2.24rem',
-    },
-    buttonMedium: {
-      fontSize: '1.4rem',
-      fontWeight: 600,
-      lineHeight: '1.96rem',
-    },
-    buttonSemiMedium: {
-      fontSize: '1.3rem',
-      fontWeight: 600,
-      lineHeight: '1.82rem',
-    },
-    buttonSmall: {
-      fontSize: '1.2rem',
-      fontWeight: 600,
-      lineHeight: '1.68rem',
     },
     caption: {
       fontSize: '1.2rem',
+      color: black,
       fontWeight: 700,
-      lineHeight: '1.68rem',
+      letterSpacing: '0.01em',
+      lineHeight: '1.05rem',
     },
-    captionItem: {
-      fontSize: '1.2rem',
+    overline: {
+      color: gray2,
       fontWeight: 700,
-      lineHeight: '1.68rem',
-      letterSpacing: '1px',
-      textTransform: 'uppercase',
-      color: darkGrey,
-    },
-    tooltip: {
-      fontSize: '1.2rem',
-      fontWeight: 400,
-      lineHeight: '1.68rem',
+      letterSpacing: '0.5px',
+      lineHeight: '1rem',
     },
   },
 });
 
-// Override default styles
 theme.components = {
   MuiCssBaseline: {
     styleOverrides: {
@@ -199,19 +112,6 @@ theme.components = {
         avertaMedium,
         avertaRegular,
       ] as unknown as React.CSSProperties,
-    },
-  },
-  MuiListItem: {
-    styleOverrides: {
-      root: {
-        paddingTop: 0,
-        paddingBottom: 0,
-      },
-      button: {
-        '&:hover': {
-          backgroundColor: 'transparent',
-        },
-      },
     },
   },
   MuiDialog: {
@@ -289,7 +189,7 @@ theme.components = {
         fontSize: '1.4rem',
         fontWeight: 600,
         transform: 'translate(0, 0) scale(1)',
-        color: (theme as any).palette.formLabel.main,
+        color: black,
         position: 'relative',
         top: '-1rem',
       },
@@ -315,14 +215,14 @@ theme.components = {
     styleOverrides: {
       root: {
         border: `2px solid transparent`,
-        background: (theme as any).palette.input.main,
+        background: darkGrey,
         padding: theme.spacing(1, 2),
         borderRadius: '0.6rem',
         minHeight: '4.6rem',
         fontSize: '1.4rem',
         '&$focused': {
           borderRadius: '0.6rem',
-          border: `2px solid ${(theme as any).palette.primary.main}`,
+          border: `2px solid ${primary}`,
           boxSizing: 'border-box',
         },
       },
@@ -353,7 +253,7 @@ theme.components = {
   MuiOutlinedInput: {
     styleOverrides: {
       root: {
-        background: (theme as any).palette.input.main,
+        background: gray4,
         borderRadius: '0.6rem',
         fontSize: '1.4rem',
         minHeight: '4.6rem',
@@ -373,7 +273,7 @@ theme.components = {
   MuiInputAdornment: {
     styleOverrides: {
       positionStart: {
-        color: (theme as any).palette.caption.main,
+        color: darkGrey,
       },
     },
   },
@@ -396,13 +296,6 @@ theme.components = {
       },
     },
   },
-  MuiFab: {
-    styleOverrides: {
-      root: {
-        boxShadow: 'none',
-      },
-    },
-  },
   MuiSwitch: {
     defaultProps: {
       disableRipple: true,
@@ -420,7 +313,6 @@ theme.components = {
           transform: 'translateX(18px)',
           '& + .MuiSwitch-track': {
             opacity: 1,
-            backgroundColor: green,
           },
         },
       },
@@ -430,38 +322,12 @@ theme.components = {
       },
       track: {
         borderRadius: 26 / 2,
-        border: `1px solid ${(theme as any).palette.input.main}`,
+        border: `1px solid ${gray4}`,
         backgroundColor: '#F4F7F9',
         opacity: 1,
         transition: theme.transitions.create(['background-color', 'border']),
       },
       checked: {},
-    },
-  },
-  MuiSelect: {
-    styleOverrides: {
-      select: {
-        '&:focus': {
-          backgroundColor: 'none',
-        },
-      },
-    },
-  },
-  MuiIconButton: {
-    defaultProps: {
-      disableRipple: true,
-    },
-    styleOverrides: {
-      root: {
-        '&:hover': {
-          backgroundColor: 'transparent',
-        },
-      },
-    },
-  },
-  MuiTab: {
-    defaultProps: {
-      disableRipple: true,
     },
   },
 };

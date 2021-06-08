@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 // next
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // mui
@@ -24,37 +23,34 @@ const ChangePasswordPage = () => {
     switch (view) {
       case View.Form:
         return (
-          <>
-            <Typography component="h1" variant="h2">
-              Create New Password
-            </Typography>
-            <ChangePassword
-              changeView={() => setView(View.Success)}
-              token={(router?.query?.token as string) || ''}
-            />
-          </>
+          <ChangePassword
+            changeView={() => setView(View.Success)}
+            token={(router?.query?.token as string) || ''}
+          />
         );
       case View.Success:
         return (
-          <Box textAlign="center">
-            <Typography
-              component="h1"
-              style={{ marginBottom: 30 }}
-              variant="h2"
-            >
-              Password Change successfully
-            </Typography>
-            <Link passHref href="/login">
-              <Button color="primary" variant="contained">
-                Login
-              </Button>
-            </Link>
-          </Box>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => console.log('todo login')}
+          >
+            Login
+          </Button>
         );
     }
   };
 
-  return <>{renderView()}</>;
+  return (
+    <Box display="gird" gap={3}>
+      <Typography component="h1">
+        {view === View.Form
+          ? 'Create New Password'
+          : 'Password Change successfully'}
+      </Typography>
+      {renderView()}
+    </Box>
+  );
 };
 
 ChangePasswordPage.Layout = Layout;

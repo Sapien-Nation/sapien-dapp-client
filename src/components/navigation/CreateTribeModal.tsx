@@ -125,7 +125,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="buttonMedium">Name*</Typography>
+                  Name*
                   <ChartCount control={control} maxCount={20} name="name" />
                 </Box>
               }
@@ -146,9 +146,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="buttonMedium">
-                    Unique Identifier*
-                  </Typography>
+                  Unique Identifier*
                   <ChartCount
                     control={control}
                     maxCount={20}
@@ -168,7 +166,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="buttonMedium">Description</Typography>
+                  Description
                   <ChartCount
                     control={control}
                     maxCount={60}
@@ -186,10 +184,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               name="private"
               render={({ field: { onChange, value, ...rest } }) => (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography
-                    style={{ marginRight: 10 }}
-                    variant="buttonMedium"
-                  >
+                  <Typography style={{ marginRight: 10 }}>
                     Public tribe
                   </Typography>
                   <Switch

@@ -10,31 +10,20 @@ import { RegisterForm } from 'components/authentication';
 
 const RegisterPage = () => {
   return (
-    <div>
-      <Typography style={{ marginBottom: '4rem' }} variant="h1">
-        Sign Up
-      </Typography>
+    <Box display="grid" gap={3}>
+      <Typography variant="h1">Sign Up</Typography>
       <RegisterForm />
-      <Box
-        alignItems="center"
-        display="flex"
-        justifyContent="center"
-        marginTop={2}
-      >
+      <Typography paragraph>
         <Typography component="span" variant="subtitle2">
           Already have an account?
-        </Typography>
-        <Link passHref href="/login">
-          <Typography
-            component="a"
-            style={{ marginLeft: '4px' }}
-            variant="caption"
-          >
-            Log in
-          </Typography>
+        </Typography>{" "}
+        <Link href="/login">
+          <a>
+            <Typography variant="caption">Log in</Typography>
+          </a>
         </Link>
-      </Box>
-    </div>
+      </Typography>
+    </Box>
   );
 };
 

@@ -1,9 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
-// next
-import Link from 'next/link';
-
 // context
 import { useAuth } from 'context/user';
 
@@ -81,7 +78,7 @@ const Signup = () => {
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="buttonMedium">Username*</Typography>
+            Username*
             <ChartCount control={control} maxCount={20} name="username" />
           </Box>
         }
@@ -99,7 +96,7 @@ const Signup = () => {
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            <Typography variant="buttonMedium">Name*</Typography>
+            Name*
             <ChartCount control={control} maxCount={20} name="displayName" />
           </Box>
         }
@@ -118,7 +115,7 @@ const Signup = () => {
         }}
         label={
           <>
-            <Typography variant="buttonMedium">Password*</Typography>
+            Password*
             <FormHelperText style={{ margin: 0 }}>
               Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
               <br />
@@ -142,23 +139,22 @@ const Signup = () => {
             />
           }
           label={
-            <Box alignItems="baseline" display="flex">
-              <Typography variant="subtitle2">
+            <Typography>
+              <Typography component="span" variant="subtitle2">
                 I have read and agree to the
               </Typography>
-              <Link passHref href="https://common.sapien.network/terms.html">
-                <Typography
-                  component="a"
-                  style={{
-                    marginLeft: '4px',
-                  }}
+              {" "}
+              <Typography component="span" variant="subtitle2">
+                <a
+                  href="https://common.sapien.network/terms.html"
+                  rel="noreferrer"
+                  style={{ color: "#42D1E0" }}
                   target="_blank"
-                  variant="buttonSmall"
                 >
                   Terms & Conditions
-                </Typography>
-              </Link>
-            </Box>
+                </a>
+              </Typography>
+            </Typography>
           }
         />
         <FormControlLabel

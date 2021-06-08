@@ -27,7 +27,7 @@ import {
 } from '@material-ui/icons';
 
 // styles
-import { darkGrey, gray2, purple, white } from 'styles/colors';
+import { darkGrey, gray2, primary } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -37,9 +37,9 @@ const useStyles = makeStyles(() => ({
     width: 228,
   },
   listItemSelected: {
-    backgroundColor: `${purple} !important`,
+    backgroundColor: `${primary} !important`,
     '& .MuiTypography-root, & .MuiSvgIcon-root': {
-      color: `${white} !important`,
+      color: `#fff !important`,
     },
   },
 }));
@@ -84,7 +84,7 @@ const TribeNavigation = () => {
                 style={{
                   marginLeft: 15,
                 }}
-                variant="captionItem"
+                variant="caption"
               >
                 {selectedTribe.name}
               </Typography>
@@ -106,7 +106,7 @@ const TribeNavigation = () => {
           <Link href={`/client/${query.tribeid}/store`}>
             <a style={{ alignItems: 'center', display: 'flex' }}>
               <ShoppingCart fontSize="small" style={{ color: darkGrey }} />
-              <Typography style={{ marginLeft: 15 }} variant="captionItem">
+              <Typography style={{ marginLeft: 15 }} variant="caption">
                 Badge Store
               </Typography>
             </a>
@@ -114,7 +114,7 @@ const TribeNavigation = () => {
         </ListItem>
       </List>
       <Box alignItems="center" display="flex" paddingX={2}>
-        <Typography variant="captionItem">Squares</Typography>
+        <Typography variant="caption">Squares</Typography>
         <IconButton
           style={{
             backgroundColor: gray2,
@@ -150,7 +150,7 @@ const TribeNavigation = () => {
             >
               <Link href={`/client/${query.tribeid}/square/${id}`}>
                 <a>
-                  <Typography variant="body4">#{name}</Typography>
+                  <Typography variant="caption">#{name}</Typography>
                 </a>
               </Link>
             </ListItem>

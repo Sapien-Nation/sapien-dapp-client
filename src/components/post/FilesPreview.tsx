@@ -7,9 +7,6 @@ import {
   Videocam as VideoIcon,
 } from '@material-ui/icons';
 
-// styles
-import { blue, darkGrey, lightBlue } from 'styles/colors';
-
 // utils
 import { formatBytes } from 'utils/formatBytes';
 
@@ -21,11 +18,11 @@ interface Props {
 const FilesPreview = ({ files, onRemove }: Props) => {
   const renderIcon = (type: string) => {
     if (type.includes('audio'))
-      return <AudioIcon fontSize="large" style={{ color: blue }} />;
+      return <AudioIcon fontSize="large" />;
     else if (type.includes('image'))
-      return <ImageIcon fontSize="large" style={{ color: blue }} />;
+      return <ImageIcon fontSize="large" />;
     else if (type.includes('video'))
-      return <VideoIcon fontSize="large" style={{ color: blue }} />;
+      return <VideoIcon fontSize="large" />;
   };
 
   const handleRemove = (index: number) =>
@@ -47,14 +44,13 @@ const FilesPreview = ({ files, onRemove }: Props) => {
             display="flex"
             height={46}
             justifyContent="center"
-            style={{ backgroundColor: lightBlue }}
             width={46}
           >
             {renderIcon(file.type)}
           </Box>
           <Box display="grid">
-            <Typography variant="caption">{file.name}</Typography>
-            <Typography color={darkGrey} variant="captionItem">
+            <Typography variant="h3">{file.name}</Typography>
+            <Typography variant="subtitle2">
               <span>{file?.type}</span> <span>{formatBytes(file?.size)}</span>
             </Typography>
           </Box>
