@@ -6,6 +6,7 @@ const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
 
 const instance = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
 });
 
 export const authInstance = axios.create({
@@ -15,7 +16,7 @@ export const authInstance = axios.create({
 
 instance.interceptors.response.use(undefined, async (error) => {
   if (error.response.status === 401) {
-    await axios.post('/api/users/logout');
+    await authInstance.post('/api/v3/user/me');
     mutate('/api/users/me');
   }
   return Promise.reject(error);

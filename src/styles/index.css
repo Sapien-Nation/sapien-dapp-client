@@ -8,5 +8,19 @@
 }
 
 a {
+  color: inherit;
   text-decoration: none;
+}
+
+.DraftEditor-root {
+  background-color: #F9F9FA;
+  border-radius: 16px;
+  padding: 8px 15px;
+  width: 100%;
+}
+
+.public-DraftEditorPlaceholder-root {
+  color: #8F92A1;
+  font-size: 1.4rem;
+  font-weight: 400;
 }
