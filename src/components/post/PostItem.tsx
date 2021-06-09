@@ -1,6 +1,22 @@
+import { useState } from 'react';
+
 // mui
-import { Avatar, Box, Chip, Typography, makeStyles } from '@material-ui/core';
-import { ArrowRight, Public as Globe, Groups } from '@material-ui/icons';
+import {
+  Avatar,
+  Box,
+  Chip,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
+import {
+  ArrowRight,
+  MoreHoriz,
+  Public as Globe,
+  Groups,
+} from '@material-ui/icons';
 
 // next
 import Link from 'next/link';
@@ -35,7 +51,15 @@ const PostCard = ({ post }: Props) => {
     topics,
     tribe: { name: tribeName },
   } = post;
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div style={{ display: 'grid', gap: 22 }}>
@@ -70,7 +94,29 @@ const PostCard = ({ post }: Props) => {
           />
         </Box>
 
-        {formatTimestampToRelative(createdAt)}
+        <div>
+          {formatTimestampToRelative(createdAt)}
+          <IconButton
+            aria-controls="post-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            <MoreHoriz />
+          </IconButton>
+          <Menu
+            keepMounted
+            MenuListProps={{
+              'aria-labelledby': 'Post Option Buttons',
+            }}
+            anchorEl={anchorEl}
+            id="post-menu"
+            open={Boolean(anchorEl)}
+            style={{ marginLeft: '0.5rem' }}
+            onClose={handleClose}
+          >
+            <MenuItem>Delete</MenuItem>
+          </Menu>
+        </div>
       </Box>
 
       <div>
