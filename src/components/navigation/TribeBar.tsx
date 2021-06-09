@@ -67,7 +67,7 @@ const TribeBar = () => {
           marginTop: '2rem',
         }}
       >
-        <Query apiUrl="/api/profile/tribes">
+        <Query api="/api/profile/tribes">
           {(tribes: Array<Tribe>) => (
             <>
               {tribes.map((tribe, index) => (

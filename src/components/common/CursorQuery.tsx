@@ -21,7 +21,7 @@ const CursorQuery = ({ baseApiUrl, ...rest }: Props) => {
   return (
     <>
       <Query
-        apiUrl={apiUrl}
+        api={apiUrl}
         options={{
           onSuccess: ({ posts }: any) => {
             setTempCursor(cursor);

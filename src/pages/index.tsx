@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // hooks
-import { getTribes } from 'hooks/tribeBar';
+import { getTribes } from 'hooks';
 
 // components
 import Layout from './Layout';

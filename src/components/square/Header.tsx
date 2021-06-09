@@ -1,38 +1,36 @@
-// next
-import { useRouter } from 'next/router';
+// components
+import { Image, Query } from 'components/common';
 
-// types
-import { Square } from 'tools/types/square/view';
+// hooks
+import { getTribe } from 'hooks';
 
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
 
-// components
-import { Query } from 'components/common';
+// types
+import type { Tribe } from 'tools/types/tribe/view';
 
 interface Props {
-  avatar: string;
-  cover: string;
+  squareID: string;
 }
 
-const Header = ({ avatar, cover }: Props) => {
-  const { query } = useRouter();
-
+const Header = ({ squareID }: Props) => {
+  const tribe = getTribe(squareID);
   return (
     <Box className="card--rounded" padding={0.8}>
-      <Query apiUrl={query.squareid ? `/api/square/${query.squareid}` : ''}>
-        {(square: Square) => (
+      <Query api={`/api/tribe/${tribe.id}`}>
+        {(tribe: Tribe) => (
           <>
-            <img
-              alt={square.description}
-              src={cover}
+            <Image
+              alt={tribe.description}
+              src={tribe.cover}
               style={{ width: '100%', height: 200 }}
             />
             <Box paddingBottom={3.5} paddingX={3.2}>
               <Box display="flex" marginBottom={3.2}>
                 <Avatar
-                  alt={square.name}
-                  src={avatar}
+                  alt={tribe.name}
+                  src={tribe.avatar}
                   style={{
                     width: 110,
                     height: 110,
@@ -49,23 +47,23 @@ const Header = ({ avatar, cover }: Props) => {
                   style={{ gap: 8 }}
                 >
                   <Box alignItems="baseline" display="flex" gap={1.4}>
-                    <Typography variant="h2">{square.name}</Typography>
+                    <Typography variant="h2">{tribe.name}</Typography>
                     <Typography color="textSecondary" variant="button">
-                      {square.userName}
+                      {tribe.identifier}
                     </Typography>
                   </Box>
                   <Box alignItems="baseline" display="flex" gap={1.4}>
                     <Typography color="textSecondary" variant="button">
-                      {square.followersCount} Followers
+                      {tribe.followersCount} Followers
                     </Typography>
                     <Typography color="textSecondary" variant="button">
-                      {square.membersCount} Members
+                      {tribe.membersCount} Members
                     </Typography>
                   </Box>
                 </Box>
               </Box>
               <Typography color="textSecondary" variant="body2">
-                {square.description}
+                {tribe.description}
               </Typography>
             </Box>
           </>

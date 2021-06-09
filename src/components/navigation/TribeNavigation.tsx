@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // hooks
-import { getTribes } from 'hooks/tribeBar';
+import { getTribes } from 'hooks';
 
 // mui
 import {

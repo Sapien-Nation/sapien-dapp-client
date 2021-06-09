@@ -7,7 +7,7 @@ import type { SWRConfiguration, Key } from 'swr';
 import ErrorView from './ErrorView';
 
 interface Props {
-  apiUrl: Key;
+  api: Key;
   // eslint-disable-next-line @typescript-eslint/ban-types
   children?: Function | null;
   showValidating?: boolean;
@@ -18,21 +18,16 @@ export type Error = {
   message: string;
 };
 
-const Query = ({
-  apiUrl,
-  children,
-  showValidating = false,
-  options,
-}: Props) => {
-  const { data, error, isValidating } = useSWR(apiUrl, options);
+const Query = ({ api, children, showValidating = false, options }: Props) => {
+  const { data, error, isValidating } = useSWR(api, options);
 
-  if (apiUrl !== null) {
+  if (api !== null) {
     if ((!data && !error) || (showValidating && isValidating)) {
       return null; // TODO loader
     }
   }
   if (error) {
-    return <ErrorView error={error as Error} onClick={() => mutate(apiUrl)} />;
+    return <ErrorView error={error as Error} onClick={() => mutate(api)} />;
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-types
