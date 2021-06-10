@@ -1,4 +1,5 @@
 export { default as ChartCount } from './ChartCount';
+export { default as Chip } from './Chip';
 export { default as CursorQuery } from './CursorQuery';
 export { default as Dialog } from './Dialog';
 export { default as DropZone } from './DropZone';
