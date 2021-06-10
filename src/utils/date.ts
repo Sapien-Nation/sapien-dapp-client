@@ -1,3 +1,6 @@
+// types
+import type { ISOString } from 'tools/types/common';
+
 export const formatTimestampToRelative = (
   compare: ISOString,
   current: ISOString = new Date().toISOString()

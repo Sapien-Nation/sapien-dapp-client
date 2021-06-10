@@ -79,9 +79,7 @@ const PostCard = ({ post }: Props) => {
           {topics.map((topic) => (
             <Link key={topic} href="/">
               <a>
-                <Typography color="primary" variant="body4">
-                  #{topic}
-                </Typography>
+                <Typography color="primary">#{topic}</Typography>
               </a>
             </Link>
           ))}
