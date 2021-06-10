@@ -3,14 +3,16 @@ import { mutate } from 'swr';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
+console.info(`API_URL: ${API_URL}`);
+console.info(`API_AUTH_URL: ${API_AUTH_URL}`);
 
 const instance = axios.create({
-  baseURL: API_URL,
+  baseURL: 'http://backend.sandbox.spn33-sandbox.tooling-sapien.network/',
   withCredentials: true,
 });
 
 export const authInstance = axios.create({
-  baseURL: API_AUTH_URL,
+  baseURL: 'http://auth.sandbox.spn33-sandbox.tooling-sapien.network/',
   withCredentials: true,
 });
 
