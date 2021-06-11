@@ -1,4 +1,4 @@
-import { BOLD_REGEX, ITALIC_REGEX, UNDERLINE_REGEX } from './regex';
+import { BOLD_REGEX, ITALIC_REGEX, LINK_REGEX, UNDERLINE_REGEX } from './regex';
 
 const findWithRegex = (regex: any, contentBlock: any, callback: any) => {
   const text = contentBlock.getText();
@@ -22,4 +22,8 @@ const underlineStrategy = (contentBlock: any, callback: any) => {
   findWithRegex(UNDERLINE_REGEX, contentBlock, callback);
 };
 
-export { boldStrategy, italicStrategy, underlineStrategy };
+const linkStrategy = (contentBlock: any, callback: any) => {
+  findWithRegex(LINK_REGEX, contentBlock, callback);
+};
+
+export { boldStrategy, italicStrategy, linkStrategy, underlineStrategy };
