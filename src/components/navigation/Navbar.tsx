@@ -6,6 +6,9 @@ import Link from 'next/link';
 // context
 import { useAuth } from 'context/user';
 
+// components
+import { Chip } from 'components/common';
+
 // mui
 import {
   AppBar,
@@ -19,7 +22,8 @@ import {
 } from '@material-ui/core';
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const { me, logout } = useAuth();
 
   return (
@@ -27,19 +31,25 @@ const Navbar = () => {
       <Toolbar variant="dense">
         <Box marginLeft="auto">
           {me ? (
-            <IconButton
-              aria-controls="user-profile"
-              aria-haspopup="true"
-              aria-label={me.username}
-              color="inherit"
-              edge="end"
-              onClick={(event) => setAnchorEl(event.currentTarget)}
-            >
-              <Avatar alt={me.username}>
-                {me.firstName[0]}
-                {me.lastName?.[0]}
-              </Avatar>
-            </IconButton>
+            <>
+              <Chip
+                label="3197"
+                onClick={(event) => setBalanceAnchor(event.currentTarget)}
+              />
+              <IconButton
+                aria-controls="user-profile"
+                aria-haspopup="true"
+                aria-label={me.username}
+                color="inherit"
+                edge="end"
+                onClick={(event) => setMenuAnchor(event.currentTarget)}
+              >
+                <Avatar alt={me.username}>
+                  {me.firstName[0]}
+                  {me.lastName?.[0]}
+                </Avatar>
+              </IconButton>
+            </>
           ) : (
             <Link passHref href="/login">
               <Button color="primary" variant="contained">
@@ -51,21 +61,33 @@ const Navbar = () => {
       </Toolbar>
       <Menu
         keepMounted
-        anchorEl={anchorEl}
+        anchorEl={menuAnchor}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         id="user-profile"
-        open={Boolean(anchorEl)}
+        open={Boolean(menuAnchor)}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => setMenuAnchor(null)}
       >
         <MenuItem
           onClick={() => {
-            setAnchorEl(null);
+            setMenuAnchor(null);
             logout({ email: me.email });
           }}
         >
           Logout
         </MenuItem>
+      </Menu>
+
+      <Menu
+        keepMounted
+        anchorEl={balanceAnchor}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        id="my-balance"
+        open={Boolean(balanceAnchor)}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setBalanceAnchor(null)}
+      >
+        <MenuItem>Balance content</MenuItem>
       </Menu>
     </AppBar>
   );
