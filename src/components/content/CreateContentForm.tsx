@@ -1,10 +1,7 @@
 import { Editor, EditorState } from 'draft-js';
 import { useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { decorators } from './decorators';
-
-// components
-import FilesPreview from './FilesPreview';
+import { decorators } from 'utils/draftjs/decorators';
 
 // icons
 import {
@@ -29,22 +26,19 @@ interface Props {
   user: { avatar: string; username: string };
 }
 
-const CreatePostForm = ({ user }: Props) => {
+const CreateContentForm = ({ user }: Props) => {
   const audioRef = useRef(null);
   const imagesRef = useRef(null);
 
-  const { control, getValues, handleSubmit, setValue, watch } =
-    useForm<FormValues>({
-      defaultValues: {
-        audios: [],
-        editorState: EditorState.createEmpty(decorators),
-        images: [],
-      },
-    });
+  const { control, getValues, handleSubmit } = useForm<FormValues>({
+    defaultValues: {
+      audios: [],
+      editorState: EditorState.createEmpty(decorators),
+      images: [],
+    },
+  });
 
   const onSubmit = (values: FormValues) => console.log(values);
-
-  const [audios, images] = watch(['audios', 'images']);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -62,16 +56,6 @@ const CreatePostForm = ({ user }: Props) => {
               />
             </Box>
           )}
-        />
-      </Box>
-      <Box display="flex" gap={1.5} margin={2}>
-        <FilesPreview
-          files={audios}
-          onRemove={(newFiles) => setValue('audios', newFiles)}
-        />
-        <FilesPreview
-          files={images}
-          onRemove={(newFiles) => setValue('images', newFiles)}
         />
       </Box>
       <Divider />
@@ -109,7 +93,7 @@ const CreatePostForm = ({ user }: Props) => {
                 hidden
                 multiple
                 accept="image/*, video/*"
-                id="create-post-form-image-input"
+                id="create-content-form-image-input"
                 type="file"
                 onChange={(event) => {
                   onChange([...getValues('images'), ...event.target.files]);
@@ -140,7 +124,7 @@ const CreatePostForm = ({ user }: Props) => {
               hidden
               multiple
               accept="audio/mp3,audio/*;capture=microphone"
-              id="create-post-form-audio-input"
+              id="create-content-form-audio-input"
               type="file"
               onChange={(event) => {
                 onChange([...getValues('audios'), ...event.target.files]);
@@ -153,4 +137,4 @@ const CreatePostForm = ({ user }: Props) => {
   );
 };
 
-export default CreatePostForm;
+export default CreateContentForm;

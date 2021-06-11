@@ -1,7 +1,7 @@
 import { CompositeDecorator } from 'draft-js';
 
 //components
-import { Bold, Italic, Link, Underline } from './Markdowns';
+import { Bold, Italic, Link, Underline } from 'utils/draftjs/Components';
 
 //utils
 import {
@@ -9,7 +9,7 @@ import {
   italicStrategy,
   linkStrategy,
   underlineStrategy,
-} from 'utils/strategies';
+} from 'utils/draftjs/strategies';
 
 export const decorators = new CompositeDecorator([
   {

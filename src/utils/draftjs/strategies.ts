@@ -1,4 +1,9 @@
-import { BOLD_REGEX, ITALIC_REGEX, LINK_REGEX, UNDERLINE_REGEX } from './regex';
+import {
+  BOLD_REGEX,
+  ITALIC_REGEX,
+  LINK_REGEX,
+  UNDERLINE_REGEX,
+} from 'constants/regex';
 
 const findWithRegex = (regex: any, contentBlock: any, callback: any) => {
   const text = contentBlock.getText();
