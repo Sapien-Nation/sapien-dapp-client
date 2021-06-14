@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { Box } from '@material-ui/core';
 
 // components
+import CreateContentForm from 'components/content/CreateContentForm';
 import { Header } from 'components/square';
 import { CursorQuery } from 'components/common';
 import Content from 'components/content/ContentItem';
