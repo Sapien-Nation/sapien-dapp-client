@@ -1,5 +1,8 @@
 import Layout from 'pages/Layout';
 
+//types
+import type { Content as ContentType } from 'tools/types/content';
+
 // next
 import { useRouter } from 'next/router';
 
@@ -8,18 +11,34 @@ import { Box } from '@material-ui/core';
 
 // components
 import { Header } from 'components/square';
+import { CursorQuery } from 'components/common';
+import Content from 'components/content/ContentItem';
 
-const TribePage = () => {
+interface Props {
+  squareID: string;
+}
+
+const Square = ({ squareID }: Props) => (
+  <Box display="grid" gap={3}>
+    <Header squareID={String(squareID)} />
+    <CursorQuery
+      hasNextPage
+      baseApiUrl={`/api/square/${squareID}/feed`}
+      loadingComponent={<span>LOADING....</span>}
+      renderItem={(content: ContentType) => <Content content={content} />}
+    />
+  </Box>
+);
+
+const SquarePage = () => {
   const { query } = useRouter();
   const { squareid } = query;
 
-  return (
-    <Box display="grid" gap={3}>
-      {squareid && <Header squareID={String(squareid)} />}
-    </Box>
-  );
+  if (!squareid) return null;
+
+  return <Square squareID={String(squareid)} />;
 };
 
-TribePage.Layout = Layout;
+SquarePage.Layout = Layout;
 
-export default TribePage;
+export default SquarePage;

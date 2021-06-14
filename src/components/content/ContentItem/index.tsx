@@ -41,7 +41,7 @@ const ContentItem = ({ content }: Props) => {
         alt={content.tribe.name}
         className="image--rounded"
         src={content.image}
-        style={{ maxWidth: '100%' }}
+        style={{ width: '100%', maxHeight: '26rem', objectFit: 'cover' }}
       />
       <Actions commentsCount={0} echoCount={0} />
     </div>
