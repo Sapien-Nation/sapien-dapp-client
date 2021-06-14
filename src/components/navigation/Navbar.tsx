@@ -6,15 +6,13 @@ import Link from 'next/link';
 // context
 import { useAuth } from 'context/user';
 
-// components
-import { Chip } from 'components/common';
-
 // mui
 import {
   AppBar,
   Avatar,
   Box,
   Button,
+  Chip,
   IconButton,
   Menu,
   MenuItem,
@@ -34,6 +32,15 @@ const Navbar = () => {
             <>
               <Chip
                 label="3197"
+                sx={{
+                  bgcolor: 'rgba(98, 0, 234, 0.05)',
+                  borderRadius: 90,
+                  color: '#6200EA',
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  height: 40,
+                  padding: 10,
+                }}
                 onClick={(event) => setBalanceAnchor(event.currentTarget)}
               />
               <IconButton

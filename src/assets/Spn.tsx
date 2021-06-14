@@ -1,10 +1,10 @@
-const Spn = () => (
+const Spn = ({ size = 18 }: { size?: number }) => (
   <svg
     className="MuiChip-icon"
     fill="none"
-    height="18"
+    height={size}
     viewBox="0 0 18 18"
-    width="18"
+    width={size}
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
