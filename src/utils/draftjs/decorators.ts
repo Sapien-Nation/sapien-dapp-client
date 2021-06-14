@@ -1,7 +1,7 @@
 import { CompositeDecorator } from 'draft-js';
 
 //components
-import { Bold, Italic, Link, Underline } from 'utils/draftjs/Components';
+import { Bold, Italic, Link, Underline } from 'utils/draftjs';
 
 //utils
 import {
