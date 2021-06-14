@@ -3,23 +3,52 @@ import { mutate } from 'swr';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
-console.info(`API_URL: ${API_URL}`);
-console.info(`API_AUTH_URL: ${API_AUTH_URL}`);
 
 const instance = axios.create({
-  baseURL: 'http://backend.sandbox.spn33-sandbox.tooling-sapien.network/',
-  withCredentials: true,
+  baseURL:
+    API_URL || 'http://backend.sandbox.spn33-sandbox.tooling-sapien.network/',
 });
 
 export const authInstance = axios.create({
-  baseURL: 'http://auth.sandbox.spn33-sandbox.tooling-sapien.network/',
-  withCredentials: true,
+  baseURL:
+    API_AUTH_URL || 'http://auth.sandbox.spn33-sandbox.tooling-sapien.network/',
 });
 
+authInstance.interceptors.request.use((config) => {
+  const tokens = window.localStorage.getItem('tokens');
+  if (tokens) {
+    const { token } = JSON.parse(tokens);
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, undefined);
+authInstance.interceptors.response.use(undefined, async (error) => {
+  if (error.response?.status === 401) {
+    mutate('/api/v3/user/me', null, false);
+    window.location.reload();
+    return;
+  }
+  return Promise.reject(error);
+});
+
+instance.interceptors.request.use((config) => {
+  const tokens = window.localStorage.getItem('tokens');
+  if (tokens) {
+    const { token } = JSON.parse(tokens);
+    config.headers = {
+      ...config.headers,
+      'Access-Control-Allow-Origin': '*',
+      'Content-type': 'Application/json',
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  return config;
+}, undefined);
 instance.interceptors.response.use(undefined, async (error) => {
-  if (error.response.status === 401) {
-    await authInstance.post('/api/v3/user/me');
-    mutate('/api/users/me');
+  if (error.response?.status === 401) {
+    mutate('/api/v3/user/me', null, false);
+    window.location.reload();
+    return;
   }
   return Promise.reject(error);
 });

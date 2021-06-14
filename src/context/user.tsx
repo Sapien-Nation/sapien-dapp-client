@@ -1,5 +1,6 @@
 import useSWR, { mutate } from 'swr';
 import { createContext, useContext } from 'react';
+import { useLocalStorage } from 'react-use';
 
 // next
 import { useRouter } from 'next/router';
@@ -39,9 +40,7 @@ interface Props {
 
 const fetcher = async () => {
   try {
-    const { data } = await authInstance.get('/api/v3/user/me', {
-      withCredentials: true,
-    });
+    const { data } = await authInstance.get('/api/v3/user/me');
     return data;
   } catch (err) {
     Promise.reject(err);
@@ -51,12 +50,17 @@ const fetcher = async () => {
 const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
   const { data } = useSWR<User>('/api/v3/user/me', { fetcher });
+  const [, setTokens, removeTokens] = useLocalStorage<null | {
+    token: string;
+    torus: string;
+  }>('tokens', null);
 
   const isLoggingIn = data === undefined;
 
   const logout = async (body: { email: string }) => {
     try {
       await authInstance.post('/api/v3/auth/logout', body);
+      removeTokens();
       mutate('/api/v3/user/me', null, false);
       push('/login');
     } catch ({ response }) {
@@ -66,7 +70,8 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const login = async (body: PostBody) => {
     try {
-      await authInstance.post('/api/v3/auth/login', body);
+      const { data } = await authInstance.post('/api/v3/auth/login', body);
+      setTokens({ token: data.token, torus: data.torus });
       mutate('/api/v3/user/me');
       push('/');
     } catch ({ response }) {
@@ -76,7 +81,8 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const register = async (body: PostBody) => {
     try {
-      await authInstance.post('/api/v3/auth/signup', body);
+      const { data } = await authInstance.post('/api/v3/auth/signup', body);
+      setTokens({ token: data.token, torus: data.torus });
       mutate('/api/v3/user/me');
       push('/');
     } catch ({ response }) {
