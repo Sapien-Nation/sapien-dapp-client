@@ -2,13 +2,13 @@
 import { Meta } from '@storybook/react';
 
 // components
-import CreatePostForm from 'components/post/CreatePostForm';
+import CreateContentForm from 'components/content/CreateContentForm';
 
 import 'draft-js/dist/Draft.css';
 
 const StoryMeta: Meta = {
-  title: 'Post/CreatePostForm',
-  component: CreatePostForm,
+  title: 'Content/CreateContentForm',
+  component: CreateContentForm,
 };
 
 export default StoryMeta;
@@ -17,7 +17,7 @@ export const ComposerStory = () => {
   // TODO use mocks
   return (
     <div>
-      <CreatePostForm
+      <CreateContentForm
         user={{ avatar: 'https://i.pravatar.cc/300', username: 'Jhon Doe' }}
       />
     </div>
