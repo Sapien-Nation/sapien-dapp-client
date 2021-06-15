@@ -4,5 +4,5 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-
-CMD [ "npm", "run", "storybook" ]
+RUN npm run build
+CMD [ "npm", "run", "start" ]
