@@ -1,11 +1,23 @@
 // assets
 import { Transaction as TransactionIcon } from 'assets';
 
+// types
+import type { Transaction } from 'tools/types/balance/transactions';
+
+// mocks
+import { mockTransaction } from 'tools/mocks/balance/transactions';
+
+// components
+import { Query } from 'components/common';
+
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
 
 // styles
 import { darkGrey, primary } from 'styles/colors';
+
+// utils
+import { formatTimestampToRelative } from 'utils/date';
 
 const MyBalance = () => {
   return (
@@ -22,38 +34,50 @@ const MyBalance = () => {
       >
         My Transactions
       </Typography>
-      <Box
-        alignItems="center"
-        display="flex"
-        gap={2}
-        justifyContent="space-between"
+      <Query
+        apiUrl="/api/balance/transactions"
+        options={{ fetcher: () => [mockTransaction()] }}
       >
-        <Avatar sx={{ bgcolor: '#FFECF2' }}>
-          <TransactionIcon />
-        </Avatar>
-        <Box display="flex" flexDirection="column">
-          <Typography sx={{ lineHeight: 1.4 }} variant="button">
-            Withdrawal
-          </Typography>
-          <Typography
-            sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
-            variant="button"
-          >
-            Feb 2, 08:50
-          </Typography>
-        </Box>
-        <Box display="flex" flexDirection="column" marginLeft="auto">
-          <Typography sx={{ lineHeight: 1.4 }} variant="button">
-            - 500 SPN
-          </Typography>
-          <Typography
-            sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
-            variant="button"
-          >
-            $50.39
-          </Typography>
-        </Box>
-      </Box>
+        {(transactions: Array<Transaction>) => (
+          <>
+            {transactions.map((transactions, index) => (
+              <Box
+                key={index}
+                alignItems="center"
+                display="flex"
+                gap={2}
+                justifyContent="space-between"
+              >
+                <Avatar sx={{ bgcolor: '#FFECF2' }}>
+                  <TransactionIcon />
+                </Avatar>
+                <Box display="flex" flexDirection="column">
+                  <Typography sx={{ lineHeight: 1.4 }} variant="button">
+                    {transactions.info.type}
+                  </Typography>
+                  <Typography
+                    sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
+                    variant="button"
+                  >
+                    {formatTimestampToRelative(transactions.updatedAt)}
+                  </Typography>
+                </Box>
+                <Box display="flex" flexDirection="column" marginLeft="auto">
+                  <Typography sx={{ lineHeight: 1.4 }} variant="button">
+                    {transactions.info.amount}
+                  </Typography>
+                  <Typography
+                    sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
+                    variant="button"
+                  >
+                    ${transactions.info.amount}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+          </>
+        )}
+      </Query>
       <Typography
         sx={{
           fontSize: 14,
