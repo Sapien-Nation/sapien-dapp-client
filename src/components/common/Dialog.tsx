@@ -121,7 +121,7 @@ const Dialog = ({
       )}
       {subtitle}
       <DialogContent>{children}</DialogContent>
-      <DialogActions disableSpacing>{actions}</DialogActions>
+      {actions ? <DialogActions disableSpacing>{actions}</DialogActions> : null}
     </MUIDialog>
   );
 };
