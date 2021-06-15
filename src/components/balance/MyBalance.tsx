@@ -10,7 +10,7 @@ import { gray2, darkGrey } from 'styles/colors';
 
 const MyBalance = () => {
   return (
-    <Box>
+    <Box padding={2}>
       <Box alignItems="center" display="flex" gap={1} mb={1}>
         <SpnIcon size={22} />
         <Typography variant="h2">3,197</Typography>
