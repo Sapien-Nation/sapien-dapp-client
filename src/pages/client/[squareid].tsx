@@ -21,12 +21,14 @@ interface Props {
 const Square = ({ squareID }: Props) => (
   <Box display="grid" gap={3}>
     <Header squareID={String(squareID)} />
-    <CursorQuery
-      hasNextPage
-      baseApiUrl={`/api/square/${squareID}/feed`}
-      loadingComponent={<span>LOADING....</span>}
-      renderItem={(content: ContentType) => <Content content={content} />}
-    />
+    <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
+      <CursorQuery
+        hasNextPage
+        baseApiUrl={`/api/square/${squareID}/feed`}
+        loadingComponent={<span>LOADING....</span>}
+        renderItem={(content: ContentType) => <Content content={content} />}
+      />
+    </Box>
   </Box>
 );
 
