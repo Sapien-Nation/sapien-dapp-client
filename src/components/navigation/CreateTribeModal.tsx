@@ -69,8 +69,8 @@ const CreateTribeModal = ({ onClose }: Props) => {
       if (values.cover) {
         formData.append('cover', values.cover[0]);
       }
-      formData.append('description', values.identifier);
-      formData.append('identifier', values.description);
+      formData.append('description', values.description);
+      formData.append('identifier', values.identifier);
       formData.append('name', values.name);
       formData.append('private', values.private);
 
@@ -119,9 +119,8 @@ const CreateTribeModal = ({ onClose }: Props) => {
               fullWidth
               required
               inputProps={{
-                ...register('name'),
+                ...register('name', { pattern: /^[a-zA-Z\s]{1,20}$/ }),
                 autoComplete: 'name',
-                maxLength: 20,
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
@@ -140,9 +139,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 ),
               }}
               inputProps={{
-                ...register('identifier'),
+                ...register('identifier', {
+                  pattern: /^[a-zA-Z0-9_]{3,20}$/,
+                }),
                 autoComplete: 'identifier',
-                maxLength: 20,
               }}
               label={
                 <Box display="flex" justifyContent="space-between">
@@ -159,21 +159,9 @@ const CreateTribeModal = ({ onClose }: Props) => {
             <TextField
               fullWidth
               multiline
-              required
               inputProps={{
-                ...register('description'),
-                maxLength: '60',
+                ...register('description', { maxLength: 1000, minLength: 1 }),
               }}
-              label={
-                <Box display="flex" justifyContent="space-between">
-                  Description
-                  <ChartCount
-                    control={control}
-                    maxCount={60}
-                    name="description"
-                  />
-                </Box>
-              }
               maxRows={5}
               minRows={3}
               placeholder="Set brief description"

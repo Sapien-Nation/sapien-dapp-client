@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { mutate } from 'swr';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
@@ -24,9 +23,9 @@ authInstance.interceptors.request.use((config) => {
 }, undefined);
 authInstance.interceptors.response.use(undefined, async (error) => {
   if (error.response?.status === 401) {
-    mutate('/api/v3/user/me', null, false);
-    window.location.reload();
-    return;
+    // mutate('/api/v3/user/me', null, false);
+    // window.location.reload();
+    // return;
   }
   return Promise.reject(error);
 });
@@ -35,20 +34,15 @@ instance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
   if (tokens) {
     const { token } = JSON.parse(tokens);
-    config.headers = {
-      ...config.headers,
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'Application/json',
-      Authorization: `Bearer ${token}`,
-    };
+    config.headers['Authorization'] = `Bearer ${token}`;
   }
   return config;
 }, undefined);
 instance.interceptors.response.use(undefined, async (error) => {
   if (error.response?.status === 401) {
-    mutate('/api/v3/user/me', null, false);
-    window.location.reload();
-    return;
+    // mutate('/api/v3/user/me', null, false);
+    // window.location.reload();
+    // return;
   }
   return Promise.reject(error);
 });
