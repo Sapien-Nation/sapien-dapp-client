@@ -43,7 +43,7 @@ const ContentItem = ({ content }: Props) => {
         src={content.image}
         style={{ width: '100%', maxHeight: '26rem', objectFit: 'cover' }}
       />
-      <Actions commentsCount={0} echoCount={0} />
+      <Actions commentsCount={0} echoCount={0} shareCount={0} />
     </div>
   );
 };
