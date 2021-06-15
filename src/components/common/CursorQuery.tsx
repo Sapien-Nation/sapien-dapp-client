@@ -1,16 +1,30 @@
 import { useState } from 'react';
+import InfiniteScrollComponent from 'react-infinite-scroll-component';
 
-// types
-import type { InfiniteScrollProps } from 'components/common';
+// mui
+import { Box } from '@material-ui/core';
 
 // components
-import { InfiniteScroll, Query } from 'components/common';
+import { Query } from 'components/common';
+
+export interface InfiniteScrollProps {
+  hasNextPage: boolean;
+  items: Array<any>;
+  loadMore: () => Promise<any>;
+  loadingComponent: React.ReactElement;
+  renderItem: (data: any) => React.ReactElement;
+}
 
 interface Props extends Omit<InfiniteScrollProps, 'items' | 'loadMore'> {
   baseApiUrl: string;
 }
 
-const CursorQuery = ({ baseApiUrl, ...rest }: Props) => {
+const CursorQuery = ({
+  baseApiUrl,
+  hasNextPage,
+  renderItem,
+  ...rest
+}: Props) => {
   const [items, setItems] = useState<Array<any>>([]);
   const [cursor, setCursor] = useState('');
   const [tempCursor, setTempCursor] = useState('');
@@ -23,22 +37,36 @@ const CursorQuery = ({ baseApiUrl, ...rest }: Props) => {
       <Query
         api={apiUrl}
         options={{
-          onSuccess: ({ posts }: any) => {
+          onSuccess: ({ data }: any) => {
             setTempCursor(cursor);
-            setItems([...items, ...posts]);
+            setItems([...items, ...data]);
           },
         }}
       >
         {() => {
           return (
-            <InfiniteScroll
-              items={items}
-              loadMore={() => {
+            <InfiniteScrollComponent
+              dataLength={items.length}
+              endMessage={
+                <p style={{ textAlign: 'center' }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+              hasMore={hasNextPage}
+              loader={<h4>Loading...</h4>}
+              next={() => {
                 setCursor(tempCursor);
+                setItems([...items, items[0]]);
                 return Promise.resolve();
               }}
               {...rest}
-            />
+            >
+              {items.map((item) => (
+                <Box key={item.id} marginY={1}>
+                  {renderItem(item)}
+                </Box>
+              ))}
+            </InfiniteScrollComponent>
           );
         }}
       </Query>
