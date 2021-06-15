@@ -62,7 +62,7 @@ const CursorQuery = ({
               {...rest}
             >
               {items.map((item) => (
-                <Box key={item.id} marginY={1}>
+                <Box key={item.id} marginY={2}>
                   {renderItem(item)}
                 </Box>
               ))}

@@ -24,7 +24,12 @@ const Header = ({ squareID }: Props) => {
             <Image
               alt={tribe.description}
               src={tribe.cover}
-              style={{ width: '100%', height: 200 }}
+              style={{
+                width: '100%',
+                height: 200,
+                objectFit: 'cover',
+                borderRadius: '1.6rem',
+              }}
             />
             <Box paddingBottom={3.5} paddingX={3.2}>
               <Box display="flex" marginBottom={3.2}>
