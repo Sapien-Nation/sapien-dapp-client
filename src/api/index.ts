@@ -4,13 +4,11 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
 
 const instance = axios.create({
-  baseURL:
-    API_URL || 'http://backend.sandbox.spn33-sandbox.tooling-sapien.network/',
+  baseURL: API_URL || 'https://backend-sandbox.sapien.network/',
 });
 
 export const authInstance = axios.create({
-  baseURL:
-    API_AUTH_URL || 'http://auth.sandbox.spn33-sandbox.tooling-sapien.network/',
+  baseURL: API_AUTH_URL || 'https://sandbox-oauth.sapien.network/',
 });
 
 authInstance.interceptors.request.use((config) => {
