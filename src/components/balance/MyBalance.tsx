@@ -12,9 +12,11 @@ import { gray2, darkGrey } from 'styles/colors';
 
 // components
 import DepositModal from './DepositModal';
+import WithdrawModal from './WithdrawModal';
 
 const MyBalance = () => {
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   return (
     <>
       <Box padding={2}>
@@ -68,6 +70,7 @@ const MyBalance = () => {
               },
             }}
             variant="outlined"
+            onClick={() => setShowWithdrawModal(true)}
           >
             Withdraw
           </Button>
@@ -75,6 +78,9 @@ const MyBalance = () => {
       </Box>
       {showDepositModal && (
         <DepositModal onClose={() => setShowDepositModal(false)} />
+      )}
+      {showWithdrawModal && (
+        <WithdrawModal onClose={() => setShowWithdrawModal(false)} />
       )}
     </>
   );
