@@ -1,55 +1,50 @@
-import Layout from 'pages/Layout';
-
-//types
-import type { Content as ContentType } from 'tools/types/content';
+// types
+import type { Content } from 'tools/types/content';
+import type { User } from 'tools/types/user';
 
 // next
 import { useRouter } from 'next/router';
 
+// context
 import { useAuth } from 'context/user';
 
 // mui
 import { Box } from '@material-ui/core';
 
 // components
-import CreateContentForm from 'components/content/CreateContentForm';
-import { Header } from 'components/square';
 import { CursorQuery } from 'components/common';
-import Content from 'components/content/ContentItem';
+import { CreateContentForm, ContentItem } from 'components/content';
+import { Header } from 'components/square';
+import Layout from 'pages/Layout';
 
 interface Props {
   squareID: string;
-  user?: {
-    username: string;
-  };
+  user?: User;
 }
 
-const Square = ({ squareID, user }: Props) => (
+const Square = ({ squareID, user = null }: Props) => (
   <Box display="grid" gap={3}>
     <Header squareID={String(squareID)} />
+    {user && <CreateContentForm user={user} />}
     <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
       <CursorQuery
         hasNextPage
         baseApiUrl={`/api/square/${squareID}/feed`}
-        loadingComponent={<span>LOADING....</span>}
-        renderItem={(content: ContentType) => <Content content={content} />}
+        loadingComponent={null}
+        renderItem={(content: Content) => <ContentItem content={content} />}
       />
     </Box>
-    <CreateContentForm
-      user={{ avatar: 'https://i.pravatar.cc/300', username: user.username }}
-    />
   </Box>
 );
 
 const SquarePage = () => {
-  const { query } = useRouter();
   const { me } = useAuth();
-  const { squareid } = query;
+  const { query } = useRouter();
+  const { squareID } = query;
 
-  if (!squareid) return null;
-  if (!me) return null;
+  if (!squareID) return null;
 
-  return <Square squareID={String(squareid)} user={me} />;
+  return <Square squareID={String(squareID)} user={me} />;
 };
 
 SquarePage.Layout = Layout;

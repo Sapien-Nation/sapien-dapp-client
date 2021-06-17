@@ -1,8 +1,10 @@
 import { Editor, EditorState } from 'draft-js';
 import { Controller, useForm } from 'react-hook-form';
+
+// utils
 import { decorators } from 'utils/draftjs';
 
-//icons
+// icons
 import SendIcon from '@material-ui/icons/Send';
 
 // mui
@@ -10,8 +12,9 @@ import { Avatar, Box, IconButton } from '@material-ui/core';
 
 // types
 import type { EditorState as EditorStateType } from 'draft-js';
+import type { User } from 'tools/types/user';
 
-//styles
+// styles
 import { primary } from 'styles/colors';
 
 interface FormValues {
@@ -21,7 +24,7 @@ interface FormValues {
 }
 
 interface Props {
-  user: { avatar: string; username: string };
+  user: User;
 }
 
 const CreateContentForm = ({ user }: Props) => {
