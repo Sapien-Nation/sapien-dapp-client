@@ -50,7 +50,7 @@ const TribeNavigation = () => {
   const [showSquares, setShowSquares] = useState(true);
 
   const selectedTribe = tribes.find(
-    ({ mainSquareId }) => mainSquareId === query.squareid
+    ({ mainSquareId }) => mainSquareId === query.squareID
   );
 
   return (
@@ -71,7 +71,7 @@ const TribeNavigation = () => {
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath === `/client/${query.squareid}`}
+              selected={asPath === `/client/${query.squareID}`}
               style={{
                 borderRadius: 10,
                 margin: '1rem .5rem',
@@ -90,13 +90,13 @@ const TribeNavigation = () => {
             </ListItem>
           </a>
         </Link>
-        <Link href={`/client/${query.squareid}/store`}>
+        <Link href={`/client/${query.squareID}/store`}>
           <a style={{ alignItems: 'center', display: 'flex' }}>
             <ListItem
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath === `/client/${query.squareid}/store`}
+              selected={asPath === `/client/${query.squareID}/store`}
               style={{
                 borderRadius: 10,
                 margin: '1rem .5rem',
@@ -137,7 +137,7 @@ const TribeNavigation = () => {
                 minHeight: '4rem',
               }}
             >
-              <Link href={`/client/${query.squareid}/square/${id}`}>
+              <Link href={`/client/${query.squareID}/square/${id}`}>
                 <a>
                   <Typography variant="caption">#{name}</Typography>
                 </a>
