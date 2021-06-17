@@ -35,7 +35,7 @@ const MyBalance = () => {
         My Transactions
       </Typography>
       <Query
-        apiUrl="/api/balance/transactions"
+        api="/api/balance/transactions"
         options={{ fetcher: () => [mockTransaction()] }}
       >
         {(transactions: Array<Transaction>) => (

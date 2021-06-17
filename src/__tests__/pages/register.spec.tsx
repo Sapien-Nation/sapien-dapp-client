@@ -13,19 +13,15 @@ const userAgent = 'user agent';
 const error = 'Error';
 const register = jest.fn();
 
-beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
-const renderComponent = () => render(<RegisterPage />, { user: { register } });
-
 (global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
 (global as any).userAgent.mockReturnValue(userAgent);
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
+
+const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
+const renderComponent = () => render(<RegisterPage />, { user: { register } });
 
 test('renders correctly', async () => {
   renderComponent();
