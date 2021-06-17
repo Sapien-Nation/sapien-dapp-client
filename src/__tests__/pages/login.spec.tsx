@@ -11,19 +11,15 @@ const userAgent = 'user agent';
 const error = 'Error';
 const login = jest.fn();
 
-beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
-const renderComponent = () => render(<LoginPage />, { user: { login } });
-
 (global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
 (global as any).userAgent.mockReturnValue(userAgent);
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
+
+const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
+const renderComponent = () => render(<LoginPage />, { user: { login } });
 
 test('renders correctly', async () => {
   renderComponent();
