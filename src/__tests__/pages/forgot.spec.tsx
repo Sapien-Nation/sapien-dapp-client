@@ -15,6 +15,7 @@ beforeEach(() => {
 
 const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
+
 const renderComponent = () => render(<ForgotPage />, { user: { forgot } });
 
 test('renders correctly', async () => {

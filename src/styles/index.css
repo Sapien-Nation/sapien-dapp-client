@@ -1,6 +1,11 @@
-.card--rounded {
+.card--rounded-gray {
   border-radius: 24px;
   background-color: #F9F9FA;
+}
+
+.card--rounded-white {
+  border-radius: 16px;
+  background-color: #fff;
 }
 
 .image--rounded {

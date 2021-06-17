@@ -21,6 +21,7 @@ beforeEach(() => {
 });
 
 const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
+
 const renderComponent = () => render(<RegisterPage />, { user: { register } });
 
 test('renders correctly', async () => {

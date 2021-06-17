@@ -16,12 +16,12 @@ const query = {
 };
 const selectedTribe = tribes[0];
 
-const renderComponent = () =>
-  render(<TribeNavigation />, { router: mockRouter({ query }) });
-
 beforeEach(() => {
   cache.set('/api/profile/tribes', tribes);
 });
+
+const renderComponent = () =>
+  render(<TribeNavigation />, { router: mockRouter({ query }) });
 
 test('works correctly', () => {
   renderComponent();

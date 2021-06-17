@@ -1,9 +1,6 @@
 // components
 import { Image, Query } from 'components/common';
 
-// hooks
-import { getTribe } from 'hooks';
-
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
 
@@ -11,14 +8,13 @@ import { Avatar, Box, Typography } from '@material-ui/core';
 import type { Tribe } from 'tools/types/tribe/view';
 
 interface Props {
-  squareID: string;
+  tribeID: string;
 }
 
-const Header = ({ squareID }: Props) => {
-  const tribe = getTribe(squareID);
+const Header = ({ tribeID }: Props) => {
   return (
-    <Box className="card--rounded" padding={0.8}>
-      <Query api={`/api/tribe/${tribe.id}`}>
+    <Box className="card--rounded-white" padding={0.8}>
+      <Query api={`/api/tribe/${tribeID}`}>
         {(tribe: Tribe) => (
           <>
             <Image

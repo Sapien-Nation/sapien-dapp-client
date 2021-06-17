@@ -16,6 +16,7 @@ beforeEach(() => {
 
 const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
+
 const renderComponent = () =>
   render(<ChangePasswordPage />, { user: { changePassword } });
 

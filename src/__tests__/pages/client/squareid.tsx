@@ -1,27 +1,22 @@
 import { cache } from 'swr';
 
 // components
-import SquarePage from 'pages/client/[squareid]';
+import SquarePage from 'pages/client/[squareID]';
 
 // utils
 import { render, screen } from 'utils/testUtils';
 
 // mocks
+import { mockUser } from 'tools/mocks/user';
 import { mockRouter } from 'mocks/routes';
 import { mockTribe } from 'tools/mocks/tribeBar';
 import { mockTribeMedia } from 'tools/mocks/tribe/view';
 
 // mock data
+const user = mockUser();
 const tribe = mockTribe();
 const tribeMedia = mockTribeMedia({ description: 'Tribe Description' });
-const query = { squareid: tribe.mainSquareId };
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-const renderComponent = () =>
-  render(<SquarePage />, { router: mockRouter({ query }) });
+const query = { squareID: tribe.mainSquareId };
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -29,6 +24,9 @@ beforeEach(() => {
   cache.set('/api/profile/tribes', [tribe]);
   cache.set(`/api/tribe/${tribe.id}`, tribeMedia);
 });
+
+const renderComponent = () =>
+  render(<SquarePage />, { user, router: mockRouter({ query }) });
 
 test('renders correctly', async () => {
   renderComponent();

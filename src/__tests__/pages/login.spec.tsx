@@ -19,6 +19,7 @@ beforeEach(() => {
 });
 
 const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
+
 const renderComponent = () => render(<LoginPage />, { user: { login } });
 
 test('renders correctly', async () => {

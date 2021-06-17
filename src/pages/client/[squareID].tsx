@@ -11,8 +11,11 @@ import { useAuth } from 'context/user';
 // mui
 import { Box } from '@material-ui/core';
 
+// hooks
+import { getTribe } from 'hooks';
+
 // components
-import { CursorQuery } from 'components/common';
+import { CursorQuery, Page } from 'components/common';
 import { CreateContentForm, ContentItem } from 'components/content';
 import { Header } from 'components/square';
 import Layout from 'pages/Layout';
@@ -22,20 +25,30 @@ interface Props {
   user?: User;
 }
 
-const Square = ({ squareID, user = null }: Props) => (
-  <Box display="grid" gap={3}>
-    <Header squareID={String(squareID)} />
-    {user && <CreateContentForm user={user} />}
-    <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
-      <CursorQuery
-        hasNextPage
-        baseApiUrl={`/api/square/${squareID}/feed`}
-        loadingComponent={null}
-        renderItem={(content: Content) => <ContentItem content={content} />}
-      />
-    </Box>
-  </Box>
-);
+const Square = ({ squareID, user = null }: Props) => {
+  const tribe = getTribe(squareID);
+  return (
+    <Page
+      header={tribe && <Header tribeID={tribe.id} />}
+      subHeader={
+        user && (
+          <Box className="card--rounded-white">
+            <CreateContentForm user={user} />
+          </Box>
+        )
+      }
+    >
+      <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
+        <CursorQuery
+          hasNextPage
+          baseApiUrl={`/api/square/${squareID}/feed`}
+          loadingComponent={null}
+          renderItem={(content: Content) => <ContentItem content={content} />}
+        />
+      </Box>
+    </Page>
+  );
+};
 
 const SquarePage = () => {
   const { me } = useAuth();
