@@ -1,14 +1,11 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_AUTH_URL = process.env.NEXT_PUBLIC_API_AUTH_URL;
-
 const instance = axios.create({
-  baseURL: API_URL || 'https://backend-sandbox.sapien.network/',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const authInstance = axios.create({
-  baseURL: API_AUTH_URL || 'https://sandbox-oauth.sapien.network/',
+  baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
 });
 
 authInstance.interceptors.request.use((config) => {

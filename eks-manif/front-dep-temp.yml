@@ -66,10 +66,10 @@ metadata:
 spec:
   tls:
   - hosts:
-      - front.sandbox.spn33-sandbox.tooling-sapien.network
+      - front-sandbox.sapien.network
     secretName: auth-v3-tls
   rules:
-  - host: front.sandbox.spn33-sandbox.tooling-sapien.network
+  - host: front-sandbox.sapien.network
     http:
       paths:
         - backend:
