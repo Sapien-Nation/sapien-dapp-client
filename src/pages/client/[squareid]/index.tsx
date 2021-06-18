@@ -21,12 +21,12 @@ import { Header } from 'components/square';
 import Layout from 'pages/Layout';
 
 interface Props {
-  squareID: string;
+  squareid: string;
   user?: User;
 }
 
-const Square = ({ squareID, user = null }: Props) => {
-  const tribe = getTribe(squareID);
+const Square = ({ squareid, user = null }: Props) => {
+  const tribe = getTribe(squareid);
   return (
     <Page
       header={tribe && <Header tribeID={tribe.id} />}
@@ -41,7 +41,7 @@ const Square = ({ squareID, user = null }: Props) => {
       <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
         <CursorQuery
           hasNextPage
-          baseApiUrl={`/api/square/${squareID}/feed`}
+          baseApiUrl={`/api/square/${squareid}/feed`}
           loadingComponent={null}
           renderItem={(content: Content) => <ContentItem content={content} />}
         />
@@ -53,11 +53,11 @@ const Square = ({ squareID, user = null }: Props) => {
 const SquarePage = () => {
   const { me } = useAuth();
   const { query } = useRouter();
-  const { squareID } = query;
+  const { squareid } = query;
 
-  if (!squareID) return null;
+  if (!squareid) return null;
 
-  return <Square squareID={String(squareID)} user={me} />;
+  return <Square squareid={String(squareid)} user={me} />;
 };
 
 SquarePage.Layout = Layout;

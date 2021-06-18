@@ -12,7 +12,7 @@ import TribeNavigation from 'components/navigation/TribeNavigation';
 
 const tribes = [mockTribe()];
 const query = {
-  squareID: tribes[0].mainSquareId,
+  squareid: tribes[0].mainSquareId,
 };
 const selectedTribe = tribes[0];
 

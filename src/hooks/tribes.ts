@@ -7,10 +7,10 @@ export const getTribes = (): Array<Tribe> => {
   return useSWR('/api/profile/tribes').data ?? [];
 };
 
-export const getTribe = (squareID: string): Tribe | null => {
+export const getTribe = (squareid: string): Tribe | null => {
   const tribes: Array<Tribe> = useSWR('/api/profile/tribes').data ?? null;
   const tribeFromMainSquare = tribes?.find(
-    ({ mainSquareId }) => mainSquareId === squareID
+    ({ mainSquareId }) => mainSquareId === squareid
   );
 
   if (tribeFromMainSquare) return tribeFromMainSquare;
