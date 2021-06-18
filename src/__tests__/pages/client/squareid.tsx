@@ -1,7 +1,7 @@
 import { cache } from 'swr';
 
 // components
-import SquarePage from 'pages/client/[squareID]';
+import SquarePage from 'pages/client/[squareid]';
 
 // utils
 import { render, screen } from 'utils/testUtils';
@@ -16,7 +16,7 @@ import { mockTribeMedia } from 'tools/mocks/tribe/view';
 const user = mockUser();
 const tribe = mockTribe();
 const tribeMedia = mockTribeMedia({ description: 'Tribe Description' });
-const query = { squareID: tribe.mainSquareId };
+const query = { squareid: tribe.mainSquareId };
 
 beforeEach(() => {
   jest.clearAllMocks();
