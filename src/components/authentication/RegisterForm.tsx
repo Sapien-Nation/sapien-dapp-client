@@ -143,12 +143,11 @@ const Signup = () => {
               <Typography component="span" variant="subtitle2">
                 I have read and agree to the
               </Typography>
-              {" "}
               <Typography component="span" variant="subtitle2">
                 <a
                   href="https://common.sapien.network/terms.html"
                   rel="noreferrer"
-                  style={{ color: "#42D1E0" }}
+                  style={{ color: '#42D1E0' }}
                   target="_blank"
                 >
                   Terms & Conditions

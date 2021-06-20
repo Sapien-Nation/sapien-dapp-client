@@ -16,7 +16,7 @@ const LoginPage = () => {
       <Typography paragraph>
         <Typography component="span" variant="subtitle2">
           Don’t have an account?
-        </Typography>{" "}
+        </Typography>
         <Link href="/register">
           <a>
             <Typography variant="caption">Sign up</Typography>
