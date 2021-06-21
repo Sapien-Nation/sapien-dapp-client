@@ -1,19 +1,19 @@
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 
+// api
+import { verifyUser } from 'api/authentication';
+
 // next
 import { useRouter } from 'next/router';
-
-// context
-import { useAuth } from 'context/user';
 
 const VerifyPage = () => {
   const {
     push,
     query: { token },
   } = useRouter();
-  const { verifyUser } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+
   useEffect(() => {
     const handleVerify = async () => {
       try {

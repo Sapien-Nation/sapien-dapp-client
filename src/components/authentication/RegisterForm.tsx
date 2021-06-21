@@ -1,6 +1,9 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
+// api
+import { register as registerAction } from 'api/authentication';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -25,7 +28,7 @@ import {
 import { ChartCount } from 'components/common';
 
 const Signup = () => {
-  const authMethods = useAuth();
+  const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     control,
@@ -41,11 +44,13 @@ const Signup = () => {
     username: string;
   }) => {
     try {
-      await authMethods.register({
+      const response = await registerAction({
         ...values,
         client: window?.navigator.userAgent,
         redirect: '/',
       });
+
+      setSession({ torus: response.torus, token: response.token });
     } catch (error) {
       enqueueSnackbar(error, {
         anchorOrigin: {

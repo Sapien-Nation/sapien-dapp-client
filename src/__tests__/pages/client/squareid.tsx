@@ -1,7 +1,7 @@
 import { cache } from 'swr';
 
 // components
-import SquarePage from 'pages/client/[squareid]';
+import SquarePage from 'pages/client/[squareID]';
 
 // utils
 import { render, screen } from 'utils/testUtils';

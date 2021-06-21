@@ -1,4 +1,8 @@
+import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+
+// api
+import { logout } from 'api/authentication';
 
 // next
 import Link from 'next/link';
@@ -29,8 +33,20 @@ import { MyBalance, MyTransactions } from 'components/balance';
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
-  const { me, logout } = useAuth();
 
+  const { enqueueSnackbar } = useSnackbar();
+  const { clearSession, me } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      setMenuAnchor(null);
+      await logout({ email: me.email });
+
+      clearSession();
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar variant="dense">
@@ -83,14 +99,7 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={() => setMenuAnchor(null)}
       >
-        <MenuItem
-          onClick={() => {
-            setMenuAnchor(null);
-            logout({ email: me.email });
-          }}
-        >
-          Logout
-        </MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
 
       <Menu

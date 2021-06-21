@@ -1,3 +1,6 @@
+// api
+import { login } from 'api/authentication';
+
 // components
 import LoginPage from 'pages/login';
 
@@ -5,11 +8,17 @@ import LoginPage from 'pages/login';
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
 // mock data
+jest.mock('api/authentication');
+
+const token = '123';
+const torus = '123';
+(login as jest.Mock).mockResolvedValue({ token, torus });
+
 const email = 'jhon@doe.com';
 const password = '123456';
 const userAgent = 'user agent';
 const error = 'Error';
-const login = jest.fn();
+const setSession = jest.fn();
 
 (global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
 (global as any).userAgent.mockReturnValue(userAgent);
@@ -20,7 +29,7 @@ beforeEach(() => {
 
 const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
 
-const renderComponent = () => render(<LoginPage />, { user: { login } });
+const renderComponent = () => render(<LoginPage />, { user: { setSession } });
 
 test('renders correctly', async () => {
   renderComponent();
@@ -50,7 +59,7 @@ test('renders correctly', async () => {
   user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
 
   // onError
-  login.mockRejectedValueOnce(error);
+  (login as jest.Mock).mockRejectedValueOnce(error);
   user.click(getLoginButton());
 
   await waitFor(() => {
@@ -74,5 +83,7 @@ test('renders correctly', async () => {
       redirect: '/',
       client: userAgent,
     });
+
+    expect(setSession).toHaveBeenCalledWith({ torus, token });
   });
 });
