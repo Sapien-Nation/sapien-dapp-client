@@ -1,5 +1,5 @@
-import { createEditor } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
+import { createEditor, BaseEditor, Descendant } from 'slate';
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { Controller, useForm } from 'react-hook-form';
 
 // icons
@@ -16,7 +16,7 @@ import { primary } from 'styles/colors';
 
 interface FormValues {
   audios?: Array<File>;
-  editorState: any;
+  editorState: Descendant[];
   images?: Array<File>;
 }
 
@@ -24,18 +24,32 @@ interface Props {
   user: User;
 }
 
+declare module 'slate' {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor;
+    Element: CustomElement;
+    Text: CustomText;
+  }
+}
+
+type CustomElement = { type: 'paragraph'; children: CustomText[] };
+type CustomText = { text: string };
+
 const CreateContentForm = ({ user }: Props) => {
-  // @ts-ignore
   const editor = withReact(createEditor());
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
       audios: [],
-      editorState: null, // TODO
+      editorState: [],
       images: [],
     },
   });
 
   const onSubmit = (values: FormValues) => console.log(values);
+
+  const onChange = (value) => {
+    setValue('editorState', value);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -46,7 +60,12 @@ const CreateContentForm = ({ user }: Props) => {
           name="editorState"
           render={({ field: { value, ...rest } }) => (
             <Box style={{ width: '100%', minWidth: 680 }}>
-              <Slate editor={editor} value={value} {...rest}>
+              <Slate
+                editor={editor}
+                value={value}
+                onChange={onChange}
+                {...rest}
+              >
                 <Editable />
               </Slate>
             </Box>
