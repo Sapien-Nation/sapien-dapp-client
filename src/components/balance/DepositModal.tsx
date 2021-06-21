@@ -24,17 +24,6 @@ interface Props {
 const DepositModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.DepositMetamask);
 
-  const handleSteps = () => {
-    switch (step) {
-      case Step.DepositMetamask:
-        return setStep(Step.DepositSuccess);
-      case Step.DepositSuccess:
-        return onClose();
-      default:
-        return null;
-    }
-  };
-
   const renderFields = () => {
     switch (step) {
       case Step.DepositMetamask: {
@@ -57,7 +46,7 @@ const DepositModal = ({ onClose }: Props) => {
                 },
               }}
               variant="contained"
-              onClick={() => handleSteps()}
+              onClick={() => setStep(Step.DepositSuccess)}
             >
               <MetamaskLogo /> Deposit with Metamask
             </Button>
@@ -88,7 +77,7 @@ const DepositModal = ({ onClose }: Props) => {
                 marginY: 6,
               }}
               variant="contained"
-              onClick={() => handleSteps()}
+              onClick={() => onClose()}
             >
               Back to My Balance
             </Button>
