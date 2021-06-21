@@ -29,7 +29,6 @@ import { AuthenticationProvider } from 'context/user';
 
 // styles
 import '../styles/index.css';
-import 'draft-js/dist/Draft.css';
 
 initSentry();
 

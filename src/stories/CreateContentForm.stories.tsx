@@ -7,8 +7,6 @@ import CreateContentForm from 'components/content/CreateContentForm';
 // mocks
 import { mockUser } from 'tools/mocks/user';
 
-import 'draft-js/dist/Draft.css';
-
 const user = mockUser();
 const StoryMeta: Meta = {
   title: 'Content/CreateContentForm',
