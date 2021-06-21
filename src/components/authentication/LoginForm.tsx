@@ -1,6 +1,9 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
+// api
+import { login as loginAction } from 'api/authentication';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -18,7 +21,7 @@ import {
 } from '@material-ui/core';
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     handleSubmit,
@@ -28,12 +31,15 @@ const LoginForm = () => {
 
   const onSubmit = async (values: { email: string; password: string }) => {
     try {
-      await login({
+      const response = await loginAction({
         ...values,
         client: window?.navigator.userAgent,
         redirect: '/',
       });
+
+      setSession({ torus: response.torus, token: response.token });
     } catch (error) {
+      console.log(error);
       enqueueSnackbar(error, {
         anchorOrigin: {
           vertical: 'bottom',

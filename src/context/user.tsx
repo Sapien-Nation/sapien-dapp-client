@@ -10,26 +10,11 @@ import { User } from 'tools/types/user';
 
 // api
 import { authInstance } from 'api';
-
-interface PostBody {
-  email: string;
-  password: string;
-  redirect: string;
-  client: string;
-}
-
 export interface Authentication {
   me: User | null;
-  changePassword: (values: {
-    password: string;
-    token: string;
-  }) => Promise<unknown>;
-  forgot: (email: string) => Promise<unknown>;
-  login: (values: PostBody) => Promise<unknown>;
-  logout: (values: { email: string }) => Promise<unknown>;
+  clearSession: () => void;
   isLoggingIn: boolean;
-  register: (values: PostBody) => Promise<unknown>;
-  verifyUser: (token: string) => Promise<unknown>;
+  setSession: (tokens: { token: string; torus: string }) => void;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -57,85 +42,26 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const isLoggingIn = data === undefined;
 
-  const logout = async (body: { email: string }) => {
-    try {
-      await authInstance.post('/api/v3/auth/logout', body);
-      removeTokens();
-      mutate('/api/v3/user/me', null, false);
-      push('/login');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
+  const clearSession = () => {
+    removeTokens();
+    mutate('/api/v3/user/me', null, false);
+    mutate('/api/profile/tribes', []);
+    push('/login');
   };
 
-  const login = async (body: PostBody) => {
-    try {
-      const { data } = await authInstance.post('/api/v3/auth/login', body);
-      setTokens({ token: data.token, torus: data.torus });
-      mutate('/api/v3/user/me');
-      push('/');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const register = async (body: PostBody) => {
-    try {
-      const { data } = await authInstance.post('/api/v3/auth/signup', body);
-      setTokens({ token: data.token, torus: data.torus });
-      mutate('/api/v3/user/me');
-      push('/');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const forgot = async (email: string) => {
-    try {
-      await authInstance.post('/api/v3/user/forgot-password', {
-        email,
-      });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const changePassword = async ({
-    password,
-    token,
-  }: {
-    password: string;
-    token: string;
-  }) => {
-    try {
-      await authInstance.post('/api/v3/user/reset-password', {
-        password,
-        token,
-      });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const verifyUser = async (token: string) => {
-    try {
-      await authInstance.post('/api/v3/user/verify-user-email', { token });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
+  const setSession = ({ token, torus }: { token: string; torus: string }) => {
+    setTokens({ token, torus });
+    mutate('/api/v3/user/me');
+    push('/');
   };
 
   return (
     <AuthenticationContext.Provider
       value={{
-        changePassword,
-        forgot,
+        clearSession,
         me: data,
         isLoggingIn,
-        login,
-        logout,
-        register,
-        verifyUser,
+        setSession,
       }}
     >
       {children}

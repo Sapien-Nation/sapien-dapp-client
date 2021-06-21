@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
+// api
+import { changePassword as changePasswordAction } from 'api/authentication';
+
 // mui
 import { Button, TextField, FormHelperText } from '@material-ui/core';
-
-// context
-import { useAuth } from 'context/user';
 
 interface Props {
   changeView: () => void;
@@ -13,7 +13,6 @@ interface Props {
 }
 
 const ChangePassword = ({ changeView, token }: Props) => {
-  const { changePassword } = useAuth();
   const {
     formState: { isSubmitting },
     getValues,
@@ -33,7 +32,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
           },
         });
       }
-      await changePassword({ password, token });
+      await changePasswordAction({ password, token });
       changeView();
     } catch (error) {
       enqueueSnackbar(error, {
