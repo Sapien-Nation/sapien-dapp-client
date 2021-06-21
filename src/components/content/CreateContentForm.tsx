@@ -1,8 +1,6 @@
-import { Editor, EditorState } from 'draft-js';
+import { createEditor } from 'slate';
+import { Slate, Editable, withReact } from 'slate-react';
 import { Controller, useForm } from 'react-hook-form';
-
-// utils
-import { decorators } from 'utils/draftjs';
 
 // icons
 import SendIcon from '@material-ui/icons/Send';
@@ -11,7 +9,6 @@ import SendIcon from '@material-ui/icons/Send';
 import { Avatar, Box, IconButton } from '@material-ui/core';
 
 // types
-import type { EditorState as EditorStateType } from 'draft-js';
 import type { User } from 'tools/types/user';
 
 // styles
@@ -19,7 +16,7 @@ import { primary } from 'styles/colors';
 
 interface FormValues {
   audios?: Array<File>;
-  editorState: EditorStateType;
+  editorState: any;
   images?: Array<File>;
 }
 
@@ -28,10 +25,12 @@ interface Props {
 }
 
 const CreateContentForm = ({ user }: Props) => {
+  // @ts-ignore
+  const editor = withReact(createEditor());
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       audios: [],
-      editorState: EditorState.createEmpty(decorators),
+      editorState: null, // TODO
       images: [],
     },
   });
@@ -47,11 +46,9 @@ const CreateContentForm = ({ user }: Props) => {
           name="editorState"
           render={({ field: { value, ...rest } }) => (
             <Box style={{ width: '100%', minWidth: 680 }}>
-              <Editor
-                {...rest}
-                editorState={value}
-                placeholder={`What’s on your mind, ${user.username}?`}
-              />
+              <Slate editor={editor} value={value} {...rest}>
+                <Editable />
+              </Slate>
             </Box>
           )}
         />

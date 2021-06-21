@@ -7,8 +7,6 @@ import ContentItem from 'components/content/ContentItem';
 // types
 import { mockContent } from 'tools/mocks/content';
 
-import 'draft-js/dist/Draft.css';
-
 const StoryMeta: Meta = {
   title: 'Content/ContentItem',
   component: ContentItem,
