@@ -33,7 +33,7 @@ const ChangePasswordPage = () => {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => console.log('todo login')}
+            onClick={() => router.push('/login')}
           >
             Login
           </Button>

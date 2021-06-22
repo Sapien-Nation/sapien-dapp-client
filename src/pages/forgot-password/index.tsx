@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
@@ -16,6 +17,7 @@ enum View {
 }
 
 const ForgotPage = () => {
+  const { push } = useRouter();
   const [view, setView] = useState(View.Form);
 
   const renderView = () => {
@@ -48,7 +50,7 @@ const ForgotPage = () => {
             <Button
               color="primary"
               variant="contained"
-              onClick={() => console.log('todo login')}
+              onClick={() => push('/login')}
             >
               Got it!
             </Button>

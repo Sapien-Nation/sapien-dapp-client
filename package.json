@@ -39,7 +39,6 @@
   },
   "homepage": "https://github.com/SapienNetwork/web#readme",
   "dependencies": {
-    "@emotion/css": "^10.0.27",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@hookform/error-message": "^2.0.0",
@@ -58,7 +57,6 @@
     "match-sorter": "^6.3.0",
     "next": "^11.0.0",
     "notistack": "^1.0.9",
-    "prismjs": "^1.23.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.2",
@@ -88,7 +86,6 @@
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.170",
     "@types/node": "^15.12.3",
-    "@types/prismjs": "^1.16.5",
     "@types/react": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",

@@ -7,6 +7,9 @@ import LoginPage from 'pages/login';
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
+// mocks
+import { mockRouter } from 'mocks/routes';
+
 // mock data
 jest.mock('api/authentication');
 
@@ -29,7 +32,8 @@ beforeEach(() => {
 
 const getLoginButton = () => screen.getByRole('button', { name: 'Log In' });
 
-const renderComponent = () => render(<LoginPage />, { user: { setSession } });
+const renderComponent = () =>
+  render(<LoginPage />, { user: { setSession }, router: mockRouter() });
 
 test('renders correctly', async () => {
   renderComponent();
