@@ -26,7 +26,7 @@ beforeEach(() => {
 });
 
 const renderComponent = () =>
-  render(<SquarePage />, { user, router: mockRouter({ query }) });
+  render(<SquarePage />, { user: { me: user }, router: mockRouter({ query }) });
 
 test('renders correctly', async () => {
   renderComponent();

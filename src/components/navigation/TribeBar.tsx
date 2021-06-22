@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-// types
-import type { Tribe } from 'tools/types/tribeBar';
+// hooks
+import { getTribes } from 'hooks';
 
 // next
 import Link from 'next/link';
@@ -16,7 +16,6 @@ import { AddRounded as AddIcon } from '@material-ui/icons';
 
 // components
 import CreateTribeModal from './CreateTribeModal';
-import { Query } from 'components/common';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -45,8 +44,9 @@ const colors = [
 ];
 
 const TribeBar = () => {
-  const { asPath } = useRouter();
   const [showModal, setShowModal] = useState(false);
+  const tribes = getTribes();
+  const { asPath } = useRouter();
   const classes = useStyles();
 
   return (
@@ -67,39 +67,32 @@ const TribeBar = () => {
           marginTop: '2rem',
         }}
       >
-        <Query api="/api/profile/tribes">
-          {(tribes: Array<Tribe>) => (
-            <>
-              {tribes.map((tribe, index) => (
-                <Link key={tribe.id} href={`/client/${tribe.mainSquareId}`}>
-                  <a>
-                    <Avatar
-                      alt={tribe.name}
-                      classes={{
-                        img: classes.avatarImage,
-                      }}
-                      src={tribe.avatar}
-                      style={{
-                        color: 'white',
-                        backgroundColor:
-                          tribe.avatar === null ? colors[index] : '',
-                        borderRadius: 15,
-                        border: asPath.includes(`/client/${tribe.mainSquareId}`)
-                          ? '2px solid'
-                          : `2px solid #322837`,
-                        boxSizing: 'content-box',
-                        padding: '3px',
-                      }}
-                      variant="rounded"
-                    >
-                      {tribe.name[0].toUpperCase()}
-                    </Avatar>
-                  </a>
-                </Link>
-              ))}
-            </>
-          )}
-        </Query>
+        {tribes.map((tribe, index) => (
+          <Link key={tribe.id} href={`/client/${tribe.mainSquareId}`}>
+            <a>
+              <Avatar
+                alt={tribe.name}
+                classes={{
+                  img: classes.avatarImage,
+                }}
+                src={tribe.avatar}
+                style={{
+                  color: 'white',
+                  backgroundColor: tribe.avatar === null ? colors[index] : '',
+                  borderRadius: 15,
+                  border: asPath.includes(`/client/${tribe.mainSquareId}`)
+                    ? '2px solid'
+                    : `2px solid #322837`,
+                  boxSizing: 'content-box',
+                  padding: '3px',
+                }}
+                variant="rounded"
+              >
+                {tribe.name[0].toUpperCase()}
+              </Avatar>
+            </a>
+          </Link>
+        ))}
         <IconButton
           aria-label="Create Tribe"
           onClick={() => setShowModal(true)}

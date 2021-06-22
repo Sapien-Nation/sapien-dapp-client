@@ -18,7 +18,7 @@ export default StoryMeta;
 export const ComposerStory = () => {
   return (
     <div>
-      <CreateContentForm handleContentSubmit={() => {}} user={user} />
+      <CreateContentForm user={user} onSubmit={() => {}} />
     </div>
   );
 };

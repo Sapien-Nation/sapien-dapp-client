@@ -1,8 +1,11 @@
 import { useSnackbar } from 'notistack';
+import { useState } from 'react';
+import InfiniteScrollComponent from 'react-infinite-scroll-component';
+import useSWR from 'swr';
 
 // types
 import type { Content } from 'tools/types/content';
-import type { User } from 'tools/types/user';
+import type { SquareFeed } from 'tools/types/square/view';
 
 // next
 import { useRouter } from 'next/router';
@@ -20,25 +23,38 @@ import { createContent } from 'api/content';
 import { getTribe } from 'hooks';
 
 // components
-import { CursorQuery, Page } from 'components/common';
+import { Page, Query } from 'components/common';
 import { CreateContentForm, ContentItem } from 'components/content';
 import { Header } from 'components/square';
 import Layout from 'pages/Layout';
 
 interface Props {
   squareID: string;
-  user?: User;
 }
 
-const Square = ({ squareID, user = null }: Props) => {
-  const { enqueueSnackbar } = useSnackbar();
+const Square = ({ squareID }: Props) => {
+  const [contentFeed, setContentFeed] = useState<Array<Content>>([]);
+  const [cursor, setCursor] = useState('');
+  const [tempCursor, setTempCursor] = useState('');
 
-  const tribe = getTribe(squareID);
+  const { me } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const { id: tribeID } = getTribe(String(squareID));
+
+  const params = cursor ? `?cursor=${cursor}` : '';
+  const apiUrl = `/api/tribe/${tribeID}/square/${squareID}/feed${params}`;
+
+  useSWR(apiUrl, {
+    onSuccess: (data: SquareFeed) => {
+      setTempCursor(data.nextCursor);
+      setContentFeed([...contentFeed, ...data.data]);
+    },
+  });
 
   const handleSubmit = async () => {
     try {
       await createContent({
-        data: '<h1>Hello</h1>', // TODO de-serialize https://docs.slatejs.org/walkthroughs/06-saving-to-a-database
+        data: `<h1>This is a Post ${contentFeed.length}</h1>`, // TODO de-serialize https://docs.slatejs.org/walkthroughs/06-saving-to-a-database
         squareId: squareID,
       });
 
@@ -50,35 +66,39 @@ const Square = ({ squareID, user = null }: Props) => {
 
   return (
     <Page
-      header={tribe && <Header tribeID={tribe.id} />}
+      header={<Header tribeID={tribeID} />}
       subHeader={
-        user && (
-          <Box className="card--rounded-white">
-            <CreateContentForm user={user} onSubmit={handleSubmit} />
-          </Box>
-        )
+        <Box className="card--rounded-white">
+          <CreateContentForm user={me} onSubmit={handleSubmit} />
+        </Box>
       }
     >
-      <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
-        <CursorQuery
-          hasNextPage
-          baseApiUrl={`/api/square/${squareID}/feed`}
-          loadingComponent={null}
-          renderItem={(content: Content) => <ContentItem content={content} />}
-        />
-      </Box>
+      <InfiniteScrollComponent
+        dataLength={contentFeed.length}
+        hasMore={Boolean(tempCursor)}
+        loader={null}
+        next={() => setCursor(tempCursor)}
+      >
+        {contentFeed.map((content) => (
+          <Box key={content.id} marginY={2}>
+            <ContentItem content={content} />
+          </Box>
+        ))}
+      </InfiniteScrollComponent>
     </Page>
   );
 };
 
 const SquarePage = () => {
-  const { me } = useAuth();
   const { query } = useRouter();
-  const { squareID } = query;
 
-  if (!squareID) return null;
+  if (!query.squareID) return null;
 
-  return <Square squareID={String(squareID)} user={me} />;
+  return (
+    <Query api="/api/profile/tribes">
+      {() => <Square squareID={String(query.squareID)} />}
+    </Query>
+  );
 };
 
 SquarePage.Layout = Layout;

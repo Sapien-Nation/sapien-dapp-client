@@ -3,9 +3,6 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
 
-// types
-import type { Tribe } from 'tools/types/tribeBar';
-
 // next
 import { useRouter } from 'next/router';
 
@@ -79,11 +76,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
       formData.append('private', values.private);
 
       const response = await createTribe(formData);
-      mutate(
-        '/api/profile/tribes',
-        (tribes: Array<Tribe>) => [...tribes, response],
-        false
-      );
+      mutate('/api/profile/tribes');
 
       onClose();
       enqueueSnackbar('Tribe Created Successfully', {
@@ -93,7 +86,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
         },
       });
 
-      push(`/client/${response.id}`);
+      push(`/client/${response.mainSquareId}`);
     } catch (err) {
       enqueueSnackbar(err, {
         anchorOrigin: {

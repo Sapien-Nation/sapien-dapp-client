@@ -6,14 +6,18 @@ import { useRouter } from 'next/router';
 // context
 import { useAuth } from 'context/user';
 
-// hooks
-import { getTribes } from 'hooks';
+// types
+import type { Tribe } from 'tools/types/tribeBar';
 
 // components
 import Layout from './Layout';
+import { Query } from 'components/common';
 
-const Index = () => {
-  const tribes = getTribes();
+interface Props {
+  tribes: Array<Tribe>;
+}
+
+const Index = ({ tribes }: Props) => {
   const { push } = useRouter();
 
   useEffect(() => {
@@ -30,7 +34,11 @@ const IndexPage = () => {
 
   if (!me) return null;
 
-  return <Index />;
+  return (
+    <Query api="/api/profile/tribes">
+      {(tribes: Array<Tribe>) => <Index tribes={tribes} />}
+    </Query>
+  );
 };
 
 IndexPage.Layout = Layout;

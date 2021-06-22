@@ -15,9 +15,6 @@ import Head from 'next/head';
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';
 
-// utils
-import { init as initSentry } from 'utils/sentry';
-
 // styles
 import theme from 'styles/theme';
 
@@ -30,7 +27,7 @@ import { AuthenticationProvider } from 'context/user';
 // styles
 import '../styles/index.css';
 
-initSentry();
+// initSentry();
 
 const Noop = ({ children }) => children;
 

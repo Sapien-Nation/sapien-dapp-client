@@ -95,12 +95,4 @@ test('CreateTribe', async () => {
     await screen.findByText('Tribe Created Successfully')
   ).toBeInTheDocument();
   expect(createTribe).toHaveBeenCalledWith(expect.any(FormData));
-
-  // New tribe should be on the TribeBar
-  expect(screen.getAllByRole('link')[2]).toHaveAttribute(
-    'href',
-    `/client/${tribe.mainSquareId}`
-  );
-  expect(screen.getAllByRole('img')[2]).toHaveAttribute('src', tribe.avatar);
-  expect(push).toHaveBeenCalledWith(`/client/${tribe.id}`);
 });
