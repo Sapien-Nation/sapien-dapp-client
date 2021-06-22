@@ -7,6 +7,9 @@ import ForgotPage from 'pages/forgot-password';
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
+// mocks
+import { mockRouter } from 'mocks/routes';
+
 // mock data
 jest.mock('api/authentication');
 
@@ -22,7 +25,7 @@ beforeEach(() => {
 const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
 
-const renderComponent = () => render(<ForgotPage />);
+const renderComponent = () => render(<ForgotPage />, { router: mockRouter() });
 
 test('renders correctly', async () => {
   renderComponent();

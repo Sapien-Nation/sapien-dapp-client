@@ -16,7 +16,7 @@ import { mockTribeMedia } from 'tools/mocks/tribe/view';
 const user = mockUser();
 const tribe = mockTribe();
 const tribeMedia = mockTribeMedia({ description: 'Tribe Description' });
-const query = { squareid: tribe.mainSquareId };
+const query = { squareID: tribe.mainSquareId };
 
 beforeEach(() => {
   jest.clearAllMocks();

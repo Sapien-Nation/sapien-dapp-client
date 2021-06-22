@@ -39,7 +39,6 @@ const LoginForm = () => {
 
       setSession({ torus: response.torus, token: response.token });
     } catch (error) {
-      console.log(error);
       enqueueSnackbar(error, {
         anchorOrigin: {
           vertical: 'bottom',

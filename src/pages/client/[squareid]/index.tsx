@@ -1,3 +1,5 @@
+import { useSnackbar } from 'notistack';
+
 // types
 import type { Content } from 'tools/types/content';
 import type { User } from 'tools/types/user';
@@ -11,6 +13,9 @@ import { useAuth } from 'context/user';
 // mui
 import { Box } from '@material-ui/core';
 
+// api
+import { createContent } from 'api/content';
+
 // hooks
 import { getTribe } from 'hooks';
 
@@ -21,19 +26,35 @@ import { Header } from 'components/square';
 import Layout from 'pages/Layout';
 
 interface Props {
-  squareid: string;
+  squareID: string;
   user?: User;
 }
 
-const Square = ({ squareid, user = null }: Props) => {
-  const tribe = getTribe(squareid);
+const Square = ({ squareID, user = null }: Props) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const tribe = getTribe(squareID);
+
+  const handleSubmit = async () => {
+    try {
+      await createContent({
+        data: '<h1>Hello</h1>', // TODO de-serialize https://docs.slatejs.org/walkthroughs/06-saving-to-a-database
+        squareId: squareID,
+      });
+
+      enqueueSnackbar('Post Created Successfully');
+    } catch (error) {
+      enqueueSnackbar(error.message);
+    }
+  };
+
   return (
     <Page
       header={tribe && <Header tribeID={tribe.id} />}
       subHeader={
         user && (
           <Box className="card--rounded-white">
-            <CreateContentForm user={user} />
+            <CreateContentForm user={user} onSubmit={handleSubmit} />
           </Box>
         )
       }
@@ -41,7 +62,7 @@ const Square = ({ squareid, user = null }: Props) => {
       <Box maxWidth="78rem" style={{ margin: '0 auto' }}>
         <CursorQuery
           hasNextPage
-          baseApiUrl={`/api/square/${squareid}/feed`}
+          baseApiUrl={`/api/square/${squareID}/feed`}
           loadingComponent={null}
           renderItem={(content: Content) => <ContentItem content={content} />}
         />
@@ -53,11 +74,11 @@ const Square = ({ squareid, user = null }: Props) => {
 const SquarePage = () => {
   const { me } = useAuth();
   const { query } = useRouter();
-  const { squareid } = query;
+  const { squareID } = query;
 
-  if (!squareid) return null;
+  if (!squareID) return null;
 
-  return <Square squareid={String(squareid)} user={me} />;
+  return <Square squareID={String(squareID)} user={me} />;
 };
 
 SquarePage.Layout = Layout;
