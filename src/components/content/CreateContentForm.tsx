@@ -1,6 +1,10 @@
+import { Controller, useForm } from 'react-hook-form';
+import { useMemo, useCallback } from 'react';
+
+// editor
 import { createEditor, BaseEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
-import { Controller, useForm } from 'react-hook-form';
+import { withHistory } from 'slate-history';
 
 // icons
 import SendIcon from '@material-ui/icons/Send';
@@ -14,6 +18,9 @@ import type { User } from 'tools/types/user';
 // styles
 import { primary } from 'styles/colors';
 
+// utils
+import { decorate, Leaf } from 'utils/slate';
+
 interface FormValues {
   audios?: Array<File>;
   editorState: Descendant[];
@@ -22,6 +29,7 @@ interface FormValues {
 
 interface Props {
   user: User;
+  handleContentSubmit: (values: FormValues) => void;
 }
 
 declare module 'slate' {
@@ -35,8 +43,9 @@ declare module 'slate' {
 type CustomElement = { type: 'paragraph'; children: CustomText[] };
 type CustomText = { text: string };
 
-const CreateContentForm = ({ user }: Props) => {
-  const editor = withReact(createEditor());
+const CreateContentForm = ({ user, handleContentSubmit }: Props) => {
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const renderLeaf = useCallback((props) => <Leaf {...props} />, []);
   const { control, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
       audios: [],
@@ -45,9 +54,13 @@ const CreateContentForm = ({ user }: Props) => {
     },
   });
 
-  const onSubmit = (values: FormValues) => console.log(values);
+  const onSubmit = (values: FormValues) => {
+    console.log('Values: ', values);
+    handleContentSubmit(values);
+  };
 
   const onChange = (value) => {
+    console.log('Values: ', value);
     setValue('editorState', value);
   };
 
@@ -66,7 +79,11 @@ const CreateContentForm = ({ user }: Props) => {
                 onChange={onChange}
                 {...rest}
               >
-                <Editable />
+                <Editable
+                  decorate={decorate}
+                  placeholder={`What’s on your mind, ${user.username}?`}
+                  renderLeaf={renderLeaf}
+                />
               </Slate>
             </Box>
           )}

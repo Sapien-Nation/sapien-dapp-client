@@ -16,10 +16,9 @@ const StoryMeta: Meta = {
 export default StoryMeta;
 
 export const ComposerStory = () => {
-  // TODO use mocks
   return (
     <div>
-      <CreateContentForm user={user} />
+      <CreateContentForm handleContentSubmit={() => {}} user={user} />
     </div>
   );
 };

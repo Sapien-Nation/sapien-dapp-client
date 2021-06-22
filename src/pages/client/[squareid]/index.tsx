@@ -1,3 +1,5 @@
+import { mutate } from 'swr';
+
 // types
 import type { Content } from 'tools/types/content';
 import type { User } from 'tools/types/user';
@@ -10,6 +12,9 @@ import { useAuth } from 'context/user';
 
 // mui
 import { Box } from '@material-ui/core';
+
+// api
+import { createContent } from 'api/content';
 
 // hooks
 import { getTribe } from 'hooks';
@@ -25,6 +30,15 @@ interface Props {
   user?: User;
 }
 
+const handleFormSubmit = async (values) => {
+  try {
+    const response = await createContent(values);
+    mutate('', (posts) => [...posts, response], false);
+  } catch (err) {
+    console.log('Error: ', err);
+  }
+};
+
 const Square = ({ squareid, user = null }: Props) => {
   const tribe = getTribe(squareid);
   return (
@@ -33,7 +47,10 @@ const Square = ({ squareid, user = null }: Props) => {
       subHeader={
         user && (
           <Box className="card--rounded-white">
-            <CreateContentForm user={user} />
+            <CreateContentForm
+              handleContentSubmit={handleFormSubmit}
+              user={user}
+            />
           </Box>
         )
       }
