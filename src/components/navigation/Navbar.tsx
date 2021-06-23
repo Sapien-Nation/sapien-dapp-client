@@ -76,8 +76,7 @@ const Navbar = () => {
                 onClick={(event) => setMenuAnchor(event.currentTarget)}
               >
                 <Avatar alt={me.username}>
-                  {me.firstName[0]}
-                  {me.lastName?.[0]}
+                  {me.firstName?.[0]?.toUpperCase()}
                 </Avatar>
               </IconButton>
             </>

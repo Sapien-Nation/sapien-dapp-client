@@ -68,9 +68,11 @@ const Square = ({ squareID }: Props) => {
     <Page
       header={<Header tribeID={tribeID} />}
       subHeader={
-        <Box className="card--rounded-white">
-          <CreateContentForm user={me} onSubmit={handleSubmit} />
-        </Box>
+        me && (
+          <Box className="card--rounded-white">
+            <CreateContentForm user={me} onSubmit={handleSubmit} />
+          </Box>
+        )
       }
     >
       <InfiniteScrollComponent

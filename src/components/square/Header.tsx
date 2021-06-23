@@ -19,6 +19,7 @@ const Header = ({ tribeID }: Props) => {
           <>
             <Image
               alt={tribe.description}
+              fallbackImage={tribe.cover_original}
               src={tribe.cover}
               style={{
                 width: '100%',
@@ -40,7 +41,17 @@ const Header = ({ tribeID }: Props) => {
                     top: '-2.5rem',
                   }}
                   variant="rounded"
-                />
+                >
+                  {tribe.avatar_original ? (
+                    <img
+                      alt={tribe.name}
+                      className="MuiAvatar-img"
+                      src={tribe.avatar_original}
+                    />
+                  ) : (
+                    tribe.name[0].toUpperCase()
+                  )}
+                </Avatar>
                 <Box
                   display="grid"
                   marginLeft={3}

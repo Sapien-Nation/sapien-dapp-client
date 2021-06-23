@@ -88,7 +88,15 @@ const TribeBar = () => {
                 }}
                 variant="rounded"
               >
-                {tribe.name[0].toUpperCase()}
+                {tribe.avatar_original ? (
+                  <img
+                    alt={tribe.name}
+                    className="MuiAvatar-img"
+                    src={tribe.avatar_original}
+                  />
+                ) : (
+                  tribe.name[0].toUpperCase()
+                )}
               </Avatar>
             </a>
           </Link>

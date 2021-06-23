@@ -7,14 +7,14 @@ export const getTribes = (): Array<Tribe> => {
   return useSWR('/api/profile/tribes', { revalidateOnMount: false }).data ?? [];
 };
 
-export const getTribe = (squareID: string): Tribe | null => {
+export const getTribe = (squareID: string): Tribe => {
   const tribes: Array<Tribe> =
-    useSWR('/api/profile/tribes', { revalidateOnMount: false }).data ?? null;
+    useSWR('/api/profile/tribes', { revalidateOnMount: false }).data ?? {};
   const tribeFromMainSquare = tribes?.find(
     ({ mainSquareId }) => mainSquareId === squareID
   );
 
   if (tribeFromMainSquare) return tribeFromMainSquare;
 
-  return null;
+  return {} as Tribe;
 };
