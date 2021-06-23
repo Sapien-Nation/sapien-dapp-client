@@ -30,7 +30,7 @@ const ForgotPage = () => {
             <Typography paragraph>
               <Typography component="span" variant="subtitle2">
                 Remembered your password?
-              </Typography>
+              </Typography>{' '}
               <Link href="/login">
                 <a>
                   <Typography variant="caption">Log in</Typography>

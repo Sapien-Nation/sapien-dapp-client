@@ -65,43 +65,51 @@ const Signup = () => {
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
-        required
         id="email"
-        inputProps={{ ...register('email'), autoComplete: 'email' }}
-        label="Email or phone number"
+        inputProps={{
+          ...register('email', {
+            pattern: /^\S+@\S+\.\S+$/,
+            required: true,
+          }),
+          autoComplete: 'email',
+        }}
+        label="Email"
         placeholder="myemailaddress@email.com"
         type="email"
       />
       <TextField
         fullWidth
-        required
         id="username"
         inputProps={{
-          ...register('username'),
+          ...register('username', {
+            pattern: /^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
+            required: true,
+          }),
           autoComplete: 'username',
-          maxLength: '20',
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            Username*
+            Username
             <ChartCount control={control} maxCount={20} name="username" />
           </Box>
         }
-        placeholder="johniedoe"
+        placeholder="johndoe"
         type="text"
       />
       <TextField
         fullWidth
-        required
         id="displayName"
         inputProps={{
-          ...register('displayName'),
           autoComplete: 'name',
-          maxLength: '20',
+          title: 'Invalid Name',
+          ...register('displayName', {
+            pattern: /^\w{2,} \w{2,}/,
+            required: true,
+          }),
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            Name*
+            Name
             <ChartCount control={control} maxCount={20} name="displayName" />
           </Box>
         }
@@ -110,21 +118,21 @@ const Signup = () => {
       />
       <TextField
         fullWidth
-        required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         id="password"
         inputProps={{
           ...register('password'),
           autoComplete: 'new-password',
           pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
+          required: true,
         }}
         label={
           <>
-            Password*
+            Password
             <FormHelperText style={{ margin: 0 }}>
-              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
+              Minimum length is 8 characters. Must include at least an alpha, a{' '}
               <br />
-              numeric, 1 lowercaps, and 1 highercaps.
+              numeric, a lowercase and an uppercase.
             </FormHelperText>
           </>
         }
@@ -136,7 +144,6 @@ const Signup = () => {
           control={
             <Checkbox
               disableRipple
-              required
               checkedIcon={<CheckboxCheckedIcon />}
               color="default"
               icon={<CheckboxIcon />}
@@ -147,7 +154,7 @@ const Signup = () => {
             <Typography>
               <Typography component="span" variant="subtitle2">
                 I have read and agree to the
-              </Typography>
+              </Typography>{' '}
               <Typography component="span" variant="subtitle2">
                 <a
                   href="https://common.sapien.network/terms.html"
