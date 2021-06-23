@@ -55,12 +55,8 @@ test('renders correctly', async () => {
     expect(login).not.toHaveBeenCalled();
   });
 
-  user.type(
-    screen.getByRole('textbox', { name: 'Email, phone number, or username' }),
-    email
-  );
+  user.type(screen.getByRole('textbox', { name: 'Email or username' }), email);
   user.type(screen.getByLabelText(/password/i), password);
-  user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
 
   // onError
   (login as jest.Mock).mockRejectedValueOnce(error);
@@ -72,6 +68,7 @@ test('renders correctly', async () => {
       password,
       redirect: '/',
       client: userAgent,
+      remember: true,
     });
 
     expect(screen.getByText(error)).toBeInTheDocument();
@@ -79,6 +76,7 @@ test('renders correctly', async () => {
 
   // onSuccess
   jest.clearAllMocks();
+  user.click(screen.getByRole('checkbox', { name: 'Remember me' }));
   user.click(getLoginButton());
   await waitFor(() => {
     expect(login).toHaveBeenCalledWith({
@@ -86,6 +84,7 @@ test('renders correctly', async () => {
       password,
       redirect: '/',
       client: userAgent,
+      remember: false,
     });
 
     expect(setSession).toHaveBeenCalledWith({ torus, token });

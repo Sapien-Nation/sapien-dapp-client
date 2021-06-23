@@ -51,7 +51,7 @@ test('renders correctly', async () => {
     expect(register).not.toHaveBeenCalled();
   });
 
-  user.type(screen.getByLabelText(/email or phone number/i), email);
+  user.type(screen.getByLabelText(/email/i), email);
   user.type(screen.getByLabelText(/username*/i), username);
   user.type(screen.getByLabelText(/Name*/), displayName);
   user.type(screen.getByLabelText(/password*/i), password);
