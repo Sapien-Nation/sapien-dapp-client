@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react';
 import { useSnackbar } from 'notistack';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 // types
@@ -20,16 +20,9 @@ interface Props extends Omit<DropzoneProps, 'children'> {
 
 const Dropzone = ({ children, className, id, onChange, ...rest }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
+
   const onDrop = useCallback<DropzoneOptions['onDrop']>(
     (droppedFiles) => {
-      if (!droppedFiles?.length) {
-        enqueueSnackbar('Please select a correct image!', {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'center',
-          },
-        });
-      }
       onChange(droppedFiles);
     },
     [onChange]
@@ -37,6 +30,18 @@ const Dropzone = ({ children, className, id, onChange, ...rest }: Props) => {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    onDropRejected: (files = []) => {
+      files.forEach(({ errors = [] }) => {
+        errors.forEach(({ message = 'Please select a correct image!' }) => {
+          enqueueSnackbar(message, {
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'center',
+            },
+          });
+        });
+      });
+    },
     ...rest,
   });
 
