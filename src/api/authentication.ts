@@ -19,7 +19,7 @@ export const changePassword = async ({
 
 export const forgot = async (email: string) => {
   try {
-    await authInstance.post('/api/v3/user/forgot-password', {
+    await authInstance.post('/api/v3/user/change-password', {
       email,
     });
   } catch ({ response }) {

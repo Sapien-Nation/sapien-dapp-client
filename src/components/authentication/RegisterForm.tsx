@@ -65,12 +65,10 @@ const Signup = () => {
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
+        required
         id="email"
         inputProps={{
-          ...register('email', {
-            pattern: /^\S+@\S+\.\S+$/,
-            required: true,
-          }),
+          ...register('email'),
           autoComplete: 'email',
         }}
         label="Email"
@@ -79,12 +77,10 @@ const Signup = () => {
       />
       <TextField
         fullWidth
+        required
         id="username"
         inputProps={{
-          ...register('username', {
-            pattern: /^(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/,
-            required: true,
-          }),
+          ...register('username'),
           autoComplete: 'username',
         }}
         label={
@@ -98,14 +94,12 @@ const Signup = () => {
       />
       <TextField
         fullWidth
+        required
         id="displayName"
         inputProps={{
           autoComplete: 'name',
           title: 'Invalid Name',
-          ...register('displayName', {
-            pattern: /^\w{2,} \w{2,}/,
-            required: true,
-          }),
+          ...register('displayName'),
         }}
         label={
           <Box display="flex" justifyContent="space-between">
@@ -118,13 +112,13 @@ const Signup = () => {
       />
       <TextField
         fullWidth
+        required
         InputLabelProps={{ style: { pointerEvents: 'auto' } }}
         id="password"
         inputProps={{
           ...register('password'),
           autoComplete: 'new-password',
           pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
-          required: true,
         }}
         label={
           <>

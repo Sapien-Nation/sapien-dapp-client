@@ -2,7 +2,7 @@
 import { changePassword } from 'api/authentication';
 
 // components
-import ChangePasswordPage from 'pages/forgot-password/change';
+import ChangePasswordPage from 'pages/change-password/change';
 
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';

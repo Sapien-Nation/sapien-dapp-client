@@ -42,7 +42,7 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <Box display="gird" gap={3}>
+    <Box display="grid" gap={3}>
       <Typography component="h1">
         {view === View.Form
           ? 'Create New Password'

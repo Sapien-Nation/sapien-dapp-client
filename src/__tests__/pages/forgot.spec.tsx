@@ -2,7 +2,7 @@
 import { forgot } from 'api/authentication';
 
 // components
-import ForgotPage from 'pages/forgot-password';
+import ForgotPage from 'pages/change-password';
 
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
