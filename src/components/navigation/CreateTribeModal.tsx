@@ -211,7 +211,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       maxSize={20971520}
                       onChange={onChange}
                     >
-                      {avatar && (
+                      {Boolean(avatar?.length) && (
                         <FilePreview
                           file={URL.createObjectURL(avatar[0])}
                           name="avatar"
@@ -237,10 +237,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       accept="image/*"
                       id="cover"
                       maxFiles={1}
-                      maxSize={20971520}
+                      maxSize={41943040}
                       onChange={onChange}
                     >
-                      {cover && (
+                      {Boolean(cover?.length) && (
                         <FilePreview
                           file={URL.createObjectURL(cover[0])}
                           name="cover"
