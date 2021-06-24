@@ -11,15 +11,15 @@ import { Send } from '@material-ui/icons';
 import type { User } from 'tools/types/user';
 
 // styles
-import { primary } from 'styles/colors';
+import { primary, gray2 } from 'styles/colors';
 
 // utils
 import {
   clearEditor,
   composeSlateHighOrderFns,
   Element,
-  withShortcuts,
   withLinks,
+  withShortcuts,
 } from 'utils/slate';
 
 interface Props {
@@ -65,13 +65,26 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
 
   return (
     <form onSubmit={onSubmitForm}>
-      <Box display="flex" padding={3} style={{ gap: 10 }}>
+      <Box alignItems="center" display="flex" padding={3} style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%', minWidth: 680 }}>
           <Slate editor={editor} value={data} onChange={setData}>
             <Editable
               placeholder={`What’s on your mind, ${user.username}?`}
               renderElement={(props) => <Element {...props} />}
+              style={{
+                backgroundColor: gray2,
+                borderRadius: 16,
+                padding: '1rem 1.5rem',
+              }}
+              onKeyDown={(event) => {
+                console.log(event.key);
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  //TODO - Multiline node on wrap
+                }
+                return;
+              }}
             />
           </Slate>
         </Box>
@@ -80,7 +93,6 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
           style={{
             backgroundColor: primary,
             borderRadius: 16,
-            marginTop: 'auto',
           }}
           type="submit"
         >
