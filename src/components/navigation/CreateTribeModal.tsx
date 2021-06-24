@@ -7,9 +7,6 @@ import { mutate } from 'swr';
 // types
 import type { Tribe } from 'tools/types/tribeBar';
 
-// next
-import { useRouter } from 'next/router';
-
 // api
 import { createTribe } from 'api/tribeBar';
 

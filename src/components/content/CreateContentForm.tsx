@@ -34,6 +34,7 @@ const initialEditorValue = [
   },
 ];
 const CreateContentForm = ({ user, onSubmit }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
       withShortcuts,
@@ -45,15 +46,21 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   // @ts-ignore
   const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
 
-  const onSubmitForm = (event) => {
-    event.preventDefault();
+  const onSubmitForm = async (event) => {
+    setIsSubmitting(true);
+    try {
+      event.preventDefault();
 
-    onSubmit(data);
+      await onSubmit(data);
 
-    clearEditor(editor);
+      clearEditor(editor);
 
-    // @ts-ignore
-    setData(initialEditorValue);
+      // @ts-ignore
+      setData(initialEditorValue);
+    } catch (err) {
+      //
+    }
+    setIsSubmitting(false);
   };
 
   return (
@@ -69,6 +76,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
           </Slate>
         </Box>
         <IconButton
+          disabled={isSubmitting}
           style={{
             backgroundColor: primary,
             borderRadius: 16,
