@@ -1,9 +1,7 @@
-import useSWR, { mutate } from 'swr';
+import { useRouter } from 'next/router';
 import { createContext, useContext } from 'react';
 import { useLocalStorage } from 'react-use';
-
-// next
-import { useRouter } from 'next/router';
+import useSWR, { mutate } from 'swr';
 
 // types
 import { User } from 'tools/types/user';

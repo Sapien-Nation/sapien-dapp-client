@@ -1,55 +1,78 @@
-import { Controller, useForm } from 'react-hook-form';
-
-// components
-import { Editor } from 'components/common';
+import { useState } from 'react';
+import { withHistory } from 'slate-history';
+import { createEditor, Descendant } from 'slate';
+import { Editable, Slate, withReact } from 'slate-react';
 
 // mui
 import { Avatar, Box, IconButton } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
 
 // types
-import { Descendant } from 'slate';
 import type { User } from 'tools/types/user';
 
 // styles
 import { primary } from 'styles/colors';
+
+// utils
+import {
+  clearEditor,
+  composeSlateHighOrderFns,
+  Element,
+  withShortcuts,
+  withLinks,
+} from 'utils/slate';
 
 interface Props {
   user: User;
   onSubmit: (values: any) => void;
 }
 
+const initialEditorValue = [
+  {
+    type: 'paragraph',
+    children: [{ text: '' }],
+  },
+];
 const CreateContentForm = ({ user, onSubmit }: Props) => {
-  const { control, handleSubmit } = useForm<{ data: Array<Descendant> }>({
-    defaultValues: {
-      data: [
-        {
-          type: 'paragraph',
-          children: [{ text: '' }],
-        },
-      ],
-    },
-  });
+  const [editor] = useState(() =>
+    composeSlateHighOrderFns(
+      withShortcuts,
+      withLinks,
+      withHistory,
+      withReact
+    )(createEditor())
+  );
+  // @ts-ignore
+  const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
+
+  const onSubmitForm = (event) => {
+    event.preventDefault();
+
+    onSubmit(data);
+
+    clearEditor(editor);
+
+    // @ts-ignore
+    setData(initialEditorValue);
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={onSubmitForm}>
       <Box display="flex" padding={3} style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%', minWidth: 680 }}>
-          <Controller
-            control={control}
-            name="data"
-            render={({ field }) => (
-              <Box style={{ width: '100%', minWidth: 680 }}>
-                <Editor username={user.username} {...field} />
-              </Box>
-            )}
-          />
+          <Slate editor={editor} value={data} onChange={setData}>
+            <Editable
+              placeholder={`What’s on your mind, ${user.username}?`}
+              renderElement={(props) => <Element {...props} />}
+            />
+          </Slate>
         </Box>
         <IconButton
           style={{
             backgroundColor: primary,
             borderRadius: 16,
+            marginTop: 'auto',
           }}
           type="submit"
         >

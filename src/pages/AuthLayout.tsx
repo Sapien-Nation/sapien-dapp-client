@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 // mui
@@ -5,9 +6,6 @@ import { Box, CssBaseline, useMediaQuery, useTheme } from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'assets';
-
-// next
-import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
