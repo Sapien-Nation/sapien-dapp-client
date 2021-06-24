@@ -1,11 +1,9 @@
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 
 // api
 import { verifyUser } from 'api/authentication';
-
-// next
-import { useRouter } from 'next/router';
 
 const VerifyPage = () => {
   const {

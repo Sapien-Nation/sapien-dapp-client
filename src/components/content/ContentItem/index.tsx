@@ -1,12 +1,11 @@
+import Link from 'next/link';
+
 // components
 import Actions from './Actions';
 import Header from './Header';
 
 // mui
 import { Box, Typography } from '@material-ui/core';
-
-// next
-import Link from 'next/link';
 
 // types
 import type { Content } from 'tools/types/content';

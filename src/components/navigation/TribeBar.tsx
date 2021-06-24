@@ -1,11 +1,9 @@
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 // hooks
 import { getTribes } from 'hooks';
-
-// next
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 // styles
 import { dark, darkPurple } from 'styles/colors';

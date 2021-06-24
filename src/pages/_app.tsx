@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { SnackbarProvider } from 'notistack';
@@ -8,9 +9,6 @@ import type { AppProps } from 'next/app';
 
 // api
 import axios from 'api';
-
-// next
-import Head from 'next/head';
 
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';

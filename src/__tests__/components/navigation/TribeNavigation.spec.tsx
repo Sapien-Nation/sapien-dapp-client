@@ -31,5 +31,4 @@ test('works correctly', () => {
     'href',
     `/client/${selectedTribe.mainSquareId}`
   );
-  expect(screen.getByRole('link', { name: 'Badge Store' })).toBeInTheDocument();
 });
