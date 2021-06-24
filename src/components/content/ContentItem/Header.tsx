@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useState } from 'react';
 
 // mui
@@ -17,9 +18,6 @@ import {
   Public as Globe,
   Groups,
 } from '@material-ui/icons';
-
-// next
-import Link from 'next/link';
 
 // types
 import type { ContentOwner } from 'tools/types/content';

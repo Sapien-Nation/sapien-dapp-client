@@ -1,15 +1,16 @@
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import InfiniteScrollComponent from 'react-infinite-scroll-component';
 import useSWR from 'swr';
 
+// utils
+import { serialize } from 'utils/slate';
+
 // types
 import type { Content } from 'tools/types/content';
+import type { Descendant } from 'slate';
 import type { SquareFeed } from 'tools/types/square/view';
-
-// next
-import { useRouter } from 'next/router';
-
 // context
 import { useAuth } from 'context/user';
 
@@ -51,10 +52,10 @@ const Square = ({ squareID }: Props) => {
     },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (content: Array<Descendant>) => {
     try {
       await createContent({
-        data: `<h1>This is a Post ${contentFeed.length}</h1>`, // TODO de-serialize https://docs.slatejs.org/walkthroughs/06-saving-to-a-database
+        data: content.map((node: any) => serialize(node)).join(''),
         squareId: squareID,
       });
 

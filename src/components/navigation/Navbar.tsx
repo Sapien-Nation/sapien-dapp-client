@@ -1,11 +1,9 @@
+import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
 // api
 import { logout } from 'api/authentication';
-
-// next
-import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';

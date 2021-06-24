@@ -1,7 +1,5 @@
-import { useEffect } from 'react';
-
-// next
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 // context
 import { useAuth } from 'context/user';

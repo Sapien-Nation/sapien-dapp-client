@@ -1,4 +1,3 @@
-// next
 import NextErrorComponent from 'next/error';
 import { NextPage, NextPageContext } from 'next';
 

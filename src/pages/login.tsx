@@ -1,8 +1,7 @@
+import Link from 'next/link';
+
 // mui
 import { Box, Typography } from '@material-ui/core';
-
-// next
-import Link from 'next/link';
 
 // components
 import Layout from './AuthLayout';

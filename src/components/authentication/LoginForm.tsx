@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
@@ -6,9 +7,6 @@ import { login as loginAction } from 'api/authentication';
 
 // context
 import { useAuth } from 'context/user';
-
-// next
-import Link from 'next/link';
 
 // mui
 import {
