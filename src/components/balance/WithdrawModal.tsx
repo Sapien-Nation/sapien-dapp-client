@@ -77,8 +77,12 @@ const WithdrawModal = ({ onClose }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const copyAddress = async () => {
-    const address = await navigator.clipboard.readText();
-    setValue('destinationAddress', address, { shouldDirty: true });
+    try {
+      const address = await navigator.clipboard.readText();
+      setValue('destinationAddress', address, { shouldDirty: true });
+    } catch (err) {
+      enqueueSnackbar(err);
+    }
   };
 
   const addFees = () => (transactionFee / 100) * watchWithdraw;

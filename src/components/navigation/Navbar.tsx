@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { useLocalStorage } from 'react-use';
 import { connectWallet } from 'api/spn-wallet';
-
-// next
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -36,6 +35,7 @@ import { MyBalance, MyTransactions } from 'components/balance';
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
   const { me, logout } = useAuth();
   const { wallet, setWallet } = useWallet();
   const { query } = useRouter();
@@ -51,7 +51,7 @@ const Navbar = () => {
           const walletConnected = await connectWallet(tokens.torus, me.id);
           setWallet(walletConnected);
         } catch (error) {
-          console.error(error);
+          enqueueSnackbar(error);
         }
     };
     walletWeb3();
