@@ -42,11 +42,10 @@ const minSpn = 99;
 const transactionFee = 3;
 const userBalance = 15000;
 
-const NumberFormatInput = ({ name, inputRef, onChange, ...rest }) => {
+const NumberFormatInput = ({ name, onChange, ...rest }) => {
   return (
     <NumberFormat
       thousandSeparator
-      getInputRef={inputRef}
       onValueChange={(values) => {
         onChange({
           target: {
@@ -66,6 +65,7 @@ const WithdrawModal = ({ onClose }: Props) => {
     handleSubmit,
     register,
     watch,
+    setValue,
     formState: { isDirty },
   } = useForm({
     defaultValues: {
@@ -75,6 +75,11 @@ const WithdrawModal = ({ onClose }: Props) => {
   });
   const watchWithdraw = watch('withdraw');
   const { enqueueSnackbar } = useSnackbar();
+
+  const copyAddress = async () => {
+    const address = await navigator.clipboard.readText();
+    setValue('destinationAddress', address, { shouldDirty: true });
+  };
 
   const addFees = () => (transactionFee / 100) * watchWithdraw;
 
@@ -164,6 +169,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                           edge="end"
                           size="small"
                           sx={{ color: primary }}
+                          onClick={copyAddress}
                         >
                           <ContentCopyIcon fontSize="small" />
                         </IconButton>
@@ -198,7 +204,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                 <Input
                   required
                   endAdornment={
-                    <InputAdornment position="end">
+                    <InputAdornment position="end" sx={{ color: black }}>
                       SPN{' '}
                       <small
                         style={{

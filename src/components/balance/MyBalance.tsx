@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
+
+// types
+import type { Wallet as WalletType } from 'tools/types/wallet';
 
 // mui
 import { Box, Button, Chip, Typography } from '@material-ui/core';
@@ -10,21 +13,36 @@ import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 // styles
 import { gray2, darkGrey } from 'styles/colors';
 
+// utils
+import { formatSpn, formatEthToUsd } from 'utils/spn';
+
 // components
 import DepositModal from './DepositModal';
 import WithdrawModal from './WithdrawModal';
 
-const MyBalance = () => {
+const MyBalance = ({ wallet }: { wallet: WalletType }) => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [usd, setUsd] = useState('$0');
+
+  useEffect(() => {
+    const getAmount = async () => {
+      const amount = await formatEthToUsd(Number(wallet?.balance));
+      setUsd(amount);
+    };
+    getAmount();
+  }, [wallet]);
+
   return (
     <>
       <Box padding={2}>
         <Box alignItems="center" display="flex" gap={1} mb={1}>
           <SpnIcon size={22} />
-          <Typography variant="h2">3,197</Typography>
+          <Typography variant="h2">
+            {formatSpn(Number(wallet?.balance))}
+          </Typography>
           <Chip
-            label="$13,197"
+            label={usd}
             sx={{
               bgcolor: gray2,
               color: darkGrey,
