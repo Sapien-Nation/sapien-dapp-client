@@ -77,14 +77,6 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
                 borderRadius: 16,
                 padding: '1rem 1.5rem',
               }}
-              onKeyDown={(event) => {
-                console.log(event.key);
-                if (event.key === 'Enter') {
-                  event.preventDefault();
-                  //TODO - Multiline node on wrap
-                }
-                return;
-              }}
             />
           </Slate>
         </Box>
