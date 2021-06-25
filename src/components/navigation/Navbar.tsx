@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useLocalStorage } from 'react-use';
+import { connectWallet } from 'api/spn-wallet';
 
 // next
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
+
+// utils
+import { formatSpn } from 'utils/spn';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
@@ -30,6 +37,25 @@ const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const { me, logout } = useAuth();
+  const { wallet, setWallet } = useWallet();
+  const { query } = useRouter();
+  const [tokens] = useLocalStorage<{
+    token: string;
+    torus: string;
+  }>('tokens');
+
+  useEffect(() => {
+    const walletWeb3 = async () => {
+      if (tokens && Boolean(me) && query?.squareid && Boolean(!wallet))
+        try {
+          const walletConnected = await connectWallet(tokens.torus, me.id);
+          setWallet(walletConnected);
+        } catch (error) {
+          console.error(error);
+        }
+    };
+    walletWeb3();
+  }, [me, query]);
 
   return (
     <AppBar color="inherit" elevation={0} position="relative">
@@ -39,7 +65,7 @@ const Navbar = () => {
             <>
               <Chip
                 icon={<SpnIcon />}
-                label="3197"
+                label={formatSpn(Number(wallet?.balance || 0))}
                 sx={{
                   bgcolor: 'rgba(98, 0, 234, 0.05)',
                   borderRadius: 90,
@@ -114,7 +140,7 @@ const Navbar = () => {
         onClose={() => setBalanceAnchor(null)}
       >
         <div>
-          <MyBalance />
+          <MyBalance wallet={wallet} />
           <Divider sx={{ borderColor: '#EDEEF0 !important', borderWidth: 1 }} />
           <MyTransactions />
         </div>
