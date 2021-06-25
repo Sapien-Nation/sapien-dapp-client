@@ -21,6 +21,10 @@ export const Element = ({ attributes, children, element }) => {
         </blockquote>
       );
     default:
-      return <p {...attributes}>{children}</p>;
+      return (
+        <p style={{ margin: 0 }} {...attributes}>
+          {children}
+        </p>
+      );
   }
 };
