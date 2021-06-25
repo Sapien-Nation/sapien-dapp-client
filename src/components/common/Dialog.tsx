@@ -96,11 +96,17 @@ const Dialog = ({
   ),
   ...rest
 }: Props) => {
-  const classes = useStyles();
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const classes = useStyles();
+
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
-    <MUIDialog aria-labelledby="dialog-title" {...rest} fullScreen={fullScreen}>
+    <MUIDialog
+      aria-labelledby="dialog-title"
+      {...rest}
+      fullScreen={isMediumScreen}
+    >
       <IconButton aria-label="close" className={classes.root} onClick={onClose}>
         <CloseIcon />
       </IconButton>
