@@ -1,4 +1,3 @@
-import isUrl from 'is-url';
 import {
   Descendant,
   Editor,
@@ -6,6 +5,7 @@ import {
   Range,
   Transforms,
 } from 'slate';
+import { isUrl } from 'utils/url';
 
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 

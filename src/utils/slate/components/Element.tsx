@@ -1,10 +1,20 @@
 import { primary } from 'styles/colors';
 
-export const Element = ({ attributes, children, element }) => {
+// components
+import { Image } from 'utils/slate/components/Image';
+
+export const Element = (props) => {
+  const { attributes, children, element } = props;
   switch (element.type) {
     case 'link':
       return (
-        <a {...attributes} href={element.url}>
+        <a
+          {...attributes}
+          href={element.url}
+          style={{
+            color: primary,
+          }}
+        >
           {children}
         </a>
       );
@@ -20,7 +30,13 @@ export const Element = ({ attributes, children, element }) => {
           <span style={{ marginLeft: 20 }}>{children}</span>
         </blockquote>
       );
+    case 'image':
+      return <Image {...props} />;
     default:
-      return <p {...attributes}>{children}</p>;
+      return (
+        <p style={{ margin: 0 }} {...attributes}>
+          {children}
+        </p>
+      );
   }
 };

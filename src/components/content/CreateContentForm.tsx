@@ -11,15 +11,19 @@ import { Send } from '@material-ui/icons';
 import type { User } from 'tools/types/user';
 
 // styles
-import { primary } from 'styles/colors';
+import { primary, gray2 } from 'styles/colors';
 
 // utils
 import {
   clearEditor,
   composeSlateHighOrderFns,
   Element,
-  withShortcuts,
+  Leaf,
+  MarkButton,
+  Toolbar,
+  withImages,
   withLinks,
+  withShortcuts,
 } from 'utils/slate';
 
 interface Props {
@@ -37,6 +41,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
+      withImages,
       withShortcuts,
       withLinks,
       withHistory,
@@ -65,13 +70,25 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
 
   return (
     <form onSubmit={onSubmitForm}>
-      <Box display="flex" padding={3} style={{ gap: 10 }}>
+      <Box alignItems="center" display="flex" padding={3} style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%', minWidth: 680 }}>
           <Slate editor={editor} value={data} onChange={setData}>
+            <Toolbar>
+              <MarkButton format="bold" />
+              <MarkButton format="italic" />
+              <MarkButton format="underline" />
+              <MarkButton format="code" />
+            </Toolbar>
             <Editable
               placeholder={`What’s on your mind, ${user.username}?`}
               renderElement={(props) => <Element {...props} />}
+              renderLeaf={(props) => <Leaf {...props} />}
+              style={{
+                backgroundColor: gray2,
+                borderRadius: 16,
+                padding: '1rem 1.5rem',
+              }}
             />
           </Slate>
         </Box>
@@ -80,7 +97,6 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
           style={{
             backgroundColor: primary,
             borderRadius: 16,
-            marginTop: 'auto',
           }}
           type="submit"
         >

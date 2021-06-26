@@ -47,6 +47,7 @@
     "axios": "^0.21.1",
     "cookie": "^0.4.1",
     "eth-price": "^0.1.5",
+    "image-extensions": "^1.1.0",
     "lodash": "^4.17.21",
     "next": "^11.0.0",
     "notistack": "^1.0.9",
