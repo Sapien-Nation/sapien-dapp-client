@@ -18,6 +18,10 @@ import {
   clearEditor,
   composeSlateHighOrderFns,
   Element,
+  Leaf,
+  MarkButton,
+  Toolbar,
+  withImages,
   withLinks,
   withShortcuts,
 } from 'utils/slate';
@@ -37,6 +41,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
+      withImages,
       withShortcuts,
       withLinks,
       withHistory,
@@ -69,9 +74,16 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%', minWidth: 680 }}>
           <Slate editor={editor} value={data} onChange={setData}>
+            <Toolbar>
+              <MarkButton format="bold" />
+              <MarkButton format="italic" />
+              <MarkButton format="underline" />
+              <MarkButton format="code" />
+            </Toolbar>
             <Editable
               placeholder={`What’s on your mind, ${user.username}?`}
               renderElement={(props) => <Element {...props} />}
+              renderLeaf={(props) => <Leaf {...props} />}
               style={{
                 backgroundColor: gray2,
                 borderRadius: 16,
