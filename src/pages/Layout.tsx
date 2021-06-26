@@ -1,6 +1,9 @@
 // mui
 import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
+// Providers
+import { WalletProvider } from 'context/wallet';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -32,7 +35,9 @@ const Layout = ({ children }: Props) => {
         <Sidebar />
       </NoSsr>
       <main>
-        <Navbar />
+        <WalletProvider>
+          <Navbar />
+        </WalletProvider>
         <div>{children}</div>
       </main>
     </div>

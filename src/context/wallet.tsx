@@ -1,8 +1,11 @@
 import { createContext, useContext, useState } from 'react';
 
+// types
+import type { Wallet as WalletType } from 'tools/types/wallet';
+
 export interface Wallet {
-  wallet: unknown | null;
-  setWallet: (wallet: unknown) => void;
+  wallet: WalletType | null;
+  setWallet: (wallet: WalletType) => void;
 }
 
 export const WalletContext = createContext<Wallet>(null);
@@ -12,7 +15,7 @@ interface Props {
 }
 
 const WalletProvider = ({ children }: Props) => {
-  const [wallet, setWallet] = useState<unknown | null>(null);
+  const [wallet, setWallet] = useState<WalletType | null>(null);
 
   return (
     <WalletContext.Provider

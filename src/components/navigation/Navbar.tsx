@@ -1,12 +1,19 @@
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useLocalStorage } from 'react-use';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 // api
+import { connectWallet } from 'api/spn-wallet';
 import { logout } from 'api/authentication';
 
 // context
 import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
+
+// utils
+import { formatSpn } from 'utils/spn';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
@@ -32,8 +39,27 @@ const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { query } = useRouter();
+  const [tokens] = useLocalStorage<{
+    token: string;
+    torus: string;
+  }>('tokens');
   const { clearSession, me } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const { wallet, setWallet } = useWallet();
+
+  useEffect(() => {
+    const walletWeb3 = async () => {
+      if (tokens && Boolean(me) && query?.squareid && Boolean(!wallet))
+        try {
+          const walletConnected = await connectWallet(tokens.torus, me.id);
+          setWallet(walletConnected);
+        } catch (error) {
+          enqueueSnackbar(error);
+        }
+    };
+    walletWeb3();
+  }, [me, query]);
 
   const handleLogout = async () => {
     try {
@@ -45,6 +71,7 @@ const Navbar = () => {
       enqueueSnackbar(err.message);
     }
   };
+
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar variant="dense">
@@ -53,7 +80,7 @@ const Navbar = () => {
             <>
               <Chip
                 icon={<SpnIcon />}
-                label="3197"
+                label={formatSpn(Number(wallet?.balance || 0))}
                 sx={{
                   bgcolor: 'rgba(98, 0, 234, 0.05)',
                   borderRadius: 90,
@@ -120,7 +147,7 @@ const Navbar = () => {
         onClose={() => setBalanceAnchor(null)}
       >
         <div>
-          <MyBalance />
+          <MyBalance wallet={wallet} />
           <Divider sx={{ borderColor: '#EDEEF0 !important', borderWidth: 1 }} />
           <MyTransactions />
         </div>
