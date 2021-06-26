@@ -5,7 +5,7 @@ import {
   Range,
   Transforms,
 } from 'slate';
-import { isUrl } from 'utils/url';
+import { checkUrl } from 'utils/url';
 
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 
@@ -17,7 +17,7 @@ export const withLinks = (editor) => {
   };
 
   editor.insertText = (text) => {
-    if (text && isUrl(text)) {
+    if (text && checkUrl(text)) {
       wrapLink(editor, text);
     } else {
       insertText(text);
@@ -27,7 +27,7 @@ export const withLinks = (editor) => {
   editor.insertData = (data) => {
     const text = data.getData('text/plain');
 
-    if (text && isUrl(text)) {
+    if (text && checkUrl(text)) {
       wrapLink(editor, text);
     } else {
       insertData(data);

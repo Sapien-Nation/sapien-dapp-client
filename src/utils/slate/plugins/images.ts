@@ -2,7 +2,7 @@ import { Transforms } from 'slate';
 import imageExtensions from 'image-extensions';
 
 // utils
-import { isUrl } from 'utils/url';
+import { checkUrl } from 'utils/url';
 
 type EmptyText = {
   text: string;
@@ -22,7 +22,7 @@ const insertImage = (editor, url) => {
 
 const isImageUrl = (url) => {
   if (!url) return false;
-  if (!isUrl(url)) return false;
+  if (!checkUrl(url)) return false;
   const ext = new URL(url).pathname.split('.').pop();
   return imageExtensions.includes(ext);
 };
