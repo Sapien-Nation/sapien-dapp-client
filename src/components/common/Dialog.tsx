@@ -14,6 +14,7 @@ import {
   DialogActions,
   DialogContent,
   Dialog as MUIDialog,
+  useMediaQuery,
 } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
@@ -95,9 +96,17 @@ const Dialog = ({
   ),
   ...rest
 }: Props) => {
+  const theme = useTheme();
   const classes = useStyles();
+
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
-    <MUIDialog aria-labelledby="dialog-title" {...rest}>
+    <MUIDialog
+      aria-labelledby="dialog-title"
+      {...rest}
+      fullScreen={isMediumScreen}
+    >
       <IconButton aria-label="close" className={classes.root} onClick={onClose}>
         <CloseIcon />
       </IconButton>
@@ -121,7 +130,7 @@ const Dialog = ({
       )}
       {subtitle}
       <DialogContent>{children}</DialogContent>
-      <DialogActions disableSpacing>{actions}</DialogActions>
+      {actions ? <DialogActions disableSpacing>{actions}</DialogActions> : null}
     </MUIDialog>
   );
 };

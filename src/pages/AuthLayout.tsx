@@ -1,13 +1,11 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 // mui
-import { Box, CssBaseline } from '@material-ui/core';
+import { Box, CssBaseline, useMediaQuery, useTheme } from '@material-ui/core';
 
 // assets
 import { FullLogo } from 'assets';
-
-// next
-import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
@@ -17,8 +15,10 @@ interface Props {
 }
 
 const AuthLayout = ({ children }: Props) => {
+  const theme = useTheme();
   const router = useRouter();
   const { me, isLoggingIn } = useAuth();
+  const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     if (isLoggingIn === false && me) {
@@ -29,20 +29,21 @@ const AuthLayout = ({ children }: Props) => {
   return (
     <>
       <CssBaseline />
-      <div
-        style={{
-          display: 'grid',
-          height: '100vh',
-          gridTemplateColumns: '1fr 560px',
-        }}
+      <Box
+        display="grid"
+        gridTemplateColumns={matches ? '1fr' : '1fr 560px'}
+        height="100vh"
+        padding={matches ? 2 : 0}
       >
-        <Box
-          style={{
-            backgroundImage: 'url(/static/auth.jpg)',
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-          }}
-        />
+        {matches === false && (
+          <Box
+            style={{
+              backgroundImage: 'url(/static/auth.jpg)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+            }}
+          />
+        )}
         <Box
           alignSelf="center"
           display="flex"
@@ -55,7 +56,7 @@ const AuthLayout = ({ children }: Props) => {
           <FullLogo />
           {children}
         </Box>
-      </div>
+      </Box>
     </>
   );
 };

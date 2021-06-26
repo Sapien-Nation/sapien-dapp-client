@@ -14,14 +14,13 @@ import { mockRouter } from 'mocks/routes';
 import TribeBar from 'components/navigation/TribeBar';
 
 jest.mock('api/tribeBar');
-const tribe = mockTribe();
-(createTribe as jest.Mock).mockResolvedValue(tribe);
 
+const push = jest.fn();
+const tribe = mockTribe();
 const error = 'Error';
 const tribes = [mockTribe(), mockTribe()];
 
-const renderComponent = () => render(<TribeBar />, { router: mockRouter() });
-
+(createTribe as jest.Mock).mockResolvedValue(tribe);
 window.URL.createObjectURL = jest.fn();
 
 afterEach(() => {
@@ -31,6 +30,9 @@ afterEach(() => {
 beforeEach(() => {
   cache.set('/api/profile/tribes', tribes);
 });
+
+const renderComponent = () =>
+  render(<TribeBar />, { router: mockRouter({ push }) });
 
 test('works correctly', () => {
   renderComponent();
@@ -93,11 +95,4 @@ test('CreateTribe', async () => {
     await screen.findByText('Tribe Created Successfully')
   ).toBeInTheDocument();
   expect(createTribe).toHaveBeenCalledWith(expect.any(FormData));
-
-  // New tribe should be on the TribeBar
-  expect(screen.getAllByRole('link')[2]).toHaveAttribute(
-    'href',
-    `/client/${tribe.mainSquareId}`
-  );
-  expect(screen.getAllByRole('img')[2]).toHaveAttribute('src', tribe.avatar);
 });

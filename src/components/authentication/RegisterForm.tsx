@@ -1,6 +1,9 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 
+// api
+import { register as registerAction } from 'api/authentication';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -25,7 +28,7 @@ import {
 import { ChartCount } from 'components/common';
 
 const Signup = () => {
-  const authMethods = useAuth();
+  const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     control,
@@ -41,11 +44,13 @@ const Signup = () => {
     username: string;
   }) => {
     try {
-      await authMethods.register({
+      const response = await registerAction({
         ...values,
         client: window?.navigator.userAgent,
         redirect: '/',
       });
+
+      setSession({ torus: response.torus, token: response.token });
     } catch (error) {
       enqueueSnackbar(error, {
         anchorOrigin: {
@@ -62,8 +67,11 @@ const Signup = () => {
         fullWidth
         required
         id="email"
-        inputProps={{ ...register('email'), autoComplete: 'email' }}
-        label="Email or phone number"
+        inputProps={{
+          ...register('email'),
+          autoComplete: 'email',
+        }}
+        label="Email"
         placeholder="myemailaddress@email.com"
         type="email"
       />
@@ -74,15 +82,14 @@ const Signup = () => {
         inputProps={{
           ...register('username'),
           autoComplete: 'username',
-          maxLength: '20',
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            Username*
+            Username
             <ChartCount control={control} maxCount={20} name="username" />
           </Box>
         }
-        placeholder="johniedoe"
+        placeholder="johndoe"
         type="text"
       />
       <TextField
@@ -90,13 +97,13 @@ const Signup = () => {
         required
         id="displayName"
         inputProps={{
-          ...register('displayName'),
           autoComplete: 'name',
-          maxLength: '20',
+          title: 'Invalid Name',
+          ...register('displayName'),
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            Name*
+            Name
             <ChartCount control={control} maxCount={20} name="displayName" />
           </Box>
         }
@@ -115,11 +122,11 @@ const Signup = () => {
         }}
         label={
           <>
-            Password*
+            Password
             <FormHelperText style={{ margin: 0 }}>
-              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
+              Minimum length is 8 characters. Must include at least an alpha, a{' '}
               <br />
-              numeric, 1 lowercaps, and 1 highercaps.
+              numeric, a lowercase and an uppercase.
             </FormHelperText>
           </>
         }
@@ -131,7 +138,6 @@ const Signup = () => {
           control={
             <Checkbox
               disableRipple
-              required
               checkedIcon={<CheckboxCheckedIcon />}
               color="default"
               icon={<CheckboxIcon />}
@@ -142,13 +148,12 @@ const Signup = () => {
             <Typography>
               <Typography component="span" variant="subtitle2">
                 I have read and agree to the
-              </Typography>
-              {" "}
+              </Typography>{' '}
               <Typography component="span" variant="subtitle2">
                 <a
                   href="https://common.sapien.network/terms.html"
                   rel="noreferrer"
-                  style={{ color: "#42D1E0" }}
+                  style={{ color: '#42D1E0' }}
                   target="_blank"
                 >
                   Terms & Conditions

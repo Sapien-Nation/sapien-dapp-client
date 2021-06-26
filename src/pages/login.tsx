@@ -1,8 +1,7 @@
+import Link from 'next/link';
+
 // mui
 import { Box, Typography } from '@material-ui/core';
-
-// next
-import Link from 'next/link';
 
 // components
 import Layout from './AuthLayout';
@@ -16,7 +15,7 @@ const LoginPage = () => {
       <Typography paragraph>
         <Typography component="span" variant="subtitle2">
           Don’t have an account?
-        </Typography>{" "}
+        </Typography>{' '}
         <Link href="/register">
           <a>
             <Typography variant="caption">Sign up</Typography>

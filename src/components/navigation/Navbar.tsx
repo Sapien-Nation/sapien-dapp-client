@@ -1,10 +1,19 @@
-import { useState } from 'react';
-
-// next
+import { useEffect, useState } from 'react';
+import { useSnackbar } from 'notistack';
+import { useLocalStorage } from 'react-use';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+// api
+import { connectWallet } from 'api/spn-wallet';
+import { logout } from 'api/authentication';
 
 // context
 import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
+
+// utils
+import { formatSpn } from 'utils/spn';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
@@ -29,7 +38,39 @@ import { MyBalance, MyTransactions } from 'components/balance';
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
-  const { me, logout } = useAuth();
+
+  const { query } = useRouter();
+  const [tokens] = useLocalStorage<{
+    token: string;
+    torus: string;
+  }>('tokens');
+  const { clearSession, me } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+  const { wallet, setWallet } = useWallet();
+
+  useEffect(() => {
+    const walletWeb3 = async () => {
+      if (tokens && Boolean(me) && query?.squareid && Boolean(!wallet))
+        try {
+          const walletConnected = await connectWallet(tokens.torus, me.id);
+          setWallet(walletConnected);
+        } catch (error) {
+          enqueueSnackbar(error);
+        }
+    };
+    walletWeb3();
+  }, [me, query]);
+
+  const handleLogout = async () => {
+    try {
+      setMenuAnchor(null);
+      await logout({ email: me.email });
+
+      clearSession();
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
 
   return (
     <AppBar color="inherit" elevation={0} position="relative">
@@ -39,7 +80,7 @@ const Navbar = () => {
             <>
               <Chip
                 icon={<SpnIcon />}
-                label="3197"
+                label={formatSpn(Number(wallet?.balance || 0))}
                 sx={{
                   bgcolor: 'rgba(98, 0, 234, 0.05)',
                   borderRadius: 90,
@@ -60,8 +101,7 @@ const Navbar = () => {
                 onClick={(event) => setMenuAnchor(event.currentTarget)}
               >
                 <Avatar alt={me.username}>
-                  {me.firstName[0]}
-                  {me.lastName?.[0]}
+                  {me.firstName?.[0]?.toUpperCase()}
                 </Avatar>
               </IconButton>
             </>
@@ -83,14 +123,7 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         onClose={() => setMenuAnchor(null)}
       >
-        <MenuItem
-          onClick={() => {
-            setMenuAnchor(null);
-            logout({ email: me.email });
-          }}
-        >
-          Logout
-        </MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
 
       <Menu
@@ -114,7 +147,7 @@ const Navbar = () => {
         onClose={() => setBalanceAnchor(null)}
       >
         <div>
-          <MyBalance />
+          <MyBalance wallet={wallet} />
           <Divider sx={{ borderColor: '#EDEEF0 !important', borderWidth: 1 }} />
           <MyTransactions />
         </div>

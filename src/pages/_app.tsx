@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { SnackbarProvider } from 'notistack';
@@ -9,14 +10,8 @@ import type { AppProps } from 'next/app';
 // api
 import axios from 'api';
 
-// next
-import Head from 'next/head';
-
 // mui
 import { ThemeProvider } from '@material-ui/core/styles';
-
-// utils
-import { init as initSentry } from 'utils/sentry';
 
 // styles
 import theme from 'styles/theme';
@@ -29,9 +24,8 @@ import { AuthenticationProvider } from 'context/user';
 
 // styles
 import '../styles/index.css';
-import 'draft-js/dist/Draft.css';
 
-initSentry();
+// initSentry();
 
 const Noop = ({ children }) => children;
 

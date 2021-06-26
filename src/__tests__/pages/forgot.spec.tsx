@@ -1,13 +1,22 @@
+// api
+import { forgot } from 'api/authentication';
+
 // components
-import ForgotPage from 'pages/forgot-password';
+import ForgotPage from 'pages/change-password';
 
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
+// mocks
+import { mockRouter } from 'mocks/routes';
+
 // mock data
+jest.mock('api/authentication');
+
+(forgot as jest.Mock).mockResolvedValue(true);
+
 const email = 'jhon@doe.com';
 const error = 'Error';
-const forgot = jest.fn();
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -15,7 +24,8 @@ beforeEach(() => {
 
 const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
-const renderComponent = () => render(<ForgotPage />, { user: { forgot } });
+
+const renderComponent = () => render(<ForgotPage />, { router: mockRouter() });
 
 test('renders correctly', async () => {
   renderComponent();
@@ -36,7 +46,7 @@ test('renders correctly', async () => {
   );
 
   // onError
-  forgot.mockRejectedValueOnce(error);
+  (forgot as jest.Mock).mockRejectedValueOnce(error);
   user.click(getSendButton());
 
   await waitFor(() => {

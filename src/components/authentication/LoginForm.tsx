@@ -1,11 +1,12 @@
+import Link from 'next/link';
 import { useSnackbar } from 'notistack';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+
+// api
+import { login as loginAction } from 'api/authentication';
 
 // context
 import { useAuth } from 'context/user';
-
-// next
-import Link from 'next/link';
 
 // mui
 import {
@@ -18,21 +19,30 @@ import {
 } from '@material-ui/core';
 
 const LoginForm = () => {
-  const { login } = useAuth();
+  const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
+    control,
     handleSubmit,
     register,
     formState: { isSubmitting },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      remember: true,
+    },
+  });
 
   const onSubmit = async (values: { email: string; password: string }) => {
     try {
-      await login({
+      const response = await loginAction({
         ...values,
         client: window?.navigator.userAgent,
         redirect: '/',
       });
+
+      setSession({ torus: response.torus, token: response.token });
     } catch (error) {
       enqueueSnackbar(error, {
         anchorOrigin: {
@@ -50,7 +60,7 @@ const LoginForm = () => {
         required
         id="email"
         inputProps={{ ...register('email'), autoComplete: 'email' }}
-        label="Email, phone number, or username"
+        label="Email or username"
         placeholder="myemailaddress@email.com"
         type="email"
       />
@@ -70,9 +80,18 @@ const LoginForm = () => {
         justifyContent="space-between"
         marginBottom={2}
       >
-        <FormControlLabel
-          control={<Checkbox defaultChecked color="default" name="remember" />}
-          label={<Typography variant="subtitle2">Remember me</Typography>}
+        <Controller
+          control={control}
+          defaultValue={true}
+          name="remember"
+          render={({ field: { value, ...rest } }) => (
+            <FormControlLabel
+              control={
+                <Checkbox checked={Boolean(value)} color="default" {...rest} />
+              }
+              label={<Typography variant="subtitle2">Remember me</Typography>}
+            />
+          )}
         />
         <Link href="/forgot-password">
           <a>

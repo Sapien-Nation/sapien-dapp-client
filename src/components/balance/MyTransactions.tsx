@@ -19,7 +19,7 @@ import { darkGrey, primary } from 'styles/colors';
 // utils
 import { formatTimestampToRelative } from 'utils/date';
 
-const MyBalance = () => {
+const MyTransactions = () => {
   return (
     <Box padding={2}>
       <Typography
@@ -35,7 +35,7 @@ const MyBalance = () => {
         My Transactions
       </Typography>
       <Query
-        apiUrl="/api/balance/transactions"
+        api="/api/balance/transactions"
         options={{ fetcher: () => [mockTransaction()] }}
       >
         {(transactions: Array<Transaction>) => (
@@ -93,4 +93,4 @@ const MyBalance = () => {
   );
 };
 
-export default MyBalance;
+export default MyTransactions;

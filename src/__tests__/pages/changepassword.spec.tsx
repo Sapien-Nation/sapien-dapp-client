@@ -1,14 +1,20 @@
+// api
+import { changePassword } from 'api/authentication';
+
 // components
-import ChangePasswordPage from 'pages/forgot-password/change';
+import ChangePasswordPage from 'pages/change-password/change';
 
 // utils
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
 // mock data
+jest.mock('api/authentication');
+
+(changePassword as jest.Mock).mockResolvedValue(true);
+
 const error = 'Error';
 const password = '123456';
 const token = '';
-const changePassword = jest.fn();
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -16,8 +22,8 @@ beforeEach(() => {
 
 const getSendButton = () =>
   screen.getByRole('button', { name: 'Send request' });
-const renderComponent = () =>
-  render(<ChangePasswordPage />, { user: { changePassword } });
+
+const renderComponent = () => render(<ChangePasswordPage />);
 
 test('renders correctly', async () => {
   renderComponent();
@@ -38,7 +44,7 @@ test('renders correctly', async () => {
   });
 
   // onError
-  changePassword.mockRejectedValueOnce(error);
+  (changePassword as jest.Mock).mockRejectedValueOnce(error);
   user.clear(confirmPasswordField);
   user.type(confirmPasswordField, password);
   user.click(getSendButton());

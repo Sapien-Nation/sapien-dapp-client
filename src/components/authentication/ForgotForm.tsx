@@ -1,24 +1,24 @@
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
+// api
+import { forgot } from 'api/authentication';
+
 // mui
 import { Button, TextField } from '@material-ui/core';
-
-// context
-import { useAuth } from 'context/user';
 
 interface Props {
   changeView: () => void;
 }
 
 const Forgot = ({ changeView }: Props) => {
-  const { forgot } = useAuth();
   const { handleSubmit, register } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async ({ email }: { email: string }) => {
     try {
       await forgot(email);
+
       changeView();
     } catch (error) {
       enqueueSnackbar(error, {

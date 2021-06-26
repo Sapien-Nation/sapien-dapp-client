@@ -1,3 +1,6 @@
+// api
+import { register } from 'api/authentication';
+
 // components
 import RegisterPage from 'pages/register';
 
@@ -5,20 +8,19 @@ import RegisterPage from 'pages/register';
 import { render, screen, user, waitFor } from 'utils/testUtils';
 
 // mock data
+jest.mock('api/authentication');
+
+const token = '123';
+const torus = '123';
+(register as jest.Mock).mockResolvedValue({ token, torus });
+
 const email = 'jhon@doe.com';
 const displayName = 'Jonathan Doe';
 const password = '123456';
 const username = 'johniedoe';
 const userAgent = 'user agent';
 const error = 'Error';
-const register = jest.fn();
-
-beforeEach(() => {
-  jest.clearAllMocks();
-});
-
-const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
-const renderComponent = () => render(<RegisterPage />, { user: { register } });
+const setSession = jest.fn();
 
 (global as any).userAgent = jest.spyOn(navigator, 'userAgent', 'get');
 (global as any).userAgent.mockReturnValue(userAgent);
@@ -26,6 +28,11 @@ const renderComponent = () => render(<RegisterPage />, { user: { register } });
 beforeEach(() => {
   jest.clearAllMocks();
 });
+
+const getSignupButton = () => screen.getByRole('button', { name: 'Sign Up' });
+
+const renderComponent = () =>
+  render(<RegisterPage />, { user: { setSession } });
 
 test('renders correctly', async () => {
   renderComponent();
@@ -44,7 +51,7 @@ test('renders correctly', async () => {
     expect(register).not.toHaveBeenCalled();
   });
 
-  user.type(screen.getByLabelText(/email or phone number/i), email);
+  user.type(screen.getByLabelText(/email/i), email);
   user.type(screen.getByLabelText(/username*/i), username);
   user.type(screen.getByLabelText(/Name*/), displayName);
   user.type(screen.getByLabelText(/password*/i), password);
@@ -61,7 +68,7 @@ test('renders correctly', async () => {
   );
 
   // onError
-  register.mockRejectedValueOnce(error);
+  (register as jest.Mock).mockRejectedValueOnce(error);
   user.click(getSignupButton());
 
   await waitFor(() => {
@@ -89,5 +96,7 @@ test('renders correctly', async () => {
       redirect: '/',
       client: userAgent,
     });
+
+    expect(setSession).toHaveBeenCalledWith({ torus, token });
   });
 });

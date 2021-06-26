@@ -1,34 +1,18 @@
-import useSWR, { mutate } from 'swr';
-import { createContext, useContext } from 'react';
-
-// next
 import { useRouter } from 'next/router';
+import { createContext, useContext } from 'react';
+import { useLocalStorage } from 'react-use';
+import useSWR, { mutate } from 'swr';
 
 // types
 import { User } from 'tools/types/user';
 
 // api
 import { authInstance } from 'api';
-
-interface PostBody {
-  email: string;
-  password: string;
-  redirect: string;
-  client: string;
-}
-
 export interface Authentication {
   me: User | null;
-  changePassword: (values: {
-    password: string;
-    token: string;
-  }) => Promise<unknown>;
-  forgot: (email: string) => Promise<unknown>;
-  login: (values: PostBody) => Promise<unknown>;
-  logout: (values: { email: string }) => Promise<unknown>;
+  clearSession: () => void;
   isLoggingIn: boolean;
-  register: (values: PostBody) => Promise<unknown>;
-  verifyUser: (token: string) => Promise<unknown>;
+  setSession: (tokens: { token: string; torus: string }) => void;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -39,9 +23,7 @@ interface Props {
 
 const fetcher = async () => {
   try {
-    const { data } = await authInstance.get('/api/v3/user/me', {
-      withCredentials: true,
-    });
+    const { data } = await authInstance.get('/api/v3/user/me');
     return data;
   } catch (err) {
     Promise.reject(err);
@@ -51,85 +33,33 @@ const fetcher = async () => {
 const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
   const { data } = useSWR<User>('/api/v3/user/me', { fetcher });
+  const [, setTokens, removeTokens] = useLocalStorage<null | {
+    token: string;
+    torus: string;
+  }>('tokens', null);
 
   const isLoggingIn = data === undefined;
 
-  const logout = async (body: { email: string }) => {
-    try {
-      await authInstance.post('/api/v3/auth/logout', body);
-      mutate('/api/v3/user/me', null, false);
-      push('/login');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
+  const clearSession = () => {
+    removeTokens();
+    mutate('/api/v3/user/me', null, false);
+    mutate('/api/profile/tribes', []);
+    push('/login');
   };
 
-  const login = async (body: PostBody) => {
-    try {
-      await authInstance.post('/api/v3/auth/login', body);
-      mutate('/api/v3/user/me');
-      push('/');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const register = async (body: PostBody) => {
-    try {
-      await authInstance.post('/api/v3/auth/signup', body);
-      mutate('/api/v3/user/me');
-      push('/');
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const forgot = async (email: string) => {
-    try {
-      await authInstance.post('/api/v3/user/forgot-password', {
-        email,
-      });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const changePassword = async ({
-    password,
-    token,
-  }: {
-    password: string;
-    token: string;
-  }) => {
-    try {
-      await authInstance.post('/api/v3/user/reset-password', {
-        password,
-        token,
-      });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
-  };
-
-  const verifyUser = async (token: string) => {
-    try {
-      await authInstance.post('/api/v3/user/verify-user-email', { token });
-    } catch ({ response }) {
-      return Promise.reject(response.data.message);
-    }
+  const setSession = ({ token, torus }: { token: string; torus: string }) => {
+    setTokens({ token, torus });
+    mutate('/api/v3/user/me');
+    push('/');
   };
 
   return (
     <AuthenticationContext.Provider
       value={{
-        changePassword,
-        forgot,
+        clearSession,
         me: data,
         isLoggingIn,
-        login,
-        logout,
-        register,
-        verifyUser,
+        setSession,
       }}
     >
       {children}
