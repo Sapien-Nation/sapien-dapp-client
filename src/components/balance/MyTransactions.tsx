@@ -23,12 +23,12 @@ const MyTransactions = () => {
   return (
     <Box padding={2}>
       <Typography
-        sx={{
+        style={{
           letterSpacing: 1,
           textTransform: 'uppercase',
           color: darkGrey,
           fontWeight: 700,
-          marginBottom: 2,
+          marginBottom: 20,
         }}
         variant="subtitle2"
       >
@@ -45,29 +45,37 @@ const MyTransactions = () => {
                 key={index}
                 alignItems="center"
                 display="flex"
-                gap={2}
                 justifyContent="space-between"
+                style={{ gap: 20 }}
               >
-                <Avatar sx={{ bgcolor: '#FFECF2' }}>
+                <Avatar style={{ backgroundColor: '#FFECF2' }}>
                   <TransactionIcon />
                 </Avatar>
                 <Box display="flex" flexDirection="column">
-                  <Typography sx={{ lineHeight: 1.4 }} variant="button">
+                  <Typography style={{ lineHeight: 1.4 }} variant="button">
                     {transactions.info.type}
                   </Typography>
                   <Typography
-                    sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
+                    style={{
+                      lineHeight: 1.4,
+                      color: darkGrey,
+                      fontWeight: 400,
+                    }}
                     variant="button"
                   >
                     {formatTimestampToRelative(transactions.updatedAt)}
                   </Typography>
                 </Box>
                 <Box display="flex" flexDirection="column" marginLeft="auto">
-                  <Typography sx={{ lineHeight: 1.4 }} variant="button">
+                  <Typography style={{ lineHeight: 1.4 }} variant="button">
                     {transactions.info.amount}
                   </Typography>
                   <Typography
-                    sx={{ lineHeight: 1.4, color: darkGrey, fontWeight: 400 }}
+                    style={{
+                      lineHeight: 1.4,
+                      color: darkGrey,
+                      fontWeight: 400,
+                    }}
                     variant="button"
                   >
                     ${transactions.info.amount}
@@ -79,7 +87,7 @@ const MyTransactions = () => {
         )}
       </Query>
       <Typography
-        sx={{
+        style={{
           fontSize: 14,
           textAlign: 'center',
           color: primary,

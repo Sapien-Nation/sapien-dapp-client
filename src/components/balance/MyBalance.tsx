@@ -7,7 +7,7 @@ import { Spn as SpnIcon } from 'assets';
 import type { Wallet as WalletType } from 'tools/types/wallet';
 
 // mui
-import { Box, Button, Chip, Typography } from '@material-ui/core';
+import { Box, Button, Chip, Typography, makeStyles } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 
 // styles
@@ -20,14 +20,30 @@ import { formatSpn, formatEthToUsd } from 'utils/spn';
 import DepositModal from './DepositModal';
 import WithdrawModal from './WithdrawModal';
 
+const useStyles = makeStyles(() => ({
+  actionButton: {
+    color: '#000',
+    minHeight: 34,
+    maxHeight: 34,
+    px: 1,
+    border: '2px solid #EDEEF0',
+    '&:hover': {
+      border: '2px solid #EDEEF0',
+    },
+  },
+  svgIcon: {
+    color: '#C4C5CC',
+  },
+}));
+
 const MyBalance = ({ wallet }: { wallet: WalletType }) => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [usd, setUsd] = useState('$0');
-
+  const classes = useStyles();
   useEffect(() => {
     const getAmount = async () => {
-      const amount = await formatEthToUsd(Number(wallet?.balance));
+      const amount = await formatEthToUsd(Number(wallet?.balance || 0));
       setUsd(amount);
     };
     getAmount();
@@ -36,57 +52,56 @@ const MyBalance = ({ wallet }: { wallet: WalletType }) => {
   return (
     <>
       <Box padding={2}>
-        <Box alignItems="center" display="flex" gap={1} mb={1}>
+        <Box
+          alignItems="center"
+          display="flex"
+          mb={2}
+          style={{
+            gap: 10,
+          }}
+        >
           <SpnIcon size={22} />
           <Typography variant="h2">
-            {formatSpn(Number(wallet?.balance))}
+            {formatSpn(Number(wallet?.balance || 0))}
           </Typography>
           <Chip
             label={usd}
-            sx={{
-              bgcolor: gray2,
+            style={{
+              backgroundColor: gray2,
               color: darkGrey,
             }}
           />
         </Box>
-        <Box display="flex" gap={1}>
+        <Box display="flex" style={{ gap: 10 }}>
           <Button
-            color="secondary"
-            startIcon={<ArrowUpward />}
-            sx={{
-              color: '#000',
-              minHeight: 34,
-              maxHeight: 34,
-              px: 1,
-              border: '2px solid #EDEEF0',
-              '.MuiSvgIcon-root': {
-                color: '#C4C5CC',
-              },
-              '&:hover': {
-                border: '2px solid #EDEEF0',
-              },
+            classes={{
+              root: classes.actionButton,
             }}
+            color="secondary"
+            startIcon={
+              <ArrowUpward
+                classes={{
+                  root: classes.svgIcon,
+                }}
+              />
+            }
             variant="outlined"
             onClick={() => setShowDepositModal(true)}
           >
             Deposit
           </Button>
           <Button
-            color="secondary"
-            startIcon={<ArrowDownward />}
-            sx={{
-              color: '#000',
-              minHeight: 34,
-              maxHeight: 34,
-              px: 1,
-              border: '2px solid #EDEEF0',
-              '.MuiSvgIcon-root': {
-                color: '#C4C5CC',
-              },
-              '&:hover': {
-                border: '2px solid #EDEEF0',
-              },
+            classes={{
+              root: classes.actionButton,
             }}
+            color="secondary"
+            startIcon={
+              <ArrowDownward
+                classes={{
+                  root: classes.svgIcon,
+                }}
+              />
+            }
             variant="outlined"
             onClick={() => setShowWithdrawModal(true)}
           >

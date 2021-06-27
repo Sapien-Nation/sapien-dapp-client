@@ -1,8 +1,8 @@
-const Spn = ({ size = 18 }: { size?: number }) => (
+const Spn = ({ size = 18, style }: { size?: number; style?: unknown }) => (
   <svg
-    className="MuiChip-icon"
     fill="none"
     height={size}
+    style={style}
     viewBox="0 0 18 18"
     width={size}
     xmlns="http://www.w3.org/2000/svg"

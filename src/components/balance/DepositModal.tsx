@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // mui
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 
 //components
 import { Dialog } from 'components/common';
@@ -21,29 +21,43 @@ interface Props {
   onClose: () => void;
 }
 
+const useStyles = makeStyles(() => ({
+  buttonLabel: {
+    gap: 10,
+  },
+  paper: { maxWidth: 510 },
+}));
+
 const DepositModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.DepositMetamask);
+
+  const classes = useStyles();
 
   const renderFields = () => {
     switch (step) {
       case Step.DepositMetamask: {
         return (
           <>
-            <Typography sx={{ marginY: 2 }} variant="h2">
+            <Typography style={{ margin: '2rem 0' }} variant="h2">
               Deposit to balance
             </Typography>
             <Typography variant="body2">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Euismod
-              magna tempor morbi condimentum.
+              To deposit SPN tokens to the platform, install Metamask and
+              complete the transaction.
+            </Typography>
+            <Typography variant="body2">
+              The SPN tokens will be deposited to your Sapien Wallet
+              automatically.
             </Typography>
             <Button
               fullWidth
-              sx={{
-                marginY: 4,
-                bgcolor: black,
-                '.MuiButton-label': {
-                  gap: 1,
-                },
+              classes={{
+                label: classes.buttonLabel,
+              }}
+              style={{
+                margin: '4rem 0',
+                backgroundColor: black,
+                color: 'white',
               }}
               variant="contained"
               onClick={() => setStep(Step.DepositSuccess)}
@@ -64,17 +78,18 @@ const DepositModal = ({ onClose }: Props) => {
           >
             <DepositSuccess />
             <Typography
-              sx={{ marginTop: 4, marginBottom: 1.5, lineHeight: 1.6 }}
+              style={{ marginTop: 40, marginBottom: 1.5, lineHeight: 1.6 }}
               variant="h2"
             >
               You have successfully deposited 1,995.00 SPN to your balance
             </Typography>
-            <Typography sx={{ color: darkGrey }} variant="body2">
+            <Typography style={{ color: darkGrey }} variant="body2">
               The funds will appear in your balance shortly
             </Typography>
             <Button
-              sx={{
-                marginY: 6,
+              color="primary"
+              style={{
+                margin: '6rem 0',
               }}
               variant="contained"
               onClick={() => onClose()}
@@ -91,7 +106,7 @@ const DepositModal = ({ onClose }: Props) => {
     <Dialog
       open
       actions={null}
-      sx={{ '.MuiPaper-root': { maxWidth: 510 } }}
+      classes={{ paper: classes.paper }}
       onClose={onClose}
     >
       {renderFields()}

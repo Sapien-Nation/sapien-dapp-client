@@ -13,6 +13,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import { ContentCopy as ContentCopyIcon } from '@material-ui/icons';
 
@@ -41,6 +42,19 @@ const form = 'withdraw-form';
 const minSpn = 99;
 const transactionFee = 3;
 const userBalance = 15000;
+
+const useStyles = makeStyles(() => ({
+  paper: { maxWidth: 510 },
+  amountInput: {
+    '& input::placeholder': {
+      color: black,
+      opacity: 1,
+    },
+  },
+  amountInputFocus: {
+    border: 'none !important',
+  },
+}));
 
 const NumberFormatInput = ({ name, onChange, ...rest }) => {
   return (
@@ -73,6 +87,7 @@ const WithdrawModal = ({ onClose }: Props) => {
       withdraw: 0,
     },
   });
+  const classes = useStyles();
   const watchWithdraw = watch('withdraw');
   const { enqueueSnackbar } = useSnackbar();
 
@@ -153,17 +168,16 @@ const WithdrawModal = ({ onClose }: Props) => {
       case Step.Withdraw: {
         return (
           <>
-            <Typography sx={{ marginY: 2 }} variant="h2">
+            <Typography style={{ margin: '2rem 0' }} variant="h2">
               Withdraw from balance
             </Typography>
             <Typography variant="body2">
               To withdraw funds, go to your desired external wallet and fetch
               your wallet address
             </Typography>
-            <Box paddingTop={6}>
+            <Box paddingTop={5}>
               <TextField
                 fullWidth
-                required
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -172,7 +186,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                           aria-label="Paste"
                           edge="end"
                           size="small"
-                          sx={{ color: primary }}
+                          style={{ color: primary }}
                           onClick={copyAddress}
                         >
                           <ContentCopyIcon fontSize="small" />
@@ -182,7 +196,12 @@ const WithdrawModal = ({ onClose }: Props) => {
                   ),
                 }}
                 inputProps={{
-                  ...register('destinationAddress'),
+                  ...register('destinationAddress', {
+                    required: {
+                      value: true,
+                      message: 'Enter an address',
+                    },
+                  }),
                   autoComplete: 'destinationAddress',
                   maxLength: 20,
                 }}
@@ -195,7 +214,7 @@ const WithdrawModal = ({ onClose }: Props) => {
               />
               <Box bgcolor={gray4} borderRadius={2} padding={2.5}>
                 <Typography
-                  sx={{
+                  style={{
                     color: darkGrey,
                     textTransform: 'uppercase',
                     fontWeight: 700,
@@ -207,8 +226,12 @@ const WithdrawModal = ({ onClose }: Props) => {
                 </Typography>
                 <Input
                   required
+                  classes={{
+                    root: classes.amountInput,
+                    focused: classes.amountInputFocus,
+                  }}
                   endAdornment={
-                    <InputAdornment position="end" sx={{ color: black }}>
+                    <InputAdornment position="end" style={{ color: black }}>
                       SPN{' '}
                       <small
                         style={{
@@ -229,22 +252,13 @@ const WithdrawModal = ({ onClose }: Props) => {
                     maxLength: 8,
                   }}
                   placeholder="0"
-                  sx={{
-                    bgcolor: 'transparent',
+                  style={{
+                    backgroundColor: 'transparent',
                     fontSize: 22,
                     fontWeight: 700,
                     minHeight: 30,
                     padding: 0,
                     width: 140 + String(watchWithdraw)?.length * 16,
-                    '.MuiTypography-root': {
-                      color: black,
-                      fontWeight: 700,
-                      marginTop: '2px',
-                    },
-                    '> input::placeholder': {
-                      color: black,
-                      opacity: 1,
-                    },
                   }}
                 />
                 <Box
@@ -253,7 +267,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                   marginTop={3}
                 >
                   <Typography
-                    sx={{ color: red, fontWeight: 100 }}
+                    style={{ color: red, fontWeight: 100 }}
                     variant="caption"
                   >
                     {isDirty && watchWithdraw < minSpn
@@ -261,7 +275,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                       : null}
                   </Typography>
                   <Typography
-                    sx={{
+                    style={{
                       fontWeight: 100,
                       color: userBalance < watchWithdraw ? red : darkGrey,
                     }}
@@ -279,8 +293,9 @@ const WithdrawModal = ({ onClose }: Props) => {
             {watchWithdraw > minSpn ? renderFees() : null}
             <Button
               fullWidth
+              color="primary"
               disabled={watchWithdraw <= minSpn || watchWithdraw > userBalance}
-              sx={{ marginTop: 4 }}
+              style={{ marginTop: 40 }}
               type="submit"
               variant="contained"
             >
@@ -295,12 +310,12 @@ const WithdrawModal = ({ onClose }: Props) => {
               </small>
             </Button>
             <Typography
-              sx={{
+              style={{
                 color: darkGrey,
                 fontWeight: 100,
                 textAlign: 'center',
-                marginTop: 1,
-                marginBottom: 4,
+                marginTop: 10,
+                marginBottom: 30,
                 fontSize: 14,
               }}
             >
@@ -320,17 +335,18 @@ const WithdrawModal = ({ onClose }: Props) => {
           >
             <WithdrawSuccess />
             <Typography
-              sx={{ marginTop: 4, marginBottom: 1.5, lineHeight: 1.6 }}
+              style={{ marginTop: 4, marginBottom: 1.5, lineHeight: 1.6 }}
               variant="h2"
             >
               You have successfully withdrawn 2,500 SPN from your balance
             </Typography>
-            <Typography sx={{ color: darkGrey }} variant="body2">
+            <Typography style={{ color: darkGrey }} variant="body2">
               The funds will appear on your external wallet account shortly.
             </Typography>
             <Button
-              sx={{
-                marginY: 6,
+              color="primary"
+              style={{
+                margin: '6rem 0',
               }}
               variant="contained"
               onClick={() => onClose()}
@@ -347,7 +363,7 @@ const WithdrawModal = ({ onClose }: Props) => {
     <Dialog
       open
       actions={null}
-      sx={{ '.MuiPaper-root': { maxWidth: 510 } }}
+      classes={{ paper: classes.paper }}
       onClose={onClose}
     >
       <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
