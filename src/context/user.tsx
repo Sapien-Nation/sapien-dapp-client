@@ -43,7 +43,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const clearSession = () => {
     removeTokens();
     mutate('/api/v3/user/me', null, false);
-    mutate('/api/profile/tribes', []);
+    mutate('/api/v3/profile/tribes', []);
     push('/login');
   };
 

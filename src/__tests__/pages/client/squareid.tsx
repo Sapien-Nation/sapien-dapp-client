@@ -21,8 +21,8 @@ const query = { squareID: tribe.mainSquareId };
 beforeEach(() => {
   jest.clearAllMocks();
 
-  cache.set('/api/profile/tribes', [tribe]);
-  cache.set(`/api/tribe/${tribe.id}`, tribeMedia);
+  cache.set('/api/v3/profile/tribes', [tribe]);
+  cache.set(`/api/v3/tribe/${tribe.id}`, tribeMedia);
 });
 
 const renderComponent = () =>

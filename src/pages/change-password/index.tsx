@@ -22,10 +22,12 @@ const ForgotPage = () => {
     switch (view) {
       case View.Form:
         return (
-          <Box display="grid" gap={3}>
-            <Typography variant="h2">Forgotten Password</Typography>
-            <ForgotForm changeView={() => setView(View.Success)} />
-            <Typography paragraph>
+          <>
+            <Typography variant="h1">Forgotten Password</Typography>
+            <Box marginTop={6.5}>
+              <ForgotForm changeView={() => setView(View.Success)} />
+            </Box>
+            <Box marginTop={2} textAlign="center">
               <Typography component="span" variant="subtitle2">
                 Remembered your password?
               </Typography>{' '}
@@ -34,36 +36,44 @@ const ForgotPage = () => {
                   <Typography variant="caption">Log in</Typography>
                 </a>
               </Link>
-            </Typography>
-          </Box>
+            </Box>
+          </>
         );
       case View.Success:
         return (
-          <Box display="grid" gap={3}>
+          <Box textAlign="center">
             <Typography variant="h2">Request sent successfully</Typography>
-            <Typography variant="body2">
-              If the email and username provided match, you will receive
-              instructions to set a new password shortly.
-            </Typography>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => push('/login')}
-            >
-              Got it!
-            </Button>
-            <Typography paragraph>
+            <Box marginTop={4}>
+              <Typography variant="body2">
+                If the email and username provided match, you will receive
+                instructions to set a new password shortly.
+              </Typography>
+            </Box>
+            <Box marginTop={4}>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => push('/login')}
+              >
+                Got it!
+              </Button>
+            </Box>
+            <Box marginTop={2}>
               <Typography
                 color="textPrimary"
                 component="span"
                 variant="subtitle2"
               >
                 Haven’t received an email?
-              </Typography>
-              <Button color="inherit" onClick={() => setView(View.Form)}>
+              </Typography>{' '}
+              <Typography
+                style={{ cursor: 'pointer' }}
+                variant="caption"
+                onClick={() => setView(View.Form)}
+              >
                 Resend
-              </Button>
-            </Typography>
+              </Typography>
+            </Box>
           </Box>
         );
     }

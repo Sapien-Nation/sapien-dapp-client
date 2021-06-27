@@ -1,18 +1,20 @@
 import Link from 'next/link';
 
-// mui
-import { Box, Typography } from '@material-ui/core';
-
 // components
 import Layout from './AuthLayout';
 import { LoginForm } from 'components/authentication';
 
+// mui
+import { Box, Typography } from '@material-ui/core';
+
 const LoginPage = () => {
   return (
-    <Box display="grid" gap={3}>
+    <>
       <Typography variant="h1">Log in</Typography>
-      <LoginForm />
-      <Typography paragraph>
+      <Box marginTop={6.5}>
+        <LoginForm />
+      </Box>
+      <Box marginTop={2} textAlign="center">
         <Typography component="span" variant="subtitle2">
           Don’t have an account?
         </Typography>{' '}
@@ -21,8 +23,8 @@ const LoginPage = () => {
             <Typography variant="caption">Sign up</Typography>
           </a>
         </Link>
-      </Typography>
-    </Box>
+      </Box>
+    </>
   );
 };
 

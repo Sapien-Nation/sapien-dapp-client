@@ -7,12 +7,19 @@ import { forgot } from 'api/authentication';
 // mui
 import { Button, TextField } from '@material-ui/core';
 
+// utils
+import { EmailRegex } from 'utils/regex';
+
 interface Props {
   changeView: () => void;
 }
 
 const Forgot = ({ changeView }: Props) => {
-  const { handleSubmit, register } = useForm();
+  const {
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    register,
+  } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async ({ email }: { email: string }) => {
@@ -30,19 +37,38 @@ const Forgot = ({ changeView }: Props) => {
     }
   };
 
+  console.log(errors);
+
   return (
     <form id="forgot-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
-        required
         id="email"
-        inputProps={{ ...register('email'), autoComplete: 'email' }}
-        label="Email, phone number, or username"
-        placeholder="Enter your email, phone number, or username"
+        inputProps={{
+          ...register('email', {
+            pattern: {
+              value: EmailRegex,
+              message: 'Invalid email',
+            },
+            required: {
+              value: true,
+              message: 'Enter an email',
+            },
+          }),
+          autoComplete: 'email',
+        }}
+        label="Email or username"
+        placeholder="Enter your email, or username"
         type="email"
       />
 
-      <Button fullWidth color="primary" type="submit" variant="contained">
+      <Button
+        fullWidth
+        color="primary"
+        disabled={isSubmitting}
+        type="submit"
+        variant="contained"
+      >
         Send request
       </Button>
     </form>

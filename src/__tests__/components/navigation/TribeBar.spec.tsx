@@ -28,7 +28,7 @@ afterEach(() => {
 });
 
 beforeEach(() => {
-  cache.set('/api/profile/tribes', tribes);
+  cache.set('/api/v3/profile/tribes', tribes);
 });
 
 const renderComponent = () =>

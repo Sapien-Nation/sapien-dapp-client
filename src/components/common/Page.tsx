@@ -10,7 +10,7 @@ interface Props {
 const Page = ({ children, header, subHeader }: Props) => {
   return (
     <div className="card--rounded-gray">
-      <Box display="grid" gap={3} paddingX={3.8} paddingY={3}>
+      <Box display="grid" paddingX={3.8} paddingY={3} style={{ gap: '30px' }}>
         {header}
         {subHeader}
         {children}

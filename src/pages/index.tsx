@@ -30,10 +30,10 @@ const Index = ({ tribes }: Props) => {
 const IndexPage = () => {
   const { me } = useAuth();
 
-  if (!me) return null;
+  if (!me) return 'TODO NOT AUTH API CALL';
 
   return (
-    <Query api="/api/profile/tribes">
+    <Query api="/api/v3/profile/tribes" loader={<span>Redirecting...</span>}>
       {(tribes: Array<Tribe>) => <Index tribes={tribes} />}
     </Query>
   );

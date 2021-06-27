@@ -44,17 +44,9 @@ const AuthLayout = ({ children }: Props) => {
             }}
           />
         )}
-        <Box
-          alignSelf="center"
-          display="flex"
-          flexDirection="column"
-          gap={4}
-          justifySelf="center"
-          marginY={6}
-          maxWidth={390}
-        >
+        <Box marginTop={20} paddingX={8.5}>
           <FullLogo />
-          {children}
+          <Box marginTop={8.5}>{children}</Box>
         </Box>
       </Box>
     </>

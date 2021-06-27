@@ -1,11 +1,21 @@
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 
 // api
 import { changePassword as changePasswordAction } from 'api/authentication';
 
 // mui
-import { Button, TextField, FormHelperText } from '@material-ui/core';
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+} from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+
+// utils
+import { PasswordRegex } from 'utils/regex';
 
 interface Props {
   changeView: () => void;
@@ -13,25 +23,19 @@ interface Props {
 }
 
 const ChangePassword = ({ changeView, token }: Props) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
   const {
     formState: { isSubmitting },
-    getValues,
     handleSubmit,
     register,
+    watch,
   } = useForm();
   const { enqueueSnackbar } = useSnackbar();
 
   const onSubmit = async ({ password }: { password: string }) => {
     try {
-      const repeatPassword = getValues('repeatPassword');
-      if (repeatPassword !== password) {
-        return enqueueSnackbar('Password dont match', {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'right',
-          },
-        });
-      }
       await changePasswordAction({ password, token });
       changeView();
     } catch (error) {
@@ -48,39 +52,73 @@ const ChangePassword = ({ changeView, token }: Props) => {
     <form id="change-password-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
-        required
-        InputLabelProps={{ style: { pointerEvents: 'auto' } }}
+        InputLabelProps={{
+          style: { pointerEvents: 'auto' },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                edge="end"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
         id="password"
         inputProps={{
-          ...register('password'),
-          autoComplete: 'password',
-          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
+          ...register('password', {
+            pattern: {
+              value: PasswordRegex,
+              message: 'Invalid password',
+            },
+            required: {
+              value: true,
+              message: 'Enter a password',
+            },
+          }),
+          autoComplete: 'new-password',
         }}
-        label={
-          <>
-            Password*
-            <FormHelperText style={{ margin: 0 }}>
-              Minimum length is 8 characters. Must include at least 1 alpha, 1{' '}
-              <br />
-              numeric, 1 lowercaps, and 1 highercaps.
-            </FormHelperText>
-          </>
-        }
-        placeholder="password"
-        type="password"
+        label="Password"
+        placeholder="mypassword123*"
+        type={showPassword ? 'text' : 'password'}
       />
-
       <TextField
         fullWidth
-        required
-        id="repeat-password"
-        inputProps={{
-          ...register('repeatPassword'),
-          autoComplete: 'repat-password',
+        InputLabelProps={{
+          style: { pointerEvents: 'auto' },
         }}
-        label="Confirm password"
-        placeholder="password"
-        type="password"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                edge="end"
+                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+              >
+                {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        id="confirmPassword"
+        inputProps={{
+          ...register('confirmPassword', {
+            required: {
+              value: true,
+              message: 'Enter a password',
+            },
+            validate: (value) =>
+              value === watch('password') || "Passwords don't match.",
+          }),
+          autoComplete: 'new-password',
+        }}
+        label="Confirm Password"
+        placeholder="Repeat Password"
+        type={showRepeatPassword ? 'text' : 'password'}
       />
 
       <Button

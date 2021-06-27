@@ -4,14 +4,18 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
 
-// types
-import type { Tribe } from 'tools/types/tribeBar';
-
 // api
-import { createTribe } from 'api/tribeBar';
+import { createTribe, uploadImage } from 'api/tribeBar';
+
+// components
+import { Dialog, DropZone, ChartCount } from 'components/common';
 
 // utils
 import { FilePreview, MazSizeHelper } from 'utils/dropzone';
+import { TribeNameRegex, TribeIdentifierRegex } from 'utils/regex';
+
+// types
+import type { CreateTribe, Tribe } from 'tools/types/tribeBar';
 
 // mui
 import {
@@ -26,9 +30,6 @@ import {
 } from '@material-ui/core';
 import { Add as AddIcon } from '@material-ui/icons';
 
-//components
-import { Dialog, DropZone, ChartCount } from 'components/common';
-
 enum Step {
   TribeSummary = 1,
   TribeMedia,
@@ -40,15 +41,23 @@ interface Props {
 
 const form = 'create-tribe-form';
 
+// @ts-ignore
+interface TribeForm extends CreateTribe {
+  avatar: null | { url: string; key: string };
+  cover: null | { url: string; key: string };
+}
+
 const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
+  const [isUploading, setIsUploading] = useState(false);
+
   const {
     control,
     formState: { isSubmitting },
     handleSubmit,
     register,
     watch,
-  } = useForm({
+  } = useForm<TribeForm>({
     defaultValues: {
       avatar: null,
       cover: null,
@@ -61,24 +70,19 @@ const CreateTribeModal = ({ onClose }: Props) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
+  const [avatar, cover] = watch(['avatar', 'cover']);
+
   const handleFormSubmit = async (values) => {
     try {
       if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
-      const formData = new FormData();
-      if (values.avatar) {
-        formData.append('avatar', values.avatar[0]);
-      }
-      if (values.cover) {
-        formData.append('cover', values.cover[0]);
-      }
-      formData.append('description', values.description);
-      formData.append('identifier', values.identifier);
-      formData.append('name', values.name);
-      formData.append('private', values.private);
 
-      const response = await createTribe(formData);
+      const response = await createTribe({
+        ...values,
+        avatar: avatar?.key ?? null,
+        cover: cover?.key ?? null,
+      });
       mutate(
-        '/api/profile/tribes',
+        '/api/v3/profile/tribes',
         (tribes: Array<Tribe>) => [...tribes, response],
         false
       );
@@ -113,7 +117,28 @@ const CreateTribeModal = ({ onClose }: Props) => {
     }
   };
 
-  const [avatar, cover] = watch(['avatar', 'cover']);
+  const handleUploadImage = async (
+    variant: 'avatar' | 'cover',
+    file: File,
+    onChange: (value: string) => void
+  ) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('variant', variant);
+      formData.append('file', file);
+      formData.append(
+        'key',
+        variant === 'avatar' ? avatar?.key ?? null : cover?.key ?? null
+      );
+      const data = await uploadImage(formData);
+      onChange(data);
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+    setIsUploading(false);
+  };
+
   const renderFields = () => {
     switch (step) {
       case Step.TribeSummary: {
@@ -121,9 +146,17 @@ const CreateTribeModal = ({ onClose }: Props) => {
           <>
             <TextField
               fullWidth
-              required
               inputProps={{
-                ...register('name', { pattern: /^[a-zA-Z\s]{1,20}$/ }),
+                ...register('name', {
+                  pattern: {
+                    value: TribeNameRegex,
+                    message: 'Invalid tribe name',
+                  },
+                  required: {
+                    value: true,
+                    message: 'Name is required',
+                  },
+                }),
                 autoComplete: 'name',
               }}
               label={
@@ -132,11 +165,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   <ChartCount control={control} maxCount={20} name="name" />
                 </Box>
               }
-              placeholder="Name"
+              placeholder="Foodies"
             />
             <TextField
               fullWidth
-              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">@</InputAdornment>
@@ -144,7 +176,14 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }}
               inputProps={{
                 ...register('identifier', {
-                  pattern: /^[a-zA-Z0-9_]{3,20}$/,
+                  pattern: {
+                    value: TribeIdentifierRegex,
+                    message: 'Invalid tribe name',
+                  },
+                  required: {
+                    value: true,
+                    message: 'Identifier is required',
+                  },
                 }),
                 autoComplete: 'identifier',
               }}
@@ -158,17 +197,21 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   />
                 </Box>
               }
-              placeholder="Unique Identifier"
+              placeholder="foodies"
             />
             <TextField
               fullWidth
               multiline
               inputProps={{
-                ...register('description', { maxLength: 1000, minLength: 1 }),
+                ...register('description', {
+                  maxLength: {
+                    value: 1000,
+                    message: 'Description its to long',
+                  },
+                }),
               }}
-              maxRows={5}
-              minRows={3}
               placeholder="Set brief description"
+              rows={5}
             />
 
             <Controller
@@ -176,7 +219,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               name="private"
               render={({ field: { onChange, value, ...rest } }) => (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography style={{ marginRight: 10 }}>
+                  <Typography style={{ marginRight: 10 }} variant="button">
                     Public tribe
                   </Typography>
                   <Switch
@@ -201,19 +244,18 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 <Controller
                   control={control}
                   name="avatar"
-                  render={({ field: { onChange } }) => (
+                  render={({ field }) => (
                     <DropZone
                       accept="image/*"
                       id="avatar"
                       maxFiles={1}
                       maxSize={20971520}
-                      onChange={onChange}
+                      onChange={(file: Array<File>) =>
+                        handleUploadImage('avatar', file[0], field.onChange)
+                      }
                     >
-                      {Boolean(avatar?.length) && (
-                        <FilePreview
-                          file={URL.createObjectURL(avatar[0])}
-                          name="avatar"
-                        />
+                      {avatar?.url && (
+                        <FilePreview file={avatar.url} name="avatar" />
                       )}
                       <IconButton>
                         <AddIcon fontSize="small" />
@@ -230,19 +272,18 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 <Controller
                   control={control}
                   name="cover"
-                  render={({ field: { onChange } }) => (
+                  render={({ field }) => (
                     <DropZone
                       accept="image/*"
                       id="cover"
                       maxFiles={1}
                       maxSize={41943040}
-                      onChange={onChange}
+                      onChange={(file: Array<File>) =>
+                        handleUploadImage('avatar', file[0], field.onChange)
+                      }
                     >
-                      {Boolean(cover?.length) && (
-                        <FilePreview
-                          file={URL.createObjectURL(cover[0])}
-                          name="cover"
-                        />
+                      {cover?.url && (
+                        <FilePreview file={cover.url} name="avatar" />
                       )}
                       <IconButton>
                         <AddIcon fontSize="small" />
@@ -263,7 +304,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
     <Dialog
       open
       cancelLabel={step == Step.TribeSummary ? 'Cancel' : 'Back'}
-      confirmDisabled={isSubmitting}
+      confirmDisabled={isSubmitting || isUploading}
       confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
       form={form}
       maxWidth="xs"

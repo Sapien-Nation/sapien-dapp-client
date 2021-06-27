@@ -15,7 +15,7 @@ enum View {
 
 const ChangePasswordPage = () => {
   const router = useRouter();
-  const [view, setView] = useState(View.Form);
+  const [view, setView] = useState(View.Success);
 
   const renderView = () => {
     switch (view) {
@@ -33,20 +33,19 @@ const ChangePasswordPage = () => {
             variant="contained"
             onClick={() => router.push('/login')}
           >
-            Login
+            Back to Login
           </Button>
         );
     }
   };
 
   return (
-    <Box display="grid" gap={3}>
-      <Typography component="h1">
-        {view === View.Form
-          ? 'Create New Password'
-          : 'Password Change successfully'}
+    <Box textAlign="center">
+      <Typography variant="h1">
+        {' '}
+        {view === View.Form ? 'Create New Password' : 'Password Changed'}
       </Typography>
-      {renderView()}
+      <Box marginTop={6.5}>{renderView()}</Box>
     </Box>
   );
 };

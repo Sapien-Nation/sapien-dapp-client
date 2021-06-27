@@ -1,11 +1,9 @@
 import { useSnackbar } from 'notistack';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 // api
 import { register as registerAction } from 'api/authentication';
-
-// context
-import { useAuth } from 'context/user';
 
 // assets
 import {
@@ -13,33 +11,50 @@ import {
   CheckboxChecked as CheckboxCheckedIcon,
 } from 'assets';
 
+// context
+import { useAuth } from 'context/user';
+
+// components
+import { ChartCount } from 'components/common';
+
 // mui
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
-  FormHelperText,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
-// components
-import { ChartCount } from 'components/common';
+// utils
+import {
+  EmailRegex,
+  NameRegex,
+  UsernameRegex,
+  PasswordRegex,
+} from 'utils/regex';
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
   const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     control,
     handleSubmit,
     register,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
+    watch,
   } = useForm();
 
   const onSubmit = async (values: {
-    email: string;
     displayName: string;
+    email: string;
     password: string;
     username: string;
   }) => {
@@ -61,14 +76,23 @@ const Signup = () => {
     }
   };
 
+  console.log(errors);
   return (
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
-        required
         id="email"
         inputProps={{
-          ...register('email'),
+          ...register('email', {
+            pattern: {
+              value: EmailRegex,
+              message: 'Invalid email',
+            },
+            required: {
+              value: true,
+              message: 'Enter an email',
+            },
+          }),
           autoComplete: 'email',
         }}
         label="Email"
@@ -77,10 +101,18 @@ const Signup = () => {
       />
       <TextField
         fullWidth
-        required
         id="username"
         inputProps={{
-          ...register('username'),
+          ...register('username', {
+            pattern: {
+              value: UsernameRegex,
+              message: 'Invalid email',
+            },
+            required: {
+              value: true,
+              message: 'Enter a username',
+            },
+          }),
           autoComplete: 'username',
         }}
         label={
@@ -94,12 +126,19 @@ const Signup = () => {
       />
       <TextField
         fullWidth
-        required
         id="displayName"
         inputProps={{
           autoComplete: 'name',
-          title: 'Invalid Name',
-          ...register('displayName'),
+          ...register('displayName', {
+            pattern: {
+              value: NameRegex,
+              message: 'Invalid name',
+            },
+            required: {
+              value: true,
+              message: 'Enter a name',
+            },
+          }),
         }}
         label={
           <Box display="flex" justifyContent="space-between">
@@ -112,26 +151,73 @@ const Signup = () => {
       />
       <TextField
         fullWidth
-        required
-        InputLabelProps={{ style: { pointerEvents: 'auto' } }}
+        InputLabelProps={{
+          style: { pointerEvents: 'auto' },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                edge="end"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
         id="password"
         inputProps={{
-          ...register('password'),
+          ...register('password', {
+            pattern: {
+              value: PasswordRegex,
+              message: 'Invalid password',
+            },
+            required: {
+              value: true,
+              message: 'Enter a password',
+            },
+          }),
           autoComplete: 'new-password',
-          pattern: '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$',
         }}
-        label={
-          <>
-            Password
-            <FormHelperText style={{ margin: 0 }}>
-              Minimum length is 8 characters. Must include at least an alpha, a{' '}
-              <br />
-              numeric, a lowercase and an uppercase.
-            </FormHelperText>
-          </>
-        }
+        label="Password"
         placeholder="mypassword123*"
-        type="password"
+        type={showPassword ? 'text' : 'password'}
+      />
+      <TextField
+        fullWidth
+        InputLabelProps={{
+          style: { pointerEvents: 'auto' },
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                edge="end"
+                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+              >
+                {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        id="confirmPassword"
+        inputProps={{
+          ...register('confirmPassword', {
+            required: {
+              value: true,
+              message: 'Enter a password',
+            },
+            validate: (value) =>
+              value === watch('password') || "Passwords don't match.",
+          }),
+          autoComplete: 'new-password',
+        }}
+        label="Confirm Password"
+        placeholder="Repeat Password"
+        type={showRepeatPassword ? 'text' : 'password'}
       />
       <Box marginBottom="2rem">
         <FormControlLabel

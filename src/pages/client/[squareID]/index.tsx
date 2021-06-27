@@ -26,7 +26,7 @@ import { createContent } from 'api/content';
 import { getTribe } from 'hooks';
 
 // components
-import { Page, Query } from 'components/common';
+import { Page, PostComposerSkeleton, Query } from 'components/common';
 import { CreateContentForm, ContentItem } from 'components/content';
 import { Header } from 'components/square';
 import Layout from 'pages/Layout';
@@ -64,7 +64,7 @@ const Square = ({ squareID }: Props) => {
     mutate,
   } = useSWRInfinite(
     (...rest) =>
-      getKey(...rest, `/api/tribe/${tribeID}/square/${squareID}/feed`),
+      getKey(...rest, `/api/v3/tribe/${tribeID}/square/${squareID}/feed`),
     fetcher
   );
 
@@ -97,11 +97,13 @@ const Square = ({ squareID }: Props) => {
     <Page
       header={<Header tribeID={tribeID} />}
       subHeader={
-        me && (
-          <Box className="card--rounded-white">
+        <Box className="card--rounded-white">
+          {me ? (
             <CreateContentForm user={me} onSubmit={handleSubmit} />
-          </Box>
-        )
+          ) : (
+            <PostComposerSkeleton />
+          )}
+        </Box>
       }
     >
       <>
@@ -134,7 +136,7 @@ const SquarePage = () => {
   if (!query.squareID) return null;
 
   return (
-    <Query api="/api/profile/tribes">
+    <Query api="/api/v3/profile/tribes">
       {() => <Square squareID={String(query.squareID)} />}
     </Query>
   );
