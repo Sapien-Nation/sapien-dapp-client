@@ -99,7 +99,7 @@ const Dialog = ({
   const theme = useTheme();
   const classes = useStyles();
 
-  const isMediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <MUIDialog
