@@ -49,7 +49,7 @@ export const MarkButton = ({ format }) => {
   const editor = useSlate();
   return (
     <Button
-      active={isMarkActive(editor, format)}
+      //active={isMarkActive(editor, format)}
       style={{ cursor: 'pointer', margin: '0 10px' }}
       onMouseDown={(event) => {
         event.preventDefault();

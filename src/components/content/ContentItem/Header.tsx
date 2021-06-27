@@ -24,7 +24,7 @@ import type { ContentOwner } from 'tools/types/content';
 import type { ISOString } from 'tools/types/common';
 
 // styles
-import { blackLight, primary, purpleHighLight } from 'styles/colors';
+import { primary, purpleHighLight } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
@@ -72,9 +72,7 @@ const Header = ({ createdAt, groupName, owner, tribeName }: Props) => {
         </Link>
         <ArrowRight />
         <Globe fontSize="small" />
-        <Typography color={blackLight} marginRight={1}>
-          {groupName}
-        </Typography>
+        <Typography>{groupName}</Typography>
         <Chip
           classes={{
             root: classes.chipRoot,

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
 
@@ -54,8 +54,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
   const {
     control,
     formState: { isSubmitting },
+    getValues,
     handleSubmit,
     register,
+    reset,
     watch,
   } = useForm<TribeForm>({
     defaultValues: {
@@ -72,6 +74,21 @@ const CreateTribeModal = ({ onClose }: Props) => {
 
   const [avatar, cover] = watch(['avatar', 'cover']);
 
+  useEffect(() => {
+    return () => {
+      const keys = [];
+      const [image1, image2] = getValues(['avatar', 'cover']);
+
+      if (image1) keys.push(image1.key);
+      if (image2) keys.push(image2.key);
+
+      if (keys.length) {
+        // TODO backend working on API
+        // deleteImages(keys);
+      }
+    };
+  }, []);
+
   const handleFormSubmit = async (values) => {
     try {
       if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
@@ -87,7 +104,9 @@ const CreateTribeModal = ({ onClose }: Props) => {
         false
       );
 
+      reset();
       onClose();
+
       enqueueSnackbar('Tribe Created Successfully', {
         anchorOrigin: {
           vertical: 'bottom',
@@ -132,6 +151,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
         variant === 'avatar' ? avatar?.key ?? null : cover?.key ?? null
       );
       const data = await uploadImage(formData);
+
       onChange(data);
     } catch (err) {
       enqueueSnackbar(err.message);
