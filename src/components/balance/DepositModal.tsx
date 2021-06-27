@@ -38,7 +38,10 @@ const DepositModal = ({ onClose }: Props) => {
       case Step.DepositMetamask: {
         return (
           <>
-            <Typography style={{ margin: '2rem 0' }} variant="h2">
+            <Typography
+              style={{ marginTop: 40, marginBottom: 20 }}
+              variant="h2"
+            >
               Deposit to balance
             </Typography>
             <Typography style={{ marginBottom: 30 }} variant="body2">

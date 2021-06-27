@@ -168,7 +168,10 @@ const WithdrawModal = ({ onClose }: Props) => {
       case Step.Withdraw: {
         return (
           <>
-            <Typography style={{ margin: '2rem 0' }} variant="h2">
+            <Typography
+              style={{ marginTop: 40, marginBottom: 20 }}
+              variant="h2"
+            >
               Withdraw from balance
             </Typography>
             <Typography variant="body2">
