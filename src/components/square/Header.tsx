@@ -57,13 +57,21 @@ const Header = ({ tribeID }: Props) => (
                 marginTop={2.8}
                 style={{ gap: 8 }}
               >
-                <Box alignItems="baseline" display="flex" gap={1.4}>
+                <Box
+                  alignItems="baseline"
+                  display="flex"
+                  style={{ gap: '14px' }}
+                >
                   <Typography variant="h2">{tribe.name}</Typography>
                   <Typography color="textSecondary" variant="button">
                     {tribe.identifier}
                   </Typography>
                 </Box>
-                <Box alignItems="baseline" display="flex" gap={1.4}>
+                <Box
+                  alignItems="baseline"
+                  display="flex"
+                  style={{ gap: '14px' }}
+                >
                   <Typography color="textSecondary" variant="button">
                     {tribe.followersCount} Followers
                   </Typography>

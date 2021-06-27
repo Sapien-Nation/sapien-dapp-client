@@ -5,6 +5,8 @@ import {
   Range,
   Transforms,
 } from 'slate';
+
+// utils
 import { checkUrl } from 'utils/url';
 
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
@@ -42,7 +44,7 @@ const unwrapLink = (editor) => {
     match: (n) =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
-      n.type === ('link' as any),
+      (n as any).type === ('link' as any),
   });
 };
 
@@ -72,7 +74,7 @@ const isLinkActive = (editor) => {
     match: (n) =>
       !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
-      n.type === ('link' as any),
+      (n as any).type === ('link' as any),
   });
   return !!link;
 };
