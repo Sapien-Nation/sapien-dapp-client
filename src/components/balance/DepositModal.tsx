@@ -41,7 +41,7 @@ const DepositModal = ({ onClose }: Props) => {
             <Typography style={{ margin: '2rem 0' }} variant="h2">
               Deposit to balance
             </Typography>
-            <Typography variant="body2">
+            <Typography style={{ marginBottom: 30 }} variant="body2">
               To deposit SPN tokens to the platform, install Metamask and
               complete the transaction.
             </Typography>
@@ -78,7 +78,7 @@ const DepositModal = ({ onClose }: Props) => {
           >
             <DepositSuccess />
             <Typography
-              style={{ marginTop: 40, marginBottom: 1.5, lineHeight: 1.6 }}
+              style={{ marginTop: 40, marginBottom: 15, lineHeight: 1.6 }}
               variant="h2"
             >
               You have successfully deposited 1,995.00 SPN to your balance

@@ -335,7 +335,7 @@ const WithdrawModal = ({ onClose }: Props) => {
           >
             <WithdrawSuccess />
             <Typography
-              style={{ marginTop: 4, marginBottom: 1.5, lineHeight: 1.6 }}
+              style={{ marginTop: 4, marginBottom: 15, lineHeight: 1.6 }}
               variant="h2"
             >
               You have successfully withdrawn 2,500 SPN from your balance
