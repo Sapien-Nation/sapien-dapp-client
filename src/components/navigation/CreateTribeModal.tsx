@@ -296,7 +296,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   render={({ field }) => (
                     <DropZone
                       accept="image/*"
-                      disabledDropzone={isUploading && true}
+                      disabledDropzone={Boolean(isUploading)}
                       id="avatar"
                       maxFiles={1}
                       maxSize={20971520}
@@ -329,6 +329,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   render={({ field }) => (
                     <DropZone
                       accept="image/*"
+                      disabledDropzone={Boolean(isUploading)}
                       id="cover"
                       maxFiles={1}
                       maxSize={41943040}
@@ -339,9 +340,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {cover?.url && (
                         <FilePreview file={cover.url} name="avatar" />
                       )}
-                      <IconButton>
-                        <AddIcon fontSize="small" />
-                      </IconButton>
+                      {isUploading ? (
+                        <CircularProgress size={26} />
+                      ) : (
+                        <IconButton>
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      )}
                     </DropZone>
                   )}
                 />
