@@ -264,11 +264,17 @@ const CreateTribeModal = ({ onClose }: Props) => {
                     <Typography style={{ marginRight: 10 }} variant="button">
                       Public tribe
                     </Typography>
-                    <Tooltip arrow placement="right" title="To Do">
-                      <InfoIcon
-                        fontSize="small"
-                        style={{ marginLeft: '0.5rem' }}
-                      />
+                    <Tooltip
+                      arrow
+                      color="primary"
+                      placement="right"
+                      title={
+                        <Box borderRadius={10} minWidth={321} padding={1.6}>
+                          TODO explain tribe public/notpublic
+                        </Box>
+                      }
+                    >
+                      <InfoIcon fontSize="small" />
                     </Tooltip>
                   </Box>
                   <Switch
