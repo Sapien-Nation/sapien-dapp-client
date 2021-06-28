@@ -27,7 +27,6 @@ const ContentItem = ({ content }: Props) => {
         createdAt={content.createdAt}
         groupName={content.group.name}
         owner={content.owner}
-        tribeAvatar={content.tribe.avatar}
         tribeName={content.tribe.name}
       />
       <div>
