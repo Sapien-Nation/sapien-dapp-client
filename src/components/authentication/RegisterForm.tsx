@@ -27,8 +27,13 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import {
+  Info as InfoIcon,
+  Visibility,
+  VisibilityOff,
+} from '@material-ui/icons';
 
 // utils
 import {
@@ -181,7 +186,18 @@ const Signup = () => {
           }),
           autoComplete: 'new-password',
         }}
-        label="Password"
+        label={
+          <Box alignItems="center" display="flex">
+            Password{' '}
+            <Tooltip
+              arrow
+              placement="right"
+              title="Minimum length is 8 characters. Must include at least 1 alpha, 1 numeric, 1 lowercaps, and 1 highercaps."
+            >
+              <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
+            </Tooltip>
+          </Box>
+        }
         placeholder="mypassword123*"
         type={showPassword ? 'text' : 'password'}
       />

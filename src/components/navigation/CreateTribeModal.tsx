@@ -27,8 +27,9 @@ import {
   Switch,
   TextField,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+import { Add as AddIcon, Info as InfoIcon } from '@material-ui/icons';
 
 enum Step {
   TribeSummary = 1,
@@ -239,9 +240,17 @@ const CreateTribeModal = ({ onClose }: Props) => {
               name="private"
               render={({ field: { onChange, value, ...rest } }) => (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography style={{ marginRight: 10 }} variant="button">
-                    Public tribe
-                  </Typography>
+                  <Box alignItems="center" display="flex">
+                    <Typography style={{ marginRight: 10 }} variant="button">
+                      Public tribe
+                    </Typography>
+                    <Tooltip arrow placement="right" title="To Do">
+                      <InfoIcon
+                        fontSize="small"
+                        style={{ marginLeft: '0.5rem' }}
+                      />
+                    </Tooltip>
+                  </Box>
                   <Switch
                     disableRipple
                     checked={value as boolean}
