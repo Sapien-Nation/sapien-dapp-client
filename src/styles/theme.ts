@@ -193,7 +193,23 @@ theme.overrides = {
   },
   MuiFormControl: {
     root: {
-      marginBottom: `${theme.spacing(2.8)}`,
+      marginBottom: `${theme.spacing(2)}`,
+    },
+  },
+  MuiFormHelperText: {
+    root: {
+      height: `${theme.spacing(2)}`,
+    },
+  },
+  MuiFormLabel: {
+    root: {
+      color: black,
+      '&$focused': {
+        color: black,
+      },
+      '&.Mui-error': {
+        color: black,
+      },
     },
   },
   MuiInput: {
@@ -207,6 +223,11 @@ theme.overrides = {
       '&$focused': {
         borderRadius: '0.6rem',
         border: `2px solid ${primary}`,
+        boxSizing: 'border-box',
+      },
+      '&.Mui-error': {
+        backgroundColor: '#FEF9F9',
+        border: `2px solid ${red} !important`,
         boxSizing: 'border-box',
       },
     },
