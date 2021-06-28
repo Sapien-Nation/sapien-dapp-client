@@ -19,6 +19,7 @@ const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: 72,
     backgroundColor: dark,
+    overflow: 'hidden',
   },
   avatarImage: {
     borderRadius: '10px',

@@ -17,7 +17,7 @@ import type { Descendant } from 'slate';
 import { useAuth } from 'context/user';
 
 // mui
-import { Box } from '@material-ui/core';
+import { Box, Fade, Typography } from '@material-ui/core';
 
 // api
 import { createContent } from 'api/content';
@@ -26,7 +26,12 @@ import { createContent } from 'api/content';
 import { getTribe } from 'hooks';
 
 // components
-import { Page, PostComposerSkeleton, Query } from 'components/common';
+import {
+  ContentFeedSkeleton,
+  Page,
+  PostComposerSkeleton,
+  Query,
+} from 'components/common';
 import { CreateContentForm, ContentItem } from 'components/content';
 import { Header } from 'components/square';
 import Layout from 'pages/Layout';
@@ -51,7 +56,7 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 
 const Square = ({ squareID }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
-
+  console.log(isCreating);
   const { me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -87,10 +92,7 @@ const Square = ({ squareID }: Props) => {
 
   const content = data?.length ? data.map(({ data }) => data).flat() : [];
   const isLoadingInitialData = !data && !swrError;
-  const isLoadingMore =
-    isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === 'undefined');
-  const isEmpty = data?.[0]?.length === 0;
+  const isEmpty = data?.[0].data?.length === 0;
   const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < 10);
 
   return (
@@ -106,26 +108,56 @@ const Square = ({ squareID }: Props) => {
         </Box>
       }
     >
-      <Box className="card--rounded-white">
-        {isEmpty ? <p>No Posts Yet</p> : null}
-        {isReachingEnd ? <p>No More Posts</p> : null}
-        {isCreating ? <span>Adding new item....</span> : null}
+      <>
         <InfiniteScrollComponent
           dataLength={content.length}
-          hasMore={!isEmpty}
+          hasMore={!false}
           loader={null}
           next={() => {
             setSize(size + 1);
           }}
         >
-          {content.map((content) => (
-            <Box key={content.id} marginY={2}>
-              <ContentItem content={content} />
+          {isEmpty || isReachingEnd ? (
+            <Box className="card--rounded-white" padding={4} textAlign="center">
+              <Typography>
+                There are no more posts{' '}
+                <span aria-label="No more posts" role="img">
+                  🙈
+                </span>
+              </Typography>
             </Box>
-          ))}
+          ) : null}
+          {/* <Fade unmountOnExit in={isCreating}>
+            <div>
+              <ContentFeedSkeleton />
+            </div>
+          </Fade> */}
+          <Box display="grid" style={{ gap: '16px' }}>
+            {isCreating
+              ? [[{}], ...content]
+              : content.map((content, index) => (
+                  <>
+                    {isCreating && index === 0 ? (
+                      <Fade unmountOnExit in={isCreating}>
+                        <div>
+                          <ContentFeedSkeleton />
+                        </div>
+                      </Fade>
+                    ) : (
+                      <ContentItem key={content.id} content={content} />
+                    )}
+                  </>
+                ))}
+          </Box>
         </InfiniteScrollComponent>
-        {isLoadingMore ? <span>Loading...</span> : null}
-      </Box>
+        {isLoadingInitialData && (
+          <>
+            <ContentFeedSkeleton />
+            <ContentFeedSkeleton />
+            <ContentFeedSkeleton />
+          </>
+        )}
+      </>
     </Page>
   );
 };
