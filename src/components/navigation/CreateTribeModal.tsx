@@ -20,6 +20,7 @@ import type { CreateTribe, Tribe } from 'tools/types/tribeBar';
 // mui
 import {
   Box,
+  CircularProgress,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -276,6 +277,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   render={({ field }) => (
                     <DropZone
                       accept="image/*"
+                      disabledDropzone={isUploading && true}
                       id="avatar"
                       maxFiles={1}
                       maxSize={20971520}
@@ -286,9 +288,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {avatar?.url && (
                         <FilePreview file={avatar.url} name="avatar" />
                       )}
-                      <IconButton>
-                        <AddIcon fontSize="small" />
-                      </IconButton>
+                      {isUploading ? (
+                        <CircularProgress size={26} />
+                      ) : (
+                        <IconButton>
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      )}
                     </DropZone>
                   )}
                 />

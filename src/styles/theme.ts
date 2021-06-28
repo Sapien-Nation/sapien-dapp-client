@@ -118,10 +118,6 @@ theme.overrides = {
       body: {
         overscrollBehaviorY: 'none',
       },
-      '*, *::before, *::after': {
-        transition: 'none !important',
-        animation: 'none !important',
-      },
       '@font-face': [
         avertaBold,
         avertaItalic,

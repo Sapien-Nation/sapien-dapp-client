@@ -14,11 +14,19 @@ import { gray1, gray2 } from 'styles/colors';
 interface Props extends Omit<DropzoneProps, 'children'> {
   children: React.ReactElement | Array<React.ReactElement>;
   className?: string;
+  disabledDropzone?: boolean;
   id: string;
   onChange: (droppedFiles: Array<File>) => void;
 }
 
-const Dropzone = ({ children, className, id, onChange, ...rest }: Props) => {
+const Dropzone = ({
+  children,
+  className,
+  disabledDropzone = false,
+  id,
+  onChange,
+  ...rest
+}: Props) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const onDrop = useCallback<DropzoneOptions['onDrop']>(
@@ -29,6 +37,7 @@ const Dropzone = ({ children, className, id, onChange, ...rest }: Props) => {
   );
 
   const { getRootProps, getInputProps } = useDropzone({
+    disabled: disabledDropzone,
     onDrop,
     onDropRejected: (files = []) => {
       files.forEach(({ errors = [] }) => {
