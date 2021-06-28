@@ -302,6 +302,12 @@ theme.overrides = {
     },
     checked: {},
   },
+  MuiTooltip: {
+    tooltip: {
+      backgroundColor: '#fff',
+      color: '#8F92A1',
+    },
+  },
 };
 
 export default theme;

@@ -191,8 +191,14 @@ const Signup = () => {
             Password{' '}
             <Tooltip
               arrow
+              color="primary"
               placement="right"
-              title="Minimum length is 8 characters. Must include at least 1 alpha, 1 numeric, 1 lowercaps, and 1 highercaps."
+              title={
+                <Box borderRadius={10} minWidth={321} padding={1.6}>
+                  Minimum length is 8 characters. Must include at least 1 alpha,
+                  1 numeric, 1 lowercaps, and 1 highercaps.
+                </Box>
+              }
             >
               <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
             </Tooltip>
