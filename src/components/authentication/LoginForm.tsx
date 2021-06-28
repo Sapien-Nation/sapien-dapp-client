@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { Controller, useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { login as loginAction } from 'api/authentication';
@@ -68,6 +69,12 @@ const LoginForm = () => {
     <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
+        error={Boolean(errors.email)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="email" />
+          </Box>
+        }
         id="email"
         inputProps={{
           ...register('email', {
@@ -77,7 +84,7 @@ const LoginForm = () => {
             },
             required: {
               value: true,
-              message: 'Enter an email',
+              message: 'Enter an email address!',
             },
           }),
           autoComplete: 'email',
