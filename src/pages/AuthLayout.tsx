@@ -44,9 +44,18 @@ const AuthLayout = ({ children }: Props) => {
             }}
           />
         )}
-        <Box marginBottom={4} marginTop={8} paddingX={8.5}>
-          <FullLogo />
-          <Box marginTop={8.5}>{children}</Box>
+        <Box
+          alignItems="center"
+          display="flex"
+          flexWrap="wrap"
+          marginBottom={4}
+          marginTop={8}
+          paddingX={8.5}
+        >
+          <div style={{ width: '100%' }}>
+            <FullLogo />
+            <Box marginTop={4.5}>{children}</Box>
+          </div>
         </Box>
       </Box>
     </>
