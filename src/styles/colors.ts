@@ -6,8 +6,9 @@ export const black = '#252326';
 
 export const darkGrey = '#8F92A1';
 export const darkPurple = '#322837';
-
 export const blackLight = '#171717';
+
+export const lightRed = '#FEF9F9';
 export const purpleHighLight = '#f7f2fd';
 
 export const gray1 = '#CCCCCC';
