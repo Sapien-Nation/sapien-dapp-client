@@ -44,7 +44,7 @@ const AuthLayout = ({ children }: Props) => {
             }}
           />
         )}
-        <Box marginTop={20} paddingX={8.5}>
+        <Box marginBottom={4} marginTop={8} paddingX={8.5}>
           <FullLogo />
           <Box marginTop={8.5}>{children}</Box>
         </Box>
