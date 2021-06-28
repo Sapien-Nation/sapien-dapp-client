@@ -106,7 +106,7 @@ const Square = ({ squareID }: Props) => {
         </Box>
       }
     >
-      <>
+      <Box className="card--rounded-white">
         {isEmpty ? <p>No Posts Yet</p> : null}
         {isReachingEnd ? <p>No More Posts</p> : null}
         {isCreating ? <span>Adding new item....</span> : null}
@@ -125,7 +125,7 @@ const Square = ({ squareID }: Props) => {
           ))}
         </InfiniteScrollComponent>
         {isLoadingMore ? <span>Loading...</span> : null}
-      </>
+      </Box>
     </Page>
   );
 };

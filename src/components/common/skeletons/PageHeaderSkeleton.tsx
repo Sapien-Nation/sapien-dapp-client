@@ -10,7 +10,7 @@ const PageHeaderSkeleton = () => (
         animation="wave"
         height={110}
         style={{ top: '-2.5rem' }}
-        variant="circle"
+        variant="rect"
         width={110}
       />
       <Box marginLeft={3} marginTop={2.8} width="100%">

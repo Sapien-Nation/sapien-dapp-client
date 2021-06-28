@@ -40,10 +40,17 @@ interface Props {
   createdAt: ISOString;
   groupName: string;
   owner: ContentOwner;
+  tribeAvatar: string;
   tribeName: string;
 }
 
-const Header = ({ createdAt, groupName, owner, tribeName }: Props) => {
+const Header = ({
+  createdAt,
+  groupName,
+  owner,
+  tribeAvatar,
+  tribeName,
+}: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
@@ -62,7 +69,7 @@ const Header = ({ createdAt, groupName, owner, tribeName }: Props) => {
         justifyContent="center"
         style={{ gap: 8 }}
       >
-        <Avatar alt="Post Image" src={owner.avatar} />
+        <Avatar alt="Tribe Image" src={tribeAvatar} />
         <Link href="/">
           <a>
             <Typography>
