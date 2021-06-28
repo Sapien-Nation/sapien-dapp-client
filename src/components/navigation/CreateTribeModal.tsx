@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { createTribe, uploadImage } from 'api/tribeBar';
@@ -55,7 +56,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
     getValues,
     handleSubmit,
     register,
@@ -168,6 +169,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
           <>
             <TextField
               fullWidth
+              error={Boolean(errors.name)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="name" />
+                </Box>
+              }
               inputProps={{
                 ...register('name', {
                   pattern: {
@@ -196,6 +203,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   <InputAdornment position="start">@</InputAdornment>
                 ),
               }}
+              error={Boolean(errors.identifier)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="identifier" />
+                </Box>
+              }
               inputProps={{
                 ...register('identifier', {
                   pattern: {
@@ -224,6 +237,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
             <TextField
               fullWidth
               multiline
+              error={Boolean(errors.description)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="description" />
+                </Box>
+              }
               inputProps={{
                 ...register('description', {
                   maxLength: {

@@ -1,12 +1,14 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { changePassword as changePasswordAction } from 'api/authentication';
 
 // mui
 import {
+  Box,
   Button,
   IconButton,
   InputAdornment,
@@ -27,7 +29,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const {
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
     watch,
@@ -68,6 +70,12 @@ const ChangePassword = ({ changeView, token }: Props) => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.password)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="password" />
+          </Box>
+        }
         id="password"
         inputProps={{
           ...register('password', {
@@ -104,6 +112,12 @@ const ChangePassword = ({ changeView, token }: Props) => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.confirmPassword)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="confirmPassword" />
+          </Box>
+        }
         id="confirmPassword"
         inputProps={{
           ...register('confirmPassword', {

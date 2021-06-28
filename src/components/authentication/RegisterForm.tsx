@@ -1,6 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { register as registerAction } from 'api/authentication';
@@ -81,11 +82,16 @@ const Signup = () => {
     }
   };
 
-  console.log(errors);
   return (
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
+        error={Boolean(errors.email)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="email" />
+          </Box>
+        }
         id="email"
         inputProps={{
           ...register('email', {
@@ -102,10 +108,15 @@ const Signup = () => {
         }}
         label="Email"
         placeholder="myemailaddress@email.com"
-        type="email"
       />
       <TextField
         fullWidth
+        error={Boolean(errors.username)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="username" />
+          </Box>
+        }
         id="username"
         inputProps={{
           ...register('username', {
@@ -131,6 +142,12 @@ const Signup = () => {
       />
       <TextField
         fullWidth
+        error={Boolean(errors.displayName)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="displayName" />
+          </Box>
+        }
         id="displayName"
         inputProps={{
           autoComplete: 'name',
@@ -172,6 +189,12 @@ const Signup = () => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.password)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="password" />
+          </Box>
+        }
         id="password"
         inputProps={{
           ...register('password', {
@@ -225,6 +248,12 @@ const Signup = () => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.confirmPassword)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="confirmPassword" />
+          </Box>
+        }
         id="confirmPassword"
         inputProps={{
           ...register('confirmPassword', {

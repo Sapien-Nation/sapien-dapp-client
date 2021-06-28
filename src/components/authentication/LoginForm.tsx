@@ -62,9 +62,6 @@ const LoginForm = () => {
     }
   };
 
-  // TODO show errors
-  console.log(errors);
-
   return (
     <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -84,14 +81,13 @@ const LoginForm = () => {
             },
             required: {
               value: true,
-              message: 'Enter an email address!',
+              message: 'Enter an email address',
             },
           }),
           autoComplete: 'email',
         }}
         label="Email or username"
         placeholder="myemailaddress@email.com"
-        type="email"
       />
       <TextField
         fullWidth
@@ -108,6 +104,12 @@ const LoginForm = () => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.password)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="password" />
+          </Box>
+        }
         id="password"
         inputProps={{
           ...register('password', {
