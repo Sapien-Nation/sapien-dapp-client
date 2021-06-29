@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: 72,
     backgroundColor: neutral[800],
-    overflow: 'hidden',
   },
   avatarImage: {
     borderRadius: '10px',
@@ -77,7 +76,8 @@ const TribeBar = () => {
                 src={tribe.avatar}
                 style={{
                   color: 'white',
-                  backgroundColor: tribe.avatar === null ? colors[index] : '',
+                  backgroundColor:
+                    tribe.avatar === null ? colors[index] : 'white',
                   borderRadius: 15,
                   border: asPath.includes(`/client/${tribe.mainSquareId}`)
                     ? '2px solid'
