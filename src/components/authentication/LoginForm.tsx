@@ -86,7 +86,7 @@ const LoginForm = () => {
           }),
           autoComplete: 'email',
         }}
-        label="Email or username"
+        label="Email"
         placeholder="myemailaddress@email.com"
       />
       <TextField
@@ -138,7 +138,7 @@ const LoginForm = () => {
           render={({ field: { value, ...rest } }) => (
             <FormControlLabel
               control={
-                <Checkbox checked={Boolean(value)} color="default" {...rest} />
+                <Checkbox checked={Boolean(value)} color="primary" {...rest} />
               }
               label={<Typography variant="overline">Remember me</Typography>}
             />
