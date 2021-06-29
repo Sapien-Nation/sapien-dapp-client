@@ -1,6 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { register as registerAction } from 'api/authentication';
@@ -27,8 +28,13 @@ import {
   InputAdornment,
   TextField,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import {
+  Info as InfoIcon,
+  Visibility,
+  VisibilityOff,
+} from '@material-ui/icons';
 
 // utils
 import {
@@ -76,11 +82,16 @@ const Signup = () => {
     }
   };
 
-  console.log(errors);
   return (
     <form id="register-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
+        error={Boolean(errors.email)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="email" />
+          </Box>
+        }
         id="email"
         inputProps={{
           ...register('email', {
@@ -97,10 +108,15 @@ const Signup = () => {
         }}
         label="Email"
         placeholder="myemailaddress@email.com"
-        type="email"
       />
       <TextField
         fullWidth
+        error={Boolean(errors.username)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="username" />
+          </Box>
+        }
         id="username"
         inputProps={{
           ...register('username', {
@@ -126,6 +142,12 @@ const Signup = () => {
       />
       <TextField
         fullWidth
+        error={Boolean(errors.displayName)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="displayName" />
+          </Box>
+        }
         id="displayName"
         inputProps={{
           autoComplete: 'name',
@@ -167,6 +189,12 @@ const Signup = () => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.password)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="password" />
+          </Box>
+        }
         id="password"
         inputProps={{
           ...register('password', {
@@ -181,7 +209,24 @@ const Signup = () => {
           }),
           autoComplete: 'new-password',
         }}
-        label="Password"
+        label={
+          <Box alignItems="center" display="flex">
+            Password{' '}
+            <Tooltip
+              arrow
+              color="primary"
+              placement="right"
+              title={
+                <Box borderRadius={10} minWidth={321} padding={1.6}>
+                  Minimum length is 8 characters. Must include at least 1 alpha,
+                  1 numeric, 1 lowercaps, and 1 highercaps.
+                </Box>
+              }
+            >
+              <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
+            </Tooltip>
+          </Box>
+        }
         placeholder="mypassword123*"
         type={showPassword ? 'text' : 'password'}
       />
@@ -203,6 +248,12 @@ const Signup = () => {
             </InputAdornment>
           ),
         }}
+        error={Boolean(errors.confirmPassword)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="confirmPassword" />
+          </Box>
+        }
         id="confirmPassword"
         inputProps={{
           ...register('confirmPassword', {

@@ -1,11 +1,12 @@
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { forgot } from 'api/authentication';
 
 // mui
-import { Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
 
 // utils
 import { EmailRegex } from 'utils/regex';
@@ -37,12 +38,16 @@ const Forgot = ({ changeView }: Props) => {
     }
   };
 
-  console.log(errors);
-
   return (
     <form id="forgot-form" onSubmit={handleSubmit(onSubmit)}>
       <TextField
         fullWidth
+        error={Boolean(errors.email)}
+        helperText={
+          <Box marginTop={1} textAlign="right">
+            <ErrorMessage errors={errors} name="email" />
+          </Box>
+        }
         id="email"
         inputProps={{
           ...register('email', {
@@ -59,7 +64,6 @@ const Forgot = ({ changeView }: Props) => {
         }}
         label="Email or username"
         placeholder="Enter your email, or username"
-        type="email"
       />
 
       <Button

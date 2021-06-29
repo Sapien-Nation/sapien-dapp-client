@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
+import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { createTribe, uploadImage } from 'api/tribeBar';
@@ -20,6 +21,7 @@ import type { CreateTribe, Tribe } from 'tools/types/tribeBar';
 // mui
 import {
   Box,
+  CircularProgress,
   FormControl,
   InputAdornment,
   InputLabel,
@@ -27,8 +29,9 @@ import {
   Switch,
   TextField,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
-import { Add as AddIcon } from '@material-ui/icons';
+import { Add as AddIcon, Info as InfoIcon } from '@material-ui/icons';
 
 enum Step {
   TribeSummary = 1,
@@ -53,7 +56,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
     getValues,
     handleSubmit,
     register,
@@ -166,6 +169,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
           <>
             <TextField
               fullWidth
+              error={Boolean(errors.name)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="name" />
+                </Box>
+              }
               inputProps={{
                 ...register('name', {
                   pattern: {
@@ -194,6 +203,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   <InputAdornment position="start">@</InputAdornment>
                 ),
               }}
+              error={Boolean(errors.identifier)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="identifier" />
+                </Box>
+              }
               inputProps={{
                 ...register('identifier', {
                   pattern: {
@@ -222,6 +237,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
             <TextField
               fullWidth
               multiline
+              error={Boolean(errors.description)}
+              helperText={
+                <Box marginTop={1} textAlign="right">
+                  <ErrorMessage errors={errors} name="description" />
+                </Box>
+              }
               inputProps={{
                 ...register('description', {
                   maxLength: {
@@ -239,9 +260,23 @@ const CreateTribeModal = ({ onClose }: Props) => {
               name="private"
               render={({ field: { onChange, value, ...rest } }) => (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography style={{ marginRight: 10 }} variant="button">
-                    Public tribe
-                  </Typography>
+                  <Box alignItems="center" display="flex">
+                    <Typography style={{ marginRight: 10 }} variant="button">
+                      Public tribe
+                    </Typography>
+                    <Tooltip
+                      arrow
+                      color="primary"
+                      placement="right"
+                      title={
+                        <Box borderRadius={10} minWidth={321} padding={1.6}>
+                          TODO explain tribe public/notpublic
+                        </Box>
+                      }
+                    >
+                      <InfoIcon fontSize="small" />
+                    </Tooltip>
+                  </Box>
                   <Switch
                     disableRipple
                     checked={value as boolean}
@@ -267,6 +302,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   render={({ field }) => (
                     <DropZone
                       accept="image/*"
+                      disabledDropzone={Boolean(isUploading)}
                       id="avatar"
                       maxFiles={1}
                       maxSize={20971520}
@@ -277,9 +313,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {avatar?.url && (
                         <FilePreview file={avatar.url} name="avatar" />
                       )}
-                      <IconButton>
-                        <AddIcon fontSize="small" />
-                      </IconButton>
+                      {isUploading ? (
+                        <CircularProgress size={26} />
+                      ) : (
+                        <IconButton>
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      )}
                     </DropZone>
                   )}
                 />
@@ -295,6 +335,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   render={({ field }) => (
                     <DropZone
                       accept="image/*"
+                      disabledDropzone={Boolean(isUploading)}
                       id="cover"
                       maxFiles={1}
                       maxSize={41943040}
@@ -305,9 +346,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {cover?.url && (
                         <FilePreview file={cover.url} name="avatar" />
                       )}
-                      <IconButton>
-                        <AddIcon fontSize="small" />
-                      </IconButton>
+                      {isUploading ? (
+                        <CircularProgress size={26} />
+                      ) : (
+                        <IconButton>
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      )}
                     </DropZone>
                   )}
                 />

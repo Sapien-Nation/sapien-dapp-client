@@ -11,10 +11,7 @@ import type { AppProps } from 'next/app';
 import axios from 'api';
 
 // mui
-import { ThemeProvider } from '@material-ui/core/styles';
-
-// styles
-import theme from 'styles/theme';
+import { makeStyles, ThemeProvider, Zoom } from '@material-ui/core';
 
 // components
 import { ErrorView } from 'components/common';
@@ -24,12 +21,23 @@ import { AuthenticationProvider } from 'context/user';
 
 // styles
 import '../styles/index.css';
+import { primary, red } from 'styles/colors';
+import theme from 'styles/theme';
 
 // initSentry();
+
+const useStyles = makeStyles(() => ({
+  success: { backgroundColor: primary },
+  error: { backgroundColor: red },
+  warning: { backgroundColor: primary },
+  info: { backgroundColor: primary },
+}));
 
 const Noop = ({ children }) => children;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const classes = useStyles();
+
   useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -51,8 +59,21 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         />
       </Head>
       <ErrorBoundary FallbackComponent={ErrorView}>
-        <SnackbarProvider maxSnack={2}>
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <SnackbarProvider
+            TransitionComponent={Zoom}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'center',
+            }}
+            classes={{
+              variantSuccess: classes.success,
+              variantError: classes.error,
+              variantWarning: classes.warning,
+              variantInfo: classes.info,
+            }}
+            maxSnack={2}
+          >
             <SWRConfig
               value={{
                 errorRetryCount: 0,
@@ -71,8 +92,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 </Layout>
               </AuthenticationProvider>
             </SWRConfig>
-          </ThemeProvider>
-        </SnackbarProvider>
+          </SnackbarProvider>
+        </ThemeProvider>
       </ErrorBoundary>
     </>
   );

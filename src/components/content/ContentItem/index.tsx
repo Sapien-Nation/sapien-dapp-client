@@ -16,12 +16,17 @@ interface Props {
 
 const ContentItem = ({ content }: Props) => {
   return (
-    <Box display="grid" paddingX={1.5} paddingY={3.6} style={{ gap: 22 }}>
+    <Box
+      className="card--rounded-white"
+      display="grid"
+      paddingX={1.5}
+      paddingY={3.6}
+      style={{ gap: 22 }}
+    >
       <Header
         createdAt={content.createdAt}
         groupName={content.group.name}
         owner={content.owner}
-        tribeAvatar={content.tribe.avatar}
         tribeName={content.tribe.name}
       />
       <div>
@@ -37,12 +42,6 @@ const ContentItem = ({ content }: Props) => {
         </Box>
       </div>
 
-      {/* <img
-        alt={content.tribe.name}
-        className="image--rounded"
-        src={content.image}
-        style={{ width: '100%', maxHeight: '26rem', objectFit: 'cover' }}
-      /> */}
       <Actions commentsCount={0} echoCount={0} shareCount={0} />
     </Box>
   );
