@@ -42,6 +42,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
       changeView();
     } catch (error) {
       enqueueSnackbar(error, {
+        variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'right',

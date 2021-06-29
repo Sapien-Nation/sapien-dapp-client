@@ -25,12 +25,24 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
     try {
       await deleteContentAction(contentID);
 
-      enqueueSnackbar('Post Deleted Successfully');
+      enqueueSnackbar('Post Deleted Successfully', {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
 
       onDelete();
       onCancel();
-    } catch (err) {
-      enqueueSnackbar(err.message);
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
     setIsFetching(false);
   };

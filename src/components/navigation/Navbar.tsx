@@ -68,7 +68,13 @@ const Navbar = () => {
           const walletConnected = await connectWallet(tokens.torus, me.id);
           setWallet(walletConnected);
         } catch (error) {
-          enqueueSnackbar(error);
+          enqueueSnackbar(error, {
+            variant: 'error',
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'center',
+            },
+          });
         }
     };
     walletWeb3();
@@ -81,7 +87,13 @@ const Navbar = () => {
 
       clearSession();
     } catch (err) {
-      enqueueSnackbar(err.message);
+      enqueueSnackbar(err.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
   };
 

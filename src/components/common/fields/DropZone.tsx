@@ -43,6 +43,7 @@ const Dropzone = ({
       files.forEach(({ errors = [] }) => {
         errors.forEach(({ message = 'Please select a correct image!' }) => {
           enqueueSnackbar(message, {
+            variant: 'warning',
             anchorOrigin: {
               vertical: 'bottom',
               horizontal: 'center',

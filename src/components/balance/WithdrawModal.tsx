@@ -95,8 +95,14 @@ const WithdrawModal = ({ onClose }: Props) => {
     try {
       const address = await navigator.clipboard.readText();
       setValue('destinationAddress', address, { shouldDirty: true });
-    } catch (err) {
-      enqueueSnackbar(err);
+    } catch (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
     }
   };
 
@@ -114,8 +120,9 @@ const WithdrawModal = ({ onClose }: Props) => {
       formData.append('destinationAddress', destinationAddress);
       formData.append('withdraw', withdraw);
       setStep(Step.WithdrawSuccess);
-    } catch (err) {
-      enqueueSnackbar(err, {
+    } catch (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'center',

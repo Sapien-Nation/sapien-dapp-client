@@ -17,7 +17,13 @@ const VerifyPage = () => {
       try {
         await verifyUser(token as string);
       } catch (error) {
-        enqueueSnackbar(error);
+        enqueueSnackbar(error, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'center',
+          },
+        });
       }
       push('/');
     };

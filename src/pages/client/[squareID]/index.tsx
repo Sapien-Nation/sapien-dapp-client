@@ -85,9 +85,21 @@ const Square = ({ squareID }: Props) => {
 
       mutate();
 
-      enqueueSnackbar('Post Created Successfully');
+      enqueueSnackbar('Post Created Successfully', {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     } catch (error) {
-      enqueueSnackbar(error.message);
+      enqueueSnackbar(error.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
     setIsCreating(false);
   };
