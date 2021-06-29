@@ -3,7 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 import * as React from 'react';
 
 // styles
-import { black, red, primary, darkGrey, gray1, gray2, gray4 } from './colors';
+import { black, red, primary, darkGrey, gray1, gray4 } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
@@ -21,6 +21,15 @@ const theme = createMuiTheme({
     },
     MuiSwitch: {
       disableRipple: true,
+    },
+    MuiTypography: {
+      variantMapping: {
+        h5: 'p',
+        h6: 'p',
+        subtitle1: 'button',
+        subtitle2: 'button',
+        h4: 'button',
+      },
     },
   },
   palette: {
@@ -69,13 +78,6 @@ const theme = createMuiTheme({
       fontWeight: 600,
       lineHeight: '2.52rem',
     },
-    subtitle1: { fontSize: '1rem', lineHeight: '1.5rem' },
-    subtitle2: {
-      fontSize: '1.2rem',
-      fontWeight: 400,
-      letterSpacing: '0.005rem',
-      lineHeight: '1.25rem',
-    },
     body1: {
       fontSize: '1.8rem',
       fontWeight: 400,
@@ -86,9 +88,35 @@ const theme = createMuiTheme({
       fontWeight: 400,
       lineHeight: '2.24rem',
     },
-    button: {
+    h5: {
+      // Body3
+      fontSize: '1.5rem',
+      lineHeight: '140%',
+    },
+    h6: {
+      // Body 4/ Input Text
       fontSize: '1.4rem',
-      textTransform: 'unset',
+      lineHeight: '140%',
+    },
+    subtitle1: {
+      // Button Large
+      fontSize: '1.6rem',
+      fontWeight: 600,
+    },
+    button: {
+      // Button Medium
+      fontSize: '1.4rem',
+      textTransform: 'none',
+      fontWeight: 600,
+    },
+    subtitle2: {
+      // Button SemiMedium
+      fontSize: '1.3rem',
+      fontWeight: 600,
+    },
+    h4: {
+      // Button small
+      fontSize: '1.2rem',
       fontWeight: 600,
     },
     caption: {
@@ -100,10 +128,9 @@ const theme = createMuiTheme({
       textTransform: 'uppercase',
     },
     overline: {
-      color: gray2,
-      fontWeight: 700,
-      letterSpacing: '0.5px',
-      lineHeight: '1rem',
+      // Tooltip/Helper Text/ Additional Info
+      fontSize: '1.2rem',
+      textTransform: 'none',
     },
   },
 });
@@ -166,9 +193,18 @@ theme.overrides = {
       minHeight: '4rem',
       minWidth: '8rem',
       fontWeight: 600,
+      fontSize: '1.4rem',
     },
     containedSecondary: {
       fontWeight: 700,
+    },
+    sizeLarge: {
+      fontSize: '1.6rem',
+      fontWeight: 600,
+    },
+    sizeSmall: {
+      fontSize: '1.2rem',
+      fontWeight: 600,
     },
   },
   MuiInputLabel: {
@@ -323,6 +359,7 @@ theme.overrides = {
     tooltip: {
       backgroundColor: '#fff',
       color: '#8F92A1',
+      fontSize: '1.2rem',
     },
   },
 };
