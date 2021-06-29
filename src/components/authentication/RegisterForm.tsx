@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 // api
@@ -271,51 +271,80 @@ const Signup = () => {
         type={showRepeatPassword ? 'text' : 'password'}
       />
       <Box marginBottom="2rem">
-        <FormControlLabel
-          control={
-            <Checkbox
-              disableRipple
-              checkedIcon={<CheckboxCheckedIcon />}
-              color="default"
-              icon={<CheckboxIcon />}
-              name="agree"
-            />
-          }
-          label={
-            <Typography>
-              <Typography variant="overline">
-                I have read and agree to the
-              </Typography>{' '}
-              <Typography variant="overline">
-                <a
-                  href="https://common.sapien.network/terms.html"
-                  rel="noreferrer"
-                  style={{ color: '#42D1E0' }}
-                  target="_blank"
-                >
-                  Terms & Conditions
-                </a>
-              </Typography>
-            </Typography>
-          }
+        <Controller
+          control={control}
+          name="terms"
+          render={({ field }) => {
+            return (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    disableRipple
+                    checkedIcon={<CheckboxCheckedIcon />}
+                    color="default"
+                    icon={<CheckboxIcon />}
+                    name="terms"
+                    {...field}
+                  />
+                }
+                label={
+                  <Typography>
+                    <Typography variant="overline">
+                      I have read and agree to the
+                    </Typography>{' '}
+                    <Typography variant="overline">
+                      <a
+                        href="https://common.sapien.network/terms.html"
+                        rel="noreferrer"
+                        style={{ color: '#42D1E0' }}
+                        target="_blank"
+                      >
+                        Terms & Conditions
+                      </a>
+                    </Typography>
+                  </Typography>
+                }
+              />
+            );
+          }}
+          rules={{
+            required: {
+              value: true,
+              message: 'Please Check the box',
+            },
+          }}
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              defaultChecked
-              disableRipple
-              required
-              checkedIcon={<CheckboxCheckedIcon />}
-              color="default"
-              icon={<CheckboxIcon />}
-              name="wallet"
-            />
-          }
-          label={
-            <Typography variant="overline">
-              I understand that a wallet will be created for me
-            </Typography>
-          }
+        <Controller
+          control={control}
+          name="wallet"
+          render={({ field }) => {
+            return (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked
+                    disableRipple
+                    checkedIcon={<CheckboxCheckedIcon />}
+                    color="default"
+                    icon={<CheckboxIcon />}
+                    name="wallet"
+                    {...field}
+                  />
+                }
+                label={
+                  <Typography variant="overline">
+                    I understand that a wallet will be created for me
+                  </Typography>
+                }
+              />
+            );
+          }}
+          rules={{
+            required: {
+              value: true,
+              message: 'Please Check the box',
+            },
+          }}
         />
       </Box>
 
