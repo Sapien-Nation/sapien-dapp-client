@@ -12,7 +12,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { Group } from '@material-ui/icons';
+import { Groups } from '@material-ui/icons';
 
 // styles
 import { neutral, primary } from 'styles/colors';
@@ -67,7 +67,7 @@ const TribeNavigation = () => {
                 padding: '1rem 1.5rem',
               }}
             >
-              <Group fontSize="small" style={{ color: neutral[500] }} />
+              <Groups fontSize="small" style={{ color: neutral[500] }} />
               <Typography
                 style={{
                   marginLeft: 15,
