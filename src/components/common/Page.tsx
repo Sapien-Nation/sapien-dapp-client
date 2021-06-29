@@ -2,7 +2,7 @@
 import { Box } from '@material-ui/core';
 
 interface Props {
-  children: React.ReactElement;
+  children: React.ReactElement | Array<React.ReactElement>;
   header: React.ReactElement;
   subHeader: React.ReactElement;
 }
