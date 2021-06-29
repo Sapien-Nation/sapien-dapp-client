@@ -62,8 +62,8 @@ const Forgot = ({ changeView }: Props) => {
           }),
           autoComplete: 'email',
         }}
-        label="Email or username"
-        placeholder="Enter your email, or username"
+        label="Email"
+        placeholder="Enter your email"
       />
 
       <Button

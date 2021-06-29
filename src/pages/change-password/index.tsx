@@ -23,7 +23,7 @@ const ForgotPage = () => {
       case View.Form:
         return (
           <>
-            <Typography variant="h1">Forgotten Password</Typography>
+            <Typography variant="h1">Forgot Password?</Typography>
             <Box marginTop={6.5}>
               <ForgotForm changeView={() => setView(View.Success)} />
             </Box>
@@ -45,8 +45,8 @@ const ForgotPage = () => {
             <Typography variant="h2">Request sent successfully</Typography>
             <Box marginTop={4}>
               <Typography variant="body2">
-                If the email and username provided match, you will receive
-                instructions to set a new password shortly.
+                Please check your email and follow the instructions to reset
+                your password.
               </Typography>
             </Box>
             <Box marginTop={4}>
