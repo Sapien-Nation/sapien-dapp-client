@@ -28,7 +28,7 @@ const ForgotPage = () => {
               <ForgotForm changeView={() => setView(View.Success)} />
             </Box>
             <Box marginTop={2} textAlign="center">
-              <Typography component="span" variant="subtitle2">
+              <Typography variant="overline">
                 Remembered your password?
               </Typography>{' '}
               <Link href="/login">

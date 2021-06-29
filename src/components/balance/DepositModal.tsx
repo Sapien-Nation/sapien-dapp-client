@@ -7,7 +7,7 @@ import { Box, Button, Typography, makeStyles } from '@material-ui/core';
 import { Dialog } from 'components/common';
 
 // styles
-import { black, darkGrey } from 'styles/colors';
+import { neutral } from 'styles/colors';
 
 // assets
 import { MetamaskLogo, DepositSuccess } from 'assets';
@@ -59,7 +59,7 @@ const DepositModal = ({ onClose }: Props) => {
               }}
               style={{
                 margin: '4rem 0',
-                backgroundColor: black,
+                backgroundColor: neutral[700],
                 color: 'white',
               }}
               variant="contained"
@@ -86,7 +86,7 @@ const DepositModal = ({ onClose }: Props) => {
             >
               You have successfully deposited 1,995.00 SPN to your balance
             </Typography>
-            <Typography style={{ color: darkGrey }} variant="body2">
+            <Typography style={{ color: neutral[500] }} variant="body2">
               The funds will appear in your balance shortly
             </Typography>
             <Button

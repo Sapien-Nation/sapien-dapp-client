@@ -68,7 +68,7 @@ const LoginForm = () => {
         fullWidth
         error={Boolean(errors.email)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="email" />
           </Box>
         }
@@ -106,7 +106,7 @@ const LoginForm = () => {
         }}
         error={Boolean(errors.password)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="password" />
           </Box>
         }
@@ -140,13 +140,13 @@ const LoginForm = () => {
               control={
                 <Checkbox checked={Boolean(value)} color="default" {...rest} />
               }
-              label={<Typography variant="subtitle2">Remember me</Typography>}
+              label={<Typography variant="overline">Remember me</Typography>}
             />
           )}
         />
         <Link href="/change-password">
           <a>
-            <Typography color="primary" variant="subtitle2">
+            <Typography color="primary" variant="overline">
               Forgot password?
             </Typography>
           </a>

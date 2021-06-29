@@ -15,9 +15,7 @@ const LoginPage = () => {
         <LoginForm />
       </Box>
       <Box marginTop={2} textAlign="center">
-        <Typography component="span" variant="subtitle2">
-          Don’t have an account?
-        </Typography>{' '}
+        <Typography variant="overline">Don’t have an account?</Typography>{' '}
         <Link href="/register">
           <a>
             <Typography variant="caption">Sign up</Typography>

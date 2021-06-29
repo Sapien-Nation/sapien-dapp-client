@@ -72,7 +72,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
         }}
         error={Boolean(errors.password)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="password" />
           </Box>
         }
@@ -114,7 +114,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
         }}
         error={Boolean(errors.confirmPassword)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="confirmPassword" />
           </Box>
         }

@@ -14,7 +14,7 @@ import { Query } from 'components/common';
 import { Avatar, Box, Typography } from '@material-ui/core';
 
 // styles
-import { darkGrey, primary } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
@@ -23,14 +23,12 @@ const MyTransactions = () => {
   return (
     <Box padding={2}>
       <Typography
+        component="h6"
         style={{
-          letterSpacing: 1,
-          textTransform: 'uppercase',
-          color: darkGrey,
-          fontWeight: 700,
+          color: neutral[500],
           marginBottom: 20,
         }}
-        variant="subtitle2"
+        variant="caption"
       >
         My Transactions
       </Typography>
@@ -58,7 +56,7 @@ const MyTransactions = () => {
                   <Typography
                     style={{
                       lineHeight: 1.4,
-                      color: darkGrey,
+                      color: neutral[500],
                       fontWeight: 400,
                     }}
                     variant="button"
@@ -73,7 +71,7 @@ const MyTransactions = () => {
                   <Typography
                     style={{
                       lineHeight: 1.4,
-                      color: darkGrey,
+                      color: neutral[500],
                       fontWeight: 400,
                     }}
                     variant="button"
@@ -90,7 +88,7 @@ const MyTransactions = () => {
         style={{
           fontSize: 14,
           textAlign: 'center',
-          color: primary,
+          color: primary[800],
           fontWeight: 600,
           marginTop: 1,
         }}

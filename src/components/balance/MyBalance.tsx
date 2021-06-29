@@ -11,7 +11,7 @@ import { Box, Button, Chip, Typography, makeStyles } from '@material-ui/core';
 import { ArrowDownward, ArrowUpward } from '@material-ui/icons';
 
 // styles
-import { gray2, darkGrey } from 'styles/colors';
+import { neutral } from 'styles/colors';
 
 // utils
 import { formatSpn, formatEthToUsd } from 'utils/spn';
@@ -67,8 +67,8 @@ const MyBalance = ({ wallet }: { wallet: WalletType }) => {
           <Chip
             label={usd}
             style={{
-              backgroundColor: gray2,
-              color: darkGrey,
+              backgroundColor: neutral[50],
+              color: neutral[500],
             }}
           />
         </Box>

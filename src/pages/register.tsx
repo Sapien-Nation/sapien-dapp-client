@@ -15,9 +15,7 @@ const RegisterPage = () => {
         <RegisterForm />
       </Box>
       <Box marginTop={2} textAlign="center">
-        <Typography component="span" variant="subtitle2">
-          Already have an account?
-        </Typography>{' '}
+        <Typography variant="overline">Already have an account?</Typography>{' '}
         <Link href="/login">
           <a>
             <Typography variant="caption">Log in</Typography>

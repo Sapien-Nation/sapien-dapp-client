@@ -88,7 +88,7 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.email)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="email" />
           </Box>
         }
@@ -113,7 +113,7 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.username)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="username" />
           </Box>
         }
@@ -144,7 +144,7 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.displayName)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="displayName" />
           </Box>
         }
@@ -191,7 +191,7 @@ const Signup = () => {
         }}
         error={Boolean(errors.password)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="password" />
           </Box>
         }
@@ -250,7 +250,7 @@ const Signup = () => {
         }}
         error={Boolean(errors.confirmPassword)}
         helperText={
-          <Box marginTop={1} textAlign="right">
+          <Box component="span" display="block" marginTop={1} textAlign="right">
             <ErrorMessage errors={errors} name="confirmPassword" />
           </Box>
         }
@@ -283,10 +283,10 @@ const Signup = () => {
           }
           label={
             <Typography>
-              <Typography component="span" variant="subtitle2">
+              <Typography variant="overline">
                 I have read and agree to the
               </Typography>{' '}
-              <Typography component="span" variant="subtitle2">
+              <Typography variant="overline">
                 <a
                   href="https://common.sapien.network/terms.html"
                   rel="noreferrer"
@@ -312,7 +312,7 @@ const Signup = () => {
             />
           }
           label={
-            <Typography variant="subtitle2">
+            <Typography variant="overline">
               I understand that a wallet will be created for me
             </Typography>
           }

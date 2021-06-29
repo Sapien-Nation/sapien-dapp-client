@@ -3,7 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 import * as React from 'react';
 
 // styles
-import { black, red, primary, darkGrey, gray1, gray4 } from './colors';
+import { green, neutral, red, primary, secondary } from './colors';
 import { avertaBold, avertaItalic, avertaMedium, avertaRegular } from './fonts';
 
 const theme = createMuiTheme({
@@ -34,30 +34,43 @@ const theme = createMuiTheme({
   },
   palette: {
     text: {
-      primary: black,
-      secondary: darkGrey,
+      primary: neutral[700],
+      secondary: neutral[500],
     },
     primary: {
-      light: '#8133ee',
-      main: primary,
-      dark: '#4400a3',
+      light: primary[800],
+      main: primary[800],
+      dark: primary[900],
       contrastText: '#fff',
+      ...primary,
     },
     secondary: {
-      light: '#d6d6d6',
-      main: gray1,
-      dark: '#8e8e8e',
+      light: secondary[800],
+      main: secondary[800],
+      dark: secondary[900],
       contrastText: '#fff',
+      ...secondary,
     },
     info: {
-      main: darkGrey,
+      main: neutral[500],
       contrastText: '#fff',
     },
     error: {
-      light: '#ff6793',
-      main: red,
-      dark: '#b22e54',
+      light: red[700],
+      main: red[700],
+      dark: red[800],
       contrastText: '#fff',
+      ...red,
+    },
+    success: {
+      light: green[700],
+      main: green[700],
+      dark: green[800],
+      contrastText: '#fff',
+      ...green,
+    },
+    grey: {
+      ...neutral,
     },
   },
   typography: {
@@ -121,11 +134,9 @@ const theme = createMuiTheme({
     },
     caption: {
       fontSize: '1.2rem',
-      color: black,
       fontWeight: 'bold',
       letterSpacing: '0.05rem',
       lineHeight: '1.05rem',
-      textTransform: 'uppercase',
     },
     overline: {
       // Tooltip/Helper Text/ Additional Info
@@ -212,7 +223,7 @@ theme.overrides = {
       fontSize: '1.4rem',
       fontWeight: 600,
       transform: 'translate(0, 0) scale(1)',
-      color: black,
+      color: neutral[700],
       position: 'relative',
       top: '-1rem',
     },
@@ -235,12 +246,12 @@ theme.overrides = {
   },
   MuiFormLabel: {
     root: {
-      color: black,
+      color: neutral[700],
       '&$focused': {
-        color: black,
+        color: neutral[700],
       },
       '&.Mui-error': {
-        color: black,
+        color: neutral[700],
       },
     },
   },
@@ -259,7 +270,7 @@ theme.overrides = {
       },
       '&.Mui-error': {
         backgroundColor: '#FEF9F9',
-        border: `2px solid ${red} !important`,
+        border: `2px solid ${red[700]} !important`,
         boxSizing: 'border-box',
       },
     },
@@ -288,7 +299,7 @@ theme.overrides = {
   },
   MuiOutlinedInput: {
     root: {
-      background: gray4,
+      background: neutral[50],
       borderRadius: '0.6rem',
       fontSize: '1.4rem',
       minHeight: '4.6rem',
@@ -306,7 +317,7 @@ theme.overrides = {
   },
   MuiInputAdornment: {
     positionStart: {
-      color: darkGrey,
+      color: neutral[500],
     },
   },
   MuiInputBase: {
@@ -348,7 +359,7 @@ theme.overrides = {
     },
     track: {
       borderRadius: 26 / 2,
-      border: `1px solid ${gray4}`,
+      border: `1px solid ${neutral[50]}`,
       backgroundColor: '#F4F7F9',
       opacity: 1,
       transition: theme.transitions.create(['background-color', 'border']),

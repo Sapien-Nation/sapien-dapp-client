@@ -21,7 +21,7 @@ import { ContentCopy as ContentCopyIcon } from '@material-ui/icons';
 import { Dialog } from 'components/common';
 
 // styles
-import { black, darkGrey, gray4, primary, red } from 'styles/colors';
+import { neutral, primary, red } from 'styles/colors';
 
 // assets
 import { WithdrawSuccess } from 'assets';
@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
   paper: { maxWidth: 510 },
   amountInput: {
     '& input::placeholder': {
-      color: black,
+      color: neutral[700],
       opacity: 1,
     },
   },
@@ -134,7 +134,7 @@ const WithdrawModal = ({ onClose }: Props) => {
             <small
               style={{
                 marginLeft: 10,
-                color: darkGrey,
+                color: neutral[500],
                 fontSize: 12,
                 fontWeight: 100,
               }}
@@ -150,7 +150,7 @@ const WithdrawModal = ({ onClose }: Props) => {
             <small
               style={{
                 marginLeft: 10,
-                color: darkGrey,
+                color: neutral[500],
                 fontSize: 12,
                 fontWeight: 100,
               }}
@@ -189,7 +189,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                           aria-label="Paste"
                           edge="end"
                           size="small"
-                          style={{ color: primary }}
+                          style={{ color: primary[800] }}
                           onClick={copyAddress}
                         >
                           <ContentCopyIcon fontSize="small" />
@@ -215,15 +215,15 @@ const WithdrawModal = ({ onClose }: Props) => {
                 }
                 placeholder="Enter wallet address"
               />
-              <Box bgcolor={gray4} borderRadius={2} padding={2.5}>
+              <Box bgcolor={neutral[50]} borderRadius={2} padding={2.5}>
                 <Typography
                   style={{
-                    color: darkGrey,
+                    color: neutral[500],
                     textTransform: 'uppercase',
                     fontWeight: 700,
                     lineHeight: 1,
                   }}
-                  variant="subtitle2"
+                  variant="overline"
                 >
                   You withdraw
                 </Typography>
@@ -234,12 +234,15 @@ const WithdrawModal = ({ onClose }: Props) => {
                     focused: classes.amountInputFocus,
                   }}
                   endAdornment={
-                    <InputAdornment position="end" style={{ color: black }}>
+                    <InputAdornment
+                      position="end"
+                      style={{ color: neutral[700] }}
+                    >
                       SPN{' '}
                       <small
                         style={{
                           marginLeft: 10,
-                          color: darkGrey,
+                          color: neutral[500],
                           fontSize: 12,
                           fontWeight: 100,
                         }}
@@ -270,7 +273,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                   marginTop={3}
                 >
                   <Typography
-                    style={{ color: red, fontWeight: 100 }}
+                    style={{ color: red[700], fontWeight: 100 }}
                     variant="caption"
                   >
                     {isDirty && watchWithdraw < minSpn
@@ -280,7 +283,8 @@ const WithdrawModal = ({ onClose }: Props) => {
                   <Typography
                     style={{
                       fontWeight: 100,
-                      color: userBalance < watchWithdraw ? red : darkGrey,
+                      color:
+                        userBalance < watchWithdraw ? red[700] : neutral[500],
                     }}
                     variant="caption"
                   >
@@ -314,7 +318,7 @@ const WithdrawModal = ({ onClose }: Props) => {
             </Button>
             <Typography
               style={{
-                color: darkGrey,
+                color: neutral[500],
                 fontWeight: 100,
                 textAlign: 'center',
                 marginTop: 10,
@@ -343,7 +347,7 @@ const WithdrawModal = ({ onClose }: Props) => {
             >
               You have successfully withdrawn 2,500 SPN from your balance
             </Typography>
-            <Typography style={{ color: darkGrey }} variant="body2">
+            <Typography style={{ color: neutral[500] }} variant="body2">
               The funds will appear on your external wallet account shortly.
             </Typography>
             <Button

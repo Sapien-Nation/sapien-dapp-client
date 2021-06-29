@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getTribes } from 'hooks';
 
 // styles
-import { dark, darkPurple } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 // mui
 import { Avatar, Drawer, IconButton, makeStyles } from '@material-ui/core';
@@ -18,7 +18,7 @@ import CreateTribeModal from './CreateTribeModal';
 const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: 72,
-    backgroundColor: dark,
+    backgroundColor: neutral[800],
     overflow: 'hidden',
   },
   avatarImage: {
@@ -108,7 +108,7 @@ const TribeBar = () => {
             style={{
               backgroundColor: 'inherit',
               borderRadius: 15,
-              border: `2px ${darkPurple} solid`,
+              border: `2px ${primary[900]} solid`,
               boxSizing: 'content-box',
               padding: '3px',
             }}
