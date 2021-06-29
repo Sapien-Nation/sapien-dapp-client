@@ -15,7 +15,7 @@ enum View {
 
 const ChangePasswordPage = () => {
   const router = useRouter();
-  const [view, setView] = useState(View.Success);
+  const [view, setView] = useState(View.Form);
 
   const renderView = () => {
     switch (view) {
