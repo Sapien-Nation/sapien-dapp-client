@@ -7,5 +7,5 @@ export const NameRegex = /^\w{2,} \w{2,}/;
 export const PasswordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
 
 // Tribes
-export const TribeNameRegex = /^[a-zA-Z\s]{1,20}$/;
-export const TribeIdentifierRegex = /^[a-zA-Z0-9_]{3,20}$/;
+export const TribeNameRegex = /^[a-zA-Z\s]/;
+export const TribeIdentifierRegex = /^[a-zA-Z0-9_]/;

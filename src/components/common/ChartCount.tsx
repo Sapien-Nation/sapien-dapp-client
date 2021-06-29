@@ -18,7 +18,7 @@ const ChartCount = ({ control, maxCount, name }: Props) => {
   const currentCount = currentValue?.length || 0;
   return (
     <Typography
-      color={currentCount > maxCount ? 'primary' : 'inherit'}
+      color={currentCount > maxCount ? 'error' : 'inherit'}
       data-testid="chart-count"
       variant="caption"
     >

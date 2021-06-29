@@ -26,12 +26,10 @@ import {
   InputAdornment,
   InputLabel,
   IconButton,
-  Switch,
   TextField,
   Typography,
-  Tooltip,
 } from '@material-ui/core';
-import { Add as AddIcon, Info as InfoIcon } from '@material-ui/icons';
+import { Add as AddIcon } from '@material-ui/icons';
 
 enum Step {
   TribeSummary = 1,
@@ -96,11 +94,19 @@ const CreateTribeModal = ({ onClose }: Props) => {
     try {
       if (step === Step.TribeSummary) return setStep(Step.TribeMedia);
 
-      const response = await createTribe({
-        ...values,
-        avatar: avatar?.key ?? null,
-        cover: cover?.key ?? null,
-      });
+      if (values.avatar) {
+        values.avatar = values.avatar.key;
+      } else {
+        delete values.avatar;
+      }
+
+      if (values.cover) {
+        values.cover = values.cover.key;
+      } else {
+        delete values.cover;
+      }
+
+      const response = await createTribe(values);
       mutate(
         '/api/v3/profile/tribes',
         (tribes: Array<Tribe>) => [...tribes, response],
@@ -149,10 +155,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
       const formData = new FormData();
       formData.append('variant', variant);
       formData.append('file', file);
-      formData.append(
-        'key',
-        variant === 'avatar' ? avatar?.key ?? null : cover?.key ?? null
-      );
+
+      if (avatar?.key || cover?.key) {
+        formData.append('key', variant === 'avatar' ? avatar?.key : cover?.key);
+      }
       const data = await uploadImage(formData);
 
       onChange(data);
@@ -184,6 +190,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   required: {
                     value: true,
                     message: 'Name is required',
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: 'Name is to long',
                   },
                 }),
                 autoComplete: 'name',
@@ -219,6 +229,14 @@ const CreateTribeModal = ({ onClose }: Props) => {
                     value: true,
                     message: 'Identifier is required',
                   },
+                  minLength: {
+                    value: 3,
+                    message: 'Identifier is to short',
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: 'Identifier is to long',
+                  },
                 }),
                 autoComplete: 'identifier',
               }}
@@ -251,41 +269,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   },
                 }),
               }}
+              label={
+                <Box display="flex" justifyContent="space-between">
+                  Description
+                </Box>
+              }
               placeholder="Set brief description"
               rows={5}
-            />
-
-            <Controller
-              control={control}
-              name="private"
-              render={({ field: { onChange, value, ...rest } }) => (
-                <Box display="flex" justifyContent="space-between">
-                  <Box alignItems="center" display="flex">
-                    <Typography style={{ marginRight: 10 }} variant="button">
-                      Public tribe
-                    </Typography>
-                    <Tooltip
-                      arrow
-                      color="primary"
-                      placement="right"
-                      title={
-                        <Box borderRadius={10} minWidth={321} padding={1.6}>
-                          TODO explain tribe public/notpublic
-                        </Box>
-                      }
-                    >
-                      <InfoIcon fontSize="small" />
-                    </Tooltip>
-                  </Box>
-                  <Switch
-                    disableRipple
-                    checked={value as boolean}
-                    color="default"
-                    onChange={(e) => onChange(e.target.checked)}
-                    {...rest}
-                  />
-                </Box>
-              )}
             />
           </>
         );
