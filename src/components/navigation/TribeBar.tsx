@@ -76,8 +76,7 @@ const TribeBar = () => {
                 src={tribe.avatar}
                 style={{
                   color: 'white',
-                  backgroundColor:
-                    tribe.avatar === null ? colors[index] : 'white',
+                  backgroundColor: tribe.avatar === null ? colors[index] : '',
                   borderRadius: 15,
                   border: asPath.includes(`/client/${tribe.mainSquareId}`)
                     ? '2px solid'

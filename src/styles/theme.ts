@@ -164,6 +164,11 @@ theme.overrides = {
       ] as unknown as React.CSSProperties,
     },
   },
+  MuiAvatar: {
+    img: {
+      backgroundColor: '#FFFFFF',
+    },
+  },
   MuiDialog: {
     paper: {
       borderRadius: '1rem',
