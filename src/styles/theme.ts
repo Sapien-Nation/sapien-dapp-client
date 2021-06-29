@@ -73,7 +73,7 @@ const theme = createMuiTheme({
     subtitle2: {
       fontSize: '1.2rem',
       fontWeight: 400,
-      letterSpacing: '0.005em',
+      letterSpacing: '0.005rem',
       lineHeight: '1.25rem',
     },
     body1: {
@@ -88,16 +88,16 @@ const theme = createMuiTheme({
     },
     button: {
       fontSize: '1.4rem',
-      letterSpacing: '0.01em',
       textTransform: 'unset',
       fontWeight: 600,
     },
     caption: {
       fontSize: '1.2rem',
       color: black,
-      fontWeight: 700,
-      letterSpacing: '0.01em',
+      fontWeight: 'bold',
+      letterSpacing: '0.05rem',
       lineHeight: '1.05rem',
+      textTransform: 'uppercase',
     },
     overline: {
       color: gray2,
