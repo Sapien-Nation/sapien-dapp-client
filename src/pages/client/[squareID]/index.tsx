@@ -6,6 +6,29 @@ import { useSWRInfinite } from 'swr';
 
 // api
 import axios from 'api';
+import { createContent } from 'api/content';
+
+// context
+import { useAuth } from 'context/user';
+
+// components
+import {
+  FeedSkeleton,
+  Page,
+  PostComposerSkeleton,
+  Query,
+} from 'components/common';
+import Layout from 'pages/Layout';
+import { Header } from 'components/square';
+import {
+  CreateContentForm,
+  ContentItem,
+  EmptyFeed,
+  NewContentPlaceholder,
+} from 'components/content';
+
+// hooks
+import { getTribe } from 'hooks';
 
 // utils
 import { serialize } from 'utils/slate';
@@ -13,28 +36,8 @@ import { serialize } from 'utils/slate';
 // types
 import type { Descendant } from 'slate';
 
-// context
-import { useAuth } from 'context/user';
-
 // mui
-import { Box, Fade, Typography } from '@material-ui/core';
-
-// api
-import { createContent } from 'api/content';
-
-// hooks
-import { getTribe } from 'hooks';
-
-// components
-import {
-  ContentFeedSkeleton,
-  Page,
-  PostComposerSkeleton,
-  Query,
-} from 'components/common';
-import { CreateContentForm, ContentItem } from 'components/content';
-import { Header } from 'components/square';
-import Layout from 'pages/Layout';
+import { Box } from '@material-ui/core';
 
 interface Props {
   squareID: string;
@@ -56,13 +59,12 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 
 const Square = ({ squareID }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
-  console.log(isCreating);
   const { me } = useAuth();
+  const { id: tribeID } = getTribe(String(squareID));
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id: tribeID } = getTribe(String(squareID));
   const {
-    data,
+    data: swrData,
     error: swrError,
     setSize,
     size,
@@ -70,7 +72,7 @@ const Square = ({ squareID }: Props) => {
   } = useSWRInfinite(
     (...rest) =>
       getKey(...rest, `/api/v3/tribe/${tribeID}/square/${squareID}/feed`),
-    fetcher
+    { fetcher, revalidateOnMount: true }
   );
 
   const handleSubmit = async (content: Array<Descendant>) => {
@@ -81,19 +83,21 @@ const Square = ({ squareID }: Props) => {
         squareId: squareID,
       });
 
-      enqueueSnackbar('Post Created Successfully');
-
       mutate();
+
+      enqueueSnackbar('Post Created Successfully');
     } catch (error) {
       enqueueSnackbar(error.message);
     }
     setIsCreating(false);
   };
 
-  const content = data?.length ? data.map(({ data }) => data).flat() : [];
+  const data = swrData?.map(({ data: posts }) => posts);
+  const content = data ? [].concat(...data) : [];
   const isLoadingInitialData = !data && !swrError;
-  const isEmpty = data?.[0].data?.length === 0;
-  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < 10);
+  const isEmpty = swrData?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty || (swrData && swrData[swrData.length - 1]?.length < 20);
 
   return (
     <Page
@@ -108,56 +112,22 @@ const Square = ({ squareID }: Props) => {
         </Box>
       }
     >
-      <>
-        <InfiniteScrollComponent
-          dataLength={content.length}
-          hasMore={!false}
-          loader={null}
-          next={() => {
-            setSize(size + 1);
-          }}
-        >
-          {isEmpty || isReachingEnd ? (
-            <Box className="card--rounded-white" padding={4} textAlign="center">
-              <Typography>
-                There are no more posts{' '}
-                <span aria-label="No more posts" role="img">
-                  🙈
-                </span>
-              </Typography>
-            </Box>
-          ) : null}
-          {/* <Fade unmountOnExit in={isCreating}>
-            <div>
-              <ContentFeedSkeleton />
-            </div>
-          </Fade> */}
-          <Box display="grid" style={{ gap: '16px' }}>
-            {isCreating
-              ? [[{}], ...content]
-              : content.map((content, index) => (
-                  <>
-                    {isCreating && index === 0 ? (
-                      <Fade unmountOnExit in={isCreating}>
-                        <div>
-                          <ContentFeedSkeleton />
-                        </div>
-                      </Fade>
-                    ) : (
-                      <ContentItem key={content.id} content={content} />
-                    )}
-                  </>
-                ))}
-          </Box>
-        </InfiniteScrollComponent>
-        {isLoadingInitialData && (
-          <>
-            <ContentFeedSkeleton />
-            <ContentFeedSkeleton />
-            <ContentFeedSkeleton />
-          </>
-        )}
-      </>
+      <InfiniteScrollComponent
+        key={squareID}
+        dataLength={content.length}
+        hasMore={!isEmpty}
+        loader={null}
+        next={() => setSize(size + 1)}
+      >
+        {(isEmpty || isReachingEnd) && <EmptyFeed />}
+        <Box display="grid" style={{ gap: '16px' }}>
+          <NewContentPlaceholder open={isCreating} />
+          {content.map((content) => (
+            <ContentItem key={content.id} content={content} mutate={mutate} />
+          ))}
+        </Box>
+        {isLoadingInitialData && <FeedSkeleton />}
+      </InfiniteScrollComponent>
     </Page>
   );
 };
