@@ -1,5 +1,4 @@
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -16,7 +15,7 @@ import {
 import { useAuth } from 'context/user';
 
 // components
-import { ChartCount } from 'components/common';
+import { ChartCount, PasswordField } from 'components/common';
 
 // mui
 import {
@@ -24,30 +23,16 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  IconButton,
-  InputAdornment,
   TextField,
   Typography,
   Tooltip,
 } from '@material-ui/core';
-import {
-  Info as InfoIcon,
-  Visibility,
-  VisibilityOff,
-} from '@material-ui/icons';
+import { Info as InfoIcon } from '@material-ui/icons';
 
 // utils
-import {
-  EmailRegex,
-  NameRegex,
-  UsernameRegex,
-  PasswordRegex,
-} from 'utils/regex';
+import { EmailRegex, NameRegex, UsernameRegex } from 'utils/regex';
 
 const Signup = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-
   const { setSession } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -55,9 +40,8 @@ const Signup = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-    watch,
   } = useForm();
-
+  console.log(errors);
   const onSubmit = async (values: {
     displayName: string;
     email: string;
@@ -172,44 +156,8 @@ const Signup = () => {
         placeholder="Jonathan Doe"
         type="text"
       />
-      <TextField
-        fullWidth
-        InputLabelProps={{
-          style: { pointerEvents: 'auto' },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                edge="end"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        error={Boolean(errors.password)}
-        helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
-            <ErrorMessage errors={errors} name="password" />
-          </Box>
-        }
-        id="password"
-        inputProps={{
-          ...register('password', {
-            pattern: {
-              value: PasswordRegex,
-              message: 'Invalid password',
-            },
-            required: {
-              value: true,
-              message: 'Enter a password',
-            },
-          }),
-          autoComplete: 'new-password',
-        }}
+      <PasswordField
+        errors={errors}
         label={
           <Box alignItems="center" display="flex">
             Password{' '}
@@ -228,48 +176,12 @@ const Signup = () => {
             </Tooltip>
           </Box>
         }
-        placeholder="mypassword123*"
-        type={showPassword ? 'text' : 'password'}
+        register={register}
       />
-      <TextField
-        fullWidth
-        InputLabelProps={{
-          style: { pointerEvents: 'auto' },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                edge="end"
-                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
-              >
-                {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        error={Boolean(errors.confirmPassword)}
-        helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
-            <ErrorMessage errors={errors} name="confirmPassword" />
-          </Box>
-        }
-        id="confirmPassword"
-        inputProps={{
-          ...register('confirmPassword', {
-            required: {
-              value: true,
-              message: 'Enter a password',
-            },
-            validate: (value) =>
-              value === watch('password') || "Passwords don't match.",
-          }),
-          autoComplete: 'new-password',
-        }}
-        label="Confirm Password"
-        placeholder="Repeat Password"
-        type={showRepeatPassword ? 'text' : 'password'}
+      <PasswordField
+        errors={errors}
+        name="confirmPassword"
+        register={register}
       />
       <Box marginBottom="2rem">
         <Controller
@@ -323,7 +235,6 @@ const Signup = () => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    defaultChecked
                     disableRipple
                     checkedIcon={<CheckboxCheckedIcon />}
                     color="default"
