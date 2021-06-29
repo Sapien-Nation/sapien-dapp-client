@@ -63,8 +63,7 @@ const Header = ({ createdAt, groupName, owner, tribeName }: Props) => {
         style={{ gap: 8 }}
       >
         <Avatar alt="Tribe Image" src={owner.avatar}>
-          {/* @ts-ignore */}
-          {owner.username?.[0].toUpperCase()}
+          {owner.displayName?.[0].toUpperCase()}
         </Avatar>
         <Link href="/">
           <a>
