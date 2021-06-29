@@ -53,6 +53,7 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
       confirmLabel="Delete Post"
       isFetching={isFetching}
       title="Deleting post"
+      variant="delete"
       onCancel={onCancel}
       onConfirm={handleDelete}
     >

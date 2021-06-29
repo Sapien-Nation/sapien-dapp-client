@@ -17,7 +17,7 @@ export default StoryMeta;
 export const ComposerStory = () => {
   return (
     <div>
-      <ContentItem content={mockContent()} />
+      <ContentItem content={mockContent()} mutate={() => {}} />
     </div>
   );
 };

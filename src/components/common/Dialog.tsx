@@ -19,9 +19,6 @@ import {
 import { useTheme } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
-// styles
-import { red } from 'styles/colors';
-
 interface Props extends Omit<DialogProps, 'title'> {
   actions?: React.ReactNode;
   form?: string;
@@ -36,6 +33,7 @@ interface Props extends Omit<DialogProps, 'title'> {
   showConfirm?: boolean;
   subtitle?: string | React.ReactNode;
   title?: string | React.ReactNode;
+  variant?: 'confirm' | 'delete' | 'normal';
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -66,6 +64,7 @@ const Dialog = ({
   children,
   title,
   subtitle,
+  variant = 'normal',
   actions = (
     <>
       {showCancel && (
@@ -73,7 +72,6 @@ const Dialog = ({
           disabled={isFetching}
           style={{
             marginRight: useTheme().spacing(2),
-            color: cancelLabel.includes('Delete') && red,
           }}
           onClick={onCancel}
         >
@@ -81,16 +79,31 @@ const Dialog = ({
         </Button>
       )}
       {showConfirm && (
-        <Button
-          color="primary"
-          disabled={isFetching || confirmDisabled}
-          form={form}
-          type={form ? 'submit' : 'button'}
-          variant="contained"
-          onClick={onConfirm}
-        >
-          {confirmLabel}
-        </Button>
+        <>
+          {variant === 'delete' ? (
+            <Button
+              color="secondary"
+              disabled={isFetching || confirmDisabled}
+              form={form}
+              type={form ? 'submit' : 'button'}
+              variant="text"
+              onClick={onConfirm}
+            >
+              {confirmLabel}
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              disabled={isFetching || confirmDisabled}
+              form={form}
+              type={form ? 'submit' : 'button'}
+              variant="contained"
+              onClick={onConfirm}
+            >
+              {confirmLabel}
+            </Button>
+          )}
+        </>
       )}
     </>
   ),
@@ -100,7 +113,7 @@ const Dialog = ({
   const classes = useStyles();
 
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
+  console.log(variant);
   return (
     <MUIDialog
       aria-labelledby="dialog-title"
