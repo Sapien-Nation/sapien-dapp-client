@@ -27,10 +27,10 @@ import theme from 'styles/theme';
 // initSentry();
 
 const useStyles = makeStyles(() => ({
-  success: { backgroundColor: primary },
-  error: { backgroundColor: red },
-  warning: { backgroundColor: primary },
-  info: { backgroundColor: primary },
+  success: { backgroundColor: primary[800] },
+  error: { backgroundColor: red[700] },
+  warning: { backgroundColor: primary[800] },
+  info: { backgroundColor: primary[800] },
 }));
 
 const Noop = ({ children }) => children;

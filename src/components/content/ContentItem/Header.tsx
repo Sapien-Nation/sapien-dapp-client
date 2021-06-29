@@ -22,7 +22,7 @@ import {
 } from '@material-ui/icons';
 
 // styles
-import { primary, purpleHighLight } from 'styles/colors';
+import { primary } from 'styles/colors';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -32,8 +32,8 @@ import { formatTimestampToRelative } from 'utils/date';
 
 const useStyles = makeStyles(() => ({
   chipRoot: {
-    color: primary,
-    backgroundColor: purpleHighLight,
+    color: primary[800],
+    backgroundColor: primary[100],
   },
 }));
 

@@ -15,7 +15,7 @@ import {
 import { Group } from '@material-ui/icons';
 
 // styles
-import { darkGrey, primary } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
     width: 228,
   },
   listItemSelected: {
-    backgroundColor: `${primary} !important`,
+    backgroundColor: `${primary[800]} !important`,
     '& .MuiTypography-root, & .MuiSvgIcon-root': {
       color: `#fff !important`,
     },
@@ -67,7 +67,7 @@ const TribeNavigation = () => {
                 padding: '1rem 1.5rem',
               }}
             >
-              <Group fontSize="small" style={{ color: darkGrey }} />
+              <Group fontSize="small" style={{ color: neutral[500] }} />
               <Typography
                 style={{
                   marginLeft: 15,

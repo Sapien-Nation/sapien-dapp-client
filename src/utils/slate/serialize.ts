@@ -17,7 +17,7 @@ export const serialize = (node) => {
       return `<p style="margin:0;">${children}</p>`;
     case 'link':
       return `<a 
-          style="margin:0;color:${primary};" 
+          style="margin:0;color:${primary[800]};" 
           target="_blank" href="${escapeHtml(node.url)}"
         >
           ${children}
@@ -33,7 +33,7 @@ export const serialize = (node) => {
           ${children}
         </div>`;
     case 'block-quote':
-      return `<blockquote style="font-style:bold;border:4px solid ${primary}">
+      return `<blockquote style="font-style:bold;border:4px solid ${primary[800]}">
             <span style="margin-left:4px;">
               ${children}
             </span>

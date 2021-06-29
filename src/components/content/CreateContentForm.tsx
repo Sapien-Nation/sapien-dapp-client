@@ -11,7 +11,7 @@ import { Send } from '@material-ui/icons';
 import type { User } from 'tools/types/user';
 
 // styles
-import { primary, gray2 } from 'styles/colors';
+import { primary, neutral } from 'styles/colors';
 
 // utils
 import {
@@ -85,7 +85,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
               renderElement={(props) => <Element {...props} />}
               renderLeaf={(props) => <Leaf {...props} />}
               style={{
-                backgroundColor: gray2,
+                backgroundColor: neutral[50],
                 borderRadius: 16,
                 padding: '1rem 1.5rem',
               }}
@@ -95,7 +95,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
         <IconButton
           disabled={isSubmitting}
           style={{
-            backgroundColor: primary,
+            backgroundColor: primary[800],
             borderRadius: 16,
           }}
           type="submit"

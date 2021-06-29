@@ -9,7 +9,7 @@ import type { DropzoneProps, DropzoneOptions } from 'react-dropzone';
 import { Box } from '@material-ui/core';
 
 // styles
-import { gray1, gray2 } from 'styles/colors';
+import { neutral } from 'styles/colors';
 
 interface Props extends Omit<DropzoneProps, 'children'> {
   children: React.ReactElement | Array<React.ReactElement>;
@@ -65,8 +65,8 @@ const Dropzone = ({
       overflow="hidden"
       position="relative"
       style={{
-        backgroundColor: gray2,
-        border: `1px dashed ${gray1}`,
+        backgroundColor: neutral[50],
+        border: `1px dashed ${neutral[400]}`,
       }}
       width="100%"
       {...getRootProps()}

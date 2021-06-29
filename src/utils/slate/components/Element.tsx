@@ -12,7 +12,7 @@ export const Element = (props) => {
           {...attributes}
           href={element.url}
           style={{
-            color: primary,
+            color: primary[800],
           }}
         >
           {children}
@@ -24,7 +24,7 @@ export const Element = (props) => {
           {...attributes}
           style={{
             fontStyle: 'italic',
-            borderLeft: `4px solid ${primary}`,
+            borderLeft: `4px solid ${primary[800]}`,
           }}
         >
           <span style={{ marginLeft: 20 }}>{children}</span>
