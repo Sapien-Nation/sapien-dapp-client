@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 import { ErrorBoundary } from 'react-error-boundary';
 
 // types
@@ -11,7 +11,13 @@ import type { AppProps } from 'next/app';
 import axios from 'api';
 
 // mui
-import { makeStyles, ThemeProvider, Zoom } from '@material-ui/core';
+import { IconButton, makeStyles, ThemeProvider, Zoom } from '@material-ui/core';
+import {
+  CheckCircleOutlineOutlined as SuccessIcon,
+  Close as CloseIcon,
+  ErrorOutline as ErrorIcon,
+  InfoOutlined as InfoIcon,
+} from '@material-ui/icons';
 
 // components
 import { ErrorView } from 'components/common';
@@ -21,17 +27,30 @@ import { AuthenticationProvider } from 'context/user';
 
 // styles
 import '../styles/index.css';
-import { primary, red } from 'styles/colors';
+import { blue, green, neutral, red, secondary } from 'styles/colors';
 import theme from 'styles/theme';
 
 // initSentry();
 
 const useStyles = makeStyles(() => ({
-  success: { backgroundColor: primary[800] },
-  error: { backgroundColor: red[700] },
-  warning: { backgroundColor: primary[800] },
-  info: { backgroundColor: primary[800] },
+  customSnackbar: {
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0px 15px 30px rgba(56, 49, 67, 0.05)',
+    borderRadius: 10,
+    color: neutral[700],
+    fontSize: 14,
+  },
 }));
+
+const SnackbarCloseButton = ({ key }) => {
+  const { closeSnackbar } = useSnackbar();
+
+  return (
+    <IconButton onClick={() => closeSnackbar(key)}>
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  );
+};
 
 const Noop = ({ children }) => children;
 
@@ -62,15 +81,42 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider theme={theme}>
           <SnackbarProvider
             TransitionComponent={Zoom}
+            action={(key) => <SnackbarCloseButton key={key} />}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',
             }}
             classes={{
-              variantSuccess: classes.success,
-              variantError: classes.error,
-              variantWarning: classes.warning,
-              variantInfo: classes.info,
+              variantSuccess: classes.customSnackbar,
+              variantError: classes.customSnackbar,
+              variantWarning: classes.customSnackbar,
+              variantInfo: classes.customSnackbar,
+            }}
+            iconVariant={{
+              success: (
+                <SuccessIcon
+                  fontSize="small"
+                  style={{ marginRight: 10, color: green[700] }}
+                />
+              ),
+              error: (
+                <ErrorIcon
+                  fontSize="small"
+                  style={{ marginRight: 10, color: red[700] }}
+                />
+              ),
+              warning: (
+                <ErrorIcon
+                  fontSize="small"
+                  style={{ marginRight: 10, color: secondary[700] }}
+                />
+              ),
+              info: (
+                <InfoIcon
+                  fontSize="small"
+                  style={{ marginRight: 10, color: blue[700] }}
+                />
+              ),
             }}
             maxSnack={2}
           >

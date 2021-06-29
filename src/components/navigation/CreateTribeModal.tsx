@@ -111,6 +111,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
       onClose();
 
       enqueueSnackbar('Tribe Created Successfully', {
+        variant: 'success',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'center',
@@ -118,8 +119,9 @@ const CreateTribeModal = ({ onClose }: Props) => {
       });
 
       push(`/client/${response.mainSquareId}`);
-    } catch (err) {
-      enqueueSnackbar(err, {
+    } catch (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'center',
@@ -157,7 +159,13 @@ const CreateTribeModal = ({ onClose }: Props) => {
 
       onChange(data);
     } catch (err) {
-      enqueueSnackbar(err.message);
+      enqueueSnackbar(err.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
     setIsUploading(false);
   };

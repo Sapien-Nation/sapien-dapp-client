@@ -74,6 +74,7 @@ const Signup = () => {
       setSession({ torus: response.torus, token: response.token });
     } catch (error) {
       enqueueSnackbar(error, {
+        variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'right',
