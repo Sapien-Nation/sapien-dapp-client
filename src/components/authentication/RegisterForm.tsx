@@ -26,6 +26,7 @@ import {
   TextField,
   Typography,
   Tooltip,
+  FormHelperText,
 } from '@material-ui/core';
 import { Info as InfoIcon } from '@material-ui/icons';
 
@@ -189,35 +190,48 @@ const Signup = () => {
           name="terms"
           render={({ field }) => {
             return (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    disableRipple
-                    checkedIcon={<CheckboxCheckedIcon />}
-                    color="default"
-                    icon={<CheckboxIcon />}
-                    name="terms"
-                    {...field}
-                  />
-                }
-                label={
-                  <Typography>
-                    <Typography variant="overline">
-                      I have read and agree to the
-                    </Typography>{' '}
-                    <Typography variant="overline">
-                      <a
-                        href="https://common.sapien.network/terms.html"
-                        rel="noreferrer"
-                        style={{ color: '#42D1E0' }}
-                        target="_blank"
-                      >
-                        Terms & Conditions
-                      </a>
+              <>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      disableRipple
+                      checkedIcon={<CheckboxCheckedIcon />}
+                      color="default"
+                      icon={<CheckboxIcon />}
+                      name="terms"
+                      {...field}
+                    />
+                  }
+                  label={
+                    <Typography>
+                      <Typography variant="overline">
+                        I have read and agree to the
+                      </Typography>{' '}
+                      <Typography variant="overline">
+                        <a
+                          href="https://common.sapien.network/terms.html"
+                          rel="noreferrer"
+                          style={{ color: '#42D1E0' }}
+                          target="_blank"
+                        >
+                          Terms & Conditions
+                        </a>
+                      </Typography>
                     </Typography>
-                  </Typography>
-                }
-              />
+                  }
+                />
+                <FormHelperText
+                  className="Mui-error"
+                  style={{
+                    marginTop: '-1.5rem',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <ErrorMessage errors={errors} name="terms" />
+                </FormHelperText>
+              </>
             );
           }}
           rules={{
@@ -232,23 +246,36 @@ const Signup = () => {
           name="wallet"
           render={({ field }) => {
             return (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    disableRipple
-                    checkedIcon={<CheckboxCheckedIcon />}
-                    color="default"
-                    icon={<CheckboxIcon />}
-                    name="wallet"
-                    {...field}
-                  />
-                }
-                label={
-                  <Typography variant="overline">
-                    I understand that a wallet will be created for me
-                  </Typography>
-                }
-              />
+              <>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      disableRipple
+                      checkedIcon={<CheckboxCheckedIcon />}
+                      color="default"
+                      icon={<CheckboxIcon />}
+                      name="wallet"
+                      {...field}
+                    />
+                  }
+                  label={
+                    <Typography variant="overline">
+                      I understand that a wallet will be created for me
+                    </Typography>
+                  }
+                />
+                <FormHelperText
+                  className="Mui-error"
+                  style={{
+                    marginTop: '-1.5rem',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <ErrorMessage errors={errors} name="wallet" />
+                </FormHelperText>
+              </>
             );
           }}
           rules={{
