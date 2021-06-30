@@ -124,6 +124,10 @@ const Signup = () => {
               value: true,
               message: 'Enter a username',
             },
+            maxLength: {
+              value: 20,
+              message: 'Max length exceeded',
+            },
           }),
           autoComplete: 'username',
         }}
@@ -160,6 +164,10 @@ const Signup = () => {
             required: {
               value: true,
               message: 'Enter a name',
+            },
+            maxLength: {
+              value: 20,
+              message: 'Max length exceeded',
             },
           }),
         }}
