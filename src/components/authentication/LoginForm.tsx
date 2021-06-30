@@ -69,7 +69,12 @@ const LoginForm = () => {
         fullWidth
         error={Boolean(errors.email)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="email" />
           </Box>
         }
@@ -107,7 +112,12 @@ const LoginForm = () => {
         }}
         error={Boolean(errors.password)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="password" />
           </Box>
         }

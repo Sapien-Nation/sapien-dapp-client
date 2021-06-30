@@ -74,7 +74,12 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.email)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="email" />
           </Box>
         }
@@ -99,7 +104,12 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.username)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="username" />
           </Box>
         }
@@ -130,7 +140,12 @@ const Signup = () => {
         fullWidth
         error={Boolean(errors.displayName)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="displayName" />
           </Box>
         }
@@ -220,17 +235,11 @@ const Signup = () => {
                     </Typography>
                   }
                 />
-                <FormHelperText
-                  className="Mui-error"
-                  style={{
-                    marginTop: '-1.5rem',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <ErrorMessage errors={errors} name="terms" />
-                </FormHelperText>
+                {errors.terms && (
+                  <FormHelperText className="Mui-error">
+                    <ErrorMessage errors={errors} name="terms" />
+                  </FormHelperText>
+                )}
               </>
             );
           }}
@@ -264,17 +273,11 @@ const Signup = () => {
                     </Typography>
                   }
                 />
-                <FormHelperText
-                  className="Mui-error"
-                  style={{
-                    marginTop: '-1.5rem',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <ErrorMessage errors={errors} name="wallet" />
-                </FormHelperText>
+                {errors.wallet && (
+                  <FormHelperText className="Mui-error">
+                    <ErrorMessage errors={errors} name="wallet" />
+                  </FormHelperText>
+                )}
               </>
             );
           }}

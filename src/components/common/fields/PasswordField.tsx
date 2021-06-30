@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { validatePassword } from 'utils/passwordValidation';
 
 // mui
 import {
@@ -48,7 +49,7 @@ const PasswordField = ({
       }}
       error={Boolean(errors.password)}
       helperText={
-        <Box component="span" display="block" marginTop={1} textAlign="right">
+        <Box component="span" display="block" marginTop={0.5} textAlign="right">
           <ErrorMessage errors={errors} name={name} />
         </Box>
       }
@@ -58,6 +59,9 @@ const PasswordField = ({
           required: {
             value: true,
             message: 'Enter a password',
+          },
+          validate: (value: string) => {
+            return validatePassword(value);
           },
         }),
         autoComplete: 'new-password',

@@ -241,7 +241,7 @@ theme.overrides = {
   },
   MuiFormControl: {
     root: {
-      marginBottom: `${theme.spacing(2)}`,
+      marginBottom: `${theme.spacing(0.5)}`,
     },
   },
   MuiFormHelperText: {

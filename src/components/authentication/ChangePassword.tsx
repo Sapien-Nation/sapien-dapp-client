@@ -2,6 +2,7 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
+import { validatePassword } from 'utils/passwordValidation';
 
 // api
 import { changePassword as changePasswordAction } from 'api/authentication';
@@ -15,9 +16,6 @@ import {
   TextField,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-
-// utils
-import { PasswordRegex } from 'utils/regex';
 
 interface Props {
   changeView: () => void;
@@ -73,16 +71,20 @@ const ChangePassword = ({ changeView, token }: Props) => {
         }}
         error={Boolean(errors.password)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="password" />
           </Box>
         }
         id="password"
         inputProps={{
           ...register('password', {
-            pattern: {
-              value: PasswordRegex,
-              message: 'Invalid password',
+            validate: (value: string) => {
+              return validatePassword(value);
             },
             required: {
               value: true,
@@ -115,7 +117,12 @@ const ChangePassword = ({ changeView, token }: Props) => {
         }}
         error={Boolean(errors.confirmPassword)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="confirmPassword" />
           </Box>
         }

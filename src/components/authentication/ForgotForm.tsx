@@ -45,7 +45,12 @@ const Forgot = ({ changeView }: Props) => {
         fullWidth
         error={Boolean(errors.email)}
         helperText={
-          <Box component="span" display="block" marginTop={1} textAlign="right">
+          <Box
+            component="span"
+            display="block"
+            marginTop={0.5}
+            textAlign="right"
+          >
             <ErrorMessage errors={errors} name="email" />
           </Box>
         }

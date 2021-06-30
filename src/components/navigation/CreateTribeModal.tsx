@@ -185,7 +185,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
               fullWidth
               error={Boolean(errors.name)}
               helperText={
-                <Box marginTop={1} textAlign="right">
+                <Box
+                  component="span"
+                  display="block"
+                  marginTop={0.5}
+                  textAlign="right"
+                >
                   <ErrorMessage errors={errors} name="name" />
                 </Box>
               }
@@ -223,7 +228,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }}
               error={Boolean(errors.identifier)}
               helperText={
-                <Box marginTop={1} textAlign="right">
+                <Box
+                  component="span"
+                  display="block"
+                  marginTop={0.5}
+                  textAlign="right"
+                >
                   <ErrorMessage errors={errors} name="identifier" />
                 </Box>
               }
@@ -265,7 +275,12 @@ const CreateTribeModal = ({ onClose }: Props) => {
               multiline
               error={Boolean(errors.description)}
               helperText={
-                <Box marginTop={1} textAlign="right">
+                <Box
+                  component="span"
+                  display="block"
+                  marginTop={0.5}
+                  textAlign="right"
+                >
                   <ErrorMessage errors={errors} name="description" />
                 </Box>
               }
