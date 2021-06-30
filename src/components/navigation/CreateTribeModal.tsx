@@ -13,7 +13,11 @@ import { Dialog, DropZone, ChartCount } from 'components/common';
 
 // utils
 import { FilePreview, MazSizeHelper } from 'utils/dropzone';
-import { TribeNameRegex, TribeIdentifierRegex } from 'utils/regex';
+import {
+  TribeDescriptionRegex,
+  TribeIdentifierRegex,
+  TribeNameRegex,
+} from 'utils/regex';
 
 // types
 import type { CreateTribe, Tribe } from 'tools/types/tribeBar';
@@ -286,6 +290,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
               }
               inputProps={{
                 ...register('description', {
+                  pattern: {
+                    value: TribeDescriptionRegex,
+                    message: 'Invalid tribe description',
+                  },
                   maxLength: {
                     value: 1000,
                     message: 'Description its to long',
