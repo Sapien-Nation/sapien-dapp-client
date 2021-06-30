@@ -166,7 +166,7 @@ const Signup = () => {
               message: 'Enter a name',
             },
             maxLength: {
-              value: 20,
+              value: 40,
               message: 'Max length exceeded',
             },
           }),
@@ -174,7 +174,7 @@ const Signup = () => {
         label={
           <Box display="flex" justifyContent="space-between">
             Name
-            <ChartCount control={control} maxCount={20} name="displayName" />
+            <ChartCount control={control} maxCount={40} name="displayName" />
           </Box>
         }
         placeholder="Jonathan Doe"

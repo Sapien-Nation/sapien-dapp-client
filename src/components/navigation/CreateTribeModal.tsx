@@ -205,7 +205,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                     message: 'Name is required',
                   },
                   maxLength: {
-                    value: 20,
+                    value: 40,
                     message: 'Name is to long',
                   },
                 }),
@@ -214,7 +214,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
               label={
                 <Box display="flex" justifyContent="space-between">
                   Name
-                  <ChartCount control={control} maxCount={20} name="name" />
+                  <ChartCount control={control} maxCount={40} name="name" />
                 </Box>
               }
               placeholder="Foodies"
