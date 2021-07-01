@@ -55,6 +55,9 @@ const theme = createMuiTheme({
       main: neutral[500],
       contrastText: '#fff',
     },
+    action: {
+      active: neutral[500],
+    },
     error: {
       light: red[700],
       main: red[700],
@@ -207,7 +210,7 @@ theme.overrides = {
       borderRadius: '0.6rem',
       textTransform: 'none',
       minHeight: '4rem',
-      minWidth: '8rem',
+      minWidth: '6rem',
       fontWeight: 600,
       fontSize: '1.4rem',
     },
@@ -221,6 +224,7 @@ theme.overrides = {
     sizeSmall: {
       fontSize: '1.2rem',
       fontWeight: 600,
+      minHeight: '3.2',
     },
   },
   MuiInputLabel: {

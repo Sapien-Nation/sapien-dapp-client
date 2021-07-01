@@ -1,5 +1,5 @@
 // mui
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Button } from '@material-ui/core';
 import {
   ChatBubbleOutlineOutlined as CommentsIcon,
   ShareOutlined as ShareIcon,
@@ -14,25 +14,34 @@ interface Props {
 
 const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
   return (
-    <Box display="flex" marginLeft={1.5} style={{ gap: '17px' }}>
-      <Box alignItems="center" display="flex" style={{ gap: '0.7px' }}>
-        <CommentsIcon color="secondary" fontSize="small" />
-        <Typography color="secondary" variant="caption">
+    <Box display="flex" paddingX={1.5}>
+      <Button
+        color="primary"
+        size="small"
+        startIcon={<CommentsIcon color="action" fontSize="small" />}
+      >
+        <Typography color="textSecondary" variant="caption">
           {commentsCount}
         </Typography>
-      </Box>
-      <Box alignItems="center" display="flex" style={{ gap: '0.7px' }}>
-        <EchoIcon color="secondary" fontSize="small" />
-        <Typography color="secondary" variant="caption">
+      </Button>
+      <Button
+        color="primary"
+        size="small"
+        startIcon={<EchoIcon color="action" fontSize="small" />}
+      >
+        <Typography color="textSecondary" variant="caption">
           {echoCount}
         </Typography>
-      </Box>
-      <Box alignItems="center" display="flex" style={{ gap: '0.7px' }}>
-        <ShareIcon color="secondary" fontSize="small" />
-        <Typography color="secondary" variant="caption">
+      </Button>
+      <Button
+        color="primary"
+        size="small"
+        startIcon={<ShareIcon color="action" fontSize="small" />}
+      >
+        <Typography color="textSecondary" variant="caption">
           {shareCount}
         </Typography>
-      </Box>
+      </Button>
     </Box>
   );
 };
