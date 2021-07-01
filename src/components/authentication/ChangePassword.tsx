@@ -2,7 +2,6 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { ErrorMessage } from '@hookform/error-message';
-import { validatePassword } from 'utils/passwordValidation';
 
 // api
 import { changePassword as changePasswordAction } from 'api/authentication';
@@ -84,7 +83,27 @@ const ChangePassword = ({ changeView, token }: Props) => {
         inputProps={{
           ...register('password', {
             validate: (value: string) => {
-              return validatePassword(value);
+              if (!/[a-zA-Z]/.test(value)) {
+                return 'At least one alphabet is required.';
+              }
+
+              if (!/[a-z]/.test(value)) {
+                return 'At least one lowercase letter is required.';
+              }
+
+              if (!/[A-Z]/.test(value)) {
+                return 'At least one uppercase letter is required.';
+              }
+
+              if (!/[\d]/.test(value)) {
+                return 'At least one number is required.';
+              }
+
+              if (value?.length < 8) {
+                return 'Minimum 8 characters required.';
+              }
+
+              return true;
             },
             required: {
               value: true,

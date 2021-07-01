@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { UseFormRegister } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { validatePassword } from 'utils/passwordValidation';
 
 // mui
 import {
@@ -61,7 +60,25 @@ const PasswordField = ({
             message: 'Enter a password',
           },
           validate: (value: string) => {
-            return validatePassword(value);
+            if (!/[a-zA-Z]/.test(value)) {
+              return 'At least one alphabet is required.';
+            }
+
+            if (!/[a-z]/.test(value)) {
+              return 'At least one lowercase letter is required.';
+            }
+
+            if (!/[A-Z]/.test(value)) {
+              return 'At least one uppercase letter is required.';
+            }
+
+            if (!/[\d]/.test(value)) {
+              return 'At least one number is required.';
+            }
+
+            if (value?.length < 8) {
+              return 'Minimum 8 characters required.';
+            }
           },
         }),
         autoComplete: 'new-password',
