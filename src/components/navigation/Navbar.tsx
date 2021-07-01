@@ -30,6 +30,7 @@ import {
   Menu,
   MenuItem,
   Toolbar,
+  Fade,
   makeStyles,
 } from '@material-ui/core';
 
@@ -38,10 +39,12 @@ import { MyBalance, MyTransactions } from 'components/balance';
 
 const useStyles = makeStyles(() => ({
   paper: {
-    width: 350,
-    boxShadow: '0px 20px 40px rgba(51, 51, 51, 0.1)',
-    borderRadius: 2,
+    height: 600,
+    width: 366,
+    filter: 'drop-shadow(0px 15px 40px rgba(56, 49, 67, 0.1))',
+    borderRadius: 10,
     padding: '0 !important',
+    transform: 'translateX(-11.47%) translateY(-2%)',
   },
   list: {
     padding: '0 !important',
@@ -99,7 +102,7 @@ const Navbar = () => {
 
   return (
     <AppBar color="inherit" elevation={0} position="relative">
-      <Toolbar variant="dense">
+      <Toolbar style={{ minHeight: 97 }}>
         <Box marginLeft="auto">
           {me ? (
             <>
@@ -151,25 +154,24 @@ const Navbar = () => {
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
-
       <Menu
-        keepMounted
+        TransitionComponent={Fade}
         anchorEl={balanceAnchor}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         classes={{
           paper: classes.paper,
           list: classes.list,
         }}
-        getContentAnchorEl={null}
-        id="my-balance"
+        id="wallet"
         open={Boolean(balanceAnchor)}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setBalanceAnchor(null)}
       >
         <div>
           <MyBalance wallet={wallet} />
           <Divider
-            style={{ borderColor: '#EDEEF0 !important', borderWidth: 1 }}
+            style={{
+              borderColor: '#EDEEF0 !important',
+              borderWidth: 1,
+            }}
           />
           <MyTransactions />
         </div>
