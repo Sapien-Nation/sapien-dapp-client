@@ -14,7 +14,7 @@ export const uploadImage = (data: FormData) =>
   axios
     .post('api/v3/tribe/image', data)
     .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
+    .catch(({ response }) => Promise.reject(response.data[0].message));
 
 export const deleteImages = (keys: Array<string>) =>
   axios

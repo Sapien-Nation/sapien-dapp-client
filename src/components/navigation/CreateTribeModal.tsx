@@ -168,8 +168,8 @@ const CreateTribeModal = ({ onClose }: Props) => {
       const data = await uploadImage(formData);
 
       onChange(data);
-    } catch (err) {
-      enqueueSnackbar(err.message, {
+    } catch (error) {
+      enqueueSnackbar(error, {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
@@ -361,11 +361,11 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       maxFiles={1}
                       maxSize={41943040}
                       onChange={(file: Array<File>) =>
-                        handleUploadImage('avatar', file[0], field.onChange)
+                        handleUploadImage('cover', file[0], field.onChange)
                       }
                     >
                       {cover?.url && (
-                        <FilePreview file={cover.url} name="avatar" />
+                        <FilePreview file={cover.url} name="cover" />
                       )}
                       {isUploading ? (
                         <CircularProgress size={26} />
