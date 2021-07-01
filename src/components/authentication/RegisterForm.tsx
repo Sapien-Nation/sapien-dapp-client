@@ -41,6 +41,7 @@ const Signup = () => {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm();
   console.log(errors);
   const onSubmit = async (values: {
@@ -203,9 +204,11 @@ const Signup = () => {
         register={register}
       />
       <PasswordField
+        isConfirm
         errors={errors}
         name="confirmPassword"
         register={register}
+        watch={watch}
       />
       <Box marginBottom="2rem">
         <Controller

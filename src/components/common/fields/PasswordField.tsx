@@ -14,16 +14,20 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 interface Props extends BaseTextFieldProps {
   errors: any;
+  isConfirm?: boolean;
   name?: string;
   register: UseFormRegister<any>;
-  shouldValidate?: boolean;
+  watch?: (field: Array<string> | string) => Array<string> | string;
 }
 
 const PasswordField = ({
   errors = {},
+  isConfirm = false,
   name = 'password',
   register,
   label,
+  placeholder = 'mypassword123*',
+  watch,
 }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -46,7 +50,7 @@ const PasswordField = ({
           </InputAdornment>
         ),
       }}
-      error={Boolean(errors.password)}
+      error={Boolean(errors[name])}
       helperText={
         <Box component="span" display="block" marginTop={0.5} textAlign="right">
           <ErrorMessage errors={errors} name={name} />
@@ -55,10 +59,6 @@ const PasswordField = ({
       id={name}
       inputProps={{
         ...register(name, {
-          required: {
-            value: true,
-            message: 'Enter a password',
-          },
           validate: (value: string) => {
             if (!/[a-zA-Z]/.test(value)) {
               return 'At least one alphabet is required.';
@@ -79,12 +79,18 @@ const PasswordField = ({
             if (value?.length < 8) {
               return 'Minimum 8 characters required.';
             }
+
+            if (isConfirm && value !== watch('password')) {
+              return 'Password dont match';
+            }
+
+            return true;
           },
         }),
         autoComplete: 'new-password',
       }}
       label={label}
-      placeholder="mypassword123*"
+      placeholder={placeholder}
       type={showPassword ? 'text' : 'password'}
     />
   );

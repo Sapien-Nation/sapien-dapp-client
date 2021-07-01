@@ -1,20 +1,15 @@
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { ErrorMessage } from '@hookform/error-message';
 
 // api
 import { changePassword as changePasswordAction } from 'api/authentication';
 
+// components
+import { PasswordField } from 'components/common';
+
 // mui
-import {
-  Box,
-  Button,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { Box, Button, Tooltip } from '@material-ui/core';
+import { Info as InfoIcon } from '@material-ui/icons';
 
 interface Props {
   changeView: () => void;
@@ -22,9 +17,6 @@ interface Props {
 }
 
 const ChangePassword = ({ changeView, token }: Props) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
-
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
@@ -50,116 +42,36 @@ const ChangePassword = ({ changeView, token }: Props) => {
 
   return (
     <form id="change-password-form" onSubmit={handleSubmit(onSubmit)}>
-      <TextField
-        fullWidth
-        InputLabelProps={{
-          style: { pointerEvents: 'auto' },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                edge="end"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        error={Boolean(errors.password)}
-        helperText={
-          <Box
-            component="span"
-            display="block"
-            marginTop={0.5}
-            textAlign="right"
-          >
-            <ErrorMessage errors={errors} name="password" />
+      <PasswordField
+        errors={errors}
+        label={
+          <Box alignItems="center" display="flex">
+            Password{' '}
+            <Tooltip
+              arrow
+              color="primary"
+              placement="right"
+              title={
+                <Box borderRadius={10} minWidth={321} padding={1.6}>
+                  Minimum length is 8 characters. Must include at least 1 alpha,
+                  1 numeric, 1 lowercaps, and 1 highercaps.
+                </Box>
+              }
+            >
+              <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
+            </Tooltip>
           </Box>
         }
-        id="password"
-        inputProps={{
-          ...register('password', {
-            validate: (value: string) => {
-              if (!/[a-zA-Z]/.test(value)) {
-                return 'At least one alphabet is required.';
-              }
-
-              if (!/[a-z]/.test(value)) {
-                return 'At least one lowercase letter is required.';
-              }
-
-              if (!/[A-Z]/.test(value)) {
-                return 'At least one uppercase letter is required.';
-              }
-
-              if (!/[\d]/.test(value)) {
-                return 'At least one number is required.';
-              }
-
-              if (value?.length < 8) {
-                return 'Minimum 8 characters required.';
-              }
-
-              return true;
-            },
-            required: {
-              value: true,
-              message: 'Enter a password',
-            },
-          }),
-          autoComplete: 'new-password',
-        }}
-        label="Password"
-        placeholder="mypassword123*"
-        type={showPassword ? 'text' : 'password'}
+        placeholder="New Password"
+        register={register}
       />
-      <TextField
-        fullWidth
-        InputLabelProps={{
-          style: { pointerEvents: 'auto' },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                edge="end"
-                onClick={() => setShowRepeatPassword(!showRepeatPassword)}
-              >
-                {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        error={Boolean(errors.confirmPassword)}
-        helperText={
-          <Box
-            component="span"
-            display="block"
-            marginTop={0.5}
-            textAlign="right"
-          >
-            <ErrorMessage errors={errors} name="confirmPassword" />
-          </Box>
-        }
-        id="confirmPassword"
-        inputProps={{
-          ...register('confirmPassword', {
-            required: {
-              value: true,
-              message: 'Enter a password',
-            },
-            validate: (value) =>
-              value === watch('password') || "Passwords don't match.",
-          }),
-          autoComplete: 'new-password',
-        }}
-        label="Confirm Password"
-        placeholder="Repeat Password"
-        type={showRepeatPassword ? 'text' : 'password'}
+      <PasswordField
+        isConfirm
+        errors={errors}
+        name="confirmPassword"
+        placeholder="Password"
+        register={register}
+        watch={watch}
       />
 
       <Button
