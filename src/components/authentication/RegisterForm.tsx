@@ -119,7 +119,7 @@ const Signup = () => {
           ...register('username', {
             pattern: {
               value: UsernameRegex,
-              message: 'Invalid email',
+              message: 'Invalid username',
             },
             required: {
               value: true,
@@ -130,7 +130,7 @@ const Signup = () => {
               message: 'Max length exceeded',
             },
           }),
-          autoComplete: 'username',
+          autoComplete: 'nickname',
         }}
         label={
           <Box display="flex" justifyContent="space-between">
