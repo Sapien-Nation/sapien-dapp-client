@@ -42,11 +42,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SnackbarCloseButton = ({ key }) => {
+const SnackbarCloseButton = ({ snackKey }) => {
   const { closeSnackbar } = useSnackbar();
 
   return (
-    <IconButton onClick={() => closeSnackbar(key)}>
+    <IconButton onClick={() => closeSnackbar(snackKey)}>
       <CloseIcon fontSize="small" />
     </IconButton>
   );
@@ -81,7 +81,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider theme={theme}>
           <SnackbarProvider
             TransitionComponent={Zoom}
-            action={(key) => <SnackbarCloseButton key={key} />}
+            action={(key) => <SnackbarCloseButton snackKey={key} />}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',
