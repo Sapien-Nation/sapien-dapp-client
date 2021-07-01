@@ -40,7 +40,7 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <Box textAlign="center">
+    <Box>
       <Typography variant="h1">
         {' '}
         {view === View.Form ? 'Create New Password' : 'Password Changed'}
