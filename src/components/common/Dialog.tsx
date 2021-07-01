@@ -113,7 +113,7 @@ const Dialog = ({
   const classes = useStyles();
 
   const isMediumScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  console.log(variant);
+
   return (
     <MUIDialog
       aria-labelledby="dialog-title"

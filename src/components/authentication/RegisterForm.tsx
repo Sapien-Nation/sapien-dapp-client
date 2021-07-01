@@ -43,7 +43,6 @@ const Signup = () => {
     formState: { errors, isSubmitting },
     watch,
   } = useForm();
-  console.log(errors);
   const onSubmit = async (values: {
     displayName: string;
     email: string;

@@ -54,7 +54,8 @@ interface TribeForm extends CreateTribe {
 
 const CreateTribeModal = ({ onClose }: Props) => {
   const [step, setStep] = useState(Step.TribeSummary);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
   const {
     control,
@@ -156,14 +157,21 @@ const CreateTribeModal = ({ onClose }: Props) => {
     file: File,
     onChange: (value: string) => void
   ) => {
-    setIsUploading(true);
+    if (variant === 'avatar') {
+      setIsUploadingAvatar(true);
+    } else {
+      setIsUploadingCover(true);
+    }
+
     try {
       const formData = new FormData();
       formData.append('variant', variant);
       formData.append('file', file);
-
-      if (avatar?.key || cover?.key) {
-        formData.append('key', variant === 'avatar' ? avatar?.key : cover?.key);
+      if (avatar?.key && variant === 'avatar') {
+        formData.append('key', avatar?.key);
+      }
+      if (cover?.key && variant === 'cover') {
+        formData.append('key', cover?.key);
       }
       const data = await uploadImage(formData);
 
@@ -177,8 +185,11 @@ const CreateTribeModal = ({ onClose }: Props) => {
         },
       });
     }
-    setIsUploading(false);
+    setIsUploadingCover(false);
+    setIsUploadingAvatar(false);
   };
+
+  const isUploading = isUploadingAvatar || isUploadingCover;
 
   const renderFields = () => {
     switch (step) {
@@ -334,7 +345,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {avatar?.url && (
                         <FilePreview file={avatar.url} name="avatar" />
                       )}
-                      {isUploading ? (
+                      {isUploadingAvatar ? (
                         <CircularProgress size={26} />
                       ) : (
                         <IconButton>
@@ -367,7 +378,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {cover?.url && (
                         <FilePreview file={cover.url} name="cover" />
                       )}
-                      {isUploading ? (
+                      {isUploadingCover ? (
                         <CircularProgress size={26} />
                       ) : (
                         <IconButton>
@@ -390,7 +401,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
     <Dialog
       open
       cancelLabel={step == Step.TribeSummary ? 'Cancel' : 'Back'}
-      confirmDisabled={isSubmitting || isUploading}
+      confirmDisabled={isSubmitting || isUploadingAvatar}
       confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
       form={form}
       maxWidth="xs"
