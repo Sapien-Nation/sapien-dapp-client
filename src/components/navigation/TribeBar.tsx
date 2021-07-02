@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { getTribes } from 'hooks';
 
 // styles
-import { neutral, primary } from 'styles/colors';
+import { neutral } from 'styles/colors';
 
 // mui
 import { Avatar, Drawer, IconButton, makeStyles } from '@material-ui/core';
@@ -19,9 +19,10 @@ const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: 72,
     backgroundColor: neutral[800],
+    borderRight: 'none',
   },
   avatarImage: {
-    borderRadius: '10px',
+    borderRadius: '1rem',
   },
 }));
 
@@ -61,8 +62,8 @@ const TribeBar = () => {
           alignItems: 'center',
           display: 'flex',
           flexDirection: 'column',
-          gap: '2rem',
-          marginTop: '2rem',
+          gap: '2.8rem',
+          padding: '2.8rem 0',
         }}
       >
         {tribes.map((tribe, index) => (
@@ -81,8 +82,10 @@ const TribeBar = () => {
                   border: asPath.includes(`/client/${tribe.mainSquareId}`)
                     ? '2px solid'
                     : `2px solid #322837`,
-                  boxSizing: 'content-box',
-                  padding: '3px',
+                  boxSizing: 'border-box',
+                  padding: '2px',
+                  width: '4.8rem',
+                  height: '4.8rem',
                 }}
                 variant="rounded"
               >
@@ -101,15 +104,16 @@ const TribeBar = () => {
         ))}
         <IconButton
           aria-label="Create Tribe"
+          style={{ padding: 0 }}
           onClick={() => setShowModal(true)}
         >
           <Avatar
             style={{
-              backgroundColor: 'inherit',
+              backgroundColor: neutral[700],
               borderRadius: 15,
-              border: `2px ${primary[900]} solid`,
-              boxSizing: 'content-box',
-              padding: '3px',
+              boxSizing: 'border-box',
+              width: '4rem',
+              height: '4rem',
             }}
             variant="square"
           >
