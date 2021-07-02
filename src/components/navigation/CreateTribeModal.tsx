@@ -167,12 +167,6 @@ const CreateTribeModal = ({ onClose }: Props) => {
       const formData = new FormData();
       formData.append('variant', variant);
       formData.append('file', file);
-      if (avatar?.key && variant === 'avatar') {
-        formData.append('key', avatar?.key);
-      }
-      if (cover?.key && variant === 'cover') {
-        formData.append('key', cover?.key);
-      }
       const data = await uploadImage(formData);
 
       onChange(data);
