@@ -25,7 +25,6 @@ import {
   Box,
   Button,
   Chip,
-  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -35,7 +34,7 @@ import {
 } from '@material-ui/core';
 
 // components
-import { MyBalance, MyTransactions } from 'components/balance';
+import { WalletMenu } from 'components/wallet';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -44,9 +43,10 @@ const useStyles = makeStyles(() => ({
     filter: 'drop-shadow(0px 15px 40px rgba(56, 49, 67, 0.1))',
     borderRadius: 10,
     padding: '0 !important',
-    transform: 'translateX(-11.47%) translateY(-2%)',
+    transform: 'translateX(-11.47%) translateY(-4.34%)',
   },
   list: {
+    height: '100%',
     padding: '0 !important',
   },
 }));
@@ -165,16 +165,7 @@ const Navbar = () => {
         open={Boolean(balanceAnchor)}
         onClose={() => setBalanceAnchor(null)}
       >
-        <div>
-          <MyBalance wallet={wallet} />
-          <Divider
-            style={{
-              borderColor: '#EDEEF0 !important',
-              borderWidth: 1,
-            }}
-          />
-          <MyTransactions />
-        </div>
+        <WalletMenu wallet={wallet} />
       </Menu>
     </AppBar>
   );

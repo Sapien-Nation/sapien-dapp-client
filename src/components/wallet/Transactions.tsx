@@ -19,19 +19,9 @@ import { neutral, primary } from 'styles/colors';
 // utils
 import { formatTimestampToRelative } from 'utils/date';
 
-const MyTransactions = () => {
+const Transactions = () => {
   return (
     <Box padding={2}>
-      <Typography
-        component="h6"
-        style={{
-          color: neutral[500],
-          marginBottom: 20,
-        }}
-        variant="caption"
-      >
-        My Transactions
-      </Typography>
       <Query
         api="/api/v3/balance/transactions"
         options={{ fetcher: () => [mockTransaction()] }}
@@ -99,4 +89,4 @@ const MyTransactions = () => {
   );
 };
 
-export default MyTransactions;
+export default Transactions;

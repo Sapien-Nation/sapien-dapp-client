@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 import NumberFormat from 'react-number-format';
 
 // mui
@@ -17,30 +18,25 @@ import {
 } from '@material-ui/core';
 import { ContentCopy as ContentCopyIcon } from '@material-ui/icons';
 
-//components
-import { Dialog } from 'components/common';
-
 // styles
 import { neutral, primary, red } from 'styles/colors';
 
 // assets
-import { WithdrawSuccess } from 'assets';
+import { WithdrawSuccess, Spn as SpnIcon } from 'assets';
 
 // utils
 import { formatSpn, formatSpnToUsd } from 'utils/spn';
+
+// emums
+import View from './ViewEnum';
 
 enum Step {
   Withdraw = 1,
   WithdrawSuccess,
 }
 
-interface Props {
-  onClose: () => void;
-}
-
 const form = 'withdraw-form';
 const minSpn = 99;
-const transactionFee = 3;
 const userBalance = 15000;
 
 const useStyles = makeStyles(() => ({
@@ -73,14 +69,14 @@ const NumberFormatInput = ({ name, onChange, ...rest }) => {
   );
 };
 
-const WithdrawModal = ({ onClose }: Props) => {
+const Withdraw = ({ setView }: { setView: (view: View) => void }) => {
   const [step, setStep] = useState(Step.Withdraw);
   const {
     handleSubmit,
     register,
     watch,
     setValue,
-    formState: { isDirty },
+    formState: { isDirty, errors },
   } = useForm({
     defaultValues: {
       destinationAddress: '',
@@ -94,7 +90,7 @@ const WithdrawModal = ({ onClose }: Props) => {
   const copyAddress = async () => {
     try {
       const address = await navigator.clipboard.readText();
-      setValue('destinationAddress', address, { shouldDirty: true });
+      setValue('destinationAddress', address, { shouldValidate: true });
     } catch (error) {
       enqueueSnackbar(error, {
         variant: 'error',
@@ -105,8 +101,6 @@ const WithdrawModal = ({ onClose }: Props) => {
       });
     }
   };
-
-  const addFees = () => (transactionFee / 100) * watchWithdraw;
 
   const handleFormSubmit = async ({
     destinationAddress,
@@ -131,61 +125,17 @@ const WithdrawModal = ({ onClose }: Props) => {
     }
   };
 
-  const renderFees = () => {
-    return (
-      <Box marginTop={3}>
-        <Box display="flex" justifyContent="space-between" marginBottom={1}>
-          <Typography variant="body2">Amount</Typography>
-          <Typography variant="body2">
-            {formatSpn(watchWithdraw)}
-            <small
-              style={{
-                marginLeft: 10,
-                color: neutral[500],
-                fontSize: 12,
-                fontWeight: 100,
-              }}
-            >
-              {formatSpnToUsd(watchWithdraw)}
-            </small>
-          </Typography>
-        </Box>
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="body2">Fee {transactionFee}%</Typography>
-          <Typography variant="body2">
-            {formatSpn(addFees())}
-            <small
-              style={{
-                marginLeft: 10,
-                color: neutral[500],
-                fontSize: 12,
-                fontWeight: 100,
-              }}
-            >
-              {formatSpnToUsd(addFees())}
-            </small>
-          </Typography>
-        </Box>
-      </Box>
-    );
-  };
-
   const renderFields = () => {
     switch (step) {
       case Step.Withdraw: {
         return (
-          <>
-            <Typography
-              style={{ marginTop: 40, marginBottom: 20 }}
-              variant="h2"
-            >
-              Withdraw from balance
-            </Typography>
-            <Typography variant="body2">
-              To withdraw funds, go to your desired external wallet and fetch
-              your wallet address
-            </Typography>
-            <Box paddingTop={5}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            height="100%"
+            justifyContent="space-between"
+          >
+            <Box marginX={2} marginY={3}>
               <TextField
                 fullWidth
                 InputProps={{
@@ -205,6 +155,17 @@ const WithdrawModal = ({ onClose }: Props) => {
                     </InputAdornment>
                   ),
                 }}
+                error={Boolean(errors.destinationAddress)}
+                helperText={
+                  <Box
+                    component="span"
+                    display="block"
+                    marginTop={0.5}
+                    textAlign="right"
+                  >
+                    <ErrorMessage errors={errors} name="destinationAddress" />
+                  </Box>
+                }
                 inputProps={{
                   ...register('destinationAddress', {
                     required: {
@@ -222,7 +183,7 @@ const WithdrawModal = ({ onClose }: Props) => {
                 }
                 placeholder="Enter wallet address"
               />
-              <Box bgcolor={neutral[50]} borderRadius={2} padding={2.5}>
+              <Box bgcolor={neutral[50]} borderRadius={10} padding={2}>
                 <Typography
                   style={{
                     color: neutral[500],
@@ -234,8 +195,9 @@ const WithdrawModal = ({ onClose }: Props) => {
                 >
                   You withdraw
                 </Typography>
+                <br />
+                <SpnIcon style={{ marginRight: 10 }} />
                 <Input
-                  required
                   classes={{
                     root: classes.amountInput,
                     focused: classes.amountInputFocus,
@@ -304,69 +266,73 @@ const WithdrawModal = ({ onClose }: Props) => {
                 </Box>
               </Box>
             </Box>
-            {watchWithdraw > minSpn ? renderFees() : null}
-            <Button
-              fullWidth
-              color="primary"
-              disabled={watchWithdraw <= minSpn || watchWithdraw > userBalance}
-              style={{ marginTop: 40 }}
-              type="submit"
-              variant="contained"
-            >
-              Withdraw{' '}
-              {watchWithdraw > minSpn && watchWithdraw <= userBalance
-                ? `${formatSpn(addFees() + Number(watchWithdraw))} SPN`
-                : null}
-              <small style={{ marginLeft: 10, opacity: 0.4 }}>
-                {watchWithdraw > minSpn && watchWithdraw <= userBalance
-                  ? `${formatSpnToUsd(addFees() + Number(watchWithdraw))}`
-                  : null}
-              </small>
-            </Button>
-            <Typography
-              style={{
-                color: neutral[500],
-                fontWeight: 100,
-                textAlign: 'center',
-                marginTop: 10,
-                marginBottom: 30,
-                fontSize: 14,
-              }}
-            >
-              Additional fees may apply
-            </Typography>
-          </>
+            <div>
+              <Typography
+                style={{
+                  color: neutral[500],
+                  fontWeight: 100,
+                  textAlign: 'center',
+                  marginBottom: 20,
+                }}
+                variant="h6"
+              >
+                Additional fees may apply
+              </Typography>
+              <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
+                <Button
+                  fullWidth
+                  color="primary"
+                  disabled={
+                    watchWithdraw <= minSpn || watchWithdraw > userBalance
+                  }
+                  type="submit"
+                  variant="contained"
+                >
+                  Proceed
+                </Button>
+              </div>
+            </div>
+          </Box>
         );
       }
       case Step.WithdrawSuccess: {
         return (
           <Box
-            alignItems="center"
             display="flex"
             flexDirection="column"
-            marginTop={6}
-            textAlign="center"
+            height="100%"
+            justifyContent="space-between"
           >
-            <WithdrawSuccess />
-            <Typography
-              style={{ marginTop: 4, marginBottom: 15, lineHeight: 1.6 }}
-              variant="h2"
+            <Box
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+              height="100%"
+              justifyContent="center"
+              paddingX={3.5}
+              textAlign="center"
             >
-              You have successfully withdrawn 2,500 SPN from your balance
-            </Typography>
-            <Typography style={{ color: neutral[500] }} variant="body2">
-              The funds will appear on your external wallet account shortly.
-            </Typography>
-            <Button
-              color="primary"
-              style={{
-                margin: '6rem 0',
-              }}
-              variant="contained"
-              onClick={() => onClose()}
-            >
-              Back to My Balance
-            </Button>
+              <WithdrawSuccess />
+              <Typography
+                style={{ marginTop: 40, marginBottom: 15, lineHeight: 1.6 }}
+                variant="body2"
+              >
+                You have successfully withdrawn 2,500 SPN from your balance
+              </Typography>
+              <Typography style={{ color: neutral[500] }} variant="h6">
+                The funds will appear on your external wallet account shortly.
+              </Typography>
+            </Box>
+            <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
+              <Button
+                fullWidth
+                color="primary"
+                variant="contained"
+                onClick={() => setView(View.Tokens)}
+              >
+                Thank you!
+              </Button>
+            </div>
           </Box>
         );
       }
@@ -374,17 +340,16 @@ const WithdrawModal = ({ onClose }: Props) => {
   };
 
   return (
-    <Dialog
-      open
-      actions={null}
-      classes={{ paper: classes.paper }}
-      onClose={onClose}
+    <form
+      id={form}
+      style={{
+        height: '100%',
+      }}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
-      <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
-        {renderFields()}
-      </form>
-    </Dialog>
+      {renderFields()}
+    </form>
   );
 };
 
-export default WithdrawModal;
+export default Withdraw;
