@@ -105,6 +105,7 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
         id="post-menu"
         open={Boolean(anchorEl)}
         style={{ marginLeft: '0.5rem' }}
+        onClick={() => setAnchorEl(null)}
         onClose={() => setAnchorEl(null)}
       >
         {canEdit && (
