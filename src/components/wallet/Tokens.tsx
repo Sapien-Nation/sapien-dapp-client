@@ -14,6 +14,11 @@ const useStyles = makeStyles(() => ({
   root: {
     minWidth: 0,
     minHeight: 0,
+    opacity: '0.5',
+    filter: 'grayscale(1)',
+    '&.Mui-selected': {
+      filter: 'none',
+    },
   },
   wrapper: {
     flexDirection: 'row',

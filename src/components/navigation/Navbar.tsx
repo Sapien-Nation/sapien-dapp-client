@@ -12,9 +12,6 @@ import { logout } from 'api/authentication';
 import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
-// utils
-import { formatSpn } from 'utils/spn';
-
 // assets
 import { Spn as SpnIcon } from 'assets';
 
@@ -109,7 +106,7 @@ const Navbar = () => {
             <>
               <Chip
                 icon={<SpnIcon style={{ marginLeft: 10 }} />}
-                label={formatSpn(Number(wallet?.balance || 0))}
+                label={Number(wallet?.balance || 0)}
                 style={{
                   backgroundColor: 'rgba(98, 0, 234, 0.05)',
                   borderRadius: 90,

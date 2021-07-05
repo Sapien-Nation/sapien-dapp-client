@@ -26,9 +26,6 @@ import {
 // styles
 import { neutral } from 'styles/colors';
 
-// utils
-import { formatSpn } from 'utils/spn';
-
 // emums
 import View from './ViewEnum';
 
@@ -115,7 +112,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
           <div>
             <Chip
               icon={<SpnIcon style={{ marginLeft: 10 }} />}
-              label={formatSpn(Number(wallet?.balance || 0))}
+              label={Number(wallet?.balance || 0)}
               style={{
                 backgroundColor: 'rgba(98, 0, 234, 0.05)',
                 borderRadius: 90,
