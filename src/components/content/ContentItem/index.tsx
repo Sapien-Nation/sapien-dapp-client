@@ -3,7 +3,7 @@ import { useState } from 'react';
 // components
 import Actions from './Actions';
 import Header from './Header';
-import { DeleteContent } from '../Modals';
+import { DeleteContent, EditContent } from '../Modals';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -16,8 +16,13 @@ interface Props {
   mutate: () => void;
 }
 
+enum Dialog {
+  Edit,
+  Delete,
+}
+
 const ContentItem = ({ content, mutate }: Props) => {
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [dialog, setDialog] = useState<null | Dialog>(null);
 
   return (
     <Box
@@ -29,8 +34,8 @@ const ContentItem = ({ content, mutate }: Props) => {
     >
       <Header
         content={content}
-        onDelete={() => setShowDeleteModal(true)}
-        onEdit={() => {}}
+        onDelete={() => setDialog(Dialog.Delete)}
+        onEdit={() => setDialog(Dialog.Edit)}
       />
       <div>
         <div dangerouslySetInnerHTML={{ __html: content.data }} />
@@ -38,11 +43,19 @@ const ContentItem = ({ content, mutate }: Props) => {
 
       <Actions commentsCount={0} echoCount={0} shareCount={0} />
 
-      {showDeleteModal && (
+      {dialog === Dialog.Delete && (
         <DeleteContent
           contentID={content.id}
-          onCancel={() => setShowDeleteModal(false)}
+          onCancel={() => setDialog(null)}
           onDelete={() => mutate()}
+        />
+      )}
+
+      {dialog === Dialog.Edit && (
+        <EditContent
+          content={content}
+          onCancel={() => setDialog(null)}
+          onEdit={() => mutate()}
         />
       )}
     </Box>
