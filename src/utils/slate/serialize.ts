@@ -13,15 +13,14 @@ export const serialize = (node) => {
   }
 
   switch (node.type) {
-    case 'paragraph':
-      return `<p style="margin:0;">${children}</p>`;
-    case 'link':
-      return `<a 
-          style="margin:0;color:${primary[800]};" 
-          target="_blank" href="${escapeHtml(node.url)}"
-        >
-          ${children}
-          </a>`;
+    case 'block-quote':
+      return `<blockquote style="font-style:bold;border:4px solid ${primary[800]}">
+            <span style="margin-left:4px;">
+              ${children}
+            </span>
+          </blockquote>`;
+    case 'heading':
+      return `<h1>${children}</h1>`;
     case 'image':
       return `<div>
           <div>
@@ -32,12 +31,15 @@ export const serialize = (node) => {
           </div>
           ${children}
         </div>`;
-    case 'block-quote':
-      return `<blockquote style="font-style:bold;border:4px solid ${primary[800]}">
-            <span style="margin-left:4px;">
-              ${children}
-            </span>
-          </blockquote>`;
+    case 'link':
+      return `<a 
+          style="margin:0;color:${primary[800]};" 
+          target="_blank" href="${escapeHtml(node.url)}"
+        >
+          ${children}
+          </a>`;
+    case 'paragraph':
+      return `<p style="margin:0;">${children}</p>`;
     default:
       return children;
   }

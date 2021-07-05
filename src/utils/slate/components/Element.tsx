@@ -3,9 +3,18 @@ import { primary } from 'styles/colors';
 // components
 import { Image } from 'utils/slate/components/Image';
 
+// mui
+import { Typography } from '@material-ui/core';
+
 export const Element = (props) => {
   const { attributes, children, element } = props;
   switch (element.type) {
+    case 'heading':
+      return (
+        <Typography variant="h1" {...attributes}>
+          {children}
+        </Typography>
+      );
     case 'link':
       return (
         <a
@@ -34,7 +43,7 @@ export const Element = (props) => {
       return <Image {...props} />;
     default:
       return (
-        <p style={{ margin: 0 }} {...attributes}>
+        <p style={{ margin: 2 }} {...attributes}>
           {children}
         </p>
       );
