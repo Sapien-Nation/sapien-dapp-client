@@ -43,7 +43,8 @@ const useStyles = makeStyles(() => ({
     filter: 'drop-shadow(0px 15px 40px rgba(56, 49, 67, 0.1))',
     borderRadius: 10,
     padding: '0 !important',
-    transform: 'translateX(-11.47%) translateY(-4.34%)',
+    position: 'absolute',
+    transform: 'translateX(-10px) translateY(-24px)',
   },
   list: {
     height: '100%',

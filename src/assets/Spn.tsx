@@ -1,4 +1,10 @@
-const Spn = ({ size = 18, style }: { size?: number; style?: unknown }) => (
+const Spn = ({
+  size = 18,
+  style,
+}: {
+  size?: number;
+  style?: React.CSSProperties;
+}) => (
   <svg
     fill="none"
     height={size}

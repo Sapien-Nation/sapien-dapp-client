@@ -19,8 +19,7 @@ import {
   ArrowBack as ArrowBackIcon,
   ArrowDownward as ArrowDownwardIcon,
   ArrowUpward as ArrowUpwardIcon,
-  ExpandLess as ExpandLessIcon,
-  ExpandMore as ExpandMoreIcon,
+  MoreHoriz as MoreHorizIcon,
   History as HistoryIcon,
 } from '@material-ui/icons';
 
@@ -41,7 +40,7 @@ interface Props {
 
 const WalletHeader = ({ wallet, setView, currentView }: Props) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const renderWalletActions = () => {
+  const renderCurrentHeader = () => {
     switch (currentView) {
       case View.Deposit:
         return (
@@ -95,6 +94,38 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
         return (
           <>
             <Typography variant="h2">Wallet</Typography>
+          </>
+        );
+    }
+  };
+  return (
+    <>
+      <Box padding={2.4}>
+        <Box
+          alignItems="center"
+          display="flex"
+          justifyContent="space-between"
+          style={{
+            gap: 10,
+          }}
+        >
+          <Box alignItems="center" display="flex">
+            {renderCurrentHeader()}
+          </Box>
+          <div>
+            <Chip
+              icon={<SpnIcon style={{ marginLeft: 10 }} />}
+              label={formatSpn(Number(wallet?.balance || 0))}
+              style={{
+                backgroundColor: 'rgba(98, 0, 234, 0.05)',
+                borderRadius: 90,
+                color: '#6200EA',
+                fontSize: 16,
+                fontWeight: 'bold',
+                height: 40,
+                padding: 1,
+              }}
+            />
             <IconButton
               aria-label="toggle wallet menu"
               style={{
@@ -103,7 +134,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
               }}
               onClick={(event) => setMenuAnchor(event.currentTarget)}
             >
-              {menuAnchor ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+              <MoreHorizIcon />
             </IconButton>
             <Menu
               keepMounted
@@ -119,11 +150,11 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                 },
               }}
               anchorEl={menuAnchor}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               getContentAnchorEl={null}
               id="wallet-actions"
               open={Boolean(menuAnchor)}
-              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               onClose={() => setMenuAnchor(null)}
             >
               <MenuItem
@@ -190,37 +221,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                 Transaction History
               </MenuItem>
             </Menu>
-          </>
-        );
-    }
-  };
-  return (
-    <>
-      <Box padding={2.4}>
-        <Box
-          alignItems="center"
-          display="flex"
-          justifyContent="space-between"
-          style={{
-            gap: 10,
-          }}
-        >
-          <Box alignItems="center" display="flex">
-            {renderWalletActions()}
-          </Box>
-          <Chip
-            icon={<SpnIcon style={{ marginLeft: 10 }} />}
-            label={formatSpn(Number(wallet?.balance || 0))}
-            style={{
-              backgroundColor: 'rgba(98, 0, 234, 0.05)',
-              borderRadius: 90,
-              color: '#6200EA',
-              fontSize: 16,
-              fontWeight: 'bold',
-              height: 40,
-              padding: 1,
-            }}
-          />
+          </div>
         </Box>
       </Box>
     </>

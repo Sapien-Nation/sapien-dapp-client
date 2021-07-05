@@ -13,6 +13,10 @@ const theme = createMuiTheme({
       disableRipple: true,
       disableElevation: true,
     },
+    MuiTab: {
+      disableRipple: true,
+      disableFocusRipple: true,
+    },
     MuiInputLabel: {
       shrink: true,
     },
@@ -184,6 +188,11 @@ theme.overrides = {
     paperWidthSm: {
       maxWidth: '51.8rem',
       width: '100%',
+    },
+  },
+  MuiTabs: {
+    indicator: {
+      display: 'none',
     },
   },
   MuiDialogTitle: {
