@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 // components
 import { Dialog } from 'components/common';
+import EditContentForm from '../EditContentForm';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -13,7 +14,7 @@ interface Props {
   onEdit: () => void;
 }
 
-const EditContent = ({ onCancel }: Props) => {
+const EditContent = ({ content, onCancel }: Props) => {
   const [isFetching, setIsFetching] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +50,7 @@ const EditContent = ({ onCancel }: Props) => {
       onCancel={onCancel}
       onConfirm={handleDelete}
     >
-      TODO
+      <EditContentForm content={content} />
     </Dialog>
   );
 };

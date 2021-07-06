@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { withHistory } from 'slate-history';
+import { useSnackbar } from 'notistack';
 import { createEditor, Descendant } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
 
@@ -37,6 +38,7 @@ const initialEditorValue = [
     children: [{ text: '' }],
   },
 ];
+
 const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editor] = useState(() =>
@@ -50,6 +52,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   );
   // @ts-ignore
   const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
+  const { enqueueSnackbar } = useSnackbar();
 
   const onSubmitForm = async (event) => {
     setIsSubmitting(true);
@@ -63,7 +66,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
       // @ts-ignore
       setData(initialEditorValue);
     } catch (err) {
-      //
+      enqueueSnackbar(err.message);
     }
     setIsSubmitting(false);
   };
