@@ -81,15 +81,19 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
           <ArrowIcon color="action" />
           <GlobeIcon color="action" style={{ fontSize: '1.4rem' }} />
           <Typography>{group.name}</Typography>
-          <Chip
-            classes={{
-              root: classes.chipRoot,
-            }}
-            color="primary"
-            icon={<GroupIcon color="primary" />}
-            label={tribe.name}
-            size="small"
-          />
+          <Link href="/">
+            <a>
+              <Chip
+                classes={{
+                  root: classes.chipRoot,
+                }}
+                color="primary"
+                icon={<GroupIcon color="primary" />}
+                label={tribe.name}
+                size="small"
+              />
+            </a>
+          </Link>
         </Box>
 
         <Box alignItems="center" display="flex" justifyContent="flex-end">

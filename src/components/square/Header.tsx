@@ -28,7 +28,12 @@ const Header = ({ tribeID }: Props) => (
             }}
           />
           <Box paddingBottom={3.5} paddingX={3.2}>
-            <Box display="flex" marginBottom={3.2}>
+            <Box
+              alignItems="flex-end"
+              display="flex"
+              position="relative"
+              top="-3rem"
+            >
               <Avatar
                 alt={tribe.name}
                 src={tribe.avatar}
@@ -37,7 +42,6 @@ const Header = ({ tribeID }: Props) => (
                   height: 110,
                   borderRadius: 16,
                   border: '3px solid white',
-                  top: '-2.5rem',
                 }}
                 variant="rounded"
               >
@@ -51,12 +55,7 @@ const Header = ({ tribeID }: Props) => (
                   tribe.name[0].toUpperCase()
                 )}
               </Avatar>
-              <Box
-                display="grid"
-                marginLeft={3}
-                marginTop={2.8}
-                style={{ gap: 8 }}
-              >
+              <Box display="grid" paddingLeft={3} style={{ gap: 8 }}>
                 <Box
                   alignItems="baseline"
                   display="flex"
@@ -64,7 +63,7 @@ const Header = ({ tribeID }: Props) => (
                 >
                   <Typography variant="h2">{tribe.name}</Typography>
                   <Typography color="textSecondary" variant="button">
-                    {tribe.identifier}
+                    @{tribe.identifier}
                   </Typography>
                 </Box>
                 <Box
