@@ -73,7 +73,7 @@ const Navbar = () => {
             variant: 'error',
             anchorOrigin: {
               vertical: 'bottom',
-              horizontal: 'center',
+              horizontal: 'right',
             },
           });
         }
