@@ -28,8 +28,7 @@ const ContentItem = ({ content, mutate }: Props) => {
     <Box
       className="card--rounded-white"
       display="grid"
-      paddingX={1.5}
-      paddingY={3.6}
+      padding={3}
       style={{ gap: 22 }}
     >
       <Header

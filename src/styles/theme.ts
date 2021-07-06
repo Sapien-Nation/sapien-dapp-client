@@ -233,7 +233,7 @@ theme.overrides = {
     sizeSmall: {
       fontSize: '1.2rem',
       fontWeight: 600,
-      minHeight: '3.2',
+      minHeight: '3.2rem',
     },
   },
   MuiInputLabel: {

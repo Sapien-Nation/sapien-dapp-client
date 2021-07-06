@@ -14,7 +14,7 @@ interface Props {
 
 const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
   return (
-    <Box display="flex" paddingX={1.5}>
+    <Box display="flex">
       <Button
         color="primary"
         size="small"

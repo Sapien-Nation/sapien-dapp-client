@@ -34,6 +34,12 @@ const useStyles = makeStyles(() => ({
   chipRoot: {
     color: primary[800],
     backgroundColor: primary[100],
+    padding: '0.2rem 0.8rem',
+    borderRadius: '9rem',
+  },
+  avatar: {
+    width: '3.2rem',
+    height: '3.2rem',
   },
 }));
 
@@ -58,7 +64,11 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
           justifyContent="center"
           style={{ gap: 8 }}
         >
-          <Avatar alt="Tribe Image" src={owner.avatar}>
+          <Avatar
+            alt="Tribe Image"
+            className={classes.avatar}
+            src={owner.avatar}
+          >
             {owner.displayName?.[0].toUpperCase()}
           </Avatar>
           <Link href="/">
@@ -68,8 +78,8 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
               </Typography>
             </a>
           </Link>
-          <ArrowIcon />
-          <GlobeIcon fontSize="small" />
+          <ArrowIcon color="action" />
+          <GlobeIcon color="action" style={{ fontSize: '1.4rem' }} />
           <Typography>{group.name}</Typography>
           <Chip
             classes={{
@@ -82,18 +92,20 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
           />
         </Box>
 
-        <div>
-          {formatTimestampToRelative(createdAt)}
+        <Box alignItems="center" display="flex" justifyContent="flex-end">
+          <Typography color="textSecondary" component="span" variant="h6">
+            {formatTimestampToRelative(createdAt)}
+          </Typography>
           {canEdit && canDelete && (
             <IconButton
               aria-controls="post-menu"
               aria-haspopup="true"
               onClick={(event) => setAnchorEl(event.currentTarget)}
             >
-              <MoreIcon />
+              <MoreIcon color="action" />
             </IconButton>
           )}
-        </div>
+        </Box>
       </Box>
 
       <Menu
