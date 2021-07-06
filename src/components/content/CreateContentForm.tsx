@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { withHistory } from 'slate-history';
 import { useSnackbar } from 'notistack';
 import { createEditor, Descendant } from 'slate';
-import { Editable, Slate, withReact } from 'slate-react';
+import { withReact } from 'slate-react';
+
+// components
+import { Editor } from 'components/common';
 
 // mui
 import { Avatar, Box, IconButton } from '@material-ui/core';
@@ -12,16 +15,12 @@ import { Send } from '@material-ui/icons';
 import type { User } from 'tools/types/user';
 
 // styles
-import { primary, neutral } from 'styles/colors';
+import { primary } from 'styles/colors';
 
 // utils
 import {
   clearEditor,
   composeSlateHighOrderFns,
-  Element,
-  Leaf,
-  MarkButton,
-  Toolbar,
   withImages,
   withLinks,
   withShortcuts,
@@ -76,25 +75,14 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
       <Box alignItems="center" display="flex" padding={3} style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%', minWidth: 680 }}>
-          <Slate editor={editor} value={data} onChange={setData}>
-            <Toolbar>
-              <MarkButton format="bold" />
-              <MarkButton format="italic" />
-              <MarkButton format="underline" />
-              <MarkButton format="code" />
-            </Toolbar>
-            <Editable
-              spellCheck
-              placeholder={`What’s on your mind, ${user.username}?`}
-              renderElement={(props) => <Element {...props} />}
-              renderLeaf={(props) => <Leaf {...props} />}
-              style={{
-                backgroundColor: neutral[50],
-                borderRadius: 16,
-                padding: '1rem 1.5rem',
-              }}
-            />
-          </Slate>
+          <Editor
+            editor={editor}
+            editorProps={{
+              placeholder: `What’s on your mind, ${user.username}?`,
+            }}
+            value={data}
+            onChange={setData}
+          />
         </Box>
         <IconButton
           disabled={isSubmitting}
