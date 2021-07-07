@@ -163,8 +163,8 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                   borderRadius: 5,
                 }}
                 onClick={() => {
-                  setView(View.Deposit);
                   setMenuAnchor(null);
+                  setView(View.Deposit);
                 }}
               >
                 <ArrowUpwardIcon
@@ -184,8 +184,8 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                   borderRadius: 5,
                 }}
                 onClick={() => {
-                  setView(View.Withdraw);
                   setMenuAnchor(null);
+                  setView(View.Withdraw);
                 }}
               >
                 <ArrowDownwardIcon
@@ -205,8 +205,8 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                   borderRadius: 5,
                 }}
                 onClick={() => {
-                  setView(View.Transactions);
                   setMenuAnchor(null);
+                  setView(View.Transactions);
                 }}
               >
                 <HistoryIcon
