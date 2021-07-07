@@ -395,6 +395,11 @@ theme.overrides = {
       color: '#fff',
     },
   },
+  MuiIconButton: {
+    root: {
+      padding: '1rem',
+    },
+  },
 };
 
 export default theme;
