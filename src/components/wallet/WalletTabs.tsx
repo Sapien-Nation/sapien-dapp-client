@@ -10,6 +10,9 @@ import {
   Store as StoreIcon,
 } from 'assets';
 
+// components
+import { Store } from './';
+
 const useStyles = makeStyles(() => ({
   root: {
     minWidth: 0,
@@ -47,7 +50,7 @@ const WalletTabs = () => {
         return <div>SPN</div>;
       }
       case WalletTab.Store: {
-        return <div>Store</div>;
+        return <Store />;
       }
     }
   };
