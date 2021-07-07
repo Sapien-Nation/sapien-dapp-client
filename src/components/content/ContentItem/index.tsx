@@ -4,8 +4,8 @@ import { useState } from 'react';
 import Actions from './Actions';
 import Header from './Header';
 import { DeleteContent } from '../Modals';
-import { PostComposerSkeleton } from 'components/common';
 import { CreateContentForm } from 'components/content';
+import { PostComposerSkeleton } from 'components/common';
 
 // mui
 import { Box } from '@material-ui/core';
