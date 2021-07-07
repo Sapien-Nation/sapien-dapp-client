@@ -3,7 +3,7 @@ import { useState } from 'react';
 // components
 import Actions from './Actions';
 import Header from './Header';
-import { DeleteContent, EditContent } from '../Modals';
+import { DeleteContent } from '../Modals';
 import { PostComposerSkeleton } from 'components/common';
 import { CreateContentForm } from 'components/content';
 
@@ -22,7 +22,6 @@ interface Props {
 }
 
 enum Dialog {
-  Edit,
   Delete,
 }
 
@@ -37,11 +36,7 @@ const ContentItem = ({ content, mutate }: Props) => {
       padding={3}
       style={{ gap: 22 }}
     >
-      <Header
-        content={content}
-        onDelete={() => setDialog(Dialog.Delete)}
-        onEdit={() => setDialog(Dialog.Edit)}
-      />
+      <Header content={content} onDelete={() => setDialog(Dialog.Delete)} />
       <div>
         <div dangerouslySetInnerHTML={{ __html: content.data }} />
       </div>
@@ -61,14 +56,6 @@ const ContentItem = ({ content, mutate }: Props) => {
           contentID={content.id}
           onCancel={() => setDialog(null)}
           onDelete={() => mutate()}
-        />
-      )}
-
-      {dialog === Dialog.Edit && (
-        <EditContent
-          content={content}
-          onCancel={() => setDialog(null)}
-          onEdit={() => mutate()}
         />
       )}
     </Box>
