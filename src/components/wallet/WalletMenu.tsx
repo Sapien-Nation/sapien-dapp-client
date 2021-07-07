@@ -9,9 +9,9 @@ import { Divider } from '@material-ui/core';
 // components
 import {
   Deposit,
-  Tokens,
   Transactions,
   WalletHeader,
+  WalletTabs,
   Withdraw,
 } from 'components/wallet';
 
@@ -19,7 +19,7 @@ import {
 import View from './ViewEnum';
 
 const WalletMenu = ({ wallet }: { wallet: WalletType }) => {
-  const [view, setView] = useState(View.Tokens);
+  const [view, setView] = useState(View.Tabs);
   const renderView = () => {
     switch (view) {
       case View.Deposit:
@@ -29,7 +29,7 @@ const WalletMenu = ({ wallet }: { wallet: WalletType }) => {
       case View.Transactions:
         return <Transactions />;
       default:
-        return <Tokens />;
+        return <WalletTabs />;
     }
   };
 

@@ -48,7 +48,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                 padding: 0,
                 marginRight: 6,
               }}
-              onClick={() => setView(View.Tokens)}
+              onClick={() => setView(View.Tabs)}
             >
               <ArrowBackIcon style={{ color: neutral[700] }} />
             </IconButton>
@@ -64,7 +64,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                 padding: 0,
                 marginRight: 6,
               }}
-              onClick={() => setView(View.Tokens)}
+              onClick={() => setView(View.Tabs)}
             >
               <ArrowBackIcon style={{ color: neutral[700] }} />
             </IconButton>
@@ -80,7 +80,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                 padding: 0,
                 marginRight: 6,
               }}
-              onClick={() => setView(View.Tokens)}
+              onClick={() => setView(View.Tabs)}
             >
               <ArrowBackIcon style={{ color: neutral[700] }} />
             </IconButton>

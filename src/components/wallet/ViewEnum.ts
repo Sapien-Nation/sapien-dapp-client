@@ -1,5 +1,5 @@
 enum View {
-  Tokens,
+  Tabs,
   Deposit,
   Withdraw,
   Transactions,

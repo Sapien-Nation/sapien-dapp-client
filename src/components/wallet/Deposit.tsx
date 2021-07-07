@@ -101,7 +101,7 @@ const Deposit = ({ setView }: { setView: (view: View) => void }) => {
                 fullWidth
                 color="primary"
                 variant="contained"
-                onClick={() => setView(View.Tokens)}
+                onClick={() => setView(View.Tabs)}
               >
                 Thank you!
               </Button>

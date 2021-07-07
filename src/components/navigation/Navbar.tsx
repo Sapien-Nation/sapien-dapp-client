@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
     borderRadius: 10,
     padding: '0 !important',
     position: 'absolute',
-    transform: 'translateX(-10px) translateY(-24px)',
+    transform: 'translateX(-6px) translateY(-24px)',
   },
   list: {
     height: '100%',
