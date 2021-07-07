@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
@@ -34,7 +35,9 @@ enum Dialog {
 
 const ContentItem = ({ content, mutate }: Props) => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
+
   const { me } = useAuth();
+  const { asPath, push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleReplySubmit = async (slateData) => {
@@ -45,7 +48,7 @@ const ContentItem = ({ content, mutate }: Props) => {
 
       enqueueSnackbar('Replied');
 
-      // TODO redirect
+      push(`${asPath}/content/${content.id}`);
     } catch (err) {
       enqueueSnackbar(err.message);
     }
