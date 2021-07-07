@@ -1,4 +1,8 @@
+import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+
+// api
+import { createReply } from 'api/content';
 
 // components
 import Actions from './Actions';
@@ -12,6 +16,9 @@ import { Box } from '@material-ui/core';
 
 // context
 import { useAuth } from 'context/user';
+
+// utils
+import { serialize } from 'utils/slate';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -28,6 +35,21 @@ enum Dialog {
 const ContentItem = ({ content, mutate }: Props) => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
   const { me } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleReplySubmit = async (slateData) => {
+    try {
+      await createReply(content.id, {
+        data: slateData.map((node: any) => serialize(node)).join(''),
+      });
+
+      enqueueSnackbar('Replied');
+
+      // TODO redirect
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
 
   return (
     <Box
@@ -45,7 +67,7 @@ const ContentItem = ({ content, mutate }: Props) => {
       <Box borderColor="grey.100" borderTop={1} marginX={-3} />
       <Box>
         {me ? (
-          <CreateContentForm user={me} onSubmit={() => {}} />
+          <CreateContentForm user={me} onSubmit={handleReplySubmit} />
         ) : (
           <PostComposerSkeleton />
         )}
