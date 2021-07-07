@@ -35,6 +35,9 @@ const useStyles = makeStyles(() => ({
     backgroundColor: primary[100],
     padding: '0.2rem 0.8rem',
     borderRadius: '9rem',
+    fontSize: '1.2rem',
+    height: '100%',
+    fontWeight: 'bold',
   },
   avatar: {
     width: '3.2rem',
@@ -71,14 +74,24 @@ const Header = ({ content, onDelete }: Props) => {
           </Avatar>
           <Link href="/">
             <a>
-              <Typography>
-                {owner.displayName} @{owner.userName}
+              <Typography component="span" variant="button">
+                {owner.displayName}
+                <Typography
+                  color="textSecondary"
+                  component="span"
+                  style={{ marginLeft: '1rem' }}
+                  variant="button"
+                >
+                  @{owner.userName}
+                </Typography>
               </Typography>
             </a>
           </Link>
           <ArrowIcon color="action" />
           <GlobeIcon color="action" style={{ fontSize: '1.4rem' }} />
-          <Typography>{group.name}</Typography>
+          <Typography component="span" variant="h4">
+            {group.name}
+          </Typography>
           <Link href="/">
             <a>
               <Chip

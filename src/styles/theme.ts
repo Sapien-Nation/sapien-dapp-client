@@ -30,9 +30,6 @@ const theme = createMuiTheme({
       variantMapping: {
         h5: 'p',
         h6: 'p',
-        subtitle1: 'button',
-        subtitle2: 'button',
-        h4: 'button',
       },
     },
   },
