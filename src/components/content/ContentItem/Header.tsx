@@ -15,7 +15,6 @@ import {
 import {
   ArrowRight as ArrowIcon,
   Delete as DeleteIcon,
-  Edit as EditIcon,
   Groups as GroupIcon,
   MoreHoriz as MoreIcon,
   Public as GlobeIcon,
@@ -45,15 +44,14 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   content: Content;
-  onEdit: () => void;
   onDelete: () => void;
 }
 
-const Header = ({ content, onEdit, onDelete }: Props) => {
+const Header = ({ content, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
-  const { canEdit, canDelete, createdAt, group, tribe, owner } = content;
+  const { canDelete, createdAt, group, tribe, owner } = content;
 
   return (
     <>
@@ -100,7 +98,7 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
           <Typography color="textSecondary" component="span" variant="h6">
             {formatTimestampToRelative(createdAt)}
           </Typography>
-          {canEdit && canDelete && (
+          {canDelete && (
             <IconButton
               aria-controls="post-menu"
               aria-haspopup="true"
@@ -124,14 +122,6 @@ const Header = ({ content, onEdit, onDelete }: Props) => {
         onClick={() => setAnchorEl(null)}
         onClose={() => setAnchorEl(null)}
       >
-        {canEdit && (
-          <MenuItem onClick={onEdit}>
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-            Edit
-          </MenuItem>
-        )}
         {canDelete && (
           <MenuItem onClick={onDelete}>
             <IconButton>
