@@ -29,7 +29,7 @@ const Editor = ({ editor, editorProps = {}, value, onChange }: Props) => {
         style={{
           backgroundColor: neutral[50],
           borderRadius: 16,
-          padding: '1rem 1.5rem',
+          padding: '0.7rem 1.5rem',
         }}
         {...editorProps}
       />

@@ -115,7 +115,7 @@ const Square = ({ squareID }: Props) => {
     <Page
       header={<Header tribeID={tribeID} />}
       subHeader={
-        <Box className="card--rounded-white">
+        <Box className="card--rounded-white" padding={3}>
           {me ? (
             <CreateContentForm user={me} onSubmit={handleSubmit} />
           ) : (

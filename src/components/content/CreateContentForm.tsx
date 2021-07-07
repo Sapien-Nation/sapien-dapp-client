@@ -72,7 +72,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
 
   return (
     <form onSubmit={onSubmitForm}>
-      <Box alignItems="center" display="flex" padding={3} style={{ gap: 10 }}>
+      <Box alignItems="flex-end" display="flex" style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Box style={{ width: '100%' }}>
           <Editor
