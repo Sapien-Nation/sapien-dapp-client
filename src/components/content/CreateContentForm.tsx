@@ -9,13 +9,13 @@ import { Editor } from 'components/common';
 
 // mui
 import { Avatar, Box, IconButton } from '@material-ui/core';
-import { Send } from '@material-ui/icons';
+import { ImageOutlined, Send } from '@material-ui/icons';
 
 // types
 import type { User } from 'tools/types/user';
 
 // styles
-import { primary } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 // utils
 import {
@@ -53,6 +53,18 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
   const { enqueueSnackbar } = useSnackbar();
 
+  const hasContent = () => {
+    const position = editor.selection?.anchor;
+    const offset = position?.offset;
+    const path = position?.path[0];
+
+    if (editor.selection && (offset !== 0 || path !== 0)) {
+      return true;
+    }
+
+    return false;
+  };
+
   const onSubmitForm = async (event) => {
     setIsSubmitting(true);
     try {
@@ -74,7 +86,14 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
     <form onSubmit={onSubmitForm}>
       <Box alignItems="flex-end" display="flex" style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
-        <Box style={{ width: '100%' }}>
+        <Box
+          borderRadius={16}
+          display="flex"
+          flexDirection={hasContent() ? 'column' : 'row'}
+          padding={0.5}
+          style={{ backgroundColor: neutral[50] }}
+          width="100%"
+        >
           <Editor
             editor={editor}
             editorProps={{
@@ -83,17 +102,39 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
             value={data}
             onChange={setData}
           />
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            padding={hasContent() ? 0.5 : 0}
+          >
+            <IconButton
+              style={{
+                borderRadius: 10,
+                height: 40,
+                width: 40,
+              }}
+            >
+              <ImageOutlined fontSize="small" style={{ color: neutral[400] }} />
+            </IconButton>
+            <IconButton
+              disabled={isSubmitting}
+              style={{
+                backgroundColor: hasContent() ? primary[800] : '',
+                borderRadius: 10,
+                height: 40,
+                width: 40,
+              }}
+              type="submit"
+            >
+              <Send
+                fontSize="small"
+                style={{
+                  color: hasContent() ? '#fff' : neutral[400],
+                }}
+              />
+            </IconButton>
+          </Box>
         </Box>
-        <IconButton
-          disabled={isSubmitting}
-          style={{
-            backgroundColor: primary[800],
-            borderRadius: 16,
-          }}
-          type="submit"
-        >
-          <Send fontSize="small" style={{ color: '#FFF' }} />
-        </IconButton>
       </Box>
     </form>
   );

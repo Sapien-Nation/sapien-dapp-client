@@ -3,7 +3,7 @@ const localhostDomainRE = /^localhost[:?\d]*(?:[^:?\d]\S*)?$/;
 const nonLocalhostDomainRE = /^[^\s.]+\.\S{2,}$/;
 /*eslint-disable */
 const youtubeRegex =
-  /^http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\v=|\.be\/)([\-]*)(&(amp;)?‌​[\w\‌​=]*)?/;
+  /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 /*eslint-enable */
 
 export const isUrl = (url: string) => {
