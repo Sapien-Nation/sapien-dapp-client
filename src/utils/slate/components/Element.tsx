@@ -2,13 +2,17 @@ import { primary } from 'styles/colors';
 
 // components
 import { Image } from 'utils/slate/components/Image';
+import { VideoElement } from 'utils/slate/components/Video';
 
 // mui
 import { Typography } from '@material-ui/core';
 
 export const Element = (props) => {
   const { attributes, children, element } = props;
+
   switch (element.type) {
+    case 'video':
+      return <VideoElement {...props} />;
     case 'heading':
       return (
         <Typography variant="h1" {...attributes}>

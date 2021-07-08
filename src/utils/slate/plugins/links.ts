@@ -7,7 +7,8 @@ import {
 } from 'slate';
 
 // utils
-import { checkUrl } from 'utils/url';
+import { checkUrl, isOnlineVideo } from 'utils/url';
+import { wrapOnlineVideo } from 'utils/slate/plugins';
 
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 
@@ -20,7 +21,11 @@ export const withLinks = (editor) => {
 
   editor.insertText = (text) => {
     if (text && checkUrl(text)) {
-      wrapLink(editor, text);
+      if (isOnlineVideo(text)) {
+        wrapOnlineVideo(editor, text);
+      } else {
+        wrapLink(editor, text);
+      }
     } else {
       insertText(text);
     }
@@ -30,7 +35,11 @@ export const withLinks = (editor) => {
     const text = data.getData('text/plain');
 
     if (text && checkUrl(text)) {
-      wrapLink(editor, text);
+      if (isOnlineVideo(text)) {
+        wrapOnlineVideo(editor, text);
+      } else {
+        wrapLink(editor, text);
+      }
     } else {
       insertData(data);
     }
