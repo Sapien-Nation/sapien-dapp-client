@@ -1,7 +1,10 @@
 import { useState } from 'react';
 
 // mui
-import { Box, Tabs, Tab, makeStyles } from '@material-ui/core';
+import { Tabs, Tab, makeStyles } from '@material-ui/core';
+
+// styles
+import { primary } from 'styles/colors';
 
 // assets
 import {
@@ -36,9 +39,10 @@ enum WalletTab {
 
 const WalletTabs = () => {
   const [currentTab, setCurrentTab] = useState(WalletTab.MyBadges);
+  const [showTabsMenu, setShowTabsMenu] = useState(true);
   const classes = useStyles();
-  const handleChange = (_, newValue) => {
-    setCurrentTab(newValue);
+  const handleChange = (_, tab) => {
+    setCurrentTab(tab);
   };
 
   const renderCurrentTab = () => {
@@ -50,48 +54,59 @@ const WalletTabs = () => {
         return <div>SPN</div>;
       }
       case WalletTab.Store: {
-        return <Store />;
+        return (
+          <Store
+            setShowTabsMenu={setShowTabsMenu}
+            showTabsMenu={showTabsMenu}
+          />
+        );
       }
     }
   };
 
   return (
     <>
-      <Tabs
-        aria-label="simple tabs example"
-        style={{
-          minHeight: 0,
-          padding: '1.2rem',
-        }}
-        value={currentTab}
-        onChange={handleChange}
-      >
-        <Tab
-          classes={{
-            root: classes.root,
-            wrapper: classes.wrapper,
+      {showTabsMenu && (
+        <Tabs
+          aria-label="simple tabs example"
+          style={{
+            minHeight: 0,
+            padding: '1.2rem',
           }}
-          icon={<TokensIcon style={{ marginBottom: 0, marginRight: 5 }} />}
-          label="My Badges"
-        />
-        <Tab
-          classes={{
-            root: classes.root,
-            wrapper: classes.wrapper,
-          }}
-          icon={<SpnIcon style={{ marginBottom: 0, marginRight: 5 }} />}
-          label="SPN"
-        />
-        <Tab
-          classes={{
-            root: classes.root,
-            wrapper: classes.wrapper,
-          }}
-          icon={<StoreIcon style={{ marginBottom: 0, marginRight: 5 }} />}
-          label="Store"
-        />
-      </Tabs>
-      <Box paddingX={2.4}>{renderCurrentTab()}</Box>
+          value={currentTab}
+          onChange={handleChange}
+        >
+          <Tab
+            classes={{
+              root: classes.root,
+              wrapper: classes.wrapper,
+            }}
+            icon={<TokensIcon style={{ marginBottom: 0, marginRight: 5 }} />}
+            label="My Badges"
+          />
+          <Tab
+            classes={{
+              root: classes.root,
+              wrapper: classes.wrapper,
+            }}
+            icon={<SpnIcon style={{ marginBottom: 0, marginRight: 5 }} />}
+            label="SPN"
+          />
+          <Tab
+            classes={{
+              root: classes.root,
+              wrapper: classes.wrapper,
+            }}
+            icon={
+              <StoreIcon
+                style={{ fill: primary[700], marginBottom: 0, marginRight: 5 }}
+              />
+            }
+            label="Store"
+          />
+        </Tabs>
+      )}
+      {renderCurrentTab()}
     </>
   );
 };
