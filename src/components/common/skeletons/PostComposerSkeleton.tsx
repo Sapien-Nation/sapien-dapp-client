@@ -8,8 +8,8 @@ const PostComposerSkeleton = () => (
     display="grid"
     style={{ gridTemplateColumns: '32px 1fr', gap: '10px' }}
   >
-    <Skeleton animation="pulse" height={32} variant="circle" width={32} />
-    <Skeleton animation="pulse" height={40} variant="rect" />
+    <Skeleton animation="wave" height={32} variant="circle" width={32} />
+    <Skeleton animation="wave" height={40} variant="rect" />
   </Box>
 );
 

@@ -1,3 +1,4 @@
+export { default as ContentDetailSkeleton } from './ContentDetailSkeleton';
 export { default as ContentFeedSkeleton } from './ContentFeedSkeleton';
 export { default as FeedSkeleton } from './FeedSkeleton';
 export { default as PageHeaderSkeleton } from './PageHeaderSkeleton';

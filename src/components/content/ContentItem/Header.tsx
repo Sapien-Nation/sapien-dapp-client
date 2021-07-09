@@ -62,7 +62,7 @@ const Header = ({ content, onDelete }: Props) => {
         <Box
           alignItems="center"
           display="flex"
-          justifyContent="center"
+          flexWrap="wrap"
           style={{ gap: 8 }}
         >
           <Avatar

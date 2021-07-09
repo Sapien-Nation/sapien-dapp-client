@@ -13,10 +13,10 @@ const PageHeaderSkeleton = () => (
         variant="rect"
         width={110}
       />
-      <Box marginLeft={3} marginTop={2.8} width="100%">
-        <Skeleton animation="pulse" variant="text" />
-        <Skeleton animation="pulse" variant="text" />
-        <Skeleton animation="pulse" variant="text" />
+      <Box marginTop={2.8} width="100%">
+        <Skeleton animation="wave" variant="text" />
+        <Skeleton animation="wave" variant="text" />
+        <Skeleton animation="wave" variant="text" />
       </Box>
     </Box>
   </Box>
