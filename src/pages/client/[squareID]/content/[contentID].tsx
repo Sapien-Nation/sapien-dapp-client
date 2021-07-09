@@ -22,6 +22,7 @@ const Content = ({ contentID }: Props) => {
       <>
         <Query
           api={`/post/${contentID}`}
+          loader={<ContentDetailSkeleton />}
           options={{
             fetcher: () =>
               mockContent({
