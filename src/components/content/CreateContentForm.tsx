@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { useSnackbar } from 'notistack';
-import { createEditor, Descendant } from 'slate';
+import { createEditor, Descendant, Transforms } from 'slate';
 import { withReact } from 'slate-react';
 
 // components
@@ -40,6 +40,8 @@ const initialEditorValue = [
 
 const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const imageRef = useRef(null);
+
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
       withImages,
@@ -63,6 +65,51 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
     }
 
     return false;
+  };
+
+  const removeImage = () => {
+    //TODO removeNodes method crashes the editor
+    // Transforms.removeNodes(editor, image);
+    // return editor;
+  };
+
+  const handleUploadImage = async (event: any) => {
+    try {
+      setTimeout(() => {
+        if (event.target.files && event.target.files.length > 0) {
+          const file = event.target.files[0];
+          const newFile = Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          });
+          const url = newFile.preview;
+          const image = {
+            type: 'image',
+            url,
+            children: [{ text: '' }],
+            removeMethod: removeImage,
+          };
+          Transforms.insertNodes(editor, image);
+
+          enqueueSnackbar('Image added successfully', {
+            variant: 'success',
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'center',
+            },
+          });
+
+          return editor;
+        }
+      }, 2000);
+    } catch (error) {
+      enqueueSnackbar(error, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
+    }
   };
 
   const onSubmitForm = async (event) => {
@@ -113,9 +160,18 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
                 height: 40,
                 width: 40,
               }}
+              onClick={() => imageRef.current.click()}
             >
               <ImageOutlined fontSize="small" style={{ color: neutral[400] }} />
             </IconButton>
+            <input
+              ref={imageRef}
+              hidden
+              accept="image/*"
+              id="upload-image"
+              type="file"
+              onChange={handleUploadImage}
+            />
             <IconButton
               disabled={isSubmitting}
               style={{
