@@ -280,7 +280,7 @@ theme.overrides = {
       fontSize: '1.4rem',
       '&$focused': {
         borderRadius: '0.6rem',
-        border: `2px solid ${primary}`,
+        border: `2px solid ${primary[700]}`,
         boxSizing: 'border-box',
       },
       '&.Mui-error': {
@@ -296,6 +296,17 @@ theme.overrides = {
     },
     input: {
       padding: 0,
+      '&[type=number]': {
+        '-moz-appearance': 'textfield',
+      },
+      '&::-webkit-outer-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0,
+      },
+      '&::-webkit-inner-spin-button': {
+        '-webkit-appearance': 'none',
+        margin: 0,
+      },
     },
     inputTypeSearch: {
       '&::-webkit-search-decoration': {
