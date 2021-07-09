@@ -2,7 +2,14 @@ import { useRouter } from 'next/router';
 
 // components
 import Layout from 'pages/Layout';
-import { Query } from 'components/common';
+import { Page, Query } from 'components/common';
+import { ContentDetail } from 'components/content';
+
+// types
+import type { Content as ContentType } from 'tools/types/content';
+
+// mocks
+import { mockContent } from 'tools/mocks/content';
 
 interface Props {
   contentID: string;
@@ -10,7 +17,21 @@ interface Props {
 
 const Content = ({ contentID }: Props) => {
   console.log(contentID);
-  return <h1>TODO Content Page</h1>;
+  return (
+    <Page>
+      <>
+        <Query
+          api={`/post/${contentID}`}
+          options={{ fetcher: () => mockContent() }}
+        >
+          {(content: ContentType) => <ContentDetail content={content} />}
+        </Query>
+        {/* <Query api={`/post/${contentID}/replies`}>
+          {(content: Array<ContentType>) => <h1>'TODO Reply feed'</h1>}
+        </Query> */}
+      </>
+    </Page>
+  );
 };
 
 const ContentPage = () => {

@@ -3,11 +3,11 @@ import { Box } from '@material-ui/core';
 
 interface Props {
   children: React.ReactElement | Array<React.ReactElement>;
-  header: React.ReactElement;
-  subHeader: React.ReactElement;
+  header?: React.ReactElement;
+  subHeader?: React.ReactElement;
 }
 
-const Page = ({ children, header, subHeader }: Props) => {
+const Page = ({ children, header = null, subHeader = null }: Props) => {
   return (
     <div className="card--rounded-gray">
       <Box
