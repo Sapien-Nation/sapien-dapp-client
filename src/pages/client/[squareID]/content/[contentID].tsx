@@ -30,13 +30,9 @@ const Content = ({ contentID }: Props) => {
               }),
           }}
         >
-          {(content: ContentType) =>
-            content ? (
-              <ContentDetail content={content} mutate={() => {}} />
-            ) : (
-              <ContentDetailSkeleton />
-            )
-          }
+          {(content: ContentType) => (
+            <ContentDetail content={content} mutate={() => {}} />
+          )}
         </Query>
         {/* <Query api={`/post/${contentID}/replies`}>
           {(content: Array<ContentType>) => <h1>'TODO Reply feed'</h1>}
