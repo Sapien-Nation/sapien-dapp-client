@@ -48,10 +48,26 @@ const WalletTabs = () => {
   const renderCurrentTab = () => {
     switch (currentTab) {
       case WalletTab.MyBadges: {
-        return <div>My Badges</div>;
+        return (
+          <div
+            style={{
+              padding: '0 2.4rem',
+            }}
+          >
+            My Badges
+          </div>
+        );
       }
       case WalletTab.Spn: {
-        return <div>SPN</div>;
+        return (
+          <div
+            style={{
+              padding: '0 2.4rem',
+            }}
+          >
+            SPN
+          </div>
+        );
       }
       case WalletTab.Store: {
         return (
