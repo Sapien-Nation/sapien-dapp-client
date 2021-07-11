@@ -53,6 +53,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NumberFormatInput = ({ name, onChange, ...rest }) => {
+  delete rest.inputRef;
   return (
     <NumberFormat
       thousandSeparator

@@ -131,7 +131,7 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
           <Typography variant="body2">Transaction fee</Typography>
           <Typography variant="body2">5%</Typography>
         </Box>
-        <Box display="flex" justifyContent="space-between" marginBottom={1}>
+        <Box display="flex" justifyContent="space-between" marginBottom={1.8}>
           <Typography style={{ fontWeight: 700 }} variant="body2">
             Total
           </Typography>
@@ -461,12 +461,26 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                   }}
                 />
                 <Typography variant="subtitle1">Badge Name (x2)</Typography>
-                <Typography style={{ textAlign: 'center' }} variant="h6">
+                <Typography
+                  style={{ textAlign: 'center', color: neutral[500] }}
+                  variant="h6"
+                >
                   Velit sed turpis tellus curabitur sit habitant sit eget lorem
                   ipsum.
                 </Typography>
               </Box>
               {renderFees()}
+              <Box
+                bgcolor={neutral[50]}
+                borderRadius={10}
+                display="flex"
+                justifyContent="center"
+                paddingY={0.6}
+              >
+                <Typography style={{ color: neutral[500] }} variant="overline">
+                  Remaining balance: 3,082 SPN
+                </Typography>
+              </Box>
             </Box>
             <Box
               borderTop="1px solid #EDEEF0"
@@ -495,7 +509,12 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                         }
                         label={
                           <Typography>
-                            <Typography variant="button">I agree to</Typography>{' '}
+                            <Typography
+                              style={{ fontWeight: 400 }}
+                              variant="button"
+                            >
+                              I agree to
+                            </Typography>{' '}
                             <Typography variant="button">
                               <a
                                 href="https://common.sapien.network/terms.html"

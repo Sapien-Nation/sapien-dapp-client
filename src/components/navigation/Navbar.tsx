@@ -22,12 +22,13 @@ import {
   Box,
   Button,
   Chip,
+  Fade,
   IconButton,
+  makeStyles,
   Menu,
   MenuItem,
+  Popover,
   Toolbar,
-  Fade,
-  makeStyles,
 } from '@material-ui/core';
 
 // components
@@ -152,19 +153,18 @@ const Navbar = () => {
       >
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
-      <Menu
+      <Popover
         TransitionComponent={Fade}
         anchorEl={balanceAnchor}
         classes={{
           paper: classes.paper,
-          list: classes.list,
         }}
         id="wallet"
         open={Boolean(balanceAnchor)}
         onClose={() => setBalanceAnchor(null)}
       >
         <WalletMenu wallet={wallet} />
-      </Menu>
+      </Popover>
     </AppBar>
   );
 };
