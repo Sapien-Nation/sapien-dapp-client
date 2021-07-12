@@ -1,6 +1,8 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+import sanitizeHtml from 'sanitize-html';
 
 // api
 import { createReply } from 'api/content';
@@ -27,13 +29,14 @@ import type { Content } from 'tools/types/content';
 interface Props {
   content: Content;
   mutate: () => void;
+  variant: 'detail' | 'feed';
 }
 
 enum Dialog {
   Delete,
 }
 
-const ContentItem = ({ content, mutate }: Props) => {
+const ContentItem = ({ content, mutate, variant }: Props) => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
 
   const { me } = useAuth();
@@ -63,7 +66,20 @@ const ContentItem = ({ content, mutate }: Props) => {
     >
       <Header content={content} onDelete={() => setDialog(Dialog.Delete)} />
       <div>
-        <div dangerouslySetInnerHTML={{ __html: content.data }} />
+        {variant === 'detail' ? (
+          <div dangerouslySetInnerHTML={{ __html: content.data }} />
+        ) : (
+          <Link href={`${asPath}/content/${content.id}`}>
+            <a>
+              {sanitizeHtml(content.data, {
+                allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+                allowedAttributes: {
+                  a: ['href'],
+                },
+              })?.substring(0, 250)}
+            </a>
+          </Link>
+        )}
       </div>
 
       <Actions commentsCount={0} echoCount={0} shareCount={0} />

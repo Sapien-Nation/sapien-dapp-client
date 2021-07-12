@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ContentDetail = ({ content, mutate }: Props) => {
-  return <ContentItem content={content} mutate={mutate} />;
+  return <ContentItem content={content} mutate={mutate} variant="detail" />;
 };
 
 export default ContentDetail;
