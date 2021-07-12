@@ -45,13 +45,23 @@ interface Props {
   setShowTabsMenu: (status: boolean) => void;
 }
 
+interface Badge {
+  price: number;
+  name: string;
+  description: string;
+}
+
+const form = 'buy-badge-form';
+
 const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
   const [step, setStep] = useState(Steps.Badges);
+  const [currentBadge, setCurrentBadge] = useState<Badge | null>();
   const {
     control,
+    formState: { errors },
+    handleSubmit,
     register,
     setValue,
-    formState: { errors },
     watch,
   } = useForm({
     defaultValues: {
@@ -60,6 +70,11 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
     },
   });
   const watchBadgesAmount = watch('badgesAmount');
+  const handleFormSubmit = async () => {
+    if (step === Steps.Badges) return setStep(Steps.Confirmation);
+    if (step === Steps.Confirmation) return setStep(Steps.Checkout);
+    if (step === Steps.Checkout) return setStep(Steps.Badges);
+  };
 
   const NumericInputCounter = () => {
     const handleIncrement = () => {
@@ -97,9 +112,28 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
               margin: '0 1rem',
             },
           }}
-          id="badges-number"
+          helperText={
+            <Box
+              component="span"
+              display="block"
+              marginTop={0.5}
+              textAlign="right"
+            >
+              <ErrorMessage errors={errors} name="badgesAmount" />
+            </Box>
+          }
+          id="badges-amount"
           inputProps={{
-            ...register('badgesAmount'),
+            ...register('badgesAmount', {
+              required: {
+                value: true,
+                message: 'Enter an amount',
+              },
+              maxLength: {
+                value: 1,
+                message: 'Max amount exceeded',
+              },
+            }),
           }}
           label=""
           style={{
@@ -185,6 +219,11 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
               onClick={() => {
                 setShowTabsMenu(false);
                 setStep(Steps.Confirmation);
+                setCurrentBadge({
+                  price: 250,
+                  name: 'Badge name',
+                  description: 'Description goes here...',
+                });
               }}
             >
               <Avatar
@@ -285,9 +324,9 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                     padding: 0,
                     marginLeft: 'auto',
                   }}
+                  type="submit"
                   onClick={() => {
                     setShowTabsMenu(true);
-                    setStep(Steps.Badges);
                   }}
                 >
                   <CloseIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -314,10 +353,6 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                 padding={1.8}
                 style={{
                   cursor: 'pointer',
-                }}
-                onClick={() => {
-                  setShowTabsMenu(false);
-                  setStep(Steps.Confirmation);
                 }}
               >
                 <Avatar
@@ -356,13 +391,13 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
               <Button
                 fullWidth
                 color="primary"
+                type="submit"
                 variant="contained"
-                onClick={() => setStep(Steps.Checkout)}
               >
                 <StoreIcon
                   style={{ fill: '#FFF', marginRight: 7, zoom: '80%' }}
                 />{' '}
-                500 SPN
+                {currentBadge.price * watchBadgesAmount} SPN
               </Button>
             </div>
           </Box>
@@ -568,7 +603,9 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
         height: showTabsMenu ? 'calc(100% - 63px)' : '100%',
       }}
     >
-      {renderStep()}
+      <form id={form} onSubmit={handleSubmit(handleFormSubmit)}>
+        {renderStep()}
+      </form>
     </div>
   );
 };
