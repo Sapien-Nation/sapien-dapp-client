@@ -60,7 +60,7 @@ const TribeNavigation = () => {
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath === `/client/${squareID}`}
+              selected={asPath?.includes(`/client/${squareID}`)}
               style={{
                 borderRadius: 10,
                 margin: '1rem .5rem',
