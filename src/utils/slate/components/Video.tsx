@@ -13,7 +13,14 @@ export const VideoElement = ({ attributes, children, element }) => {
 
   return (
     <>
-      {children}
+      <a
+        href={children}
+        rel="noreferrer"
+        style={{ margin: 0, color: primary[800] }}
+        target="_blank"
+      >
+        {children}
+      </a>
       <div {...attributes}>
         <div contentEditable={false}>
           <Box

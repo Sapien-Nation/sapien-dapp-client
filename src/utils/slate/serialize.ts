@@ -40,6 +40,20 @@ export const serialize = (node) => {
           </a>`;
     case 'paragraph':
       return `<p style="margin:0;">${children}</p>`;
+    case 'video':
+      return `<div>
+          <div>
+            <div
+              style="padding:75% 0 0 0;position:relative;"
+            >
+              <iframe
+                src="${escapeHtml(node.url)}"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              />
+            </div>
+          </div>
+          ${children}
+        </div>`;
     default:
       return children;
   }

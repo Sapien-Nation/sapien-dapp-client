@@ -68,9 +68,8 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
   };
 
   const removeImage = () => {
-    //TODO removeNodes method crashes the editor
-    // Transforms.removeNodes(editor, image);
-    // return editor;
+    //TODO remove image from API
+    // return editor
   };
 
   const handleUploadImage = async (event: any) => {
@@ -82,6 +81,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
             preview: URL.createObjectURL(file),
           });
           const url = newFile.preview;
+
           const image = {
             type: 'image',
             url,
