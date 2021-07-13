@@ -11,7 +11,7 @@ import { Box } from '@material-ui/core';
 import type { Content } from 'tools/types/content';
 
 interface Props {
-  content: Content;
+  reply: Content;
   mutate: () => void;
 }
 
@@ -19,7 +19,7 @@ enum Dialog {
   Delete,
 }
 
-const ContentItem = ({ content, mutate }: Props) => {
+const ReplyItem = ({ reply, mutate }: Props) => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
 
   return (
@@ -29,12 +29,12 @@ const ContentItem = ({ content, mutate }: Props) => {
       padding={3}
       style={{ gap: 22 }}
     >
-      <Header content={content} onDelete={() => setDialog(Dialog.Delete)} />
-      <div dangerouslySetInnerHTML={{ __html: content.data }} />
+      <Header reply={reply} onDelete={() => setDialog(Dialog.Delete)} />
+      <div dangerouslySetInnerHTML={{ __html: reply.data }} />
 
       {dialog === Dialog.Delete && (
         <DeleteReply
-          contentID={content.id}
+          replyID={reply.id}
           onCancel={() => setDialog(null)}
           onDelete={() => mutate()}
         />
@@ -43,4 +43,4 @@ const ContentItem = ({ content, mutate }: Props) => {
   );
 };
 
-export default ContentItem;
+export default ReplyItem;

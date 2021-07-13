@@ -1,9 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
-// api
-import { deleteContent as deleteContentAction } from 'api/content';
-
 // components
 import { Dialog } from 'components/common';
 
@@ -11,29 +8,18 @@ import { Dialog } from 'components/common';
 import { Box, Typography } from '@material-ui/core';
 
 interface Props {
-  contentID: string;
+  replyID: string;
   onCancel: () => void;
   onDelete: () => void;
 }
 
-const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
+const DeleteReply = ({ onCancel }: Props) => {
   const [isFetching, setIsFetching] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
     setIsFetching(true);
     try {
-      await deleteContentAction(contentID);
-
-      enqueueSnackbar('Post Deleted Successfully', {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'center',
-        },
-      });
-
-      onDelete();
       onCancel();
     } catch (error) {
       enqueueSnackbar(error.message, {
@@ -50,9 +36,9 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
   return (
     <Dialog
       open
-      confirmLabel="Delete Post"
+      confirmLabel="Delete Reply"
       isFetching={isFetching}
-      title="Deleting post"
+      title="Deleting Reply"
       variant="delete"
       onCancel={onCancel}
       onConfirm={handleDelete}
@@ -62,11 +48,12 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
           style={{ color: '#999999', lineHeight: '30px' }}
           variant="body2"
         >
-          You are about to permanently delete your post. Do you want to proceed?
+          You are about to permanently delete your reply. Do you want to
+          proceed?
         </Typography>
       </Box>
     </Dialog>
   );
 };
 
-export default DeleteContent;
+export default DeleteReply;

@@ -46,15 +46,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface Props {
-  content: Content;
+  reply: Content;
   onDelete: () => void;
 }
 
-const Header = ({ content, onDelete }: Props) => {
+const Header = ({ reply, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
-  const { canDelete, createdAt, group, tribe, owner } = content;
+  const { canDelete, createdAt, group, tribe, owner } = reply;
 
   return (
     <>
