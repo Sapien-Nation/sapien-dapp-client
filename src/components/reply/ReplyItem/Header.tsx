@@ -5,7 +5,6 @@ import { useState } from 'react';
 import {
   Avatar,
   Box,
-  Chip,
   IconButton,
   Menu,
   MenuItem,
@@ -13,11 +12,8 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import {
-  ArrowRight as ArrowIcon,
   Delete as DeleteIcon,
-  Groups as GroupIcon,
   MoreHoriz as MoreIcon,
-  Public as GlobeIcon,
 } from '@material-ui/icons';
 
 // styles
@@ -54,7 +50,7 @@ const Header = ({ reply, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
-  const { canDelete, createdAt, group, tribe, owner } = reply;
+  const { canDelete, createdAt, owner } = reply;
 
   return (
     <>
@@ -85,24 +81,6 @@ const Header = ({ reply, onDelete }: Props) => {
                   @{owner.userName}
                 </Typography>
               </Typography>
-            </a>
-          </Link>
-          <ArrowIcon color="action" />
-          <GlobeIcon color="action" style={{ fontSize: '1.4rem' }} />
-          <Typography component="span" variant="h4">
-            {group.name}
-          </Typography>
-          <Link href="/">
-            <a>
-              <Chip
-                classes={{
-                  root: classes.chipRoot,
-                }}
-                color="primary"
-                icon={<GroupIcon color="primary" />}
-                label={tribe.name}
-                size="small"
-              />
             </a>
           </Link>
         </Box>
