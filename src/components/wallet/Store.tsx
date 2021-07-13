@@ -112,16 +112,6 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
               margin: '0 1rem',
             },
           }}
-          helperText={
-            <Box
-              component="span"
-              display="block"
-              marginTop={0.5}
-              textAlign="right"
-            >
-              <ErrorMessage errors={errors} name="badgesAmount" />
-            </Box>
-          }
           id="badges-amount"
           inputProps={{
             ...register('badgesAmount', {
@@ -159,7 +149,9 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
       <Box marginTop={3}>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
           <Typography variant="body2">Badges cost</Typography>
-          <Typography variant="body2">500 SPN</Typography>
+          <Typography variant="body2">
+            {currentBadge.price * watchBadgesAmount} SPN
+          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
           <Typography variant="body2">Transaction fee</Typography>
@@ -170,7 +162,7 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
             Total
           </Typography>
           <Typography style={{ color: primary[800] }} variant="body2">
-            525 SPN
+            {currentBadge.price * watchBadgesAmount + 5} SPN
           </Typography>
         </Box>
       </Box>
@@ -327,6 +319,7 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                   type="submit"
                   onClick={() => {
                     setShowTabsMenu(true);
+                    setStep(Steps.Badges);
                   }}
                 >
                   <CloseIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -495,7 +488,9 @@ const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
                     border: `2px solid ${primary[800]}`,
                   }}
                 />
-                <Typography variant="subtitle1">Badge Name (x2)</Typography>
+                <Typography variant="subtitle1">
+                  Badge Name (x{watchBadgesAmount})
+                </Typography>
                 <Typography
                   style={{ textAlign: 'center', color: neutral[500] }}
                   variant="h6"
