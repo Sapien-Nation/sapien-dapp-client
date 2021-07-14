@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 // components
-import Actions from './Actions';
 import Header from './Header';
+import Actions from './Actions';
+import ReplyForm from './ReplyForm';
 import { DeleteReply } from '../Modals';
-import { CreateContentForm } from 'components/content';
 import { PostComposerSkeleton } from 'components/common';
 
 // mui
@@ -40,20 +40,9 @@ const ReplyItem = ({ reply, mutate }: Props) => {
     >
       <Header reply={reply} onDelete={() => setDialog(Dialog.Delete)} />
       <div dangerouslySetInnerHTML={{ __html: reply.data }} />
-      <Actions
-        commentsCount={0}
-        echoCount={0}
-        shareCount={0}
-        toggleReply={() => setShowReplyForm(!showReplyForm)}
-      />
+      <Actions toggleReply={() => setShowReplyForm(!showReplyForm)} />
       <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-      <Box>
-        {me ? (
-          <CreateContentForm user={me} onSubmit={() => {}} />
-        ) : (
-          <PostComposerSkeleton />
-        )}
-      </Box>
+      <Box>{me ? <ReplyForm /> : <PostComposerSkeleton />}</Box>
       {dialog === Dialog.Delete && (
         <DeleteReply
           replyID={reply.id}

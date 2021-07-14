@@ -29,14 +29,14 @@ import type { Content } from 'tools/types/content';
 interface Props {
   content: Content;
   mutate: () => void;
-  variant: 'detail' | 'feed';
+  variant?: 'detail' | 'feed';
 }
 
 enum Dialog {
   Delete,
 }
 
-const ContentItem = ({ content, mutate, variant }: Props) => {
+const ContentItem = ({ content, mutate, variant = 'feed' }: Props) => {
   const [dialog, setDialog] = useState<null | Dialog>(null);
 
   const { me } = useAuth();
@@ -82,7 +82,7 @@ const ContentItem = ({ content, mutate, variant }: Props) => {
         )}
       </div>
 
-      <Actions commentsCount={0} echoCount={0} shareCount={0} />
+      <Actions />
       <Box borderColor="grey.100" borderTop={1} marginX={-3} />
       <Box>
         {me ? (

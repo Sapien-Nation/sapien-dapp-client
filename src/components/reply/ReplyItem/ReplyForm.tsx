@@ -1,5 +1,5 @@
 const ReplyForm = () => {
-  return 'TODO';
+  return <span>TODO</span>;
 };
 
 export default ReplyForm;

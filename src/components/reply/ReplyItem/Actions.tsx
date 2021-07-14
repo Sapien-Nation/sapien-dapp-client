@@ -8,18 +8,10 @@ import {
 } from '@material-ui/icons';
 
 interface Props {
-  commentsCount: number;
-  echoCount: number;
-  shareCount: number;
   toggleReply: () => void;
 }
 
-const Actions = ({
-  commentsCount,
-  echoCount,
-  shareCount,
-  toggleReply,
-}: Props) => {
+const Actions = ({ toggleReply }: Props) => {
   return (
     <Box display="flex" justifyContent="space-between">
       <Box display="flex">
@@ -29,7 +21,7 @@ const Actions = ({
           startIcon={<CommentsIcon color="action" fontSize="small" />}
         >
           <Typography color="textSecondary" variant="caption">
-            {commentsCount}
+            0
           </Typography>
         </Button>
         <Button
@@ -38,7 +30,7 @@ const Actions = ({
           startIcon={<EchoIcon color="action" fontSize="small" />}
         >
           <Typography color="textSecondary" variant="caption">
-            {echoCount}
+            0
           </Typography>
         </Button>
         <Button
@@ -47,7 +39,7 @@ const Actions = ({
           startIcon={<ShareIcon color="action" fontSize="small" />}
         >
           <Typography color="textSecondary" variant="caption">
-            {shareCount}
+            0
           </Typography>
         </Button>
       </Box>

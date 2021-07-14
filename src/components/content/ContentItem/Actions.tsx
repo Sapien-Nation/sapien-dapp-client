@@ -6,13 +6,7 @@ import {
   Campaign as EchoIcon,
 } from '@material-ui/icons';
 
-interface Props {
-  commentsCount: number;
-  echoCount: number;
-  shareCount: number;
-}
-
-const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
+const Actions = () => {
   return (
     <Box display="flex">
       <Button
@@ -21,7 +15,7 @@ const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
         startIcon={<CommentsIcon color="action" fontSize="small" />}
       >
         <Typography color="textSecondary" variant="caption">
-          {commentsCount}
+          0
         </Typography>
       </Button>
       <Button
@@ -30,7 +24,7 @@ const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
         startIcon={<EchoIcon color="action" fontSize="small" />}
       >
         <Typography color="textSecondary" variant="caption">
-          {echoCount}
+          0
         </Typography>
       </Button>
       <Button
@@ -39,7 +33,7 @@ const Actions = ({ commentsCount, echoCount, shareCount }: Props) => {
         startIcon={<ShareIcon color="action" fontSize="small" />}
       >
         <Typography color="textSecondary" variant="caption">
-          {shareCount}
+          0
         </Typography>
       </Button>
     </Box>
