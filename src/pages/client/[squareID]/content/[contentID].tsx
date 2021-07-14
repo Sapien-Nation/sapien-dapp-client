@@ -15,7 +15,7 @@ import {
   Query,
 } from 'components/common';
 import {
-  ContentDetail,
+  ContentItem,
   EmptyFeed,
   NewContentPlaceholder,
 } from 'components/content';
@@ -83,7 +83,11 @@ const Content = ({ contentID }: Props) => {
           }}
         >
           {(content: ContentType) => (
-            <ContentDetail content={content} mutate={() => {}} />
+            <ContentItem
+              content={content}
+              mutate={() => mutate()}
+              variant="detail"
+            />
           )}
         </Query>
         <InfiniteScrollComponent
@@ -96,7 +100,7 @@ const Content = ({ contentID }: Props) => {
           {(isEmpty || isReachingEnd) && <EmptyFeed />}
           <Box display="grid" style={{ gap: '16px' }}>
             <NewContentPlaceholder open={isCreating} />
-            {replies.map((reply) => (
+            {content.map((reply) => (
               <ReplyItem key={reply.id} mutate={mutate} reply={reply} />
             ))}
           </Box>

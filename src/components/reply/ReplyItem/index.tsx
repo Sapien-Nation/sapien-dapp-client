@@ -5,7 +5,6 @@ import Header from './Header';
 import Actions from './Actions';
 import ReplyForm from './ReplyForm';
 import { DeleteReply } from '../Modals';
-import { PostComposerSkeleton } from 'components/common';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -41,8 +40,14 @@ const ReplyItem = ({ reply, mutate }: Props) => {
       <Header reply={reply} onDelete={() => setDialog(Dialog.Delete)} />
       <div dangerouslySetInnerHTML={{ __html: reply.data }} />
       <Actions toggleReply={() => setShowReplyForm(!showReplyForm)} />
-      <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-      <Box>{me ? <ReplyForm /> : <PostComposerSkeleton />}</Box>
+      {me && showReplyForm ? (
+        <>
+          <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+          <div>
+            <ReplyForm />
+          </div>
+        </>
+      ) : null}
       {dialog === Dialog.Delete && (
         <DeleteReply
           replyID={reply.id}
