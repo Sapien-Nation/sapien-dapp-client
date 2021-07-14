@@ -36,6 +36,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
     try {
       await onSubmit(content);
 
+      //TODO - clear editor from parent
       // @ts-ignore
       // setData(initialEditorValue);
     } catch (err) {
