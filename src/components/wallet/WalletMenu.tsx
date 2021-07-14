@@ -16,7 +16,7 @@ import {
 } from 'components/wallet';
 
 // emums
-import View from './ViewEnum';
+import { View } from './WalletEnums';
 
 const WalletMenu = ({ wallet }: { wallet: WalletType }) => {
   const [view, setView] = useState(View.Tabs);

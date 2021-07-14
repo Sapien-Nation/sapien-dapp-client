@@ -2,10 +2,10 @@
 import { Transaction as TransactionIcon } from 'assets';
 
 // types
-import type { Transaction } from 'tools/types/balance/transactions';
+import type { Transaction } from 'tools/types/wallet/transactions';
 
 // mocks
-import { mockTransaction } from 'tools/mocks/balance/transactions';
+import { mockTransaction } from 'tools/mocks/wallet/transactions';
 
 // components
 import { Query } from 'components/common';

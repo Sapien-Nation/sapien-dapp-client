@@ -27,7 +27,7 @@ import {
 import { neutral } from 'styles/colors';
 
 // emums
-import View from './ViewEnum';
+import { View } from './WalletEnums';
 
 interface Props {
   wallet: WalletType;

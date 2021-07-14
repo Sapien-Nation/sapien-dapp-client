@@ -10,7 +10,7 @@ import { neutral } from 'styles/colors';
 import { MetamaskLogo, DepositSuccess } from 'assets';
 
 // emums
-import View from './ViewEnum';
+import { View } from './WalletEnums';
 
 enum Step {
   DepositMetamask = 1,
