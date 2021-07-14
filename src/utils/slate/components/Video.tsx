@@ -24,11 +24,10 @@ export const VideoElement = ({ attributes, children, element }) => {
       <div {...attributes}>
         <div contentEditable={false}>
           <Box
-            borderRadius={16}
+            className="card--rounded-white"
             display={hidden ? 'none' : 'flex'}
             marginY={1}
             position="relative"
-            style={{ backgroundColor: '#fff' }}
           >
             <IconButton
               style={{
