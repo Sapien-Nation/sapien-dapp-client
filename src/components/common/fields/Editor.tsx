@@ -4,6 +4,9 @@ import { withHistory } from 'slate-history';
 import { createEditor, Descendant } from 'slate';
 import React, { useRef, useState, useEffect } from 'react';
 
+//constants
+import { initialEditorValue } from 'constants/initialEditorValue';
+
 // mui
 import { Box, IconButton } from '@material-ui/core';
 import { ImageOutlined, Send } from '@material-ui/icons';
@@ -29,13 +32,6 @@ interface Props {
   isSubmitting: boolean;
   onChange: (editor: any) => void;
 }
-
-const initialEditorValue = [
-  {
-    type: 'paragraph',
-    children: [{ text: '' }],
-  },
-];
 
 const Editor = ({
   editorProps = {},

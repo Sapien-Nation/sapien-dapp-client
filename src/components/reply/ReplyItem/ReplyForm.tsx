@@ -10,7 +10,7 @@ import { Box } from '@material-ui/core';
 
 const ReplyForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [clearText, setClearText] = useState(false);
   const { control, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       content: '',
@@ -27,16 +27,15 @@ const ReplyForm = () => {
     setIsSubmitting(true);
     try {
       //TODO - submit method
-      // await onSubmit(content);
       console.log('Content', content);
 
-      //TODO - clear editor from parent
       // @ts-ignore
-      // setData(initialEditorValue);
+      setClearText(true);
     } catch (err) {
       enqueueSnackbar(err.message);
     }
     setIsSubmitting(false);
+    setClearText(false);
   };
 
   return (
@@ -49,6 +48,7 @@ const ReplyForm = () => {
             return (
               <>
                 <Editor
+                  clearText={Boolean(clearText)}
                   editorProps={{
                     placeholder: 'Write a comment...',
                   }}
