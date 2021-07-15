@@ -28,7 +28,7 @@ import { WithdrawSuccess, Spn as SpnIcon } from 'assets';
 import { formatSpn, formatSpnToUsd } from 'utils/spn';
 
 // emums
-import View from './WalletEnums';
+import { View } from './WalletEnums';
 
 enum Step {
   Withdraw = 1,
