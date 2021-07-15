@@ -1,7 +1,7 @@
 import { Editable, Slate, withReact } from 'slate-react';
 import { useSnackbar } from 'notistack';
 import { withHistory } from 'slate-history';
-import { createEditor, Descendant, Transforms } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import React, { useRef, useState, useEffect } from 'react';
 
 // mui
@@ -21,6 +21,7 @@ import {
   withLinks,
   withShortcuts,
 } from 'utils/slate';
+import { handleUploadImage } from 'utils/slate/plugins';
 
 interface Props {
   clearText?: boolean;
@@ -80,46 +81,6 @@ const Editor = ({
     // return editor
   };
 
-  const handleUploadImage = async (event: any) => {
-    try {
-      setTimeout(() => {
-        if (event.target.files && event.target.files.length > 0) {
-          const file = event.target.files[0];
-          const newFile = Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          });
-          const url = newFile.preview;
-
-          const image = {
-            type: 'image',
-            url,
-            children: [{ text: '' }],
-            removeMethod: removeImage,
-          };
-          Transforms.insertNodes(editor, image);
-
-          enqueueSnackbar('Image added successfully', {
-            variant: 'success',
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'center',
-            },
-          });
-
-          return editor;
-        }
-      }, 2000);
-    } catch (error) {
-      enqueueSnackbar(error, {
-        variant: 'error',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'center',
-        },
-      });
-    }
-  };
-
   const onChangeEditor = (data: any) => {
     setData(data);
     onChange(data);
@@ -167,7 +128,9 @@ const Editor = ({
           accept="image/*"
           id="upload-image"
           type="file"
-          onChange={handleUploadImage}
+          onChange={(event) =>
+            handleUploadImage(event, editor, removeImage, enqueueSnackbar)
+          }
         />
         <IconButton
           disabled={isSubmitting || !hasContent()}
