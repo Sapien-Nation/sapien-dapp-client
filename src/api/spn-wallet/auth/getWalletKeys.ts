@@ -9,7 +9,7 @@ const getWalletKeys = async (
   try {
     const torus = await initTorus(
       `${window.location.origin}/api/serviceworker`,
-      true
+      false
     );
 
     return torus.getAggregateTorusKey(verifier, userId, [

@@ -51,7 +51,11 @@ const LoginForm = () => {
         redirect: '/',
       });
 
-      setSession({ torus: response.torus, token: response.token });
+      setSession({
+        torus: response.torus,
+        token: response.token,
+        refresh: response.refresh,
+      });
     } catch (error) {
       enqueueSnackbar(error, {
         variant: 'error',
