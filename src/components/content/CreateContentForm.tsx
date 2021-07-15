@@ -18,7 +18,7 @@ interface Props {
 
 const CreateContentForm = ({ user, onSubmit }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [clearText, setClearText] = useState(false);
   const { control, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       content: '',
@@ -36,13 +36,13 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
     try {
       await onSubmit(content);
 
-      //TODO - clear editor from parent
       // @ts-ignore
-      // setData(initialEditorValue);
+      setClearText(true);
     } catch (err) {
       enqueueSnackbar(err.message);
     }
     setIsSubmitting(false);
+    setClearText(false);
   };
 
   return (
@@ -56,6 +56,7 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
             return (
               <>
                 <Editor
+                  clearText={Boolean(clearText)}
                   editorProps={{
                     placeholder: `What’s on your mind, ${user.username}?`,
                   }}

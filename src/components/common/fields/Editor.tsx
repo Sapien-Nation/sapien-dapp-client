@@ -2,27 +2,28 @@ import { Editable, Slate, withReact } from 'slate-react';
 import { useSnackbar } from 'notistack';
 import { withHistory } from 'slate-history';
 import { createEditor, Descendant, Transforms } from 'slate';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 // mui
 import { Box, IconButton } from '@material-ui/core';
 import { ImageOutlined, Send } from '@material-ui/icons';
-
-// utils
-import { Element, Leaf } from 'utils/slate';
 
 // styles
 import { neutral, primary } from 'styles/colors';
 
 // utils
 import {
+  clearEditor,
   composeSlateHighOrderFns,
+  Element,
+  Leaf,
   withImages,
   withLinks,
   withShortcuts,
 } from 'utils/slate';
 
 interface Props {
+  clearText?: boolean;
   editorProps: any;
   isSubmitting: boolean;
   onChange: (editor: any) => void;
@@ -35,7 +36,12 @@ const initialEditorValue = [
   },
 ];
 
-const Editor = ({ editorProps = {}, isSubmitting, onChange }: Props) => {
+const Editor = ({
+  editorProps = {},
+  isSubmitting,
+  onChange,
+  clearText,
+}: Props) => {
   const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
@@ -46,6 +52,13 @@ const Editor = ({ editorProps = {}, isSubmitting, onChange }: Props) => {
       withReact
     )(createEditor())
   );
+
+  useEffect(() => {
+    if (clearText) {
+      setData(initialEditorValue);
+      clearEditor(editor);
+    }
+  }, [clearText]);
 
   const imageRef = useRef(null);
   const { enqueueSnackbar } = useSnackbar();
@@ -157,7 +170,7 @@ const Editor = ({ editorProps = {}, isSubmitting, onChange }: Props) => {
           onChange={handleUploadImage}
         />
         <IconButton
-          disabled={isSubmitting}
+          disabled={isSubmitting || !hasContent()}
           style={{
             backgroundColor: hasContent() ? primary[800] : '',
             borderRadius: 10,
