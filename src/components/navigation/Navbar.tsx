@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 // api
 import { connectWallet } from 'api/spn-wallet';
-import { logout } from 'api/authentication';
+import { logout, refresh } from 'api/authentication';
 
 // context
 import { useAuth } from 'context/user';
@@ -58,6 +58,7 @@ const Navbar = () => {
   const [tokens] = useLocalStorage<{
     token: string;
     torus: string;
+    refresh: string;
   }>('tokens');
   const { clearSession, me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
@@ -68,15 +69,35 @@ const Navbar = () => {
       if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
         try {
           const walletConnected = await connectWallet(tokens.torus, me.id);
-          setWallet(walletConnected);
-        } catch (error) {
-          enqueueSnackbar(error, {
-            variant: 'error',
+          enqueueSnackbar('Wallet connected', {
+            variant: 'success',
             anchorOrigin: {
               vertical: 'bottom',
               horizontal: 'right',
             },
           });
+          setWallet(walletConnected);
+        } catch (error) {
+          try {
+            const { token } = await refresh(tokens.refresh, 'torus');
+            const walletConnected = await connectWallet(token, me.id);
+            enqueueSnackbar('Wallet connected', {
+              variant: 'success',
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right',
+              },
+            });
+            setWallet(walletConnected);
+          } catch (err) {
+            enqueueSnackbar(err, {
+              variant: 'error',
+              anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'right',
+              },
+            });
+          }
         }
     };
     walletWeb3();

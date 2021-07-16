@@ -12,7 +12,11 @@ export interface Authentication {
   me: User | null;
   clearSession: () => void;
   isLoggingIn: boolean;
-  setSession: (tokens: { token: string; torus: string }) => void;
+  setSession: (tokens: {
+    token: string;
+    torus: string;
+    refresh: string;
+  }) => void;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);
@@ -36,6 +40,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const [, setTokens, removeTokens] = useLocalStorage<null | {
     token: string;
     torus: string;
+    refresh: string;
   }>('tokens', null);
 
   const isLoggingIn = data === undefined;
@@ -47,8 +52,16 @@ const AuthenticationProvider = ({ children }: Props) => {
     push('/login');
   };
 
-  const setSession = ({ token, torus }: { token: string; torus: string }) => {
-    setTokens({ token, torus });
+  const setSession = ({
+    token,
+    torus,
+    refresh,
+  }: {
+    token: string;
+    torus: string;
+    refresh: string;
+  }) => {
+    setTokens({ token, torus, refresh });
     mutate('/api/v3/user/me');
     push('/');
   };

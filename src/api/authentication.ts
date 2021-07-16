@@ -27,6 +27,21 @@ export const forgot = async (email: string) => {
   }
 };
 
+export const refresh = async (
+  refresh: string,
+  type: string
+): Promise<{ token: string }> => {
+  try {
+    const { data } = await authInstance.post('/api/v3/auth/refresh', {
+      refresh,
+      type,
+    });
+    return data;
+  } catch ({ response }) {
+    return Promise.reject(response.data.message);
+  }
+};
+
 export const logout = async (body: { email: string }) => {
   try {
     await authInstance.post('/api/v3/auth/logout', body);
@@ -40,10 +55,10 @@ export const login = async (body: {
   password: string;
   redirect: string;
   client: string;
-}): Promise<{ token: string; torus: string }> => {
+}): Promise<{ token: string; torus: string; refresh: string }> => {
   try {
     const { data } = await authInstance.post('/api/v3/auth/login', body);
-    return { torus: data.torus, token: data.token };
+    return { torus: data.torus, token: data.token, refresh: data.refresh };
   } catch ({ response }) {
     return Promise.reject(response.data.message);
   }
@@ -54,10 +69,10 @@ export const register = async (body: {
   password: string;
   redirect: string;
   client: string;
-}): Promise<{ token: string; torus: string }> => {
+}): Promise<{ token: string; torus: string; refresh: string }> => {
   try {
     const { data } = await authInstance.post('/api/v3/auth/signup', body);
-    return { torus: data.torus, token: data.token };
+    return { torus: data.torus, token: data.token, refresh: data.refresh };
   } catch ({ response }) {
     return Promise.reject(response.data.message);
   }

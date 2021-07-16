@@ -1,13 +1,26 @@
 // mui
-import { Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 
-export const MazSizeHelper = ({ size }: { size: string }) => (
-  <Typography variant="caption">
+export const MaxSizeHelper = ({
+  size,
+  open,
+}: {
+  size: number;
+  open: () => void;
+}) => (
+  <Typography color="textSecondary" variant="button">
     Drag and Drop or{' '}
-    <Typography color="primary" variant="caption">
+    {/* <Typography color="primary" variant="button">
       Browse{' '}
-    </Typography>
-    to upload image (max {size})
+    </Typography> */}
+    <Button
+      color="primary"
+      style={{ verticalAlign: 'baseline' }}
+      onClick={open}
+    >
+      Browse
+    </Button>
+    to upload image (max {size / (1024 * 1024)}MB)
   </Typography>
 );
 

@@ -27,7 +27,7 @@ const Header = ({ tribeID }: Props) => (
               borderRadius: '1.6rem',
             }}
           />
-          <Box paddingBottom={3.5} paddingX={3.2}>
+          <Box paddingBottom={3.5} paddingX={3.2} whiteSpace="pre-wrap">
             <Box
               alignItems="flex-end"
               display="flex"

@@ -12,7 +12,7 @@ import { createTribe, uploadImage } from 'api/tribeBar';
 import { Dialog, DropZone, ChartCount } from 'components/common';
 
 // utils
-import { FilePreview, MazSizeHelper } from 'utils/dropzone';
+import { FilePreview } from 'utils/dropzone';
 import {
   TribeDescriptionRegex,
   TribeIdentifierRegex,
@@ -250,7 +250,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 ...register('identifier', {
                   pattern: {
                     value: TribeIdentifierRegex,
-                    message: 'Invalid tribe name',
+                    message: 'Invalid identifier',
                   },
                   required: {
                     value: true,
@@ -320,8 +320,8 @@ const CreateTribeModal = ({ onClose }: Props) => {
         return (
           <>
             <FormControl fullWidth>
-              <InputLabel htmlFor="avatar">Avatar</InputLabel>
-              <Box height="6.4rem" marginY={1.6} width="6.4rem">
+              <InputLabel>Avatar</InputLabel>
+              <Box marginY={1.6}>
                 <Controller
                   control={control}
                   name="avatar"
@@ -329,9 +329,11 @@ const CreateTribeModal = ({ onClose }: Props) => {
                     <DropZone
                       accept="image/*"
                       disabledDropzone={Boolean(isUploading)}
+                      height="6.4rem"
                       id="avatar"
                       maxFiles={1}
                       maxSize={20971520}
+                      width="6.4rem"
                       onChange={(file: Array<File>) =>
                         handleUploadImage('avatar', file[0], field.onChange)
                       }
@@ -350,11 +352,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   )}
                 />
               </Box>
-              <MazSizeHelper size="20MB" />
             </FormControl>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="cover">Cover image</InputLabel>
-              <Box height="10rem" marginY={1.6} width="100%">
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Cover image</InputLabel>
+              <Box marginY={1.6}>
                 <Controller
                   control={control}
                   name="cover"
@@ -362,9 +363,11 @@ const CreateTribeModal = ({ onClose }: Props) => {
                     <DropZone
                       accept="image/*"
                       disabledDropzone={Boolean(isUploading)}
+                      height="10rem"
                       id="cover"
                       maxFiles={1}
                       maxSize={41943040}
+                      width="100%"
                       onChange={(file: Array<File>) =>
                         handleUploadImage('cover', file[0], field.onChange)
                       }
@@ -383,7 +386,6 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   )}
                 />
               </Box>
-              <MazSizeHelper size="40MB" />
             </FormControl>
           </>
         );

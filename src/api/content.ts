@@ -18,3 +18,9 @@ export const createReply = (postID: string, data: { data: string }) =>
     .post(`/api/v3/post/${postID}/reply`, data)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const uploadContentImage = (data: FormData) =>
+  axios
+    .post('api/v3/content/image', data)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
