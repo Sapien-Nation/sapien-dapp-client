@@ -175,7 +175,7 @@ const Withdraw = ({ setView }: { setView: (view: View) => void }) => {
                     },
                   }),
                   autoComplete: 'destinationAddress',
-                  maxLength: 20,
+                  maxLength: 42,
                 }}
                 label={
                   <Box display="flex" justifyContent="space-between">
@@ -318,7 +318,8 @@ const Withdraw = ({ setView }: { setView: (view: View) => void }) => {
                 style={{ marginTop: 40, marginBottom: 15, lineHeight: 1.6 }}
                 variant="body2"
               >
-                You have successfully withdrawn 2,500 SPN from your balance
+                You have successfully withdrawn {watchWithdraw} SPN from your
+                balance
               </Typography>
               <Typography style={{ color: neutral[500] }} variant="h6">
                 The funds will appear on your external wallet account shortly.
