@@ -22,10 +22,13 @@ interface Props {
 }
 
 const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [clearText, setClearText] = useState(false);
 
-  const { control, handleSubmit, setValue } = useForm({
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       content: '',
     },
@@ -33,16 +36,11 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
   const { asPath, push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const setFormValue = (data: any) => setValue('content', data);
-
   const onSubmitForm = async ({ content }) => {
-    setIsSubmitting(true);
     try {
       await createReply(contentID, {
         data: content.map((node: any) => serialize(node)).join(''),
       });
-
-      enqueueSnackbar('Replied');
 
       if (redirect) {
         push(`${asPath}/content/${contentID}`);
@@ -54,7 +52,6 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
     } catch (err) {
       enqueueSnackbar(err.message);
     }
-    setIsSubmitting(false);
     setClearText(false);
   };
 
@@ -64,21 +61,16 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
         <Controller
           control={control}
           name="content"
-          render={({ field }) => {
-            return (
-              <>
-                <Editor
-                  clearText={Boolean(clearText)}
-                  editorProps={{
-                    placeholder: 'Write a comment...',
-                  }}
-                  isSubmitting={isSubmitting}
-                  onChange={setFormValue}
-                  {...field}
-                />
-              </>
-            );
-          }}
+          render={({ field }) => (
+            <Editor
+              clearText={Boolean(clearText)}
+              editorProps={{
+                placeholder: 'Write a comment...',
+              }}
+              isSubmitting={isSubmitting}
+              {...field}
+            />
+          )}
         />
       </Box>
     </form>

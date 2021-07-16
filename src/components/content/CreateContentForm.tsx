@@ -17,31 +17,27 @@ interface Props {
 }
 
 const CreateContentForm = ({ user, onSubmit }: Props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [clearText, setClearText] = useState(false);
-  const { control, handleSubmit, setValue, watch } = useForm({
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       content: '',
     },
   });
-
-  // @ts-ignore
   const { enqueueSnackbar } = useSnackbar();
-  const [content] = watch(['content']);
 
-  const setFormValue = (data: any) => setValue('content', data);
-
-  const onSubmitForm = async () => {
-    setIsSubmitting(true);
+  const onSubmitForm = async ({ content }) => {
     try {
       await onSubmit(content);
 
-      // @ts-ignore
       setClearText(true);
     } catch (err) {
       enqueueSnackbar(err.message);
     }
-    setIsSubmitting(false);
+
     setClearText(false);
   };
 
@@ -52,21 +48,16 @@ const CreateContentForm = ({ user, onSubmit }: Props) => {
         <Controller
           control={control}
           name="content"
-          render={({ field }) => {
-            return (
-              <>
-                <Editor
-                  clearText={Boolean(clearText)}
-                  editorProps={{
-                    placeholder: `What’s on your mind, ${user.username}?`,
-                  }}
-                  isSubmitting={isSubmitting}
-                  onChange={setFormValue}
-                  {...field}
-                />
-              </>
-            );
-          }}
+          render={({ field }) => (
+            <Editor
+              clearText={Boolean(clearText)}
+              editorProps={{
+                placeholder: `What’s on your mind, ${user.username}?`,
+              }}
+              isSubmitting={isSubmitting}
+              {...field}
+            />
+          )}
         />
       </Box>
     </form>
