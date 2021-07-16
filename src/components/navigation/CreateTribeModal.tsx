@@ -12,7 +12,7 @@ import { createTribe, uploadImage } from 'api/tribeBar';
 import { Dialog, DropZone, ChartCount } from 'components/common';
 
 // utils
-import { FilePreview, MazSizeHelper } from 'utils/dropzone';
+import { FilePreview, MaxSizeHelper } from 'utils/dropzone';
 import {
   TribeDescriptionRegex,
   TribeIdentifierRegex,
@@ -250,7 +250,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                 ...register('identifier', {
                   pattern: {
                     value: TribeIdentifierRegex,
-                    message: 'Invalid tribe name',
+                    message: 'Invalid identifier',
                   },
                   required: {
                     value: true,
@@ -320,7 +320,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
         return (
           <>
             <FormControl fullWidth>
-              <InputLabel htmlFor="avatar">Avatar</InputLabel>
+              <InputLabel>Avatar</InputLabel>
               <Box height="6.4rem" marginY={1.6} width="6.4rem">
                 <Controller
                   control={control}
@@ -350,10 +350,10 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   )}
                 />
               </Box>
-              <MazSizeHelper size="20MB" />
+              <MaxSizeHelper size="20MB" />
             </FormControl>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="cover">Cover image</InputLabel>
+            <FormControl fullWidth margin="normal">
+              <InputLabel>Cover image</InputLabel>
               <Box height="10rem" marginY={1.6} width="100%">
                 <Controller
                   control={control}
@@ -383,7 +383,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   )}
                 />
               </Box>
-              <MazSizeHelper size="40MB" />
+              <MaxSizeHelper size="40MB" />
             </FormControl>
           </>
         );
