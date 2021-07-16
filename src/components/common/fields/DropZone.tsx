@@ -11,10 +11,15 @@ import { Box } from '@material-ui/core';
 // styles
 import { neutral } from 'styles/colors';
 
+//utils
+import { MaxSizeHelper } from 'utils/dropzone';
+
 interface Props extends Omit<DropzoneProps, 'children'> {
   children: React.ReactElement | Array<React.ReactElement>;
   className?: string;
   disabledDropzone?: boolean;
+  height: string;
+  width: string;
   id: string;
   onChange: (droppedFiles: Array<File>) => void;
 }
@@ -24,6 +29,9 @@ const Dropzone = ({
   className,
   disabledDropzone = false,
   id,
+  height,
+  width,
+  maxSize,
   onChange,
   ...rest
 }: Props) => {
@@ -36,7 +44,7 @@ const Dropzone = ({
     [onChange]
   );
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     disabled: disabledDropzone,
     onDrop,
     onDropRejected: (files = []) => {
@@ -52,33 +60,38 @@ const Dropzone = ({
         });
       });
     },
+    maxSize,
     ...rest,
   });
 
   return (
-    <Box
-      alignItems="center"
-      borderRadius={4}
-      className={className}
-      display="flex"
-      height="100%"
-      justifyContent="center"
-      overflow="hidden"
-      position="relative"
-      style={{
-        backgroundColor: neutral[50],
-        border: `1px dashed ${neutral[400]}`,
-      }}
-      width="100%"
-      {...getRootProps()}
-    >
-      {children}
-      <input
-        {...getInputProps()}
-        data-testid="dropzone-file-uploader"
-        id={id}
-      />
-    </Box>
+    <>
+      <Box
+        alignItems="center"
+        borderRadius={4}
+        className={className}
+        display="flex"
+        height={height}
+        justifyContent="center"
+        overflow="hidden"
+        position="relative"
+        style={{
+          backgroundColor: neutral[50],
+          border: `1px dashed ${neutral[400]}`,
+        }}
+        width={width}
+        {...getRootProps()}
+      >
+        {children}
+        <input
+          {...getInputProps()}
+          data-testid="dropzone-file-uploader"
+          id={id}
+        />
+      </Box>
+
+      <MaxSizeHelper open={open} size={maxSize} />
+    </>
   );
 };
 
