@@ -57,7 +57,7 @@ const LoginForm = () => {
         refresh: response.refresh,
       });
     } catch (error) {
-      enqueueSnackbar(error, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
@@ -87,11 +87,11 @@ const LoginForm = () => {
           ...register('email', {
             pattern: {
               value: EmailRegex,
-              message: 'Invalid email',
+              message: '',
             },
             required: {
               value: true,
-              message: 'Enter an email address',
+              message: '',
             },
           }),
           autoComplete: 'email',
@@ -130,7 +130,7 @@ const LoginForm = () => {
           ...register('password', {
             required: {
               value: true,
-              message: 'Enter a password',
+              message: '',
             },
           }),
           autoComplete: 'new-password',
