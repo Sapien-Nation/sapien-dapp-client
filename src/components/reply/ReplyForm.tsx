@@ -15,10 +15,13 @@ import { serialize } from 'utils/slate';
 // mui
 import { Box } from '@material-ui/core';
 
+// types
+import type { Content as ContentType } from 'tools/types/content';
+
 interface Props {
   contentID: string;
   redirect?: boolean;
-  onSubmit?: () => void;
+  onSubmit?: (reply: ContentType) => void;
 }
 
 const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
@@ -38,14 +41,14 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
 
   const onSubmitForm = async ({ content }) => {
     try {
-      await createReply(contentID, {
+      const reply = await createReply(contentID, {
         data: content.map((node: any) => serialize(node)).join(''),
       });
 
       if (redirect) {
         push(`${asPath}/content/${contentID}`);
       } else {
-        onSubmit();
+        onSubmit(reply);
       }
 
       setClearText(true);

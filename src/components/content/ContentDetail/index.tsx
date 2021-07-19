@@ -1,3 +1,4 @@
+import { mutate } from 'swr';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -14,11 +15,11 @@ import type { Content as ContentType } from 'tools/types/content';
 import { Box } from '@material-ui/core';
 
 interface Props {
+  apiUrl: string;
   contentID: string;
-  mutateReply: () => void;
 }
 
-const ContentDetail = ({ contentID, mutateReply }: Props) => {
+const ContentDetail = ({ apiUrl, contentID }: Props) => {
   const [dialog, setDialog] = useState(false);
 
   const { push } = useRouter();
@@ -43,7 +44,16 @@ const ContentDetail = ({ contentID, mutateReply }: Props) => {
         )}
       </Query>
       <Box>
-        <ReplyForm contentID={contentID} onSubmit={() => mutateReply()} />
+        <ReplyForm
+          contentID={contentID}
+          onSubmit={(reply: ContentType) => {
+            mutate(
+              apiUrl,
+              (replies: Array<ContentType>) => [reply, ...replies],
+              false
+            );
+          }}
+        />
       </Box>
       {dialog && (
         <DeleteContent

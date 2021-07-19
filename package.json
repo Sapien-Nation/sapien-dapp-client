@@ -59,6 +59,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-number-format": "^4.6.3",
     "react-use": "^17.2.4",
+    "react-window": "^1.8.6",
     "sanitize-html": "^2.4.0",
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",

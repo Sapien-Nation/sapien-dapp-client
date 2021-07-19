@@ -85,6 +85,7 @@ const Dialog = ({
               color="secondary"
               disabled={isFetching || confirmDisabled}
               form={form}
+              style={{ color: '#FF4279' }}
               type={form ? 'submit' : 'button'}
               variant="text"
               onClick={onConfirm}

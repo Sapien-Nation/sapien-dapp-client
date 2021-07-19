@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { mutate } from 'swr';
 
 // components
 import Header from './Header';
@@ -12,15 +13,16 @@ import { Box } from '@material-ui/core';
 import type { Content } from 'tools/types/content';
 
 interface Props {
+  apiUrl: string;
   reply: Content;
-  mutate: () => void;
 }
 
 enum Dialog {
   Delete,
 }
 
-const ReplyItem = ({ reply, mutate }: Props) => {
+const ReplyItem = ({ apiUrl, reply }: Props) => {
+  // TODO only show when reply.data length >140
   const [dialog, setDialog] = useState<null | Dialog>(null);
 
   return (
@@ -37,7 +39,14 @@ const ReplyItem = ({ reply, mutate }: Props) => {
         <DeleteReply
           replyID={reply.id}
           onCancel={() => setDialog(null)}
-          onDelete={() => mutate()}
+          onDelete={() => {
+            mutate(
+              apiUrl,
+              (replies: Array<Content>) =>
+                replies.filter(({ id }) => id !== reply.id),
+              false
+            );
+          }}
         />
       )}
     </Box>
