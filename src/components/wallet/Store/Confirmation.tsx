@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 // assets
 import { Store as StoreIcon } from 'assets';
@@ -11,6 +12,7 @@ import {
   Avatar,
   Box,
   Button,
+  FormHelperText,
   IconButton,
   TextField,
   Typography,
@@ -35,7 +37,12 @@ interface Props {
 }
 
 const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
-  const { watch, register, setValue } = useFormContext();
+  const {
+    watch,
+    register,
+    setValue,
+    formState: { errors },
+  } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
 
   const NumericInputCounter = () => {
@@ -46,7 +53,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
     };
 
     const handleDecrement = () => {
-      if (Number(watchBadgesAmount) < 1) return;
+      if (Number(watchBadgesAmount) < 2) return;
       setValue('badgesAmount', Number(watchBadgesAmount) - 1, {
         shouldValidate: true,
       });
@@ -55,6 +62,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
     return (
       <Box alignItems="center" display="flex">
         <IconButton
+          disabled={Number(watchBadgesAmount) < 2}
           style={{
             padding: 1.4,
             backgroundColor: neutral[200],
@@ -66,7 +74,11 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
         <TextField
           InputProps={{
             style: {
-              width: 36,
+              width:
+                36 +
+                (String(watchBadgesAmount)?.length > 1 &&
+                  String(watchBadgesAmount)?.length) *
+                  5,
               padding: '1rem 1.2rem',
               height: 34,
               minHeight: 32,
@@ -77,13 +89,16 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
           id="badges-amount"
           inputProps={{
             ...register('badgesAmount', {
-              required: {
-                value: true,
-                message: 'Enter an amount',
-              },
-              maxLength: {
-                value: 1,
-                message: 'Max amount exceeded',
+              validate: {
+                positive: (value: string) => {
+                  if (parseInt(value) < 1 || !value) {
+                    return 'Value should be more than 0';
+                  } else if (value.length > 2) {
+                    return 'Max badges amount is 99';
+                  } else {
+                    return true;
+                  }
+                },
               },
             }),
           }}
@@ -222,6 +237,14 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             <NumericInputCounter />
           </Box>
         </Box>
+        {errors.badgesAmount && (
+          <FormHelperText
+            className="Mui-error"
+            style={{ textAlign: 'center', margin: '1rem 0' }}
+          >
+            <ErrorMessage errors={errors} name="badgesAmount" />
+          </FormHelperText>
+        )}
       </Box>
       <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
         <Button fullWidth color="primary" type="submit" variant="contained">

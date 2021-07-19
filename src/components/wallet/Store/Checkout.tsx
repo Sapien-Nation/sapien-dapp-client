@@ -188,7 +188,11 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
           name="terms"
           render={({ field }) => {
             return (
-              <>
+              <div
+                style={{
+                  padding: '1rem 0',
+                }}
+              >
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -217,16 +221,13 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
                       </Typography>
                     </Typography>
                   }
-                  style={{
-                    padding: '1rem 0',
-                  }}
                 />
                 {errors.terms && (
                   <FormHelperText className="Mui-error">
                     <ErrorMessage errors={errors} name="terms" />
                   </FormHelperText>
                 )}
-              </>
+              </div>
             );
           }}
           rules={{
@@ -239,10 +240,10 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
         <Button
           fullWidth
           color="primary"
+          type="submit"
           variant="contained"
           onClick={() => {
             setShowTabsMenu(true);
-            setStep(StoreSteps.Badges);
           }}
         >
           Purchase Token
