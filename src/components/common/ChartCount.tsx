@@ -20,7 +20,7 @@ const ChartCount = ({ control, maxCount, name }: Props) => {
     <Typography
       color={currentCount > maxCount ? 'error' : 'inherit'}
       data-testid="chart-count"
-      variant="caption"
+      variant="overline"
     >
       {currentCount} / {maxCount}
     </Typography>

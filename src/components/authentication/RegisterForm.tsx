@@ -200,7 +200,11 @@ const Signup = () => {
                 </Box>
               }
             >
-              <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
+              <InfoIcon
+                color="action"
+                fontSize="small"
+                style={{ marginLeft: '0.5rem' }}
+              />
             </Tooltip>
           </Box>
         }
@@ -209,6 +213,7 @@ const Signup = () => {
       <PasswordField
         isConfirm
         errors={errors}
+        label="Confirm password"
         name="confirmPassword"
         register={register}
         watch={watch}

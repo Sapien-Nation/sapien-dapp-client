@@ -68,6 +68,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
       <PasswordField
         isConfirm
         errors={errors}
+        label="Confirm password"
         name="confirmPassword"
         placeholder="Password"
         register={register}

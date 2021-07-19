@@ -145,6 +145,7 @@ const theme = createMuiTheme({
     overline: {
       // Tooltip/Helper Text/ Additional Info
       fontSize: '1.2rem',
+      lineHeight: 'normal',
       textTransform: 'none',
     },
   },
