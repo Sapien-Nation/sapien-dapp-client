@@ -85,7 +85,7 @@ const Square = ({ squareID }: Props) => {
 
       mutate();
 
-      enqueueSnackbar('Post Created Successfully', {
+      enqueueSnackbar('Post created successfully', {
         variant: 'success',
         anchorOrigin: {
           vertical: 'bottom',
@@ -93,7 +93,7 @@ const Square = ({ squareID }: Props) => {
         },
       });
     } catch (error) {
-      enqueueSnackbar(error.message, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',

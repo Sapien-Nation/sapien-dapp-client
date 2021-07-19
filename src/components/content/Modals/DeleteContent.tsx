@@ -25,7 +25,7 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
     try {
       await deleteContentAction(contentID);
 
-      enqueueSnackbar('Post Deleted Successfully', {
+      enqueueSnackbar('Post deleted successfully', {
         variant: 'success',
         anchorOrigin: {
           vertical: 'bottom',
@@ -34,9 +34,8 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
       });
 
       onDelete();
-      onCancel();
     } catch (error) {
-      enqueueSnackbar(error.message, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',

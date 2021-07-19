@@ -1,6 +1,9 @@
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 
+// api
+import { deleteReply } from 'api/replies';
+
 // components
 import { Dialog } from 'components/common';
 
@@ -13,16 +16,25 @@ interface Props {
   onDelete: () => void;
 }
 
-const DeleteReply = ({ onCancel }: Props) => {
+const DeleteReply = ({ replyID, onCancel }: Props) => {
   const [isFetching, setIsFetching] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = async () => {
     setIsFetching(true);
     try {
+      await deleteReply(replyID);
+
       onCancel();
+      enqueueSnackbar('Reply deleted successfully.', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     } catch (error) {
-      enqueueSnackbar(error.message, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
@@ -30,6 +42,7 @@ const DeleteReply = ({ onCancel }: Props) => {
         },
       });
     }
+
     setIsFetching(false);
   };
 

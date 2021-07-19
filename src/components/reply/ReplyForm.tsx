@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 import { Controller, useForm } from 'react-hook-form';
 
 // api
-import { createReply } from 'api/content';
+import { createReply } from 'api/replies';
 
 // components
 import { Editor } from 'components/common';

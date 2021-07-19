@@ -40,6 +40,15 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
             <Header content={content} onDelete={() => setDialog(true)} />
             <div dangerouslySetInnerHTML={{ __html: content.data }} />
             <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+            {dialog && (
+              <DeleteContent
+                contentID={contentID}
+                onCancel={() => setDialog(null)}
+                onDelete={() => {
+                  push(`/client/${content.group.id}`);
+                }}
+              />
+            )}
           </>
         )}
       </Query>
@@ -55,13 +64,6 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
           }}
         />
       </Box>
-      {dialog && (
-        <DeleteContent
-          contentID={contentID}
-          onCancel={() => setDialog(null)}
-          onDelete={() => push('/')}
-        />
-      )}
     </Box>
   );
 };
