@@ -177,7 +177,26 @@ const Signup = () => {
         }}
         label={
           <Box display="flex" justifyContent="space-between">
-            Name
+            <Box alignItems="center" display="flex">
+              Name{' '}
+              <Tooltip
+                arrow
+                color="primary"
+                placement="right"
+                title={
+                  <Box>
+                    This is the name others will see. You can use:
+                    <ul>
+                      <li>Up to 20 characters</li>
+                      <li>Letters and numbers</li>
+                      <li>Spaces</li>
+                    </ul>
+                  </Box>
+                }
+              >
+                <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
+              </Tooltip>
+            </Box>
             <ChartCount control={control} maxCount={40} name="displayName" />
           </Box>
         }

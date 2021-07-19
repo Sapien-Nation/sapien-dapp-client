@@ -19,9 +19,14 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Tooltip,
   Typography,
 } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
+import {
+  Info as InfoIcon,
+  Visibility,
+  VisibilityOff,
+} from '@material-ui/icons';
 
 // utils
 import { EmailRegex } from 'utils/regex';
@@ -57,7 +62,7 @@ const LoginForm = () => {
         refresh: response.refresh,
       });
     } catch (error) {
-      enqueueSnackbar(error, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
@@ -87,11 +92,11 @@ const LoginForm = () => {
           ...register('email', {
             pattern: {
               value: EmailRegex,
-              message: 'Invalid email',
+              message: '',
             },
             required: {
               value: true,
-              message: 'Enter an email address',
+              message: '',
             },
           }),
           autoComplete: 'email',
@@ -130,7 +135,7 @@ const LoginForm = () => {
           ...register('password', {
             required: {
               value: true,
-              message: 'Enter a password',
+              message: '',
             },
           }),
           autoComplete: 'new-password',
@@ -155,7 +160,27 @@ const LoginForm = () => {
               control={
                 <Checkbox checked={Boolean(value)} color="primary" {...rest} />
               }
-              label={<Typography variant="overline">Remember me</Typography>}
+              label={
+                <Box alignItems="center" display="flex">
+                  <Typography variant="overline">Remember me</Typography>
+                  <Tooltip
+                    arrow
+                    color="primary"
+                    placement="right"
+                    title={
+                      <Box>
+                        Please only select this when using your own personal
+                        device
+                      </Box>
+                    }
+                  >
+                    <InfoIcon
+                      fontSize="small"
+                      style={{ marginLeft: '0.5rem' }}
+                    />
+                  </Tooltip>
+                </Box>
+              }
             />
           )}
         />
