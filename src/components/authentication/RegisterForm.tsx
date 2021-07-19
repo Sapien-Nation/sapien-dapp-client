@@ -62,7 +62,7 @@ const Signup = () => {
         refresh: response.refresh,
       });
     } catch (error) {
-      enqueueSnackbar(error, {
+      enqueueSnackbar('Oops, something went wrong. Please try again', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
@@ -92,11 +92,11 @@ const Signup = () => {
           ...register('email', {
             pattern: {
               value: EmailRegex,
-              message: 'Invalid email',
+              message: 'Invalid email address',
             },
             required: {
               value: true,
-              message: 'Enter an email',
+              message: 'Invalid email address',
             },
           }),
           autoComplete: 'email',
@@ -126,11 +126,11 @@ const Signup = () => {
             },
             required: {
               value: true,
-              message: 'Enter a username',
+              message: 'Invalid username',
             },
             maxLength: {
               value: 20,
-              message: 'Max length exceeded',
+              message: 'Invalid username',
             },
           }),
           autoComplete: 'nickname',
@@ -167,11 +167,11 @@ const Signup = () => {
             },
             required: {
               value: true,
-              message: 'Enter a name',
+              message: 'Invalid name',
             },
             maxLength: {
               value: 40,
-              message: 'Max length exceeded',
+              message: 'Invalid name',
             },
           }),
         }}
@@ -260,7 +260,7 @@ const Signup = () => {
           rules={{
             required: {
               value: true,
-              message: 'Please Check the box',
+              message: 'Please check to continue',
             },
           }}
         />
@@ -298,7 +298,7 @@ const Signup = () => {
           rules={{
             required: {
               value: true,
-              message: 'Please Check the box',
+              message: 'Please check to continue',
             },
           }}
         />

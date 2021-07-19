@@ -60,28 +60,24 @@ const PasswordField = ({
       inputProps={{
         ...register(name, {
           validate: (value: string) => {
-            if (!/[a-zA-Z]/.test(value)) {
-              return 'At least one alphabet is required.';
+            if (!isConfirm && !/[a-z]/.test(value)) {
+              return 'At least one lowercase letter.';
             }
 
-            if (!/[a-z]/.test(value)) {
-              return 'At least one lowercase letter is required.';
+            if (!isConfirm && !/[A-Z]/.test(value)) {
+              return 'At least one uppercase letter.';
             }
 
-            if (!/[A-Z]/.test(value)) {
-              return 'At least one uppercase letter is required.';
+            if (!isConfirm && !/[\d]/.test(value)) {
+              return 'At least one number.';
             }
 
-            if (!/[\d]/.test(value)) {
-              return 'At least one number is required.';
-            }
-
-            if (value?.length < 8) {
-              return 'Minimum 8 characters required.';
+            if (!isConfirm && value?.length < 8) {
+              return 'At least 8 characters.';
             }
 
             if (isConfirm && value !== watch('password')) {
-              return 'Password dont match';
+              return 'Passwords don’t match';
             }
 
             return true;
