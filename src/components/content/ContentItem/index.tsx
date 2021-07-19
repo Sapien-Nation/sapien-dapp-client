@@ -33,18 +33,20 @@ const ContentItem = ({ content, mutate }: Props) => {
       style={{ gap: 22 }}
     >
       <Header content={content} onDelete={() => setDialog(true)} />
-      <div>
-        <Link href={`${asPath}/content/${content.id}`}>
-          <a>
-            {sanitizeHtml(content.data, {
-              allowedTags: ['b', 'i', 'em', 'strong', 'a'],
-              allowedAttributes: {
-                a: ['href'],
-              },
-            })?.substring(0, 250)}
-          </a>
-        </Link>
-      </div>
+      {!content.deletedAt && (
+        <div>
+          <Link href={`${asPath}/content/${content.id}`}>
+            <a>
+              {sanitizeHtml(content.data, {
+                allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+                allowedAttributes: {
+                  a: ['href'],
+                },
+              })?.substring(0, 250)}
+            </a>
+          </Link>
+        </div>
+      )}
 
       <Actions />
       <Box borderColor="grey.100" borderTop={1} marginX={-3} />

@@ -38,7 +38,9 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
         {(content: ContentType) => (
           <>
             <Header content={content} onDelete={() => setDialog(true)} />
-            <div dangerouslySetInnerHTML={{ __html: content.data }} />
+            {!content.deletedAt && (
+              <div dangerouslySetInnerHTML={{ __html: content.data }} />
+            )}
             <Box borderColor="grey.100" borderTop={1} marginX={-3} />
             {dialog && (
               <DeleteContent
