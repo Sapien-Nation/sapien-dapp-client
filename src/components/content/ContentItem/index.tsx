@@ -10,12 +10,12 @@ import { DeleteContent } from '../Modals';
 import { ReplyForm } from 'components/reply';
 
 // mui
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // types
 import type { Content } from 'tools/types/content';
 
-//utils
+// utils
 import { getContentCount } from 'utils/contentCount';
 
 interface Props {
@@ -23,13 +23,37 @@ interface Props {
   mutate: () => void;
 }
 
+enum View {
+  Compacted,
+  Expanded,
+}
+
+const maxContentLength = 280;
+
 const ContentItem = ({ content, mutate }: Props) => {
+  const [view, setView] = useState(View.Compacted);
   const [dialog, setDialog] = useState(false);
 
   const { asPath } = useRouter();
 
-  const postContentCount = getContentCount(content?.data);
-  console.log('Counter', postContentCount);
+  const showMore = getContentCount(content.data) > maxContentLength;
+
+  const getHTML = () => {
+    if (content.deletedAt) return '';
+
+    let html = sanitizeHtml(content.data, {
+      allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+      allowedAttributes: {
+        a: ['href'],
+      },
+    });
+
+    if (view === View.Compacted) {
+      html = html.substring(0, maxContentLength);
+    }
+
+    return html;
+  };
 
   return (
     <Box
@@ -42,14 +66,22 @@ const ContentItem = ({ content, mutate }: Props) => {
       <div>
         <Link href={`${asPath}/content/${content.id}`}>
           <a>
-            {sanitizeHtml(content.deletedAt ? '' : content.data, {
-              allowedTags: ['b', 'i', 'em', 'strong', 'a'],
-              allowedAttributes: {
-                a: ['href'],
-              },
-            })?.substring(0, 250)}
+            {getHTML()}
+            {showMore && view === View.Compacted && '...'}
           </a>
-        </Link>
+        </Link>{' '}
+        {showMore && (
+          <Typography
+            color="primary"
+            component="span"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setView(view === View.Compacted ? View.Expanded : View.Compacted);
+            }}
+          >
+            {view === View.Compacted ? 'See More' : 'See Less'}
+          </Typography>
+        )}
       </div>
       <Actions />
       <Box borderColor="grey.100" borderTop={1} marginX={-3} />

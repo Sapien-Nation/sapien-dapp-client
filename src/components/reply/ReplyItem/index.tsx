@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
+import sanitizeHtml from 'sanitize-html';
 
 // components
 import Header from './Header';
@@ -7,10 +8,13 @@ import Actions from './Actions';
 import { DeleteReply } from '../Modals';
 
 // mui
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 // types
 import type { Content } from 'tools/types/content';
+
+// utils
+import { getContentCount } from 'utils/contentCount';
 
 interface Props {
   apiUrl: string;
@@ -21,9 +25,35 @@ enum Dialog {
   Delete,
 }
 
+enum View {
+  Compacted,
+  Expanded,
+}
+
+const maxReplyLength = 140;
+
 const ReplyItem = ({ apiUrl, reply }: Props) => {
-  // TODO only show when reply.data length >140
+  const [view, setView] = useState(View.Compacted);
   const [dialog, setDialog] = useState<null | Dialog>(null);
+
+  const showMore = getContentCount(reply.data) > maxReplyLength;
+
+  const getHTML = () => {
+    if (reply.deletedAt) return '';
+
+    let html = sanitizeHtml(reply.data, {
+      allowedTags: ['b', 'i', 'em', 'strong', 'a'],
+      allowedAttributes: {
+        a: ['href'],
+      },
+    });
+
+    if (view === View.Compacted) {
+      html = html.substring(0, maxReplyLength);
+    }
+
+    return html;
+  };
 
   return (
     <Box
@@ -33,8 +63,24 @@ const ReplyItem = ({ apiUrl, reply }: Props) => {
       style={{ gap: 22 }}
     >
       <Header reply={reply} onDelete={() => setDialog(Dialog.Delete)} />
-      <div dangerouslySetInnerHTML={{ __html: reply.data }} />
+      <p>
+        {getHTML()}
+        {showMore && view === View.Compacted && '...'}
+        {showMore && (
+          <Typography
+            color="primary"
+            component="span"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setView(view === View.Compacted ? View.Expanded : View.Compacted);
+            }}
+          >
+            {view === View.Compacted ? ' See More' : ' See Less'}
+          </Typography>
+        )}
+      </p>
       <Actions />
+
       {dialog === Dialog.Delete && (
         <DeleteReply
           replyID={reply.id}
