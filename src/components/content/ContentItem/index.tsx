@@ -15,6 +15,9 @@ import { Box } from '@material-ui/core';
 // types
 import type { Content } from 'tools/types/content';
 
+//utils
+import { getContentCount } from 'utils/contentCount';
+
 interface Props {
   content: Content;
   mutate: () => void;
@@ -24,6 +27,9 @@ const ContentItem = ({ content, mutate }: Props) => {
   const [dialog, setDialog] = useState(false);
 
   const { asPath } = useRouter();
+
+  const postContentCount = getContentCount(content?.data);
+  console.log('Counter', postContentCount);
 
   return (
     <Box
