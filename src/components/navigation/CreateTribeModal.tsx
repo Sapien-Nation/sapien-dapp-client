@@ -171,7 +171,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
 
       onChange(data);
     } catch (error) {
-      enqueueSnackbar(error, {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
