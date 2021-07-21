@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 // mui
 import { Tabs, Tab, makeStyles } from '@material-ui/core';
@@ -40,15 +41,27 @@ enum WalletTab {
 const WalletTabs = () => {
   const [currentTab, setCurrentTab] = useState(WalletTab.MyBadges);
   const [showTabsMenu, setShowTabsMenu] = useState(true);
+  const [transition, setTransition] = useState('forward');
   const classes = useStyles();
   const handleChange = (_, tab) => {
     setCurrentTab(tab);
+    if (currentTab > tab) {
+      setTransition('back');
+    }
+    if (currentTab < tab) {
+      setTransition('forward');
+    }
   };
 
   const renderCurrentTab = () => {
-    switch (currentTab) {
-      case WalletTab.MyBadges: {
-        return (
+    return (
+      <>
+        <CSSTransition
+          unmountOnExit
+          classNames={transition}
+          in={currentTab === WalletTab.MyBadges}
+          timeout={300}
+        >
           <div
             style={{
               padding: '0 2.4rem',
@@ -56,10 +69,13 @@ const WalletTabs = () => {
           >
             My Badges
           </div>
-        );
-      }
-      case WalletTab.Spn: {
-        return (
+        </CSSTransition>
+        <CSSTransition
+          unmountOnExit
+          classNames={transition}
+          in={currentTab === WalletTab.Spn}
+          timeout={300}
+        >
           <div
             style={{
               padding: '0 2.4rem',
@@ -67,17 +83,20 @@ const WalletTabs = () => {
           >
             SPN
           </div>
-        );
-      }
-      case WalletTab.Store: {
-        return (
+        </CSSTransition>
+        <CSSTransition
+          unmountOnExit
+          classNames={transition}
+          in={currentTab === WalletTab.Store}
+          timeout={300}
+        >
           <Store
             setShowTabsMenu={setShowTabsMenu}
             showTabsMenu={showTabsMenu}
           />
-        );
-      }
-    }
+        </CSSTransition>
+      </>
+    );
   };
 
   return (
