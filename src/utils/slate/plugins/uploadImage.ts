@@ -15,6 +15,7 @@ export const addImageToEditor = async ({
 }) => {
   Transforms.insertNodes(editor, {
     children: [{ text: data.key }],
+    // @ts-ignore
     type: 'image',
     url: data.url,
     data,
