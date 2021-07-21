@@ -68,6 +68,15 @@ const ContentItem = ({ content, mutate }: Props) => {
           <a>
             {getHTML()}
             {showMore && view === View.Compacted && '...'}
+            <Box marginTop={2.3}>
+              {content.preview && (
+                <img
+                  alt="Preview"
+                  src={content.preview}
+                  style={{ borderRadius: '10px' }}
+                />
+              )}
+            </Box>
           </a>
         </Link>{' '}
         {showMore && (

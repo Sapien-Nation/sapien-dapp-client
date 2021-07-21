@@ -24,7 +24,8 @@ export const Image = ({ attributes, children, element }) => {
           <CloseIcon fontSize="small" />
         </IconButton>
         <img
-          alt={children}
+          alt="Content"
+          data-fileKey={element.data.key}
           src={element.url}
           style={{
             borderRadius: 16,
@@ -32,6 +33,9 @@ export const Image = ({ attributes, children, element }) => {
             height: 'auto',
             maxWidth: '100%',
             width: '100%',
+          }}
+          onError={(event) => {
+            (event as any).target.src = element.data.original;
           }}
         />
       </div>

@@ -25,11 +25,11 @@ export const serialize = (node) => {
       return `<div>
           <div>
             <img
+              data-fileKey=${node.data?.key}
               src=${escapeHtml(node.url)}
               style="display:block;max-width:100%;"
             />
           </div>
-          ${children}
         </div>`;
     case 'link':
       return `<a 

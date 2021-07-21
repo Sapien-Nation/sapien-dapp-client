@@ -49,6 +49,7 @@
     "image-extensions": "^1.1.0",
     "lodash": "^4.17.21",
     "next": "^11.0.0",
+    "node-html-parser": "^1.4.9",
     "notistack": "^1.0.9",
     "postcss": "^8.3.5",
     "react": "^17.0.2",

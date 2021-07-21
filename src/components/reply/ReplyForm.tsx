@@ -1,3 +1,4 @@
+import { parse } from 'node-html-parser';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
@@ -41,9 +42,24 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
 
   const onSubmitForm = async ({ content }) => {
     try {
-      const reply = await createReply(contentID, {
-        data: content.map((node: any) => serialize(node)).join(''),
-      });
+      const dataSerialized = content
+        .map((node: any) => serialize(node))
+        .join('');
+
+      const body = {
+        data: dataSerialized,
+      };
+
+      const rawHTML = parse(dataSerialized);
+      const preview =
+        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
+
+      if (preview) {
+        // @ts-ignore
+        body.preview = preview;
+      }
+
+      const reply = await createReply(contentID, body);
 
       if (redirect) {
         push(`${asPath}/content/${contentID}`);
@@ -53,7 +69,14 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
 
       setClearText(true);
     } catch (err) {
-      enqueueSnackbar(err.message);
+      console.log(err);
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
     setClearText(false);
   };

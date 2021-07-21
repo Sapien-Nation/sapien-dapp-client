@@ -4,7 +4,10 @@ import { withHistory } from 'slate-history';
 import { createEditor, Descendant } from 'slate';
 import React, { useRef, useState, useEffect } from 'react';
 
-//constants
+// api
+import { uploadContentImage } from 'api/content';
+
+// constants
 import { initialEditorValue } from 'constants/initialEditorValue';
 
 // mui
@@ -16,6 +19,7 @@ import { neutral, primary } from 'styles/colors';
 
 // utils
 import {
+  addImageToEditor,
   clearEditor,
   composeSlateHighOrderFns,
   Element,
@@ -24,7 +28,6 @@ import {
   withLinks,
   withShortcuts,
 } from 'utils/slate';
-import { handleUploadImage } from 'utils/slate/plugins';
 
 interface Props {
   clearText?: boolean;
@@ -72,9 +75,32 @@ const Editor = ({
     return false;
   };
 
-  const removeImage = () => {
-    //TODO remove image from API
-    // return editor
+  const handleImageUpload = async (event) => {
+    try {
+      if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const data = await uploadContentImage(formData);
+        addImageToEditor({
+          data,
+          editor,
+          removeMethod: () => {
+            console.log('remove');
+          },
+        });
+      }
+    } catch (error) {
+      enqueueSnackbar(error.message, {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
+    }
   };
 
   const onChangeEditor = (data: any) => {
@@ -124,9 +150,7 @@ const Editor = ({
           accept="image/*"
           id="upload-image"
           type="file"
-          onChange={(event) =>
-            handleUploadImage(event, editor, removeImage, enqueueSnackbar)
-          }
+          onChange={handleImageUpload}
         />
         <IconButton
           disabled={isSubmitting || !hasContent()}

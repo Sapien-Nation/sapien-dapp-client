@@ -1,8 +1,9 @@
+import { parse } from 'node-html-parser';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
-import InfiniteScrollComponent from 'react-infinite-scroll-component';
 import { useSWRInfinite } from 'swr';
+import InfiniteScrollComponent from 'react-infinite-scroll-component';
 
 // api
 import axios from 'api';
@@ -78,10 +79,25 @@ const Square = ({ squareID }: Props) => {
   const handleSubmit = async (content: Array<Descendant>) => {
     setIsCreating(true);
     try {
-      await createContent({
-        data: content.map((node: any) => serialize(node)).join(''),
+      const dataSerialized = content
+        .map((node: any) => serialize(node))
+        .join('');
+
+      const body = {
+        data: dataSerialized,
         squareId: squareID,
-      });
+      };
+
+      const rawHTML = parse(dataSerialized);
+      const preview =
+        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
+
+      if (preview) {
+        // @ts-ignore
+        body.preview = preview;
+      }
+
+      await createContent(body);
 
       mutate();
 
