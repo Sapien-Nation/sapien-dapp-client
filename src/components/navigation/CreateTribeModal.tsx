@@ -397,7 +397,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
     <Dialog
       open
       cancelLabel={step == Step.TribeSummary ? 'Cancel' : 'Back'}
-      confirmDisabled={isSubmitting || isUploadingAvatar}
+      confirmDisabled={isSubmitting || isUploadingAvatar || isUploadingCover}
       confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
       form={form}
       maxWidth="xs"
