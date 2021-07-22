@@ -58,7 +58,7 @@ export const Element = (props) => {
       return <Image {...props} />;
     default:
       return (
-        <p style={{ margin: 2 }} {...attributes}>
+        <p style={{ display: 'inline', margin: 2 }} {...attributes}>
           {children}
         </p>
       );

@@ -1,4 +1,5 @@
 import {
+  BaseEditor,
   Descendant,
   Editor,
   Element as SlateElement,
@@ -15,7 +16,7 @@ type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 export const withLinks = (editor) => {
   const { insertData, insertText, isInline } = editor;
 
-  editor.isInline = (element) => {
+  editor.isInline = (element: any) => {
     return element.type === 'link' || element.type === 'video'
       ? true
       : isInline(element);
@@ -50,7 +51,7 @@ export const withLinks = (editor) => {
   return editor;
 };
 
-const unwrapLink = (editor) => {
+const unwrapLink = (editor: BaseEditor) => {
   Transforms.unwrapNodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) &&
@@ -59,7 +60,7 @@ const unwrapLink = (editor) => {
   });
 };
 
-const wrapLink = (editor, url) => {
+const wrapLink = (editor: BaseEditor, url: string) => {
   if (isLinkActive(editor)) {
     unwrapLink(editor);
   }
@@ -80,7 +81,7 @@ const wrapLink = (editor, url) => {
   }
 };
 
-const isLinkActive = (editor) => {
+const isLinkActive = (editor: BaseEditor) => {
   const [link] = Editor.nodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) &&

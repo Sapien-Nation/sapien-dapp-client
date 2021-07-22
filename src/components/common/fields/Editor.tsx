@@ -44,8 +44,6 @@ interface Props {
   onChange: (editor: any) => void;
 }
 
-const Emoji = (props) => <Picker onSelect={(event) => props.addEmoji(event)} />;
-
 const Editor = ({
   editorProps = {},
   isSubmitting,
@@ -123,7 +121,7 @@ const Editor = ({
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
-  const addEmoji = (emoji) => {
+  const addEmoji = (emoji: any) => {
     const emojiElement = {
       type: 'emoji',
       name: emoji?.name,
@@ -191,7 +189,7 @@ const Editor = ({
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <Emoji addEmoji={addEmoji} />
+          <Picker onSelect={(event) => addEmoji(event)} />
         </Menu>
         <IconButton
           style={{
