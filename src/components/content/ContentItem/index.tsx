@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import sanitizeHtml from 'sanitize-html';
+import ReactHtmlParser from 'react-html-parser';
 
 // components
 import Actions from './Actions';
@@ -17,6 +17,7 @@ import type { Content } from 'tools/types/content';
 
 // utils
 import { getContentCount } from 'utils/contentCount';
+import { html_substring } from 'utils/html';
 
 interface Props {
   content: Content;
@@ -41,18 +42,9 @@ const ContentItem = ({ content, mutate }: Props) => {
   const getHTML = () => {
     if (content.deletedAt) return '';
 
-    let html = sanitizeHtml(content.data, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'a'],
-      allowedAttributes: {
-        a: ['href'],
-      },
-    });
-
-    if (view === View.Compacted) {
-      html = html.substring(0, maxContentLength);
-    }
-
-    return html;
+    return view === View.Compacted
+      ? html_substring(content.data, maxContentLength)
+      : content.data;
   };
 
   return (
@@ -66,7 +58,7 @@ const ContentItem = ({ content, mutate }: Props) => {
       <div>
         <Link href={`${asPath}/content/${content.id}`}>
           <a>
-            {getHTML()}
+            {ReactHtmlParser(getHTML())}
             {showMore && view === View.Compacted && '...'}
             <Box marginTop={2.3}>
               {content.preview && (

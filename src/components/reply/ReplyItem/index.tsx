@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
-import sanitizeHtml from 'sanitize-html';
+import ReactHtmlParser from 'react-html-parser';
 
 // components
 import Header from './Header';
@@ -15,6 +15,7 @@ import type { Content } from 'tools/types/content';
 
 // utils
 import { getContentCount } from 'utils/contentCount';
+import { html_substring } from 'utils/html';
 
 interface Props {
   apiUrl: string;
@@ -41,18 +42,9 @@ const ReplyItem = ({ apiUrl, reply }: Props) => {
   const getHTML = () => {
     if (reply.deletedAt) return '';
 
-    let html = sanitizeHtml(reply.data, {
-      allowedTags: ['b', 'i', 'em', 'strong', 'a'],
-      allowedAttributes: {
-        a: ['href'],
-      },
-    });
-
-    if (view === View.Compacted) {
-      html = html.substring(0, maxReplyLength);
-    }
-
-    return html;
+    return view === View.Compacted
+      ? html_substring(reply.data, maxReplyLength)
+      : reply.data;
   };
 
   return (
@@ -63,22 +55,20 @@ const ReplyItem = ({ apiUrl, reply }: Props) => {
       style={{ gap: 22 }}
     >
       <Header reply={reply} onDelete={() => setDialog(Dialog.Delete)} />
-      <p>
-        {getHTML()}
-        {showMore && view === View.Compacted && '...'}
-        {showMore && (
-          <Typography
-            color="primary"
-            component="span"
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setView(view === View.Compacted ? View.Expanded : View.Compacted);
-            }}
-          >
-            {view === View.Compacted ? ' See More' : ' See Less'}
-          </Typography>
-        )}
-      </p>
+      {ReactHtmlParser(getHTML())}
+      {showMore && view === View.Compacted && '...'}
+      {showMore && (
+        <Typography
+          color="primary"
+          component="span"
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setView(view === View.Compacted ? View.Expanded : View.Compacted);
+          }}
+        >
+          {view === View.Compacted ? ' See More' : ' See Less'}
+        </Typography>
+      )}
       <Actions />
 
       {dialog === Dialog.Delete && (
