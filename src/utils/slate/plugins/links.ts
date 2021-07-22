@@ -16,7 +16,9 @@ export const withLinks = (editor) => {
   const { insertData, insertText, isInline } = editor;
 
   editor.isInline = (element) => {
-    return element.type === 'link' ? true : isInline(element);
+    return element.type === 'link' || element.type === 'video'
+      ? true
+      : isInline(element);
   };
 
   editor.insertText = (text) => {

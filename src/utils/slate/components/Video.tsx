@@ -8,19 +8,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import { primary } from 'styles/colors';
 
 export const VideoElement = ({ attributes, children, element }) => {
-  const { url, image } = element;
+  const { image } = element;
   const [hidden, setHidden] = useState(false);
 
   return (
     <>
-      <a
-        href={children}
-        rel="noreferrer"
-        style={{ margin: 0, color: primary[800] }}
-        target="_blank"
-      >
-        {children}
-      </a>
       <div {...attributes}>
         <div contentEditable={false}>
           <Box
@@ -48,12 +40,12 @@ export const VideoElement = ({ attributes, children, element }) => {
             />
             <Box padding={2} width="100%">
               <a
-                href={url}
+                href={children}
                 rel="noreferrer"
                 style={{ margin: 0, color: primary[800] }}
                 target="_blank"
               >
-                {url}
+                {children}
               </a>
             </Box>
           </Box>
