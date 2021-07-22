@@ -40,6 +40,14 @@ export const serialize = (node) => {
           </a>`;
     case 'paragraph':
       return `<p style="margin:0;">${children}</p>`;
+    case 'emoji':
+      return `<span
+            {...attributes}
+            aria-label=${node.name}
+            role="img"
+          >
+            ${node.emoji}
+          </span>`;
     case 'video':
       return `<div>
           <div>

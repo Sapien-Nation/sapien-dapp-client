@@ -19,7 +19,7 @@ export const Image = ({ attributes, children, element }) => {
             right: '0.5rem',
             top: '0.5rem',
           }}
-          onClick={() => element.removeMethod(element)}
+          onClick={() => element.removeMethod()}
         >
           <CloseIcon fontSize="small" />
         </IconButton>

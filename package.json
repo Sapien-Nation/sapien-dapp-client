@@ -45,6 +45,7 @@
     "@toruslabs/torus-direct-web-sdk": "^4.14.0",
     "axios": "^0.21.1",
     "cookie": "^0.4.1",
+    "emoji-mart": "^3.0.1",
     "eth-price": "^0.1.5",
     "image-extensions": "^1.1.0",
     "lodash": "^4.17.21",

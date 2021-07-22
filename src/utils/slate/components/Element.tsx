@@ -13,6 +13,17 @@ export const Element = (props) => {
   switch (element.type) {
     case 'video':
       return <VideoElement {...props} />;
+    case 'emoji':
+      return (
+        <span
+          {...attributes}
+          aria-label={element.name}
+          role="img"
+          style={{ display: 'inline' }}
+        >
+          {element.emoji}
+        </span>
+      );
     case 'heading':
       return (
         <Typography variant="h1" {...attributes}>

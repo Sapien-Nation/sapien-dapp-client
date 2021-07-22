@@ -1,18 +1,26 @@
 import { Editable, Slate, withReact } from 'slate-react';
 import { useSnackbar } from 'notistack';
 import { withHistory } from 'slate-history';
-import { createEditor, Descendant } from 'slate';
+import { createEditor, Descendant, Transforms } from 'slate';
 import React, { useRef, useState, useEffect } from 'react';
 
 // api
 import { uploadContentImage } from 'api/content';
 
 // constants
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
+
+//constants
 import { initialEditorValue } from 'constants/initialEditorValue';
 
 // mui
-import { Box, IconButton } from '@material-ui/core';
-import { ImageOutlined, Send } from '@material-ui/icons';
+import { Box, IconButton, Menu } from '@material-ui/core';
+import {
+  ImageOutlined,
+  Send,
+  SentimentSatisfiedOutlined,
+} from '@material-ui/icons';
 
 // styles
 import { neutral, primary } from 'styles/colors';
@@ -36,6 +44,8 @@ interface Props {
   onChange: (editor: any) => void;
 }
 
+const Emoji = (props) => <Picker onSelect={(event) => props.addEmoji(event)} />;
+
 const Editor = ({
   editorProps = {},
   isSubmitting,
@@ -43,6 +53,7 @@ const Editor = ({
   clearText,
 }: Props) => {
   const [data, setData] = useState<Array<Descendant>>(initialEditorValue);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [editor] = useState(() =>
     composeSlateHighOrderFns(
       withImages,
@@ -88,7 +99,13 @@ const Editor = ({
           data,
           editor,
           removeMethod: () => {
-            console.log('remove');
+            // const position = editor.selection;
+            // Transforms.delete(editor, {
+            //   at: {
+            //     anchor: { path: position.anchor.path, offset: position.anchor.offset },
+            //     focus: { path: position.focus.path, offset: position.focus.offset },
+            //   },
+            // })
           },
         });
       }
@@ -101,6 +118,21 @@ const Editor = ({
         },
       });
     }
+  };
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  const addEmoji = (emoji) => {
+    const emojiElement = {
+      type: 'emoji',
+      name: emoji?.name,
+      emoji: emoji?.native,
+      children: [{ text: '' }],
+    };
+
+    handleClose();
+    Transforms.insertNodes(editor, emojiElement as any);
   };
 
   const onChangeEditor = (data: any) => {
@@ -134,6 +166,33 @@ const Editor = ({
         justifyContent="flex-end"
         padding={hasContent() ? 0.5 : 0}
       >
+        <IconButton
+          aria-controls="simple-menu"
+          aria-haspopup="true"
+          disabled={isSubmitting}
+          style={{
+            borderRadius: 10,
+            height: 40,
+            width: 40,
+          }}
+          onClick={handleClick}
+        >
+          <SentimentSatisfiedOutlined
+            fontSize="small"
+            style={{
+              color: neutral[400],
+            }}
+          />
+        </IconButton>
+        <Menu
+          keepMounted
+          anchorEl={anchorEl}
+          id="simple-menu"
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          <Emoji addEmoji={addEmoji} />
+        </Menu>
         <IconButton
           style={{
             borderRadius: 10,
