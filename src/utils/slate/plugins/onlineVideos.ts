@@ -10,7 +10,9 @@ export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
 
   const thumbnail = `https://img.youtube.com/vi/${videoId}/1.jpg`;
 
-  const onlineVideo = {
+  Transforms.insertNodes(editor, {
+    children: [{ text: url }],
+    // @ts-ignore
     type: 'video',
     url,
     image: {
@@ -18,10 +20,8 @@ export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
       url: thumbnail,
       children: [{ text: '' }],
     },
-    children: [{ text: url }],
-  };
+  });
 
-  Transforms.insertNodes(editor, onlineVideo as any);
   Editor.insertBreak(editor);
 };
 

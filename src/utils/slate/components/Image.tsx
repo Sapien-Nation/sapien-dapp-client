@@ -6,8 +6,9 @@ import CloseIcon from '@material-ui/icons/Close';
 
 export const Image = ({ attributes, children, element }) => {
   return (
-    <div {...attributes}>
+    <>
       <div
+        {...attributes}
         contentEditable={false}
         style={{
           position: 'relative',
@@ -40,6 +41,6 @@ export const Image = ({ attributes, children, element }) => {
         />
       </div>
       {children}
-    </div>
+    </>
   );
 };
