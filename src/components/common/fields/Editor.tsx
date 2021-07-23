@@ -1,4 +1,4 @@
-import { Editable, Slate, withReact } from 'slate-react';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { useSnackbar } from 'notistack';
 import { withHistory } from 'slate-history';
 import { createEditor, Descendant, Transforms } from 'slate';
@@ -136,6 +136,7 @@ const Editor = ({
   const onChangeEditor = (data: any) => {
     setData(data);
     onChange(data);
+    ReactEditor.focus(editor);
   };
 
   return (

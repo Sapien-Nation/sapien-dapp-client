@@ -1,14 +1,6 @@
-import {
-  BaseEditor,
-  Editor,
-  Element as SlateElement,
-  Range,
-  Transforms,
-} from 'slate';
+import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
 
 export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
-  const { selection } = editor;
-  const isCollapsed = selection && Range.isCollapsed(selection);
   const results = url.match('v=([a-zA-Z0-9_-]+)&?');
   const videoId = results[1];
 
@@ -26,16 +18,11 @@ export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
       url: thumbnail,
       children: [{ text: '' }],
     },
-    children: isCollapsed ? [{ text: url }] : [],
+    children: [{ text: url }],
   };
 
-  if (isCollapsed) {
-    Transforms.insertNodes(editor, onlineVideo as any);
-    //TODO FOCUS AFTER INSERT
-  } else {
-    Transforms.wrapNodes(editor, onlineVideo as any, { split: true });
-    Transforms.collapse(editor, { edge: 'end' });
-  }
+  Transforms.insertNodes(editor, onlineVideo as any);
+  Editor.insertBreak(editor);
 };
 
 const unwrapVideo = (editor: BaseEditor) => {

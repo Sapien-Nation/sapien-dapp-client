@@ -8,49 +8,55 @@ import CloseIcon from '@material-ui/icons/Close';
 import { primary } from 'styles/colors';
 
 export const VideoElement = ({ attributes, children, element }) => {
-  const { image } = element;
+  const { url, image } = element;
   const [hidden, setHidden] = useState(false);
 
   return (
     <>
-      <div {...attributes}>
-        <div contentEditable={false}>
-          <Box
-            className="card--rounded-white"
-            display={hidden ? 'none' : 'flex'}
-            marginY={1}
-            position="relative"
+      <div {...attributes} contentEditable={false}>
+        <Box
+          className="card--rounded-white"
+          display={hidden ? 'none' : 'flex'}
+          marginY={1}
+          position="relative"
+        >
+          <IconButton
+            style={{
+              position: 'absolute',
+              right: '0.5rem',
+              top: '1rem',
+            }}
+            onClick={() => setHidden(true)}
           >
-            <IconButton
-              style={{
-                position: 'absolute',
-                right: '0.5rem',
-                top: '1rem',
-              }}
-              onClick={() => setHidden(true)}
+            <CloseIcon />
+          </IconButton>
+          <img
+            alt={image?.url || ''}
+            height="auto"
+            src={image?.url}
+            style={{ borderRadius: '16px 0 0 16px' }}
+            width="130px"
+          />
+          <Box padding={2} width="100%">
+            <a
+              href={url}
+              rel="noreferrer"
+              style={{ margin: 0, color: primary[800] }}
+              target="_blank"
             >
-              <CloseIcon />
-            </IconButton>
-            <img
-              alt={image?.url || ''}
-              height="auto"
-              src={image?.url}
-              style={{ borderRadius: '16px 0 0 16px' }}
-              width="130px"
-            />
-            <Box padding={2} width="100%">
-              <a
-                href={children}
-                rel="noreferrer"
-                style={{ margin: 0, color: primary[800] }}
-                target="_blank"
-              >
-                {children}
-              </a>
-            </Box>
+              {url}
+            </a>
           </Box>
-        </div>
+        </Box>
       </div>
+      <a
+        href={children}
+        rel="noreferrer"
+        style={{ margin: 0, color: primary[800] }}
+        target="_blank"
+      >
+        {children}
+      </a>
     </>
   );
 };

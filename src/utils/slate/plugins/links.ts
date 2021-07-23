@@ -14,7 +14,13 @@ import { wrapOnlineVideo } from 'utils/slate/plugins';
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 
 export const withLinks = (editor) => {
-  const { insertData, insertText, isInline } = editor;
+  const { insertData, insertText, isInline, isVoid } = editor;
+
+  editor.isVoid = (element) => {
+    return element.type === 'link' || element.type === 'video'
+      ? true
+      : isVoid(element);
+  };
 
   editor.isInline = (element: any) => {
     return element.type === 'link' || element.type === 'video'
