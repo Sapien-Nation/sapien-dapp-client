@@ -22,6 +22,7 @@ export const Element = (props) => {
           style={{ display: 'inline' }}
         >
           {element.emoji}
+          <span style={{ display: 'none' }}>{children}</span>
         </span>
       );
     case 'heading':
