@@ -16,6 +16,7 @@ import {
 
 // components
 import { Store } from './';
+import BadgesList from './MyBadges/BadgesList';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -62,13 +63,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.MyBadges}
           timeout={300}
         >
-          <div
-            style={{
-              padding: '0 2.4rem',
-            }}
-          >
-            My Badges
-          </div>
+          <BadgesList />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
