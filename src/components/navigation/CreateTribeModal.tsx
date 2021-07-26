@@ -301,7 +301,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   },
                   maxLength: {
                     value: 1000,
-                    message: 'Description its too long',
+                    message: 'Description is too long',
                   },
                 }),
               }}
