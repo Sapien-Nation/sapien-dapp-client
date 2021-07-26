@@ -65,7 +65,7 @@ const ContentItem = ({ content, mutate }: Props) => {
                 <img
                   alt="Preview"
                   src={content.preview}
-                  style={{ borderRadius: '10px' }}
+                  style={{ borderRadius: '10px', maxWidth: '100%' }}
                 />
               )}
             </Box>
@@ -76,6 +76,7 @@ const ContentItem = ({ content, mutate }: Props) => {
             color="primary"
             component="span"
             style={{ cursor: 'pointer' }}
+            variant="body2"
             onClick={() => {
               setView(view === View.Compacted ? View.Expanded : View.Compacted);
             }}
