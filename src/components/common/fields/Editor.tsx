@@ -206,7 +206,6 @@ const Editor = ({
           ref={imageRef}
           hidden
           accept="image/*"
-          id="upload-image"
           type="file"
           onChange={handleImageUpload}
         />
