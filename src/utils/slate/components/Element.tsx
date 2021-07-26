@@ -15,12 +15,7 @@ export const Element = (props) => {
       return <VideoElement {...props} />;
     case 'emoji':
       return (
-        <span
-          {...attributes}
-          aria-label={element.name}
-          role="img"
-          style={{ display: 'inline' }}
-        >
+        <span {...attributes} aria-label={element.emoji} role="img">
           {element.emoji}
           <span style={{ display: 'none' }}>{children}</span>
         </span>
@@ -59,7 +54,7 @@ export const Element = (props) => {
       return <Image {...props} />;
     default:
       return (
-        <p style={{ display: 'inline', margin: 2 }} {...attributes}>
+        <p style={{ margin: 2 }} {...attributes}>
           {children}
         </p>
       );

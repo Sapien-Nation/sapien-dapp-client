@@ -39,7 +39,7 @@ export const serialize = (node) => {
           ${children}
           </a>`;
     case 'paragraph':
-      return `<p style="margin:0;">${children}</p>`;
+      return `<p style="margin:0;margin-top:2rem;">${children}</p>`;
     case 'emoji':
       return `<span
             {...attributes}
