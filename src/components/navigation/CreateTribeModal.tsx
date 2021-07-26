@@ -215,7 +215,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   },
                   maxLength: {
                     value: 40,
-                    message: 'Name is to long',
+                    message: 'Name is too long',
                   },
                 }),
                 autoComplete: 'name',
@@ -258,11 +258,11 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   },
                   minLength: {
                     value: 3,
-                    message: 'Identifier is to short',
+                    message: 'Identifier is too short',
                   },
                   maxLength: {
                     value: 20,
-                    message: 'Identifier is to long',
+                    message: 'Identifier is too long',
                   },
                 }),
                 autoComplete: 'identifier',
@@ -301,7 +301,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                   },
                   maxLength: {
                     value: 1000,
-                    message: 'Description its to long',
+                    message: 'Description its too long',
                   },
                 }),
               }}
