@@ -11,4 +11,10 @@ enum StoreSteps {
   Checkout,
 }
 
-export { View, StoreSteps };
+enum MyBadgesSteps {
+  Badges,
+  Receivers,
+  Confirmation,
+}
+
+export { MyBadgesSteps, StoreSteps, View };

@@ -63,7 +63,7 @@ const SearchInput = ({
       );
 
   return (
-    <div className="App">
+    <>
       <TextField
         fullWidth
         InputProps={{
@@ -102,7 +102,7 @@ const SearchInput = ({
           />
         ))}
       </>
-    </div>
+    </>
   );
 };
 
