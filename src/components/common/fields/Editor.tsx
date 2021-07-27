@@ -1,7 +1,7 @@
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { useSnackbar } from 'notistack';
 import { withHistory } from 'slate-history';
-import { createEditor, Descendant, Transforms } from 'slate';
+import { createEditor, Descendant } from 'slate';
 import React, { useRef, useState, useEffect } from 'react';
 
 // api
@@ -32,6 +32,7 @@ import {
   composeSlateHighOrderFns,
   Element,
   Leaf,
+  withEmojis,
   withImages,
   withLinks,
   withShortcuts,
@@ -122,15 +123,8 @@ const Editor = ({
   const handleClose = () => setAnchorEl(null);
 
   const addEmoji = (emoji: any) => {
-    const emojiElement = {
-      type: 'emoji',
-      name: emoji?.name,
-      emoji: emoji?.native,
-      children: [{ text: '' }],
-    };
-
     handleClose();
-    Transforms.insertNodes(editor, emojiElement as any);
+    withEmojis(editor, emoji.native);
   };
 
   const onChangeEditor = (data: any) => {
