@@ -35,8 +35,8 @@ const renderElement = (props) => {
       return <Video {...props} />;
     case 'emoji':
       return (
-        <span {...attributes} aria-label={element.emoji} role="img">
-          {element.emoji}
+        <span {...attributes} aria-label={children} role="img">
+          {children}
           <span style={{ display: 'none' }}>{children}</span>
         </span>
       );

@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 const Image = ({ attributes, children, element }) => {
   // TODO handle loading
   const { isUploading } = element;
-  if (isUploading) return 'Adding image...';
+  if (isUploading) return <>Adding image...</>;
 
   return (
     <>
@@ -36,6 +36,7 @@ const Image = ({ attributes, children, element }) => {
             borderRadius: 16,
             display: 'block',
             height: 'auto',
+            margin: '1rem 0',
             maxWidth: '100%',
             width: '100%',
           }}
