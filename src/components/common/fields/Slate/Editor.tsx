@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
@@ -38,8 +38,14 @@ const Editor = ({ editorProps = {}, isSubmitting, onChange, value }: Props) => {
 
   //------------------------------------------------------------------------
   // TODO useMemo
-  const [editor] = useState(() =>
-    composeSlateHighOrderFns(withLinks, withHistory, withReact)(createEditor())
+  const editor = useMemo(
+    () =>
+      composeSlateHighOrderFns(
+        withLinks,
+        withHistory,
+        withReact
+      )(createEditor()),
+    []
   );
   const { renderElement, renderLeaf } = useEditorConfig(editor);
   const [, selection, setSelection] = useSelection(editor);
