@@ -4,7 +4,11 @@ import React from 'react';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
-export const Image = ({ attributes, children, element }) => {
+const Image = ({ attributes, children, element }) => {
+  // TODO handle loading
+  const { isUploading } = element;
+  if (isUploading) return 'Adding image...';
+
   return (
     <>
       <div
@@ -26,7 +30,7 @@ export const Image = ({ attributes, children, element }) => {
         </IconButton>
         <img
           alt="Content"
-          data-fileKey={element.data.key}
+          data-fileKey={element.key}
           src={element.url}
           style={{
             borderRadius: 16,
@@ -36,7 +40,7 @@ export const Image = ({ attributes, children, element }) => {
             width: '100%',
           }}
           onError={(event) => {
-            (event as any).target.src = element.data.original;
+            (event as any).target.src = element.original;
           }}
         />
       </div>
@@ -44,3 +48,5 @@ export const Image = ({ attributes, children, element }) => {
     </>
   );
 };
+
+export default Image;

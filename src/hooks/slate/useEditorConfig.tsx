@@ -1,18 +1,38 @@
-import { primary } from 'styles/colors';
-
 // components
-import { Image } from 'utils/slate/components/Image';
-import { VideoElement } from 'utils/slate/components/Video';
+import { Image, Video } from 'components/common/fields/Slate';
 
 // mui
 import { Typography } from '@material-ui/core';
 
-export const Element = (props) => {
+// styles
+import { primary } from 'styles/colors';
+
+const renderLeaf = ({ attributes, children, leaf }) => {
+  if (leaf.bold) {
+    children = <strong>{children}</strong>;
+  }
+
+  if (leaf.code) {
+    children = <code>{children}</code>;
+  }
+
+  if (leaf.italic) {
+    children = <em>{children}</em>;
+  }
+
+  if (leaf.underline) {
+    children = <u>{children}</u>;
+  }
+
+  return <span {...attributes}>{children}</span>;
+};
+
+const renderElement = (props) => {
   const { attributes, children, element } = props;
 
   switch (element.type) {
     case 'video':
-      return <VideoElement {...props} />;
+      return <Video {...props} />;
     case 'emoji':
       return (
         <span {...attributes} aria-label={element.emoji} role="img">
@@ -60,3 +80,20 @@ export const Element = (props) => {
       );
   }
 };
+
+const EditorInlines = ['emoji', 'link'];
+
+const useEditorConfig = (editor) => {
+  const { isVoid } = editor;
+  editor.isVoid = (element) => {
+    return ['image'].includes(element.type) || isVoid(element);
+  };
+
+  editor.isInline = (element) => {
+    return EditorInlines.includes(element.type);
+  };
+
+  return { renderElement, renderLeaf };
+};
+
+export default useEditorConfig;
