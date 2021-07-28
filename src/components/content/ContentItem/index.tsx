@@ -95,7 +95,10 @@ const ContentItem = ({ content, mutate }: Props) => {
         <DeleteContent
           contentID={content.id}
           onCancel={() => setDialog(false)}
-          onDelete={() => mutate()}
+          onDelete={() => {
+            mutate();
+            setDialog(false);
+          }}
         />
       )}
     </Box>

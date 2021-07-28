@@ -47,6 +47,7 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
                 contentID={contentID}
                 onCancel={() => setDialog(null)}
                 onDelete={() => {
+                  setDialog(null);
                   push(`/client/${content.group.id}`);
                 }}
               />
