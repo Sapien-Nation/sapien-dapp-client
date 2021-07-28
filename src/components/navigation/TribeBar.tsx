@@ -15,6 +15,9 @@ import { AddRounded as AddIcon } from '@material-ui/icons';
 // components
 import CreateTribeModal from './CreateTribeModal';
 
+// types
+import type { Tribe } from 'tools/types/tribeBar';
+
 const useStyles = makeStyles(() => ({
   drawerPaper: {
     width: 72,
@@ -44,9 +47,19 @@ const colors = [
 
 const TribeBar = () => {
   const [showModal, setShowModal] = useState(false);
+
   const tribes = getTribes();
-  const { asPath } = useRouter();
   const classes = useStyles();
+  const { asPath } = useRouter();
+
+  const isTribeSelected = (tribe: Tribe) => {
+    // @ts-ignore
+    if (tribe.isMain) {
+      return asPath === '/client/sapien';
+    }
+
+    return asPath.includes(`/client/${tribe.mainSquareId}`);
+  };
 
   return (
     <Drawer
@@ -66,42 +79,54 @@ const TribeBar = () => {
           padding: '2.8rem 0',
         }}
       >
-        {tribes.map((tribe, index) => (
-          <Link key={tribe.id} href={`/client/${tribe.mainSquareId}`}>
-            <a>
-              <Avatar
-                alt={tribe.name}
-                classes={{
-                  img: classes.avatarImage,
-                }}
-                src={tribe.avatar}
-                style={{
-                  color: 'white',
-                  backgroundColor: tribe.avatar === null ? colors[index] : '',
-                  borderRadius: 15,
-                  border: asPath.includes(`/client/${tribe.mainSquareId}`)
-                    ? '2px solid'
-                    : `2px solid #322837`,
-                  boxSizing: 'border-box',
-                  padding: '2px',
-                  width: '4.8rem',
-                  height: '4.8rem',
-                }}
-                variant="rounded"
-              >
-                {tribe.avatar_original ? (
-                  <img
-                    alt={tribe.name}
-                    className="MuiAvatar-img"
-                    src={tribe.avatar_original}
-                  />
-                ) : (
-                  tribe.name[0].toUpperCase()
-                )}
-              </Avatar>
-            </a>
-          </Link>
-        ))}
+        {tribes.map((tribe, index) => {
+          // TODO update tools
+          // @ts-ignore
+          const isSapienTribe = tribe.isMain;
+          return (
+            <Link
+              key={tribe.id}
+              href={
+                isSapienTribe
+                  ? '/client/sapien'
+                  : `/client/${tribe.mainSquareId}`
+              }
+            >
+              <a>
+                <Avatar
+                  alt={tribe.name}
+                  classes={{
+                    img: classes.avatarImage,
+                  }}
+                  src={tribe.avatar}
+                  style={{
+                    color: 'white',
+                    backgroundColor: tribe.avatar === null ? colors[index] : '',
+                    borderRadius: 15,
+                    border: isTribeSelected(tribe)
+                      ? '2px solid'
+                      : `2px solid #322837`,
+                    boxSizing: 'border-box',
+                    padding: '2px',
+                    width: '4.8rem',
+                    height: '4.8rem',
+                  }}
+                  variant="rounded"
+                >
+                  {tribe.avatar_original ? (
+                    <img
+                      alt={tribe.name}
+                      className="MuiAvatar-img"
+                      src={tribe.avatar_original}
+                    />
+                  ) : (
+                    tribe.name[0].toUpperCase()
+                  )}
+                </Avatar>
+              </a>
+            </Link>
+          );
+        })}
         <IconButton
           aria-label="Create Tribe"
           style={{ padding: 0 }}
