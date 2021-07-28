@@ -1,13 +1,10 @@
-import { parse } from 'node-html-parser';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSnackbar } from 'notistack';
 import { useSWRInfinite } from 'swr';
 import InfiniteScrollComponent from 'react-infinite-scroll-component';
 
 // api
 import axios from 'api';
-import { createContent } from 'api/content';
 
 // context
 import { useAuth } from 'context/user';
@@ -30,12 +27,6 @@ import {
 
 // hooks
 import { getTribe } from 'hooks';
-
-// utils
-import { serialize } from 'utils/slate';
-
-// types
-import type { Descendant } from 'slate';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -67,7 +58,6 @@ const Square = ({ squareID }: Props) => {
   // for query.squareID to see if we are trying to render the sapien tribe
   const isSapienTribe = squareID === 'sapien';
   const { id: tribeID } = getTribe(String(squareID));
-  const { enqueueSnackbar } = useSnackbar();
 
   const {
     data: swrData,
@@ -86,50 +76,6 @@ const Square = ({ squareID }: Props) => {
     { fetcher, revalidateOnMount: true }
   );
 
-  const handleSubmit = async (content: Array<Descendant>) => {
-    setIsCreating(true);
-    try {
-      const dataSerialized = content
-        .map((node: any) => serialize(node))
-        .join('');
-
-      const body = {
-        data: dataSerialized,
-        squareId: squareID,
-      };
-
-      const rawHTML = parse(dataSerialized);
-      const preview =
-        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
-
-      if (preview) {
-        // @ts-ignore
-        body.preview = preview;
-      }
-
-      await createContent(body);
-
-      mutate();
-
-      enqueueSnackbar('Post created successfully', {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'center',
-        },
-      });
-    } catch (error) {
-      enqueueSnackbar('Oops, something went wrong. Please try again.', {
-        variant: 'error',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'center',
-        },
-      });
-    }
-    setIsCreating(false);
-  };
-
   const data = swrData?.map(({ data: posts }) => posts);
   const content = data ? [].concat(...data) : [];
   const isLoadingInitialData = !data && !swrError;
@@ -142,7 +88,14 @@ const Square = ({ squareID }: Props) => {
       header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
       subHeader={
         <Box className="card--rounded-white" padding={3}>
-          {me && <CreateContentForm user={me} onSubmit={handleSubmit} />}
+          {me && (
+            <CreateContentForm
+              setIsCreating={setIsCreating}
+              squareID={squareID}
+              user={me}
+              onSave={() => mutate()}
+            />
+          )}
           {!me && isLoggingIn && <PostComposerSkeleton />}
         </Box>
       }

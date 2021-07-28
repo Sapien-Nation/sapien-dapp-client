@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // mui
 import { Box, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { Close as CloseIcon } from '@material-ui/icons';
 
 // styles
 import { primary } from 'styles/colors';
 
-export const VideoElement = ({ attributes, children, element }) => {
-  const { url, image } = element;
+const Video = ({ attributes, children, element }) => {
   const [hidden, setHidden] = useState(false);
+
+  const { url, image } = element;
 
   return (
     <>
@@ -60,3 +61,5 @@ export const VideoElement = ({ attributes, children, element }) => {
     </>
   );
 };
+
+export default Video;

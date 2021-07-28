@@ -1,14 +1,16 @@
 import { parse } from 'node-html-parser';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
-import { Controller, useForm } from 'react-hook-form';
+import { useController, useForm } from 'react-hook-form';
 
 // api
 import { createReply } from 'api/replies';
 
 // components
 import { Editor } from 'components/common';
+
+// constants
+import { initialEditorValue } from 'constants/initialEditorValue';
 
 // utils
 import { serialize } from 'utils/slate';
@@ -26,23 +28,23 @@ interface Props {
 }
 
 const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
-  const [clearText, setClearText] = useState(false);
-
   const {
     control,
     formState: { isSubmitting },
     handleSubmit,
-  } = useForm({
-    defaultValues: {
-      content: '',
-    },
+  } = useForm();
+  const { field: editorField } = useController({
+    control,
+    name: 'document',
+    defaultValue: initialEditorValue,
   });
+
   const { asPath, push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmitForm = async ({ content }) => {
+  const onSubmitForm = async ({ document }) => {
     try {
-      const dataSerialized = content
+      const dataSerialized = document
         .map((node: any) => serialize(node))
         .join('');
 
@@ -66,10 +68,7 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
       } else {
         onSubmit(reply);
       }
-
-      setClearText(true);
     } catch (err) {
-      console.log(err);
       enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
         anchorOrigin: {
@@ -78,25 +77,17 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
         },
       });
     }
-    setClearText(false);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmitForm)}>
       <Box alignItems="flex-end" display="flex" style={{ gap: 10 }}>
-        <Controller
-          control={control}
-          name="content"
-          render={({ field }) => (
-            <Editor
-              clearText={Boolean(clearText)}
-              editorProps={{
-                placeholder: 'Write a comment...',
-              }}
-              isSubmitting={isSubmitting}
-              {...field}
-            />
-          )}
+        <Editor
+          editorProps={{
+            placeholder: 'Write a comment...',
+          }}
+          isSubmitting={isSubmitting}
+          {...editorField}
         />
       </Box>
     </form>
