@@ -59,7 +59,7 @@ const ContentItem = ({ content, mutate }: Props) => {
         <Link href={`${asPath}/content/${content.id}`}>
           <a>
             {ReactHtmlParser(getHTML())}
-            {showMore && view === View.Compacted && '...'}
+            {showMore && view === View.Compacted && !content.deletedAt && '...'}
             <Box marginTop={2.3}>
               {content.preview && (
                 <img
@@ -71,7 +71,7 @@ const ContentItem = ({ content, mutate }: Props) => {
             </Box>
           </a>
         </Link>{' '}
-        {showMore && (
+        {showMore && !content.deletedAt && (
           <Typography
             color="primary"
             component="span"
