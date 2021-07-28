@@ -1,6 +1,6 @@
 import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
 
-export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
+export const wrapOnlineVideo = (editor: any, url: string) => {
   const results = url.match('v=([a-zA-Z0-9_-]+)&?');
   const videoId = results[1];
 
@@ -10,19 +10,24 @@ export const wrapOnlineVideo = (editor: BaseEditor, url: string) => {
 
   const thumbnail = `https://img.youtube.com/vi/${videoId}/1.jpg`;
 
-  Transforms.insertNodes(editor, {
-    children: [{ text: url }],
-    // @ts-ignore
-    type: 'video',
-    url,
-    image: {
-      type: 'image',
-      url: thumbnail,
+  Transforms.insertNodes(editor, [
+    {
+      children: [{ text: url }],
+      // @ts-ignore
+      type: 'video',
+      url,
+      image: {
+        type: 'image',
+        url: thumbnail,
+        children: [{ text: '' }],
+      },
+    },
+    {
+      // @ts-ignore
+      type: 'paragraph',
       children: [{ text: '' }],
     },
-  });
-
-  Editor.insertBreak(editor);
+  ]);
 };
 
 const unwrapVideo = (editor: BaseEditor) => {

@@ -39,7 +39,7 @@ const TribeNavigation = () => {
 
   const { squareID } = query;
   const selectedTribe = tribes.find(
-    ({ mainSquareId }) => mainSquareId === squareID
+    ({ mainSquareId, name }) => mainSquareId === squareID || name === squareID
   );
 
   return (

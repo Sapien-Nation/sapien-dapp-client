@@ -1,63 +1,106 @@
-import { useState } from 'react';
+import { parse } from 'node-html-parser';
 import { useSnackbar } from 'notistack';
-import { Controller, useForm } from 'react-hook-form';
+import { useController, useForm } from 'react-hook-form';
+
+// api
+import { createContent } from 'api/content';
 
 // components
 import { Editor } from 'components/common';
 
+// constants
+import { initialEditorValue } from 'constants/initialEditorValue';
+
 // mui
 import { Avatar, Box } from '@material-ui/core';
+
+// utils
+import { serialize } from 'utils/slate';
 
 // types
 import type { User } from 'tools/types/user';
 
 interface Props {
+  setIsCreating: any;
   user: User;
-  onSubmit: (values: any) => void;
+  onSave: () => void;
+  squareID: string;
 }
 
-const CreateContentForm = ({ user, onSubmit }: Props) => {
-  const [clearText, setClearText] = useState(false);
+const CreateContentForm = ({
+  setIsCreating,
+  user,
+  onSave,
+  squareID,
+}: Props) => {
   const {
     control,
     formState: { isSubmitting },
     handleSubmit,
-  } = useForm({
-    defaultValues: {
-      content: '',
-    },
+    setValue,
+  } = useForm();
+  const { field: editorField } = useController({
+    control,
+    name: 'document',
+    defaultValue: initialEditorValue,
   });
+
   const { enqueueSnackbar } = useSnackbar();
 
-  const onSubmitForm = async ({ content }) => {
+  const onSubmit = async ({ document }) => {
+    setIsCreating(true);
     try {
-      await onSubmit(content);
+      const dataSerialized = document
+        .map((node: any) => serialize(node))
+        .join('');
 
-      setClearText(true);
-    } catch (err) {
-      enqueueSnackbar(err.message);
+      const body = {
+        data: dataSerialized,
+        squareId: squareID,
+      };
+
+      const rawHTML = parse(dataSerialized);
+      const preview =
+        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
+
+      if (preview) {
+        (body as any).preview = preview;
+      }
+
+      await createContent(body);
+
+      onSave();
+      setValue('document', initialEditorValue);
+
+      enqueueSnackbar('Post created successfully', {
+        variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
+    } catch (error) {
+      enqueueSnackbar('Oops, something went wrong. Please try again.', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'center',
+        },
+      });
     }
-
-    setClearText(false);
+    setIsCreating(false);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitForm)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Box alignItems="flex-end" display="flex" style={{ gap: 10 }}>
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
-        <Controller
-          control={control}
-          name="content"
-          render={({ field }) => (
-            <Editor
-              clearText={Boolean(clearText)}
-              editorProps={{
-                placeholder: `What’s on your mind, ${user.username}?`,
-              }}
-              isSubmitting={isSubmitting}
-              {...field}
-            />
-          )}
+        <Editor
+          editorProps={{
+            placeholder: `What’s on your mind, ${user.username}?`,
+          }}
+          isSubmitting={isSubmitting}
+          {...editorField}
         />
       </Box>
     </form>

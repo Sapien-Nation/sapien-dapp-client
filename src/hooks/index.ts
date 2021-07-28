@@ -1,1 +1,3 @@
-export * from './tribes';
+export * from './api';
+
+export * from './slate';
