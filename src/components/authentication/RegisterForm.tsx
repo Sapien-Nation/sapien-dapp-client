@@ -53,7 +53,7 @@ const Signup = () => {
       const response = await registerAction({
         ...values,
         client: window?.navigator.userAgent,
-        redirect: '/',
+        redirect: '/client/home',
       });
 
       setSession({

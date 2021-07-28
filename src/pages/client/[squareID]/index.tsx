@@ -20,7 +20,7 @@ import {
   Query,
 } from 'components/common';
 import Layout from 'pages/Layout';
-import { Header } from 'components/square';
+import { Header } from 'components/tribe';
 import {
   CreateContentForm,
   ContentItem,
@@ -60,7 +60,12 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 
 const Square = ({ squareID }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
-  const { me } = useAuth();
+  const { me, isLoggingIn } = useAuth();
+
+  // Sapien its an special "tribe" that don't have a mainSquareID
+  // but it renders all exactly as a normal Square, thats why we check
+  // for query.squareID to see if we are trying to render the sapien tribe
+  const isSapienTribe = squareID === 'sapien';
   const { id: tribeID } = getTribe(String(squareID));
   const { enqueueSnackbar } = useSnackbar();
 
@@ -72,7 +77,12 @@ const Square = ({ squareID }: Props) => {
     mutate,
   } = useSWRInfinite(
     (...rest) =>
-      getKey(...rest, `/api/v3/tribe/${tribeID}/square/${squareID}/feed`),
+      getKey(
+        ...rest,
+        isSapienTribe
+          ? '/api/v3/tribe/sapien/feed'
+          : `/api/v3/tribe/${tribeID}/square/${squareID}/feed`
+      ),
     { fetcher, revalidateOnMount: true }
   );
 
@@ -129,14 +139,11 @@ const Square = ({ squareID }: Props) => {
 
   return (
     <Page
-      header={<Header tribeID={tribeID} />}
+      header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
       subHeader={
         <Box className="card--rounded-white" padding={3}>
-          {me ? (
-            <CreateContentForm user={me} onSubmit={handleSubmit} />
-          ) : (
-            <PostComposerSkeleton />
-          )}
+          {me && <CreateContentForm user={me} onSubmit={handleSubmit} />}
+          {!me && isLoggingIn && <PostComposerSkeleton />}
         </Box>
       }
     >

@@ -25,7 +25,7 @@ const VerifyPage = () => {
           },
         });
       }
-      push('/');
+      push('/client/home');
     };
 
     if (token) {

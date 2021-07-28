@@ -53,7 +53,7 @@ const LoginForm = () => {
       const response = await loginAction({
         ...values,
         client: window?.navigator.userAgent,
-        redirect: '/',
+        redirect: '/client/home',
       });
 
       setSession({
