@@ -54,6 +54,7 @@ const DeleteContent = ({ contentID, onCancel, onDelete }: Props) => {
       title="Deleting post"
       variant="delete"
       onCancel={onCancel}
+      onClose={onCancel}
       onConfirm={handleDelete}
     >
       <Box marginBottom={1} marginTop={1}>

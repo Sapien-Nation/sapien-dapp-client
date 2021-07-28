@@ -54,6 +54,7 @@ const DeleteReply = ({ replyID, onCancel }: Props) => {
       title="Deleting Reply"
       variant="delete"
       onCancel={onCancel}
+      onClose={onCancel}
       onConfirm={handleDelete}
     >
       <Box marginBottom={1} marginTop={1}>
