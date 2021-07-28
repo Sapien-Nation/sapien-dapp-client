@@ -37,7 +37,6 @@ const renderElement = (props) => {
       return (
         <span {...attributes} aria-label={children} role="img">
           {children}
-          <span style={{ display: 'none' }}>{children}</span>
         </span>
       );
     case 'heading':
