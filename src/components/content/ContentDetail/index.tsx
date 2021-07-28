@@ -37,11 +37,18 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
       >
         {(content: ContentType) => (
           <>
-            <Header content={content} onDelete={() => setDialog(true)} />
+            <Header
+              content={content}
+              variant="detail"
+              onDelete={() => setDialog(true)}
+            />
             {!content.deletedAt && (
-              <div dangerouslySetInnerHTML={{ __html: content.data }} />
+              <>
+                <div dangerouslySetInnerHTML={{ __html: content.data }} />
+                <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+              </>
             )}
-            <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+
             {dialog && (
               <DeleteContent
                 contentID={contentID}
@@ -52,21 +59,24 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
                 }}
               />
             )}
+
+            {!content.deletedAt && (
+              <Box>
+                <ReplyForm
+                  contentID={contentID}
+                  onSubmit={(reply: ContentType) => {
+                    mutate(
+                      apiUrl,
+                      (replies: Array<ContentType>) => [reply, ...replies],
+                      false
+                    );
+                  }}
+                />
+              </Box>
+            )}
           </>
         )}
       </Query>
-      <Box>
-        <ReplyForm
-          contentID={contentID}
-          onSubmit={(reply: ContentType) => {
-            mutate(
-              apiUrl,
-              (replies: Array<ContentType>) => [reply, ...replies],
-              false
-            );
-          }}
-        />
-      </Box>
     </Box>
   );
 };

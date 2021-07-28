@@ -54,21 +54,29 @@ const ContentItem = ({ content, mutate }: Props) => {
       padding={3}
       style={{ gap: 22 }}
     >
-      <Header content={content} onDelete={() => setDialog(true)} />
+      <Header
+        content={content}
+        variant="feed"
+        onDelete={() => setDialog(true)}
+      />
       <div>
         <Link href={`${asPath}/content/${content.id}`}>
           <a>
-            {ReactHtmlParser(getHTML())}
-            {showMore && view === View.Compacted && !content.deletedAt && '...'}
-            <Box marginTop={2.3}>
-              {content.preview && (
-                <img
-                  alt="Preview"
-                  src={content.preview}
-                  style={{ borderRadius: '10px', maxWidth: '100%' }}
-                />
-              )}
-            </Box>
+            {!content.deletedAt && (
+              <>
+                {ReactHtmlParser(getHTML())}
+                {showMore && view === View.Compacted && '...'}
+                <Box marginTop={2.3}>
+                  {content.preview && (
+                    <img
+                      alt="Preview"
+                      src={content.preview}
+                      style={{ borderRadius: '10px', maxWidth: '100%' }}
+                    />
+                  )}
+                </Box>
+              </>
+            )}
           </a>
         </Link>{' '}
         {showMore && !content.deletedAt && (
@@ -86,10 +94,15 @@ const ContentItem = ({ content, mutate }: Props) => {
         )}
       </div>
       <Actions />
-      <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-      <Box>
-        <ReplyForm redirect contentID={content.id} />
-      </Box>
+
+      {!content.deletedAt && (
+        <>
+          <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+          <Box>
+            <ReplyForm redirect contentID={content.id} />
+          </Box>
+        </>
+      )}
 
       {dialog && (
         <DeleteContent

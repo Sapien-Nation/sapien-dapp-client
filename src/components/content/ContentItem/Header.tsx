@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 // mui
@@ -48,14 +49,16 @@ const useStyles = makeStyles(() => ({
 
 interface Props {
   content: Content;
+  variant: 'detail' | 'feed';
   onDelete: () => void;
 }
 
-const Header = ({ content, onDelete }: Props) => {
+const Header = ({ content, onDelete, variant }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
   const { canDelete, createdAt, deletedAt, group, tribe, owner } = content;
+  const { asPath } = useRouter();
 
   return (
     <>
@@ -68,10 +71,19 @@ const Header = ({ content, onDelete }: Props) => {
         >
           {deletedAt ? (
             <>
-              <Typography color="textSecondary" component="span" variant="h6">
-                This post was removed by the owner
-              </Typography>
-              <Divider flexItem orientation="vertical" />
+              <Link
+                passHref
+                href={
+                  variant === 'detail'
+                    ? asPath
+                    : `${asPath}/content/${content.id}`
+                }
+              >
+                <Typography color="textSecondary" component="a" variant="h6">
+                  This post was removed by the owner
+                </Typography>
+              </Link>
+              <Divider flexItem light orientation="vertical" />
             </>
           ) : (
             <>
