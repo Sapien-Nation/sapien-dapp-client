@@ -13,7 +13,7 @@ import { Avatar, Box, Typography } from '@material-ui/core';
 // types
 import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 
-// emums
+// enums
 import { StoreSteps } from '../WalletEnums';
 
 interface Props {

@@ -10,7 +10,26 @@ import SearchInput from '../shared/SearchInput';
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
 
-export const BadgeItem = ({ description, name, spn }) => (
+// types
+import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+
+// enums
+import { MyBadgesSteps } from '../WalletEnums';
+
+interface Props {
+  setShowTabsMenu: (showTab: boolean) => void;
+  setStep: (step: MyBadgesSteps) => void;
+  setCurrentBadge: (Badge: BadgeType) => void;
+}
+
+export const BadgeItem = ({
+  setShowTabsMenu,
+  setStep,
+  setCurrentBadge,
+  description,
+  name,
+  spn,
+}) => (
   <Box
     alignItems="center"
     bgcolor={neutral[50]}
@@ -20,6 +39,15 @@ export const BadgeItem = ({ description, name, spn }) => (
     padding={1.8}
     style={{
       cursor: 'pointer',
+    }}
+    onClick={() => {
+      setShowTabsMenu(false);
+      setStep(MyBadgesSteps.Receivers);
+      setCurrentBadge({
+        price: spn,
+        name,
+        description,
+      });
     }}
   >
     <Avatar
@@ -58,14 +86,19 @@ export const BadgeItem = ({ description, name, spn }) => (
   </Box>
 );
 
-const BadgesList = () => {
+const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
   return (
     <div
       style={{
         padding: '0 2.4rem',
       }}
     >
-      <SearchInput ItemComponent={BadgeItem} />
+      <SearchInput
+        ItemComponent={BadgeItem}
+        setCurrentBadge={setCurrentBadge}
+        setShowTabsMenu={setShowTabsMenu}
+        setStep={setStep}
+      />
     </div>
   );
 };

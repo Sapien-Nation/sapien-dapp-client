@@ -8,7 +8,7 @@ import { Search as SearchIcon } from '@material-ui/icons';
 import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 
 // emums
-import { StoreSteps } from '../WalletEnums';
+import { MyBadgesSteps, StoreSteps } from '../WalletEnums';
 
 const list = [
   {
@@ -41,7 +41,7 @@ const list = [
 interface Props {
   ItemComponent: any;
   setShowTabsMenu?: (showTab: boolean) => void;
-  setStep?: (step: StoreSteps) => void;
+  setStep?: (step: StoreSteps | MyBadgesSteps) => void;
   setCurrentBadge?: (Badge: BadgeType) => void;
 }
 

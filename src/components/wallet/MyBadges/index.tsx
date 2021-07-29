@@ -6,6 +6,9 @@ import BadgesList from './BadgesList';
 import Receivers from './Receivers';
 import Confirmation from './Confirmation';
 
+// types
+import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+
 // emums
 import { MyBadgesSteps } from '../WalletEnums';
 
@@ -16,8 +19,10 @@ interface Props {
 
 const form = 'my-badges-form';
 
-const MyBadges = ({ showTabsMenu }: Props) => {
+const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
   const [step, setStep] = useState(MyBadgesSteps.Badges);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [currentBadge, setCurrentBadge] = useState<BadgeType | null>();
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
@@ -36,7 +41,13 @@ const MyBadges = ({ showTabsMenu }: Props) => {
   const renderStep = () => {
     switch (step) {
       case MyBadgesSteps.Badges:
-        return <BadgesList />;
+        return (
+          <BadgesList
+            setCurrentBadge={setCurrentBadge}
+            setShowTabsMenu={setShowTabsMenu}
+            setStep={setStep}
+          />
+        );
       case MyBadgesSteps.Receivers:
         return <Receivers />;
       case MyBadgesSteps.Confirmation:

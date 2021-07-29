@@ -1,4 +1,5 @@
 export { default as Deposit } from './Deposit';
+export { default as MyBadges } from './MyBadges';
 export { default as Store } from './Store';
 export { default as Transactions } from './Transactions';
 export { default as WalletHeader } from './WalletHeader';
