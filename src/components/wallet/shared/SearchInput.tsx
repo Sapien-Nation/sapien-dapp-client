@@ -89,7 +89,7 @@ const SearchInput = ({
         value={searchTerm}
         onChange={handleChange}
       />
-      <>
+      <div style={{ height: '100%', overflow: 'auto' }}>
         {results.map((item, index) => (
           <ItemComponent
             key={index}
@@ -101,7 +101,7 @@ const SearchInput = ({
             spn={item.spn}
           />
         ))}
-      </>
+      </div>
     </>
   );
 };

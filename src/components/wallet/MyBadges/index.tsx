@@ -49,7 +49,9 @@ const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
           />
         );
       case MyBadgesSteps.Receivers:
-        return <Receivers />;
+        return (
+          <Receivers setShowTabsMenu={setShowTabsMenu} setStep={setStep} />
+        );
       case MyBadgesSteps.Confirmation:
         return <Confirmation />;
     }
