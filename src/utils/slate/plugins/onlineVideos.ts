@@ -1,4 +1,5 @@
 import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 export const wrapOnlineVideo = (editor: any, url: string) => {
   const results = url.match('v=([a-zA-Z0-9_-]+)&?');
@@ -9,6 +10,7 @@ export const wrapOnlineVideo = (editor: any, url: string) => {
   }
 
   const thumbnail = `https://img.youtube.com/vi/${videoId}/1.jpg`;
+  const embed = `https://www.youtube.com/embed/${videoId}`;
 
   Transforms.insertNodes(editor, [
     {
@@ -16,6 +18,16 @@ export const wrapOnlineVideo = (editor: any, url: string) => {
       // @ts-ignore
       type: 'video',
       url,
+      embed,
+      removeMethod: () => {
+        editor.selection &&
+          Transforms.delete(editor, {
+            at: editor.selection,
+            unit: 'block',
+          });
+
+        ReactEditor.focus(editor);
+      },
       image: {
         type: 'image',
         url: thumbnail,

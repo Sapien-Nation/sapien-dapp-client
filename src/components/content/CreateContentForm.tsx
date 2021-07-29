@@ -19,6 +19,7 @@ import { serialize } from 'utils/slate';
 
 // types
 import type { User } from 'tools/types/user';
+import { useEffect, useState } from 'react';
 
 interface Props {
   setIsCreating: any;
@@ -44,8 +45,17 @@ const CreateContentForm = ({
     name: 'document',
     defaultValue: initialEditorValue,
   });
+  const [hasContent, setHasContent] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (editorField.value !== initialEditorValue) {
+      setHasContent(true);
+    } else {
+      setHasContent(false);
+    }
+  }, [editorField]);
 
   const onSubmit = async ({ document }) => {
     setIsCreating(true);
@@ -99,6 +109,7 @@ const CreateContentForm = ({
           editorProps={{
             placeholder: `What’s on your mind, ${user.username}?`,
           }}
+          hasContent={hasContent}
           isSubmitting={isSubmitting}
           {...editorField}
         />

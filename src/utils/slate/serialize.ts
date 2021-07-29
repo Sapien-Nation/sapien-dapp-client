@@ -11,6 +11,7 @@ export const serialize = (node) => {
     const string = escapeHtml(node.text);
     return string;
   }
+
   switch (node.type) {
     case 'block-quote':
       return `<blockquote style="font-style:bold;border:4px solid ${primary[800]}">
@@ -33,7 +34,7 @@ export const serialize = (node) => {
       return `<a 
                 target="_blank" 
                 href="${escapeHtml(node.url)}"
-                style="margin:0;color:${primary[800]};" 
+                style="margin:0;" 
               >
                 ${node.url}
               </a>`;
@@ -49,17 +50,14 @@ export const serialize = (node) => {
                 ${children}
               </span>`;
     case 'video':
-      return `<div>
-                <div
-                  style="padding:75% 0 0 0;position:relative;"
-                >
-                  <iframe
-                    src="${escapeHtml(node.url)}"
-                    style="position:absolute;top:0;left:0;width:100%;height:100%;"
-                  />
-                </div>
-              ${children}
-            </div>`;
+      return `<div style="text-align:center;">
+                <iframe
+                  src="${node.embed}"
+                  width="560"
+                  height="315"
+                  style="border:none;"
+                ></iframe>
+              </div>`;
     default:
       return children;
   }

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 // mui
 import { Box, IconButton } from '@material-ui/core';
 import { Close as CloseIcon } from '@material-ui/icons';
@@ -8,8 +6,6 @@ import { Close as CloseIcon } from '@material-ui/icons';
 import { primary } from 'styles/colors';
 
 const Video = ({ attributes, children, element }) => {
-  const [hidden, setHidden] = useState(false);
-
   const { url, image } = element;
 
   return (
@@ -17,7 +13,7 @@ const Video = ({ attributes, children, element }) => {
       <div {...attributes} contentEditable={false}>
         <Box
           className="card--rounded-white"
-          display={hidden ? 'none' : 'flex'}
+          display="flex"
           marginY={1}
           position="relative"
         >
@@ -27,7 +23,7 @@ const Video = ({ attributes, children, element }) => {
               right: '0.5rem',
               top: '1rem',
             }}
-            onClick={() => setHidden(true)}
+            onClick={() => element.removeMethod()}
           >
             <CloseIcon />
           </IconButton>

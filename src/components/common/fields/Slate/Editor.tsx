@@ -28,11 +28,18 @@ import 'emoji-mart/css/emoji-mart.css';
 interface Props {
   editorProps: any;
   isSubmitting: boolean;
+  hasContent?: boolean;
   onChange: (editor: any) => void;
   value: any;
 }
 
-const Editor = ({ editorProps = {}, isSubmitting, onChange, value }: Props) => {
+const Editor = ({
+  editorProps = {},
+  hasContent = false,
+  isSubmitting,
+  onChange,
+  value,
+}: Props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const imageRef = useRef(null);
 
@@ -59,9 +66,6 @@ const Editor = ({ editorProps = {}, isSubmitting, onChange, value }: Props) => {
     },
     [onChange, setSelection, editor]
   );
-
-  // TODO
-  const hasContent = true;
 
   return (
     <Box

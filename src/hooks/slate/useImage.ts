@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { Editor, Transforms } from 'slate';
 import { v4 as uuidv4 } from 'uuid';
+import { ReactEditor } from 'slate-react';
 
 // api
 import { uploadContentImage } from 'api/content';
@@ -31,6 +32,15 @@ const useImageUploadHandler = (editor, selection) => {
             caption: fileName,
             url: null,
             isUploading: true,
+            removeMethod: () => {
+              editor.selection &&
+                Transforms.delete(editor, {
+                  at: editor.selection,
+                  unit: 'block',
+                });
+
+              ReactEditor.focus(editor);
+            },
             children: [{ text: '' }],
           },
           {
