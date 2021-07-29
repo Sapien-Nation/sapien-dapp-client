@@ -16,7 +16,7 @@ interface Props {
   onDelete: () => void;
 }
 
-const DeleteReply = ({ replyID, onCancel }: Props) => {
+const DeleteReply = ({ replyID, onCancel, onDelete }: Props) => {
   const [isFetching, setIsFetching] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -25,9 +25,9 @@ const DeleteReply = ({ replyID, onCancel }: Props) => {
     try {
       await deleteReply(replyID);
 
-      onCancel();
+      onDelete();
       enqueueSnackbar('Reply deleted successfully.', {
-        variant: 'error',
+        variant: 'success',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'center',

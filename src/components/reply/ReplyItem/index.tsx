@@ -76,6 +76,7 @@ const ReplyItem = ({ apiUrl, reply }: Props) => {
           replyID={reply.id}
           onCancel={() => setDialog(null)}
           onDelete={() => {
+            setDialog(null);
             mutate(
               apiUrl,
               (replies: Array<Content>) =>

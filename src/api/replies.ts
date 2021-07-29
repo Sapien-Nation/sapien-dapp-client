@@ -9,6 +9,6 @@ export const createReply = (postID: string, data: { data: string }) =>
 
 export const deleteReply = (replyID: string) =>
   axios
-    .delete(`/api/v3/post/${replyID}/reply`)
+    .delete(`/api/v3/reply/${replyID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
