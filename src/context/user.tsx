@@ -63,7 +63,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   }) => {
     setTokens({ token, torus, refresh });
     mutate('/api/v3/user/me');
-    push('/client/home');
+    push('/client/sapien');
   };
 
   return (

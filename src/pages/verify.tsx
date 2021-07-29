@@ -25,7 +25,7 @@ const VerifyPage = () => {
           },
         });
       }
-      push('/client/home');
+      push('/client/sapien');
     };
 
     if (token) {
