@@ -14,7 +14,7 @@ export const getTribe = (squareID: string): Tribe => {
     useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? {};
 
   const tribeFromMainSquare = tribes?.find(
-    ({ mainSquareId }) => mainSquareId === squareID
+    ({ name, mainSquareId }) => mainSquareId === squareID || name === squareID
   );
 
   if (tribeFromMainSquare) return tribeFromMainSquare;

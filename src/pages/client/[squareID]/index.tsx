@@ -57,7 +57,9 @@ const Square = ({ squareID }: Props) => {
   // but it renders all exactly as a normal Square, thats why we check
   // for query.squareID to see if we are trying to render the sapien tribe
   const isSapienTribe = squareID === 'sapien';
-  const { id: tribeID } = getTribe(String(squareID));
+  const { id: tribeID, mainSquareId: sapienSquareID } = getTribe(
+    String(squareID)
+  );
 
   const {
     data: swrData,
@@ -87,17 +89,19 @@ const Square = ({ squareID }: Props) => {
     <Page
       header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
       subHeader={
-        <Box className="card--rounded-white" padding={3}>
+        <>
           {me && (
-            <CreateContentForm
-              setIsCreating={setIsCreating}
-              squareID={squareID}
-              user={me}
-              onSave={() => mutate()}
-            />
+            <Box className="card--rounded-white" padding={3}>
+              <CreateContentForm
+                setIsCreating={setIsCreating}
+                squareID={isSapienTribe ? sapienSquareID : squareID}
+                user={me}
+                onSave={() => mutate()}
+              />
+            </Box>
           )}
           {!me && isLoggingIn && <PostComposerSkeleton />}
-        </Box>
+        </>
       }
     >
       <InfiniteScrollComponent

@@ -22,6 +22,7 @@ import type { User } from 'tools/types/user';
 import { useEffect, useState } from 'react';
 
 interface Props {
+  isFromSapienTribe?: boolean;
   setIsCreating: any;
   user: User;
   onSave: () => void;

@@ -9,6 +9,9 @@ import Header from './Header';
 import { DeleteContent } from '../Modals';
 // import { ReplyForm } from 'components/reply';
 
+// context
+import { useAuth } from 'context/user';
+
 // mui
 import { Box, Typography } from '@material-ui/core';
 
@@ -35,6 +38,7 @@ const ContentItem = ({ content, mutate }: Props) => {
   const [view, setView] = useState(View.Compacted);
   const [dialog, setDialog] = useState(false);
 
+  const { me } = useAuth();
   const { asPath } = useRouter();
 
   const showMore = getContentCount(content.data) > maxContentLength;
@@ -93,9 +97,9 @@ const ContentItem = ({ content, mutate }: Props) => {
           </Typography>
         )}
       </div>
-      <Actions />
+      <Actions content={content} user={me} />
 
-      {!content.deletedAt && (
+      {!content.deletedAt && me && (
         <>
           <Box borderColor="grey.100" borderTop={1} marginX={-3} />
           <Box>{/* <ReplyForm redirect contentID={content.id} /> */}</Box>
