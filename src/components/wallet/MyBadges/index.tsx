@@ -21,7 +21,7 @@ const form = 'my-badges-form';
 
 const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
   const [step, setStep] = useState(MyBadgesSteps.Badges);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [currentReceiver, setCurrentReceiver] = useState(null);
   const [currentBadge, setCurrentBadge] = useState<BadgeType | null>();
   const methods = useForm({
     defaultValues: {
@@ -50,10 +50,22 @@ const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
         );
       case MyBadgesSteps.Receivers:
         return (
-          <Receivers setShowTabsMenu={setShowTabsMenu} setStep={setStep} />
+          <Receivers
+            currentBadge={currentBadge}
+            setCurrentReceiver={setCurrentReceiver}
+            setShowTabsMenu={setShowTabsMenu}
+            setStep={setStep}
+          />
         );
       case MyBadgesSteps.Confirmation:
-        return <Confirmation />;
+        return (
+          <Confirmation
+            currentBadge={currentBadge}
+            currentReceiver={currentReceiver}
+            setShowTabsMenu={setShowTabsMenu}
+            setStep={setStep}
+          />
+        );
     }
   };
   return (

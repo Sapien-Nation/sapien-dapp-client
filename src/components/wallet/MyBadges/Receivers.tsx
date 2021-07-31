@@ -12,6 +12,7 @@ import {
   IconButton,
   TextField,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import {
   Add as AddIcon,
@@ -25,42 +26,94 @@ import { primary, neutral } from 'styles/colors';
 // enums
 import { MyBadgesSteps } from '../WalletEnums';
 
-export const ReceiverItem = ({ name, spn }) => (
-  <Box
-    alignItems="center"
-    borderRadius={10}
-    display="flex"
-    marginTop={1}
-    padding={1}
-    style={{
-      cursor: 'pointer',
-    }}
-  >
-    <Avatar
-      alt=""
-      imgProps={{
-        style: {
-          borderRadius: 40,
-        },
-      }}
-      src="/fixtures/normal/slowpoke.jpg"
-      style={{
-        width: 40,
-        height: 40,
-      }}
-    />
-    <Box display="flex" marginLeft={1}>
-      <Typography variant="button">{name}</Typography>
-    </Box>
-    <Box alignItems="center" display="flex">
-      <Typography style={{ marginLeft: 6 }} variant="button">
-        {spn}
-      </Typography>
-    </Box>
-  </Box>
-);
+const useStyles = makeStyles(() => ({
+  receiverItem: {
+    '&:hover': {
+      backgroundColor: neutral[50],
+    },
+  },
+}));
 
-const Receivers = ({ setShowTabsMenu, setStep }) => {
+const mockList = [
+  {
+    name: 'Member 1',
+    description: '@member1',
+  },
+  {
+    name: 'Member 2',
+    description: '@member2',
+  },
+  {
+    name: 'Member 3',
+    description: '@member3',
+  },
+  {
+    name: 'Member 5',
+    description: '@member4',
+  },
+  {
+    name: 'Member 5',
+    description: '@member5',
+  },
+];
+
+export const ReceiverItem = ({
+  description,
+  name,
+  setCurrentReceiver,
+  setStep,
+}) => {
+  const classes = useStyles();
+  return (
+    <Box
+      alignItems="center"
+      borderRadius={10}
+      className={classes.receiverItem}
+      display="flex"
+      marginTop={1}
+      padding={1}
+      style={{
+        cursor: 'pointer',
+      }}
+      onClick={() => {
+        setStep(MyBadgesSteps.Confirmation);
+        setCurrentReceiver({
+          name,
+          description,
+        });
+      }}
+    >
+      <Avatar
+        alt=""
+        imgProps={{
+          style: {
+            borderRadius: 40,
+          },
+        }}
+        src="/fixtures/normal/slowpoke.jpg"
+        style={{
+          width: 40,
+          height: 40,
+        }}
+      />
+      <Box display="flex" marginLeft={1}>
+        <Typography variant="button">{name}</Typography>
+      </Box>
+      <Box alignItems="center" display="flex">
+        <Typography style={{ marginLeft: 6 }} variant="button">
+          {description}
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+const Receivers = ({
+  setShowTabsMenu,
+  setStep,
+  currentBadge,
+  setCurrentReceiver,
+}) => {
   const {
     watch,
     register,
@@ -148,13 +201,13 @@ const Receivers = ({ setShowTabsMenu, setStep }) => {
   return (
     <div
       style={{
-        padding: '2.4rem',
+        padding: '2rem 2.4rem',
         height: '100%',
         display: 'grid',
-        gridTemplateRows: '32px 50px 1fr 86px',
+        gridTemplateRows: '42px 50px 1fr 86px',
       }}
     >
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', marginBottom: '1rem' }}>
         <IconButton
           aria-label="go back"
           style={{
@@ -171,7 +224,12 @@ const Receivers = ({ setShowTabsMenu, setStep }) => {
         </IconButton>
         <Typography variant="button">Confirmation</Typography>
       </div>
-      <SearchInput ItemComponent={ReceiverItem} />
+      <SearchInput
+        ItemComponent={ReceiverItem}
+        list={mockList}
+        setCurrentReceiver={setCurrentReceiver}
+        setStep={setStep}
+      />
       <Box
         alignItems="center"
         bgcolor={neutral[50]}
@@ -199,7 +257,7 @@ const Receivers = ({ setShowTabsMenu, setStep }) => {
           }}
         />
         <Box display="flex" flexDirection="column" marginLeft={1}>
-          <Typography variant="button">Badge Name</Typography>
+          <Typography variant="button">{currentBadge.name}</Typography>
           <Typography
             style={{
               color: neutral[500],
@@ -207,7 +265,7 @@ const Receivers = ({ setShowTabsMenu, setStep }) => {
             }}
             variant="overline"
           >
-            Description goes here...
+            {currentBadge.description}
           </Typography>
         </Box>
         <Box alignItems="center" display="flex" marginLeft="auto">

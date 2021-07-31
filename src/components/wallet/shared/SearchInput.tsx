@@ -10,7 +10,7 @@ import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 // emums
 import { MyBadgesSteps, StoreSteps } from '../WalletEnums';
 
-const list = [
+const mockList = [
   {
     name: 'Badge 1',
     description: 'Description goes here...',
@@ -40,14 +40,18 @@ const list = [
 
 interface Props {
   ItemComponent: any;
+  list?: any;
+  setCurrentBadge?: (Badge: BadgeType) => void;
+  setCurrentReceiver?: (Receiver: any) => void;
   setShowTabsMenu?: (showTab: boolean) => void;
   setStep?: (step: StoreSteps | MyBadgesSteps) => void;
-  setCurrentBadge?: (Badge: BadgeType) => void;
 }
 
 const SearchInput = ({
   ItemComponent,
+  list = mockList,
   setCurrentBadge,
+  setCurrentReceiver,
   setShowTabsMenu,
   setStep,
 }: Props) => {
@@ -96,6 +100,7 @@ const SearchInput = ({
             description={item.description}
             name={item.name}
             setCurrentBadge={setCurrentBadge}
+            setCurrentReceiver={setCurrentReceiver}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
             spn={item.spn}
