@@ -15,7 +15,7 @@ import {
 } from 'assets';
 
 // components
-import { Store, MyBadges } from './';
+import { MyBadges, Spn, Store } from './';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -73,13 +73,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.Spn}
           timeout={300}
         >
-          <div
-            style={{
-              padding: '0 2.4rem',
-            }}
-          >
-            SPN
-          </div>
+          <Spn setShowTabsMenu={setShowTabsMenu} showTabsMenu={showTabsMenu} />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
