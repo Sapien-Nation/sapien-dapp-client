@@ -73,7 +73,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.Spn}
           timeout={300}
         >
-          <Spn setShowTabsMenu={setShowTabsMenu} showTabsMenu={showTabsMenu} />
+          <Spn showTabsMenu={showTabsMenu} />
         </CSSTransition>
         <CSSTransition
           unmountOnExit

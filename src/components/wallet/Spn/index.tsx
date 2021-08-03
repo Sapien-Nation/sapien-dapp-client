@@ -6,13 +6,11 @@ import Receivers from './Receivers';
 
 interface Props {
   showTabsMenu: boolean;
-  setShowTabsMenu: (status: boolean) => void;
 }
 
 const form = 'spn-form';
 
-const Spn = ({ showTabsMenu, setShowTabsMenu }: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Spn = ({ showTabsMenu }: Props) => {
   const [currentReceiver, setCurrentReceiver] = useState(null);
   const methods = useForm({
     defaultValues: {
@@ -35,8 +33,8 @@ const Spn = ({ showTabsMenu, setShowTabsMenu }: Props) => {
           onSubmit={handleSubmit(handleFormSubmit)}
         >
           <Receivers
+            currentReceiver={currentReceiver}
             setCurrentReceiver={setCurrentReceiver}
-            setShowTabsMenu={setShowTabsMenu}
           />
         </form>
       </FormProvider>

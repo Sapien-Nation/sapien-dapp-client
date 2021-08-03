@@ -10,10 +10,12 @@ import {
   Box,
   Button,
   Input,
+  IconButton,
   InputAdornment,
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
 // styles
 import { red, neutral } from 'styles/colors';
@@ -23,9 +25,6 @@ import { formatSpn } from 'utils/spn';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
-
-// enums
-import { MyBadgesSteps } from '../WalletEnums';
 
 const mockList = [
   {
@@ -71,12 +70,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ReceiverItem = ({
-  description,
-  name,
-  setCurrentReceiver,
-  setStep,
-}) => {
+export const ReceiverItem = ({ description, name, setCurrentReceiver }) => {
   const classes = useStyles();
   return (
     <Box
@@ -90,7 +84,6 @@ export const ReceiverItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
-        setStep(MyBadgesSteps.Confirmation);
         setCurrentReceiver({
           name,
           description,
@@ -140,7 +133,7 @@ const NumberFormatInput = ({ name, onChange, ...rest }) => {
   );
 };
 
-const Receivers = ({ setShowTabsMenu, setCurrentReceiver }) => {
+const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
   const {
     watch,
     register,
@@ -152,7 +145,7 @@ const Receivers = ({ setShowTabsMenu, setCurrentReceiver }) => {
     <Box
       display="flex"
       flexDirection="column"
-      height="calc(100% - 90px)"
+      height="calc(100% - 81px)"
       justifyContent="space-between"
     >
       <div
@@ -160,17 +153,72 @@ const Receivers = ({ setShowTabsMenu, setCurrentReceiver }) => {
           height: '100%',
           display: 'grid',
           margin: '0 2.4rem',
-          gridTemplateRows: '32px 50px 1fr 200px',
+          gridTemplateRows: currentReceiver
+            ? '32px 72px 1fr 90px'
+            : '32px 50px 1fr 200px',
         }}
       >
-        <div style={{ display: 'flex', marginBottom: '1rem' }}>
-          <Typography variant="button">Receiver</Typography>
+        <div
+          style={{
+            alignItems: 'center',
+            display: 'flex',
+          }}
+        >
+          {currentReceiver ? (
+            <>
+              <IconButton
+                aria-label="go back"
+                style={{
+                  padding: 0,
+                  marginRight: 6,
+                }}
+                onClick={() => {
+                  setCurrentReceiver(null);
+                }}
+              >
+                <ArrowBackIcon
+                  fontSize="small"
+                  style={{ color: neutral[700] }}
+                />
+              </IconButton>
+              <Typography variant="button">Confirmation</Typography>
+            </>
+          ) : (
+            <Typography variant="button">Receiver</Typography>
+          )}
         </div>
-        <SearchInput
-          ItemComponent={ReceiverItem}
-          list={mockList}
-          setCurrentReceiver={setCurrentReceiver}
-        />
+        {currentReceiver ? (
+          <Box
+            alignItems="center"
+            bgcolor={neutral[50]}
+            borderRadius={10}
+            display="flex"
+            marginBottom={1}
+            padding={1.8}
+            style={{
+              cursor: 'pointer',
+            }}
+          >
+            <Avatar
+              alt=""
+              src="/fixtures/normal/slowpoke.jpg"
+              style={{
+                width: 40,
+                height: 40,
+              }}
+            />
+            <Box display="flex" flexDirection="column" marginLeft={1}>
+              <Typography variant="button">{currentReceiver.name}</Typography>
+              <Typography variant="overline">@marryrob</Typography>
+            </Box>
+          </Box>
+        ) : (
+          <SearchInput
+            ItemComponent={ReceiverItem}
+            list={mockList}
+            setCurrentReceiver={setCurrentReceiver}
+          />
+        )}
         <div>
           <Typography
             style={{
@@ -262,6 +310,27 @@ const Receivers = ({ setShowTabsMenu, setCurrentReceiver }) => {
             </Typography>
           </Box>
         </div>
+        {currentReceiver && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Typography
+              style={{
+                fontWeight: 100,
+                color: neutral[500],
+                textAlign: 'center',
+                lineHeight: 1.5,
+              }}
+              variant="caption"
+            >
+              Are you sure you want to proceed with this transaction?
+            </Typography>
+          </div>
+        )}
       </div>
       <Box
         borderTop="1px solid #EDEEF0"
@@ -277,7 +346,7 @@ const Receivers = ({ setShowTabsMenu, setCurrentReceiver }) => {
           type="submit"
           variant="contained"
           onClick={() => {
-            setShowTabsMenu(true);
+            setCurrentReceiver(null);
           }}
         >
           Send SPN
