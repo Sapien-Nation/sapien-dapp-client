@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -7,13 +9,14 @@ import TribeNavigation from './TribeNavigation';
 
 const Sidebar = () => {
   const { me } = useAuth();
+  const { asPath } = useRouter();
 
   if (!me) return null;
 
   return (
     <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
       <TribeBar />
-      <TribeNavigation />
+      {asPath !== '/discovery' && <TribeNavigation />}
     </nav>
   );
 };

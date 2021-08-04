@@ -10,7 +10,7 @@ import { neutral } from 'styles/colors';
 
 // mui
 import { Avatar, Drawer, IconButton, makeStyles } from '@material-ui/core';
-import { AddRounded as AddIcon } from '@material-ui/icons';
+import { AddRounded as AddIcon, Explore } from '@material-ui/icons';
 
 // components
 import CreateTribeModal from './CreateTribeModal';
@@ -127,6 +127,28 @@ const TribeBar = () => {
             </Link>
           );
         })}
+        <Link href="/discovery">
+          <a>
+            <Avatar
+              alt="discovery"
+              classes={{
+                img: classes.avatarImage,
+              }}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: 15,
+                boxSizing: 'border-box',
+                border: `2px solid ${neutral[700]}`,
+                padding: '2px',
+                width: '4.8rem',
+                height: '4.8rem',
+              }}
+              variant="rounded"
+            >
+              <Explore htmlColor={neutral[700]} />
+            </Avatar>
+          </a>
+        </Link>
         <IconButton
           aria-label="Create Tribe"
           style={{ padding: 0 }}
