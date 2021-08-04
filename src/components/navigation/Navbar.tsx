@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useLocalStorage } from 'react-use';
 import Link from 'next/link';
@@ -19,6 +19,7 @@ import { Spn as SpnIcon } from 'assets';
 import {
   AppBar,
   Avatar,
+  Badge,
   Box,
   Button,
   Chip,
@@ -30,9 +31,11 @@ import {
   Popover,
   Toolbar,
 } from '@material-ui/core';
+import { NotificationsNone } from '@material-ui/icons';
 
 // components
 import { WalletMenu } from 'components/wallet';
+import { NotificationMenu } from 'components/notification';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -41,6 +44,15 @@ const useStyles = makeStyles(() => ({
     filter: 'drop-shadow(0px 15px 40px rgba(56, 49, 67, 0.1))',
     borderRadius: 10,
     padding: '0 !important',
+    position: 'absolute',
+    transform: 'translateX(-6px) translateY(-24px)',
+  },
+  notification: {
+    height: 702,
+    width: 449,
+    filter: 'drop-shadow(0px 20px 40px rgba(51, 51, 51, 0.1))',
+    borderRadius: 10,
+    padding: '20px 16px 16px',
     position: 'absolute',
     transform: 'translateX(-6px) translateY(-24px)',
   },
@@ -53,6 +65,8 @@ const useStyles = makeStyles(() => ({
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
+  const [notificationsAnchor, setNotificationsAnchor] =
+    useState<null | HTMLElement>(null);
   const classes = useStyles();
   const { query } = useRouter();
   const [tokens] = useLocalStorage<{
@@ -141,6 +155,24 @@ const Navbar = () => {
                 onClick={(event) => setBalanceAnchor(event.currentTarget)}
               />
               <IconButton
+                aria-controls="notifications"
+                aria-haspopup="true"
+                edge="end"
+                style={{ backgroundColor: '#E5E5E5', margin: '0 22px' }}
+                onClick={(event) => setNotificationsAnchor(event.currentTarget)}
+              >
+                <Badge
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  }}
+                  badgeContent={1}
+                  color="secondary"
+                >
+                  <NotificationsNone />
+                </Badge>
+              </IconButton>
+              <IconButton
                 aria-controls="user-profile"
                 aria-haspopup="true"
                 aria-label={me.username}
@@ -186,6 +218,21 @@ const Navbar = () => {
       >
         <WalletMenu wallet={wallet} />
       </Popover>
+      <Menu
+        keepMounted
+        anchorEl={notificationsAnchor}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        classes={{
+          paper: classes.notification,
+        }}
+        getContentAnchorEl={null}
+        id="notifications"
+        open={Boolean(notificationsAnchor)}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setNotificationsAnchor(null)}
+      >
+        <NotificationMenu />
+      </Menu>
     </AppBar>
   );
 };
