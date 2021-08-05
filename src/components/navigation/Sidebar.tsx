@@ -5,6 +5,7 @@ import { useAuth } from 'context/user';
 
 // components
 import TribeBar from './TribeBar';
+import DiscoveryNavigation from './DiscoveryNavigation';
 import TribeNavigation from './TribeNavigation';
 
 const Sidebar = () => {
@@ -13,10 +14,12 @@ const Sidebar = () => {
 
   if (!me) return null;
 
+  const showDiscoveryBar = asPath.includes('discovery');
   return (
     <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
       <TribeBar />
-      {asPath !== '/discovery' && <TribeNavigation />}
+      {showDiscoveryBar && <DiscoveryNavigation />}
+      {showDiscoveryBar === false && <TribeNavigation />}
     </nav>
   );
 };
