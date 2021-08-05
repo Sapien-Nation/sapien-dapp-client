@@ -9,7 +9,12 @@ interface Props {
 
 const Page = ({ children, header = null, subHeader = null }: Props) => {
   return (
-    <Box className="card--rounded-gray" paddingX={3.8} paddingY={3}>
+    <Box
+      className="card--rounded-gray"
+      marginTop={12.7}
+      paddingX={3.8}
+      paddingY={3}
+    >
       <Box
         display="grid"
         maxWidth="79rem"
