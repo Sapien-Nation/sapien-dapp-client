@@ -76,7 +76,12 @@ const Discovery = () => {
   };
 
   return (
-    <Box className="card--rounded-gray" paddingTop={4} paddingX={2.8}>
+    <Box
+      className="card--rounded-gray"
+      marginTop={12.7}
+      paddingTop={4}
+      paddingX={2.8}
+    >
       <Box marginBottom={4} paddingX={1.2}>
         <Tabs aria-label="Discovery Tabs" value={value} onChange={handleChange}>
           <Tab

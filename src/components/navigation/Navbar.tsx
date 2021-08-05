@@ -29,6 +29,7 @@ import {
   Popover,
   TextField,
   Toolbar,
+  Theme,
   Typography,
 } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
@@ -42,7 +43,7 @@ import {
 import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles<Theme>(() => ({
   paper: {
     height: 600,
     width: 366,
@@ -69,6 +70,9 @@ const useStyles = makeStyles(() => ({
     borderRadius: 90,
     paddingBottom: '8px',
   },
+  navBar: {
+    width: `calc(100% - 300px)`,
+  },
 }));
 
 const Navbar = () => {
@@ -77,8 +81,8 @@ const Navbar = () => {
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
-  const classes = useStyles();
   const { query } = useRouter();
+  const classes = useStyles();
   const [tokens] = useLocalStorage<{
     token: string;
     torus: string;
@@ -147,7 +151,12 @@ const Navbar = () => {
   if (!me) return null;
 
   return (
-    <AppBar color="inherit" elevation={0} position="relative">
+    <AppBar
+      className={classes.navBar}
+      color="inherit"
+      elevation={0}
+      position="fixed"
+    >
       <Toolbar style={{ minHeight: 97 }}>
         <Box marginRight="auto" minWidth={734}>
           <Autocomplete

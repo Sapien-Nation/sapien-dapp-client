@@ -9,6 +9,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
+import { Widgets } from 'components/widgets';
 
 interface Props {
   children: React.ReactNode;
@@ -22,6 +23,11 @@ const useStyles = makeStyles(() => ({
     minHeight: '100vh',
     backgroundColor: '#fff',
   }),
+  container: {
+    display: 'grid',
+    gridTemplateAreas: "'main widgets'",
+    gridTemplateColumns: 'auto 290px',
+  },
 }));
 
 const Layout = ({ children }: Props) => {
@@ -38,7 +44,9 @@ const Layout = ({ children }: Props) => {
         <WalletProvider>
           <Navbar />
         </WalletProvider>
-        <div>{children}</div>
+        <div className={classes.container}>
+          {children} <Widgets />
+        </div>
       </main>
     </div>
   );
