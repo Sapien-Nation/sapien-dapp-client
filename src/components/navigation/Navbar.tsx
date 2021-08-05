@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useLocalStorage } from 'react-use';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // api
@@ -21,7 +20,6 @@ import {
   Avatar,
   Badge,
   Box,
-  Button,
   Chip,
   Fade,
   IconButton,
@@ -29,9 +27,16 @@ import {
   Menu,
   MenuItem,
   Popover,
+  TextField,
   Toolbar,
+  Typography,
 } from '@material-ui/core';
-import { NotificationsNone } from '@material-ui/icons';
+import { Autocomplete } from '@material-ui/lab';
+import {
+  NotificationsNone,
+  Search as SearchIcon,
+  Close as CloseIcon,
+} from '@material-ui/icons';
 
 // components
 import { WalletMenu } from 'components/wallet';
@@ -60,10 +65,15 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     padding: '0 !important',
   },
+  inputRoot: {
+    borderRadius: 90,
+    paddingBottom: '8px',
+  },
 }));
 
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [inputValue, setInputValue] = useState('');
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
@@ -134,64 +144,89 @@ const Navbar = () => {
     }
   };
 
+  if (!me) return null;
+
   return (
     <AppBar color="inherit" elevation={0} position="relative">
       <Toolbar style={{ minHeight: 97 }}>
-        <Box marginLeft="auto">
-          {me ? (
-            <>
-              <Chip
-                icon={<SpnIcon style={{ marginLeft: 10 }} />}
-                label={Number(wallet?.balance || 0)}
-                style={{
-                  backgroundColor: 'rgba(98, 0, 234, 0.05)',
-                  borderRadius: 90,
-                  color: '#6200EA',
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  height: 40,
-                  padding: 1,
+        <Box marginRight="auto" minWidth={734}>
+          <Autocomplete
+            classes={{
+              inputRoot: classes.inputRoot,
+            }}
+            inputValue={inputValue}
+            options={[]}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                fullWidth
+                InputProps={{
+                  ...params.InputProps,
+                  type: 'search',
+                  startAdornment: <SearchIcon style={{ marginLeft: 10 }} />,
+                  endAdornment: (
+                    <Box alignItems="center" display="flex">
+                      <Typography>13 results</Typography>
+                      <IconButton onClick={() => setInputValue('')}>
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                  ),
                 }}
-                onClick={(event) => setBalanceAnchor(event.currentTarget)}
               />
-              <IconButton
-                aria-controls="notifications"
-                aria-haspopup="true"
-                edge="end"
-                style={{ backgroundColor: '#E5E5E5', margin: '0 22px' }}
-                onClick={(event) => setNotificationsAnchor(event.currentTarget)}
+            )}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+          />
+        </Box>
+        <Box marginLeft="auto">
+          <>
+            <Chip
+              icon={<SpnIcon style={{ marginLeft: 10 }} />}
+              label={Number(wallet?.balance || 0)}
+              style={{
+                backgroundColor: 'rgba(98, 0, 234, 0.05)',
+                borderRadius: 90,
+                color: '#6200EA',
+                fontSize: 16,
+                fontWeight: 'bold',
+                height: 40,
+                padding: 1,
+              }}
+              onClick={(event) => setBalanceAnchor(event.currentTarget)}
+            />
+            <IconButton
+              aria-controls="notifications"
+              aria-haspopup="true"
+              edge="end"
+              style={{ backgroundColor: '#E5E5E5', margin: '0 22px' }}
+              onClick={(event) => setNotificationsAnchor(event.currentTarget)}
+            >
+              <Badge
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                badgeContent={1}
+                color="secondary"
               >
-                <Badge
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right',
-                  }}
-                  badgeContent={1}
-                  color="secondary"
-                >
-                  <NotificationsNone />
-                </Badge>
-              </IconButton>
-              <IconButton
-                aria-controls="user-profile"
-                aria-haspopup="true"
-                aria-label={me.username}
-                color="inherit"
-                edge="end"
-                onClick={(event) => setMenuAnchor(event.currentTarget)}
-              >
-                <Avatar alt={me.username}>
-                  {me.firstName?.[0]?.toUpperCase()}
-                </Avatar>
-              </IconButton>
-            </>
-          ) : (
-            <Link passHref href="/login">
-              <Button color="primary" variant="contained">
-                Login
-              </Button>
-            </Link>
-          )}
+                <NotificationsNone />
+              </Badge>
+            </IconButton>
+            <IconButton
+              aria-controls="user-profile"
+              aria-haspopup="true"
+              aria-label={me.username}
+              color="inherit"
+              edge="end"
+              onClick={(event) => setMenuAnchor(event.currentTarget)}
+            >
+              <Avatar alt={me.username}>
+                {me.firstName?.[0]?.toUpperCase()}
+              </Avatar>
+            </IconButton>
+          </>
         </Box>
       </Toolbar>
       <Menu
