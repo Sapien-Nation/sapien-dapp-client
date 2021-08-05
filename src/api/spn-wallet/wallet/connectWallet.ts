@@ -8,15 +8,17 @@ const connectWallet = async (
   verifier = 'sandbox-sapien'
 ) => {
   try {
-    const { publicAddress } = await getWalletKeys(
+    const { publicAddress, privateKey } = await getWalletKeys(
       torusToken,
       userId,
       subVerifier,
       verifier
     );
-    const wallet = await Wallet(publicAddress);
+    const wallet = await Wallet(publicAddress, privateKey);
+
     return wallet;
   } catch (error) {
+    console.log('error.............', error);
     return Promise.reject(`Wallet ${String(error).split(',')[0]}`);
   }
 };
