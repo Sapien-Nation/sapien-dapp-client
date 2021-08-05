@@ -39,15 +39,11 @@ import {
   Close as CloseIcon,
 } from '@material-ui/icons';
 
-type Props = {
-  leftOffset: number;
-};
-
 // components
 import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
 
-const useStyles = makeStyles<Theme, Props>(() => ({
+const useStyles = makeStyles<Theme>(() => ({
   paper: {
     height: 600,
     width: 366,
@@ -75,7 +71,7 @@ const useStyles = makeStyles<Theme, Props>(() => ({
     paddingBottom: '8px',
   },
   navBar: {
-    width: ({ leftOffset }) => `calc(100% - ${leftOffset}px)`,
+    width: `calc(100% - 300px)`,
   },
 }));
 
@@ -85,11 +81,8 @@ const Navbar = () => {
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
-  const { asPath, query } = useRouter();
-  const leftNavbarWidth = asPath === '/discovery' ? 72 : 300;
-  const classes = useStyles({
-    leftOffset: leftNavbarWidth,
-  });
+  const { query } = useRouter();
+  const classes = useStyles();
   const [tokens] = useLocalStorage<{
     token: string;
     torus: string;

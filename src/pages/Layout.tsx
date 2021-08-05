@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
   container: {
     display: 'grid',
     gridTemplateAreas: "'main widgets'",
-    gridTemplateColumns: 'auto 300px',
+    gridTemplateColumns: 'auto 290px',
   },
 }));
 

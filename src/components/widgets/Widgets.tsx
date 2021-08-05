@@ -1,15 +1,16 @@
-// import Link from 'next/link';
-// import { useRouter } from 'next/router';
-// import { useState } from 'react';
-
-// hooks
-// import { getTribes } from 'hooks';
-
-// styles
-// import { neutral } from 'styles/colors';
+import { useState } from 'react';
 
 // mui
-import { Drawer, makeStyles } from '@material-ui/core';
+import {
+  Box,
+  Collapse,
+  Drawer,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
+
+// components
+import CalendarEvents from './CalendarEvents';
 
 const useStyles = makeStyles(() => ({
   drawerPaper: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles(() => ({
 
 const Wdigets = () => {
   const classes = useStyles();
-  //const { asPath } = useRouter();
+  const [openCalendarWidgets, setCalendarWidgets] = useState(true);
 
   return (
     <Drawer
@@ -34,7 +35,19 @@ const Wdigets = () => {
       style={{ gridArea: 'widgets' }}
       variant="permanent"
     >
-      TODO
+      <Box padding={2.5}>
+        <Typography
+          color="textSecondary"
+          style={{ cursor: 'pointer' }}
+          variant="caption"
+          onClick={() => setCalendarWidgets(!openCalendarWidgets)}
+        >
+          ANNOUNCEMENTS
+        </Typography>
+        <Collapse unmountOnExit in={openCalendarWidgets} timeout="auto">
+          <CalendarEvents />
+        </Collapse>
+      </Box>
     </Drawer>
   );
 };
