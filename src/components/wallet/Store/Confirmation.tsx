@@ -249,7 +249,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
       <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
         <Button fullWidth color="primary" type="submit" variant="contained">
           <StoreIcon style={{ fill: '#FFF', marginRight: 7, zoom: '80%' }} />{' '}
-          {currentBadge.price * watchBadgesAmount} SPN
+          {currentBadge.spn * watchBadgesAmount} SPN
         </Button>
       </div>
     </Box>

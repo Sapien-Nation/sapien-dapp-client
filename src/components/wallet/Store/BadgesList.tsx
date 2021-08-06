@@ -1,3 +1,5 @@
+import useSWR from 'swr';
+
 // assets
 import { Spn as SpnIcon } from 'assets';
 
@@ -12,6 +14,9 @@ import { Avatar, Box, Typography } from '@material-ui/core';
 
 // types
 import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+
+// api
+import { tokensInstance } from 'api';
 
 // enums
 import { StoreSteps } from '../WalletEnums';
@@ -86,7 +91,11 @@ export const BadgeItem = ({
   </Box>
 );
 
+const fetcher = (url: string) =>
+  tokensInstance.get(url).then((res) => res.data);
+
 const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
+  const { data: list } = useSWR('/api/v3/badge/store/listBadges', { fetcher });
   return (
     <div
       style={{
@@ -95,6 +104,7 @@ const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
     >
       <SearchInput
         ItemComponent={BadgeItem}
+        list={list}
         setCurrentBadge={setCurrentBadge}
         setShowTabsMenu={setShowTabsMenu}
         setStep={setStep}

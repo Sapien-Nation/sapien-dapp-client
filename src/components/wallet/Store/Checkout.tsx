@@ -49,7 +49,7 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
           <Typography variant="body2">Badges cost</Typography>
           <Typography variant="body2">
-            {currentBadge.price * watchBadgesAmount} SPN
+            {currentBadge.spn * watchBadgesAmount} SPN
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
@@ -61,7 +61,7 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             Total
           </Typography>
           <Typography style={{ color: primary[800] }} variant="body2">
-            {currentBadge.price * watchBadgesAmount + 5} SPN
+            {currentBadge.spn * watchBadgesAmount + 5} SPN
           </Typography>
         </Box>
       </Box>
