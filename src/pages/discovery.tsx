@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 // components
-import Layout from 'pages/Layout';
-import { Query } from 'components/common';
+import { Layout, Query } from 'components/common';
 
 // mui
 import {

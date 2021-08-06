@@ -2,10 +2,14 @@ import { useRouter } from 'next/router';
 import { useLocalStorage } from 'react-use';
 
 // components
-import Layout from 'pages/LayoutWithWidgets';
 import { ReplyItem } from 'components/reply';
 import ContentDetail from 'components/content/ContentDetail';
-import { FeedSkeleton, Page, Query } from 'components/common';
+import {
+  FeedSkeleton,
+  LayoutWithWidgets as Layout,
+  Page,
+  Query,
+} from 'components/common';
 import { Widgets } from 'components/widgets';
 
 // mui
