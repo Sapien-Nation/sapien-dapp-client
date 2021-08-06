@@ -2,10 +2,11 @@ import { useRouter } from 'next/router';
 import { useLocalStorage } from 'react-use';
 
 // components
-import Layout from 'pages/Layout';
+import Layout from 'pages/LayoutWithWidgets';
 import { ReplyItem } from 'components/reply';
 import ContentDetail from 'components/content/ContentDetail';
 import { FeedSkeleton, Page, Query } from 'components/common';
+import { Widgets } from 'components/widgets';
 
 // mui
 import { Box, Button } from '@material-ui/core';
@@ -32,29 +33,32 @@ const Content = ({ contentID }: Props) => {
   const apiUrl = `/api/v3/post/${contentID}/replies?viewType=${view}`;
 
   return (
-    <Page>
-      <>
-        <ContentDetail apiUrl={apiUrl} contentID={contentID} />
-        <Query api={apiUrl} loader={<FeedSkeleton />}>
-          {(replies: Array<ContentType>) => (
-            <Box display="grid" style={{ gap: '16px' }}>
-              {replies.map((reply) => (
-                <ReplyItem key={reply.id} apiUrl={apiUrl} reply={reply} />
-              ))}
-            </Box>
+    <>
+      <Page>
+        <>
+          <ContentDetail apiUrl={apiUrl} contentID={contentID} />
+          <Query api={apiUrl} loader={<FeedSkeleton />}>
+            {(replies: Array<ContentType>) => (
+              <Box display="grid" style={{ gap: '16px' }}>
+                {replies.map((reply) => (
+                  <ReplyItem key={reply.id} apiUrl={apiUrl} reply={reply} />
+                ))}
+              </Box>
+            )}
+          </Query>
+          {view === RepliesViewTypes.Head && (
+            <Button
+              onClick={() => {
+                setView(RepliesViewTypes.All);
+              }}
+            >
+              Load more
+            </Button>
           )}
-        </Query>
-        {view === RepliesViewTypes.Head && (
-          <Button
-            onClick={() => {
-              setView(RepliesViewTypes.All);
-            }}
-          >
-            Load more
-          </Button>
-        )}
-      </>
-    </Page>
+        </>
+      </Page>
+      <Widgets />
+    </>
   );
 };
 

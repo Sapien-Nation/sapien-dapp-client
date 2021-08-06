@@ -1,5 +1,5 @@
 // mui
-import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
+import { Box, CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
 // Providers
 import { WalletProvider } from 'context/wallet';
@@ -38,7 +38,7 @@ const Layout = ({ children }: Props) => {
         <WalletProvider>
           <Navbar />
         </WalletProvider>
-        <div>{children}</div>
+        <Box paddingRight={29}>{children}</Box>
       </main>
     </div>
   );

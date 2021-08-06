@@ -16,7 +16,7 @@ import {
   PostComposerSkeleton,
   Query,
 } from 'components/common';
-import Layout from 'pages/Layout';
+import Layout from 'pages/LayoutWithWidgets';
 import { Header } from 'components/tribe';
 import {
   CreateContentForm,
@@ -24,6 +24,7 @@ import {
   EmptyFeed,
   NewContentPlaceholder,
 } from 'components/content';
+import { Widgets } from 'components/widgets';
 
 // hooks
 import { getTribe } from 'hooks';
@@ -86,41 +87,44 @@ const Square = ({ squareID }: Props) => {
     isEmpty || (swrData && swrData[swrData.length - 1]?.length < 20);
 
   return (
-    <Page
-      header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
-      subHeader={
-        <>
-          {me && (
-            <Box className="card--rounded-white" padding={3}>
-              <CreateContentForm
-                setIsCreating={setIsCreating}
-                squareID={isSapienTribe ? sapienSquareID : squareID}
-                user={me}
-                onSave={() => mutate()}
-              />
-            </Box>
-          )}
-          {!me && isLoggingIn && <PostComposerSkeleton />}
-        </>
-      }
-    >
-      <InfiniteScrollComponent
-        key={squareID}
-        dataLength={content.length}
-        hasMore={!isEmpty}
-        loader={null}
-        next={() => setSize(size + 1)}
+    <>
+      <Page
+        header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
+        subHeader={
+          <>
+            {me && (
+              <Box className="card--rounded-white" padding={3}>
+                <CreateContentForm
+                  setIsCreating={setIsCreating}
+                  squareID={isSapienTribe ? sapienSquareID : squareID}
+                  user={me}
+                  onSave={() => mutate()}
+                />
+              </Box>
+            )}
+            {!me && isLoggingIn && <PostComposerSkeleton />}
+          </>
+        }
       >
-        {(isEmpty || isReachingEnd) && <EmptyFeed />}
-        <Box display="grid" style={{ gap: '16px' }}>
-          <NewContentPlaceholder open={isCreating} />
-          {content.map((content) => (
-            <ContentItem key={content.id} content={content} mutate={mutate} />
-          ))}
-        </Box>
-        {isLoadingInitialData && <FeedSkeleton />}
-      </InfiniteScrollComponent>
-    </Page>
+        <InfiniteScrollComponent
+          key={squareID}
+          dataLength={content.length}
+          hasMore={!isEmpty}
+          loader={null}
+          next={() => setSize(size + 1)}
+        >
+          {(isEmpty || isReachingEnd) && <EmptyFeed />}
+          <Box display="grid" style={{ gap: '16px' }}>
+            <NewContentPlaceholder open={isCreating} />
+            {content.map((content) => (
+              <ContentItem key={content.id} content={content} mutate={mutate} />
+            ))}
+          </Box>
+          {isLoadingInitialData && <FeedSkeleton />}
+        </InfiniteScrollComponent>
+      </Page>
+      <Widgets />
+    </>
   );
 };
 
