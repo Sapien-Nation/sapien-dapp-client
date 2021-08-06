@@ -12,11 +12,11 @@ import { useAuth } from 'context/user';
 // components
 import {
   FeedSkeleton,
+  LayoutWithWidgets as Layout,
   Page,
   PostComposerSkeleton,
   Query,
 } from 'components/common';
-import Layout from 'pages/LayoutWithWidgets';
 import { Header } from 'components/tribe';
 import {
   CreateContentForm,

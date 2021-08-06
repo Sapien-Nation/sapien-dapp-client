@@ -22,6 +22,11 @@ const useStyles = makeStyles(() => ({
     minHeight: '100vh',
     backgroundColor: '#fff',
   }),
+  container: ({ isLoggedIn }: { isLoggedIn: boolean }) => ({
+    display: isLoggedIn ? 'grid' : 'block',
+    gridTemplateAreas: "'main widgets'",
+    gridTemplateColumns: 'auto 290px',
+  }),
 }));
 
 const Layout = ({ children }: Props) => {
@@ -38,7 +43,7 @@ const Layout = ({ children }: Props) => {
         <WalletProvider>
           <Navbar />
         </WalletProvider>
-        <Box paddingRight={29}>{children}</Box>
+        <Box className={classes.container}>{children}</Box>
       </main>
     </div>
   );

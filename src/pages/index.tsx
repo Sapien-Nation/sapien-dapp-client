@@ -1,6 +1,5 @@
 // components
-import Layout from './Layout';
-import { Redirect, Query } from 'components/common';
+import { Layout, Redirect, Query } from 'components/common';
 
 const IndexPage = () => (
   <Query api="/api/v3/profile/tribes" loader={null}>
