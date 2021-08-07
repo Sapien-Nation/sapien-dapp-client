@@ -62,6 +62,7 @@ export const ReceiverItem = ({
   name,
   setCurrentReceiver,
   setStep,
+  setTransition,
 }) => {
   const classes = useStyles();
   return (
@@ -76,6 +77,7 @@ export const ReceiverItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
+        setTransition('forward');
         setStep(MyBadgesSteps.Confirmation);
         setCurrentReceiver({
           name,
@@ -109,10 +111,11 @@ export const ReceiverItem = ({
 };
 
 const Receivers = ({
-  setShowTabsMenu,
-  setStep,
   currentBadge,
   setCurrentReceiver,
+  setShowTabsMenu,
+  setStep,
+  setTransition,
 }) => {
   const {
     watch,
@@ -216,6 +219,7 @@ const Receivers = ({
             marginBottom: 10,
           }}
           onClick={() => {
+            setTransition('back');
             setShowTabsMenu(true);
             setStep(MyBadgesSteps.Badges);
           }}
@@ -229,6 +233,7 @@ const Receivers = ({
         list={mockList}
         setCurrentReceiver={setCurrentReceiver}
         setStep={setStep}
+        setTransition={setTransition}
       />
       <Box
         alignItems="center"
