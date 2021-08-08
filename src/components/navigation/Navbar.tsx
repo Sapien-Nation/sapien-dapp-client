@@ -27,21 +27,15 @@ import {
   Menu,
   MenuItem,
   Popover,
-  TextField,
   Toolbar,
   Theme,
-  Typography,
 } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
-import {
-  NotificationsNone,
-  Search as SearchIcon,
-  Close as CloseIcon,
-} from '@material-ui/icons';
+import { NotificationsNone } from '@material-ui/icons';
 
 // components
 import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
+import { Search } from 'components/search';
 
 const useStyles = makeStyles<Theme>(() => ({
   paper: {
@@ -77,7 +71,6 @@ const useStyles = makeStyles<Theme>(() => ({
 
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const [inputValue, setInputValue] = useState('');
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
@@ -158,37 +151,7 @@ const Navbar = () => {
       position="fixed"
     >
       <Toolbar style={{ minHeight: 97 }}>
-        <Box marginRight="auto" minWidth={734}>
-          <Autocomplete
-            classes={{
-              inputRoot: classes.inputRoot,
-            }}
-            inputValue={inputValue}
-            options={[]}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                fullWidth
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'search',
-                  startAdornment: <SearchIcon style={{ marginLeft: 10 }} />,
-                  endAdornment: (
-                    <Box alignItems="center" display="flex">
-                      <Typography>13 results</Typography>
-                      <IconButton onClick={() => setInputValue('')}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  ),
-                }}
-              />
-            )}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-          />
-        </Box>
+        <Search />
         <Box marginLeft="auto">
           <>
             <Chip

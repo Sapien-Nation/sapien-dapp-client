@@ -28,6 +28,7 @@ interface Props {
   setShowTabsMenu: (showTab: boolean) => void;
   setStep: (step: MyBadgesSteps) => void;
   setCurrentBadge: (Badge: BadgeType) => void;
+  setTransition: (transition: string) => void;
 }
 
 export const BadgeItem = ({
@@ -37,6 +38,7 @@ export const BadgeItem = ({
   description,
   name,
   spn,
+  setTransition,
 }) => (
   <Box
     alignItems="center"
@@ -49,6 +51,7 @@ export const BadgeItem = ({
       cursor: 'pointer',
     }}
     onClick={() => {
+      setTransition('forward');
       setShowTabsMenu(false);
       setStep(MyBadgesSteps.Receivers);
       setCurrentBadge({
@@ -97,7 +100,12 @@ export const BadgeItem = ({
 const fetcher = (url: string) =>
   tokensInstance.get(url).then((res) => res.data);
 
-const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
+const BadgesList = ({
+  setShowTabsMenu,
+  setStep,
+  setCurrentBadge,
+  setTransition,
+}: Props) => {
   const { me } = useAuth();
   const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
     fetcher,
@@ -114,6 +122,7 @@ const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
         setCurrentBadge={setCurrentBadge}
         setShowTabsMenu={setShowTabsMenu}
         setStep={setStep}
+        setTransition={setTransition}
       />
     </div>
   );

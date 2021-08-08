@@ -18,6 +18,7 @@ interface Props {
   currentReceiver: any;
   setShowTabsMenu: (showTab: boolean) => void;
   setStep: (step: MyBadgesSteps) => void;
+  setTransition: (transition: string) => void;
 }
 
 const Confirmation = ({
@@ -25,6 +26,7 @@ const Confirmation = ({
   currentReceiver,
   setShowTabsMenu,
   setStep,
+  setTransition,
 }: Props) => {
   const { watch } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
@@ -46,6 +48,7 @@ const Confirmation = ({
               marginBottom: 10,
             }}
             onClick={() => {
+              setTransition('back');
               setShowTabsMenu(false);
               setStep(MyBadgesSteps.Receivers);
             }}

@@ -45,6 +45,7 @@ interface Props {
   setCurrentReceiver?: (Receiver: any) => void;
   setShowTabsMenu?: (showTab: boolean) => void;
   setStep?: (step: StoreSteps | MyBadgesSteps) => void;
+  setTransition?: (transition: string) => void;
 }
 
 const SearchInput = ({
@@ -54,6 +55,7 @@ const SearchInput = ({
   setCurrentReceiver,
   setShowTabsMenu,
   setStep,
+  setTransition,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const handleChange = (event) => {
@@ -103,6 +105,7 @@ const SearchInput = ({
             setCurrentReceiver={setCurrentReceiver}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
+            setTransition={setTransition}
             spn={item.spn}
           />
         ))}
