@@ -60,7 +60,7 @@ const WalletTabs = () => {
           unmountOnExit
           classNames={transition}
           in={currentTab === WalletTab.MyBadges}
-          timeout={300}
+          timeout={250}
         >
           <MyBadges
             setShowTabsMenu={setShowTabsMenu}
@@ -71,7 +71,7 @@ const WalletTabs = () => {
           unmountOnExit
           classNames={transition}
           in={currentTab === WalletTab.Spn}
-          timeout={300}
+          timeout={250}
         >
           <Spn showTabsMenu={showTabsMenu} />
         </CSSTransition>
@@ -79,7 +79,7 @@ const WalletTabs = () => {
           unmountOnExit
           classNames={transition}
           in={currentTab === WalletTab.Store}
-          timeout={300}
+          timeout={250}
         >
           <Store
             setShowTabsMenu={setShowTabsMenu}
@@ -132,7 +132,9 @@ const WalletTabs = () => {
           />
         </Tabs>
       )}
-      {renderCurrentTab()}
+      <div style={{ minHeight: '500px', width: '366px' }}>
+        {renderCurrentTab()}
+      </div>
     </>
   );
 };

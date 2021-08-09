@@ -13,7 +13,9 @@ import {
   makeStyles,
   TextField,
   Typography,
+  useMediaQuery,
 } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
 
@@ -35,9 +37,10 @@ const useStyles = makeStyles(() => ({
 const Search = () => {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
-  console.log(inputValue);
+  const theme = useTheme();
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between(960, 1281));
   return (
-    <Box marginRight="auto" minWidth={734}>
+    <Box marginRight="auto" minWidth={isMediumScreen ? 700 : 734}>
       <Autocomplete
         classes={{
           inputRoot: classes.inputRoot,

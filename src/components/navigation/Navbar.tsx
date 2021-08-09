@@ -45,7 +45,7 @@ const useStyles = makeStyles<Theme>(() => ({
     borderRadius: 10,
     padding: '0 !important',
     position: 'absolute',
-    transform: 'translateX(-6px) translateY(-24px)',
+    transform: 'translateX(-94px) translateY(-24px)',
   },
   notification: {
     height: 702,
