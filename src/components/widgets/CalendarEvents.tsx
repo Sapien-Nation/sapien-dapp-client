@@ -1,15 +1,11 @@
 //mui
 import {
   Box,
-  Divider,
   List,
   ListItem,
   ListItemText,
   Typography,
 } from '@material-ui/core';
-
-// styles
-import { neutral } from 'styles/colors';
 
 // types
 import type { CalendarWidget } from 'tools/types/widgets/calendarWidget';
@@ -33,7 +29,7 @@ const events = [
 
 const CalendarEvents = () => {
   return (
-    <List>
+    <List style={{ padding: 0 }}>
       {events.map(({ id, date, start, end, title }: CalendarWidget) => {
         return (
           <div key={id}>
@@ -78,13 +74,6 @@ const CalendarEvents = () => {
                 style={{ paddingLeft: '1.6rem' }}
               />
             </ListItem>
-            <Divider
-              component="li"
-              style={{
-                background: 'none',
-                border: `1px dashed ${neutral[100]}`,
-              }}
-            />
           </div>
         );
       })}
