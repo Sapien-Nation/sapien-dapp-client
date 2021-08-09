@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 // types
 import type { Theme } from '@material-ui/core/styles';
-import type { Topic } from 'tools/types/topic';
 
 // mui
 import {
@@ -71,7 +70,7 @@ const DiscoverNavigation = () => {
           loader={null}
           options={{ fetcher: () => [] }}
         >
-          {(topics: Array<Topic>) => (
+          {(topics: Array<any>) => (
             <>
               {topics.map(({ id, name }) => (
                 <ListItem

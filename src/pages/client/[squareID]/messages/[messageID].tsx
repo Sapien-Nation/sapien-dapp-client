@@ -1,0 +1,32 @@
+import { useRouter } from 'next/router';
+
+// components
+import { Page, Query, LayoutWithWidgets } from 'components/common';
+
+interface Props {
+  messageID: string;
+}
+
+const Message = ({ messageID }: Props) => {
+  return (
+    <Page>
+      <h1>TODO Message Page: {messageID}</h1>
+    </Page>
+  );
+};
+
+const MessagePage = () => {
+  const { query } = useRouter();
+
+  if (!query.messageID) return null;
+
+  return (
+    <Query api="/api/v3/profile/tribes">
+      {() => <Message messageID={String(query.messageID)} />}
+    </Query>
+  );
+};
+
+MessagePage.Layout = LayoutWithWidgets;
+
+export default MessagePage;
