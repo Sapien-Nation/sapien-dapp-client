@@ -37,7 +37,7 @@ interface Props {
 const DirectMessages = ({ messages }: Props) => {
   const classes = useStyles();
   const { asPath, query } = useRouter();
-  const { tribeid } = query;
+  const { squareID } = query;
 
   return (
     <>
@@ -51,14 +51,14 @@ const DirectMessages = ({ messages }: Props) => {
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath === `/client/${tribeid}/channel/${id}`}
+              selected={asPath === `/client/${squareID}/channel/${id}`}
               style={{
                 borderRadius: 10,
                 margin: '0.5rem 0',
                 padding: '0',
               }}
             >
-              <Link key={id} href={`/client/${tribeid}/channel/${id}`}>
+              <Link key={id} href={`/client/${squareID}/messages/${id}`}>
                 <a
                   style={{
                     display: 'flex',

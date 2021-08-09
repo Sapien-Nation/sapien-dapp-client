@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 
 // components
 import { Page, Query, LayoutWithWidgets } from 'components/common';
+import { Widgets } from 'components/widgets';
 
 interface Props {
   messageID: string;
@@ -9,9 +10,12 @@ interface Props {
 
 const Message = ({ messageID }: Props) => {
   return (
-    <Page>
-      <h1>TODO Message Page: {messageID}</h1>
-    </Page>
+    <>
+      <Page>
+        <h1>TODO Message Page: {messageID}</h1>
+      </Page>
+      <Widgets />
+    </>
   );
 };
 

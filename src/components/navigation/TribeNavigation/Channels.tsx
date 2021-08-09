@@ -47,7 +47,7 @@ interface Props {
 const Channels = ({ channels }: Props) => {
   const classes = useStyles();
   const { asPath, query } = useRouter();
-  const { tribeid } = query;
+  const { squareID } = query;
 
   return (
     <>
@@ -62,14 +62,14 @@ const Channels = ({ channels }: Props) => {
                 classes={{
                   selected: classes.listItemSelected,
                 }}
-                selected={asPath === `/client/${tribeid}/channel/${id}`}
+                selected={asPath === `/client/${squareID}/channel/${id}`}
                 style={{
                   borderRadius: 10,
                   margin: '0.5rem 0',
                   padding: '0',
                 }}
               >
-                <Link key={id} href={`/client/${tribeid}/channel/${id}`}>
+                <Link key={id} href={`/client/${squareID}/channel/${id}`}>
                   <a
                     style={{
                       display: 'flex',
@@ -84,7 +84,7 @@ const Channels = ({ channels }: Props) => {
                       src={avatarImage}
                       style={{
                         border: `2px solid ${
-                          asPath === `/client/${tribeid}/channel/${id}`
+                          asPath === `/client/${squareID}/channel/${id}`
                             ? 'white'
                             : neutral[200]
                         }`,

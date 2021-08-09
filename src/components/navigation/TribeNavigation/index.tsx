@@ -93,10 +93,10 @@ const TribeNavigation = () => {
       >
         <Squares
           squares={[
-            { name: 'PoliticsSquare', id: '1' },
-            { name: 'SportsSquare', id: '2' },
-            { name: 'SportsSquare', id: '3' },
-            { name: 'TravelSquare', id: '4' },
+            { name: 'PoliticsSquare', id: 'sqr-1' },
+            { name: 'SportsSquare', id: 'sqr-2' },
+            { name: 'SportsSquare', id: 'sqr-3' },
+            { name: 'TravelSquare', id: 'sqr-4' },
           ]}
         />
       </Section>
@@ -108,7 +108,7 @@ const TribeNavigation = () => {
         <Channels
           channels={[
             {
-              id: '1',
+              id: 'channel-1',
               name: 'Politics',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
@@ -118,7 +118,7 @@ const TribeNavigation = () => {
               membersCount: 227,
             },
             {
-              id: '2',
+              id: 'channel-2',
               name: 'Foodies',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
@@ -128,7 +128,7 @@ const TribeNavigation = () => {
               membersCount: 227,
             },
             {
-              id: '3',
+              id: 'channel-3',
               name: 'Our trips',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
@@ -146,31 +146,29 @@ const TribeNavigation = () => {
         onClick={() => console.log('TODO not POC')}
       >
         <DirectMessages
-          messages={
-            [
-              // {
-              //   id: '1',
-              //   name: 'Ollie Hampton',
-              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              //   avatarImage: 'https://material-ui.com/static/images/avatar/1.jpg',
-              //   message: 'Let’s go!',
-              // },
-              // {
-              //   id: '2',
-              //   name: 'Michael Perry',
-              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              //   avatarImage: 'https://material-ui.com/static/images/avatar/2.jpg',
-              //   message: 'Let’s go!',
-              // },
-              // {
-              //   id: '3',
-              //   name: 'Amanda Ben...',
-              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              //   avatarImage: 'https://material-ui.com/static/images/avatar/3.jpg',
-              //   message: 'Let’s go!',
-              // },
-            ]
-          }
+          messages={[
+            {
+              id: 'msg-1',
+              name: 'Ollie Hampton',
+              lastUpdateAt: '2021-08-09T04:35:15.149Z',
+              avatarImage: 'https://material-ui.com/static/images/avatar/1.jpg',
+              message: 'Let’s go!',
+            },
+            // {
+            //   id: '2',
+            //   name: 'Michael Perry',
+            //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
+            //   avatarImage: 'https://material-ui.com/static/images/avatar/2.jpg',
+            //   message: 'Let’s go!',
+            // },
+            // {
+            //   id: '3',
+            //   name: 'Amanda Ben...',
+            //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
+            //   avatarImage: 'https://material-ui.com/static/images/avatar/3.jpg',
+            //   message: 'Let’s go!',
+            // },
+          ]}
         />
       </Section>
     </Drawer>
