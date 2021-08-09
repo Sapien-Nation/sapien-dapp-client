@@ -132,9 +132,7 @@ const WalletTabs = () => {
           />
         </Tabs>
       )}
-      <div style={{ minHeight: '500px', width: '366px' }}>
-        {renderCurrentTab()}
-      </div>
+      {renderCurrentTab()}
     </>
   );
 };
