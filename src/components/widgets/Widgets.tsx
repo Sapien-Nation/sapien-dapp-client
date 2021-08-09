@@ -54,7 +54,7 @@ const Wdigets = () => {
           <Typography color="textSecondary" variant="caption">
             ANNOUNCEMENTS
           </Typography>
-          <IconButton aria-label="upload picture" component="span">
+          <IconButton aria-label="Toggle calendar widgets" component="span">
             {openCalendarWidgets ? <ArrowDropUp /> : <ArrowDropDown />}
           </IconButton>
         </Box>
@@ -79,7 +79,7 @@ const Wdigets = () => {
           <Typography color="textSecondary" variant="caption">
             TOP CREATORS
           </Typography>
-          <IconButton aria-label="upload picture" component="span">
+          <IconButton aria-label="Toggle creators widgets" component="span">
             {openCreatorWidgets ? <ArrowDropUp /> : <ArrowDropDown />}
           </IconButton>
         </Box>

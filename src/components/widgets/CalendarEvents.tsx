@@ -32,49 +32,47 @@ const CalendarEvents = () => {
     <List style={{ padding: 0 }}>
       {events.map(({ id, date, start, end, title }: CalendarWidget) => {
         return (
-          <div key={id}>
-            <ListItem disableGutters alignItems="flex-start">
-              <Box
-                alignItems="center"
-                borderRadius={10}
-                boxShadow="3px 10px 15px rgba(47, 22, 81, 0.1)"
-                display="flex"
-                flexDirection="column"
-                height={72}
-                justifyContent="center"
-                width={58}
-              >
-                <Typography color="error" component="span" variant="h4">
-                  {Intl.DateTimeFormat('default', {
-                    month: 'short',
-                  })
-                    .format(new Date(date))
-                    .toUpperCase()}
-                </Typography>
-                <Typography component="span" variant="h2">
-                  {Intl.DateTimeFormat('default', {
-                    day: '2-digit',
-                  }).format(new Date(date))}
-                </Typography>
-              </Box>
-              <ListItemText
-                disableTypography
-                primary={<Typography variant="button">{title}</Typography>}
-                secondary={
-                  <>
-                    <Typography
-                      color="textSecondary"
-                      display="block"
-                      variant="overline"
-                    >
-                      {start} - {end}
-                    </Typography>
-                  </>
-                }
-                style={{ paddingLeft: '1.6rem' }}
-              />
-            </ListItem>
-          </div>
+          <ListItem key={id} disableGutters alignItems="flex-start">
+            <Box
+              alignItems="center"
+              borderRadius={10}
+              boxShadow="3px 10px 15px rgba(47, 22, 81, 0.1)"
+              display="flex"
+              flexDirection="column"
+              height={72}
+              justifyContent="center"
+              width={58}
+            >
+              <Typography color="error" component="span" variant="h4">
+                {Intl.DateTimeFormat('default', {
+                  month: 'short',
+                })
+                  .format(new Date(date))
+                  .toUpperCase()}
+              </Typography>
+              <Typography component="span" variant="h2">
+                {Intl.DateTimeFormat('default', {
+                  day: '2-digit',
+                }).format(new Date(date))}
+              </Typography>
+            </Box>
+            <ListItemText
+              disableTypography
+              primary={<Typography variant="button">{title}</Typography>}
+              secondary={
+                <>
+                  <Typography
+                    color="textSecondary"
+                    display="block"
+                    variant="overline"
+                  >
+                    {start} - {end}
+                  </Typography>
+                </>
+              }
+              style={{ paddingLeft: '1.6rem' }}
+            />
+          </ListItem>
         );
       })}
     </List>

@@ -9,7 +9,6 @@ import {
   createStyles,
   Collapse,
   IconButton,
-  ListItem,
   makeStyles,
   Typography,
 } from '@material-ui/core';
@@ -51,17 +50,24 @@ const Section = ({ children, showAction, title, onClick }: Props) => {
 
   return (
     <>
-      <ListItem disableGutters component="div">
+      <div>
         <Box
           alignItems="center"
           display="flex"
           justifyContent="space-between"
-          px={2}
-          py={1}
-          width="100%"
+          paddingTop={0.5}
+          px={1.6}
+          style={{ cursor: 'pointer' }}
+          onClick={() => setShow(!show)}
         >
           <Box alignItems="center" display="flex">
-            <Typography>{title}</Typography>
+            <Typography
+              color="textSecondary"
+              style={{ textTransform: 'uppercase' }}
+              variant="caption"
+            >
+              {title}
+            </Typography>
             {showAction && (
               <IconButton
                 aria-label={`Create ${title}`}
@@ -70,22 +76,15 @@ const Section = ({ children, showAction, title, onClick }: Props) => {
                 }}
                 onClick={onClick}
               >
-                <AddIcon />
+                <AddIcon fontSize="small" />
               </IconButton>
             )}
           </Box>
-          <IconButton
-            disableRipple
-            aria-label="show options"
-            classes={{
-              root: classes.collapseButton,
-            }}
-            onClick={() => setShow(!show)}
-          >
-            {show ? <ArrowDown /> : <ArrowUp />}
+          <IconButton aria-label={`Toggle ${title} section`} component="span">
+            {show ? <ArrowUp /> : <ArrowDown />}
           </IconButton>
         </Box>
-      </ListItem>
+      </div>
       <Collapse
         unmountOnExit
         in={show}

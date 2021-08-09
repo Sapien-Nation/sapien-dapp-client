@@ -29,6 +29,7 @@ const useStyles = makeStyles(() => ({
     borderRight: 'none',
     left: 72,
     width: 228,
+    padding: '2.5rem 0.5rem',
   },
   listItemSelected: {
     backgroundColor: `${primary[800]} !important`,
@@ -69,7 +70,6 @@ const TribeNavigation = () => {
               selected={asPath?.includes(`/client/${squareID}`)}
               style={{
                 borderRadius: 10,
-                margin: '1rem .5rem',
                 padding: '1rem 1.5rem',
               }}
             >
@@ -112,9 +112,9 @@ const TribeNavigation = () => {
               name: 'Politics',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
               image:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
               membersCount: 227,
             },
             {
@@ -122,9 +122,9 @@ const TribeNavigation = () => {
               name: 'Foodies',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=40&w=40',
               image:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
               membersCount: 227,
             },
             {
@@ -132,9 +132,9 @@ const TribeNavigation = () => {
               name: 'Our trips',
               lastUpdateAt: '2021-08-09T04:35:15.149Z',
               avatarImage:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
               image:
-                'https://i.picsum.photos/id/866/200/300.jpg?hmac=rcadCENKh4rD6MAp6V_ma-AyWv641M4iiOpe1RyFHeI',
+                'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
               membersCount: 4,
             },
           ]}
@@ -145,7 +145,33 @@ const TribeNavigation = () => {
         title="My Messages"
         onClick={() => console.log('TODO not POC')}
       >
-        <DirectMessages />
+        <DirectMessages
+          messages={
+            [
+              // {
+              //   id: '1',
+              //   name: 'Ollie Hampton',
+              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
+              //   avatarImage: 'https://material-ui.com/static/images/avatar/1.jpg',
+              //   message: 'Let’s go!',
+              // },
+              // {
+              //   id: '2',
+              //   name: 'Michael Perry',
+              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
+              //   avatarImage: 'https://material-ui.com/static/images/avatar/2.jpg',
+              //   message: 'Let’s go!',
+              // },
+              // {
+              //   id: '3',
+              //   name: 'Amanda Ben...',
+              //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
+              //   avatarImage: 'https://material-ui.com/static/images/avatar/3.jpg',
+              //   message: 'Let’s go!',
+              // },
+            ]
+          }
+        />
       </Section>
     </Drawer>
   );

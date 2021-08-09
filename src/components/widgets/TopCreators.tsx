@@ -44,42 +44,40 @@ const TopCreators = () => {
       {creators.map(
         ({ avatar, displayName, id, username, postCount }: CreatorWidget) => {
           return (
-            <div key={id}>
-              <ListItem disableGutters alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt={displayName} src={avatar} />
-                </ListItemAvatar>
-                <ListItemText
-                  disableTypography
-                  primary={
-                    <Typography variant="button">{displayName}</Typography>
-                  }
-                  secondary={
-                    <>
-                      <Typography
-                        color="textSecondary"
-                        display="block"
-                        variant="overline"
-                      >
-                        @{username}
-                      </Typography>
-                    </>
-                  }
-                />
-                <Tooltip
-                  placement="top"
+            <ListItem key={id} disableGutters alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt={displayName} src={avatar} />
+              </ListItemAvatar>
+              <ListItemText
+                disableTypography
+                primary={
+                  <Typography variant="button">{displayName}</Typography>
+                }
+                secondary={
+                  <>
+                    <Typography
+                      color="textSecondary"
+                      display="block"
+                      variant="overline"
+                    >
+                      @{username}
+                    </Typography>
+                  </>
+                }
+              />
+              <Tooltip placement="top" title={`${postCount} posts`}>
+                <Typography
+                  align="right"
                   style={{ marginTop: '1rem' }}
-                  title={`${postCount} posts`}
+                  variant="overline"
                 >
-                  <Typography align="right" variant="overline">
-                    <Typography component="span" variant="h4">
-                      {numeral(postCount).format('0a')}
-                    </Typography>{' '}
-                    posts
-                  </Typography>
-                </Tooltip>
-              </ListItem>
-            </div>
+                  <Typography component="span" variant="h4">
+                    {numeral(postCount).format('0a')}
+                  </Typography>{' '}
+                  posts
+                </Typography>
+              </Tooltip>
+            </ListItem>
           );
         }
       )}

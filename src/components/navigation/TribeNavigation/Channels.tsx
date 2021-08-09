@@ -8,12 +8,13 @@ import {
   createStyles,
   List,
   ListItem,
+  ListItemText,
   makeStyles,
   Typography,
 } from '@material-ui/core';
 
 // styles
-import { black, darkGrey, gray3 } from 'styles/colors';
+import { primary, neutral } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
@@ -21,15 +22,20 @@ import { formatTimestampToRelative } from 'utils/date';
 const useStyles = makeStyles(() => {
   return createStyles({
     avatar: {
-      color: '#fff',
-      backgroundColor: 'inherit',
-      borderRadius: 15,
-      border: `2px solid ${gray3}`,
-      boxSizing: 'content-box',
-      padding: '3px',
+      borderRadius: 10,
+      boxSizing: 'border-box',
+      padding: '2px',
+      width: '4.8rem',
+      height: '4.8rem',
+      '& > img': {
+        borderRadius: 10,
+      },
     },
-    avatarImage: {
-      borderRadius: '10px',
+    listItemSelected: {
+      backgroundColor: `${primary[800]} !important`,
+      '& .MuiTypography-root, & .MuiSvgIcon-root': {
+        color: `#fff !important`,
+      },
     },
   });
 });
@@ -40,83 +46,91 @@ interface Props {
 
 const Channels = ({ channels }: Props) => {
   const classes = useStyles();
-  const router = useRouter();
-  const { id, tribeid } = router.query;
+  const { asPath, query } = useRouter();
+  const { tribeid } = query;
 
   return (
-    <List aria-label="Channels list" role="list">
-      {channels.map((channel) => (
-        <ListItem
-          key={channel.id}
-          button
-          disableGutters
-          disableRipple
-          component="li"
-          role="listitem"
-        >
-          <Link href={`/client/${tribeid}/channel/${channel.id}`}>
-            <Box
-              aria-label={channel.name}
-              display="flex"
-              justifyContent="space-between"
-              role="button"
-              style={{
-                margin: '0 .65rem',
-                padding: '1rem',
-                width: '100%',
-                color: id === channel.id ? '#fff' : darkGrey,
-                backgroundColor: id === channel.id ? '#6200EA' : '#fff',
-                borderRadius: '1rem',
-              }}
-            >
-              <Box display="flex">
-                <Avatar
-                  alt={channel.name}
-                  classes={{
-                    root: classes.avatar,
-                  }}
-                  variant="square"
-                >
-                  <img
-                    alt={channel.name}
-                    className="MuiAvatar-img"
-                    src={channel.avatarImage}
-                  />
-                </Avatar>
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="center"
-                  marginLeft={1.2}
-                >
-                  <Typography
-                    style={{
-                      color: id === channel.id ? '#fff' : black,
-                    }}
-                  >
-                    {channel.name}
-                  </Typography>
-                  <Typography
-                    style={{
-                      color: id === channel.id ? '#fff' : darkGrey,
-                    }}
-                  >
-                    {channel.membersCount} members
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography
+    <>
+      <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
+        {channels.map(
+          ({ avatarImage, name, id, lastUpdateAt, membersCount }) => {
+            return (
+              <ListItem
+                key={id}
+                disableGutters
+                alignItems="flex-start"
+                classes={{
+                  selected: classes.listItemSelected,
+                }}
+                selected={asPath === `/client/${tribeid}/channel/${id}`}
                 style={{
-                  color: id === channel.id ? '#fff' : darkGrey,
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
                 }}
               >
-                {formatTimestampToRelative(channel.lastUpdateAt)}
-              </Typography>
-            </Box>
-          </Link>
-        </ListItem>
-      ))}
-    </List>
+                <Link key={id} href={`/client/${tribeid}/channel/${id}`}>
+                  <a
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      padding: '1rem 1.5rem',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Avatar
+                      alt={name}
+                      className={classes.avatar}
+                      src={avatarImage}
+                      style={{
+                        border: `2px solid ${
+                          asPath === `/client/${tribeid}/channel/${id}`
+                            ? 'white'
+                            : neutral[200]
+                        }`,
+                      }}
+                      variant="square"
+                    />
+                    <Box
+                      display="flex"
+                      flex={1}
+                      justifyContent="space-between"
+                      paddingLeft={1.5}
+                    >
+                      <ListItemText
+                        disableTypography
+                        primary={
+                          <Typography variant="button">{name}</Typography>
+                        }
+                        secondary={
+                          <>
+                            <Typography
+                              color="textSecondary"
+                              display="block"
+                              variant="overline"
+                            >
+                              {membersCount} members
+                            </Typography>
+                          </>
+                        }
+                      />
+                      <Typography
+                        color="textSecondary"
+                        display="block"
+                        style={{ marginTop: '1rem' }}
+                        variant="overline"
+                      >
+                        {formatTimestampToRelative(lastUpdateAt)}
+                      </Typography>
+                    </Box>
+                  </a>
+                </Link>
+              </ListItem>
+            );
+          }
+        )}
+      </List>
+    </>
   );
 };
 

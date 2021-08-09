@@ -2,18 +2,28 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // mui
-import { Box, List, ListItem, Typography } from '@material-ui/core';
+import { Box, List, ListItem, makeStyles, Typography } from '@material-ui/core';
 
 // styles
-import { black, darkGrey } from 'styles/colors';
+import { black, primary } from 'styles/colors';
 
 interface Props {
   squares: Array<any>; // TODO
 }
 
+const useStyles = makeStyles(() => ({
+  listItemSelected: {
+    backgroundColor: `${primary[800]} !important`,
+    '& .MuiTypography-root, & .MuiSvgIcon-root': {
+      color: `#fff !important`,
+    },
+  },
+}));
+
 const Squares = ({ squares }: Props) => {
-  const router = useRouter();
-  const { id, squareID } = router.query;
+  const { asPath, query } = useRouter();
+  const { id, squareID } = query;
+  const classes = useStyles();
 
   return (
     <List aria-label="Squares list" role="list">
@@ -23,32 +33,37 @@ const Squares = ({ squares }: Props) => {
           button
           disableGutters
           disableRipple
+          classes={{
+            selected: classes.listItemSelected,
+          }}
           component="li"
           role="listitem"
+          selected={asPath === `/client/${squareID}/square/${square.id}`}
+          style={{
+            borderRadius: 10,
+            margin: '0.5rem 0',
+            padding: '0',
+          }}
         >
           <Link href={`/client/${squareID}/square/${square.id}`}>
-            <Box
-              aria-label={square.name}
-              display="flex"
-              justifyContent="space-between"
-              role="button"
-              style={{
-                margin: '0 .65rem',
-                padding: '1rem',
-                width: '100%',
-                color: id === square.id ? '#fff' : darkGrey,
-                backgroundColor: id === square.id ? '#6200EA' : '#fff',
-                borderRadius: '1rem',
-              }}
-            >
-              <Typography
-                style={{
-                  color: id === square.id ? '#fff' : black,
-                }}
+            <a style={{ width: '100%', padding: '1rem 1.5rem' }}>
+              <Box
+                aria-label={square.name}
+                display="flex"
+                justifyContent="space-between"
+                role="button"
               >
-                #{square.name}
-              </Typography>
-            </Box>
+                <Typography
+                  component="span"
+                  style={{
+                    color: id === square.id ? '#fff' : black,
+                  }}
+                  variant="h6"
+                >
+                  #{square.name}
+                </Typography>
+              </Box>
+            </a>
           </Link>
         </ListItem>
       ))}
