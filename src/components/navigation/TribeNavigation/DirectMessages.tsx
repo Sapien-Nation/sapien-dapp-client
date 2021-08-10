@@ -51,7 +51,7 @@ const DirectMessages = ({ messages }: Props) => {
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath === `/client/${squareID}/channel/${id}`}
+              selected={asPath === `/client/${squareID}/messages/${id}`}
               style={{
                 borderRadius: 10,
                 margin: '0.5rem 0',
