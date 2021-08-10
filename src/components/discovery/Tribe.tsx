@@ -1,5 +1,8 @@
 import numeral from 'numeral';
 
+// colors
+import { neutral } from 'styles/colors';
+
 // types
 import type { Theme } from '@material-ui/core/styles';
 
@@ -10,7 +13,9 @@ import Image from 'next/image';
 import {
   Avatar,
   Box,
+  Badge,
   Button,
+  ButtonGroup,
   Card,
   CardActions,
   CardContent,
@@ -18,12 +23,26 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
+import { FileCopy as FileCopyIcon } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     borderRadius: '1.6rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     padding: theme.spacing(2.4),
     maxWidth: 341,
+  },
+  badge: {
+    width: '100%',
+  },
+  badgeContent: {
+    backgroundColor: neutral[50],
+    border: '3px solid #fff',
+    borderRadius: 16,
+    marginRight: '9.5rem',
+    padding: 6,
   },
   media: {
     borderRadius: '1rem',
@@ -64,17 +83,28 @@ const Tribe = ({
   tribe: { avatar, cover, description, name, membersCount },
 }: Props) => {
   const classes = useStyles();
+  const isFollowing = true;
+  const price = 1200;
 
   return (
     <Card className={classes.root} elevation={0}>
       <Box>
         <div className={classes.mediaContainer}>
-          <CardMedia
-            className={classes.media}
-            component="img"
-            image={cover}
-            title="Contemplative Reptile"
-          />
+          <Badge
+            badgeContent={
+              <span className={classes.badgeContent}>
+                {numeral(price).format('$0.00')}
+              </span>
+            }
+            className={classes.badge}
+          >
+            <CardMedia
+              className={classes.media}
+              component="img"
+              image={cover}
+              title="Contemplative Reptile"
+            />
+          </Badge>
           <Avatar alt="Tribe Name" className={classes.avatar} variant="rounded">
             <Image alt="Tribe name" height={72} src={avatar} width={72} />
           </Avatar>
@@ -93,10 +123,21 @@ const Tribe = ({
         </CardContent>
       </Box>
       <CardActions className={classes.action}>
-        <Typography>{numeral(membersCount).format('0a')} Members</Typography>
-        <Button color="primary" variant="contained">
-          Join Tribe
-        </Button>
+        <Typography variant="overline">
+          {numeral(membersCount).format('0a')} Members
+        </Typography>
+        {isFollowing ? (
+          <ButtonGroup disableElevation color="primary" variant="contained">
+            <Button>Invite</Button>
+            <Button>
+              <FileCopyIcon fontSize="small" />
+            </Button>
+          </ButtonGroup>
+        ) : (
+          <Button color="primary" variant="contained">
+            Join Tribe
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
