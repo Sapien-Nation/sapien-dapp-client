@@ -37,14 +37,14 @@ const ReplyItem = ({ apiUrl, reply }: Props) => {
   const [view, setView] = useState(View.Compacted);
   const [dialog, setDialog] = useState<null | Dialog>(null);
 
-  const showMore = getContentCount(reply.data) > maxReplyLength;
+  const showMore = getContentCount(reply.body) > maxReplyLength;
 
   const getHTML = () => {
     if (reply.deletedAt) return '';
 
     return view === View.Compacted
-      ? html_substring(reply.data, maxReplyLength)
-      : reply.data;
+      ? html_substring(reply.body, maxReplyLength)
+      : reply.body;
   };
 
   return (

@@ -41,14 +41,14 @@ const ContentItem = ({ content, mutate }: Props) => {
   const { me } = useAuth();
   const { asPath } = useRouter();
 
-  const showMore = getContentCount(content.data) > maxContentLength;
+  const showMore = getContentCount(content.body) > maxContentLength;
 
   const getHTML = () => {
     if (content.deletedAt) return '';
 
     return view === View.Compacted
-      ? html_substring(content.data, maxContentLength)
-      : content.data;
+      ? html_substring(content.body, maxContentLength)
+      : content.body;
   };
 
   return (
@@ -71,10 +71,10 @@ const ContentItem = ({ content, mutate }: Props) => {
                 {ReactHtmlParser(getHTML())}
                 {showMore && view === View.Compacted && '...'}
                 <Box marginTop={2.3}>
-                  {content.preview && (
+                  {content.imagePreview && (
                     <img
                       alt="Preview"
-                      src={content.preview}
+                      src={content.imagePreview}
                       style={{ borderRadius: '10px', maxWidth: '100%' }}
                     />
                   )}

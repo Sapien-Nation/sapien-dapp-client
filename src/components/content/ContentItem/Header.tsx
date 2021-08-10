@@ -57,7 +57,7 @@ const Header = ({ content, onDelete, variant }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
-  const { canDelete, createdAt, deletedAt, group, tribe, owner } = content;
+  const { author, canDelete, createdAt, deletedAt, group, tribe } = content;
   const { asPath } = useRouter();
 
   return (
@@ -90,21 +90,21 @@ const Header = ({ content, onDelete, variant }: Props) => {
               <Avatar
                 alt="Tribe Image"
                 className={classes.avatar}
-                src={owner.avatar}
+                src={author.avatar}
               >
-                {owner.displayName?.[0].toUpperCase()}
+                {author.displayName?.[0].toUpperCase()}
               </Avatar>
               <Link href="/">
                 <a>
                   <Typography component="span" variant="button">
-                    {owner.displayName}
+                    {author.displayName}
                     <Typography
                       color="textSecondary"
                       component="span"
                       style={{ marginLeft: '1rem' }}
                       variant="button"
                     >
-                      @{owner.userName}
+                      @{author.userName}
                     </Typography>
                   </Typography>
                 </a>

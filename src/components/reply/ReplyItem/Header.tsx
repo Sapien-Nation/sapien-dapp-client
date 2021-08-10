@@ -50,7 +50,7 @@ const Header = ({ reply, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const classes = useStyles();
 
-  const { canDelete, createdAt, owner } = reply;
+  const { author, canDelete, createdAt } = reply;
 
   return (
     <>
@@ -64,21 +64,21 @@ const Header = ({ reply, onDelete }: Props) => {
           <Avatar
             alt="Tribe Image"
             className={classes.avatar}
-            src={owner.avatar}
+            src={author.avatar}
           >
-            {owner.displayName?.[0].toUpperCase()}
+            {author.displayName?.[0].toUpperCase()}
           </Avatar>
           <Link href="/">
             <a>
               <Typography component="span" variant="button">
-                {owner.displayName}
+                {author.displayName}
                 <Typography
                   color="textSecondary"
                   component="span"
                   style={{ marginLeft: '1rem' }}
                   variant="button"
                 >
-                  @{owner.userName}
+                  @{author.userName}
                 </Typography>
               </Typography>
             </a>

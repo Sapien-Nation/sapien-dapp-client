@@ -44,7 +44,7 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
             />
             {!content.deletedAt && (
               <>
-                <div dangerouslySetInnerHTML={{ __html: content.data }} />
+                <div dangerouslySetInnerHTML={{ __html: content.body }} />
                 <Box borderColor="grey.100" borderTop={1} marginX={-3} />
               </>
             )}
