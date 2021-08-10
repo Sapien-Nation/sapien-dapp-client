@@ -13,7 +13,7 @@ import { DeleteContent } from '../Modals';
 import { useAuth } from 'context/user';
 
 // mui
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, makeStyles } from '@material-ui/core';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -32,6 +32,14 @@ enum View {
   Expanded,
 }
 
+const useStyles = makeStyles(() => ({
+  content: {
+    '& p:first-child': {
+      marginTop: '0 !important',
+    },
+  },
+}));
+
 const maxContentLength = 280;
 
 const ContentItem = ({ content, mutate }: Props) => {
@@ -40,6 +48,7 @@ const ContentItem = ({ content, mutate }: Props) => {
 
   const { me } = useAuth();
   const { asPath } = useRouter();
+  const classes = useStyles();
 
   const showMore = getContentCount(content.body) > maxContentLength;
 
@@ -65,9 +74,9 @@ const ContentItem = ({ content, mutate }: Props) => {
       />
       <div>
         <Link href={`${asPath}/content/${content.id}`}>
-          <a>
+          <a className={classes.content}>
             {!content.deletedAt && (
-              <>
+              <Typography component="div" variant="h6">
                 {ReactHtmlParser(getHTML())}
                 {showMore && view === View.Compacted && '...'}
                 {/* <Box marginTop={2.3}>
@@ -79,7 +88,7 @@ const ContentItem = ({ content, mutate }: Props) => {
                     />
                   )}
                 </Box> */}
-              </>
+              </Typography>
             )}
           </a>
         </Link>{' '}

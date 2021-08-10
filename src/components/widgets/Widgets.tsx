@@ -14,6 +14,7 @@ import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
 
 // components
 import CalendarEvents from './CalendarEvents';
+import TopContents from './TopContents';
 import TopCreators from './TopCreators';
 
 // styles
@@ -33,6 +34,7 @@ const Wdigets = () => {
   const classes = useStyles();
   const [openCalendarWidgets, setCalendarWidgets] = useState(true);
   const [openCreatorWidgets, setCreatorWidgets] = useState(true);
+  const [openContentWidgets, setContentWidgets] = useState(true);
 
   return (
     <Drawer
@@ -62,6 +64,7 @@ const Wdigets = () => {
         <Collapse unmountOnExit in={openCalendarWidgets} timeout="auto">
           <CalendarEvents />
         </Collapse>
+
         <Divider
           style={{
             background: 'none',
@@ -69,6 +72,7 @@ const Wdigets = () => {
             margin: '2rem 0',
           }}
         />
+
         <Box
           alignItems="center"
           display="flex"
@@ -85,6 +89,32 @@ const Wdigets = () => {
         </Box>
         <Collapse unmountOnExit in={openCreatorWidgets} timeout="auto">
           <TopCreators />
+        </Collapse>
+
+        <Divider
+          style={{
+            background: 'none',
+            border: `1px dashed ${neutral[100]}`,
+            margin: '2rem 0',
+          }}
+        />
+
+        <Box
+          alignItems="center"
+          display="flex"
+          justifyContent="space-between"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setContentWidgets(!openContentWidgets)}
+        >
+          <Typography color="textSecondary" variant="caption">
+            TOP CONTENTS
+          </Typography>
+          <IconButton aria-label="Toggle top contents widgets" component="span">
+            {openContentWidgets ? <ArrowDropUp /> : <ArrowDropDown />}
+          </IconButton>
+        </Box>
+        <Collapse unmountOnExit in={openContentWidgets} timeout="auto">
+          <TopContents />
         </Collapse>
       </Box>
     </Drawer>
