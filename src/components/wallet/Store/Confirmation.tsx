@@ -222,7 +222,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             }}
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
-            <Typography variant="button">Badge Name</Typography>
+            <Typography variant="button">{currentBadge.name}</Typography>
             <Typography
               style={{
                 color: neutral[500],
@@ -230,7 +230,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
               }}
               variant="overline"
             >
-              Description goes here...
+              {currentBadge.description}
             </Typography>
           </Box>
           <Box alignItems="center" display="flex" marginLeft="auto">

@@ -28,11 +28,13 @@ interface Props {
 }
 
 export const BadgeItem = ({
+  blockchainId,
+  description,
+  id,
+  name,
+  setCurrentBadge,
   setShowTabsMenu,
   setStep,
-  setCurrentBadge,
-  description,
-  name,
   spn,
 }) => (
   <Box
@@ -49,9 +51,11 @@ export const BadgeItem = ({
       setShowTabsMenu(false);
       setStep(StoreSteps.Confirmation);
       setCurrentBadge({
-        price: 250,
-        name: 'Badge name',
-        description: 'Description goes here...',
+        id,
+        spn,
+        name,
+        blockchainId,
+        description,
       });
     }}
   >

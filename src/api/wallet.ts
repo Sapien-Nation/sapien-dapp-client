@@ -12,7 +12,7 @@ export const sendSPN = (body: {
   spnAmount: number;
   rawTx: string;
 }) =>
-  axios
+  tokensInstance
     .post('/api/v3/wallet/sendSPN', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
@@ -22,7 +22,7 @@ export const purchaseBadge = (body: {
   parentBadgeId: string;
   ownerId: string;
 }) =>
-  axios
+  tokensInstance
     .post('/api/v3/badge/purchaseBadge', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

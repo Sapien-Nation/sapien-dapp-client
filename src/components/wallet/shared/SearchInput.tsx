@@ -99,7 +99,9 @@ const SearchInput = ({
         {results.map((item, index) => (
           <ItemComponent
             key={index}
+            blockchainId={item.blockchainId}
             description={item.description}
+            id={item.id}
             name={item.name}
             setCurrentBadge={setCurrentBadge}
             setCurrentReceiver={setCurrentReceiver}

@@ -18,7 +18,6 @@ const connectWallet = async (
 
     return wallet;
   } catch (error) {
-    console.log('error.............', error);
     return Promise.reject(`Wallet ${String(error).split(',')[0]}`);
   }
 };

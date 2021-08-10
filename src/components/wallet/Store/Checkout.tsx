@@ -10,6 +10,10 @@ import {
 // styles
 import { primary, neutral } from 'styles/colors';
 
+// context
+import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
+
 // mui
 import {
   Avatar,
@@ -41,8 +45,10 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
     watch,
     control,
   } = useFormContext();
+  const { me } = useAuth();
+  const { wallet } = useWallet();
   const watchBadgesAmount = watch('badgesAmount');
-
+  console.log('wallet', wallet, currentBadge);
   const renderFees = () => {
     return (
       <Box marginTop={3}>
@@ -153,7 +159,7 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             }}
           />
           <Typography variant="subtitle1">
-            Badge Name (x{watchBadgesAmount})
+            {currentBadge.name} (x{watchBadgesAmount})
           </Typography>
           <Typography
             style={{ textAlign: 'center', color: neutral[500] }}
@@ -244,6 +250,13 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
           variant="contained"
           onClick={() => {
             setShowTabsMenu(true);
+            wallet.purchaseBadge(
+              watchBadgesAmount,
+              currentBadge.blockchainId,
+              me.id,
+              currentBadge.id,
+              watchBadgesAmount * currentBadge.spn
+            );
           }}
         >
           Purchase Token

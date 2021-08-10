@@ -208,6 +208,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       parentBadgeId, // id of the badge on Sapien
       totalPrice: number // price of the badge x amount
     ) => {
+      console.log('parentBadgeId', parentBadgeId);
       if (!Number.isInteger(blockchainId)) {
         return Promise.reject('Badge Id not valid');
       }
@@ -229,7 +230,6 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         config.POLY_BADGE_STORE_ADDRESS,
         contracts.badgeStoreDomainData
       );
-
       const body = {
         rawTx,
         parentBadgeId,
