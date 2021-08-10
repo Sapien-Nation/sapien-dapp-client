@@ -1,3 +1,5 @@
+import numeral from 'numeral';
+
 // types
 import type { Theme } from '@material-ui/core/styles';
 
@@ -91,7 +93,7 @@ const Tribe = ({
         </CardContent>
       </Box>
       <CardActions className={classes.action}>
-        <Typography>{membersCount} Members</Typography>
+        <Typography>{numeral(membersCount).format('0a')} Members</Typography>
         <Button color="primary" variant="contained">
           Join Tribe
         </Button>

@@ -70,7 +70,7 @@ const ContentItem = ({ content, mutate }: Props) => {
               <>
                 {ReactHtmlParser(getHTML())}
                 {showMore && view === View.Compacted && '...'}
-                <Box marginTop={2.3}>
+                {/* <Box marginTop={2.3}>
                   {content.imagePreview && (
                     <img
                       alt="Preview"
@@ -78,7 +78,7 @@ const ContentItem = ({ content, mutate }: Props) => {
                       style={{ borderRadius: '10px', maxWidth: '100%' }}
                     />
                   )}
-                </Box>
+                </Box> */}
               </>
             )}
           </a>
