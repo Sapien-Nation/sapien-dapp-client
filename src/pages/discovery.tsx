@@ -1,13 +1,9 @@
-import { matchSorter } from 'match-sorter';
-import { useState } from 'react';
-
 // components
 import { Layout, Query } from 'components/common';
 import { TribeCard } from 'components/discovery';
 
 // mui
-import { Box, IconButton, TextField } from '@material-ui/core';
-import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
+import { Box } from '@material-ui/core';
 import { mockTribe } from 'tools/mocks/discover';
 
 const tribes = [
@@ -61,52 +57,32 @@ const tribes = [
   }),
 ];
 
-const Discovery = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredTribes = matchSorter(tribes, searchTerm, { keys: ['name'] });
-  return (
-    <Box
-      className="card--rounded-gray"
-      marginTop={12.7}
-      paddingTop={4}
-      paddingX={2.8}
-    >
-      <Box marginBottom={3}>
-        <TextField
-          fullWidth
-          InputProps={{
-            placeholder: 'Search for tribes, channels, or people',
-            type: 'search',
-            startAdornment: <SearchIcon style={{ marginLeft: 10 }} />,
-            endAdornment: (
-              <IconButton onClick={() => setSearchTerm('')}>
-                <CloseIcon />
-              </IconButton>
-            ),
-          }}
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
-        />
-      </Box>
-      <Box
-        display="grid"
-        style={{
-          gap: '40px',
-          gridRowGap: '16px',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-        }}
-      >
-        {filteredTribes.map((tribe: any) => (
-          <TribeCard key={tribe.id} tribe={tribe} />
-        ))}
-      </Box>
-    </Box>
-  );
-};
-
 const DiscoveryPage = () => {
-  return <Query api="/api/v3/profile/tribes">{() => <Discovery />}</Query>;
+  return (
+    <Query api="/api/v3/profile/tribes">
+      {() => (
+        <Box
+          className="card--rounded-gray"
+          marginTop={12.7}
+          paddingTop={4}
+          paddingX={2.8}
+        >
+          <Box
+            display="grid"
+            style={{
+              gap: '40px',
+              gridRowGap: '16px',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+            }}
+          >
+            {tribes.map((tribe: any) => (
+              <TribeCard key={tribe.id} tribe={tribe} />
+            ))}
+          </Box>
+        </Box>
+      )}
+    </Query>
+  );
 };
 
 DiscoveryPage.Layout = Layout;
