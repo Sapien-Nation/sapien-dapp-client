@@ -123,7 +123,7 @@ const Square = ({ squareID }: Props) => {
           {isLoadingInitialData && <FeedSkeleton />}
         </InfiniteScrollComponent>
       </Page>
-      <Widgets />
+      {me && <Widgets />}
     </>
   );
 };
