@@ -15,7 +15,6 @@ const connectWallet = async (
       verifier
     );
     const wallet = await Wallet(publicAddress, privateKey);
-
     return wallet;
   } catch (error) {
     return Promise.reject(`Wallet ${String(error).split(',')[0]}`);

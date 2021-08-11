@@ -84,7 +84,6 @@ const Navbar = () => {
   const { clearSession, me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { wallet, setWallet } = useWallet();
-
   useEffect(() => {
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
@@ -101,6 +100,7 @@ const Navbar = () => {
         } catch (error) {
           try {
             const { token } = await refresh(tokens.refresh, 'torus');
+            alert(`'hola! ${token} ${me.id}`);
             const walletConnected = await connectWallet(token, me.id);
             enqueueSnackbar('Wallet connected', {
               variant: 'success',
@@ -111,6 +111,7 @@ const Navbar = () => {
             });
             setWallet(walletConnected);
           } catch (err) {
+            alert('hey!');
             enqueueSnackbar(err, {
               variant: 'error',
               anchorOrigin: {

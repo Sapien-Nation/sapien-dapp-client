@@ -48,7 +48,6 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
   const { me } = useAuth();
   const { wallet } = useWallet();
   const watchBadgesAmount = watch('badgesAmount');
-  console.log('wallet', wallet, currentBadge);
   const renderFees = () => {
     return (
       <Box marginTop={3}>

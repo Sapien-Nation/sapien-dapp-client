@@ -1,4 +1,4 @@
-export default (isMainnet: boolean) =>
+const getConfig = (isMainnet: boolean) =>
   isMainnet
     ? {
         MAINNET_NETWORK_ID: 1,
@@ -16,3 +16,4 @@ export default (isMainnet: boolean) =>
         POLY_BADGE_STORE_ADDRESS: '0xab221c69D8EEcF6aC7944efD4589DA206AE1046C',
         BICONOMY_API_KEY: 'tYSKReKvQ.c2fbc08c-3991-49b8-8ed8-cb945b0e55fe',
       };
+export default getConfig;

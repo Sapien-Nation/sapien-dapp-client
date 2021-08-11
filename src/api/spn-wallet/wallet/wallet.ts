@@ -162,7 +162,6 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
   }
 
   return {
-    balance: await getBalance(),
     getBalance,
     transferSPN: async (
       fromUserId: string,
