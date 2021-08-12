@@ -74,7 +74,7 @@ const Navbar = () => {
   const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
-  const { query } = useRouter();
+  const { query, asPath } = useRouter();
   const classes = useStyles();
   const [tokens] = useLocalStorage<{
     token: string;
@@ -89,7 +89,11 @@ const Navbar = () => {
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
         try {
-          const walletConnected = await connectWallet(tokens.torus, me.id);
+          const walletConnected = await connectWallet(
+            tokens.torus,
+            me.id,
+            asPath.includes('signup')
+          );
           enqueueSnackbar('Wallet connected', {
             variant: 'success',
             anchorOrigin: {
@@ -101,7 +105,11 @@ const Navbar = () => {
         } catch (error) {
           try {
             const { token } = await refresh(tokens.refresh, 'torus');
-            const walletConnected = await connectWallet(token, me.id);
+            const walletConnected = await connectWallet(
+              token,
+              me.id,
+              asPath.includes('signup')
+            );
             enqueueSnackbar('Wallet connected', {
               variant: 'success',
               anchorOrigin: {

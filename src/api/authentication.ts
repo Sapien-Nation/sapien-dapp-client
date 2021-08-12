@@ -85,3 +85,13 @@ export const verifyUser = async (token: string) => {
     return Promise.reject(response.data.message);
   }
 };
+
+export const addWallet = async (walletAddress: string) => {
+  try {
+    await authInstance.post('/api/v3/wallet/add-accounts', {
+      walletAddress,
+    });
+  } catch ({ response }) {
+    return Promise.reject(response.data.message);
+  }
+};
