@@ -10,3 +10,7 @@ export const PasswordRegex = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
 export const TribeNameRegex = /^[^-\s][a-zA-Z0-9_\s-]{1,40}$/;
 export const TribeIdentifierRegex = /^[a-zA-Z0-9_]{3,20}$/;
 export const TribeDescriptionRegex = /^[a-zA-Z0-9_]/;
+
+// Channel
+export const ChannelNameRegex = /^[^-\s][a-zA-Z0-9_\s-]{1,40}$/;
+export const ChannelDescriptionRegex = /^[a-zA-Z0-9_]/;

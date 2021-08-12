@@ -1,28 +1,8 @@
 import { useRouter } from 'next/router';
 
 // components
-import {
-  Page,
-  Query,
-  LayoutWithWidgets,
-  LayoutSkeleton,
-} from 'components/common';
-import { Widgets } from 'components/widgets';
-
-interface Props {
-  channelID: string;
-}
-
-const Channel = ({ channelID }: Props) => {
-  return (
-    <>
-      <Page>
-        <h1>TODO Channel Page: {channelID}</h1>
-      </Page>
-      <Widgets />
-    </>
-  );
-};
+import { Query, LayoutWithWidgets, LayoutSkeleton } from 'components/common';
+import { Channel } from 'components/channel';
 
 const ChannelPage = () => {
   const { query } = useRouter();
