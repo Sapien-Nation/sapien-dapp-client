@@ -57,8 +57,6 @@ const Section = ({ children, showAction, title, onClick }: Props) => {
           justifyContent="space-between"
           paddingTop={0.5}
           px={1.6}
-          style={{ cursor: 'pointer' }}
-          onClick={() => setShow(!show)}
         >
           <Box alignItems="center" display="flex">
             <Typography
@@ -80,7 +78,11 @@ const Section = ({ children, showAction, title, onClick }: Props) => {
               </IconButton>
             )}
           </Box>
-          <IconButton aria-label={`Toggle ${title} section`} component="span">
+          <IconButton
+            aria-label={`Toggle ${title} section`}
+            component="span"
+            onClick={() => setShow(!show)}
+          >
             {show ? <ArrowUp /> : <ArrowDown />}
           </IconButton>
         </Box>

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 // components
@@ -6,6 +7,7 @@ import Channels from './Channels';
 import Section from './Section';
 import Squares from './Squares';
 import DirectMessages from './DirectMessages';
+import { CreateChannelModal } from 'components/navigation';
 
 // hooks
 import { getTribes } from 'hooks';
@@ -42,6 +44,7 @@ const useStyles = makeStyles(() => ({
 const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
+  const [showModal, setShowModal] = useState(true);
   const { asPath, query } = useRouter();
 
   const { squareID } = query;
@@ -100,45 +103,46 @@ const TribeNavigation = () => {
           ]}
         />
       </Section>
-      <Section
-        showAction={false}
-        title="Channels"
-        onClick={() => console.log('TODO not POC')}
-      >
-        <Channels
-          channels={[
-            {
-              id: 'channel-1',
-              name: 'Politics',
-              lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              avatarImage:
-                'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
-              image:
-                'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-              membersCount: 227,
-            },
-            {
-              id: 'channel-2',
-              name: 'Foodies',
-              lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              avatarImage:
-                'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=40&w=40',
-              image:
-                'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-              membersCount: 227,
-            },
-            {
-              id: 'channel-3',
-              name: 'Our trips',
-              lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              avatarImage:
-                'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
-              image:
-                'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-              membersCount: 4,
-            },
-          ]}
-        />
+      <Section showAction title="Channels" onClick={() => setShowModal(true)}>
+        <>
+          <Channels
+            channels={[
+              {
+                id: 'channel-1',
+                name: 'Politics',
+                lastUpdateAt: '2021-08-09T04:35:15.149Z',
+                avatarImage:
+                  'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
+                image:
+                  'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
+                membersCount: 227,
+              },
+              {
+                id: 'channel-2',
+                name: 'Foodies',
+                lastUpdateAt: '2021-08-09T04:35:15.149Z',
+                avatarImage:
+                  'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=40&w=40',
+                image:
+                  'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                membersCount: 227,
+              },
+              {
+                id: 'channel-3',
+                name: 'Our trips',
+                lastUpdateAt: '2021-08-09T04:35:15.149Z',
+                avatarImage:
+                  'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
+                image:
+                  'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
+                membersCount: 4,
+              },
+            ]}
+          />
+          {showModal && (
+            <CreateChannelModal onClose={() => setShowModal(false)} />
+          )}
+        </>
       </Section>
       <Section
         showAction={false}
