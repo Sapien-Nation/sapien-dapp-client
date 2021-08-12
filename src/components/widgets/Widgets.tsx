@@ -13,6 +13,7 @@ import {
 import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
 
 // components
+import Badges from './Badges';
 import CalendarEvents from './CalendarEvents';
 import TopContents from './TopContents';
 import TopCreators from './TopCreators';
@@ -35,6 +36,7 @@ const Wdigets = () => {
   const [openCalendarWidgets, setCalendarWidgets] = useState(true);
   const [openCreatorWidgets, setCreatorWidgets] = useState(true);
   const [openContentWidgets, setContentWidgets] = useState(true);
+  const [openAllBadgesWidgets, setAllBadgesWidgets] = useState(true);
 
   return (
     <Drawer
@@ -115,6 +117,24 @@ const Wdigets = () => {
         </Box>
         <Collapse unmountOnExit in={openContentWidgets} timeout="auto">
           <TopContents />
+        </Collapse>
+
+        <Box
+          alignItems="center"
+          display="flex"
+          justifyContent="space-between"
+          style={{ cursor: 'pointer' }}
+          onClick={() => setAllBadgesWidgets(!openAllBadgesWidgets)}
+        >
+          <Typography color="textSecondary" variant="caption">
+            All Badges
+          </Typography>
+          <IconButton aria-label="Toggle top contents widgets" component="span">
+            {openAllBadgesWidgets ? <ArrowDropUp /> : <ArrowDropDown />}
+          </IconButton>
+        </Box>
+        <Collapse unmountOnExit in={openAllBadgesWidgets} timeout="auto">
+          <Badges />
         </Collapse>
       </Box>
     </Drawer>
