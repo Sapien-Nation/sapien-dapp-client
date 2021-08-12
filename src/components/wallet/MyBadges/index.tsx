@@ -34,7 +34,6 @@ const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
   const { handleSubmit } = methods;
 
   const handleFormSubmit = async () => {
-    console.log('HOLA!');
     setTransition('forward');
     if (step === MyBadgesSteps.Badges) {
       return setStep(MyBadgesSteps.Receivers);

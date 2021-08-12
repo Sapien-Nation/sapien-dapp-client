@@ -53,7 +53,7 @@ const Signup = () => {
       const response = await registerAction({
         ...values,
         client: window?.navigator.userAgent,
-        redirect: '/client/sapien',
+        redirect: '/client/sapien#f=signup',
       });
 
       setSession({
