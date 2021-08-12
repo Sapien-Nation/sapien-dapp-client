@@ -44,7 +44,7 @@ const useStyles = makeStyles(() => ({
 const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const { asPath, query } = useRouter();
 
   const { squareID } = query;
