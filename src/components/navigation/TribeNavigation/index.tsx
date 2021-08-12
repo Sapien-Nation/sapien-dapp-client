@@ -139,9 +139,6 @@ const TribeNavigation = () => {
               },
             ]}
           />
-          {showModal && (
-            <CreateChannelModal onClose={() => setShowModal(false)} />
-          )}
         </>
       </Section>
       <Section
@@ -175,6 +172,7 @@ const TribeNavigation = () => {
           ]}
         />
       </Section>
+      {showModal && <CreateChannelModal onClose={() => setShowModal(false)} />}
     </Drawer>
   );
 };
