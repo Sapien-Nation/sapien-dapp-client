@@ -1,7 +1,7 @@
 // api
 import axios from '.';
 
-export const createContent = (content: { data: string; squareId: string }) =>
+export const createContent = (content: { data: string; groupId: string }) =>
   axios
     .post('/api/v3/post', content)
     .then(({ data }) => data)

@@ -67,7 +67,7 @@ const CreateContentForm = ({
 
       const body = {
         data: dataSerialized,
-        squareId: squareID,
+        groupId: squareID,
       };
 
       const rawHTML = parse(dataSerialized);
