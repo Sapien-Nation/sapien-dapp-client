@@ -1,7 +1,12 @@
 import { useRouter } from 'next/router';
 
 // components
-import { Page, Query, LayoutWithWidgets } from 'components/common';
+import {
+  Page,
+  Query,
+  LayoutWithWidgets,
+  LayoutSkeleton,
+} from 'components/common';
 import { Widgets } from 'components/widgets';
 
 interface Props {
@@ -25,7 +30,7 @@ const ChannelPage = () => {
   if (!query.channelID) return null;
 
   return (
-    <Query api="/api/v3/profile/tribes">
+    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
       {() => <Channel channelID={String(query.channelID)} />}
     </Query>
   );

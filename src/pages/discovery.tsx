@@ -1,5 +1,5 @@
 // components
-import { Layout, Query } from 'components/common';
+import { DiscoverSkeleton, Layout, Query } from 'components/common';
 import { TribeCard } from 'components/discovery';
 
 // mui
@@ -128,7 +128,7 @@ const tribes = [
 
 const DiscoveryPage = () => {
   return (
-    <Query api="/api/v3/profile/tribes">
+    <Query api="/api/v3/profile/tribes" loader={<DiscoverSkeleton />}>
       {() => (
         <Box
           className="card--rounded-gray"
