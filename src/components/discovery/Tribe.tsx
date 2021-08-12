@@ -80,11 +80,9 @@ interface Props {
 }
 
 const Tribe = ({
-  tribe: { avatar, cover, description, name, membersCount },
+  tribe: { avatar, cover, description, isMember, name, membersCount, price },
 }: Props) => {
   const classes = useStyles();
-  const isFollowing = true;
-  const price = 1200;
 
   return (
     <Card className={classes.root} elevation={0}>
@@ -126,7 +124,7 @@ const Tribe = ({
         <Typography variant="overline">
           {numeral(membersCount).format('0a')} Members
         </Typography>
-        {isFollowing ? (
+        {isMember ? (
           <ButtonGroup disableElevation color="primary" variant="contained">
             <Button>Invite</Button>
             <Button>
