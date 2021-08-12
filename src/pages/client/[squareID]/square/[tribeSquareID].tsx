@@ -1,23 +1,8 @@
 import { useRouter } from 'next/router';
 
 // components
-import { Page, Query, LayoutWithWidgets } from 'components/common';
-import { Widgets } from 'components/widgets';
-
-interface Props {
-  squareID: string;
-}
-
-const Square = ({ squareID }: Props) => {
-  return (
-    <>
-      <Page>
-        <h1>TODO Square Page: {squareID}</h1>
-      </Page>
-      <Widgets />
-    </>
-  );
-};
+import { Query, LayoutWithWidgets } from 'components/common';
+import { Square } from 'components/square';
 
 const SquarePage = () => {
   const { query } = useRouter();
