@@ -50,87 +50,81 @@ const Channels = ({ channels }: Props) => {
   const { squareID } = query;
 
   return (
-    <>
-      <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
-        {channels.map(
-          ({ avatarImage, name, id, lastUpdateAt, membersCount }) => {
-            return (
-              <ListItem
-                key={id}
-                disableGutters
-                alignItems="flex-start"
-                classes={{
-                  selected: classes.listItemSelected,
-                }}
-                selected={asPath === `/client/${squareID}/channel/${id}`}
+    <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
+      {channels.map(({ avatarImage, name, id, lastUpdateAt, membersCount }) => {
+        return (
+          <ListItem
+            key={id}
+            disableGutters
+            alignItems="flex-start"
+            classes={{
+              selected: classes.listItemSelected,
+            }}
+            selected={asPath === `/client/${squareID}/channel/${id}`}
+            style={{
+              borderRadius: 10,
+              margin: '0.5rem 0',
+              padding: '0',
+            }}
+          >
+            <Link key={id} href={`/client/${squareID}/channel/${id}`}>
+              <a
                 style={{
-                  borderRadius: 10,
-                  margin: '0.5rem 0',
-                  padding: '0',
+                  display: 'flex',
+                  width: '100%',
+                  padding: '1rem 1.5rem',
+                  alignItems: 'center',
                 }}
               >
-                <Link key={id} href={`/client/${squareID}/channel/${id}`}>
-                  <a
-                    style={{
-                      display: 'flex',
-                      width: '100%',
-                      padding: '1rem 1.5rem',
-                      alignItems: 'center',
-                    }}
+                <Avatar
+                  alt={name}
+                  className={classes.avatar}
+                  src={avatarImage}
+                  style={{
+                    border: `2px solid ${
+                      asPath === `/client/${squareID}/channel/${id}`
+                        ? 'white'
+                        : neutral[200]
+                    }`,
+                  }}
+                  variant="square"
+                />
+                <Box
+                  display="flex"
+                  flex={1}
+                  justifyContent="space-between"
+                  paddingLeft={1.5}
+                >
+                  <ListItemText
+                    disableTypography
+                    primary={<Typography variant="button">{name}</Typography>}
+                    secondary={
+                      <>
+                        <Typography
+                          color="textSecondary"
+                          display="block"
+                          variant="overline"
+                        >
+                          {membersCount} members
+                        </Typography>
+                      </>
+                    }
+                  />
+                  <Typography
+                    color="textSecondary"
+                    display="block"
+                    style={{ marginTop: '1rem' }}
+                    variant="overline"
                   >
-                    <Avatar
-                      alt={name}
-                      className={classes.avatar}
-                      src={avatarImage}
-                      style={{
-                        border: `2px solid ${
-                          asPath === `/client/${squareID}/channel/${id}`
-                            ? 'white'
-                            : neutral[200]
-                        }`,
-                      }}
-                      variant="square"
-                    />
-                    <Box
-                      display="flex"
-                      flex={1}
-                      justifyContent="space-between"
-                      paddingLeft={1.5}
-                    >
-                      <ListItemText
-                        disableTypography
-                        primary={
-                          <Typography variant="button">{name}</Typography>
-                        }
-                        secondary={
-                          <>
-                            <Typography
-                              color="textSecondary"
-                              display="block"
-                              variant="overline"
-                            >
-                              {membersCount} members
-                            </Typography>
-                          </>
-                        }
-                      />
-                      <Typography
-                        color="textSecondary"
-                        display="block"
-                        style={{ marginTop: '1rem' }}
-                        variant="overline"
-                      >
-                        {formatTimestampToRelative(lastUpdateAt)}
-                      </Typography>
-                    </Box>
-                  </a>
-                </Link>
-              </ListItem>
-            );
-          }
-        )}
-      </List>
-    </>
+                    {formatTimestampToRelative(lastUpdateAt)}
+                  </Typography>
+                </Box>
+              </a>
+            </Link>
+          </ListItem>
+        );
+      })}
+    </List>
   );
 };
 

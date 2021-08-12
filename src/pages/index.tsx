@@ -1,8 +1,8 @@
 // components
-import { Layout, Redirect, Query } from 'components/common';
+import { Layout, LayoutSkeleton, Redirect, Query } from 'components/common';
 
 const IndexPage = () => (
-  <Query api="/api/v3/profile/tribes" loader={null}>
+  <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
     {() => <Redirect to="/client/sapien" />}
   </Query>
 );

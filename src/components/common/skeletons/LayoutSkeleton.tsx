@@ -1,5 +1,6 @@
 // components
 import {
+  FeedSkeleton,
   Page,
   PageHeaderSkeleton,
   PostComposerSkeleton,
@@ -14,15 +15,26 @@ import {
   makeStyles,
   List,
   ListItem,
+  ListItemText,
   Typography,
 } from '@material-ui/core';
 import { Groups } from '@material-ui/icons';
+import { Skeleton } from '@material-ui/lab';
 
 // styles
 import { neutral } from 'styles/colors';
-import FeedSkeleton from './FeedSkeleton';
 
 const useStyles = makeStyles(() => ({
+  avatar: {
+    borderRadius: 10,
+    boxSizing: 'border-box',
+    padding: '2px',
+    width: '4.8rem',
+    height: '4.8rem',
+    '& > img': {
+      borderRadius: 10,
+    },
+  },
   drawerPaper: {
     width: 72,
     backgroundColor: neutral[800],
@@ -97,7 +109,7 @@ const LayoutSkeleton = () => {
           variant="permanent"
         >
           <List aria-label="Tribe Navigation">
-            <p style={{ alignItems: 'center', display: 'flex' }}>
+            <span style={{ alignItems: 'center', display: 'flex' }}>
               <ListItem
                 selected
                 style={{
@@ -115,13 +127,187 @@ const LayoutSkeleton = () => {
                   Sapien
                 </Typography>
               </ListItem>
-            </p>
+            </span>
           </List>
           <Section showAction={false} title="Squares" onClick={() => {}}>
-            <></>
+            <List aria-label="Squares list" role="list">
+              <ListItem
+                button
+                disableGutters
+                disableRipple
+                component="li"
+                role="listitem"
+                style={{
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
+                }}
+              >
+                <Box margin="0 auto" width="85%">
+                  <Skeleton />
+                </Box>
+              </ListItem>
+              <ListItem
+                button
+                disableGutters
+                disableRipple
+                component="li"
+                role="listitem"
+                style={{
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
+                }}
+              >
+                <Box margin="0 auto" width="85%">
+                  <Skeleton />
+                </Box>
+              </ListItem>
+              <ListItem
+                button
+                disableGutters
+                disableRipple
+                component="li"
+                role="listitem"
+                style={{
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
+                }}
+              >
+                <Box margin="0 auto" width="85%">
+                  <Skeleton />
+                </Box>
+              </ListItem>
+            </List>
           </Section>
           <Section showAction={false} title="Channels" onClick={() => {}}>
-            <></>
+            <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
+              <ListItem
+                disableGutters
+                alignItems="flex-start"
+                style={{
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
+                }}
+              >
+                <a
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    padding: '1rem 1.5rem',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Skeleton>
+                    <Avatar
+                      className={classes.avatar}
+                      style={{
+                        border: '2px solid white',
+                      }}
+                      variant="square"
+                    />
+                  </Skeleton>
+                  <Box
+                    display="flex"
+                    flex={1}
+                    justifyContent="space-between"
+                    paddingLeft={1.5}
+                  >
+                    <ListItemText
+                      disableTypography
+                      primary={
+                        <Typography variant="button">
+                          <Skeleton />
+                        </Typography>
+                      }
+                      secondary={
+                        <>
+                          <Typography
+                            color="textSecondary"
+                            display="block"
+                            variant="overline"
+                          >
+                            <Skeleton />
+                          </Typography>
+                        </>
+                      }
+                    />
+                    <Typography
+                      color="textSecondary"
+                      display="block"
+                      style={{ marginTop: '1rem' }}
+                      variant="overline"
+                    >
+                      <Skeleton />
+                    </Typography>
+                  </Box>
+                </a>
+              </ListItem>
+              <ListItem
+                disableGutters
+                alignItems="flex-start"
+                style={{
+                  borderRadius: 10,
+                  margin: '0.5rem 0',
+                  padding: '0',
+                }}
+              >
+                <p
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    padding: '1rem 1.5rem',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Skeleton>
+                    <Avatar
+                      className={classes.avatar}
+                      style={{
+                        border: '2px solid white',
+                      }}
+                      variant="square"
+                    />
+                  </Skeleton>
+                  <Box
+                    display="flex"
+                    flex={1}
+                    justifyContent="space-between"
+                    paddingLeft={1.5}
+                  >
+                    <ListItemText
+                      disableTypography
+                      primary={
+                        <Typography variant="button">
+                          <Skeleton />
+                        </Typography>
+                      }
+                      secondary={
+                        <>
+                          <Typography
+                            color="textSecondary"
+                            display="block"
+                            variant="overline"
+                          >
+                            <Skeleton />
+                          </Typography>
+                        </>
+                      }
+                    />
+                    <Typography
+                      color="textSecondary"
+                      display="block"
+                      style={{ marginTop: '1rem' }}
+                      variant="overline"
+                    >
+                      <Skeleton />
+                    </Typography>
+                  </Box>
+                </p>
+              </ListItem>
+            </List>
           </Section>
           <Section showAction={false} title="My Messages" onClick={() => {}}>
             <></>
