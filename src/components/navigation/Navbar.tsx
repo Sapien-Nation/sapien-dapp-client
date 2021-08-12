@@ -100,7 +100,6 @@ const Navbar = () => {
         } catch (error) {
           try {
             const { token } = await refresh(tokens.refresh, 'torus');
-            alert(`'hola! ${token} ${me.id}`);
             const walletConnected = await connectWallet(token, me.id);
             enqueueSnackbar('Wallet connected', {
               variant: 'success',
@@ -111,7 +110,6 @@ const Navbar = () => {
             });
             setWallet(walletConnected);
           } catch (err) {
-            alert('hey!');
             enqueueSnackbar(err, {
               variant: 'error',
               anchorOrigin: {
