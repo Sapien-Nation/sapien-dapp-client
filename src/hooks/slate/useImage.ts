@@ -54,7 +54,6 @@ const useImageUploadHandler = (editor, selection) => {
 
       uploadContentImage(formData)
         .then((response) => {
-          console.log(response);
           const newImageEntry = Editor.nodes(editor, {
             // @ts-ignore
             match: (n) => n.id === id,

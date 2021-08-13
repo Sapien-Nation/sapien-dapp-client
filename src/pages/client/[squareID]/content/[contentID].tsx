@@ -7,7 +7,6 @@ import ContentDetail from 'components/content/ContentDetail';
 import {
   FeedSkeleton,
   LayoutWithWidgets as Layout,
-  LayoutSkeleton,
   Page,
   Query,
 } from 'components/common';
@@ -72,11 +71,7 @@ const ContentPage = () => {
 
   if (!query.contentID) return null;
 
-  return (
-    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
-      {() => <Content contentID={String(query.contentID)} />}
-    </Query>
-  );
+  return <Content contentID={String(query.contentID)} />;
 };
 
 ContentPage.Layout = Layout;

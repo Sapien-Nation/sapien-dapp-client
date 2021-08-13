@@ -10,7 +10,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { FeedSkeleton, Page, PostComposerSkeleton } from 'components/common';
-import { Header } from 'components/tribe';
+import Header from 'components/channel/Header';
 import {
   CreateContentForm,
   ContentItem,
@@ -44,13 +44,10 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 };
 
 export const Channel = ({ channelID }: Props) => {
-  console.log('Channel', channelID);
   const [isCreating, setIsCreating] = useState(false);
   const { me, isLoggingIn } = useAuth();
 
-  const { id: tribeID, mainSquareId: sapienSquareID } = getTribe(
-    String(channelID)
-  );
+  const { mainSquareId: sapienSquareID } = getTribe(String(channelID));
 
   const {
     data: swrData,
@@ -59,8 +56,7 @@ export const Channel = ({ channelID }: Props) => {
     size,
     mutate,
   } = useSWRInfinite(
-    (...rest) =>
-      getKey(...rest, `/api/v3/tribe/${tribeID}/channel/${channelID}/feed`),
+    (...rest) => getKey(...rest, `/api/v3/channel/${channelID}/feed`),
     { fetcher, revalidateOnMount: true }
   );
 
@@ -74,14 +70,14 @@ export const Channel = ({ channelID }: Props) => {
   return (
     <>
       <Page
-        header={<Header tribeID={tribeID} />}
+        header={<Header channelID={channelID} />}
         subHeader={
           <>
             {me && (
               <Box className="card--rounded-white" padding={3}>
                 <CreateContentForm
                   setIsCreating={setIsCreating}
-                  squareID={sapienSquareID}
+                  squareID={channelID}
                   user={me}
                   onSave={() => mutate()}
                 />

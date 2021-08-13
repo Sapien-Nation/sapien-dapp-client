@@ -1,12 +1,4 @@
-// types
-import type { Content } from 'tools/types/content';
-
-interface Props {
-  content: Content;
-}
-
-const CreateContentForm = ({ content }: Props) => {
-  console.log(content);
+const CreateContentForm = () => {
   const onSubmitForm = async (event) => {
     try {
       event.preventDefault();

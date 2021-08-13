@@ -9,6 +9,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
+import { LayoutSkeleton, Query } from 'components/common';
 
 interface Props {
   children: React.ReactNode;
@@ -30,16 +31,22 @@ const Layout = ({ children }: Props) => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
-      <NoSsr>
-        <Sidebar />
-      </NoSsr>
-      <main>
-        <WalletProvider>
-          <Navbar />
-        </WalletProvider>
-        <div>{children}</div>
-      </main>
+      <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
+        {() => (
+          <>
+            <CssBaseline />
+            <NoSsr>
+              <Sidebar />
+            </NoSsr>
+            <main>
+              <WalletProvider>
+                <Navbar />
+              </WalletProvider>
+              <div>{children}</div>
+            </main>
+          </>
+        )}
+      </Query>
     </div>
   );
 };

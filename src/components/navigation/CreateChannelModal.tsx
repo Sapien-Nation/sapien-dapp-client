@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { mutate } from 'swr';
 
 // api
 import { createChannel, uploadImage } from 'api/tribeNavigation';
@@ -16,6 +17,7 @@ import { ChannelDescriptionRegex, ChannelNameRegex } from 'utils/regex';
 
 // types
 import type { CreateChannel } from 'tools/types/tribeNavigation';
+import type { Tribe } from 'tools/types/tribeBar';
 
 // mui
 import {
@@ -35,6 +37,8 @@ enum Step {
 }
 
 interface Props {
+  squareID: string;
+  tribeId: string;
   onClose: () => void;
 }
 
@@ -46,7 +50,7 @@ interface ChannelForm extends CreateChannel {
   cover: null | { url: string; key: string };
 }
 
-const CreateChannelModal = ({ onClose }: Props) => {
+const CreateChannelModal = ({ squareID, tribeId, onClose }: Props) => {
   const [step, setStep] = useState(Step.ChannelSummary);
   const [isUploadingCover, setIsUploadingCover] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
@@ -104,11 +108,24 @@ const CreateChannelModal = ({ onClose }: Props) => {
         delete values.cover;
       }
 
-      const response = await createChannel(values);
+      const response = await createChannel({
+        ...values,
+        tribeId,
+      });
 
-      // TODO
-      // mutate tribe navigation channel data
-
+      mutate(
+        '/api/v3/profile/tribes',
+        (tribes: Array<Tribe>) => {
+          return tribes.map((tribe) => ({
+            ...tribe,
+            channels:
+              tribe.mainSquareId === squareID
+                ? [...tribe.channels, response]
+                : tribe.channels,
+          }));
+        },
+        false
+      );
       reset();
       onClose();
 
@@ -120,7 +137,7 @@ const CreateChannelModal = ({ onClose }: Props) => {
         },
       });
 
-      push(`/client/${response.mainSquareId}`);
+      push(`/client/${squareID}/channel/${response.id}`);
     } catch (error) {
       enqueueSnackbar(error, {
         variant: 'error',

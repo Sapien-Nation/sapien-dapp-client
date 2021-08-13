@@ -3,9 +3,7 @@ import { useRouter } from 'next/router';
 // components
 import {
   Page,
-  Query,
   LayoutWithWidgets,
-  LayoutSkeleton,
 } from 'components/common';
 import { Widgets } from 'components/widgets';
 
@@ -30,9 +28,7 @@ const MessagePage = () => {
   if (!query.messageID) return null;
 
   return (
-    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
-      {() => <Message messageID={String(query.messageID)} />}
-    </Query>
+    <Message messageID={String(query.messageID)} /> <Message messageID={String(query.messageID)} />
   );
 };
 

@@ -26,6 +26,7 @@ import { getTribe } from 'hooks';
 import { Box } from '@material-ui/core';
 
 interface Props {
+  isMainSquare?: boolean;
   squareID: string;
 }
 
@@ -43,8 +44,7 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
   return `${apiUrl}?nextCursor=${previousPageData.nextCursor}`;
 };
 
-export const Square = ({ squareID }: Props) => {
-  console.log('square', squareID);
+export const Square = ({ squareID, isMainSquare = true }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
   const { me, isLoggingIn } = useAuth();
 
@@ -83,7 +83,12 @@ export const Square = ({ squareID }: Props) => {
   return (
     <>
       <Page
-        header={<Header tribeID={isSapienTribe ? 'sapien' : tribeID} />}
+        header={
+          <Header
+            isMainSquare={isMainSquare}
+            tribeID={isSapienTribe ? 'sapien' : tribeID}
+          />
+        }
         subHeader={
           <>
             {me && (

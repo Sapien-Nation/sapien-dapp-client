@@ -1,5 +1,5 @@
 // components
-import { DiscoverSkeleton, Layout, Query } from 'components/common';
+import { Layout } from 'components/common';
 import { TribeCard } from 'components/discovery';
 
 // mui
@@ -126,33 +126,27 @@ const tribes = [
   },
 ];
 
-const DiscoveryPage = () => {
-  return (
-    <Query api="/api/v3/profile/tribes" loader={<DiscoverSkeleton />}>
-      {() => (
-        <Box
-          className="card--rounded-gray"
-          marginTop={12.7}
-          paddingTop={4}
-          paddingX={2.8}
-        >
-          <Box
-            display="grid"
-            style={{
-              gap: '40px',
-              gridRowGap: '16px',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-            }}
-          >
-            {tribes.map((tribe: any) => (
-              <TribeCard key={tribe.id} tribe={tribe} />
-            ))}
-          </Box>
-        </Box>
-      )}
-    </Query>
-  );
-};
+const DiscoveryPage = () => (
+  <Box
+    className="card--rounded-gray"
+    marginTop={12.7}
+    paddingTop={4}
+    paddingX={2.8}
+  >
+    <Box
+      display="grid"
+      style={{
+        gap: '40px',
+        gridRowGap: '16px',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+      }}
+    >
+      {tribes.map((tribe: any) => (
+        <TribeCard key={tribe.id} tribe={tribe} />
+      ))}
+    </Box>
+  </Box>
+);
 
 DiscoveryPage.Layout = Layout;
 

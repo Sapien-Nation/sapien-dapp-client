@@ -5,19 +5,20 @@ import type { Tribe } from 'tools/types/tribeBar';
 
 export const getTribes = (): Array<Tribe> => {
   return (
-    useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? []
+    useSWR('/api/v3/profile/tribes', { revalidateOnMount: true }).data ?? []
   );
 };
 
 export const getTribe = (squareID: string): Tribe => {
   const tribes: Array<Tribe> =
-    useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? {};
+    useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? [];
 
-  const tribeFromMainSquare = tribes?.find(
+  const tribeFromMainSquare = tribes.find(
     ({ name, mainSquareId }) => mainSquareId === squareID || name === squareID
   );
 
   if (tribeFromMainSquare) return tribeFromMainSquare;
 
-  return {} as Tribe;
+  // @ts-ignore
+  return {};
 };

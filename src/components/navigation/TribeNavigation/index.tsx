@@ -41,16 +41,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+enum ModalType {
+  Channel,
+  Square,
+}
+
 const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState<ModalType | null>(null);
   const { asPath, query } = useRouter();
 
   const { squareID } = query;
   const selectedTribe = tribes.find(
     ({ mainSquareId, name }) => mainSquareId === squareID || name === squareID
   );
+
+  // TODO fix this
+  if (!selectedTribe) return <></>;
 
   return (
     <Drawer
@@ -70,7 +78,7 @@ const TribeNavigation = () => {
               classes={{
                 selected: classes.listItemSelected,
               }}
-              selected={asPath?.includes(`/client/${squareID}`)}
+              selected={asPath === `/client/${squareID}`}
               style={{
                 borderRadius: 10,
                 padding: '1rem 1.5rem',
@@ -94,85 +102,29 @@ const TribeNavigation = () => {
         title="Squares"
         onClick={() => console.log('TODO not POC')}
       >
-        <Squares
-          squares={[
-            { name: 'PoliticsSquare', id: 'sqr-1' },
-            { name: 'SportsSquare', id: 'sqr-2' },
-            { name: 'SportsSquare', id: 'sqr-3' },
-            { name: 'TravelSquare', id: 'sqr-4' },
-          ]}
-        />
+        <Squares squares={[]} />
       </Section>
-      <Section showAction title="Channels" onClick={() => setShowModal(true)}>
-        <>
-          <Channels
-            channels={[
-              {
-                id: 'channel-1',
-                name: 'Politics',
-                lastUpdateAt: '2021-08-09T04:35:15.149Z',
-                avatarImage:
-                  'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
-                image:
-                  'https://images.pexels.com/photos/3505000/pexels-photo-3505000.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-                membersCount: 227,
-              },
-              {
-                id: 'channel-2',
-                name: 'Foodies',
-                lastUpdateAt: '2021-08-09T04:35:15.149Z',
-                avatarImage:
-                  'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=40&w=40',
-                image:
-                  'https://images.pexels.com/photos/8698547/pexels-photo-8698547.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-                membersCount: 227,
-              },
-              {
-                id: 'channel-3',
-                name: 'Our trips',
-                lastUpdateAt: '2021-08-09T04:35:15.149Z',
-                avatarImage:
-                  'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=40&w=40',
-                image:
-                  'https://images.pexels.com/photos/8651513/pexels-photo-8651513.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260',
-                membersCount: 4,
-              },
-            ]}
-          />
-        </>
+      <Section
+        showAction
+        title="Channels"
+        onClick={() => setModal(ModalType.Channel)}
+      >
+        <Channels channels={selectedTribe.channels} />
       </Section>
       <Section
         showAction={false}
         title="My Messages"
         onClick={() => console.log('TODO not POC')}
       >
-        <DirectMessages
-          messages={[
-            {
-              id: 'msg-1',
-              name: 'Ollie Hampton',
-              lastUpdateAt: '2021-08-09T04:35:15.149Z',
-              avatarImage: 'https://material-ui.com/static/images/avatar/1.jpg',
-              message: 'Let’s go!',
-            },
-            // {
-            //   id: '2',
-            //   name: 'Michael Perry',
-            //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
-            //   avatarImage: 'https://material-ui.com/static/images/avatar/2.jpg',
-            //   message: 'Let’s go!',
-            // },
-            // {
-            //   id: '3',
-            //   name: 'Amanda Ben...',
-            //   lastUpdateAt: '2021-08-09T04:35:15.149Z',
-            //   avatarImage: 'https://material-ui.com/static/images/avatar/3.jpg',
-            //   message: 'Let’s go!',
-            // },
-          ]}
-        />
+        <DirectMessages messages={[]} />
       </Section>
-      {showModal && <CreateChannelModal onClose={() => setShowModal(false)} />}
+      {modal === ModalType.Channel && (
+        <CreateChannelModal
+          squareID={selectedTribe.mainSquareId}
+          tribeId={selectedTribe.id}
+          onClose={() => setModal(null)}
+        />
+      )}
     </Drawer>
   );
 };

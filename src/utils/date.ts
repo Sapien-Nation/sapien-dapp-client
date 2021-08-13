@@ -2,7 +2,7 @@
 import type { ISOString } from 'tools/types/common';
 
 export const formatTimestampToRelative = (
-  compare: ISOString,
+  compare: ISOString = new Date().toISOString(),
   current: ISOString = new Date().toISOString()
 ) => {
   const msPerMinute = 60 * 1000;
@@ -28,7 +28,8 @@ export const formatTimestampToRelative = (
       months === 1 ? 'month' : 'months'
     }`;
   } else {
-    const years = Math.round(elapsed / msPerYear);
+    const years = Math.round(elapsed || 1 / msPerYear);
+
     return `${Math.round(elapsed / msPerYear)} ${
       years === 1 ? 'year' : 'years'
     }`;

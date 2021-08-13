@@ -51,7 +51,7 @@ const Channels = ({ channels }: Props) => {
 
   return (
     <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
-      {channels.map(({ avatarImage, name, id, lastUpdateAt, membersCount }) => {
+      {channels.map(({ avatar, name, id, lastUpdateAt, membersCount }) => {
         return (
           <ListItem
             key={id}
@@ -79,7 +79,7 @@ const Channels = ({ channels }: Props) => {
                 <Avatar
                   alt={name}
                   className={classes.avatar}
-                  src={avatarImage}
+                  src={avatar}
                   style={{
                     border: `2px solid ${
                       asPath === `/client/${squareID}/channel/${id}`

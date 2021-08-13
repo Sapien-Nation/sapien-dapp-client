@@ -17,15 +17,11 @@ import {
 
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 
-// types
-import type { Tribe } from 'tools/types/tribe/view';
-
 interface Props {
-  isMainSquare?: boolean;
-  tribeID: string;
+  channelID: string;
 }
 
-const Header = ({ isMainSquare, tribeID }: Props) => {
+const Header = ({ channelID }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [copyToClipboardState, copyToClipboard] = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
@@ -54,13 +50,16 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
 
   return (
     <Box className="card--rounded-white" padding={0.8}>
-      <Query api={`/api/v3/tribe/${tribeID}`} loader={<PageHeaderSkeleton />}>
-        {(tribe: Tribe) => (
+      <Query
+        api={`/api/v3/channel/${channelID}`}
+        loader={<PageHeaderSkeleton />}
+      >
+        {(channel: any) => (
           <>
             <Image
-              alt={tribe.description}
-              fallbackImage={tribe.cover_original}
-              src={tribe.cover}
+              alt={channel.description}
+              fallbackImage={channel.cover_original}
+              src={channel.cover}
               style={{
                 width: '100%',
                 height: 200,
@@ -76,8 +75,8 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                 top="-3rem"
               >
                 <Avatar
-                  alt={tribe.name}
-                  src={tribe.avatar}
+                  alt={channel.name}
+                  src={channel.avatar}
                   style={{
                     width: 110,
                     height: 110,
@@ -86,14 +85,14 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   }}
                   variant="rounded"
                 >
-                  {tribe.avatar_original ? (
+                  {channel.avatar_original ? (
                     <img
-                      alt={tribe.name}
+                      alt={channel.name}
                       className="MuiAvatar-img"
-                      src={tribe.avatar_original}
+                      src={channel.avatar_original}
                     />
                   ) : (
-                    tribe.name[0].toUpperCase()
+                    channel.name[0].toUpperCase()
                   )}
                 </Avatar>
                 <Box display="grid" paddingLeft={3} style={{ gap: 8 }}>
@@ -102,12 +101,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                     display="flex"
                     style={{ gap: '14px' }}
                   >
-                    <Typography variant="h2">{tribe.name}</Typography>
-                    <Typography color="textSecondary" variant="button">
-                      {isMainSquare
-                        ? `@${tribe.identifier}`
-                        : '#PoliticsSquare'}
-                    </Typography>
+                    <Typography variant="h2">{channel.name}</Typography>
                   </Box>
                   <Box
                     alignItems="baseline"
@@ -115,10 +109,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                     style={{ gap: '14px' }}
                   >
                     <Typography color="textSecondary" variant="button">
-                      {tribe.followersCount} Followers
-                    </Typography>
-                    <Typography color="textSecondary" variant="button">
-                      {tribe.membersCount} Members
+                      {channel.membersCount} Members
                     </Typography>
                   </Box>
                 </Box>
@@ -142,7 +133,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                 </Box>
               </Box>
               <Typography color="textSecondary" variant="body2">
-                {tribe.description}
+                {channel.description}
               </Typography>
             </Box>
           </>

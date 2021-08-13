@@ -1,19 +1,15 @@
 import { useRouter } from 'next/router';
 
 // components
-import { Query, LayoutWithWidgets, LayoutSkeleton } from 'components/common';
+import { LayoutWithWidgets } from 'components/common';
 import { Square } from 'components/square';
 
 const SquarePage = () => {
   const { query } = useRouter();
 
-  if (!query.tribeSquareID) return null;
+  if (!query.squareID) return null;
 
-  return (
-    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
-      {() => <Square squareID={String(query.tribeSquareID)} />}
-    </Query>
-  );
+  return <Square isMainSquare={false} squareID={String(query.squareID)} />;
 };
 
 SquarePage.Layout = LayoutWithWidgets;
