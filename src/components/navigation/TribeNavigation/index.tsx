@@ -7,7 +7,8 @@ import Channels from './Channels';
 import Section from './Section';
 import Squares from './Squares';
 import DirectMessages from './DirectMessages';
-import { CreateChannelModal } from 'components/navigation';
+import CreateChannelModal from 'components/channel/CreateChannelModal';
+import CreateSquareModal from 'components/square/CreateSquareModal';
 
 // hooks
 import { getTribes } from 'hooks';
@@ -98,11 +99,11 @@ const TribeNavigation = () => {
         </Link>
       </List>
       <Section
-        showAction={false}
+        showAction
         title="Squares"
-        onClick={() => console.log('TODO not POC')}
+        onClick={() => setModal(ModalType.Square)}
       >
-        <Squares squares={[]} />
+        <Squares squares={selectedTribe.squares} />
       </Section>
       <Section
         showAction
@@ -111,17 +112,21 @@ const TribeNavigation = () => {
       >
         <Channels channels={selectedTribe.channels} />
       </Section>
-      <Section
-        showAction={false}
-        title="My Messages"
-        onClick={() => console.log('TODO not POC')}
-      >
+      <Section showAction={false} title="My Messages" onClick={() => {}}>
         <DirectMessages messages={[]} />
       </Section>
+
       {modal === ModalType.Channel && (
         <CreateChannelModal
           squareID={selectedTribe.mainSquareId}
           tribeId={selectedTribe.id}
+          onClose={() => setModal(null)}
+        />
+      )}
+
+      {modal === ModalType.Square && (
+        <CreateSquareModal
+          squareID={selectedTribe.mainSquareId}
           onClose={() => setModal(null)}
         />
       )}

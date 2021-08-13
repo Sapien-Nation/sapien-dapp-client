@@ -13,7 +13,7 @@ import { Avatar, Drawer, IconButton, makeStyles } from '@material-ui/core';
 import { AddRounded as AddIcon, Explore } from '@material-ui/icons';
 
 // components
-import CreateTribeModal from './CreateTribeModal';
+import { CreateTribeModal } from 'components/navigation';
 
 // types
 import type { Tribe } from 'tools/types/tribeBar';

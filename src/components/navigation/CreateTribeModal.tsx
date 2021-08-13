@@ -400,6 +400,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
       confirmDisabled={isSubmitting || isUploadingAvatar || isUploadingCover}
       confirmLabel={step == Step.TribeSummary ? 'Next' : 'Create'}
       form={form}
+      isFetching={isSubmitting}
       maxWidth="xs"
       title={
         <>

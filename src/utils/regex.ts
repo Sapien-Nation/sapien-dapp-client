@@ -14,3 +14,6 @@ export const TribeDescriptionRegex = /^[a-zA-Z0-9_]/;
 // Channel
 export const ChannelNameRegex = /^[^-\s][a-zA-Z0-9_\s-]{1,40}$/;
 export const ChannelDescriptionRegex = /^[a-zA-Z0-9_]/;
+
+// Square
+export const SquareNameRegex = /^[^-\s][a-zA-Z0-9_\s-]{1,40}$/;
