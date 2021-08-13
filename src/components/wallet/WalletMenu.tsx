@@ -18,7 +18,11 @@ import {
 // emums
 import { View } from './WalletEnums';
 
-const WalletMenu = ({ wallet }: { wallet: WalletType }) => {
+interface Props {
+  wallet: WalletType;
+}
+
+const WalletMenu = ({ wallet }: Props) => {
   const [view, setView] = useState(View.Tabs);
   const renderView = () => {
     switch (view) {

@@ -2,12 +2,13 @@ import { createContext, useContext, useState } from 'react';
 
 // types
 import type { Wallet as WalletType } from 'tools/types/wallet';
+import type { ContentAuthor } from 'tools/types/content';
 
 export interface Wallet {
   wallet: WalletType | null;
   setWallet: (wallet: WalletType) => void;
-  walletOpen: boolean;
-  setWalletOpen: (status: boolean) => void;
+  walletOpen: boolean | ContentAuthor;
+  setWalletOpen: (status: boolean | ContentAuthor) => void;
 }
 
 export const WalletContext = createContext<Wallet>(null);
@@ -18,7 +19,7 @@ interface Props {
 
 const WalletProvider = ({ children }: Props) => {
   const [wallet, setWallet] = useState<WalletType | null>(null);
-  const [walletOpen, setWalletOpen] = useState<boolean>(false);
+  const [walletOpen, setWalletOpen] = useState<boolean | ContentAuthor>(false);
   return (
     <WalletContext.Provider
       value={{

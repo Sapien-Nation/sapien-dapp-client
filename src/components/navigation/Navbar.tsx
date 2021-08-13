@@ -223,12 +223,11 @@ const Navbar = () => {
       </Menu>
       <Popover
         TransitionComponent={Fade}
-        // anchorEl={balanceAnchor}
         classes={{
           paper: classes.paper,
         }}
         id="wallet"
-        open={walletOpen}
+        open={Boolean(walletOpen)}
         onClose={() => setWalletOpen(false)}
       >
         <WalletMenu wallet={wallet} />

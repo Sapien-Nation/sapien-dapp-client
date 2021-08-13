@@ -76,7 +76,7 @@ const Actions = ({ content, user }: Props) => {
         color="primary"
         size="small"
         startIcon={<StarIcon color="action" fontSize="small" />}
-        onClick={() => setWalletOpen(true)}
+        onClick={() => setWalletOpen(content.author)}
       >
         <Typography color="textSecondary" variant="caption">
           Badge Post

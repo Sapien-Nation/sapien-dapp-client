@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // mui
 import { Tabs, Tab, makeStyles } from '@material-ui/core';
 
@@ -43,6 +46,7 @@ const WalletTabs = () => {
   const [showTabsMenu, setShowTabsMenu] = useState(true);
   const [transition, setTransition] = useState('forward');
   const classes = useStyles();
+  const { walletOpen } = useWallet();
   const handleChange = (_, tab) => {
     setCurrentTab(tab);
     if (currentTab > tab) {
@@ -92,6 +96,8 @@ const WalletTabs = () => {
 
   return (
     <>
+      {/* @ts-ignore */}
+      {walletOpen && walletOpen.userName && <div>{walletOpen.userName}</div>}
       {showTabsMenu && (
         <Tabs
           aria-label="simple tabs example"
