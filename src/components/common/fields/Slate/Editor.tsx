@@ -82,7 +82,7 @@ const Editor = ({
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           style={{
-            minHeight: 'inherit',
+            minHeight: 'auto',
             padding: '0.7rem 1.5rem',
             width: '100%',
           }}
@@ -135,7 +135,7 @@ const Editor = ({
         <input
           ref={imageRef}
           hidden
-          accept="image/*"
+          accept=".jpeg,.png,.avif,.webp"
           type="file"
           onChange={addImage}
         />
