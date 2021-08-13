@@ -27,11 +27,11 @@ const Layout = ({ children }: Props) => {
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   return (
-    <div className={classes.root}>
+    <>
+      <CssBaseline />
       <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
         {() => (
-          <>
-            <CssBaseline />
+          <div className={classes.root}>
             <NoSsr>
               <Sidebar />
             </NoSsr>
@@ -39,10 +39,10 @@ const Layout = ({ children }: Props) => {
               <Navbar />
               <div>{children}</div>
             </main>
-          </>
+          </div>
         )}
       </Query>
-    </div>
+    </>
   );
 };
 

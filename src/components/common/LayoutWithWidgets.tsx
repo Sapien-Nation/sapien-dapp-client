@@ -6,6 +6,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
+import { LayoutSkeleton, Query } from 'components/common';
 
 interface Props {
   children: React.ReactNode;
@@ -31,16 +32,22 @@ const Layout = ({ children }: Props) => {
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   return (
-    <div className={classes.root}>
+    <>
       <CssBaseline />
-      <NoSsr>
-        <Sidebar />
-      </NoSsr>
-      <main>
-        <Navbar />
-        <Box className={classes.container}>{children}</Box>
-      </main>
-    </div>
+      <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
+        {() => (
+          <div className={classes.root}>
+            <NoSsr>
+              <Sidebar />
+            </NoSsr>
+            <main>
+              <Navbar />
+              <Box className={classes.container}>{children}</Box>
+            </main>
+          </div>
+        )}
+      </Query>
+    </>
   );
 };
 

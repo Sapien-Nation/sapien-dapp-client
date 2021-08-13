@@ -5,7 +5,9 @@ import { Skeleton } from '@material-ui/lab';
 const PostComposerSkeleton = () => (
   <Box
     alignItems="center"
+    className="card--rounded-white"
     display="grid"
+    padding={3}
     style={{ gridTemplateColumns: '32px 1fr', gap: '10px' }}
   >
     <Skeleton animation="wave" height={32} variant="circle" width={32} />

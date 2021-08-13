@@ -7,6 +7,7 @@ import { Box } from '@material-ui/core';
 
 const tribes = [
   {
+    id: '6b576b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/settings.png',
     cover: '/fixtures/256x256/battery.png',
     description: 'Financial advice for the metaverse and beyond',
@@ -16,6 +17,7 @@ const tribes = [
     price: '2500',
   },
   {
+    id: '6b576b32-5079-475a-9253-526873564926',
     avatar: '/fixtures/40x40/trash.png',
     cover: '/fixtures/256x256/bob.png',
     description:
@@ -26,6 +28,7 @@ const tribes = [
     price: '1000',
   },
   {
+    id: '2b576b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/messaging.png',
     cover: '/fixtures/256x256/stonks.png',
     description:
@@ -36,6 +39,7 @@ const tribes = [
     price: '1500',
   },
   {
+    id: '6c576b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/food.png',
     cover: '/fixtures/256x256/dinner.png',
     description:
@@ -46,6 +50,7 @@ const tribes = [
     price: '10000',
   },
   {
+    id: '9b576b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/folder.png',
     cover: '/fixtures/256x256/camera.png',
     description:
@@ -56,6 +61,7 @@ const tribes = [
     price: '1500',
   },
   {
+    id: '6b576b32-5079-475a-3253-526873564946',
     avatar: '/fixtures/40x40/cars.png',
     cover: '/fixtures/256x256/general.png',
     description:
@@ -66,6 +72,7 @@ const tribes = [
     price: '1250',
   },
   {
+    id: '6b576a32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/settings.png',
     cover: '/fixtures/256x256/battery.png',
     description: 'A community to share the love for our furry family members',
@@ -75,6 +82,7 @@ const tribes = [
     price: '1000',
   },
   {
+    id: '3b576b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/trash.png',
     cover: '/fixtures/256x256/bob.png',
     description:
@@ -85,6 +93,7 @@ const tribes = [
     price: '2500',
   },
   {
+    id: '6b574b32-5079-475a-9253-526873564946',
     avatar: '/fixtures/40x40/messaging.png',
     cover: '/fixtures/256x256/stonks.png',
     description:
@@ -95,6 +104,7 @@ const tribes = [
     price: '2000',
   },
   {
+    id: '7b576b32-5079-475a-9243-526873564946',
     avatar: '/fixtures/40x40/food.png',
     cover: '/fixtures/256x256/dinner.png',
     description:
@@ -105,6 +115,7 @@ const tribes = [
     price: '2500',
   },
   {
+    id: '6b576b32-5079-475a-9224-526873564946',
     avatar: '/fixtures/40x40/folder.png',
     cover: '/fixtures/256x256/camera.png',
     description:
@@ -115,6 +126,7 @@ const tribes = [
     price: '1500',
   },
   {
+    id: '6b576b32-5079-475a-9253-526871563946',
     avatar: '/fixtures/40x40/settings.png',
     cover: '/fixtures/256x256/battery.png',
     description:

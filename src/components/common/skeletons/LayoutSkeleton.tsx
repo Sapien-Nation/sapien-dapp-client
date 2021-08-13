@@ -7,6 +7,9 @@ import {
 } from 'components/common';
 import Section from 'components/navigation/TribeNavigation/Section';
 
+// context
+import { useAuth } from 'context/user';
+
 // mui
 import {
   Avatar,
@@ -25,6 +28,13 @@ import { Skeleton } from '@material-ui/lab';
 import { neutral } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
+  root: ({ isLoggedIn }: { isLoggedIn: boolean }) => ({
+    display: isLoggedIn ? 'grid' : 'block',
+    gridTemplateAreas: "'sidebar sidebar main'",
+    gridTemplateColumns: '72px 228px auto',
+    minHeight: '100vh',
+    backgroundColor: '#fff',
+  }),
   avatar: {
     borderRadius: 10,
     boxSizing: 'border-box',
@@ -53,10 +63,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const LayoutSkeleton = () => {
-  const classes = useStyles();
+  const { me } = useAuth();
+  const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   return (
-    <Box>
+    <Box className={classes.root}>
       <nav aria-label="Main navigation" style={{ gridArea: 'sidebar' }}>
         <Drawer
           anchor="left"
@@ -234,14 +245,6 @@ const LayoutSkeleton = () => {
                         </>
                       }
                     />
-                    <Typography
-                      color="textSecondary"
-                      display="block"
-                      style={{ marginTop: '1rem' }}
-                      variant="overline"
-                    >
-                      <Skeleton />
-                    </Typography>
                   </Box>
                 </a>
               </ListItem>
@@ -296,14 +299,6 @@ const LayoutSkeleton = () => {
                         </>
                       }
                     />
-                    <Typography
-                      color="textSecondary"
-                      display="block"
-                      style={{ marginTop: '1rem' }}
-                      variant="overline"
-                    >
-                      <Skeleton />
-                    </Typography>
                   </Box>
                 </p>
               </ListItem>
