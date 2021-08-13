@@ -6,6 +6,8 @@ import type { Wallet as WalletType } from 'tools/types/wallet';
 export interface Wallet {
   wallet: WalletType | null;
   setWallet: (wallet: WalletType) => void;
+  walletOpen: boolean;
+  setWalletOpen: (status: boolean) => void;
 }
 
 export const WalletContext = createContext<Wallet>(null);
@@ -16,12 +18,14 @@ interface Props {
 
 const WalletProvider = ({ children }: Props) => {
   const [wallet, setWallet] = useState<WalletType | null>(null);
-
+  const [walletOpen, setWalletOpen] = useState<boolean>(false);
   return (
     <WalletContext.Provider
       value={{
         wallet,
         setWallet,
+        walletOpen,
+        setWalletOpen,
       }}
     >
       {children}

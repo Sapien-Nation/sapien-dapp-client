@@ -24,6 +24,7 @@ import { ErrorView } from 'components/common';
 
 // Providers
 import { AuthenticationProvider } from 'context/user';
+import { WalletProvider } from 'context/wallet';
 
 // styles
 import '../styles/index.css';
@@ -133,9 +134,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
               }}
             >
               <AuthenticationProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+                <WalletProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </WalletProvider>
               </AuthenticationProvider>
             </SWRConfig>
           </SnackbarProvider>

@@ -1,9 +1,6 @@
 // mui
 import { Box, CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
-// Providers
-import { WalletProvider } from 'context/wallet';
-
 // context
 import { useAuth } from 'context/user';
 
@@ -40,9 +37,7 @@ const Layout = ({ children }: Props) => {
         <Sidebar />
       </NoSsr>
       <main>
-        <WalletProvider>
-          <Navbar />
-        </WalletProvider>
+        <Navbar />
         <Box className={classes.container}>{children}</Box>
       </main>
     </div>

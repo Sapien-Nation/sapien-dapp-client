@@ -45,7 +45,9 @@ const useStyles = makeStyles<Theme>(() => ({
     borderRadius: 10,
     padding: '0 !important',
     position: 'absolute',
-    transform: 'translateX(-94px) translateY(-24px)',
+    top: '5px !important',
+    left: 'auto !important',
+    right: '110px !important',
   },
   notification: {
     height: 702,
@@ -71,7 +73,6 @@ const useStyles = makeStyles<Theme>(() => ({
 
 const Navbar = () => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const [balanceAnchor, setBalanceAnchor] = useState<null | HTMLElement>(null);
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
   const { query, asPath } = useRouter();
@@ -83,8 +84,7 @@ const Navbar = () => {
   }>('tokens');
   const { clearSession, me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
-  const { wallet, setWallet } = useWallet();
-
+  const { wallet, setWallet, walletOpen, setWalletOpen } = useWallet();
   useEffect(() => {
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
@@ -174,7 +174,7 @@ const Navbar = () => {
                 height: 40,
                 padding: 1,
               }}
-              onClick={(event) => setBalanceAnchor(event.currentTarget)}
+              onClick={() => setWalletOpen(true)}
             />
             <IconButton
               aria-controls="notifications"
@@ -223,13 +223,13 @@ const Navbar = () => {
       </Menu>
       <Popover
         TransitionComponent={Fade}
-        anchorEl={balanceAnchor}
+        // anchorEl={balanceAnchor}
         classes={{
           paper: classes.paper,
         }}
         id="wallet"
-        open={Boolean(balanceAnchor)}
-        onClose={() => setBalanceAnchor(null)}
+        open={walletOpen}
+        onClose={() => setWalletOpen(false)}
       >
         <WalletMenu wallet={wallet} />
       </Popover>
