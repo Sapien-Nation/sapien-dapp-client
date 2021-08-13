@@ -82,6 +82,7 @@ const Editor = ({
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           style={{
+            minHeight: 'inherit',
             padding: '0.7rem 1.5rem',
             width: '100%',
           }}
