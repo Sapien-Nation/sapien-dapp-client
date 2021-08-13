@@ -1,10 +1,7 @@
 import { useRouter } from 'next/router';
 
 // components
-import {
-  Page,
-  LayoutWithWidgets,
-} from 'components/common';
+import { Page, LayoutWithWidgets } from 'components/common';
 import { Widgets } from 'components/widgets';
 
 interface Props {
@@ -27,9 +24,7 @@ const MessagePage = () => {
 
   if (!query.messageID) return null;
 
-  return (
-    <Message messageID={String(query.messageID)} /> <Message messageID={String(query.messageID)} />
-  );
+  return <Message messageID={String(query.messageID)} />;
 };
 
 MessagePage.Layout = LayoutWithWidgets;

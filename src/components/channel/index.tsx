@@ -19,9 +19,6 @@ import {
 } from 'components/content';
 import { Widgets } from 'components/widgets';
 
-// hooks
-import { getTribe } from 'hooks';
-
 // mui
 import { Box } from '@material-ui/core';
 
@@ -46,8 +43,6 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 export const Channel = ({ channelID }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
   const { me, isLoggingIn } = useAuth();
-
-  const { mainSquareId: sapienSquareID } = getTribe(String(channelID));
 
   const {
     data: swrData,
