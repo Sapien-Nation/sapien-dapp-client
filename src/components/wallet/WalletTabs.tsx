@@ -5,10 +5,19 @@ import { CSSTransition } from 'react-transition-group';
 import { useWallet } from 'context/wallet';
 
 // mui
-import { Tabs, Tab, makeStyles } from '@material-ui/core';
+import {
+  Avatar,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  IconButton,
+  makeStyles,
+} from '@material-ui/core';
+import { Close as CloseIcon } from '@material-ui/icons';
 
 // styles
-import { primary } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 // assets
 import {
@@ -46,7 +55,7 @@ const WalletTabs = () => {
   const [showTabsMenu, setShowTabsMenu] = useState(true);
   const [transition, setTransition] = useState('forward');
   const classes = useStyles();
-  const { walletOpen } = useWallet();
+  const { walletOpen, setWalletOpen } = useWallet();
   const handleChange = (_, tab) => {
     setCurrentTab(tab);
     if (currentTab > tab) {
@@ -97,7 +106,44 @@ const WalletTabs = () => {
   return (
     <>
       {/* @ts-ignore */}
-      {walletOpen && walletOpen.userName && <div>{walletOpen.userName}</div>}
+      {walletOpen && walletOpen.userName && (
+        <Box
+          alignItems="center"
+          bgcolor={neutral[50]}
+          borderRadius={10}
+          display="flex"
+          marginTop={2}
+          marginX={2.4}
+          padding={1.8}
+          style={{
+            cursor: 'pointer',
+          }}
+        >
+          <Avatar
+            alt=""
+            src="/fixtures/normal/slowpoke.jpg"
+            style={{
+              width: 40,
+              height: 40,
+            }}
+          />
+          <Box display="flex" flexDirection="column" marginLeft={1}>
+            <Typography variant="button">{walletOpen.displayName}</Typography>
+            <Typography variant="overline">@{walletOpen.userName}</Typography>
+          </Box>
+          <IconButton
+            aria-label="close"
+            style={{
+              padding: 0,
+              marginLeft: 'auto',
+            }}
+            type="submit"
+            onClick={() => setWalletOpen(true)}
+          >
+            <CloseIcon fontSize="small" style={{ color: neutral[700] }} />
+          </IconButton>
+        </Box>
+      )}
       {showTabsMenu && (
         <Tabs
           aria-label="simple tabs example"
