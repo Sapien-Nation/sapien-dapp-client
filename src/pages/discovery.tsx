@@ -142,15 +142,14 @@ const DiscoveryPage = () => (
   <Box
     className="card--rounded-gray"
     marginTop={12.7}
-    paddingTop={4}
     paddingX={2.8}
+    paddingY={4}
   >
     <Box
       display="grid"
       style={{
-        gap: '40px',
-        gridRowGap: '16px',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '1.6rem',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
       }}
     >
       {tribes.map((tribe: any) => (

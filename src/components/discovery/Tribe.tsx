@@ -109,11 +109,15 @@ const Tribe = ({
         </div>
         <CardContent className={classes.content}>
           <Box display="grid" style={{ gap: '24px' }}>
-            <Typography>{name}</Typography>
+            <Typography component="h2" variant="subtitle1">
+              {name}
+            </Typography>
             <Typography
               className={classes.description}
               color="textSecondary"
+              component="p"
               style={{ lineHeight: '24px' }}
+              variant="h6"
             >
               {description}
             </Typography>

@@ -127,7 +127,7 @@ const Wdigets = () => {
           onClick={() => setAllBadgesWidgets(!openAllBadgesWidgets)}
         >
           <Typography color="textSecondary" variant="caption">
-            All Badges
+            ALL BADGES
           </Typography>
           <IconButton aria-label="Toggle top contents widgets" component="span">
             {openAllBadgesWidgets ? <ArrowDropUp /> : <ArrowDropDown />}
