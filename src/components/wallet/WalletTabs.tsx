@@ -128,7 +128,9 @@ const WalletTabs = () => {
             }}
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
+            {/* @ts-ignore */}
             <Typography variant="button">{walletOpen.displayName}</Typography>
+            {/* @ts-ignore */}
             <Typography variant="overline">@{walletOpen.userName}</Typography>
           </Box>
           <IconButton

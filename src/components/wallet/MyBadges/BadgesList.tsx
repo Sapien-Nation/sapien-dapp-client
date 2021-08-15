@@ -17,6 +17,7 @@ import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 
 // context
 import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
 
 // api
 import { tokensInstance } from 'api';
@@ -25,20 +26,23 @@ import { tokensInstance } from 'api';
 import { MyBadgesSteps } from '../WalletEnums';
 
 interface Props {
+  setCurrentBadge: (Badge: BadgeType) => void;
+  setCurrentReceiver: (Receiver: any) => void;
   setShowTabsMenu: (showTab: boolean) => void;
   setStep: (step: MyBadgesSteps) => void;
-  setCurrentBadge: (Badge: BadgeType) => void;
   setTransition: (transition: string) => void;
 }
 
 export const BadgeItem = ({
-  setShowTabsMenu,
-  setStep,
-  setCurrentBadge,
   description,
   name,
-  spn,
+  setCurrentBadge,
+  setCurrentReceiver,
+  setShowTabsMenu,
+  setStep,
   setTransition,
+  spn,
+  walletOpen,
 }) => (
   <Box
     alignItems="center"
@@ -53,7 +57,15 @@ export const BadgeItem = ({
     onClick={() => {
       setTransition('forward');
       setShowTabsMenu(false);
-      setStep(MyBadgesSteps.Receivers);
+      if (walletOpen && walletOpen.userName) {
+        setCurrentReceiver({
+          name: walletOpen.userName,
+          description: walletOpen.displayName,
+        });
+        setStep(MyBadgesSteps.Confirmation);
+      } else {
+        setStep(MyBadgesSteps.Receivers);
+      }
       setCurrentBadge({
         price: spn,
         name,
@@ -105,8 +117,10 @@ const BadgesList = ({
   setStep,
   setCurrentBadge,
   setTransition,
+  setCurrentReceiver,
 }: Props) => {
   const { me } = useAuth();
+  const { walletOpen } = useWallet();
   const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
     fetcher,
   });
@@ -120,9 +134,11 @@ const BadgesList = ({
         ItemComponent={BadgeItem}
         list={list}
         setCurrentBadge={setCurrentBadge}
+        setCurrentReceiver={setCurrentReceiver}
         setShowTabsMenu={setShowTabsMenu}
         setStep={setStep}
         setTransition={setTransition}
+        walletOpen={walletOpen}
       />
     </div>
   );

@@ -7,8 +7,8 @@ import type { ContentAuthor } from 'tools/types/content';
 export interface Wallet {
   wallet: WalletType | null;
   setWallet: (wallet: WalletType) => void;
-  walletOpen: boolean | ContentAuthor;
-  setWalletOpen: (status: boolean | ContentAuthor) => void;
+  walletOpen: ContentAuthor | boolean;
+  setWalletOpen: (status: ContentAuthor | boolean) => void;
 }
 
 export const WalletContext = createContext<Wallet>(null);
@@ -19,7 +19,7 @@ interface Props {
 
 const WalletProvider = ({ children }: Props) => {
   const [wallet, setWallet] = useState<WalletType | null>(null);
-  const [walletOpen, setWalletOpen] = useState<boolean | ContentAuthor>(false);
+  const [walletOpen, setWalletOpen] = useState<ContentAuthor | boolean>(false);
   return (
     <WalletContext.Provider
       value={{
