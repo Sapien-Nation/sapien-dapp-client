@@ -6,6 +6,7 @@ import { Search as SearchIcon } from '@material-ui/icons';
 
 // types
 import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+import type { ContentAuthor } from 'tools/types/content';
 
 // emums
 import { MyBadgesSteps, StoreSteps } from '../WalletEnums';
@@ -46,6 +47,7 @@ interface Props {
   setShowTabsMenu?: (showTab: boolean) => void;
   setStep?: (step: StoreSteps | MyBadgesSteps) => void;
   setTransition?: (transition: string) => void;
+  walletOpen?: ContentAuthor | boolean;
 }
 
 const SearchInput = ({
@@ -56,6 +58,7 @@ const SearchInput = ({
   setShowTabsMenu,
   setStep,
   setTransition,
+  walletOpen,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const handleChange = (event) => {
@@ -107,6 +110,7 @@ const SearchInput = ({
             setStep={setStep}
             setTransition={setTransition}
             spn={item.spn}
+            walletOpen={walletOpen}
           />
         ))}
       </div>

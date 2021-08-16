@@ -57,6 +57,7 @@ const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
         >
           <BadgesList
             setCurrentBadge={setCurrentBadge}
+            setCurrentReceiver={setCurrentReceiver}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
             setTransition={setTransition}
