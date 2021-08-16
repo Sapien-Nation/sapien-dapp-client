@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
@@ -59,6 +59,13 @@ const Editor = ({
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
+  useEffect(() => {
+    const editorEl = document.querySelector<HTMLDivElement>(
+    '[data-slate-editor="true"]'
+    );
+    editorEl.style.minHeight = 'auto';
+  }, []);
+
   const onChangeLocal = useCallback(
     (doc) => {
       onChange(doc);
@@ -82,7 +89,6 @@ const Editor = ({
           renderElement={renderElement}
           renderLeaf={renderLeaf}
           style={{
-            minHeight: 'auto',
             padding: '0.7rem 1.5rem',
             width: '100%',
           }}

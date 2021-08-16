@@ -126,6 +126,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   <ButtonGroup
                     aria-label="split button"
                     color="primary"
+                    disableElevation
                     variant="contained"
                   >
                     <Button>Invite</Button>
