@@ -7,6 +7,9 @@ import { primary, neutral } from 'styles/colors';
 import { Avatar, Box, Button, IconButton, Typography } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // types
 import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 
@@ -19,6 +22,7 @@ interface Props {
   setShowTabsMenu: (showTab: boolean) => void;
   setStep: (step: MyBadgesSteps) => void;
   setTransition: (transition: string) => void;
+  setShowAuthorToBadge: (status: boolean) => void;
 }
 
 const Confirmation = ({
@@ -27,8 +31,10 @@ const Confirmation = ({
   setShowTabsMenu,
   setStep,
   setTransition,
+  setShowAuthorToBadge,
 }: Props) => {
   const { watch } = useFormContext();
+  const { walletOpen } = useWallet();
   const watchBadgesAmount = watch('badgesAmount');
   return (
     <Box
@@ -48,8 +54,15 @@ const Confirmation = ({
             }}
             onClick={() => {
               setTransition('back');
-              setShowTabsMenu(false);
-              setStep(MyBadgesSteps.Receivers);
+              // @ts-ignore
+              if (walletOpen?.userName) {
+                setShowTabsMenu(true);
+                setShowAuthorToBadge(true);
+                setStep(MyBadgesSteps.Badges);
+              } else {
+                setShowTabsMenu(false);
+                setStep(MyBadgesSteps.Receivers);
+              }
             }}
           >
             <ArrowBackIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -76,8 +89,10 @@ const Confirmation = ({
             }}
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
-            <Typography variant="button">{currentReceiver.name}</Typography>
-            <Typography variant="overline">@marryrob</Typography>
+            <Typography variant="button">
+              {currentReceiver.description}
+            </Typography>
+            <Typography variant="overline">@{currentReceiver.name}</Typography>
           </Box>
         </Box>
         <Typography

@@ -92,6 +92,7 @@ const MyBadges = ({
           <Confirmation
             currentBadge={currentBadge}
             currentReceiver={currentReceiver}
+            setShowAuthorToBadge={setShowAuthorToBadge}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
             setTransition={setTransition}
