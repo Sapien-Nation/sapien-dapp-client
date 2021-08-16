@@ -53,10 +53,15 @@ enum WalletTab {
 const WalletTabs = () => {
   const [currentTab, setCurrentTab] = useState(WalletTab.MyBadges);
   const [showTabsMenu, setShowTabsMenu] = useState(true);
+  const [showAuthorToBadge, setShowAuthorToBadge] = useState(true);
   const [transition, setTransition] = useState('forward');
   const classes = useStyles();
   const { walletOpen, setWalletOpen } = useWallet();
   const handleChange = (_, tab) => {
+    // @ts-ignore
+    if (walletOpen?.userName) {
+      setShowAuthorToBadge(true);
+    }
     setCurrentTab(tab);
     if (currentTab > tab) {
       setTransition('back');
@@ -76,6 +81,7 @@ const WalletTabs = () => {
           timeout={250}
         >
           <MyBadges
+            setShowAuthorToBadge={setShowAuthorToBadge}
             setShowTabsMenu={setShowTabsMenu}
             showTabsMenu={showTabsMenu}
           />
@@ -86,7 +92,10 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.Spn}
           timeout={250}
         >
-          <Spn showTabsMenu={showTabsMenu} />
+          <Spn
+            setShowAuthorToBadge={setShowAuthorToBadge}
+            showTabsMenu={showTabsMenu}
+          />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
@@ -106,7 +115,7 @@ const WalletTabs = () => {
   return (
     <>
       {/* @ts-ignore */}
-      {walletOpen && walletOpen.userName && (
+      {walletOpen && walletOpen.userName && showAuthorToBadge && (
         <Box
           alignItems="center"
           bgcolor={neutral[50]}
