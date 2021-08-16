@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 // mui
 import { CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
 
@@ -13,10 +15,16 @@ interface Props {
 }
 
 const useStyles = makeStyles(() => ({
-  root: ({ isLoggedIn }: { isLoggedIn: boolean }) => ({
+  root: ({
+    isLoggedIn,
+    isDiscoveryPage,
+  }: {
+    isLoggedIn: boolean;
+    isDiscoveryPage: boolean;
+  }) => ({
     display: isLoggedIn ? 'grid' : 'block',
     gridTemplateAreas: "'sidebar sidebar main'",
-    gridTemplateColumns: '72px 228px auto',
+    gridTemplateColumns: `72px ${isDiscoveryPage ? '15' : '228'}px auto`,
     minHeight: '100vh',
     backgroundColor: '#fff',
   }),
@@ -24,7 +32,9 @@ const useStyles = makeStyles(() => ({
 
 const Layout = ({ children }: Props) => {
   const { me } = useAuth();
-  const classes = useStyles({ isLoggedIn: Boolean(me) });
+  const { asPath } = useRouter();
+  const isDiscoveryPage = Boolean(asPath.includes('discovery'));
+  const classes = useStyles({ isLoggedIn: Boolean(me), isDiscoveryPage });
 
   return (
     <>
