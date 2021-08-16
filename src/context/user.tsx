@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import useSWR, { mutate } from 'swr';
 
@@ -12,6 +12,8 @@ export interface Authentication {
   me: User | null;
   clearSession: () => void;
   isLoggingIn: boolean;
+  newUser: boolean;
+  setNewUser: (status: boolean) => void;
   setSession: (tokens: {
     token: string;
     torus: string;
@@ -37,6 +39,7 @@ const fetcher = async () => {
 const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
   const { data } = useSWR<User>('/api/v3/user/me', { fetcher });
+  const [newUser, setNewUser] = useState<boolean>(false);
   const [, setTokens, removeTokens] = useLocalStorage<null | {
     token: string;
     torus: string;
@@ -63,7 +66,6 @@ const AuthenticationProvider = ({ children }: Props) => {
   }) => {
     setTokens({ token, torus, refresh });
     mutate('/api/v3/user/me');
-    push('/client/sapien');
   };
 
   return (
@@ -73,6 +75,8 @@ const AuthenticationProvider = ({ children }: Props) => {
         me: data,
         isLoggingIn,
         setSession,
+        newUser,
+        setNewUser,
       }}
     >
       {children}

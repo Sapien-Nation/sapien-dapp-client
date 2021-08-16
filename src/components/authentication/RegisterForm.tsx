@@ -34,7 +34,7 @@ import { Info as InfoIcon } from '@material-ui/icons';
 import { EmailRegex, NameRegex, UsernameRegex } from 'utils/regex';
 
 const Signup = () => {
-  const { setSession } = useAuth();
+  const { setSession, setNewUser } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const {
     control,
@@ -53,7 +53,7 @@ const Signup = () => {
       const response = await registerAction({
         ...values,
         client: window?.navigator.userAgent,
-        redirect: '/client/sapien#f=signup',
+        redirect: '/client/sapien',
       });
 
       setSession({
@@ -61,6 +61,7 @@ const Signup = () => {
         token: response.token,
         refresh: response.refresh,
       });
+      setNewUser(true);
     } catch (error) {
       enqueueSnackbar('Oops, something went wrong. Please try again', {
         variant: 'error',

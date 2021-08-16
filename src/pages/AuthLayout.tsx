@@ -17,11 +17,13 @@ interface Props {
 const AuthLayout = ({ children }: Props) => {
   const theme = useTheme();
   const router = useRouter();
-  const { me, isLoggingIn } = useAuth();
+  const { me, isLoggingIn, newUser } = useAuth();
   const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
-    if (isLoggingIn === false && me) {
+    if (newUser && isLoggingIn === false && me) {
+      router.push('/client/sapien#f=signup');
+    } else if (isLoggingIn === false && me) {
       router.push('/');
     }
   }, [isLoggingIn, me, router]);
