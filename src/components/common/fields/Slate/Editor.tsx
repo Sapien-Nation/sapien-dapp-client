@@ -61,7 +61,7 @@ const Editor = ({
 
   useEffect(() => {
     const editorEl = document.querySelector<HTMLDivElement>(
-    '[data-slate-editor="true"]'
+      '[data-slate-editor="true"]'
     );
     editorEl.style.minHeight = 'auto';
   }, []);

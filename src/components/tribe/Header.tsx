@@ -124,9 +124,9 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                 </Box>
                 <Box display="flex" style={{ gap: '10px', marginLeft: 'auto' }}>
                   <ButtonGroup
+                    disableElevation
                     aria-label="split button"
                     color="primary"
-                    disableElevation
                     variant="contained"
                   >
                     <Button>Invite</Button>
