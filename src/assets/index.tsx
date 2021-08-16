@@ -1,3 +1,4 @@
+export { default as BadgeIcon } from './BadgeIcon';
 export { default as Checkbox } from './Checkbox';
 export { default as CheckboxChecked } from './CheckboxChecked';
 export { default as DepositSuccess } from './DepositSuccess';

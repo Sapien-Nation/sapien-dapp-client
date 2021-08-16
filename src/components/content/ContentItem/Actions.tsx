@@ -1,17 +1,22 @@
 import { useRouter } from 'next/router';
 
 // mui
-import { Box, Typography, Button } from '@material-ui/core';
+import { Box, Typography, Button, IconButton } from '@material-ui/core';
 import {
   Campaign as EchoIcon,
   ChatBubbleOutlineOutlined as CommentsIcon,
   ShareOutlined as ShareIcon,
-  Star as StarIcon,
 } from '@material-ui/icons';
+
+// assets
+import { BadgeIcon } from 'assets';
 
 // types
 import { Content } from 'tools/types/content';
 import { User } from 'tools/types/user';
+
+// styles
+import { primary } from 'styles/colors';
 
 // context
 import { useWallet } from 'context/wallet';
@@ -72,16 +77,16 @@ const Actions = ({ content, user }: Props) => {
           0
         </Typography>
       </Button>
-      <Button
-        color="primary"
-        size="small"
-        startIcon={<StarIcon color="action" fontSize="small" />}
+      <IconButton
+        style={{
+          padding: 6,
+          marginLeft: 'auto',
+          backgroundColor: primary[800],
+        }}
         onClick={() => setWalletOpen(content.author)}
       >
-        <Typography color="textSecondary" variant="caption">
-          Badge Post
-        </Typography>
-      </Button>
+        <BadgeIcon />
+      </IconButton>
     </Box>
   );
 };

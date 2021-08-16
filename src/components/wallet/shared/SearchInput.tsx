@@ -47,6 +47,7 @@ interface Props {
   setShowTabsMenu?: (showTab: boolean) => void;
   setStep?: (step: StoreSteps | MyBadgesSteps) => void;
   setTransition?: (transition: string) => void;
+  setShowAuthorToBadge?: (status: boolean) => void;
   walletOpen?: ContentAuthor | boolean;
 }
 
@@ -58,6 +59,7 @@ const SearchInput = ({
   setShowTabsMenu,
   setStep,
   setTransition,
+  setShowAuthorToBadge,
   walletOpen,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -106,6 +108,7 @@ const SearchInput = ({
             name={item.name}
             setCurrentBadge={setCurrentBadge}
             setCurrentReceiver={setCurrentReceiver}
+            setShowAuthorToBadge={setShowAuthorToBadge}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
             setTransition={setTransition}

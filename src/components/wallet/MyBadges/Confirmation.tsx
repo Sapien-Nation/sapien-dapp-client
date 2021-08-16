@@ -30,7 +30,6 @@ const Confirmation = ({
 }: Props) => {
   const { watch } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
-
   return (
     <Box
       display="flex"

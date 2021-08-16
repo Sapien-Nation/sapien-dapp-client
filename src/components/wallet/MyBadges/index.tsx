@@ -16,11 +16,16 @@ import { MyBadgesSteps } from '../WalletEnums';
 interface Props {
   showTabsMenu: boolean;
   setShowTabsMenu: (status: boolean) => void;
+  setShowAuthorToBadge: (status: boolean) => void;
 }
 
 const form = 'my-badges-form';
 
-const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
+const MyBadges = ({
+  showTabsMenu,
+  setShowTabsMenu,
+  setShowAuthorToBadge,
+}: Props) => {
   const [step, setStep] = useState(MyBadgesSteps.Badges);
   const [currentReceiver, setCurrentReceiver] = useState(null);
   const [transition, setTransition] = useState('forward');
@@ -58,6 +63,7 @@ const MyBadges = ({ showTabsMenu, setShowTabsMenu }: Props) => {
           <BadgesList
             setCurrentBadge={setCurrentBadge}
             setCurrentReceiver={setCurrentReceiver}
+            setShowAuthorToBadge={setShowAuthorToBadge}
             setShowTabsMenu={setShowTabsMenu}
             setStep={setStep}
             setTransition={setTransition}

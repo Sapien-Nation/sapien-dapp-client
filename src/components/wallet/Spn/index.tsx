@@ -1,23 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import Receivers from './Receivers';
 
+// context
+import { useWallet } from 'context/wallet';
+
 interface Props {
   showTabsMenu: boolean;
+  setShowAuthorToBadge: (status: boolean) => void;
 }
 
 const form = 'spn-form';
 
-const Spn = ({ showTabsMenu }: Props) => {
+const Spn = ({ showTabsMenu, setShowAuthorToBadge }: Props) => {
   const [currentReceiver, setCurrentReceiver] = useState(null);
+  const { walletOpen } = useWallet();
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
       terms: false,
     },
   });
+  useEffect(() => {
+    if (walletOpen?.userName) {
+      setCurrentReceiver({
+        name: walletOpen.userName,
+        description: walletOpen.displayName,
+      });
+      setShowAuthorToBadge(false);
+    }
+  }, []);
   const { handleSubmit } = methods;
   const handleFormSubmit = async () => {};
   return (

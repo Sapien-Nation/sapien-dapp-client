@@ -28,6 +28,7 @@ import { MyBadgesSteps } from '../WalletEnums';
 interface Props {
   setCurrentBadge: (Badge: BadgeType) => void;
   setCurrentReceiver: (Receiver: any) => void;
+  setShowAuthorToBadge: (status: boolean) => void;
   setShowTabsMenu: (showTab: boolean) => void;
   setStep: (step: MyBadgesSteps) => void;
   setTransition: (transition: string) => void;
@@ -41,6 +42,7 @@ export const BadgeItem = ({
   setShowTabsMenu,
   setStep,
   setTransition,
+  setShowAuthorToBadge,
   spn,
   walletOpen,
 }) => (
@@ -62,6 +64,7 @@ export const BadgeItem = ({
           name: walletOpen.userName,
           description: walletOpen.displayName,
         });
+        setShowAuthorToBadge(false);
         setStep(MyBadgesSteps.Confirmation);
       } else {
         setStep(MyBadgesSteps.Receivers);
@@ -113,11 +116,12 @@ const fetcher = (url: string) =>
   tokensInstance.get(url).then((res) => res.data);
 
 const BadgesList = ({
+  setCurrentBadge,
+  setCurrentReceiver,
+  setShowAuthorToBadge,
   setShowTabsMenu,
   setStep,
-  setCurrentBadge,
   setTransition,
-  setCurrentReceiver,
 }: Props) => {
   const { me } = useAuth();
   const { walletOpen } = useWallet();
@@ -135,6 +139,7 @@ const BadgesList = ({
         list={list}
         setCurrentBadge={setCurrentBadge}
         setCurrentReceiver={setCurrentReceiver}
+        setShowAuthorToBadge={setShowAuthorToBadge}
         setShowTabsMenu={setShowTabsMenu}
         setStep={setStep}
         setTransition={setTransition}
