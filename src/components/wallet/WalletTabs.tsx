@@ -58,6 +58,7 @@ const WalletTabs = () => {
   const classes = useStyles();
   const { walletOpen, setWalletOpen } = useWallet();
   const handleChange = (_, tab) => {
+    // @ts-ignore
     if (walletOpen?.userName) {
       setShowAuthorToBadge(true);
     }

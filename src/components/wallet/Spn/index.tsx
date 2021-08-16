@@ -24,9 +24,12 @@ const Spn = ({ showTabsMenu, setShowAuthorToBadge }: Props) => {
     },
   });
   useEffect(() => {
+    // @ts-ignore
     if (walletOpen?.userName) {
       setCurrentReceiver({
+        // @ts-ignore
         name: walletOpen.userName,
+        // @ts-ignore
         description: walletOpen.displayName,
       });
       setShowAuthorToBadge(false);
