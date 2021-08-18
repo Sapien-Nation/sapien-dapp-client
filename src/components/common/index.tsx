@@ -5,6 +5,7 @@ export * from './fields';
 export * from './skeletons';
 
 export { default as ChartCount } from './ChartCount';
+export { default as ComingSoon } from './ComingSoon';
 export { default as Dialog } from './Dialog';
 export { default as ErrorView } from './ErrorView';
 export { default as Image } from './Image';

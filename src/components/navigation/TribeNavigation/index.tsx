@@ -9,12 +9,13 @@ import Squares from './Squares';
 import DirectMessages from './DirectMessages';
 import CreateChannelModal from 'components/channel/CreateChannelModal';
 import CreateSquareModal from 'components/square/CreateSquareModal';
+import { ComingSoon } from 'components/common';
 
 // hooks
 import { getTribes } from 'hooks';
 
 // mui
-import { Box, Drawer, makeStyles, Typography } from '@material-ui/core';
+import { Box, ClickAwayListener, Drawer, makeStyles, Typography } from '@material-ui/core';
 import { Groups } from '@material-ui/icons';
 
 // styles
@@ -46,7 +47,11 @@ const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
   const [modal, setModal] = useState<ModalType | null>(null);
+  const [showPreviewSquare, setShowPreviewSquare] = useState(false);
+  const [showPreviewChannel, setShowPreviewChannel] = useState(false);
   const { query } = useRouter();
+  // to test Comingsoon make this'true'
+  const showPreview = false;
 
   const { squareID } = query;
   const selectedTribe = tribes.find(
@@ -92,18 +97,30 @@ const TribeNavigation = () => {
       <Section
         showAction
         title="Squares"
-        onClick={() => setModal(ModalType.Square)}
+        onClick={() => showPreview ? setShowPreviewSquare(!showPreviewSquare) : setModal(ModalType.Square)}
       >
         <Squares squares={selectedTribe.squares} />
       </Section>
+
+      <ComingSoon open={showPreviewSquare}>
+        {/* TODO define a better children, Section can't be used */}
+        <div></div>
+      </ComingSoon>
+
       <Section
         showAction
         title="Channels"
-        onClick={() => setModal(ModalType.Channel)}
+        onClick={() => showPreview ? setShowPreviewChannel(!showPreviewChannel) : setModal(ModalType.Channel)}
       >
         <Channels channels={selectedTribe.channels} />
       </Section>
-      <Section showAction={false} title="My Messages" onClick={() => {}}>
+
+      <ComingSoon open={showPreviewChannel}>
+        {/* TODO define a better children, Section can't be used */}
+        <div></div>
+      </ComingSoon>
+
+      <Section showAction={false} title="My Messages" onClick={() => { }}>
         <DirectMessages messages={[]} />
       </Section>
 

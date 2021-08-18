@@ -14,6 +14,7 @@ import { AddRounded as AddIcon, Explore } from '@material-ui/icons';
 
 // components
 import { CreateTribeModal } from 'components/navigation';
+import { ComingSoon } from 'components/common';
 
 // types
 import type { Tribe } from 'tools/types/tribeBar';
@@ -47,10 +48,13 @@ const colors = [
 
 const TribeBar = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showPreviewTribe, setShowPreviewTribe] = useState(false);
 
   const tribes = getTribes();
   const classes = useStyles();
   const { asPath } = useRouter();
+    // to test Comingsoon make this'true'
+    const showPreview = false;
 
   const isTribeSelected = (tribe: Tribe) => {
     // @ts-ignore
@@ -152,7 +156,7 @@ const TribeBar = () => {
         <IconButton
           aria-label="Create Tribe"
           style={{ padding: 0 }}
-          onClick={() => setShowModal(true)}
+          onClick={() => showPreview ? setShowPreviewTribe(!showPreviewTribe) : setShowModal(true)}
         >
           <Avatar
             style={{
@@ -167,6 +171,9 @@ const TribeBar = () => {
             <AddIcon />
           </Avatar>
         </IconButton>
+        <ComingSoon open={showPreviewTribe}>
+          <div></div>
+        </ComingSoon>
       </nav>
 
       {showModal && <CreateTribeModal onClose={() => setShowModal(false)} />}
