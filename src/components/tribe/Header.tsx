@@ -58,7 +58,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
         {(tribe: Tribe) => (
           <>
             <Image
-              alt={tribe.description}
+              alt={tribe.name}
               fallbackImage={tribe.cover_original}
               src={tribe.cover}
               style={{
@@ -129,12 +129,18 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                     color="primary"
                     variant="contained"
                   >
-                    <Button>Invite</Button>
-                    <Button color="primary" size="small" onClick={() => copy()}>
+                    <Button aria-label="Invite users">Invite</Button>
+                    <Button
+                      aria-label="Copy invitation link"
+                      color="primary"
+                      size="small"
+                      onClick={() => copy()}
+                    >
                       <FileCopyOutlinedIcon fontSize="small" />
                     </Button>
                   </ButtonGroup>
                   <Button
+                    aria-label="Follow or Unfollow tribe"
                     variant="outlined"
                     onClick={() => setIsFollowing(!isFollowing)}
                   >

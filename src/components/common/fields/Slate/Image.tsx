@@ -19,6 +19,7 @@ const Image = ({ attributes, children, element }) => {
         }}
       >
         <IconButton
+          aria-label="Remove image from content"
           style={{
             position: 'absolute',
             right: '0.5rem',

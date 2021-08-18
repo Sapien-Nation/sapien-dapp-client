@@ -77,6 +77,7 @@ const ChangePassword = ({ changeView, token }: Props) => {
 
       <Button
         fullWidth
+        aria-label="Send change password request"
         color="primary"
         disabled={isSubmitting}
         type="submit"

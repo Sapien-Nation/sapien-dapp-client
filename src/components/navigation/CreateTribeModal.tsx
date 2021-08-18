@@ -344,7 +344,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {isUploadingAvatar ? (
                         <CircularProgress size={26} />
                       ) : (
-                        <IconButton>
+                        <IconButton aria-label="Upload Avatar">
                           <AddIcon fontSize="small" />
                         </IconButton>
                       )}
@@ -378,7 +378,7 @@ const CreateTribeModal = ({ onClose }: Props) => {
                       {isUploadingCover ? (
                         <CircularProgress size={26} />
                       ) : (
-                        <IconButton>
+                        <IconButton aria-label="Upload cover">
                           <AddIcon fontSize="small" />
                         </IconButton>
                       )}

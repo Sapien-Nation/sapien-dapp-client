@@ -139,6 +139,7 @@ const Header = ({ content, onDelete, variant }: Props) => {
             <IconButton
               aria-controls="post-menu"
               aria-haspopup="true"
+              aria-label="Content options"
               onClick={(event) => setAnchorEl(event.currentTarget)}
             >
               <MoreIcon color="action" />
@@ -161,7 +162,7 @@ const Header = ({ content, onDelete, variant }: Props) => {
       >
         {canDelete && (
           <MenuItem onClick={onDelete}>
-            <IconButton>
+            <IconButton aria-label="Delete content">
               <DeleteIcon color="error" />
             </IconButton>
             <Typography color="error">Delete</Typography>

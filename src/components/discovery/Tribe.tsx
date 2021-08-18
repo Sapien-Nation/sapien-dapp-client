@@ -130,13 +130,13 @@ const Tribe = ({
         </Typography>
         {isMember ? (
           <ButtonGroup disableElevation color="primary" variant="contained">
-            <Button>Invite</Button>
-            <Button>
+            <Button aria-label="Invite users">Invite</Button>
+            <Button aria-label="Copy invitation link">
               <FileCopyIcon fontSize="small" />
             </Button>
           </ButtonGroup>
         ) : (
-          <Button color="primary" variant="contained">
+          <Button aria-label="Join Tribe" color="primary" variant="contained">
             Join Tribe
           </Button>
         )}

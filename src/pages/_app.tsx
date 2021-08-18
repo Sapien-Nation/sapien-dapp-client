@@ -47,7 +47,10 @@ const SnackbarCloseButton = ({ snackKey }) => {
   const { closeSnackbar } = useSnackbar();
 
   return (
-    <IconButton onClick={() => closeSnackbar(snackKey)}>
+    <IconButton
+      aria-label="Close snackbar"
+      onClick={() => closeSnackbar(snackKey)}
+    >
       <CloseIcon fontSize="small" />
     </IconButton>
   );

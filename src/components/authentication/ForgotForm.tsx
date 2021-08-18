@@ -74,6 +74,7 @@ const Forgot = ({ changeView }: Props) => {
 
       <Button
         fullWidth
+        aria-label="Send forgot password request"
         color="primary"
         disabled={isSubmitting}
         type="submit"

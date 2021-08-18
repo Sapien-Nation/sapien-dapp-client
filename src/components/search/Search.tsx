@@ -62,7 +62,10 @@ const Search = () => {
               endAdornment: inputValue.length > 0 && (
                 <Box alignItems="center" display="flex">
                   <Typography>13 results</Typography>
-                  <IconButton onClick={() => setInputValue('')}>
+                  <IconButton
+                    aria-label="Clear search text"
+                    onClick={() => setInputValue('')}
+                  >
                     <CloseIcon />
                   </IconButton>
                 </Box>

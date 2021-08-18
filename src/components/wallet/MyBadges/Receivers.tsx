@@ -142,6 +142,7 @@ const Receivers = ({
     return (
       <Box alignItems="center" display="flex">
         <IconButton
+          aria-label="Decrement amount"
           disabled={Number(watchBadgesAmount) < 2}
           style={{
             padding: 1.4,
@@ -189,6 +190,7 @@ const Receivers = ({
           type="number"
         />
         <IconButton
+          aria-label="Increment amount"
           style={{
             padding: 1.4,
             backgroundColor: neutral[200],

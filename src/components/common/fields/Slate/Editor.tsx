@@ -101,8 +101,9 @@ const Editor = ({
         padding={hasContent ? 0.5 : 0}
       >
         <IconButton
-          aria-controls="simple-menu"
+          aria-controls="emoji-selector"
           aria-haspopup="true"
+          aria-label="Select an emoji"
           disabled={isSubmitting}
           style={{
             borderRadius: 10,
@@ -121,7 +122,7 @@ const Editor = ({
         <Menu
           keepMounted
           anchorEl={anchorEl}
-          id="simple-menu"
+          id="emoji-selector"
           open={Boolean(anchorEl)}
           onClick={handleClose}
           onClose={handleClose}
@@ -129,6 +130,7 @@ const Editor = ({
           <Picker onSelect={(event) => addEmoji(event)} />
         </Menu>
         <IconButton
+          aria-label="Attach image"
           style={{
             borderRadius: 10,
             height: 40,
@@ -146,6 +148,7 @@ const Editor = ({
           onChange={addImage}
         />
         <IconButton
+          aria-label="Submit content"
           disabled={isSubmitting || !hasContent}
           style={{
             backgroundColor: hasContent ? primary[800] : '',

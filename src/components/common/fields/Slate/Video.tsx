@@ -18,6 +18,7 @@ const Video = ({ attributes, children, element }) => {
           position="relative"
         >
           <IconButton
+            aria-label="Remove video from content"
             style={{
               position: 'absolute',
               right: '0.5rem',

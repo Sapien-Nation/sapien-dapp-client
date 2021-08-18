@@ -128,7 +128,7 @@ const TribeBar = () => {
           );
         })}
         <Link href="/discovery">
-          <a>
+          <a aria-label="Browse discovery page from here">
             <Avatar
               alt="discovery"
               classes={{

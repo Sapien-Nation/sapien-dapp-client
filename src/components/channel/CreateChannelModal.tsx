@@ -302,7 +302,7 @@ const CreateChannelModal = ({ squareID, tribeId, onClose }: Props) => {
                         <CircularProgress size={26} />
                       ) : (
                         <IconButton>
-                          <AddIcon fontSize="small" />
+                          <AddIcon aria-label="Upload Image" fontSize="small" />
                         </IconButton>
                       )}
                     </DropZone>

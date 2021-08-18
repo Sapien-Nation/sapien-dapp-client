@@ -179,6 +179,7 @@ const Navbar = () => {
             <IconButton
               aria-controls="notifications"
               aria-haspopup="true"
+              aria-label="Notifications"
               edge="end"
               style={{ backgroundColor: '#E5E5E5', margin: '0 22px' }}
               onClick={(event) => setNotificationsAnchor(event.currentTarget)}

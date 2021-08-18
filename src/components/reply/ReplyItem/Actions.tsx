@@ -10,6 +10,7 @@ const Actions = () => {
     <Box display="flex" justifyContent="space-between">
       <Box display="flex">
         <Button
+          aria-label="Reply on a content"
           color="primary"
           size="small"
           startIcon={<EchoIcon color="action" fontSize="small" />}
@@ -19,6 +20,7 @@ const Actions = () => {
           </Typography>
         </Button>
         <Button
+          aria-label="Share content"
           color="primary"
           size="small"
           startIcon={<ShareIcon color="action" fontSize="small" />}

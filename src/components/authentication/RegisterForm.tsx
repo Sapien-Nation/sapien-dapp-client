@@ -331,6 +331,7 @@ const Signup = () => {
 
       <Button
         fullWidth
+        aria-label="Signup"
         color="primary"
         disabled={isSubmitting}
         type="submit"

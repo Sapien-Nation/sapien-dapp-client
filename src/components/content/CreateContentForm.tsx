@@ -108,6 +108,7 @@ const CreateContentForm = ({
         <Avatar src={user.avatar}>{user.username[0].toUpperCase()}</Avatar>
         <Editor
           editorProps={{
+            'aria-label': 'content input box',
             placeholder: `What’s on your mind, ${user.username}?`,
           }}
           hasContent={hasContent}

@@ -23,6 +23,7 @@ const Actions = ({ content, user }: Props) => {
   return (
     <Box display="flex">
       <Button
+        aria-label="Comment on content"
         color="primary"
         size="small"
         startIcon={<CommentsIcon color="action" fontSize="small" />}
@@ -41,6 +42,7 @@ const Actions = ({ content, user }: Props) => {
         </Typography>
       </Button>
       <Button
+        aria-label="Echo content"
         color="primary"
         size="small"
         startIcon={<EchoIcon color="action" fontSize="small" />}
@@ -59,6 +61,7 @@ const Actions = ({ content, user }: Props) => {
         </Typography>
       </Button>
       <Button
+        aria-label="Share content"
         color="primary"
         size="small"
         startIcon={<ShareIcon color="action" fontSize="small" />}

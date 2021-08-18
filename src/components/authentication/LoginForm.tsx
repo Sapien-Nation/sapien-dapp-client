@@ -194,6 +194,7 @@ const LoginForm = () => {
       </Box>
       <Button
         fullWidth
+        aria-label="Login to Sapien"
         color="primary"
         disabled={isSubmitting}
         type="submit"

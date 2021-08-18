@@ -32,6 +32,7 @@ const ErrorView = ({
         <Box marginTop={4}>
           <Button
             fullWidth
+            aria-label="Retry loading page"
             color="primary"
             variant="contained"
             onClick={resetErrorBoundary}

@@ -14,12 +14,12 @@ const NotificationListHeader = () => {
     >
       <Typography variant="h3">Notifications</Typography>
       <Box>
-        <Button variant="text">
+        <Button aria-label="Mark all notifications as read" variant="text">
           <Typography color="textSecondary" component="span" variant="button">
             Mark all as read
           </Typography>
         </Button>
-        <IconButton>
+        <IconButton aria-label="Notification settings">
           <Settings fontSize="small" />
         </IconButton>
       </Box>

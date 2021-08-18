@@ -69,6 +69,7 @@ const Dialog = ({
     <>
       {showCancel && (
         <Button
+          aria-label="Close diaglog"
           disabled={isFetching}
           style={{
             marginRight: useTheme().spacing(2),
@@ -82,6 +83,7 @@ const Dialog = ({
         <>
           {variant === 'delete' ? (
             <Button
+              aria-label="Submit delete in diaglog"
               color="secondary"
               disabled={isFetching || confirmDisabled}
               form={form}
@@ -94,6 +96,7 @@ const Dialog = ({
             </Button>
           ) : (
             <Button
+              aria-label="Submit confirmation in diaglog"
               color="primary"
               disabled={isFetching || confirmDisabled}
               form={form}

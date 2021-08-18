@@ -14,13 +14,7 @@ import CreateSquareModal from 'components/square/CreateSquareModal';
 import { getTribes } from 'hooks';
 
 // mui
-import {
-  Drawer,
-  List,
-  ListItem,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { Box, Drawer, makeStyles, Typography } from '@material-ui/core';
 import { Groups } from '@material-ui/icons';
 
 // styles
@@ -35,6 +29,7 @@ const useStyles = makeStyles(() => ({
     padding: '2.5rem 0.5rem',
   },
   listItemSelected: {
+    alignItems: 'center',
     backgroundColor: `${primary[800]} !important`,
     '& .MuiTypography-root, & .MuiSvgIcon-root': {
       color: `#fff !important`,
@@ -51,7 +46,7 @@ const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
   const [modal, setModal] = useState<ModalType | null>(null);
-  const { asPath, query } = useRouter();
+  const { query } = useRouter();
 
   const { squareID } = query;
   const selectedTribe = tribes.find(
@@ -72,32 +67,28 @@ const TribeNavigation = () => {
       }}
       variant="permanent"
     >
-      <List aria-label="Tribe Navigation">
-        <Link href={`/client/${selectedTribe?.mainSquareId}`}>
-          <a style={{ alignItems: 'center', display: 'flex' }}>
-            <ListItem
-              classes={{
-                selected: classes.listItemSelected,
-              }}
-              selected={asPath === `/client/${squareID}`}
+      <Link href={`/client/${selectedTribe?.mainSquareId}`}>
+        <a style={{ display: 'block' }}>
+          <Box
+            alignItems="center"
+            borderRadius={10}
+            className={classes.listItemSelected}
+            display="flex"
+            paddingX={1.5}
+            paddingY={1}
+          >
+            <Groups fontSize="small" style={{ color: neutral[500] }} />
+            <Typography
               style={{
-                borderRadius: 10,
-                padding: '1rem 1.5rem',
+                marginLeft: 15,
               }}
+              variant="caption"
             >
-              <Groups fontSize="small" style={{ color: neutral[500] }} />
-              <Typography
-                style={{
-                  marginLeft: 15,
-                }}
-                variant="caption"
-              >
-                {selectedTribe?.name.toUpperCase()}
-              </Typography>
-            </ListItem>
-          </a>
-        </Link>
-      </List>
+              {selectedTribe?.name.toUpperCase()}
+            </Typography>
+          </Box>
+        </a>
+      </Link>
       <Section
         showAction
         title="Squares"

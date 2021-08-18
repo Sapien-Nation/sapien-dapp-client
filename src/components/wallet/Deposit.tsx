@@ -52,6 +52,7 @@ const Deposit = ({ setView }: { setView: (view: View) => void }) => {
             <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
               <Button
                 fullWidth
+                aria-label="Deposit with metamask"
                 classes={{
                   label: classes.buttonLabel,
                 }}
