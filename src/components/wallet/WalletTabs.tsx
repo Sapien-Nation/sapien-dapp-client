@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 // context
@@ -51,23 +50,39 @@ enum WalletTab {
 }
 
 const WalletTabs = () => {
-  const [currentTab, setCurrentTab] = useState(WalletTab.MyBadges);
-  const [showTabsMenu, setShowTabsMenu] = useState(true);
-  const [showAuthorToBadge, setShowAuthorToBadge] = useState(true);
-  const [transition, setTransition] = useState('forward');
   const classes = useStyles();
-  const { walletOpen, setWalletOpen } = useWallet();
+  const { walletOpen, setWalletOpen, globalWalletState, dispatchWalletState } =
+    useWallet();
+  const { currentTab, transition, showTabsMenu } = globalWalletState;
   const handleChange = (_, tab) => {
     // @ts-ignore
     if (walletOpen?.userName) {
-      setShowAuthorToBadge(true);
+      dispatchWalletState({
+        type: 'showAuthorToBadge',
+        payload: true,
+      });
     }
-    setCurrentTab(tab);
     if (currentTab > tab) {
-      setTransition('back');
-    }
-    if (currentTab < tab) {
-      setTransition('forward');
+      dispatchWalletState({
+        type: 'update',
+        payload: {
+          transition: 'back',
+          currentTab: tab,
+        },
+      });
+    } else if (currentTab < tab) {
+      dispatchWalletState({
+        type: 'update',
+        payload: {
+          transition: 'forward',
+          currentTab: tab,
+        },
+      });
+    } else {
+      dispatchWalletState({
+        type: 'currentTab',
+        payload: tab,
+      });
     }
   };
 
@@ -80,11 +95,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.MyBadges}
           timeout={250}
         >
-          <MyBadges
-            setShowAuthorToBadge={setShowAuthorToBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            showTabsMenu={showTabsMenu}
-          />
+          <MyBadges />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
@@ -92,10 +103,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.Spn}
           timeout={250}
         >
-          <Spn
-            setShowAuthorToBadge={setShowAuthorToBadge}
-            showTabsMenu={showTabsMenu}
-          />
+          <Spn />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
@@ -103,10 +111,7 @@ const WalletTabs = () => {
           in={currentTab === WalletTab.Store}
           timeout={250}
         >
-          <Store
-            setShowTabsMenu={setShowTabsMenu}
-            showTabsMenu={showTabsMenu}
-          />
+          <Store />
         </CSSTransition>
       </>
     );

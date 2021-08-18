@@ -1,35 +1,22 @@
 import { CSSTransition } from 'react-transition-group';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useState } from 'react';
 
 // components
 import BadgesList from './BadgesList';
 import Receivers from './Receivers';
 import Confirmation from './Confirmation';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+// context
+import { useWallet } from 'context/wallet';
 
 // emums
 import { MyBadgesSteps } from '../WalletEnums';
 
-interface Props {
-  showTabsMenu: boolean;
-  setShowTabsMenu: (status: boolean) => void;
-  setShowAuthorToBadge: (status: boolean) => void;
-}
-
 const form = 'my-badges-form';
 
-const MyBadges = ({
-  showTabsMenu,
-  setShowTabsMenu,
-  setShowAuthorToBadge,
-}: Props) => {
-  const [step, setStep] = useState(MyBadgesSteps.Badges);
-  const [currentReceiver, setCurrentReceiver] = useState(null);
-  const [transition, setTransition] = useState('forward');
-  const [currentBadge, setCurrentBadge] = useState<BadgeType | null>();
+const MyBadges = () => {
+  const { globalWalletState, dispatchWalletState } = useWallet();
+  const { myBadgesStep, myBadgesTransition, showTabsMenu } = globalWalletState;
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
@@ -39,15 +26,32 @@ const MyBadges = ({
   const { handleSubmit } = methods;
 
   const handleFormSubmit = async () => {
-    setTransition('forward');
-    if (step === MyBadgesSteps.Badges) {
-      return setStep(MyBadgesSteps.Receivers);
+    if (myBadgesStep === MyBadgesSteps.Badges) {
+      dispatchWalletState({
+        type: 'update',
+        payload: {
+          myBadgesStep: MyBadgesSteps.Receivers,
+          myBadgesTransition: 'forward',
+        },
+      });
     }
-    if (step === MyBadgesSteps.Receivers) {
-      return setStep(MyBadgesSteps.Confirmation);
+    if (myBadgesStep === MyBadgesSteps.Receivers) {
+      dispatchWalletState({
+        type: 'myBadgesStep',
+        payload: {
+          myBadgesStep: MyBadgesSteps.Confirmation,
+          myBadgesTransition: 'forward',
+        },
+      });
     }
-    if (step === MyBadgesSteps.Confirmation) {
-      return setStep(MyBadgesSteps.Badges);
+    if (myBadgesStep === MyBadgesSteps.Confirmation) {
+      dispatchWalletState({
+        type: 'myBadgesStep',
+        payload: {
+          myBadgesStep: MyBadgesSteps.Badges,
+          myBadgesTransition: 'forward',
+        },
+      });
     }
   };
 
@@ -56,81 +60,32 @@ const MyBadges = ({
       <>
         <CSSTransition
           unmountOnExit
-          classNames={transition}
-          in={step === MyBadgesSteps.Badges}
+          classNames={myBadgesTransition}
+          in={myBadgesStep === MyBadgesSteps.Badges}
           timeout={300}
         >
-          <BadgesList
-            setCurrentBadge={setCurrentBadge}
-            setCurrentReceiver={setCurrentReceiver}
-            setShowAuthorToBadge={setShowAuthorToBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-            setTransition={setTransition}
-          />
+          <BadgesList />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
-          classNames={transition}
-          in={step === MyBadgesSteps.Receivers}
+          classNames={myBadgesTransition}
+          in={myBadgesStep === MyBadgesSteps.Receivers}
           timeout={300}
         >
-          <Receivers
-            currentBadge={currentBadge}
-            setCurrentReceiver={setCurrentReceiver}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-            setTransition={setTransition}
-          />
+          <Receivers />
         </CSSTransition>
         <CSSTransition
           unmountOnExit
-          classNames={transition}
-          in={step === MyBadgesSteps.Confirmation}
+          classNames={myBadgesTransition}
+          in={myBadgesStep === MyBadgesSteps.Confirmation}
           timeout={300}
         >
-          <Confirmation
-            currentBadge={currentBadge}
-            currentReceiver={currentReceiver}
-            setShowAuthorToBadge={setShowAuthorToBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-            setTransition={setTransition}
-          />
+          <Confirmation />
         </CSSTransition>
       </>
     );
   };
-  // const renderStep = () => {
-  //   switch (step) {
-  //     case MyBadgesSteps.Badges:
-  //       return (
-  //         <BadgesList
-  //           setCurrentBadge={setCurrentBadge}
-  //           setShowTabsMenu={setShowTabsMenu}
-  //           setStep={setStep}
-  //         />
-  //       );
-  //     case MyBadgesSteps.Receivers:
-  //       return (
-  //         <Receivers
-  //           currentBadge={currentBadge}
-  //           setCurrentReceiver={setCurrentReceiver}
-  //           setShowTabsMenu={setShowTabsMenu}
-  //           setStep={setStep}
-  //         />
-  //       );
-  //     case MyBadgesSteps.Confirmation:
-  //       return (
-  //         <Confirmation
-  //           currentBadge={currentBadge}
-  //           currentReceiver={currentReceiver}
-  //           setShowTabsMenu={setShowTabsMenu}
-  //           setStep={setStep}
-  //         />
-  //       );
-  //   }
-  // };
+
   return (
     <div
       style={{

@@ -24,19 +24,13 @@ import {
   Remove as RemoveIcon,
 } from '@material-ui/icons';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+// context
+import { useWallet } from 'context/wallet';
 
 // emums
 import { StoreSteps } from '../WalletEnums';
 
-interface Props {
-  currentBadge: BadgeType;
-  setShowTabsMenu: (showTab: boolean) => void;
-  setStep: (step: StoreSteps) => void;
-}
-
-const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
+const Confirmation = () => {
   const {
     watch,
     register,
@@ -44,7 +38,8 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
     formState: { errors },
   } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
-
+  const { dispatchWalletState, globalWalletState } = useWallet();
+  const { storeCurrentBadge } = globalWalletState;
   const NumericInputCounter = () => {
     const handleIncrement = () => {
       setValue('badgesAmount', Number(watchBadgesAmount) + 1, {
@@ -140,8 +135,13 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
               marginBottom: 10,
             }}
             onClick={() => {
-              setShowTabsMenu(true);
-              setStep(StoreSteps.Badges);
+              dispatchWalletState({
+                type: 'update',
+                payload: {
+                  showTabsMenu: true,
+                  storeStep: StoreSteps.Badges,
+                },
+              });
             }}
           >
             <ArrowBackIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -178,8 +178,13 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             }}
             type="submit"
             onClick={() => {
-              setShowTabsMenu(true);
-              setStep(StoreSteps.Badges);
+              dispatchWalletState({
+                type: 'update',
+                payload: {
+                  showTabsMenu: true,
+                  storeStep: StoreSteps.Badges,
+                },
+              });
             }}
           >
             <CloseIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -251,7 +256,7 @@ const Confirmation = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
       <div style={{ padding: 24, borderTop: '1px solid #EDEEF0' }}>
         <Button fullWidth color="primary" type="submit" variant="contained">
           <StoreIcon style={{ fill: '#FFF', marginRight: 7, zoom: '80%' }} />{' '}
-          {currentBadge.spn * watchBadgesAmount} SPN
+          {storeCurrentBadge.spn * watchBadgesAmount} SPN
         </Button>
       </div>
     </Box>

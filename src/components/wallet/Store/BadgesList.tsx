@@ -9,11 +9,11 @@ import { primary, neutral } from 'styles/colors';
 // components
 import SearchInput from '../shared/SearchInput';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
-
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 
 // api
 import { tokensInstance } from 'api';
@@ -21,20 +21,7 @@ import { tokensInstance } from 'api';
 // enums
 import { StoreSteps } from '../WalletEnums';
 
-interface Props {
-  setShowTabsMenu: (showTab: boolean) => void;
-  setStep: (step: StoreSteps) => void;
-  setCurrentBadge: (Badge: BadgeType) => void;
-}
-
-export const BadgeItem = ({
-  setShowTabsMenu,
-  setStep,
-  setCurrentBadge,
-  description,
-  name,
-  spn,
-}) => (
+export const BadgeItem = ({ dispatchWalletState, description, name, spn }) => (
   <Box
     alignItems="center"
     bgcolor={neutral[50]}
@@ -46,12 +33,17 @@ export const BadgeItem = ({
       cursor: 'pointer',
     }}
     onClick={() => {
-      setShowTabsMenu(false);
-      setStep(StoreSteps.Confirmation);
-      setCurrentBadge({
-        price: 250,
-        name: 'Badge name',
-        description: 'Description goes here...',
+      dispatchWalletState({
+        type: 'update',
+        payload: {
+          showTabsMenu: false,
+          storeStep: StoreSteps.Confirmation,
+          storeCurrentBadge: {
+            price: spn,
+            name,
+            description,
+          },
+        },
       });
     }}
   >
@@ -94,8 +86,9 @@ export const BadgeItem = ({
 const fetcher = (url: string) =>
   tokensInstance.get(url).then((res) => res.data);
 
-const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
+const BadgesList = () => {
   const { data: list } = useSWR('/api/v3/badge/store/listBadges', { fetcher });
+  const { dispatchWalletState } = useWallet();
   return (
     <div
       style={{
@@ -104,10 +97,8 @@ const BadgesList = ({ setShowTabsMenu, setStep, setCurrentBadge }: Props) => {
     >
       <SearchInput
         ItemComponent={BadgeItem}
+        dispatchWalletState={dispatchWalletState}
         list={list}
-        setCurrentBadge={setCurrentBadge}
-        setShowTabsMenu={setShowTabsMenu}
-        setStep={setStep}
       />
     </div>
   );

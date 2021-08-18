@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // components
@@ -7,16 +7,11 @@ import Receivers from './Receivers';
 // context
 import { useWallet } from 'context/wallet';
 
-interface Props {
-  showTabsMenu: boolean;
-  setShowAuthorToBadge: (status: boolean) => void;
-}
-
 const form = 'spn-form';
 
-const Spn = ({ showTabsMenu, setShowAuthorToBadge }: Props) => {
-  const [currentReceiver, setCurrentReceiver] = useState(null);
-  const { walletOpen } = useWallet();
+const Spn = () => {
+  const { walletOpen, dispatchWalletState, globalWalletState } = useWallet();
+  const { showTabsMenu } = globalWalletState;
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
@@ -26,13 +21,18 @@ const Spn = ({ showTabsMenu, setShowAuthorToBadge }: Props) => {
   useEffect(() => {
     // @ts-ignore
     if (walletOpen?.userName) {
-      setCurrentReceiver({
-        // @ts-ignore
-        name: walletOpen.userName,
-        // @ts-ignore
-        description: walletOpen.displayName,
+      dispatchWalletState({
+        type: 'update',
+        payload: {
+          spnCurrentReceiver: {
+            // @ts-ignore
+            name: walletOpen.userName,
+            // @ts-ignore
+            description: walletOpen.displayName,
+          },
+          showAuthorToBadge: false,
+        },
       });
-      setShowAuthorToBadge(false);
     }
   }, []);
   const { handleSubmit } = methods;
@@ -49,10 +49,7 @@ const Spn = ({ showTabsMenu, setShowAuthorToBadge }: Props) => {
           style={{ height: '100%' }}
           onSubmit={handleSubmit(handleFormSubmit)}
         >
-          <Receivers
-            currentReceiver={currentReceiver}
-            setCurrentReceiver={setCurrentReceiver}
-          />
+          <Receivers />
         </form>
       </FormProvider>
     </div>

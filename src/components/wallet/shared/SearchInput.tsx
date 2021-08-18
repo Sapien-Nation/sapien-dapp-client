@@ -5,11 +5,7 @@ import { InputAdornment, TextField } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 
 // types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
 import type { ContentAuthor } from 'tools/types/content';
-
-// emums
-import { MyBadgesSteps, StoreSteps } from '../WalletEnums';
 
 const mockList = [
   {
@@ -42,24 +38,14 @@ const mockList = [
 interface Props {
   ItemComponent: any;
   list?: any;
-  setCurrentBadge?: (Badge: BadgeType) => void;
-  setCurrentReceiver?: (Receiver: any) => void;
-  setShowTabsMenu?: (showTab: boolean) => void;
-  setStep?: (step: StoreSteps | MyBadgesSteps) => void;
-  setTransition?: (transition: string) => void;
-  setShowAuthorToBadge?: (status: boolean) => void;
+  dispatchWalletState?: (state: any) => void;
   walletOpen?: ContentAuthor | boolean;
 }
 
 const SearchInput = ({
   ItemComponent,
   list = mockList,
-  setCurrentBadge,
-  setCurrentReceiver,
-  setShowTabsMenu,
-  setStep,
-  setTransition,
-  setShowAuthorToBadge,
+  dispatchWalletState,
   walletOpen,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -105,13 +91,8 @@ const SearchInput = ({
           <ItemComponent
             key={index}
             description={item.description}
+            dispatchWalletState={dispatchWalletState}
             name={item.name}
-            setCurrentBadge={setCurrentBadge}
-            setCurrentReceiver={setCurrentReceiver}
-            setShowAuthorToBadge={setShowAuthorToBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-            setTransition={setTransition}
             spn={item.spn}
             walletOpen={walletOpen}
           />

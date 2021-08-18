@@ -10,31 +10,13 @@ import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 // context
 import { useWallet } from 'context/wallet';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
-
 // emums
 import { MyBadgesSteps } from '../WalletEnums';
 
-interface Props {
-  currentBadge: BadgeType;
-  currentReceiver: any;
-  setShowTabsMenu: (showTab: boolean) => void;
-  setStep: (step: MyBadgesSteps) => void;
-  setTransition: (transition: string) => void;
-  setShowAuthorToBadge: (status: boolean) => void;
-}
-
-const Confirmation = ({
-  currentBadge,
-  currentReceiver,
-  setShowTabsMenu,
-  setStep,
-  setTransition,
-  setShowAuthorToBadge,
-}: Props) => {
+const Confirmation = () => {
   const { watch } = useFormContext();
-  const { walletOpen } = useWallet();
+  const { walletOpen, dispatchWalletState, globalWalletState } = useWallet();
+  const { myBadgesCurrentBadge, myBadgesCurrentReceiver } = globalWalletState;
   const watchBadgesAmount = watch('badgesAmount');
   return (
     <Box
@@ -53,15 +35,26 @@ const Confirmation = ({
               marginBottom: 10,
             }}
             onClick={() => {
-              setTransition('back');
               // @ts-ignore
               if (walletOpen?.userName) {
-                setShowTabsMenu(true);
-                setShowAuthorToBadge(true);
-                setStep(MyBadgesSteps.Badges);
+                dispatchWalletState({
+                  type: 'update',
+                  payload: {
+                    myBadgesTransition: 'back',
+                    showTabsMenu: true,
+                    showAuthorToBadge: true,
+                    myBadgesStep: MyBadgesSteps.Badges,
+                  },
+                });
               } else {
-                setShowTabsMenu(false);
-                setStep(MyBadgesSteps.Receivers);
+                dispatchWalletState({
+                  type: 'update',
+                  payload: {
+                    myBadgesTransition: 'back',
+                    showTabsMenu: false,
+                    myBadgesStep: MyBadgesSteps.Receivers,
+                  },
+                });
               }
             }}
           >
@@ -90,9 +83,11 @@ const Confirmation = ({
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">
-              {currentReceiver.description}
+              {myBadgesCurrentReceiver.description}
             </Typography>
-            <Typography variant="overline">@{currentReceiver.name}</Typography>
+            <Typography variant="overline">
+              @{myBadgesCurrentReceiver.name}
+            </Typography>
           </Box>
         </Box>
         <Typography
@@ -132,7 +127,7 @@ const Confirmation = ({
             }}
           />
           <Typography variant="subtitle1">
-            {currentBadge.name} (x{watchBadgesAmount})
+            {myBadgesCurrentBadge.name} (x{watchBadgesAmount})
           </Typography>
           <Typography
             style={{ textAlign: 'center', color: neutral[500] }}
@@ -155,7 +150,10 @@ const Confirmation = ({
           type="submit"
           variant="contained"
           onClick={() => {
-            setShowTabsMenu(true);
+            dispatchWalletState({
+              type: 'showTabsMenu',
+              payload: true,
+            });
           }}
         >
           Gift Token

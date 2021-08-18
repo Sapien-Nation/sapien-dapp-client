@@ -12,9 +12,6 @@ import SearchInput from '../shared/SearchInput';
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
-
 // context
 import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
@@ -25,24 +22,10 @@ import { tokensInstance } from 'api';
 // enums
 import { MyBadgesSteps } from '../WalletEnums';
 
-interface Props {
-  setCurrentBadge: (Badge: BadgeType) => void;
-  setCurrentReceiver: (Receiver: any) => void;
-  setShowAuthorToBadge: (status: boolean) => void;
-  setShowTabsMenu: (showTab: boolean) => void;
-  setStep: (step: MyBadgesSteps) => void;
-  setTransition: (transition: string) => void;
-}
-
 export const BadgeItem = ({
   description,
+  dispatchWalletState,
   name,
-  setCurrentBadge,
-  setCurrentReceiver,
-  setShowTabsMenu,
-  setStep,
-  setTransition,
-  setShowAuthorToBadge,
   spn,
   walletOpen,
 }) => (
@@ -57,23 +40,40 @@ export const BadgeItem = ({
       cursor: 'pointer',
     }}
     onClick={() => {
-      setTransition('forward');
-      setShowTabsMenu(false);
       if (walletOpen && walletOpen.userName) {
-        setCurrentReceiver({
-          name: walletOpen.userName,
-          description: walletOpen.displayName,
+        dispatchWalletState({
+          type: 'update',
+          payload: {
+            myBadgesTransition: 'forward',
+            myBadgesCurrentReceiver: {
+              name: walletOpen.userName,
+              description: walletOpen.displayName,
+            },
+            showTabsMenu: false,
+            showAuthorToBadge: false,
+            myBadgesStep: MyBadgesSteps.Confirmation,
+            myBadgesCurrentBadge: {
+              price: spn,
+              name,
+              description,
+            },
+          },
         });
-        setShowAuthorToBadge(false);
-        setStep(MyBadgesSteps.Confirmation);
       } else {
-        setStep(MyBadgesSteps.Receivers);
+        dispatchWalletState({
+          type: 'update',
+          payload: {
+            myBadgesTransition: 'forward',
+            showTabsMenu: false,
+            myBadgesStep: MyBadgesSteps.Receivers,
+            myBadgesCurrentBadge: {
+              price: spn,
+              name,
+              description,
+            },
+          },
+        });
       }
-      setCurrentBadge({
-        price: spn,
-        name,
-        description,
-      });
     }}
   >
     <Avatar
@@ -115,16 +115,9 @@ export const BadgeItem = ({
 const fetcher = (url: string) =>
   tokensInstance.get(url).then((res) => res.data);
 
-const BadgesList = ({
-  setCurrentBadge,
-  setCurrentReceiver,
-  setShowAuthorToBadge,
-  setShowTabsMenu,
-  setStep,
-  setTransition,
-}: Props) => {
+const BadgesList = () => {
   const { me } = useAuth();
-  const { walletOpen } = useWallet();
+  const { dispatchWalletState, walletOpen } = useWallet();
   const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
     fetcher,
   });
@@ -136,13 +129,8 @@ const BadgesList = ({
     >
       <SearchInput
         ItemComponent={BadgeItem}
+        dispatchWalletState={dispatchWalletState}
         list={list}
-        setCurrentBadge={setCurrentBadge}
-        setCurrentReceiver={setCurrentReceiver}
-        setShowAuthorToBadge={setShowAuthorToBadge}
-        setShowTabsMenu={setShowTabsMenu}
-        setStep={setStep}
-        setTransition={setTransition}
         walletOpen={walletOpen}
       />
     </div>

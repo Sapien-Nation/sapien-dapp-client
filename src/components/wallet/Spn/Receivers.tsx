@@ -25,6 +25,7 @@ import { formatSpn } from 'utils/spn';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
+import { useWallet } from 'context/wallet';
 
 const mockList = [
   {
@@ -70,7 +71,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ReceiverItem = ({ description, name, setCurrentReceiver }) => {
+export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
   const classes = useStyles();
   return (
     <Box
@@ -84,9 +85,12 @@ export const ReceiverItem = ({ description, name, setCurrentReceiver }) => {
         cursor: 'pointer',
       }}
       onClick={() => {
-        setCurrentReceiver({
-          name,
-          description,
+        dispatchWalletState({
+          type: 'spnCurrentReceiver',
+          payload: {
+            name,
+            description,
+          },
         });
       }}
     >
@@ -133,12 +137,14 @@ const NumberFormatInput = ({ name, onChange, ...rest }) => {
   );
 };
 
-const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
+const Receivers = () => {
   const {
     watch,
     register,
     formState: { isDirty },
   } = useFormContext();
+  const { dispatchWalletState, globalWalletState } = useWallet();
+  const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
   const classes = useStyles();
   return (
@@ -153,7 +159,7 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
           height: '100%',
           display: 'grid',
           margin: '0 2.4rem',
-          gridTemplateRows: currentReceiver
+          gridTemplateRows: spnCurrentReceiver
             ? '32px 72px 1fr 90px'
             : '32px 50px 1fr 200px',
         }}
@@ -164,7 +170,7 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
             display: 'flex',
           }}
         >
-          {currentReceiver ? (
+          {spnCurrentReceiver ? (
             <>
               <IconButton
                 aria-label="go back"
@@ -173,7 +179,10 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
                   marginRight: 6,
                 }}
                 onClick={() => {
-                  setCurrentReceiver(null);
+                  dispatchWalletState({
+                    type: 'spnCurrentReceiver',
+                    payload: null,
+                  });
                 }}
               >
                 <ArrowBackIcon
@@ -187,7 +196,7 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
             <Typography variant="button">Receiver</Typography>
           )}
         </div>
-        {currentReceiver ? (
+        {spnCurrentReceiver ? (
           <Box
             alignItems="center"
             bgcolor={neutral[50]}
@@ -208,15 +217,17 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
               }}
             />
             <Box display="flex" flexDirection="column" marginLeft={1}>
-              <Typography variant="button">{currentReceiver.name}</Typography>
+              <Typography variant="button">
+                {spnCurrentReceiver.name}
+              </Typography>
               <Typography variant="overline">@marryrob</Typography>
             </Box>
           </Box>
         ) : (
           <SearchInput
             ItemComponent={ReceiverItem}
+            dispatchWalletState={dispatchWalletState}
             list={mockList}
-            setCurrentReceiver={setCurrentReceiver}
           />
         )}
         <div>
@@ -310,7 +321,7 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
             </Typography>
           </Box>
         </div>
-        {currentReceiver && (
+        {spnCurrentReceiver && (
           <div
             style={{
               display: 'flex',
@@ -346,7 +357,10 @@ const Receivers = ({ currentReceiver, setCurrentReceiver }) => {
           type="submit"
           variant="contained"
           onClick={() => {
-            setCurrentReceiver(null);
+            dispatchWalletState({
+              type: 'spnCurrentReceiver',
+              payload: null,
+            });
           }}
         >
           Send SPN

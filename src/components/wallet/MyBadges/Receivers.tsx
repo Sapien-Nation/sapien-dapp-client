@@ -23,6 +23,9 @@ import {
 // styles
 import { primary, neutral } from 'styles/colors';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // enums
 import { MyBadgesSteps } from '../WalletEnums';
 
@@ -57,13 +60,7 @@ const mockList = [
   },
 ];
 
-export const ReceiverItem = ({
-  description,
-  name,
-  setCurrentReceiver,
-  setStep,
-  setTransition,
-}) => {
+export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
   const classes = useStyles();
   return (
     <Box
@@ -77,11 +74,16 @@ export const ReceiverItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
-        setTransition('forward');
-        setStep(MyBadgesSteps.Confirmation);
-        setCurrentReceiver({
-          name,
-          description,
+        dispatchWalletState({
+          type: 'update',
+          payload: {
+            myBadgesTransition: 'forward',
+            myBadgesStep: MyBadgesSteps.Confirmation,
+            myBadgesCurrentReceiver: {
+              name,
+              description,
+            },
+          },
         });
       }}
     >
@@ -110,19 +112,15 @@ export const ReceiverItem = ({
   );
 };
 
-const Receivers = ({
-  currentBadge,
-  setCurrentReceiver,
-  setShowTabsMenu,
-  setStep,
-  setTransition,
-}) => {
+const Receivers = () => {
   const {
     watch,
     register,
     setValue,
     formState: { errors },
   } = useFormContext();
+  const { dispatchWalletState, globalWalletState } = useWallet();
+  const { myBadgesCurrentBadge } = globalWalletState;
   const watchBadgesAmount = watch('badgesAmount');
 
   const NumericInputCounter = () => {
@@ -221,9 +219,14 @@ const Receivers = ({
             marginBottom: 10,
           }}
           onClick={() => {
-            setTransition('back');
-            setShowTabsMenu(true);
-            setStep(MyBadgesSteps.Badges);
+            dispatchWalletState({
+              type: 'update',
+              payload: {
+                myBadgesTransition: 'back',
+                showTabsMenu: true,
+                myBadgesStep: MyBadgesSteps.Badges,
+              },
+            });
           }}
         >
           <ArrowBackIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -232,10 +235,8 @@ const Receivers = ({
       </div>
       <SearchInput
         ItemComponent={ReceiverItem}
+        dispatchWalletState={dispatchWalletState}
         list={mockList}
-        setCurrentReceiver={setCurrentReceiver}
-        setStep={setStep}
-        setTransition={setTransition}
       />
       <Box
         alignItems="center"
@@ -264,7 +265,7 @@ const Receivers = ({
           }}
         />
         <Box display="flex" flexDirection="column" marginLeft={1}>
-          <Typography variant="button">{currentBadge.name}</Typography>
+          <Typography variant="button">{myBadgesCurrentBadge.name}</Typography>
           <Typography
             style={{
               color: neutral[500],
@@ -272,7 +273,7 @@ const Receivers = ({
             }}
             variant="overline"
           >
-            {currentBadge.description}
+            {myBadgesCurrentBadge.description}
           </Typography>
         </Box>
         <Box alignItems="center" display="flex" marginLeft="auto">

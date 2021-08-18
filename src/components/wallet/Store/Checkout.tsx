@@ -7,6 +7,9 @@ import {
   CheckboxChecked as CheckboxCheckedIcon,
 } from 'assets';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // styles
 import { primary, neutral } from 'styles/colors';
 
@@ -23,33 +26,25 @@ import {
 } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
-
 // emums
 import { StoreSteps } from '../WalletEnums';
 
-interface Props {
-  currentBadge: BadgeType;
-  setShowTabsMenu: (showTab: boolean) => void;
-  setStep: (step: StoreSteps) => void;
-}
-
-const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
+const Checkout = () => {
   const {
     formState: { errors },
     watch,
     control,
   } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
-
+  const { globalWalletState, dispatchWalletState } = useWallet();
+  const { storeCurrentBadge } = globalWalletState;
   const renderFees = () => {
     return (
       <Box marginTop={3}>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
           <Typography variant="body2">Badges cost</Typography>
           <Typography variant="body2">
-            {currentBadge.spn * watchBadgesAmount} SPN
+            {storeCurrentBadge.spn * watchBadgesAmount} SPN
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
@@ -61,7 +56,7 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
             Total
           </Typography>
           <Typography style={{ color: primary[800] }} variant="body2">
-            {currentBadge.spn * watchBadgesAmount + 5} SPN
+            {storeCurrentBadge.spn * watchBadgesAmount + 5} SPN
           </Typography>
         </Box>
       </Box>
@@ -85,8 +80,10 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
               marginBottom: 10,
             }}
             onClick={() => {
-              setShowTabsMenu(false);
-              setStep(StoreSteps.Confirmation);
+              dispatchWalletState({
+                showTabsMenu: false,
+                storeStep: StoreSteps.Confirmation,
+              });
             }}
           >
             <ArrowBackIcon fontSize="small" style={{ color: neutral[700] }} />
@@ -243,7 +240,10 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
           type="submit"
           variant="contained"
           onClick={() => {
-            setShowTabsMenu(true);
+            dispatchWalletState({
+              type: 'showTabsMenu',
+              payload: true,
+            });
           }}
         >
           Purchase Token

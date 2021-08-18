@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
-// types
-import type { Badge as BadgeType } from 'tools/types/wallet/badge';
+// context
+import { useWallet } from 'context/wallet';
 
 // components
 import BadgesList from './BadgesList';
@@ -12,55 +11,44 @@ import Checkout from './Checkout';
 // emums
 import { StoreSteps } from '../WalletEnums';
 
-interface Props {
-  showTabsMenu: boolean;
-  setShowTabsMenu: (status: boolean) => void;
-}
-
 const form = 'buy-badge-form';
 
-const Store = ({ showTabsMenu, setShowTabsMenu }: Props) => {
-  const [step, setStep] = useState(StoreSteps.Badges);
-  const [currentBadge, setCurrentBadge] = useState<BadgeType | null>();
+const Store = () => {
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
       terms: false,
     },
   });
+  const { globalWalletState, dispatchWalletState } = useWallet();
+  const { showTabsMenu, storeStep } = globalWalletState;
   const { handleSubmit } = methods;
   const handleFormSubmit = async () => {
-    if (step === StoreSteps.Badges) return setStep(StoreSteps.Confirmation);
-    if (step === StoreSteps.Confirmation) return setStep(StoreSteps.Checkout);
-    if (step === StoreSteps.Checkout) return setStep(StoreSteps.Badges);
+    if (storeStep === StoreSteps.Badges)
+      return dispatchWalletState({
+        type: 'storeStep',
+        payload: StoreSteps.Confirmation,
+      });
+    if (storeStep === StoreSteps.Confirmation)
+      return dispatchWalletState({
+        type: 'storeStep',
+        payload: StoreSteps.Checkout,
+      });
+    if (storeStep === StoreSteps.Checkout)
+      return dispatchWalletState({
+        type: 'storeStep',
+        payload: StoreSteps.Badges,
+      });
   };
 
   const renderStep = () => {
-    switch (step) {
+    switch (storeStep) {
       case StoreSteps.Badges:
-        return (
-          <BadgesList
-            setCurrentBadge={setCurrentBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-          />
-        );
+        return <BadgesList />;
       case StoreSteps.Confirmation:
-        return (
-          <Confirmation
-            currentBadge={currentBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-          />
-        );
+        return <Confirmation />;
       case StoreSteps.Checkout:
-        return (
-          <Checkout
-            currentBadge={currentBadge}
-            setShowTabsMenu={setShowTabsMenu}
-            setStep={setStep}
-          />
-        );
+        return <Checkout />;
     }
   };
   return (
