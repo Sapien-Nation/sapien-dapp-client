@@ -53,8 +53,8 @@ const TribeBar = () => {
   const tribes = getTribes();
   const classes = useStyles();
   const { asPath } = useRouter();
-    // to test Comingsoon make this'true'
-    const showPreview = false;
+  // to test Comingsoon make this'true'
+  const showPreview = false;
 
   const isTribeSelected = (tribe: Tribe) => {
     // @ts-ignore
@@ -156,7 +156,11 @@ const TribeBar = () => {
         <IconButton
           aria-label="Create Tribe"
           style={{ padding: 0 }}
-          onClick={() => showPreview ? setShowPreviewTribe(!showPreviewTribe) : setShowModal(true)}
+          onClick={() =>
+            showPreview
+              ? setShowPreviewTribe(!showPreviewTribe)
+              : setShowModal(true)
+          }
         >
           <Avatar
             style={{

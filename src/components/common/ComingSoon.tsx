@@ -9,27 +9,24 @@ interface Props {
 
 const ComingSoon = ({ children, open }: Props) => (
   <Tooltip
-    PopperProps={{
-      disablePortal: true,
-    }}
     arrow
-    color="primary"
     disableFocusListener
     disableHoverListener
     disableTouchListener
-    placement="right"
+    PopperProps={{
+      disablePortal: true,
+    }}
+    color="primary"
     open={open}
+    placement="right"
     title={
-      <Box display="flex" flexDirection="row" alignItems="center">
+      <Box alignItems="center" display="flex" flexDirection="row">
         <InfoIcon
           color="primary"
           fontSize="small"
           style={{ marginLeft: '0.5rem' }}
         />
-        <Typography
-          variant="subtitle1"
-          style={{ marginLeft: 5 }}
-        >
+        <Typography style={{ marginLeft: 5 }} variant="subtitle1">
           *Coming soon
         </Typography>
       </Box>

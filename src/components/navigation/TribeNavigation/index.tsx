@@ -15,7 +15,7 @@ import { ComingSoon } from 'components/common';
 import { getTribes } from 'hooks';
 
 // mui
-import { Box, ClickAwayListener, Drawer, makeStyles, Typography } from '@material-ui/core';
+import { Box, Drawer, makeStyles, Typography } from '@material-ui/core';
 import { Groups } from '@material-ui/icons';
 
 // styles
@@ -97,7 +97,11 @@ const TribeNavigation = () => {
       <Section
         showAction
         title="Squares"
-        onClick={() => showPreview ? setShowPreviewSquare(!showPreviewSquare) : setModal(ModalType.Square)}
+        onClick={() =>
+          showPreview
+            ? setShowPreviewSquare(!showPreviewSquare)
+            : setModal(ModalType.Square)
+        }
       >
         <Squares squares={selectedTribe.squares} />
       </Section>
@@ -110,7 +114,11 @@ const TribeNavigation = () => {
       <Section
         showAction
         title="Channels"
-        onClick={() => showPreview ? setShowPreviewChannel(!showPreviewChannel) : setModal(ModalType.Channel)}
+        onClick={() =>
+          showPreview
+            ? setShowPreviewChannel(!showPreviewChannel)
+            : setModal(ModalType.Channel)
+        }
       >
         <Channels channels={selectedTribe.channels} />
       </Section>
@@ -120,7 +128,7 @@ const TribeNavigation = () => {
         <div></div>
       </ComingSoon>
 
-      <Section showAction={false} title="My Messages" onClick={() => { }}>
+      <Section showAction={false} title="My Messages" onClick={() => {}}>
         <DirectMessages messages={[]} />
       </Section>
 
