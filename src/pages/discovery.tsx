@@ -1,6 +1,12 @@
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 // components
 import { Layout } from 'components/common';
 import { TribeCard } from 'components/discovery';
+
+// context
+import { useAuth } from 'context/user';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -138,26 +144,37 @@ const tribes = [
   },
 ];
 
-const DiscoveryPage = () => (
-  <Box
-    className="card--rounded-gray"
-    marginTop={12.7}
-    paddingX={2.8}
-    paddingY={4}
-  >
+const DiscoveryPage = () => {
+  const router = useRouter();
+  const { me } = useAuth();
+
+  useEffect(() => {
+    if (me === null) {
+      router.push('/register');
+    }
+  }, [me, router]);
+
+  return (
     <Box
-      display="grid"
-      style={{
-        gap: '1.6rem',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
-      }}
+      className="card--rounded-gray"
+      marginTop={12.7}
+      paddingX={2.8}
+      paddingY={4}
     >
-      {tribes.map((tribe: any) => (
-        <TribeCard key={tribe.id} tribe={tribe} />
-      ))}
+      <Box
+        display="grid"
+        style={{
+          gap: '1.6rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
+        }}
+      >
+        {tribes.map((tribe: any) => (
+          <TribeCard key={tribe.id} tribe={tribe} />
+        ))}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 DiscoveryPage.Layout = Layout;
 

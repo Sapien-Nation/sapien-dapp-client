@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 
 // components
@@ -11,6 +12,9 @@ import {
   Query,
 } from 'components/common';
 import { Widgets } from 'components/widgets';
+
+// context
+import { useAuth } from 'context/user';
 
 // mui
 import { Box, Button } from '@material-ui/core';
@@ -67,7 +71,14 @@ const Content = ({ contentID }: Props) => {
 };
 
 const ContentPage = () => {
-  const { query } = useRouter();
+  const { push, query } = useRouter();
+  const { me } = useAuth();
+
+  useEffect(() => {
+    if (me === null) {
+      push('/register');
+    }
+  }, [me, push]);
 
   if (!query.contentID) return null;
 

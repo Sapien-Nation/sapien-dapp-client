@@ -1,11 +1,22 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 // components
 import { LayoutWithWidgets as Layout } from 'components/common';
 import { Square } from 'components/square';
 
+// context
+import { useAuth } from 'context/user';
+
 const SquarePage = () => {
-  const { query } = useRouter();
+  const { push, query } = useRouter();
+  const { me } = useAuth();
+
+  useEffect(() => {
+    if (me === null) {
+      push('/register');
+    }
+  }, [me, push]);
 
   if (!query.squareID) return null;
 
