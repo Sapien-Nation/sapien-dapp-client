@@ -24,5 +24,4 @@ export const purchaseBadge = (body: {
 }) =>
   tokensInstance
     .post('/api/v3/badge/purchaseBadge', body)
-    .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
+    .then((data) => console.log(data));
