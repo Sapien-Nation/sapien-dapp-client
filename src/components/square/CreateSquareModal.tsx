@@ -4,6 +4,9 @@ import { useForm } from 'react-hook-form';
 import { mutate } from 'swr';
 import { ErrorMessage } from '@hookform/error-message';
 
+// api
+import { createSquare as createSquareAction } from 'api/tribeNavigation';
+
 // components
 import { Dialog, ChartCount } from 'components/common';
 
@@ -18,12 +21,13 @@ import type { Tribe } from 'tools/types/tribeBar';
 
 interface Props {
   squareID: string;
+  tribeId: string;
   onClose: () => void;
 }
 
 const form = 'create-square-form';
 
-const CreateSquare = ({ squareID, onClose }: Props) => {
+const CreateSquare = ({ squareID, tribeId, onClose }: Props) => {
   const {
     control,
     formState: { errors, isSubmitting },
@@ -33,9 +37,9 @@ const CreateSquare = ({ squareID, onClose }: Props) => {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleFormSubmit = async () => {
+  const handleFormSubmit = async ({ name }) => {
     try {
-      const response = { id: '1' };
+      const response = await createSquareAction({ tribeId, name });
       mutate(
         '/api/v3/profile/tribes',
         (tribes: Array<Tribe>) => {

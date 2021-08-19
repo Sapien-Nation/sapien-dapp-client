@@ -104,9 +104,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   >
                     <Typography variant="h2">{tribe.name}</Typography>
                     <Typography color="textSecondary" variant="button">
-                      {isMainSquare
-                        ? `@${tribe.identifier}`
-                        : '#PoliticsSquare'}
+                      {isMainSquare ? `@${tribe.identifier}` : '#SquareName'}
                     </Typography>
                   </Box>
                   <Box

@@ -49,7 +49,7 @@ const TribeNavigation = () => {
   const [modal, setModal] = useState<ModalType | null>(null);
   const [showPreviewSquare, setShowPreviewSquare] = useState(false);
   const [showPreviewChannel, setShowPreviewChannel] = useState(false);
-  const { query } = useRouter();
+  const { asPath, query } = useRouter();
   // to test Comingsoon make this'true'
   const showPreview = false;
 
@@ -77,7 +77,9 @@ const TribeNavigation = () => {
           <Box
             alignItems="center"
             borderRadius={10}
-            className={classes.listItemSelected}
+            className={
+              asPath === `/client/${squareID}` ? classes.listItemSelected : ''
+            }
             display="flex"
             paddingX={1.5}
             paddingY={1}
@@ -180,6 +182,7 @@ const TribeNavigation = () => {
       {modal === ModalType.Square && (
         <CreateSquareModal
           squareID={selectedTribe.mainSquareId}
+          tribeId={selectedTribe.id}
           onClose={() => setModal(null)}
         />
       )}
