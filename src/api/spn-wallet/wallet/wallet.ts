@@ -24,27 +24,13 @@ const metaTransactionType = [
 const Wallet = async (publicAddress: string, privateKey: string) => {
   const config = getConfig(false);
 
-  let provider;
-
-  const getProvider = () => {
-    if (!provider || !provider.connected) {
-      provider = new Web3.providers.WebsocketProvider(config.POLY_WS_PROVIDER);
-      provider.on('connect', () => console.log('Polygon WS Connected!'));
-      provider.on('error', () => {
-        console.error('Polygon WS Error');
-      });
-      provider.on('end', () => {
-        console.error('Polygon WS End');
-        web3.setProvider(getProvider());
-      });
+  const biconomy = new Biconomy(
+    new Web3.providers.HttpProvider(config.RPC_PROVIDER),
+    {
+      apiKey: config.BICONOMY_API_KEY,
+      debug: true,
     }
-    return provider;
-  };
-
-  const biconomy = new Biconomy(getProvider(), {
-    apiKey: config.BICONOMY_API_KEY,
-    debug: true,
-  });
+  );
   const web3 = new Web3(biconomy);
 
   biconomy
@@ -74,22 +60,22 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
   const contracts = {
     badgeStoreContract: new web3.eth.Contract(
       BADGE_STORE_ABI as AbiItem[],
-      config.POLY_BADGE_STORE_ADDRESS
+      config.BADGE_STORE_ADDRESS
     ),
     badgeStoreDomainData: {
       name: 'Sapien Badge Store',
       version: 'v3',
-      verifyingContract: config.POLY_BADGE_STORE_ADDRESS,
+      verifyingContract: config.BADGE_STORE_ADDRESS,
       salt: '0x' + config.POLY_NETWORK_ID.toString(16).padStart(64, '0'),
     },
     platformSPNContract: new web3.eth.Contract(
       PLATFORM_SPN_ABI as AbiItem[],
-      config.POLY_SPN_TOKEN_ADDRESS
+      config.SPN_TOKEN_ADDRESS
     ),
     platformSPNDomainData: {
       name: 'Sapien',
       version: '1',
-      verifyingContract: config.POLY_SPN_TOKEN_ADDRESS,
+      verifyingContract: config.SPN_TOKEN_ADDRESS,
       salt: '0x' + config.POLY_NETWORK_ID.toString(16).padStart(64, '0'),
     },
   };
@@ -162,7 +148,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
   }
 
   return {
-    getBalance,
+    balance: await getBalance(),
     transferSPN: async (
       fromUserId: string,
       toUserId: string,
@@ -187,7 +173,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       const rawTx = await prepareMetaTransaction(
         functionSignature,
         contracts.platformSPNContract,
-        config.POLY_SPN_TOKEN_ADDRESS,
+        config.SPN_TOKEN_ADDRESS,
         contracts.platformSPNDomainData
       );
 
@@ -226,7 +212,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       const rawTx = await prepareMetaTransaction(
         functionSignature,
         contracts.badgeStoreContract,
-        config.POLY_BADGE_STORE_ADDRESS,
+        config.BADGE_STORE_ADDRESS,
         contracts.badgeStoreDomainData
       );
       const body = {
