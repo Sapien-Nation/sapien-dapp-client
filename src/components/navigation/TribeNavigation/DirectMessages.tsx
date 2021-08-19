@@ -42,7 +42,7 @@ const DirectMessages = ({ messages }: Props) => {
   return (
     <>
       <List aria-label="Message list" role="list" style={{ padding: 0 }}>
-        {messages.map(({ avatarImage, name, id, lastUpdateAt, message }) => {
+        {messages.map(({ avatar, displayName, id, seenAt, body }) => {
           return (
             <ListItem
               key={id}
@@ -67,7 +67,7 @@ const DirectMessages = ({ messages }: Props) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Avatar alt={name} src={avatarImage} />
+                  <Avatar alt={displayName} src={avatar} />
                   <Box
                     display="flex"
                     flex={1}
@@ -75,8 +75,9 @@ const DirectMessages = ({ messages }: Props) => {
                     paddingLeft={1.5}
                   >
                     <ListItemText
-                      disableTypography
-                      primary={<Typography variant="button">{name}</Typography>}
+                      primary={
+                        <Typography variant="button">{displayName}</Typography>
+                      }
                       secondary={
                         <>
                           <Typography
@@ -84,7 +85,7 @@ const DirectMessages = ({ messages }: Props) => {
                             display="block"
                             variant="overline"
                           >
-                            {message}
+                            {body}
                           </Typography>
                         </>
                       }
@@ -95,7 +96,7 @@ const DirectMessages = ({ messages }: Props) => {
                       style={{ marginTop: '1rem' }}
                       variant="overline"
                     >
-                      {formatTimestampToRelative(lastUpdateAt)}
+                      {formatTimestampToRelative(seenAt)}
                     </Typography>
                   </Box>
                 </a>

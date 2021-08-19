@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 
 // components
 import { LayoutWithWidgets } from 'components/common';
-import { Messages } from 'components/dm';
+import { Messages } from 'components/DirectMessages';
 
 const MessagePage = () => {
   const { query } = useRouter();

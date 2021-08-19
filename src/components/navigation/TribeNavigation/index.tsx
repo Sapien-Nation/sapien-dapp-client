@@ -9,7 +9,7 @@ import Squares from './Squares';
 import DirectMessages from './DirectMessages';
 import CreateChannelModal from 'components/channel/CreateChannelModal';
 import CreateSquareModal from 'components/square/CreateSquareModal';
-import { ComingSoon } from 'components/common';
+import { ComingSoon, Query } from 'components/common';
 
 // hooks
 import { getTribes } from 'hooks';
@@ -129,7 +129,44 @@ const TribeNavigation = () => {
       </ComingSoon>
 
       <Section showAction={false} title="My Messages" onClick={() => {}}>
-        <DirectMessages messages={[]} />
+        <Query
+          api="api-placeholder"
+          loader={null}
+          options={{
+            fetcher: () => [
+              {
+                id: '1',
+                authorId: '1',
+                avatar: 'https://material-ui.com/static/images/avatar/1.jpg',
+                body: 'Let’s go!',
+                createdAt: '2021-08-09T04:35:15.149Z',
+                displayName: 'Ollie Hampton',
+                seenAt: '2021-08-09T04:35:15.149Z',
+              },
+              {
+                id: '2',
+                authorId: '2',
+                avatar: 'https://material-ui.com/static/images/avatar/2.jpg',
+                body: 'Let’s go!',
+                createdAt: '2021-08-09T04:35:15.149Z',
+                displayName: 'Michael Perry',
+                seenAt: null,
+              },
+              {
+                id: '',
+                authorId: '4',
+                avatar: 'https://material-ui.com/static/images/avatar/3.jpg',
+                body: 'Let’s go!',
+                createdAt: '2021-08-09T06:35:15.149Z',
+                displayName: 'Amanda Ben...',
+                seenAt: '2021-08-10T04:32:15.149Z',
+              },
+            ],
+          }}
+        >
+          {/* TODO use real type */}
+          {(messages: Array<any>) => <DirectMessages messages={messages} />}
+        </Query>
       </Section>
 
       {modal === ModalType.Channel && (

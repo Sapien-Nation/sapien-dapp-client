@@ -19,9 +19,6 @@ import {
 } from 'components/content';
 import { Widgets } from 'components/widgets';
 
-// hooks
-import { getTribe } from 'hooks';
-
 // mui
 import { Box } from '@material-ui/core';
 
@@ -54,8 +51,7 @@ export const Messages = ({ messageID }: Props) => {
     size,
     mutate,
   } = useSWRInfinite(
-    (...rest) =>
-      getKey(...rest, `/api/v3/message/${messageID}/feed`),
+    (...rest) => getKey(...rest, `/api/v3/message/${messageID}/feed`),
     { fetcher, revalidateOnMount: true }
   );
 
@@ -69,7 +65,7 @@ export const Messages = ({ messageID }: Props) => {
   return (
     <>
       <Page
-        header={<Header messageID={messageID}/>}
+        header={<Header messageID={messageID} />}
         subHeader={
           <>
             {me && (
