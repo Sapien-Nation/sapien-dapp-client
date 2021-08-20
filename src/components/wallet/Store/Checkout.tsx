@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { useSnackbar } from 'notistack';
 
 // assets
 import {
@@ -47,6 +49,8 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
   } = useFormContext();
   const { me } = useAuth();
   const { wallet } = useWallet();
+  const { enqueueSnackbar } = useSnackbar();
+  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const watchBadgesAmount = watch('badgesAmount');
   const renderFees = () => {
     return (
@@ -245,20 +249,40 @@ const Checkout = ({ currentBadge, setShowTabsMenu, setStep }: Props) => {
         <Button
           fullWidth
           color="primary"
-          type="submit"
+          disabled={loadingResponse}
           variant="contained"
-          onClick={() => {
-            setShowTabsMenu(true);
-            wallet.purchaseBadge(
-              watchBadgesAmount,
-              currentBadge.blockchainId,
-              me.id,
-              currentBadge.id,
-              watchBadgesAmount * currentBadge.spn
-            );
+          onClick={async () => {
+            setLoadingResponse(true);
+            try {
+              await wallet.purchaseBadge(
+                watchBadgesAmount,
+                currentBadge.blockchainId,
+                me.id,
+                currentBadge.id,
+                watchBadgesAmount * currentBadge.spn
+              );
+              enqueueSnackbar('Success!', {
+                variant: 'success',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+              setLoadingResponse(false);
+              setShowTabsMenu(true);
+              setStep(StoreSteps.Badges);
+            } catch (error) {
+              enqueueSnackbar('Something went wrong.', {
+                variant: 'error',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+            }
           }}
         >
-          Purchase Token
+          {loadingResponse ? 'Processing...' : 'Purchase Token'}
         </Button>
       </Box>
     </Box>
