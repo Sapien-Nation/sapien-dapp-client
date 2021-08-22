@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { useSnackbar } from 'notistack';
 
 // assets
 import {
@@ -7,11 +9,12 @@ import {
   CheckboxChecked as CheckboxCheckedIcon,
 } from 'assets';
 
-// context
-import { useWallet } from 'context/wallet';
-
 // styles
 import { primary, neutral } from 'styles/colors';
+
+// context
+import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
 
 // mui
 import {
@@ -35,9 +38,14 @@ const Checkout = () => {
     watch,
     control,
   } = useFormContext();
+  const { me } = useAuth();
+  const { wallet } = useWallet();
+  const { enqueueSnackbar } = useSnackbar();
+  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const watchBadgesAmount = watch('badgesAmount');
   const { globalWalletState, dispatchWalletState } = useWallet();
   const { storeCurrentBadge } = globalWalletState;
+
   const renderFees = () => {
     return (
       <Box marginTop={3}>
@@ -150,7 +158,7 @@ const Checkout = () => {
             }}
           />
           <Typography variant="subtitle1">
-            Badge Name (x{watchBadgesAmount})
+            {storeCurrentBadge.name} (x{watchBadgesAmount})
           </Typography>
           <Typography
             style={{ textAlign: 'center', color: neutral[500] }}
@@ -237,16 +245,45 @@ const Checkout = () => {
         <Button
           fullWidth
           color="primary"
-          type="submit"
+          disabled={loadingResponse}
           variant="contained"
-          onClick={() => {
-            dispatchWalletState({
-              type: 'showTabsMenu',
-              payload: true,
-            });
+          onClick={async () => {
+            setLoadingResponse(true);
+            try {
+              await wallet.purchaseBadge(
+                watchBadgesAmount,
+                storeCurrentBadge.blockchainId,
+                me.id,
+                storeCurrentBadge.id,
+                watchBadgesAmount * storeCurrentBadge.spn
+              );
+              enqueueSnackbar('Success!', {
+                variant: 'success',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+              setLoadingResponse(false);
+              dispatchWalletState({
+                type: 'update',
+                payload: {
+                  showTabsMenu: true,
+                  storeStep: StoreSteps.Badges,
+                },
+              });
+            } catch (error) {
+              enqueueSnackbar('Something went wrong.', {
+                variant: 'error',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+            }
           }}
         >
-          Purchase Token
+          {loadingResponse ? 'Processing...' : 'Purchase Token'}
         </Button>
       </Box>
     </Box>

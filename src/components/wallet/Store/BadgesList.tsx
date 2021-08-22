@@ -21,7 +21,14 @@ import { tokensInstance } from 'api';
 // enums
 import { StoreSteps } from '../WalletEnums';
 
-export const BadgeItem = ({ dispatchWalletState, description, name, spn }) => (
+export const BadgeItem = ({
+  dispatchWalletState,
+  description,
+  name,
+  spn,
+  blockchainId,
+  id,
+}) => (
   <Box
     alignItems="center"
     bgcolor={neutral[50]}
@@ -39,9 +46,11 @@ export const BadgeItem = ({ dispatchWalletState, description, name, spn }) => (
           showTabsMenu: false,
           storeStep: StoreSteps.Confirmation,
           storeCurrentBadge: {
-            price: spn,
+            spn,
             name,
             description,
+            blockchainId,
+            id,
           },
         },
       });

@@ -229,7 +229,7 @@ const Confirmation = () => {
             }}
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
-            <Typography variant="button">Badge Name</Typography>
+            <Typography variant="button">{storeCurrentBadge.name}</Typography>
             <Typography
               style={{
                 color: neutral[500],
@@ -237,7 +237,7 @@ const Confirmation = () => {
               }}
               variant="overline"
             >
-              Description goes here...
+              {storeCurrentBadge.description}
             </Typography>
           </Box>
           <Box alignItems="center" display="flex" marginLeft="auto">

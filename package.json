@@ -38,6 +38,8 @@
   },
   "homepage": "https://github.com/SapienNetwork/web#readme",
   "dependencies": {
+    "@biconomy/mexa": "^2.0.10",
+    "@ethereumjs/tx": "^3.3.0",
     "@hookform/error-message": "^2.0.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "5.0.0-alpha.37",
@@ -48,6 +50,7 @@
     "deep-equal": "^2.0.5",
     "emoji-mart": "^3.0.1",
     "eth-price": "^0.1.5",
+    "eth-sig-util": "^2.5.3",
     "image-extensions": "^1.1.0",
     "lodash": "^4.17.21",
     "next": "^11.0.0",
