@@ -8,6 +8,7 @@ import { primary, neutral } from 'styles/colors';
 
 // components
 import SearchInput from '../shared/SearchInput';
+import { WalletSkeleton } from 'components/common';
 
 // context
 import { useWallet } from 'context/wallet';
@@ -104,11 +105,15 @@ const BadgesList = () => {
         padding: '0 2.4rem',
       }}
     >
-      <SearchInput
-        ItemComponent={BadgeItem}
-        dispatchWalletState={dispatchWalletState}
-        list={list}
-      />
+      {!list ? (
+        <WalletSkeleton />
+      ) : (
+        <SearchInput
+          ItemComponent={BadgeItem}
+          dispatchWalletState={dispatchWalletState}
+          list={list}
+        />
+      )}
     </div>
   );
 };

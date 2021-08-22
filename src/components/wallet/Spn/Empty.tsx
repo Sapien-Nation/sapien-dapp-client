@@ -47,7 +47,8 @@ const Empty = () => {
           }}
           variant="contained"
         >
-          <MetamaskLogo /> Deposit with Metamask
+          <MetamaskLogo />
+          <span style={{ marginLeft: 10 }}>Deposit with Metamask</span>
         </Button>
       </div>
     </Box>

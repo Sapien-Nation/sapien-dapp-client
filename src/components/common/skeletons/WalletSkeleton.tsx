@@ -7,7 +7,6 @@ const WalletSkeleton = () => (
     className="card--rounded-white"
     display="grid"
     paddingBottom={2.4}
-    paddingX={2.4}
     style={{ gap: 8 }}
   >
     <Skeleton

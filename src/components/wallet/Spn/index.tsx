@@ -3,7 +3,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import Receivers from './Receivers';
-// import Empty from './Empty';
+import Empty from './Empty';
 
 // context
 import { useWallet } from 'context/wallet';
@@ -11,7 +11,8 @@ import { useWallet } from 'context/wallet';
 const form = 'spn-form';
 
 const Spn = () => {
-  const { walletOpen, dispatchWalletState, globalWalletState } = useWallet();
+  const { wallet, walletOpen, dispatchWalletState, globalWalletState } =
+    useWallet();
   const { showTabsMenu } = globalWalletState;
   const methods = useForm({
     defaultValues: {
@@ -44,16 +45,19 @@ const Spn = () => {
         height: showTabsMenu ? 'calc(100% - 63px)' : '100%',
       }}
     >
-      <FormProvider {...methods}>
-        <form
-          id={form}
-          style={{ height: '100%' }}
-          onSubmit={handleSubmit(handleFormSubmit)}
-        >
-          <Receivers />
-        </form>
-      </FormProvider>
-      {/* <Empty /> */}
+      {Number(wallet?.balance) > 0 ? (
+        <FormProvider {...methods}>
+          <form
+            id={form}
+            style={{ height: '100%' }}
+            onSubmit={handleSubmit(handleFormSubmit)}
+          >
+            <Receivers />
+          </form>
+        </FormProvider>
+      ) : (
+        <Empty />
+      )}
     </div>
   );
 };

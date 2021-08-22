@@ -8,6 +8,8 @@ import { primary, neutral } from 'styles/colors';
 
 // components
 import SearchInput from '../shared/SearchInput';
+import Empty from './Empty';
+import { WalletSkeleton } from 'components/common';
 
 // mui
 import { Avatar, Box, Typography } from '@material-ui/core';
@@ -121,18 +123,27 @@ const BadgesList = () => {
   const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
     fetcher,
   });
-  return (
-    <div
-      style={{
-        padding: '0 2.4rem',
-      }}
-    >
+
+  const render = () => {
+    if (!list) return <WalletSkeleton />;
+    if (list && list.length === 0) return <Empty />;
+    return (
       <SearchInput
         ItemComponent={BadgeItem}
         dispatchWalletState={dispatchWalletState}
         list={list}
         walletOpen={walletOpen}
       />
+    );
+  };
+
+  return (
+    <div
+      style={{
+        padding: '0 2.4rem',
+      }}
+    >
+      {render()}
     </div>
   );
 };
