@@ -3,6 +3,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import Receivers from './Receivers';
+// import Empty from './Empty';
 
 // context
 import { useWallet } from 'context/wallet';
@@ -52,6 +53,7 @@ const Spn = () => {
           <Receivers />
         </form>
       </FormProvider>
+      {/* <Empty /> */}
     </div>
   );
 };

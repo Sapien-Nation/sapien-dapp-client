@@ -5,6 +5,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 import BadgesList from './BadgesList';
 import Receivers from './Receivers';
 import Confirmation from './Confirmation';
+// import Empty from './Empty';
+// import { WalletSkeleton } from 'components/common';
 
 // context
 import { useWallet } from 'context/wallet';
@@ -101,6 +103,8 @@ const MyBadges = () => {
           {renderStep()}
         </form>
       </FormProvider>
+      {/* <Empty />
+      <WalletSkeleton /> */}
     </div>
   );
 };
