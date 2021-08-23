@@ -218,6 +218,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         rawTx,
         parentBadgeId,
         ownerId,
+        totalPrice,
       };
 
       return purchaseBadge(body);
