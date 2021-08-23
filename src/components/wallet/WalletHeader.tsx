@@ -112,7 +112,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
           <div>
             <Chip
               icon={<SpnIcon style={{ marginLeft: 10 }} />}
-              label={Number(wallet?.balance / 1e6 || 0)}
+              label={Number(wallet?.balance) / 1e6 || 0}
               style={{
                 backgroundColor: 'rgba(98, 0, 234, 0.05)',
                 borderRadius: 90,

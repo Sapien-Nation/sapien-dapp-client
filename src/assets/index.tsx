@@ -10,3 +10,4 @@ export { default as Spn } from './Spn';
 export { default as Store } from './Store';
 export { default as Tokens } from './Tokens';
 export { default as Transaction } from './Transaction';
+export { default as WithdrawSuccess } from './WithdrawSuccess';
