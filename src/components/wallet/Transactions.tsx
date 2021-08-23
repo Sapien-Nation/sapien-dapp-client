@@ -18,7 +18,7 @@ import { ExitToApp as ExitToAppIcon } from '@material-ui/icons';
 import { green, neutral, red } from 'styles/colors';
 
 // utils
-import { formatTimestampToRelative } from 'utils/date';
+// import { formatTimestampToRelative } from 'utils/date';
 
 const Transactions = () => {
   return (
@@ -74,7 +74,7 @@ const Transactions = () => {
                     style={{ lineHeight: 1.4, textTransform: 'capitalize' }}
                     variant="button"
                   >
-                    {transactions.info.type}
+                    {/* {transactions.info.type} */}
                   </Typography>
                   <Typography
                     style={{
@@ -84,15 +84,15 @@ const Transactions = () => {
                     }}
                     variant="button"
                   >
-                    {formatTimestampToRelative(transactions.updatedAt)}
+                    {/* {formatTimestampToRelative(transactions.updatedAt)} */}
                     {`, `}
-                    {transactions.info.status}
+                    {/* {transactions.info.status} */}
                   </Typography>
                 </Box>
                 <Box alignItems="center" display="flex" marginLeft="auto">
                   <Box display="flex" flexDirection="column">
                     <Typography style={{ lineHeight: 1.4 }} variant="button">
-                      {transactions.info.amount} SPN
+                      {/* {transactions.info.amount} SPN */}
                     </Typography>
                     <Typography
                       style={{
@@ -102,7 +102,7 @@ const Transactions = () => {
                       }}
                       variant="button"
                     >
-                      ${transactions.info.amount}
+                      {/* ${transactions.info.amount} */}
                     </Typography>
                   </Box>
                   <IconButton aria-label="go to tx">
