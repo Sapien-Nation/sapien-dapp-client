@@ -10,6 +10,7 @@ const NotificationListHeader = () => {
       alignItems="center"
       display="flex"
       justifyContent="space-between"
+      marginBottom={1}
       paddingX={1}
     >
       <Typography variant="h3">Notifications</Typography>

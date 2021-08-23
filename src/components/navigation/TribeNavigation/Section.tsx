@@ -55,7 +55,7 @@ const Section = ({ children, showAction, title, onClick }: Props) => {
           alignItems="center"
           display="flex"
           justifyContent="space-between"
-          paddingTop={0.5}
+          paddingTop={1}
           px={1.6}
         >
           <Box alignItems="center" display="flex">

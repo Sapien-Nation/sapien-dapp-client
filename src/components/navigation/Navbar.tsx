@@ -190,7 +190,7 @@ const Navbar = () => {
                   horizontal: 'right',
                 }}
                 badgeContent={1}
-                color="secondary"
+                color="error"
               >
                 <NotificationsNone />
               </Badge>
