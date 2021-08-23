@@ -21,6 +21,7 @@ export const purchaseBadge = (body: {
   rawTx: string;
   parentBadgeId: string;
   ownerId: string;
+  totalPrice: number;
 }) =>
   tokensInstance
     .post('/api/v3/badge/purchaseBadge', body)

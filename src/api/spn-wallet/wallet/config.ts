@@ -12,7 +12,7 @@ const getConfig = (isMainnet: boolean) =>
         MAINNET_NETWORK_ID: 5,
         POLY_NETWORK_ID: 80001,
         RPC_PROVIDER: 'https://rpc-mumbai.matic.today',
-        SPN_TOKEN_ADDRESS: '0x8174Ab11EEd70297311f7318a71d9e9f48466Fff', // Mumbai SPN
+        SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
         BADGE_STORE_ADDRESS: '0xab221c69D8EEcF6aC7944efD4589DA206AE1046C',
         BICONOMY_API_KEY: 'tYSKReKvQ.c2fbc08c-3991-49b8-8ed8-cb945b0e55fe',
       };
