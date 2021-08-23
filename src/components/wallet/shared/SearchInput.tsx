@@ -53,7 +53,7 @@ const SearchInput = ({
     setSearchTerm(event.target.value);
   };
 
-  const results = searchTerm
+  const results = !searchTerm
     ? list
     : list.filter(({ name }) =>
         name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
