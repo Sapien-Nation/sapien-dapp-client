@@ -101,8 +101,6 @@ const MyBadges = () => {
           {renderStep()}
         </form>
       </FormProvider>
-      {/* <Empty />
-      <WalletSkeleton /> */}
     </div>
   );
 };

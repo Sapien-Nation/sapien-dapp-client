@@ -141,6 +141,7 @@ const BadgesList = () => {
     <div
       style={{
         padding: '0 2.4rem',
+        height: '100%',
       }}
     >
       {render()}

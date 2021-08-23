@@ -1,17 +1,21 @@
 // assets
 import { EmptyBadges } from 'assets';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // mui
 import { Box, Button, Typography } from '@material-ui/core';
 
 const Empty = () => {
+  const { dispatchWalletState } = useWallet();
   return (
     <Box
       display="flex"
       flexDirection="column"
       height="100%"
       justifyContent="space-between"
-      padding={2.4}
+      paddingBottom={2.4}
     >
       <Box
         alignItems="center"
@@ -39,7 +43,6 @@ const Empty = () => {
           style={{
             marginBottom: 10,
           }}
-          type="submit"
           variant="contained"
         >
           Expore Tribes
@@ -48,8 +51,13 @@ const Empty = () => {
           fullWidth
           aria-label="Go to Store"
           color="default"
-          type="submit"
           variant="contained"
+          onClick={() => {
+            dispatchWalletState({
+              type: 'currentTab',
+              payload: 2,
+            });
+          }}
         >
           Go to Store
         </Button>
