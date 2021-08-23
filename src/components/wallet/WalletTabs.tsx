@@ -53,7 +53,8 @@ const WalletTabs = () => {
   const classes = useStyles();
   const { walletOpen, setWalletOpen, globalWalletState, dispatchWalletState } =
     useWallet();
-  const { currentTab, transition, showTabsMenu } = globalWalletState;
+  const { currentTab, transition, showTabsMenu, showAuthorToBadge } =
+    globalWalletState;
   const handleChange = (_, tab) => {
     // @ts-ignore
     if (walletOpen?.userName) {
