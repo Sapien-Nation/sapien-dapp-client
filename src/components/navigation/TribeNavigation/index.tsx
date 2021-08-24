@@ -155,7 +155,7 @@ const TribeNavigation = () => {
                 seenAt: null,
               },
               {
-                id: '',
+                id: '3',
                 authorId: '4',
                 avatar: 'https://material-ui.com/static/images/avatar/3.jpg',
                 body: 'Let’s go!',

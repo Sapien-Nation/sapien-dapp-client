@@ -14,8 +14,10 @@ import {
   ButtonGroup,
   Typography,
 } from '@material-ui/core';
-
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+
+// TODO remove
+import { getDirectMessageHeader } from 'utils/poc';
 
 interface Props {
   messageID: string;
@@ -53,6 +55,9 @@ const Header = ({ messageID }: Props) => {
       <Query
         api={`/api/v3/message/${messageID}`}
         loader={<PageHeaderSkeleton />}
+        options={{
+          fetcher: () => getDirectMessageHeader(messageID).profile,
+        }}
       >
         {(message: any) => (
           <>
