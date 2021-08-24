@@ -13,10 +13,10 @@ const SquarePage = () => {
   const { me } = useAuth();
 
   useEffect(() => {
-    if (me === null) {
+    if (me === null && query && query.squareID !== 'sapien') {
       push('/register');
     }
-  }, [me, push]);
+  }, [me, push, query]);
 
   if (!query.squareID) return null;
 
