@@ -95,6 +95,7 @@ const SearchInput = ({
             dispatchWalletState={dispatchWalletState}
             id={item.id}
             name={item.name}
+            quantity={item.quantity}
             spn={item.spn}
             walletOpen={walletOpen}
           />

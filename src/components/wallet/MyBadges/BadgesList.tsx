@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { Spn as SpnIcon } from 'assets';
 
 // styles
-import { primary, neutral } from 'styles/colors';
+import { black, primary, neutral } from 'styles/colors';
 
 // components
 import SearchInput from '../shared/SearchInput';
@@ -12,7 +12,7 @@ import Empty from './Empty';
 import { WalletSkeleton } from 'components/common';
 
 // mui
-import { Avatar, Box, Typography } from '@material-ui/core';
+import { Avatar, Badge, Box, Typography, makeStyles } from '@material-ui/core';
 
 // context
 import { useAuth } from 'context/user';
@@ -24,95 +24,114 @@ import { tokensInstance } from 'api';
 // enums
 import { MyBadgesSteps } from '../WalletEnums';
 
+const useStyles = makeStyles(() => ({
+  badge: {
+    backgroundColor: black,
+    border: '3px solid #fff',
+    borderRadius: 22,
+    color: '#fff',
+    height: 22,
+    right: 6,
+    top: 6,
+  },
+}));
+
 export const BadgeItem = ({
   description,
   dispatchWalletState,
   name,
   spn,
+  quantity,
   walletOpen,
-}) => (
-  <Box
-    alignItems="center"
-    bgcolor={neutral[50]}
-    borderRadius={10}
-    display="flex"
-    marginTop={1}
-    padding={1.8}
-    style={{
-      cursor: 'pointer',
-    }}
-    onClick={() => {
-      if (walletOpen && walletOpen.userName) {
-        dispatchWalletState({
-          type: 'update',
-          payload: {
-            myBadgesTransition: 'forward',
-            myBadgesCurrentReceiver: {
-              name: walletOpen.userName,
-              description: walletOpen.displayName,
-            },
-            showTabsMenu: false,
-            showAuthorToBadge: false,
-            myBadgesStep: MyBadgesSteps.Confirmation,
-            myBadgesCurrentBadge: {
-              price: spn,
-              name,
-              description,
-            },
-          },
-        });
-      } else {
-        dispatchWalletState({
-          type: 'update',
-          payload: {
-            myBadgesTransition: 'forward',
-            showTabsMenu: false,
-            myBadgesStep: MyBadgesSteps.Receivers,
-            myBadgesCurrentBadge: {
-              price: spn,
-              name,
-              description,
-            },
-          },
-        });
-      }
-    }}
-  >
-    <Avatar
-      alt=""
-      imgProps={{
-        style: {
-          borderRadius: 40,
-          padding: 3,
-        },
-      }}
-      src="/fixtures/normal/slowpoke.jpg"
+}) => {
+  const classes = useStyles();
+  return (
+    <Box
+      alignItems="center"
+      bgcolor={neutral[50]}
+      borderRadius={10}
+      display="flex"
+      marginTop={1}
+      padding={1.8}
       style={{
-        width: 40,
-        height: 40,
-        border: `2px solid ${primary[800]}`,
+        cursor: 'pointer',
       }}
-    />
-    <Box display="flex" flexDirection="column" marginLeft={1}>
-      <Typography variant="button">{name}</Typography>
-      <Typography
-        style={{
-          color: neutral[500],
-          lineHeight: 1,
-        }}
-        variant="overline"
-      >
-        {description}
-      </Typography>
+      onClick={() => {
+        if (walletOpen && walletOpen.userName) {
+          dispatchWalletState({
+            type: 'update',
+            payload: {
+              myBadgesTransition: 'forward',
+              myBadgesCurrentReceiver: {
+                name: walletOpen.userName,
+                description: walletOpen.displayName,
+              },
+              showTabsMenu: false,
+              showAuthorToBadge: false,
+              myBadgesStep: MyBadgesSteps.Confirmation,
+              myBadgesCurrentBadge: {
+                price: spn,
+                name,
+                description,
+                quantity,
+              },
+            },
+          });
+        } else {
+          dispatchWalletState({
+            type: 'update',
+            payload: {
+              myBadgesTransition: 'forward',
+              showTabsMenu: false,
+              myBadgesStep: MyBadgesSteps.Receivers,
+              myBadgesCurrentBadge: {
+                price: spn,
+                name,
+                description,
+              },
+            },
+          });
+        }
+      }}
+    >
+      <Badge badgeContent={quantity} classes={{ badge: classes.badge }}>
+        <Avatar
+          alt=""
+          imgProps={{
+            style: {
+              borderRadius: 40,
+              padding: 3,
+            },
+          }}
+          src="/fixtures/normal/slowpoke.jpg"
+          style={{
+            width: 40,
+            height: 40,
+            border: `2px solid ${primary[800]}`,
+          }}
+        />
+      </Badge>
+      <Box display="flex" flexDirection="column" marginLeft={1}>
+        <Typography variant="button">{name}</Typography>
+        <Typography
+          style={{
+            color: neutral[500],
+            lineHeight: 1,
+          }}
+          variant="overline"
+        >
+          {description}
+        </Typography>
+      </Box>
+      <Box alignItems="center" display="flex" marginLeft="auto">
+        <SpnIcon />
+        <Typography style={{ marginLeft: 6 }} variant="button">
+          {spn}
+        </Typography>
+      </Box>
     </Box>
-    <Box alignItems="center" display="flex" marginLeft="auto">
-      <SpnIcon />
-      <Typography style={{ marginLeft: 6 }} variant="button">
-        {spn}
-      </Typography>
-    </Box>
-  </Box>
-);
+  );
+};
 
 const fetcher = (url: string) =>
   tokensInstance.get(url).then((res) => res.data);
