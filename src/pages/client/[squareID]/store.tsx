@@ -8,7 +8,7 @@ import { Layout } from 'components/common';
 import { useAuth } from 'context/user';
 
 const StorePage = () => {
-  const { push, query } = useRouter();
+  const { push } = useRouter();
   const { me } = useAuth();
 
   useEffect(() => {
