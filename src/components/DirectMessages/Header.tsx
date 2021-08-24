@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { useCopyToClipboard } from 'react-use';
 import { useSnackbar } from 'notistack';
 
@@ -11,10 +9,9 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   Typography,
 } from '@material-ui/core';
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 
 // TODO remove
 import { getDirectMessageHeader } from 'utils/poc';
@@ -24,31 +21,8 @@ interface Props {
 }
 
 const Header = ({ messageID }: Props) => {
-  const [isFollowing, setIsFollowing] = useState(false);
   const [copyToClipboardState, copyToClipboard] = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
-
-  const copy = () => {
-    copyToClipboard(window.location.href);
-    if (copyToClipboardState.error) {
-      enqueueSnackbar(copyToClipboardState.error.message, {
-        variant: 'error',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right',
-        },
-      });
-    } else {
-      enqueueSnackbar('Copied!', {
-        variant: 'success',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right',
-        },
-        preventDuplicate: true,
-      });
-    }
-  };
 
   return (
     <Box className="card--rounded-white" padding={0.8}>
@@ -85,10 +59,9 @@ const Header = ({ messageID }: Props) => {
                   style={{
                     width: 110,
                     height: 110,
-                    borderRadius: 16,
                     border: '3px solid white',
                   }}
-                  variant="rounded"
+                  variant="circle"
                 >
                   {message.avatar_original ? (
                     <img
@@ -106,7 +79,10 @@ const Header = ({ messageID }: Props) => {
                     display="flex"
                     style={{ gap: '14px' }}
                   >
-                    <Typography variant="h2">{message.name}</Typography>
+                    <Typography variant="h2">{message.displayName}</Typography>
+                    <Typography color="textSecondary" variant="button">
+                     @{message?.username}
+                    </Typography>
                   </Box>
                   <Box
                     alignItems="baseline"
@@ -114,38 +90,33 @@ const Header = ({ messageID }: Props) => {
                     style={{ gap: '14px' }}
                   >
                     <Typography color="textSecondary" variant="button">
-                      {message.membersCount} Members
+                      {message?.followersCount} Followers
+                    </Typography>
+                    <Typography color="textSecondary" variant="button">
+                      {message?.followingCount} Following
+                    </Typography>
+                    <Typography color="textSecondary" variant="button">
+                      {message?.postsCount} Posts
                     </Typography>
                   </Box>
                 </Box>
                 <Box display="flex" style={{ gap: '10px', marginLeft: 'auto' }}>
-                  <ButtonGroup
-                    aria-label="split button"
-                    color="primary"
-                    variant="contained"
-                  >
-                    <Button aria-label="Invite users">Invite</Button>
-                    <Button
-                      aria-label="Copy invitation link"
-                      color="primary"
-                      size="small"
-                      onClick={() => copy()}
-                    >
-                      <FileCopyOutlinedIcon fontSize="small" />
-                    </Button>
-                  </ButtonGroup>
                   <Button
                     aria-label="Follow or Unfollow a message"
                     variant="outlined"
-                    onClick={() => setIsFollowing(!isFollowing)}
+                    onClick={() => {}}
                   >
-                    {isFollowing ? 'Following' : 'Follow'}
+                    {message.isFollowing ? 'Following' : 'Follow'}
+                  </Button>
+                  <Button
+                    aria-label="Follow or Unfollow a message"
+                    variant="outlined"
+                    onClick={() => {}}
+                  >
+                    <NotificationsNoneIcon color="primary" />
                   </Button>
                 </Box>
               </Box>
-              <Typography color="textSecondary" variant="body2">
-                {message.description}
-              </Typography>
             </Box>
           </>
         )}

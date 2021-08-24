@@ -4,7 +4,7 @@ import { useAuth } from 'context/user';
 // components
 import { Page, PostComposerSkeleton } from 'components/common';
 import Header from './Header';
-import { CreateContentForm, ContentItem } from 'components/content';
+import { CreateContentForm, MessageItem } from 'components/content';
 import { Widgets } from 'components/widgets';
 
 // mui
@@ -45,7 +45,7 @@ export const Messages = ({ messageID }: Props) => {
         <Box display="grid" style={{ gap: '16px' }}>
           {data.map((content) => (
             // @ts-ignore
-            <ContentItem key={content.id} content={content} mutate={() => {}} />
+            <MessageItem key={content.id} message={content} mutate={() => {}} />
           ))}
         </Box>
       </Page>
