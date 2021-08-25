@@ -92,15 +92,20 @@ const Transactions = () => {
                   horizontal: 'right',
                 }}
                 badgeContent={
-                  <Avatar
-                    alt="Slowpoke"
-                    src="/fixtures/normal/slowpoke.jpg"
-                    style={{
-                      width: 20,
-                      height: 20,
-                      border: '2px solid #FFF',
-                    }}
-                  />
+                  TransactionType[transactions.type] ===
+                    TransactionType.RECEIVE_SPN ||
+                  TransactionType[transactions.type] ===
+                    TransactionType.SEND_SPN ? (
+                    <Avatar
+                      alt={transactions.user.displayName}
+                      src="/fixtures/normal/slowpoke.jpg"
+                      style={{
+                        width: 20,
+                        height: 20,
+                        border: '2px solid #FFF',
+                      }}
+                    />
+                  ) : null
                 }
                 overlap="circle"
               >
