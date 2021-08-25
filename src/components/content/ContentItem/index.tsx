@@ -7,7 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import Actions from './Actions';
 import Header from './Header';
 import { DeleteContent } from '../Modals';
-// import { ReplyForm } from 'components/reply';
+import { ReplyForm } from 'components/reply';
 
 // context
 import { useAuth } from 'context/user';
@@ -111,7 +111,7 @@ const ContentItem = ({ content, mutate }: Props) => {
       {!content.deletedAt && me && (
         <>
           <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-          <Box>{/* <ReplyForm redirect contentID={content.id} /> */}</Box>
+          <Box><ReplyForm redirect contentID={content.id} /></Box>
         </>
       )}
 

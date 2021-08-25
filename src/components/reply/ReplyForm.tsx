@@ -2,6 +2,7 @@ import { parse } from 'node-html-parser';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import { useController, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
 // api
 import { createReply } from 'api/replies';
@@ -38,9 +39,19 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
     name: 'document',
     defaultValue: initialEditorValue,
   });
+  const [hasContent, setHasContent] = useState(false);
+  
 
   const { asPath, push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+
+  useEffect(() => {
+    if (editorField.value !== initialEditorValue) {
+      setHasContent(true);
+    } else {
+      setHasContent(false);
+    }
+  }, [editorField]);
 
   const onSubmitForm = async ({ document }) => {
     try {
@@ -87,6 +98,7 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
             placeholder: 'Write a comment...',
           }}
           isSubmitting={isSubmitting}
+          hasContent={hasContent}
           {...editorField}
         />
       </Box>
