@@ -8,7 +8,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
-import { LayoutSkeleton, Query } from 'components/common';
+import { LayoutSkeleton, Redirect, Query } from 'components/common';
 
 interface Props {
   children: React.ReactNode;
@@ -35,6 +35,10 @@ const Layout = ({ children }: Props) => {
   const { asPath } = useRouter();
   const isDiscoveryPage = Boolean(asPath.includes('discovery'));
   const classes = useStyles({ isLoggedIn: Boolean(me), isDiscoveryPage });
+
+  if (me === undefined) return <></>;
+
+  if (me === null) return <Redirect to="/register" />;
 
   return (
     <>

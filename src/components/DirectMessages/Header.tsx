@@ -5,12 +5,7 @@ import { useSnackbar } from 'notistack';
 import { Image, PageHeaderSkeleton, Query } from 'components/common';
 
 // mui
-import {
-  Avatar,
-  Box,
-  Button,
-  Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Button, Typography } from '@material-ui/core';
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 
 // TODO remove
@@ -81,7 +76,7 @@ const Header = ({ messageID }: Props) => {
                   >
                     <Typography variant="h2">{message.displayName}</Typography>
                     <Typography color="textSecondary" variant="button">
-                     @{message?.username}
+                      @{message?.username}
                     </Typography>
                   </Box>
                   <Box

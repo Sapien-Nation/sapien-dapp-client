@@ -6,7 +6,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
-import { LayoutSkeleton, Query } from 'components/common';
+import { LayoutSkeleton, Redirect, Query } from 'components/common';
 
 interface Props {
   children: React.ReactNode;
@@ -30,6 +30,10 @@ const useStyles = makeStyles(() => ({
 const Layout = ({ children }: Props) => {
   const { me } = useAuth();
   const classes = useStyles({ isLoggedIn: Boolean(me) });
+
+  if (me === undefined) return <></>;
+
+  if (me === null) return <Redirect to="/register" />;
 
   return (
     <>
