@@ -12,6 +12,7 @@ import {
 
 // components
 import { WalletSkeleton } from 'components/common';
+import TransactionsEmpty from './TransactionsEmpty';
 
 // context
 import { useAuth } from 'context/user';
@@ -50,8 +51,28 @@ const Transactions = () => {
 
   const web3Config = getConfig(false); // replace by env var (mainnet / testnet)
 
-  if (!transactions) return <WalletSkeleton />;
-  // @Javier TODO show Empty if transactions.length === 0 ?
+  if (!transactions)
+    return (
+      <div
+        style={{
+          padding: '2.4rem',
+          height: '100%',
+        }}
+      >
+        <WalletSkeleton />
+      </div>
+    );
+  if (transactions && transactions.length === 0)
+    return (
+      <div
+        style={{
+          padding: '0 2.4rem',
+          height: '100%',
+        }}
+      >
+        <TransactionsEmpty />{' '}
+      </div>
+    );
   if (transactions && transactions.length > 0)
     return (
       <Box padding={2}>
@@ -65,7 +86,7 @@ const Transactions = () => {
               marginBottom={1}
               style={{ gap: 20 }}
             >
-              <Badge // @Javier TODO show correct circle image based on transactions.type (DEPOSIT, SELL, PURCHASE...)
+              <Badge
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -85,13 +106,37 @@ const Transactions = () => {
               >
                 <Avatar
                   style={{
-                    backgroundColor: index === 1 ? red[100] : green[100],
+                    backgroundColor:
+                      TransactionType[transactions.type] ===
+                        TransactionType.SEND_SPN ||
+                      TransactionType[transactions.type] ===
+                        TransactionType.PURCHASE_BADGE ||
+                      TransactionType[transactions.type] ===
+                        TransactionType.WITHDRAW_SPN
+                        ? red[100]
+                        : green[100],
                   }}
                 >
                   <TransactionIcon
                     style={{
-                      fill: index === 1 ? red[700] : green[700],
-                      transform: `${index === 0 && 'rotate(180deg)'}`,
+                      fill:
+                        TransactionType[transactions.type] ===
+                          TransactionType.SEND_SPN ||
+                        TransactionType[transactions.type] ===
+                          TransactionType.PURCHASE_BADGE ||
+                        TransactionType[transactions.type] ===
+                          TransactionType.WITHDRAW_SPN
+                          ? red[700]
+                          : green[700],
+                      transform: `${
+                        (TransactionType[transactions.type] ===
+                          TransactionType.SEND_SPN ||
+                          TransactionType[transactions.type] ===
+                            TransactionType.PURCHASE_BADGE ||
+                          TransactionType[transactions.type] ===
+                            TransactionType.WITHDRAW_SPN) &&
+                        'rotate(180deg)'
+                      }`,
                     }}
                   />
                 </Avatar>
@@ -119,7 +164,7 @@ const Transactions = () => {
               <Box alignItems="center" display="flex" marginLeft="auto">
                 <Box display="flex" flexDirection="column">
                   <Typography style={{ lineHeight: 1.4 }} variant="button">
-                    {transactions.amount} SPN
+                    {transactions.amount / 1e6} SPN
                   </Typography>
                   <Typography
                     style={{
@@ -129,7 +174,7 @@ const Transactions = () => {
                     }}
                     variant="button"
                   >
-                    ${transactions.amount}
+                    ${transactions.amount / 1e6}
                   </Typography>
                 </Box>
                 <IconButton aria-label="go to tx">
