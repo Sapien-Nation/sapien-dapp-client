@@ -7,6 +7,7 @@ import ReactHtmlParser from 'react-html-parser';
 import Actions from './Actions';
 import Header from './Header';
 import { DeleteContent } from '../Modals';
+import { ReplyForm } from 'components/reply';
 
 // context
 import { useAuth } from 'context/user';
@@ -101,6 +102,7 @@ const MessageItem = ({ message, mutate }: Props) => {
       {!message.deletedAt && me && (
         <>
           <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+          <Box><ReplyForm redirect contentID={message.id} /></Box>
         </>
       )}
 
