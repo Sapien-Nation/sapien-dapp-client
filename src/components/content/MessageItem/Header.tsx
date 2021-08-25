@@ -2,42 +2,16 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 // mui
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@material-ui/core';
 import {
   ArrowRight as ArrowIcon,
   Delete as DeleteIcon,
   MoreHoriz as MoreIcon,
-  Public as GlobeIcon
+  Public as GlobeIcon,
 } from '@material-ui/icons';
-
-// styles
-import { primary } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
-
-const useStyles = makeStyles(() => ({
-  chipRoot: {
-    color: primary[800],
-    backgroundColor: primary[100],
-    padding: '0.2rem 0.8rem',
-    borderRadius: '9rem',
-    fontSize: '1.2rem',
-    height: '100%',
-    fontWeight: 'bold',
-  },
-  avatar: {
-    width: '3.2rem',
-    height: '3.2rem',
-  },
-}));
 
 interface Props {
   content: any;
@@ -45,17 +19,10 @@ interface Props {
   onDelete: () => void;
 }
 
-const Header = ({ content, onDelete, variant }: Props) => {
+const Header = ({ content, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const classes = useStyles();
 
-  const {
-    body,
-    createdAt,
-    seenAt,
-    authorId,
-    badgesCount,
-  } = content;
+  const { createdAt, seenAt } = content;
 
   return (
     <>
@@ -98,8 +65,13 @@ const Header = ({ content, onDelete, variant }: Props) => {
         </Box>
 
         <Box alignItems="center" display="flex" justifyContent="flex-end">
-          <Typography color="textSecondary" component="span" variant="h6" style={{ marginRight: 5 }}>
-             Seen {formatTimestampToRelative(seenAt)} •
+          <Typography
+            color="textSecondary"
+            component="span"
+            style={{ marginRight: 5 }}
+            variant="h6"
+          >
+            Seen {formatTimestampToRelative(seenAt)} •
           </Typography>
           <Typography color="textSecondary" component="span" variant="h6">
             {formatTimestampToRelative(createdAt)}

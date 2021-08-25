@@ -1,6 +1,3 @@
-import { useCopyToClipboard } from 'react-use';
-import { useSnackbar } from 'notistack';
-
 // components
 import { Image, PageHeaderSkeleton, Query } from 'components/common';
 
@@ -16,9 +13,6 @@ interface Props {
 }
 
 const Header = ({ messageID }: Props) => {
-  const [copyToClipboardState, copyToClipboard] = useCopyToClipboard();
-  const { enqueueSnackbar } = useSnackbar();
-
   return (
     <Box className="card--rounded-white" padding={0.8}>
       <Query

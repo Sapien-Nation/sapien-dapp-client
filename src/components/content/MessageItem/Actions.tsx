@@ -2,11 +2,7 @@ import { useRouter } from 'next/router';
 
 // mui
 import { Box, Typography, Button, IconButton } from '@material-ui/core';
-import {
-  Campaign as EchoIcon,
-  ChatBubbleOutlineOutlined as CommentsIcon,
-  ShareOutlined as ShareIcon,
-} from '@material-ui/icons';
+import { ChatBubbleOutlineOutlined as CommentsIcon } from '@material-ui/icons';
 
 // assets
 import { BadgeIcon } from 'assets';
