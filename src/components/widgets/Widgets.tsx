@@ -119,6 +119,14 @@ const Wdigets = () => {
           <TopContents />
         </Collapse>
 
+        <Divider
+          style={{
+            background: 'none',
+            border: `1px dashed ${neutral[100]}`,
+            margin: '2rem 0',
+          }}
+        />
+
         <Box
           alignItems="center"
           display="flex"

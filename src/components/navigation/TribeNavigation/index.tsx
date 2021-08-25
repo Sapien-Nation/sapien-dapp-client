@@ -72,120 +72,122 @@ const TribeNavigation = () => {
       }}
       variant="permanent"
     >
-      <Link href={`/client/${selectedTribe?.mainSquareId}`}>
-        <a style={{ display: 'block' }}>
-          <Box
-            alignItems="center"
-            borderRadius={10}
-            className={
-              asPath === `/client/${squareID}` ? classes.listItemSelected : ''
-            }
-            display="flex"
-            paddingX={1.5}
-            paddingY={1}
-          >
-            <Groups fontSize="small" style={{ color: neutral[500] }} />
-            <Typography
-              style={{
-                marginLeft: 15,
-              }}
-              variant="caption"
+      <div>
+        <Link href={`/client/${selectedTribe?.mainSquareId}`}>
+          <a style={{ display: 'block' }}>
+            <Box
+              alignItems="center"
+              borderRadius={10}
+              className={
+                asPath === `/client/${squareID}` ? classes.listItemSelected : ''
+              }
+              display="flex"
+              paddingX={1.5}
+              paddingY={1}
             >
-              {selectedTribe?.name.toUpperCase()}
-            </Typography>
-          </Box>
-        </a>
-      </Link>
-      <Section
-        showAction
-        title="Squares"
-        onClick={() =>
-          showPreview
-            ? setShowPreviewSquare(!showPreviewSquare)
-            : setModal(ModalType.Square)
-        }
-      >
-        <Squares squares={selectedTribe.squares} />
-      </Section>
-
-      <ComingSoon open={showPreviewSquare}>
-        {/* TODO define a better children, Section can't be used */}
-        <div></div>
-      </ComingSoon>
-
-      <Section
-        showAction
-        title="Channels"
-        onClick={() =>
-          showPreview
-            ? setShowPreviewChannel(!showPreviewChannel)
-            : setModal(ModalType.Channel)
-        }
-      >
-        <Channels channels={selectedTribe.channels} />
-      </Section>
-
-      <ComingSoon open={showPreviewChannel}>
-        {/* TODO define a better children, Section can't be used */}
-        <div></div>
-      </ComingSoon>
-
-      <Section showAction={false} title="My Messages" onClick={() => {}}>
-        <Query
-          api="api-placeholder"
-          loader={null}
-          options={{
-            fetcher: () => [
-              {
-                id: '1',
-                authorId: '1',
-                avatar: 'https://material-ui.com/static/images/avatar/1.jpg',
-                body: 'Let’s go!',
-                createdAt: '2021-08-09T04:35:15.149Z',
-                displayName: 'Ollie Hampton',
-                seenAt: '2021-08-09T04:35:15.149Z',
-              },
-              {
-                id: '2',
-                authorId: '2',
-                avatar: 'https://material-ui.com/static/images/avatar/2.jpg',
-                body: 'Let’s go!',
-                createdAt: '2021-08-09T04:35:15.149Z',
-                displayName: 'Michael Perry',
-                seenAt: null,
-              },
-              {
-                id: '3',
-                authorId: '4',
-                avatar: 'https://material-ui.com/static/images/avatar/3.jpg',
-                body: 'Let’s go!',
-                createdAt: '2021-08-09T06:35:15.149Z',
-                displayName: 'Amanda Ben...',
-                seenAt: '2021-08-10T04:32:15.149Z',
-              },
-            ],
-          }}
+              <Groups fontSize="small" style={{ color: neutral[500] }} />
+              <Typography
+                style={{
+                  marginLeft: 15,
+                }}
+                variant="caption"
+              >
+                {selectedTribe?.name.toUpperCase()}
+              </Typography>
+            </Box>
+          </a>
+        </Link>
+        <Section
+          showAction
+          title="Squares"
+          onClick={() =>
+            showPreview
+              ? setShowPreviewSquare(!showPreviewSquare)
+              : setModal(ModalType.Square)
+          }
         >
-          {/* TODO use real type */}
-          {(messages: Array<any>) => <DirectMessages messages={messages} />}
-        </Query>
-      </Section>
+          <Squares squares={selectedTribe.squares} />
+        </Section>
 
-      {modal === ModalType.Channel && (
-        <CreateChannelModal
-          squareID={selectedTribe.mainSquareId}
-          tribeId={selectedTribe.id}
-          onClose={() => setModal(null)}
-        />
-      )}
+        <ComingSoon open={showPreviewSquare}>
+          {/* TODO define a better children, Section can't be used */}
+          <div></div>
+        </ComingSoon>
 
-      {modal === ModalType.Square && (
-        <CreateSquareModal
-          squareID={selectedTribe.mainSquareId}
-          tribeId={selectedTribe.id}
-          onClose={() => setModal(null)}
-        />
-      )}
+        <Section
+          showAction
+          title="Channels"
+          onClick={() =>
+            showPreview
+              ? setShowPreviewChannel(!showPreviewChannel)
+              : setModal(ModalType.Channel)
+          }
+        >
+          <Channels channels={selectedTribe.channels} />
+        </Section>
+
+        <ComingSoon open={showPreviewChannel}>
+          {/* TODO define a better children, Section can't be used */}
+          <div></div>
+        </ComingSoon>
+
+        <Section showAction={false} title="My Messages" onClick={() => {}}>
+          <Query
+            api="api-placeholder"
+            loader={null}
+            options={{
+              fetcher: () => [
+                {
+                  id: '1',
+                  authorId: '1',
+                  avatar: 'https://material-ui.com/static/images/avatar/1.jpg',
+                  body: 'Let’s go!',
+                  createdAt: '2021-08-09T04:35:15.149Z',
+                  displayName: 'Ollie Hampton',
+                  seenAt: '2021-08-09T04:35:15.149Z',
+                },
+                {
+                  id: '2',
+                  authorId: '2',
+                  avatar: 'https://material-ui.com/static/images/avatar/2.jpg',
+                  body: 'Let’s go!',
+                  createdAt: '2021-08-09T04:35:15.149Z',
+                  displayName: 'Michael Perry',
+                  seenAt: null,
+                },
+                {
+                  id: '3',
+                  authorId: '4',
+                  avatar: 'https://material-ui.com/static/images/avatar/3.jpg',
+                  body: 'Let’s go!',
+                  createdAt: '2021-08-09T06:35:15.149Z',
+                  displayName: 'Amanda Ben...',
+                  seenAt: '2021-08-10T04:32:15.149Z',
+                },
+              ],
+            }}
+          >
+            {/* TODO use real type */}
+            {(messages: Array<any>) => <DirectMessages messages={messages} />}
+          </Query>
+        </Section>
+
+        {modal === ModalType.Channel && (
+          <CreateChannelModal
+            squareID={selectedTribe.mainSquareId}
+            tribeId={selectedTribe.id}
+            onClose={() => setModal(null)}
+          />
+        )}
+
+        {modal === ModalType.Square && (
+          <CreateSquareModal
+            squareID={selectedTribe.mainSquareId}
+            tribeId={selectedTribe.id}
+            onClose={() => setModal(null)}
+          />
+        )}
+      </div>
     </Drawer>
   );
 };
