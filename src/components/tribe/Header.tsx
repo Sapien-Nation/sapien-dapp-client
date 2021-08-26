@@ -36,7 +36,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
   const { query } = useRouter();
   const { squareID, tribeSquareID } = query;
   const { squares } = getTribe(String(squareID));
-  const selectedSquare = squares.find(({ id }) => id === tribeSquareID);
+  const selectedSquare = squares?.find(({ id }) => id === tribeSquareID);
   const copy = () => {
     copyToClipboard(window.location.href);
     if (copyToClipboardState.error) {
