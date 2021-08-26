@@ -102,7 +102,9 @@ const MessageItem = ({ message, mutate }: Props) => {
       {!message.deletedAt && me && (
         <>
           <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-          <Box><ReplyForm redirect contentID={message.id} /></Box>
+          <Box>
+            <ReplyForm redirect contentID={message.id} />
+          </Box>
         </>
       )}
 

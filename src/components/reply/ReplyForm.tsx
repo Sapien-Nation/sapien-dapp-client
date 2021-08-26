@@ -40,7 +40,6 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
     defaultValue: initialEditorValue,
   });
   const [hasContent, setHasContent] = useState(false);
-  
 
   const { asPath, push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
@@ -97,8 +96,8 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
           editorProps={{
             placeholder: 'Write a comment...',
           }}
-          isSubmitting={isSubmitting}
           hasContent={hasContent}
+          isSubmitting={isSubmitting}
           {...editorField}
         />
       </Box>
