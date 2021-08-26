@@ -27,6 +27,10 @@ const useStyles = makeStyles(() => {
         color: `#fff !important`,
       },
     },
+    dmAvatar: {
+      width: '4.8rem',
+      height: '4.8rem',
+    },
   });
 });
 
@@ -67,37 +71,46 @@ const DirectMessages = ({ messages }: Props) => {
                     alignItems: 'center',
                   }}
                 >
-                  <Avatar alt={displayName} src={avatar} />
+                  <Avatar
+                    alt={displayName}
+                    className={classes.dmAvatar}
+                    src={avatar}
+                  />
                   <Box
                     display="flex"
                     flex={1}
                     justifyContent="space-between"
+                    minWidth={0}
                     paddingLeft={1.5}
                   >
                     <ListItemText
                       primary={
-                        <Typography variant="button">{displayName}</Typography>
+                        <Typography noWrap variant="button">
+                          {displayName}
+                        </Typography>
                       }
                       secondary={
-                        <>
+                        <Box display="flex" justifyContent="space-between">
                           <Typography
+                            noWrap
                             color="textSecondary"
                             display="block"
                             variant="overline"
                           >
                             {body}
                           </Typography>
-                        </>
+                          <Typography
+                            align="right"
+                            color="textSecondary"
+                            display="block"
+                            style={{ minWidth: '5rem' }}
+                            variant="overline"
+                          >
+                            {formatTimestampToRelative(seenAt)}
+                          </Typography>
+                        </Box>
                       }
                     />
-                    <Typography
-                      color="textSecondary"
-                      display="block"
-                      style={{ marginTop: '1rem' }}
-                      variant="overline"
-                    >
-                      {formatTimestampToRelative(seenAt)}
-                    </Typography>
                   </Box>
                 </a>
               </Link>
