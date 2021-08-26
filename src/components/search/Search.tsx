@@ -23,7 +23,6 @@ import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
 import { neutral } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
-
   inputRoot: {
     borderRadius: 90,
     zIndex: 1300,
@@ -32,7 +31,7 @@ const useStyles = makeStyles(() => ({
       border: 'none',
       borderRadius: 90,
     },
-    position: 'relative'
+    position: 'relative',
   },
   list: {
     height: '100%',
@@ -50,8 +49,8 @@ const useStyles = makeStyles(() => ({
     zIndex: 1100,
   },
   root: {
-    padding: '0 8px'
-  }
+    padding: '0 8px',
+  },
 }));
 
 const Search = () => {
@@ -60,18 +59,17 @@ const Search = () => {
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.between(960, 1281));
 
-
   return (
     <Box marginRight="auto" minWidth={isMediumScreen ? 700 : 734}>
       <Autocomplete
+        disablePortal
         classes={{
           inputRoot: classes.inputRoot,
           listbox: classes.listBox,
           paper: classes.paper,
           popper: classes.popper,
-          root: classes.root
+          root: classes.root,
         }}
-        disablePortal
         getOptionLabel={(option) => option.name}
         inputValue={inputValue}
         open={inputValue !== '' && inputValue.length > 0}
@@ -92,7 +90,7 @@ const Search = () => {
                     style={{
                       color: neutral[500],
                       fontSize: 16,
-                      marginRight: "2rem"
+                      marginRight: '2rem',
                     }}
                   >
                     13 results

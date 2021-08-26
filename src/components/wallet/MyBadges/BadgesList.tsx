@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import { useSnackbar } from 'notistack';
 
 // assets
 import { Spn as SpnIcon } from 'assets';
@@ -138,9 +139,19 @@ const fetcher = (url: string) =>
 
 const BadgesList = () => {
   const { me } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
   const { dispatchWalletState, walletOpen } = useWallet();
   const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
     fetcher,
+    onError: () => {
+      enqueueSnackbar('Something went wrong.', {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
+    },
   });
 
   const render = () => {
