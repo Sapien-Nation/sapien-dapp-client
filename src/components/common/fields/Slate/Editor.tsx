@@ -121,7 +121,6 @@ const Editor = ({
           />
         </IconButton>
         <Menu
-          keepMounted
           anchorEl={anchorEl}
           id="emoji-selector"
           open={Boolean(anchorEl)}
