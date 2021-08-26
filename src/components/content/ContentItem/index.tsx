@@ -111,7 +111,9 @@ const ContentItem = ({ content, mutate }: Props) => {
       {!content.deletedAt && me && (
         <>
           <Box borderColor="grey.100" borderTop={1} marginX={-3} />
-          <Box><ReplyForm redirect contentID={content.id} /></Box>
+          <Box>
+            <ReplyForm redirect contentID={content.id} />
+          </Box>
         </>
       )}
 
