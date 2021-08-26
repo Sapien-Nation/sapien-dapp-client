@@ -73,12 +73,13 @@ const Editor = ({
     },
     [onChange, setSelection, editor]
   );
+  const multipleLines = editor.children.length > 1;
 
   return (
     <Box
       borderRadius={16}
       display="flex"
-      flexDirection={hasContent ? 'column' : 'row'}
+      flexDirection={hasContent && multipleLines ? 'column' : 'row'}
       padding={0.5}
       style={{ backgroundColor: neutral[50] }}
       width="100%"
