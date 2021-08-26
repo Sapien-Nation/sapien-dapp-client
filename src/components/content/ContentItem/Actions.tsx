@@ -39,7 +39,7 @@ const Actions = ({ content, user }: Props) => {
         startIcon={<CommentsIcon color="action" fontSize="small" />}
         onClick={() => {
           if (user) {
-            //
+            push(`${asPath}/content/${content.id}`);
           } else {
             push(
               `/register?from=${asPath}&contentID=${content.id}&action=comment`
