@@ -2,9 +2,13 @@ import { useState } from 'react';
 
 import { useCopyToClipboard } from 'react-use';
 import { useSnackbar } from 'notistack';
+import { useRouter } from 'next/router';
 
 // components
 import { Image, PageHeaderSkeleton, Query } from 'components/common';
+
+// hooks
+import { getTribe } from 'hooks';
 
 // mui
 import {
@@ -29,7 +33,10 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [copyToClipboardState, copyToClipboard] = useCopyToClipboard();
   const { enqueueSnackbar } = useSnackbar();
-
+  const { query } = useRouter();
+  const { squareID, tribeSquareID } = query;
+  const { squares } = getTribe(String(squareID));
+  const selectedSquare = squares.find(({ id }) => id === tribeSquareID);
   const copy = () => {
     copyToClipboard(window.location.href);
     if (copyToClipboardState.error) {
@@ -104,7 +111,9 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   >
                     <Typography variant="h2">{tribe.name}</Typography>
                     <Typography color="textSecondary" variant="button">
-                      {isMainSquare ? `@${tribe.identifier}` : '#SquareName'}
+                      {isMainSquare
+                        ? `@${tribe.identifier}`
+                        : `#${selectedSquare.name}`}
                     </Typography>
                   </Box>
                   <Box
