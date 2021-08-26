@@ -26,7 +26,7 @@ const Squares = ({ squares }: Props) => {
   const classes = useStyles();
 
   return (
-    <List aria-label="Squares list" role="list">
+    <List aria-label="Squares list" role="list" style={{ padding: 0 }}>
       {squares.map((square) => (
         <ListItem
           key={square.id}
