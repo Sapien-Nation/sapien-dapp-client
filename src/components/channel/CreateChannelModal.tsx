@@ -108,6 +108,7 @@ const CreateChannelModal = ({ squareID, tribeId, onClose }: Props) => {
         delete values.cover;
       }
 
+      delete values.private;
       const response = await createChannel({
         ...values,
         tribeId,
