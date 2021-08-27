@@ -9,7 +9,7 @@ import axios from 'api';
 import { useMe } from 'hooks';
 
 // components
-import { FeedSkeleton, Page, PostComposerSkeleton } from 'components/common';
+import { FeedSkeleton, Page } from 'components/common';
 import Header from 'components/channel/Header';
 import {
   CreateContentForm,
