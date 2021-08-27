@@ -1,5 +1,5 @@
 // mui
-import { Box, CssBaseline, NoSsr, makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 
 // context
 import { useAuth } from 'context/user';
@@ -36,22 +36,17 @@ const Layout = ({ children }: Props) => {
   if (me === null) return <Redirect to="/register" />;
 
   return (
-    <>
-      <CssBaseline />
-      <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
-        {() => (
-          <div className={classes.root}>
-            <NoSsr>
-              <Sidebar />
-            </NoSsr>
-            <main>
-              <Navbar />
-              <Box className={classes.container}>{children}</Box>
-            </main>
-          </div>
-        )}
-      </Query>
-    </>
+    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
+      {() => (
+        <div className={classes.root}>
+          <Sidebar />
+          <main>
+            <Navbar />
+            <Box className={classes.container}>{children}</Box>
+          </main>
+        </div>
+      )}
+    </Query>
   );
 };
 

@@ -1,16 +1,40 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useLocalStorage } from 'react-use';
 
 // components
-import { ReplyItem } from 'components/reply';
-import ContentDetail from 'components/content/ContentDetail';
-import {
-  FeedSkeleton,
-  LayoutWithWidgets as Layout,
-  Page,
-  Query,
-} from 'components/common';
-import { Widgets } from 'components/widgets';
+const DynamicLayoutSkeleton = dynamic<any>(
+  () => import('components/common').then((mod) => mod.LayoutSkeleton) as any,
+  { ssr: false }
+);
+const DynamicReplyItem = dynamic<any>(
+  () => import('components/reply').then((mod) => mod.ReplyItem) as any,
+  { ssr: false }
+);
+const DynamicContentDetail = dynamic<any>(
+  () => import('components/content/ContentDetail') as any,
+  { ssr: false }
+);
+const DynamicFeedSkeleton = dynamic<any>(
+  () => import('components/common').then((mod) => mod.FeedSkeleton) as any,
+  { ssr: false }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.LayoutWithWidgets) as any,
+  { ssr: false, loading: () => <DynamicLayoutSkeleton /> }
+);
+const DynamicPage = dynamic<any>(
+  () => import('components/common').then((mod) => mod.Page) as any,
+  { ssr: false }
+);
+const DynamicQuery = dynamic<any>(
+  () => import('components/common').then((mod) => mod.Query) as any,
+  { ssr: false }
+);
+const DynamicWidgets = dynamic<any>(
+  () => import('components/widgets').then((mod) => mod.Widgets) as any,
+  { ssr: false }
+);
 
 // mui
 import { Box, Button } from '@material-ui/core';
@@ -38,18 +62,22 @@ const Content = ({ contentID }: Props) => {
 
   return (
     <>
-      <Page>
+      <DynamicPage>
         <>
-          <ContentDetail apiUrl={apiUrl} contentID={contentID} />
-          <Query api={apiUrl} loader={<FeedSkeleton />}>
+          <DynamicContentDetail apiUrl={apiUrl} contentID={contentID} />
+          <DynamicQuery api={apiUrl} loader={<DynamicFeedSkeleton />}>
             {(replies: Array<ContentType>) => (
               <Box display="grid" style={{ gap: '16px' }}>
                 {replies.map((reply) => (
-                  <ReplyItem key={reply.id} apiUrl={apiUrl} reply={reply} />
+                  <DynamicReplyItem
+                    key={reply.id}
+                    apiUrl={apiUrl}
+                    reply={reply}
+                  />
                 ))}
               </Box>
             )}
-          </Query>
+          </DynamicQuery>
           {view === RepliesViewTypes.Head && (
             <Button
               onClick={() => {
@@ -60,8 +88,8 @@ const Content = ({ contentID }: Props) => {
             </Button>
           )}
         </>
-      </Page>
-      <Widgets />
+      </DynamicPage>
+      <DynamicWidgets />
     </>
   );
 };
@@ -74,6 +102,6 @@ const ContentPage = () => {
   return <Content contentID={String(query.contentID)} />;
 };
 
-ContentPage.Layout = Layout;
+ContentPage.Layout = DynamicLayout;
 
 export default ContentPage;

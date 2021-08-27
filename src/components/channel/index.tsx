@@ -5,8 +5,8 @@ import InfiniteScrollComponent from 'react-infinite-scroll-component';
 // api
 import axios from 'api';
 
-// context
-import { useAuth } from 'context/user';
+// hooks
+import { useMe } from 'hooks';
 
 // components
 import { FeedSkeleton, Page, PostComposerSkeleton } from 'components/common';
@@ -42,7 +42,7 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 
 export const Channel = ({ channelID }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
-  const { me, isLoggingIn } = useAuth();
+  const me = useMe();
 
   const {
     data: swrData,
@@ -67,19 +67,14 @@ export const Channel = ({ channelID }: Props) => {
       <Page
         header={<Header channelID={channelID} />}
         subHeader={
-          <>
-            {me && (
-              <Box className="card--rounded-white" padding={3}>
-                <CreateContentForm
-                  setIsCreating={setIsCreating}
-                  squareID={channelID}
-                  user={me}
-                  onSave={() => mutate()}
-                />
-              </Box>
-            )}
-            {!me && isLoggingIn && <PostComposerSkeleton />}
-          </>
+          <Box className="card--rounded-white" padding={3}>
+            <CreateContentForm
+              setIsCreating={setIsCreating}
+              squareID={channelID}
+              user={me}
+              onSave={() => mutate()}
+            />
+          </Box>
         }
       >
         <InfiniteScrollComponent
@@ -99,7 +94,7 @@ export const Channel = ({ channelID }: Props) => {
           {isLoadingInitialData && <FeedSkeleton />}
         </InfiniteScrollComponent>
       </Page>
-      {me && <Widgets />}
+      <Widgets />
     </>
   );
 };

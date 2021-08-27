@@ -1,8 +1,19 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 // components
-import Layout from './AuthLayout';
-import { LoginForm } from 'components/authentication';
+const DynamicLoginForm = dynamic<any>(
+  () => import('components/authentication').then((mod) => mod.LoginForm) as any,
+  {
+    ssr: false,
+  }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.AuthLayout) as any,
+  {
+    ssr: false,
+  }
+);
 
 // mui
 import { Box, Typography } from '@material-ui/core';
@@ -12,7 +23,7 @@ const LoginPage = () => {
     <>
       <Typography variant="h1">Log in</Typography>
       <Box marginTop={6.5}>
-        <LoginForm />
+        <DynamicLoginForm />
       </Box>
       <Box marginTop={2} textAlign="center">
         <Typography variant="overline">Don’t have an account?</Typography>{' '}
@@ -26,6 +37,6 @@ const LoginPage = () => {
   );
 };
 
-LoginPage.Layout = Layout;
+LoginPage.Layout = DynamicLayout;
 
 export default LoginPage;

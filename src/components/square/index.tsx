@@ -5,11 +5,8 @@ import InfiniteScrollComponent from 'react-infinite-scroll-component';
 // api
 import axios from 'api';
 
-// context
-import { useAuth } from 'context/user';
-
 // components
-import { FeedSkeleton, Page, PostComposerSkeleton } from 'components/common';
+import { FeedSkeleton, Page } from 'components/common';
 import { Header } from 'components/tribe';
 import {
   CreateContentForm,
@@ -20,7 +17,7 @@ import {
 import { Widgets } from 'components/widgets';
 
 // hooks
-import { getTribe } from 'hooks';
+import { getTribe, useMe } from 'hooks';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -46,7 +43,7 @@ const getKey = (pageIndex, previousPageData, apiUrl) => {
 
 export const Square = ({ squareID, isMainSquare = true }: Props) => {
   const [isCreating, setIsCreating] = useState(false);
-  const { me, isLoggingIn } = useAuth();
+  const me = useMe();
 
   // Sapien its an special "tribe" that don't have a mainSquareID
   // but it renders all exactly as a normal Square, thats why we check
@@ -90,19 +87,14 @@ export const Square = ({ squareID, isMainSquare = true }: Props) => {
           />
         }
         subHeader={
-          <>
-            {me && (
-              <Box className="card--rounded-white" padding={3}>
-                <CreateContentForm
-                  setIsCreating={setIsCreating}
-                  squareID={isSapienTribe ? sapienSquareID : squareID}
-                  user={me}
-                  onSave={() => mutate()}
-                />
-              </Box>
-            )}
-            {!me && isLoggingIn && <PostComposerSkeleton />}
-          </>
+          <Box className="card--rounded-white" padding={3}>
+            <CreateContentForm
+              setIsCreating={setIsCreating}
+              squareID={isSapienTribe ? sapienSquareID : squareID}
+              user={me}
+              onSave={() => mutate()}
+            />
+          </Box>
         }
       >
         <InfiniteScrollComponent
@@ -122,7 +114,7 @@ export const Square = ({ squareID, isMainSquare = true }: Props) => {
           {isLoadingInitialData && <FeedSkeleton />}
         </InfiniteScrollComponent>
       </Page>
-      {me && <Widgets />}
+      <Widgets />
     </>
   );
 };

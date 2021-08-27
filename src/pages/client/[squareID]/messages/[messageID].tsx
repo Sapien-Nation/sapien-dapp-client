@@ -1,17 +1,28 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
 // components
-import { LayoutWithWidgets } from 'components/common';
-import { Messages } from 'components/DirectMessages';
+const DynamicLayoutSkeleton = dynamic<any>(
+  () => import('components/common').then((mod) => mod.LayoutSkeleton) as any,
+  { ssr: false }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.LayoutWithWidgets) as any,
+  { ssr: false, loading: () => <DynamicLayoutSkeleton /> }
+);
+const DynamicDirectMessages = dynamic<any>(
+  () => import('components/DirectMessages').then((mod) => mod.Messages) as any,
+  { ssr: false }
+);
 
 const MessagePage = () => {
   const { query } = useRouter();
 
   if (!query.messageID) return null;
 
-  return <Messages messageID={String(query.messageID)} />;
+  return <DynamicDirectMessages messageID={String(query.messageID)} />;
 };
 
-MessagePage.Layout = LayoutWithWidgets;
+MessagePage.Layout = DynamicLayout;
 
 export default MessagePage;

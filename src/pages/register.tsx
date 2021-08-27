@@ -1,8 +1,20 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 // components
-import Layout from './AuthLayout';
-import { RegisterForm } from 'components/authentication';
+const DynamicRegisterForm = dynamic<any>(
+  () =>
+    import('components/authentication').then((mod) => mod.RegisterForm) as any,
+  {
+    ssr: false,
+  }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.AuthLayout) as any,
+  {
+    ssr: false,
+  }
+);
 
 // mui
 import { Box, Typography } from '@material-ui/core';
@@ -12,7 +24,7 @@ const RegisterPage = () => {
     <>
       <Typography variant="h1">Sign Up</Typography>
       <Box marginTop={6.5}>
-        <RegisterForm />
+        <DynamicRegisterForm />
       </Box>
       <Box marginTop={2} textAlign="center">
         <Typography variant="overline">Already have an account?</Typography>{' '}
@@ -26,6 +38,6 @@ const RegisterPage = () => {
   );
 };
 
-RegisterPage.Layout = Layout;
+RegisterPage.Layout = DynamicLayout;
 
 export default RegisterPage;

@@ -1,6 +1,14 @@
+import dynamic from 'next/dynamic';
+
 // components
-import { Layout } from 'components/common';
-import { TribeCard } from 'components/discovery';
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.Layout) as any,
+  { ssr: false }
+);
+const DynamicTribeCard = dynamic<any>(
+  () => import('components/discovery').then((mod) => mod.TribeCard) as any,
+  { ssr: false }
+);
 
 // mui
 import { Box } from '@material-ui/core';
@@ -153,12 +161,12 @@ const DiscoveryPage = () => (
       }}
     >
       {tribes.map((tribe: any) => (
-        <TribeCard key={tribe.id} tribe={tribe} />
+        <DynamicTribeCard key={tribe.id} tribe={tribe} />
       ))}
     </Box>
   </Box>
 );
 
-DiscoveryPage.Layout = Layout;
+DiscoveryPage.Layout = DynamicLayout;
 
 export default DiscoveryPage;

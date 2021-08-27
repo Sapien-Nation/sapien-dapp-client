@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { SWRConfig } from 'swr';
 import { SnackbarProvider, useSnackbar } from 'notistack';
@@ -11,7 +12,13 @@ import type { AppProps } from 'next/app';
 import axios from 'api';
 
 // mui
-import { IconButton, makeStyles, ThemeProvider, Zoom } from '@material-ui/core';
+import {
+  CssBaseline,
+  IconButton,
+  makeStyles,
+  ThemeProvider,
+  Zoom,
+} from '@material-ui/core';
 import {
   CheckCircleOutlineOutlined as SuccessIcon,
   Close as CloseIcon,
@@ -20,7 +27,10 @@ import {
 } from '@material-ui/icons';
 
 // components
-import { ErrorView } from 'components/common';
+const DynamicErrorView = dynamic<any>(
+  () => import('components/common').then((mod) => mod.ErrorView) as any,
+  { ssr: false }
+);
 
 // Providers
 import { AuthenticationProvider } from 'context/user';
@@ -81,8 +91,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           name="viewport"
         />
       </Head>
-      <ErrorBoundary FallbackComponent={ErrorView}>
+      <ErrorBoundary FallbackComponent={DynamicErrorView}>
         <ThemeProvider theme={theme}>
+          <CssBaseline />
           <SnackbarProvider
             TransitionComponent={Zoom}
             action={(key) => <SnackbarCloseButton snackKey={key} />}

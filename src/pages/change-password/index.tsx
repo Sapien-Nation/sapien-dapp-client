@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -6,8 +7,19 @@ import { useState } from 'react';
 import { Box, Button, Typography } from '@material-ui/core';
 
 // components
-import Layout from '../AuthLayout';
-import { ForgotForm } from 'components/authentication';
+const DynamicForgotForm = dynamic<any>(
+  () =>
+    import('components/authentication').then((mod) => mod.ForgotForm) as any,
+  {
+    ssr: false,
+  }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.AuthLayout) as any,
+  {
+    ssr: false,
+  }
+);
 
 enum View {
   Form,
@@ -25,7 +37,7 @@ const ForgotPage = () => {
           <>
             <Typography variant="h1">Forgot Password?</Typography>
             <Box marginTop={6.5}>
-              <ForgotForm changeView={() => setView(View.Success)} />
+              <DynamicForgotForm changeView={() => setView(View.Success)} />
             </Box>
             <Box marginTop={2} textAlign="center">
               <Typography variant="overline">
@@ -82,6 +94,6 @@ const ForgotPage = () => {
   return <>{renderView()}</>;
 };
 
-ForgotPage.Layout = Layout;
+ForgotPage.Layout = DynamicLayout;
 
 export default ForgotPage;

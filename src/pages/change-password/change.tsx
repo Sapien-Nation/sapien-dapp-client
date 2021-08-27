@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -5,8 +6,18 @@ import { useState } from 'react';
 import { Box, Button, Typography } from '@material-ui/core';
 
 // components
-import ChangePassword from 'components/authentication/ChangePassword';
-import Layout from '../AuthLayout';
+const DynamicChangePassword = dynamic<any>(
+  () => import('components/authentication/ChangePassword') as any,
+  {
+    ssr: false,
+  }
+);
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.AuthLayout) as any,
+  {
+    ssr: false,
+  }
+);
 
 enum View {
   Form,
@@ -21,7 +32,7 @@ const ChangePasswordPage = () => {
     switch (view) {
       case View.Form:
         return (
-          <ChangePassword
+          <DynamicChangePassword
             changeView={() => setView(View.Success)}
             token={(router?.query?.token as string) || ''}
           />
@@ -50,6 +61,6 @@ const ChangePasswordPage = () => {
   );
 };
 
-ChangePasswordPage.Layout = Layout;
+ChangePasswordPage.Layout = DynamicLayout;
 
 export default ChangePasswordPage;

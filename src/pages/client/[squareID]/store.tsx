@@ -1,8 +1,12 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 // components
-import { Layout } from 'components/common';
+const DynamicLayout = dynamic<any>(
+  () => import('components/common').then((mod) => mod.Layout) as any,
+  { ssr: false }
+);
 
 // context
 import { useAuth } from 'context/user';
@@ -20,6 +24,6 @@ const StorePage = () => {
   return <h1>Badges Store Page</h1>;
 };
 
-StorePage.Layout = Layout;
+StorePage.Layout = DynamicLayout;
 
 export default StorePage;

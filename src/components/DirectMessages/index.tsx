@@ -1,8 +1,8 @@
-// context
-import { useAuth } from 'context/user';
+// hooks
+import { useMe } from 'hooks';
 
 // components
-import { Page, PostComposerSkeleton } from 'components/common';
+import { Page } from 'components/common';
 import Header from './Header';
 import { CreateContentForm, MessageItem } from 'components/content';
 import { Widgets } from 'components/widgets';
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const Messages = ({ messageID }: Props) => {
-  const { me, isLoggingIn } = useAuth();
+  const me = useMe();
 
   const data = getDirectMessageHeader(messageID).messages;
 
@@ -27,19 +27,14 @@ export const Messages = ({ messageID }: Props) => {
       <Page
         header={<Header messageID={messageID} />}
         subHeader={
-          <>
-            {me && (
-              <Box className="card--rounded-white" padding={3}>
-                <CreateContentForm
-                  setIsCreating={() => {}}
-                  squareID={messageID}
-                  user={me}
-                  onSave={() => console.log('Hello')}
-                />
-              </Box>
-            )}
-            {!me && isLoggingIn && <PostComposerSkeleton />}
-          </>
+          <Box className="card--rounded-white" padding={3}>
+            <CreateContentForm
+              setIsCreating={() => {}}
+              squareID={messageID}
+              user={me}
+              onSave={() => console.log('Hello')}
+            />
+          </Box>
         }
       >
         <Box display="grid" style={{ gap: '16px' }}>
@@ -49,7 +44,7 @@ export const Messages = ({ messageID }: Props) => {
           ))}
         </Box>
       </Page>
-      {me && <Widgets />}
+      <Widgets />
     </>
   );
 };
