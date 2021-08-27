@@ -182,7 +182,7 @@ const Signup = () => {
               Name{' '}
               <Tooltip
                 arrow
-                color="primary"
+                color="action"
                 placement="right"
                 title={
                   <Box>
@@ -211,7 +211,7 @@ const Signup = () => {
             Password{' '}
             <Tooltip
               arrow
-              color="primary"
+              color="action"
               placement="right"
               title={
                 <Box>
@@ -220,11 +220,7 @@ const Signup = () => {
                 </Box>
               }
             >
-              <InfoIcon
-                color="action"
-                fontSize="small"
-                style={{ marginLeft: '0.5rem' }}
-              />
+              <InfoIcon fontSize="small" style={{ marginLeft: '0.5rem' }} />
             </Tooltip>
           </Box>
         }
