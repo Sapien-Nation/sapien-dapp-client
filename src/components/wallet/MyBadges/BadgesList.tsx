@@ -1,6 +1,3 @@
-import useSWR from 'swr';
-import { useSnackbar } from 'notistack';
-
 // assets
 import { Spn as SpnIcon } from 'assets';
 
@@ -9,8 +6,9 @@ import { black, primary, neutral } from 'styles/colors';
 
 // components
 import SearchInput from '../shared/SearchInput';
+import TokenFetcher from '../shared/TokenFetcher';
 import Empty from './Empty';
-import { WalletSkeleton } from 'components/common';
+import { Query, WalletSkeleton } from 'components/common';
 
 // mui
 import { Avatar, Badge, Box, Typography, makeStyles } from '@material-ui/core';
@@ -18,9 +16,6 @@ import { Avatar, Badge, Box, Typography, makeStyles } from '@material-ui/core';
 // context
 import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
-
-// api
-import { tokensInstance } from 'api';
 
 // enums
 import { MyBadgesSteps } from '../WalletEnums';
@@ -134,38 +129,9 @@ export const BadgeItem = ({
   );
 };
 
-const fetcher = (url: string) =>
-  tokensInstance.get(url).then((res) => res.data);
-
 const BadgesList = () => {
   const { me } = useAuth();
-  const { enqueueSnackbar } = useSnackbar();
   const { dispatchWalletState, walletOpen } = useWallet();
-  const { data: list } = useSWR(`/api/v3/user/${me.id}/listBadges`, {
-    fetcher,
-    onError: () => {
-      enqueueSnackbar('Something went wrong.', {
-        variant: 'error',
-        anchorOrigin: {
-          vertical: 'bottom',
-          horizontal: 'right',
-        },
-      });
-    },
-  });
-
-  const render = () => {
-    if (!list) return <WalletSkeleton />;
-    if (list && list.length === 0) return <Empty />;
-    return (
-      <SearchInput
-        ItemComponent={BadgeItem}
-        dispatchWalletState={dispatchWalletState}
-        list={list}
-        walletOpen={walletOpen}
-      />
-    );
-  };
 
   return (
     <div
@@ -174,7 +140,23 @@ const BadgesList = () => {
         height: '100%',
       }}
     >
-      {render()}
+      <Query
+        api={`/api/v3/user/${me.id}/listBadges`}
+        empty={<Empty />}
+        loader={<WalletSkeleton />}
+        options={{
+          fetcher: TokenFetcher,
+        }}
+      >
+        {(list) => (
+          <SearchInput
+            ItemComponent={BadgeItem}
+            dispatchWalletState={dispatchWalletState}
+            list={list}
+            walletOpen={walletOpen}
+          />
+        )}
+      </Query>
     </div>
   );
 };

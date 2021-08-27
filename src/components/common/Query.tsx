@@ -11,6 +11,7 @@ interface Props {
   api: Key;
   // eslint-disable-next-line @typescript-eslint/ban-types
   children?: Function | null;
+  empty?: React.ReactNode;
   loader?: React.ReactNode;
   showValidating?: boolean;
   options?: SWRConfiguration;
@@ -23,6 +24,7 @@ export type Error = {
 const Query = ({
   api,
   children,
+  empty,
   loader = <Skeleton />,
   showValidating = false,
   options,
@@ -32,6 +34,9 @@ const Query = ({
   if (api !== null) {
     if ((!data && !error) || (showValidating && isValidating)) {
       return loader;
+    }
+    if (!error && data.length === 0 && Boolean(empty)) {
+      return empty;
     }
   }
   if (error) {
