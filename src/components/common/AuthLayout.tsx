@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 // mui
 import { Box, CssBaseline, useMediaQuery, useTheme } from '@material-ui/core';
@@ -38,20 +39,23 @@ const AuthLayout = ({ children }: Props) => {
         padding={matches ? 2 : 0}
       >
         {matches === false && (
-          <Box
-            style={{
-              backgroundImage: 'url(/static/auth.jpg)',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-            }}
-          />
+          <Box position="relative">
+            <Image
+              alt="Sapien Network"
+              layout="fill"
+              objectFit="cover"
+              quality={100}
+              src="/static/auth.jpg"
+            />
+          </Box>
         )}
         <Box
           alignItems="center"
           display="flex"
           flexWrap="wrap"
-          marginBottom={4}
-          marginTop={8}
+          overflow="auto"
+          paddingBottom={4}
+          paddingTop={8}
           paddingX={8.5}
         >
           <div style={{ width: '100%' }}>
