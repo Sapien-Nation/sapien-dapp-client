@@ -3,6 +3,9 @@ import { createContext, useContext, useState } from 'react';
 import { useLocalStorage } from 'react-use';
 import useSWR, { mutate } from 'swr';
 
+// context
+import { useWallet } from 'context/wallet';
+
 // types
 import { User } from 'tools/types/user';
 
@@ -38,6 +41,7 @@ const fetcher = async () => {
 
 const AuthenticationProvider = ({ children }: Props) => {
   const { push } = useRouter();
+  const { setWallet } = useWallet();
   const { data } = useSWR<User>('/api/v3/user/me', { fetcher });
   const [newUser, setNewUser] = useState<boolean>(false);
   const [, setTokens, removeTokens] = useLocalStorage<null | {
@@ -50,6 +54,7 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const clearSession = () => {
     removeTokens();
+    setWallet(null);
     mutate('/api/v3/user/me', null, false);
     mutate('/api/v3/profile/tribes', []);
     push('/login');

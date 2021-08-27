@@ -136,13 +136,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 revalidateOnFocus: false,
               }}
             >
-              <AuthenticationProvider>
-                <WalletProvider>
+              <WalletProvider>
+                <AuthenticationProvider>
                   <Layout>
                     <Component {...pageProps} />
                   </Layout>
-                </WalletProvider>
-              </AuthenticationProvider>
+                </AuthenticationProvider>
+              </WalletProvider>
             </SWRConfig>
           </SnackbarProvider>
         </ThemeProvider>

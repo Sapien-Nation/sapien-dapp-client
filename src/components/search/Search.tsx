@@ -19,18 +19,37 @@ import { useTheme } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
 
+// styles
+import { neutral } from 'styles/colors';
+
 const useStyles = makeStyles(() => ({
-  list: {
-    height: '100%',
-    padding: '0 !important',
-  },
   inputRoot: {
     borderRadius: 90,
+    zIndex: 1300,
     padding: '0 !important',
     '&.Mui-focused': {
       border: 'none',
       borderRadius: 90,
     },
+    position: 'relative',
+  },
+  list: {
+    height: '100%',
+    padding: '0 !important',
+  },
+  listBox: {
+    padding: '70px 5px 5px',
+  },
+  paper: {
+    borderRadius: '16px 16px 5px 5px',
+    width: 734,
+  },
+  popper: {
+    top: 10,
+    zIndex: 1100,
+  },
+  root: {
+    padding: '0 8px',
   },
 }));
 
@@ -39,11 +58,17 @@ const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.between(960, 1281));
+
   return (
     <Box marginRight="auto" minWidth={isMediumScreen ? 700 : 734}>
       <Autocomplete
+        disablePortal
         classes={{
           inputRoot: classes.inputRoot,
+          listbox: classes.listBox,
+          paper: classes.paper,
+          popper: classes.popper,
+          root: classes.root,
         }}
         getOptionLabel={(option) => option.name}
         inputValue={inputValue}
@@ -61,7 +86,15 @@ const Search = () => {
               ),
               endAdornment: inputValue.length > 0 && (
                 <Box alignItems="center" display="flex">
-                  <Typography>13 results</Typography>
+                  <Typography
+                    style={{
+                      color: neutral[500],
+                      fontSize: 16,
+                      marginRight: '2rem',
+                    }}
+                  >
+                    13 results
+                  </Typography>
                   <IconButton
                     aria-label="Clear search text"
                     onClick={() => setInputValue('')}

@@ -8,7 +8,7 @@ import type { ContentAuthor } from 'tools/types/content';
 
 export interface Wallet {
   wallet: WalletType | null;
-  setWallet: (wallet: WalletType) => void;
+  setWallet: (wallet: WalletType | null) => void;
   walletOpen: ContentAuthor | boolean;
   setWalletOpen: (status: ContentAuthor | boolean) => void;
   dispatchWalletState: any;
