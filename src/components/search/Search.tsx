@@ -37,6 +37,9 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     padding: '0 !important',
   },
+  noOptions: {
+    padding: '70px 15px 15px',
+  },
   listBox: {
     padding: '70px 5px 5px',
   },
@@ -58,6 +61,7 @@ const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.between(960, 1281));
+  const hasContent = inputValue !== '' && inputValue.length > 0;
 
   return (
     <Box marginRight="auto" minWidth={isMediumScreen ? 700 : 734}>
@@ -66,13 +70,14 @@ const Search = () => {
         classes={{
           inputRoot: classes.inputRoot,
           listbox: classes.listBox,
+          noOptions: classes.noOptions,
           paper: classes.paper,
           popper: classes.popper,
           root: classes.root,
         }}
         getOptionLabel={(option) => option.name}
         inputValue={inputValue}
-        open={inputValue !== '' && inputValue.length > 0}
+        open={hasContent}
         options={options}
         renderInput={(params) => (
           <TextField
