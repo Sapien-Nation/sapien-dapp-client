@@ -17,6 +17,7 @@ const DynamicSquare = dynamic<any>(
 
 const SquarePage = () => {
   const { query } = useRouter();
+
   if (!query.squareID) return null;
 
   return <DynamicSquare squareID={String(query.squareID)} />;

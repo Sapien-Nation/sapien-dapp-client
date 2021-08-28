@@ -10,14 +10,32 @@ export const getTribes = (): Array<Tribe> => {
 };
 
 export const getTribe = (squareID: string): Tribe => {
+  console.log(squareID);
   const tribes: Array<Tribe> =
     useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? [];
 
+  // Getting tribe from
+  // mainSquareID
+  // name - This only apply for the Sapien tribe
   const tribeFromMainSquare = tribes.find(
     ({ name, mainSquareId }) => mainSquareId === squareID || name === squareID
   );
 
   if (tribeFromMainSquare) return tribeFromMainSquare;
+
+  // Getting tribe from squares Array
+  // TODO cleanup
+  let tribeFromSquares = null;
+
+  tribes.map((tribe) => {
+    const { squares } = tribe;
+    const tribeSquare = squares.find(({ id }) => id === squareID);
+    if (tribeSquare) {
+      tribeFromSquares = tribe;
+    }
+  });
+
+  if (tribeFromSquares) return tribeFromSquares;
 
   // @ts-ignore
   return {};

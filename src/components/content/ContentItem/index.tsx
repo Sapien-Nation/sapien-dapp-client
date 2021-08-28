@@ -79,15 +79,6 @@ const ContentItem = ({ content, mutate }: Props) => {
               <Typography component="div" variant="h6">
                 {ReactHtmlParser(getHTML())}
                 {showMore && view === View.Compacted && '...'}
-                {/* <Box marginTop={2.3}>
-                  {content.imagePreview && (
-                    <img
-                      alt="Preview"
-                      src={content.imagePreview}
-                      style={{ borderRadius: '10px', maxWidth: '100%' }}
-                    />
-                  )}
-                </Box> */}
               </Typography>
             )}
           </a>

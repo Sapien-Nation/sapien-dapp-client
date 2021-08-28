@@ -18,10 +18,13 @@ const DynamicSquare = dynamic<any>(
 const SquarePage = () => {
   const { query } = useRouter();
 
-  if (!query.squareID) return null;
+  if (!query.tribeSquareID) return null;
 
   return (
-    <DynamicSquare isMainSquare={false} squareID={String(query.squareID)} />
+    <DynamicSquare
+      isMainSquare={false}
+      squareID={String(query.tribeSquareID)}
+    />
   );
 };
 
