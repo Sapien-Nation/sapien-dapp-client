@@ -54,7 +54,7 @@ const TribeNavigation = () => {
   const showPreview = false;
 
   const { squareID } = query;
-  const selectedTribe = tribes.find(
+  const selectedTribe = tribes?.find(
     ({ mainSquareId, name }) => mainSquareId === squareID || name === squareID
   );
 

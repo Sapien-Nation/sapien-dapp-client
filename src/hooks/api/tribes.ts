@@ -17,7 +17,7 @@ export const getTribe = (squareID: string): Tribe => {
   // Getting tribe from
   // mainSquareID
   // name - This only apply for the Sapien tribe
-  const tribeFromMainSquare = tribes.find(
+  const tribeFromMainSquare = tribes?.find(
     ({ name, mainSquareId }) => mainSquareId === squareID || name === squareID
   );
 
