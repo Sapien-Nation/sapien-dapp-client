@@ -57,14 +57,18 @@ const Checkout = () => {
         </Box>
         <Box display="flex" justifyContent="space-between" marginBottom={1}>
           <Typography variant="body2">Transaction fee</Typography>
-          <Typography variant="body2">5%</Typography>
+          <Typography variant="body2">
+            {storeCurrentBadge.spn === 0 ? 0 : 5}%
+          </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" marginBottom={1.8}>
           <Typography style={{ fontWeight: 700 }} variant="body2">
             Total
           </Typography>
           <Typography style={{ color: primary[800] }} variant="body2">
-            {storeCurrentBadge.spn * watchBadgesAmount + 5} SPN
+            {storeCurrentBadge.spn * watchBadgesAmount +
+              (storeCurrentBadge.spn === 0 ? 0 : 5)}{' '}
+            SPN
           </Typography>
         </Box>
       </Box>
