@@ -27,3 +27,9 @@ export const purchaseBadge = (body: {
     .post('/api/v3/badge/purchaseBadge', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const grantSapienBadge = (userId: string) =>
+  tokensInstance
+    .post('/api/v3/badge/grantSapienBadge', { userId: userId })
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
