@@ -1,7 +1,13 @@
 import { useState } from 'react';
 
 // mui
-import { Button, makeStyles, Menu, Typography } from '@material-ui/core';
+import {
+  Button,
+  makeStyles,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
@@ -16,19 +22,32 @@ const useStyles = makeStyles(() => ({
   disabled: {
     backgroundColor: neutral[400],
   },
+  paper: {
+    width: 169,
+  },
   root: {
     backgroundColor: neutral[200],
     borderRadius: 8,
     display: 'flex',
     justifyContent: 'space-between',
-    padding: '8px 20px',
+    padding: '8px 18px',
     width: 169,
   },
 }));
 
 const Filter = ({ id, name }: Props) => {
+  const [option, setOption] = useState('Popular');
   const [filtersAnchor, setFilterAnchor] = useState<null | HTMLElement>(null);
   const classes = useStyles();
+
+  const handleClose = () => setFilterAnchor(null);
+  const setMenuOption = (menuOption: string) => {
+    if (menuOption !== option) {
+      setOption(menuOption);
+    }
+    handleClose();
+  };
+
   return (
     <>
       <Button
@@ -45,19 +64,20 @@ const Filter = ({ id, name }: Props) => {
       >
         <Typography variant="h5">Sort by:</Typography>
         <Typography style={{ fontWeight: 'bold' }} variant="h5">
-          Portal
+          {option}
         </Typography>
       </Button>
       <Menu
         anchorEl={filtersAnchor}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        classes={{ paper: classes.paper }}
         getContentAnchorEl={null}
         id={`${id}`}
         open={Boolean(filtersAnchor)}
-        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-        onClose={() => setFilterAnchor(null)}
+        onClose={handleClose}
       >
-        <span>Filters</span>
+        <MenuItem onClick={() => setMenuOption('Popular')}>Popular</MenuItem>
+        <MenuItem onClick={() => setMenuOption('Hottest')}>Hottest</MenuItem>
+        <MenuItem onClick={() => setMenuOption('Lastest')}>Lastest</MenuItem>
       </Menu>
     </>
   );
