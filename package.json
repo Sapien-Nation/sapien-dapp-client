@@ -69,6 +69,7 @@
     "react-transition-group": "^4.4.2",
     "react-use": "^17.2.4",
     "react-window": "^1.8.6",
+    "reconnecting-websocket": "^4.4.0",
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",
     "slate-react": "^0.65.2",
