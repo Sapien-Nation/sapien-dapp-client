@@ -10,7 +10,6 @@ export const getTribes = (): Array<Tribe> => {
 };
 
 export const getTribe = (squareID: string): Tribe => {
-  console.log(squareID);
   const tribes: Array<Tribe> =
     useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? [];
 

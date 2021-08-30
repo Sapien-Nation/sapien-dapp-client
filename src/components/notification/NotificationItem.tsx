@@ -1,3 +1,5 @@
+import { mutate } from 'swr';
+
 // colors
 import { blue, green, neutral, primary, red, secondary } from 'styles/colors';
 
@@ -13,23 +15,33 @@ import {
 import { Avatar, Badge, Box, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 
+// utils
+import { formatTimestampToRelative } from 'utils/date';
+
+// api
+import { markAsRead } from 'api/notification';
+
+// types
+import type { ISOString } from 'tools/types/common';
+
 interface Props {
   notification: {
+    id: string;
     avatar: string;
-    description: string;
+    content: string;
     time: string;
     type: string;
-    read: boolean;
+    status: string;
+    insertedAt: ISOString;
   };
 }
 
 const NotificationItem = ({ notification }: Props) => {
-  const { avatar, description, time, type, read } = notification;
+  const { id, avatar, content, insertedAt, type, status } = notification;
   const [variant, setVariant] = useState({
     color: '',
     icon: null,
   });
-  const [isRead, setIsRead] = useState(read);
 
   useEffect(() => {
     const checkType = () => {
@@ -64,10 +76,23 @@ const NotificationItem = ({ notification }: Props) => {
     checkType();
   }, [type]);
 
-  const makeNotificationRead = () => {
-    if (!isRead) {
-      setTimeout(() => setIsRead(true), 1000);
-    }
+  const makeNotificationRead = async () => {
+    await markAsRead(id);
+    mutate(
+      '/api/v3/notification/all',
+      (data) => {
+        const updatedNotifications = data?.notifications.map((notification) => {
+          if (notification.id === id) {
+            notification.status = 'R';
+          }
+        });
+        return {
+          count: data.count,
+          notifications: updatedNotifications,
+        };
+      },
+      false
+    );
     return;
   };
 
@@ -76,10 +101,12 @@ const NotificationItem = ({ notification }: Props) => {
       alignItems="center"
       borderRadius={16}
       display="flex"
-      paddingLeft={1.8}
-      paddingY={1.8}
+      marginBottom={0.5}
+      paddingLeft={1.6}
+      paddingRight={1.6}
+      paddingY={1.5}
       style={{
-        backgroundColor: !isRead ? red[50] : 'inherit',
+        backgroundColor: status === 'U' ? red[50] : 'inherit',
       }}
     >
       <Badge
@@ -111,15 +138,15 @@ const NotificationItem = ({ notification }: Props) => {
         </Avatar>
       </Badge>
       <Box display="flex" flexDirection="column" marginLeft={2.4}>
-        {description}
+        {content}
         <Box>
           <Typography
-            color={!isRead ? 'error' : 'inherit'}
-            variant={!isRead ? 'caption' : 'overline'}
+            color={status === 'U' ? 'error' : 'textSecondary'}
+            variant={status === 'U' ? 'caption' : 'overline'}
           >
-            {time}
+            {formatTimestampToRelative(insertedAt)}
           </Typography>
-          {!isRead && (
+          {status === 'U' && (
             <Typography
               component="span"
               style={{ cursor: 'pointer', marginLeft: 10 }}

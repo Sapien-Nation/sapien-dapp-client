@@ -35,11 +35,13 @@ const DynamicErrorView = dynamic<any>(
 // Providers
 import { AuthenticationProvider } from 'context/user';
 import { WalletProvider } from 'context/wallet';
+import SocketProvider from 'context/socket';
 
 // styles
-import '../styles/index.css';
 import { blue, green, neutral, red, secondary } from 'styles/colors';
 import theme from 'styles/theme';
+
+import '../styles/index.css';
 
 // initSentry();
 
@@ -147,13 +149,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 revalidateOnFocus: false,
               }}
             >
-              <WalletProvider>
-                <AuthenticationProvider>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </AuthenticationProvider>
-              </WalletProvider>
+              <SocketProvider>
+                <WalletProvider>
+                  <AuthenticationProvider>
+                    <Layout>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </AuthenticationProvider>
+                </WalletProvider>
+              </SocketProvider>
             </SWRConfig>
           </SnackbarProvider>
         </ThemeProvider>
