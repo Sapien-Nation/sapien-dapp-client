@@ -80,16 +80,11 @@ export const Square = ({ squareID, isMainSquare = true }: Props) => {
   return (
     <>
       <Page
+        filter={<Filter id="squares" name="filter-squares" />}
         header={
           <Header
             isMainSquare={isMainSquare}
             tribeID={isSapienTribe ? 'sapien' : tribeID}
-          />
-        }
-        filter={
-          <Filter
-            id="squares"
-            name="filter-squares"
           />
         }
         subHeader={

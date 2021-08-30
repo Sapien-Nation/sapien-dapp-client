@@ -12,7 +12,7 @@ const Page = ({
   children,
   filter = null,
   header = null,
-  subHeader = null
+  subHeader = null,
 }: Props) => {
   return (
     <Box

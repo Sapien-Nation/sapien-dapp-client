@@ -1,12 +1,7 @@
 import { useState } from 'react';
 
 // mui
-import {
-  Button,
-  makeStyles,
-  Menu,
-  Typography
-} from '@material-ui/core';
+import { Button, makeStyles, Menu, Typography } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
@@ -24,16 +19,15 @@ const useStyles = makeStyles(() => ({
   root: {
     backgroundColor: neutral[200],
     borderRadius: 8,
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "8px 20px",
-    width: 169
-  }
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '8px 20px',
+    width: 169,
+  },
 }));
 
 const Filter = ({ id, name }: Props) => {
-  const [filtersAnchor, setFilterAnchor] =
-  useState<null | HTMLElement>(null);
+  const [filtersAnchor, setFilterAnchor] = useState<null | HTMLElement>(null);
   const classes = useStyles();
   return (
     <>
@@ -43,14 +37,16 @@ const Filter = ({ id, name }: Props) => {
         aria-label={`${name}`}
         classes={{
           disabled: classes.disabled,
-          root: classes.root
+          root: classes.root,
         }}
-        endIcon={<ArrowDropDownIcon />}
         disabled={true}
+        endIcon={<ArrowDropDownIcon />}
         onClick={(event) => setFilterAnchor(event.currentTarget)}
       >
         <Typography variant="h5">Sort by:</Typography>
-        <Typography variant="h5" style={{ fontWeight: 'bold' }}>Portal</Typography>
+        <Typography style={{ fontWeight: 'bold' }} variant="h5">
+          Portal
+        </Typography>
       </Button>
       <Menu
         anchorEl={filtersAnchor}
@@ -65,6 +61,6 @@ const Filter = ({ id, name }: Props) => {
       </Menu>
     </>
   );
-}
+};
 
 export default Filter;
