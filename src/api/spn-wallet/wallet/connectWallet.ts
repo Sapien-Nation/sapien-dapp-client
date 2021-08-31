@@ -3,6 +3,7 @@ import Wallet from './wallet';
 
 // api
 import { addWallet } from 'api/authentication';
+import { grantSapienBadge } from 'api/wallet';
 
 const connectWallet = async (
   torusToken: string,
@@ -20,6 +21,7 @@ const connectWallet = async (
     );
     if (isSignup) {
       await addWallet(publicAddress);
+      await grantSapienBadge(userId);
       history?.replaceState(
         {},
         document?.title,

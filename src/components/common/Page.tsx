@@ -3,11 +3,17 @@ import { Box } from '@material-ui/core';
 
 interface Props {
   children: React.ReactElement | Array<React.ReactElement>;
+  filter?: React.ReactElement;
   header?: React.ReactElement;
   subHeader?: React.ReactElement;
 }
 
-const Page = ({ children, header = null, subHeader = null }: Props) => {
+const Page = ({
+  children,
+  filter = null,
+  header = null,
+  subHeader = null,
+}: Props) => {
   return (
     <Box
       className="card--rounded-gray"
@@ -21,6 +27,7 @@ const Page = ({ children, header = null, subHeader = null }: Props) => {
         style={{ gap: '30px', margin: '0 auto' }}
       >
         {header}
+        {filter}
         {subHeader}
         {children}
       </Box>

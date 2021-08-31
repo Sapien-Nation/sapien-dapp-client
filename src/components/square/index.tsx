@@ -6,7 +6,7 @@ import InfiniteScrollComponent from 'react-infinite-scroll-component';
 import axios from 'api';
 
 // components
-import { FeedSkeleton, Page } from 'components/common';
+import { FeedSkeleton, Filter, Page } from 'components/common';
 import { Header } from 'components/tribe';
 import {
   CreateContentForm,
@@ -80,6 +80,7 @@ export const Square = ({ squareID, isMainSquare = true }: Props) => {
   return (
     <>
       <Page
+        filter={<Filter id="squares" name="filter-squares" />}
         header={
           <Header
             isMainSquare={isMainSquare}

@@ -12,6 +12,10 @@ export const authInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
 });
 
+export const notificationInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
+});
+
 authInstance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
   if (tokens) {
@@ -37,7 +41,25 @@ instance.interceptors.request.use((config) => {
   }
   return config;
 }, undefined);
+
 instance.interceptors.response.use(undefined, async (error) => {
+  if (error.response?.status === 401) {
+    // mutate('/api/v3/user/me', null, false);
+    // window.location.reload();
+    // return;
+  }
+  return Promise.reject(error);
+});
+
+notificationInstance.interceptors.request.use((config) => {
+  const tokens = window.localStorage.getItem('tokens');
+  if (tokens) {
+    const { token } = JSON.parse(tokens);
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, undefined);
+notificationInstance.interceptors.response.use(undefined, async (error) => {
   if (error.response?.status === 401) {
     // mutate('/api/v3/user/me', null, false);
     // window.location.reload();
