@@ -60,7 +60,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     push('/login');
   };
 
-  const setSession = ({
+  const setSession = async ({
     token,
     torus,
     refresh,
@@ -70,7 +70,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     refresh: string;
   }) => {
     setTokens({ token, torus, refresh });
-    mutate('/api/v3/user/me');
+    await mutate('/api/v3/user/me');
     push('/client/sapien');
   };
 

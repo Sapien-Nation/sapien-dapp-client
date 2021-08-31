@@ -15,10 +15,12 @@ import { Box } from '@material-ui/core';
 
 const tribes = [
   {
-    avatar: '',
-    cover: '',
+    avatar:
+      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/ee1954af-deb5-419a-bd39-0ba7f6fb9639-72x72.jpg',
+    cover:
+      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/cover/bc048669-0f34-4023-8b72-6cea9b7197da-295x115.jpeg',
     description: 'Financial advice for the metaverse and beyond',
-    id: '',
+    id: '8de0eb01-4594-47be-8af4-c37c2eaaa5f7',
     isMember: 'false',
     name: 'Finance Your Future',
     membersCount: '372812',
@@ -115,13 +117,15 @@ const tribes = [
     price: '2500',
   },
   {
-    avatar: '',
-    cover: '',
+    avatar:
+      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/ad6c3e7f-7bd8-485a-be5d-7f84c8d550eb-72x72.jpeg',
+    cover:
+      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/cover/fa5e0031-951f-42df-901f-c298ff7d2a58-295x115.jpeg',
     description:
       "If you are looking for an adventure, look no more. Here you'll find the best places for your next adventure, and if you are lucky, even member discounts",
-    id: '',
+    id: 'fd58af46-6ec3-420a-a800-e0184556de61',
     isMember: 'true',
-    name: 'Travel, Adventure and beyond',
+    name: 'Travel Adventure and beyond',
     membersCount: '2129',
     price: '2000',
   },
