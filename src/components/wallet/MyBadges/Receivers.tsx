@@ -2,7 +2,10 @@ import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 // components
+import Empty from './Empty';
 import SearchInput from '../shared/SearchInput';
+import TokenFetcher from '../shared/TokenFetcher';
+import { Query, WalletSkeleton } from 'components/common';
 
 // mui
 import {
@@ -37,30 +40,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const mockList = [
-  {
-    name: 'Member 1',
-    description: '@member1',
-  },
-  {
-    name: 'Member 2',
-    description: '@member2',
-  },
-  {
-    name: 'Member 3',
-    description: '@member3',
-  },
-  {
-    name: 'Member 5',
-    description: '@member4',
-  },
-  {
-    name: 'Member 5',
-    description: '@member5',
-  },
-];
-
-export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
+export const ReceiverItem = ({
+  dispatchWalletState,
+  displayName,
+  id,
+  publicAddress,
+  userName,
+}) => {
   const classes = useStyles();
   return (
     <Box
@@ -80,8 +66,10 @@ export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
             myBadgesTransition: 'forward',
             myBadgesStep: MyBadgesSteps.Confirmation,
             myBadgesCurrentReceiver: {
-              name,
-              description,
+              id,
+              userName,
+              displayName,
+              publicAddress,
             },
           },
         });
@@ -101,11 +89,11 @@ export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
         }}
       />
       <Box display="flex" marginLeft={1}>
-        <Typography variant="button">{name}</Typography>
+        <Typography variant="button">{displayName}</Typography>
       </Box>
       <Box alignItems="center" display="flex">
         <Typography style={{ marginLeft: 6 }} variant="button">
-          {description}
+          @{userName}
         </Typography>
       </Box>
     </Box>
@@ -233,11 +221,22 @@ const Receivers = () => {
         </IconButton>
         <Typography variant="button">Confirmation</Typography>
       </div>
-      <SearchInput
-        ItemComponent={ReceiverItem}
-        dispatchWalletState={dispatchWalletState}
-        list={mockList}
-      />
+      <Query
+        api="/api/v3/users"
+        empty={<Empty />}
+        loader={<WalletSkeleton />}
+        options={{
+          fetcher: TokenFetcher,
+        }}
+      >
+        {(list) => (
+          <SearchInput
+            ItemComponent={ReceiverItem}
+            dispatchWalletState={dispatchWalletState}
+            list={list}
+          />
+        )}
+      </Query>
       <Box
         alignItems="center"
         bgcolor={neutral[50]}

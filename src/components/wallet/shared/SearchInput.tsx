@@ -55,8 +55,10 @@ const SearchInput = ({
 
   const results = !searchTerm
     ? list
-    : list.filter(({ name }) =>
-        name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    : list.filter(({ name, displayName, userName }) =>
+        (name || displayName || userName)
+          .toLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
       );
 
   return (
@@ -93,10 +95,14 @@ const SearchInput = ({
             blockchainId={item.blockchainId}
             description={item.description}
             dispatchWalletState={dispatchWalletState}
+            displayName={item.displayName}
             id={item.id}
             name={item.name}
+            publicAddress={item.publicAddress}
             quantity={item.quantity}
             spn={item.spn}
+            userIsAdmin={item.userIsAdmin}
+            userName={item.userName}
             walletOpen={walletOpen}
           />
         ))}

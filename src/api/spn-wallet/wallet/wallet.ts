@@ -6,7 +6,7 @@ import Common, { CustomChain } from '@ethereumjs/common';
 import { Transaction as Tx } from '@ethereumjs/tx';
 import PLATFORM_SPN_ABI from './contracts/SapienPlatformSPN.json';
 import BADGE_STORE_ABI from './contracts/BadgeStore.json';
-import { purchaseBadge, sendSPN } from 'api/wallet';
+import { purchaseBadge, sendSPN, sendBadge } from 'api/wallet';
 import getConfig from './config';
 
 const domainType = [
@@ -185,6 +185,65 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       };
 
       return sendSPN(body);
+    },
+    transferBadge: async (
+      fromUserId: string,
+      toUserId: string,
+      toAddress: string,
+      amount: number, // # of badges to be transferred
+      badgeId: string, // badge id on Sapien platform
+      badgeBlockchainId: number, // if on the blockchain
+      userIsAdmin: boolean // current user is admin of the badge?
+    ) => {
+      if (!isAddress(toAddress)) {
+        return Promise.reject('Address should be valid');
+      }
+
+      const badgeBalance = await contracts.badgeStoreContract.methods
+        .balanceOf(publicAddress, badgeBlockchainId)
+        .call();
+
+      if (badgeBalance < amount) {
+        return Promise.reject('Number of badges exceeds the balance');
+      }
+
+      let functionSignature;
+
+      if (userIsAdmin) {
+        // if user is admin of the badge (tribe admin), then grant it
+        functionSignature = contracts.badgeStoreContract.methods
+          .grantBadge(toAddress, badgeBlockchainId, amount)
+          .encodeABI();
+      } else {
+        // if user is not the admin of the badge, transfer it
+        functionSignature = contracts.badgeStoreContract.methods
+          .safeTransferFrom(
+            publicAddress,
+            toAddress,
+            badgeBlockchainId,
+            amount,
+            '0x00'
+          )
+          .encodeABI();
+      }
+      const rawTx = await prepareMetaTransaction(
+        functionSignature,
+        contracts.platformSPNContract,
+        config.SPN_TOKEN_ADDRESS,
+        contracts.platformSPNDomainData
+      );
+
+      const body = {
+        fromUserId,
+        toUserId,
+        badgeId,
+        badgeBlockchainId,
+        amount,
+        userIsAdmin,
+        rawTx,
+      };
+
+      return sendBadge(body);
     },
     purchaseBadge: async (
       amount: number, // number of badges the user selected to be purchased
