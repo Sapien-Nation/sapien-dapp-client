@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { useFormContext } from 'react-hook-form';
 
 // styles
@@ -8,6 +10,7 @@ import { Avatar, Box, Button, IconButton, Typography } from '@material-ui/core';
 import { ArrowBack as ArrowBackIcon } from '@material-ui/icons';
 
 // context
+import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
 // emums
@@ -15,7 +18,11 @@ import { MyBadgesSteps } from '../WalletEnums';
 
 const Confirmation = () => {
   const { watch } = useFormContext();
-  const { walletOpen, dispatchWalletState, globalWalletState } = useWallet();
+  const { enqueueSnackbar } = useSnackbar();
+  const { me } = useAuth();
+  const { wallet, walletOpen, dispatchWalletState, globalWalletState } =
+    useWallet();
+  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const { myBadgesCurrentBadge, myBadgesCurrentReceiver } = globalWalletState;
   const watchBadgesAmount = watch('badgesAmount');
   return (
@@ -83,10 +90,10 @@ const Confirmation = () => {
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">
-              {myBadgesCurrentReceiver.description}
+              {myBadgesCurrentReceiver.displayName}
             </Typography>
             <Typography variant="overline">
-              @{myBadgesCurrentReceiver.name}
+              @{myBadgesCurrentReceiver.userName}
             </Typography>
           </Box>
         </Box>
@@ -147,16 +154,47 @@ const Confirmation = () => {
         <Button
           fullWidth
           color="primary"
-          type="submit"
+          disabled={loadingResponse}
           variant="contained"
-          onClick={() => {
-            dispatchWalletState({
-              type: 'showTabsMenu',
-              payload: true,
-            });
+          onClick={async () => {
+            setLoadingResponse(true);
+            try {
+              await wallet.transferBadge(
+                me.id,
+                myBadgesCurrentReceiver.id,
+                myBadgesCurrentReceiver.publicAddress,
+                watchBadgesAmount,
+                myBadgesCurrentBadge.id,
+                myBadgesCurrentBadge.blockchainId,
+                myBadgesCurrentBadge.userIsAdmin
+              );
+              enqueueSnackbar('Success!', {
+                variant: 'success',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+              setLoadingResponse(false);
+              dispatchWalletState({
+                type: 'update',
+                payload: {
+                  showTabsMenu: true,
+                  storeStep: MyBadgesSteps.Badges,
+                },
+              });
+            } catch (error) {
+              enqueueSnackbar('Something went wrong.', {
+                variant: 'error',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+            }
           }}
         >
-          Gift Token
+          {loadingResponse ? 'Processing...' : 'Gift Token'}
         </Button>
       </Box>
     </Box>

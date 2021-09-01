@@ -33,11 +33,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const BadgeItem = ({
+  id,
+  blockchainId,
   description,
   dispatchWalletState,
   name,
-  spn,
   quantity,
+  spn,
+  userIsAdmin,
   walletOpen,
 }) => {
   const classes = useStyles();
@@ -66,10 +69,13 @@ export const BadgeItem = ({
               showAuthorToBadge: false,
               myBadgesStep: MyBadgesSteps.Confirmation,
               myBadgesCurrentBadge: {
-                price: spn,
-                name,
+                id,
+                blockchainId,
                 description,
+                name,
+                price: spn,
                 quantity,
+                userIsAdmin,
               },
             },
           });
@@ -81,9 +87,13 @@ export const BadgeItem = ({
               showTabsMenu: false,
               myBadgesStep: MyBadgesSteps.Receivers,
               myBadgesCurrentBadge: {
-                price: spn,
-                name,
+                id,
+                blockchainId,
                 description,
+                name,
+                price: spn,
+                quantity,
+                userIsAdmin,
               },
             },
           });
