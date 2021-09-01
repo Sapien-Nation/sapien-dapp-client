@@ -103,7 +103,10 @@ const ReceiverItem = ({
         <Typography variant="button">{displayName}</Typography>
       </Box>
       <Box alignItems="center" display="flex">
-        <Typography style={{ marginLeft: 6 }} variant="button">
+        <Typography
+          style={{ marginLeft: 6, color: neutral[500] }}
+          variant="button"
+        >
           @{userName}
         </Typography>
       </Box>
@@ -142,6 +145,7 @@ const Receivers = () => {
   const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
   const classes = useStyles();
+  console.log('spnCurrentReceiver', spnCurrentReceiver);
   return (
     <Box
       display="flex"
@@ -152,11 +156,10 @@ const Receivers = () => {
       <div
         style={{
           height: '100%',
-          display: 'grid',
           margin: '0 2.4rem',
-          gridTemplateRows: spnCurrentReceiver
-            ? '32px 72px 1fr 90px'
-            : '32px 50px 1fr 200px',
+          // gridTemplateRows: spnCurrentReceiver
+          //   ? '32px 72px 1fr 90px'
+          //   : '32px 50px 1fr 200px',
         }}
       >
         <div
@@ -232,8 +235,10 @@ const Receivers = () => {
             {(list) => (
               <SearchInput
                 ItemComponent={ReceiverItem}
+                customHeight="15rem"
                 dispatchWalletState={dispatchWalletState}
                 list={list}
+                placeholder="Search for a receiver"
               />
             )}
           </Query>
@@ -358,11 +363,14 @@ const Receivers = () => {
       </div>
       <Box
         borderTop="1px solid #EDEEF0"
+        bottom={0}
         display="flex"
         flexWrap="wrap"
         justifyContent="center"
         paddingX={2.4}
         paddingY={2}
+        position="absolute"
+        width="100%"
       >
         <Button
           fullWidth

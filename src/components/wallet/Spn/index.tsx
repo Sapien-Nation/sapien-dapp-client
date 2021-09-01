@@ -28,9 +28,9 @@ const Spn = () => {
         payload: {
           spnCurrentReceiver: {
             // @ts-ignore
-            name: walletOpen.userName,
+            userName: walletOpen.userName,
             // @ts-ignore
-            description: walletOpen.displayName,
+            displayName: walletOpen.displayName,
           },
           showAuthorToBadge: false,
         },
@@ -42,7 +42,7 @@ const Spn = () => {
   return (
     <div
       style={{
-        height: showTabsMenu ? 'calc(100% - 63px)' : '100%',
+        height: showTabsMenu ? '448px' : '100%',
       }}
     >
       {Number(wallet?.balance) > 0 ? (

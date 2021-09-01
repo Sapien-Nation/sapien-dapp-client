@@ -93,8 +93,11 @@ const Checkout = () => {
             }}
             onClick={() => {
               dispatchWalletState({
-                showTabsMenu: false,
-                storeStep: StoreSteps.Confirmation,
+                type: 'update',
+                payload: {
+                  showTabsMenu: false,
+                  storeStep: StoreSteps.Confirmation,
+                },
               });
             }}
           >

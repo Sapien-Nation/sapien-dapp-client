@@ -92,7 +92,10 @@ export const ReceiverItem = ({
         <Typography variant="button">{displayName}</Typography>
       </Box>
       <Box alignItems="center" display="flex">
-        <Typography style={{ marginLeft: 6 }} variant="button">
+        <Typography
+          style={{ marginLeft: 6, color: neutral[500] }}
+          variant="button"
+        >
           @{userName}
         </Typography>
       </Box>
@@ -234,6 +237,7 @@ const Receivers = () => {
             ItemComponent={ReceiverItem}
             dispatchWalletState={dispatchWalletState}
             list={list}
+            placeholder="Search for a receiver"
           />
         )}
       </Query>

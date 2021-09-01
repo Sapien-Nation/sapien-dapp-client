@@ -37,6 +37,8 @@ const mockList = [
 
 interface Props {
   ItemComponent: any;
+  customHeight?: string;
+  placeholder?: string;
   list?: any;
   dispatchWalletState?: (state: any) => void;
   walletOpen?: ContentAuthor | boolean;
@@ -44,6 +46,8 @@ interface Props {
 
 const SearchInput = ({
   ItemComponent,
+  customHeight = 'auto',
+  placeholder = 'Search for a badges',
   list = mockList,
   dispatchWalletState,
   walletOpen,
@@ -62,7 +66,7 @@ const SearchInput = ({
       );
 
   return (
-    <>
+    <div style={{ height: customHeight, overflow: 'hidden' }}>
       <TextField
         fullWidth
         InputProps={{
@@ -81,7 +85,7 @@ const SearchInput = ({
           autoComplete: 'none',
         }}
         label=""
-        placeholder="Search for badges"
+        placeholder={placeholder}
         style={{
           marginBottom: 0,
         }}
@@ -107,7 +111,7 @@ const SearchInput = ({
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

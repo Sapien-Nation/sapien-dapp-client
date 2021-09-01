@@ -48,7 +48,7 @@ const WalletMenu = ({ wallet }: Props) => {
       />
       <div
         style={{
-          height: 'calc(100% - 89px)',
+          height: '511px',
         }}
       >
         {renderView()}
