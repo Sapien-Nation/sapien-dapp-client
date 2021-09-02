@@ -46,7 +46,7 @@ const AuthLayout = ({ children }: Props) => {
               alt="Sapien Network"
               src="https://d151dmflpumpzp.cloudfront.net/images/auth.jpeg"
               style={{
-                objectFit: 'cover',
+                objectFit: 'fill',
                 width: '100%',
                 height: '100%',
                 position: 'absolute',
