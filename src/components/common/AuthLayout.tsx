@@ -10,6 +10,9 @@ import { FullLogo } from 'assets';
 // context
 import { useAuth } from 'context/user';
 
+// components
+import { Redirect } from 'components/common';
+
 interface Props {
   children: React.ReactElement;
 }
@@ -23,10 +26,10 @@ const AuthLayout = ({ children }: Props) => {
   useEffect(() => {
     if (newUser && isLoggingIn === false && me) {
       router.push('/client/sapien#f=signup');
-    } else if (isLoggingIn === false && me) {
-      router.push('/');
     }
   }, [isLoggingIn, me, router]);
+
+  if (isLoggingIn === false && me) return <Redirect to="/" />;
 
   return (
     <>
