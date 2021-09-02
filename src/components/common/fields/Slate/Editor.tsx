@@ -102,7 +102,7 @@ const Editor = ({
         padding={hasContent ? 0.5 : 0}
       >
         <IconButton
-          aria-controls="emoji-selector"
+          aria-controls={anchorEl ? 'emoji-selector' : ''}
           aria-haspopup="true"
           aria-label="Select an emoji"
           disabled={isSubmitting}

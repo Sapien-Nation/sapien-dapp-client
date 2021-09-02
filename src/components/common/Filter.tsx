@@ -51,14 +51,14 @@ const Filter = ({ id, name }: Props) => {
   return (
     <>
       <Button
-        aria-controls={`${id}`}
+        disabled
+        aria-controls={filtersAnchor ? id : ''}
         aria-haspopup="true"
-        aria-label={`${name}`}
+        aria-label={name}
         classes={{
           disabled: classes.disabled,
           root: classes.root,
         }}
-        disabled={true}
         endIcon={<ArrowDropDownIcon />}
         onClick={(event) => setFilterAnchor(event.currentTarget)}
       >
@@ -71,7 +71,7 @@ const Filter = ({ id, name }: Props) => {
         anchorEl={filtersAnchor}
         classes={{ paper: classes.paper }}
         getContentAnchorEl={null}
-        id={`${id}`}
+        id={id}
         open={Boolean(filtersAnchor)}
         onClose={handleClose}
       >

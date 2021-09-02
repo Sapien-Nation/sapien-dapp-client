@@ -95,6 +95,7 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
         <Editor
           editorProps={{
             placeholder: 'Write a comment...',
+            'aria-label': `reply-input-box-${contentID}`,
           }}
           hasContent={hasContent}
           isSubmitting={isSubmitting}
