@@ -5,6 +5,8 @@ export const getServerSideProps = async ({ res }) => {
     });
     res.end();
   }
+
+  return {};
 };
 
 const Index = () => <div />;
