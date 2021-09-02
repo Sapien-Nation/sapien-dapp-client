@@ -1,19 +1,10 @@
 import { mutate } from 'swr';
 
 // colors
-import { blue, green, neutral, primary, red, secondary } from 'styles/colors';
-
-//icons
-import {
-  ChatBubbleOutline,
-  LocalOffer,
-  PeopleOutline,
-  SyncAlt,
-} from '@material-ui/icons';
+import { neutral, red } from 'styles/colors';
 
 // mui
 import { Avatar, Badge, Box, Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
