@@ -180,7 +180,7 @@ const Confirmation = () => {
                 type: 'update',
                 payload: {
                   showTabsMenu: true,
-                  storeStep: MyBadgesSteps.Badges,
+                  myBadgesStep: MyBadgesSteps.Badges,
                 },
               });
             } catch (error) {

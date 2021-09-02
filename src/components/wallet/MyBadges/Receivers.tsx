@@ -197,8 +197,6 @@ const Receivers = () => {
       style={{
         padding: '2rem 2.4rem',
         height: '100%',
-        display: 'grid',
-        gridTemplateRows: '42px 50px 1fr 86px',
       }}
     >
       <div style={{ display: 'flex', marginBottom: '1rem' }}>
@@ -235,6 +233,7 @@ const Receivers = () => {
         {(list) => (
           <SearchInput
             ItemComponent={ReceiverItem}
+            customHeight="326px"
             dispatchWalletState={dispatchWalletState}
             list={list}
             placeholder="Search for a receiver"
