@@ -32,6 +32,7 @@ const useStyles = makeStyles(() => ({
       borderRadius: 90,
     },
     position: 'relative',
+    border: 0,
   },
   list: {
     height: '100%',

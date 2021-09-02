@@ -66,9 +66,14 @@ const useStyles = makeStyles<Theme>(() => ({
     borderRadius: 90,
     paddingBottom: '8px',
   },
-  navBar: {
-    width: `calc(100% - 300px)`,
-  },
+  navBar: ({
+    isDiscoveryPage,
+  }: {
+    asPath: string;
+    isDiscoveryPage: boolean;
+  }) => ({
+    width: `${!isDiscoveryPage ? `calc(100% - 300px)` : 'calc(100% - 72px)'}`,
+  }),
 }));
 
 const Navbar = () => {
@@ -76,7 +81,8 @@ const Navbar = () => {
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
   const { query, asPath } = useRouter();
-  const classes = useStyles();
+  const isDiscoveryPage = Boolean(asPath.includes('discovery'));
+  const classes = useStyles({ isDiscoveryPage });
   const [tokens] = useLocalStorage<{
     token: string;
     torus: string;
