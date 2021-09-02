@@ -6,9 +6,6 @@ import { neutral } from 'styles/colors';
 // types
 import type { Theme } from '@material-ui/core/styles';
 
-// next
-import Image from 'next/image';
-
 // mui
 import {
   Avatar,
@@ -104,7 +101,7 @@ const Tribe = ({
             />
           </Badge>
           <Avatar alt="Tribe Name" className={classes.avatar} variant="rounded">
-            <Image alt="Tribe name" height={72} src={avatar} width={72} />
+            <img alt="Tribe name" height={72} src={avatar} width="72" />
           </Avatar>
         </div>
         <CardContent className={classes.content}>
