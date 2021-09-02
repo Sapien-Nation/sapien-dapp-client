@@ -85,6 +85,7 @@ const Search = () => {
             fullWidth
             InputProps={{
               ...params.InputProps,
+
               type: 'search',
               startAdornment: (
                 <SearchIcon style={{ color: '#C4C5CC', marginLeft: 10 }} />
@@ -109,6 +110,7 @@ const Search = () => {
                 </Box>
               ),
             }}
+            inputProps={{ ...params.inputProps, style: { border: '0px' } }}
           />
         )}
         renderOption={(option) => <OptionItem option={option} />}
