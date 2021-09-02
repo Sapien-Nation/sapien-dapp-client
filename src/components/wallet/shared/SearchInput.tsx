@@ -96,6 +96,7 @@ const SearchInput = ({
         {results.map((item, index) => (
           <ItemComponent
             key={index}
+            avatar={item.avatar}
             blockchainId={item.blockchainId}
             description={item.description}
             dispatchWalletState={dispatchWalletState}

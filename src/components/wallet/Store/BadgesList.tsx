@@ -19,12 +19,13 @@ import { Avatar, Box, Typography } from '@material-ui/core';
 import { StoreSteps } from '../WalletEnums';
 
 export const BadgeItem = ({
-  dispatchWalletState,
+  avatar,
+  blockchainId,
   description,
+  dispatchWalletState,
+  id,
   name,
   spn,
-  blockchainId,
-  id,
 }) => (
   <Box
     alignItems="center"
@@ -54,14 +55,14 @@ export const BadgeItem = ({
     }}
   >
     <Avatar
-      alt=""
+      alt="Badge image"
       imgProps={{
         style: {
           borderRadius: 40,
           padding: 3,
         },
       }}
-      src="/fixtures/normal/slowpoke.jpg"
+      src={avatar}
       style={{
         width: 40,
         height: 40,

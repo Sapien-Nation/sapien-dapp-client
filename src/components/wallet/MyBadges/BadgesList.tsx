@@ -33,10 +33,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const BadgeItem = ({
-  id,
+  avatar,
   blockchainId,
   description,
   dispatchWalletState,
+  id,
   name,
   quantity,
   spn,
@@ -102,14 +103,14 @@ export const BadgeItem = ({
     >
       <Badge badgeContent={quantity} classes={{ badge: classes.badge }}>
         <Avatar
-          alt=""
+          alt="Badge image"
           imgProps={{
             style: {
               borderRadius: 40,
               padding: 3,
             },
           }}
-          src="/fixtures/normal/slowpoke.jpg"
+          src={avatar}
           style={{
             width: 40,
             height: 40,
