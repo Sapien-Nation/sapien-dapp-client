@@ -80,6 +80,13 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
     },
   };
 
+  interface MetaTxParams {
+    functionSignature: string;
+    contract: any;
+    contractAddress: string;
+    domainData: any;
+  }
+
   /**
    * Prepares the metatransaction method to be executed by
    * the current web3Provider
@@ -90,12 +97,10 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
    * @param {string} domainData Object with domain data to compose meta transaction.
    * @return {object} { method, args } Object with the method to execute metatransaction ant required arguments
    */
-  async function prepareMetaTransaction(
-    functionSignature,
-    contract,
-    contractAddress,
-    domainData
-  ) {
+  async function prepareMetaTransaction(metaTxParams: MetaTxParams) {
+    const { functionSignature, contract, contractAddress, domainData } =
+      metaTxParams;
+
     const nonce = await contract.methods.getNonce(publicAddress).call();
 
     const message = {
@@ -155,36 +160,40 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       toAddress: string,
       spnAmount: number
     ) => {
-      if (!isAddress(toAddress)) {
-        return Promise.reject('Address should be valid');
+      try {
+        if (!isAddress(toAddress)) {
+          return Promise.reject('Address should be valid');
+        }
+        if (spnAmount <= 0) {
+          return Promise.reject('SPN amount should be positive');
+        }
+
+        const balanceSPN = await getBalance();
+        if (spnAmount > balanceSPN) {
+          return Promise.reject('Platform SPN balance is less than required');
+        }
+        const functionSignature = contracts.platformSPNContract.methods
+          .transfer(toAddress, spnAmount)
+          .encodeABI();
+
+        const rawTx = await prepareMetaTransaction({
+          functionSignature: functionSignature,
+          contract: contracts.platformSPNContract,
+          contractAddress: config.SPN_TOKEN_ADDRESS,
+          domainData: contracts.platformSPNDomainData,
+        } as MetaTxParams);
+
+        const body = {
+          fromUserId,
+          toUserId,
+          spnAmount,
+          rawTx,
+        };
+
+        return sendSPN(body);
+      } catch (err) {
+        console.log('---------error', err);
       }
-      if (spnAmount <= 0) {
-        return Promise.reject('SPN amount should be positive');
-      }
-
-      const balanceSPN = await getBalance();
-      if (spnAmount > balanceSPN) {
-        return Promise.reject('Platform SPN balance is less than required');
-      }
-      const functionSignature = contracts.platformSPNContract.methods
-        .transfer(toAddress, spnAmount)
-        .encodeABI();
-
-      const rawTx = await prepareMetaTransaction(
-        functionSignature,
-        contracts.platformSPNContract,
-        config.SPN_TOKEN_ADDRESS,
-        contracts.platformSPNDomainData
-      );
-
-      const body = {
-        fromUserId,
-        toUserId,
-        spnAmount,
-        rawTx,
-      };
-
-      return sendSPN(body);
     },
     transferBadge: async (
       fromUserId: string,
@@ -226,12 +235,13 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
           )
           .encodeABI();
       }
-      const rawTx = await prepareMetaTransaction(
-        functionSignature,
-        contracts.platformSPNContract,
-        config.SPN_TOKEN_ADDRESS,
-        contracts.platformSPNDomainData
-      );
+
+      const rawTx = await prepareMetaTransaction({
+        functionSignature: functionSignature,
+        contract: contracts.badgeStoreContract,
+        contractAddress: config.BADGE_STORE_ADDRESS,
+        domainData: contracts.badgeStoreDomainData,
+      } as MetaTxParams);
 
       const body = {
         fromUserId,
@@ -267,12 +277,12 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         .purchaseBadge(blockchainId, amount)
         .encodeABI();
 
-      const rawTx = await prepareMetaTransaction(
-        functionSignature,
-        contracts.badgeStoreContract,
-        config.BADGE_STORE_ADDRESS,
-        contracts.badgeStoreDomainData
-      );
+      const rawTx = await prepareMetaTransaction({
+        functionSignature: functionSignature,
+        contract: contracts.badgeStoreContract,
+        contractAddress: config.BADGE_STORE_ADDRESS,
+        domainData: contracts.badgeStoreDomainData,
+      } as MetaTxParams);
       const body = {
         rawTx,
         parentBadgeId,
