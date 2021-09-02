@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 // api
 import { connectWallet } from 'api/spn-wallet';
 import { logout, refresh } from 'api/authentication';
+import { notificationInstance } from 'api';
 
 // context
 import { useAuth } from 'context/user';
@@ -36,6 +37,11 @@ import { NotificationsNone } from '@material-ui/icons';
 import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
 import { Search } from 'components/search';
+import { Query } from 'components/common';
+
+// todo: use this fetcher
+// const fetcher = (url: string) =>
+//   notificationInstance.get(url).then((res) => res.data);
 
 const useStyles = makeStyles<Theme>(() => ({
   paper: {
@@ -50,7 +56,6 @@ const useStyles = makeStyles<Theme>(() => ({
     right: '110px !important',
   },
   notification: {
-    height: 702,
     width: 449,
     filter: 'drop-shadow(0px 20px 40px rgba(51, 51, 51, 0.1))',
     borderRadius: 10,
@@ -254,7 +259,10 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setNotificationsAnchor(null)}
       >
-        <NotificationMenu />
+        {/* todo: remove fetcher and use API */}
+        <Query api="/api/v3/notification/all" options={{ fetcher: () => [] }}>
+          {(data) => <NotificationMenu data={data} />}
+        </Query>
       </Menu>
     </AppBar>
   );
