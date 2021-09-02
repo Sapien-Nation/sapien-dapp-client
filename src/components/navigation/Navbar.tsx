@@ -85,6 +85,7 @@ const Navbar = () => {
   const { clearSession, me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { wallet, setWallet, walletOpen, setWalletOpen } = useWallet();
+
   useEffect(() => {
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
@@ -163,8 +164,9 @@ const Navbar = () => {
         <Box marginLeft="auto">
           <>
             <Chip
+              disabled={!wallet}
               icon={<SpnIcon style={{ marginLeft: 10 }} />}
-              label={Number(wallet?.balance) / 1e6 || 0}
+              label={!wallet ? '...' : Number(wallet?.balance) / 1e6 || 0}
               style={{
                 backgroundColor: 'rgba(98, 0, 234, 0.05)',
                 borderRadius: 90,

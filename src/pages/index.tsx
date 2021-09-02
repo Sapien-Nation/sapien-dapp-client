@@ -1,17 +1,13 @@
-import dynamic from 'next/dynamic';
+export const getServerSideProps = async ({ res }) => {
+  if (res) {
+    res.writeHead(301, {
+      Location: 'client/sapien',
+    });
+    res.end();
+  }
 
-// components
-const DynamicLayout = dynamic(
-  () => import('components/common').then((mod) => mod.Layout) as any,
-  { ssr: false }
-);
-const DynamicRedirect = dynamic<any>(
-  () => import('components/common').then((mod) => mod.Redirect) as any,
-  { ssr: false }
-);
+  return {};
+};
 
-const IndexPage = () => <DynamicRedirect to="/client/sapien" />;
-
-IndexPage.Layout = DynamicLayout;
-
-export default IndexPage;
+const Index = () => <div />;
+export default Index;

@@ -1,19 +1,10 @@
 import { mutate } from 'swr';
 
 // colors
-import { blue, green, neutral, primary, red, secondary } from 'styles/colors';
-
-//icons
-import {
-  ChatBubbleOutline,
-  LocalOffer,
-  PeopleOutline,
-  SyncAlt,
-} from '@material-ui/icons';
+import { neutral, red } from 'styles/colors';
 
 // mui
 import { Avatar, Badge, Box, Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
@@ -24,11 +15,13 @@ import { markAsRead } from 'api/notification';
 // types
 import type { ISOString } from 'tools/types/common';
 
+import { checkType } from './checkType';
+
 interface Props {
   notification: {
     id: string;
     avatar: string;
-    content: string;
+    payload: string;
     time: string;
     type: string;
     status: string;
@@ -37,44 +30,11 @@ interface Props {
 }
 
 const NotificationItem = ({ notification }: Props) => {
-  const { id, avatar, content, insertedAt, type, status } = notification;
-  const [variant, setVariant] = useState({
-    color: '',
-    icon: null,
-  });
+  const { id, avatar, payload, insertedAt, type, status } = notification;
+  console.log('noti', notification);
+  const variant = checkType(type);
 
-  useEffect(() => {
-    const checkType = () => {
-      switch (type) {
-        case 'comment':
-          return setVariant({
-            color: green[200],
-            icon: <ChatBubbleOutline style={{ color: green[700] }} />,
-          });
-        case 'post':
-          return setVariant({
-            color: primary[200],
-            icon: <PeopleOutline style={{ color: primary[700] }} />,
-          });
-        case 'trade':
-          return setVariant({
-            color: secondary[200],
-            icon: <SyncAlt style={{ color: secondary[700] }} />,
-          });
-        case 'tag':
-          return setVariant({
-            color: blue[200],
-            icon: <LocalOffer style={{ color: blue[700] }} />,
-          });
-        default:
-          return setVariant({
-            color: secondary[200],
-            icon: <SyncAlt style={{ color: secondary[700] }} />,
-          });
-      }
-    };
-    checkType();
-  }, [type]);
+  console.log('variant', variant);
 
   const makeNotificationRead = async () => {
     await markAsRead(id);
@@ -129,22 +89,22 @@ const NotificationItem = ({ notification }: Props) => {
       >
         <Avatar
           style={{
-            backgroundColor: variant.color,
+            backgroundColor: variant?.color,
             height: 64,
             width: 64,
           }}
         >
-          {variant.icon}
+          {variant?.icon}
         </Avatar>
       </Badge>
       <Box display="flex" flexDirection="column" marginLeft={2.4}>
-        {content}
+        {payload}
         <Box>
           <Typography
             color={status === 'U' ? 'error' : 'textSecondary'}
             variant={status === 'U' ? 'caption' : 'overline'}
           >
-            {formatTimestampToRelative(insertedAt)}
+            {formatTimestampToRelative(insertedAt)} ago
           </Typography>
           {status === 'U' && (
             <Typography

@@ -1,8 +1,13 @@
+import { useState } from 'react';
+import { useSnackbar } from 'notistack';
 import { useFormContext } from 'react-hook-form';
 import NumberFormat from 'react-number-format';
 
 // components
+import Empty from './Empty';
 import SearchInput from '../shared/SearchInput';
+import TokenFetcher from '../shared/TokenFetcher';
+import { Query, WalletSkeleton } from 'components/common';
 
 // mui
 import {
@@ -23,35 +28,14 @@ import { red, neutral } from 'styles/colors';
 // utils
 import { formatSpn } from 'utils/spn';
 
-// assets
-import { Spn as SpnIcon } from 'assets';
+// context
+import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
-const mockList = [
-  {
-    name: 'Member 1',
-    description: '@member1',
-  },
-  {
-    name: 'Member 2',
-    description: '@member2',
-  },
-  {
-    name: 'Member 3',
-    description: '@member3',
-  },
-  {
-    name: 'Member 5',
-    description: '@member4',
-  },
-  {
-    name: 'Member 5',
-    description: '@member5',
-  },
-];
+// assets
+import { Spn as SpnIcon } from 'assets';
 
 const minSpn = 99;
-const userBalance = 15000;
 
 const useStyles = makeStyles(() => ({
   paper: { maxWidth: 510 },
@@ -71,7 +55,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
+const ReceiverItem = ({
+  dispatchWalletState,
+  displayName,
+  id,
+  publicAddress,
+  userName,
+}) => {
   const classes = useStyles();
   return (
     <Box
@@ -88,8 +78,10 @@ export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
         dispatchWalletState({
           type: 'spnCurrentReceiver',
           payload: {
-            name,
-            description,
+            id,
+            userName,
+            displayName,
+            publicAddress,
           },
         });
       }}
@@ -108,11 +100,14 @@ export const ReceiverItem = ({ description, name, dispatchWalletState }) => {
         }}
       />
       <Box display="flex" marginLeft={1}>
-        <Typography variant="button">{name}</Typography>
+        <Typography variant="button">{displayName}</Typography>
       </Box>
       <Box alignItems="center" display="flex">
-        <Typography style={{ marginLeft: 6 }} variant="button">
-          {description}
+        <Typography
+          style={{ marginLeft: 6, color: neutral[500] }}
+          variant="button"
+        >
+          @{userName}
         </Typography>
       </Box>
     </Box>
@@ -143,10 +138,14 @@ const Receivers = () => {
     register,
     formState: { isDirty },
   } = useFormContext();
-  const { dispatchWalletState, globalWalletState } = useWallet();
+  const { enqueueSnackbar } = useSnackbar();
+  const { me } = useAuth();
+  const { wallet, dispatchWalletState, globalWalletState } = useWallet();
+  const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
   const classes = useStyles();
+  console.log('spnCurrentReceiver', spnCurrentReceiver);
   return (
     <Box
       display="flex"
@@ -157,11 +156,10 @@ const Receivers = () => {
       <div
         style={{
           height: '100%',
-          display: 'grid',
           margin: '0 2.4rem',
-          gridTemplateRows: spnCurrentReceiver
-            ? '32px 72px 1fr 90px'
-            : '32px 50px 1fr 200px',
+          // gridTemplateRows: spnCurrentReceiver
+          //   ? '32px 72px 1fr 90px'
+          //   : '32px 50px 1fr 200px',
         }}
       >
         <div
@@ -218,17 +216,32 @@ const Receivers = () => {
             />
             <Box display="flex" flexDirection="column" marginLeft={1}>
               <Typography variant="button">
-                {spnCurrentReceiver.name}
+                {spnCurrentReceiver.displayName}
               </Typography>
-              <Typography variant="overline">@marryrob</Typography>
+              <Typography variant="overline">
+                @{spnCurrentReceiver.userName}
+              </Typography>
             </Box>
           </Box>
         ) : (
-          <SearchInput
-            ItemComponent={ReceiverItem}
-            dispatchWalletState={dispatchWalletState}
-            list={mockList}
-          />
+          <Query
+            api="/api/v3/users"
+            empty={<Empty />}
+            loader={<WalletSkeleton />}
+            options={{
+              fetcher: TokenFetcher,
+            }}
+          >
+            {(list) => (
+              <SearchInput
+                ItemComponent={ReceiverItem}
+                customHeight="15rem"
+                dispatchWalletState={dispatchWalletState}
+                list={list}
+                placeholder="Search for a receiver"
+              />
+            )}
+          </Query>
         )}
         <div>
           <Typography
@@ -285,19 +298,24 @@ const Receivers = () => {
                 style={{ color: red[700], fontWeight: 100 }}
                 variant="caption"
               >
-                {isDirty && watchReceive < minSpn ? 'Minimum 100 SPN' : null}
+                {isDirty && watchReceive * 1e6 < minSpn
+                  ? 'Minimum 100 SPN'
+                  : null}
               </Typography>
               <Typography
                 style={{
                   fontWeight: 100,
-                  color: userBalance < watchReceive ? red[700] : neutral[500],
+                  color:
+                    Number(wallet?.balance) / 1e6 < watchReceive
+                      ? red[700]
+                      : neutral[500],
                 }}
                 variant="caption"
               >
                 Remaining balance{' '}
-                {watchReceive <= userBalance
-                  ? formatSpn(userBalance - watchReceive)
-                  : formatSpn(userBalance)}{' '}
+                {watchReceive <= Number(wallet?.balance) / 1e6
+                  ? formatSpn(Number(wallet?.balance) / 1e6 - watchReceive)
+                  : formatSpn(Number(wallet?.balance) / 1e6)}{' '}
                 SPN
               </Typography>
             </Box>
@@ -345,25 +363,54 @@ const Receivers = () => {
       </div>
       <Box
         borderTop="1px solid #EDEEF0"
+        bottom={0}
         display="flex"
         flexWrap="wrap"
         justifyContent="center"
         paddingX={2.4}
         paddingY={2}
+        position="absolute"
+        width="100%"
       >
         <Button
           fullWidth
           color="primary"
+          disabled={loadingResponse}
           type="submit"
           variant="contained"
-          onClick={() => {
-            dispatchWalletState({
-              type: 'spnCurrentReceiver',
-              payload: null,
-            });
+          onClick={async () => {
+            setLoadingResponse(true);
+            try {
+              await wallet.transferSPN(
+                me.id,
+                spnCurrentReceiver.id,
+                spnCurrentReceiver.publicAddress,
+                watchReceive * 1e6
+              );
+              enqueueSnackbar('Success!', {
+                variant: 'success',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+              setLoadingResponse(false);
+              dispatchWalletState({
+                type: 'spnCurrentReceiver',
+                payload: null,
+              });
+            } catch (error) {
+              enqueueSnackbar('Something went wrong.', {
+                variant: 'error',
+                anchorOrigin: {
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                },
+              });
+            }
           }}
         >
-          Send SPN
+          {loadingResponse ? 'Processing...' : 'Send SPN'}
         </Button>
       </Box>
     </Box>

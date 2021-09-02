@@ -54,7 +54,7 @@ const Store = () => {
   return (
     <div
       style={{
-        height: showTabsMenu ? 'calc(100% - 63px)' : '100%',
+        height: showTabsMenu ? '448px' : '100%',
       }}
     >
       <FormProvider {...methods}>

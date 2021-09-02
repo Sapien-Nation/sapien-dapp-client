@@ -1,3 +1,5 @@
+import useSWR from 'swr';
+
 // mui
 import { Box, makeStyles } from '@material-ui/core';
 
@@ -6,7 +8,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { Navbar, Sidebar } from 'components/navigation';
-import { LayoutSkeleton, Redirect, Query } from 'components/common';
+import { Redirect } from 'components/common';
 
 interface Props {
   children: React.ReactNode;
@@ -29,6 +31,7 @@ const useStyles = makeStyles(() => ({
 
 const Layout = ({ children }: Props) => {
   const { me } = useAuth();
+  useSWR('/api/v3/profile/tribes', { initialData: [] });
   const classes = useStyles({ isLoggedIn: Boolean(me) });
 
   if (me === undefined) return <></>;
@@ -36,17 +39,13 @@ const Layout = ({ children }: Props) => {
   if (me === null) return <Redirect to="/register" />;
 
   return (
-    <Query api="/api/v3/profile/tribes" loader={<LayoutSkeleton />}>
-      {() => (
-        <div className={classes.root}>
-          <Sidebar />
-          <main>
-            <Navbar />
-            <Box className={classes.container}>{children}</Box>
-          </main>
-        </div>
-      )}
-    </Query>
+    <div className={classes.root}>
+      <Sidebar />
+      <main>
+        <Navbar />
+        <Box className={classes.container}>{children}</Box>
+      </main>
+    </div>
   );
 };
 

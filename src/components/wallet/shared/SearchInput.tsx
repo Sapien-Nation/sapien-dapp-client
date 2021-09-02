@@ -37,6 +37,8 @@ const mockList = [
 
 interface Props {
   ItemComponent: any;
+  customHeight?: string;
+  placeholder?: string;
   list?: any;
   dispatchWalletState?: (state: any) => void;
   walletOpen?: ContentAuthor | boolean;
@@ -44,6 +46,8 @@ interface Props {
 
 const SearchInput = ({
   ItemComponent,
+  customHeight = 'auto',
+  placeholder = 'Search for a badges',
   list = mockList,
   dispatchWalletState,
   walletOpen,
@@ -55,12 +59,14 @@ const SearchInput = ({
 
   const results = !searchTerm
     ? list
-    : list.filter(({ name }) =>
-        name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+    : list.filter(({ name, displayName, userName }) =>
+        (name || displayName || userName)
+          .toLowerCase()
+          .includes(searchTerm.toLocaleLowerCase())
       );
 
   return (
-    <>
+    <div style={{ height: customHeight, overflow: 'hidden' }}>
       <TextField
         fullWidth
         InputProps={{
@@ -79,7 +85,7 @@ const SearchInput = ({
           autoComplete: 'none',
         }}
         label=""
-        placeholder="Search for badges"
+        placeholder={placeholder}
         style={{
           marginBottom: 0,
         }}
@@ -93,15 +99,19 @@ const SearchInput = ({
             blockchainId={item.blockchainId}
             description={item.description}
             dispatchWalletState={dispatchWalletState}
+            displayName={item.displayName}
             id={item.id}
             name={item.name}
+            publicAddress={item.publicAddress}
             quantity={item.quantity}
             spn={item.spn}
+            userIsAdmin={item.userIsAdmin}
+            userName={item.userName}
             walletOpen={walletOpen}
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
