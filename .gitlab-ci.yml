@@ -3,14 +3,22 @@ stages:
  #- push_to_ecr
  #- deploy
 
+variables:
+  # this variable can be overriden by pipeline run variable
+  ENV: "sandbox"
+
 .sandbox_triggers: &sandbox_triggers
   refs:
     - sandbox
 
-.prod_triggers: &prod_triggers
+.qat_triggers: &qat_triggers
   refs:
-    - master
+    - qat
 
+.poc_triggers: &poc_triggers
+  refs:
+    - poc
+    -
 build-sandbox:
   stage: build
   tags:
@@ -29,8 +37,6 @@ build-sandbox:
     - export LOG_LEVEL=debug
     - export PORT="4000"
     - envsubst < .env-temp > .env
-    - pwd
-
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 994750220687.dkr.ecr.us-east-2.amazonaws.com
     - docker build -t front-v3:latest .
@@ -42,11 +48,56 @@ build-sandbox:
   only:
     <<: *sandbox_triggers
 
-build-deploy-prod:
+build-qat:
   stage: build
   tags:
-    - back-main
+    - front-qat
   script:
-    - echo "prod deployment goes here"
+    - git submodule init   &&  git submodule update --remote
+    ##- git pull --recurse-submodule
+    - export KUBECONFIG=~/.kube/kubeconfig_sapien-qat-cluster
+    - export AWS_PROFILE=sapien-qat
+    - export AWS_REGION=us-east-2
+    - export ENV=QAT
+    - export S3_BUCKET_NAME=sapien-qat
+    - export NODE_ENV=$ENV
+    - export LOG_LEVEL=debug
+    - envsubst < .env-temp > .env
+    ### login to ecr
+    - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
+    - docker build -t front-v3:latest .
+    - docker tag front-v3:latest 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - export ENV=qat
+    - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
+    - cat front-dep.yml
+    - kubectl apply -f front-dep.yml
   only:
-    <<: *prod_triggers
+    <<: *qat_triggers
+
+build-poc:
+  stage: build
+  tags:
+    - front-poc
+  script:
+    - git submodule init   &&  git submodule update --remote
+    ##- git pull --recurse-submodule
+    - export KUBECONFIG=~/.kube/kubeconfig_sapien-poc-cluster
+    - export AWS_PROFILE=sapien-poc
+    - export AWS_REGION=us-east-2
+    - export ENV=POC
+    - export S3_BUCKET_NAME=sapien-poc
+    - export NODE_ENV=$ENV
+    - export LOG_LEVEL=debug
+    - envsubst < .env-temp > .env
+    ### login to ecr
+    - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
+    - docker build -t front-v3:latest .
+    - docker tag front-v3:latest 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - export ENV=poc
+    - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
+    - cat front-dep.yml
+    - kubectl apply -f front-dep.yml
+  only:
+    <<: *poc_triggers
