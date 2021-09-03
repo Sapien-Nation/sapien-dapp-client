@@ -40,8 +40,8 @@ import { Search } from 'components/search';
 import { Query } from 'components/common';
 
 // todo: use this fetcher
-// const fetcher = (url: string) =>
-//   notificationInstance.get(url).then((res) => res.data);
+const fetcher = (url: string) =>
+  notificationInstance.get(url).then((res) => res.data);
 
 const useStyles = makeStyles<Theme>(() => ({
   paper: {
@@ -259,8 +259,7 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setNotificationsAnchor(null)}
       >
-        {/* todo: remove fetcher and use API */}
-        <Query api="/api/v3/notification/all" options={{ fetcher: () => [] }}>
+        <Query api="/api/v3/notification/all" options={{ fetcher }}>
           {(data) => <NotificationMenu data={data} />}
         </Query>
       </Menu>
