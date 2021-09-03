@@ -36,7 +36,7 @@ const AuthLayout = ({ children }: Props) => {
       <CssBaseline />
       <Box
         display="grid"
-        gridTemplateColumns={matches ? '1fr' : '1fr 560px'}
+        gridTemplateColumns={matches ? '1fr' : '1fr 1fr'}
         height="100vh"
         padding={matches ? 2 : 0}
       >
@@ -61,7 +61,7 @@ const AuthLayout = ({ children }: Props) => {
           overflow="auto"
           paddingBottom={4}
           paddingTop={8}
-          paddingX={8.5}
+          paddingX="25%"
         >
           <div style={{ width: '100%' }}>
             <FullLogo />
