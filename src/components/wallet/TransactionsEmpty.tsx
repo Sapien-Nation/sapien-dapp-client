@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router';
+
 // assets
 import { EmptyBadges } from 'assets';
 
@@ -8,7 +10,8 @@ import { useWallet } from 'context/wallet';
 import { Box, Button, Typography } from '@material-ui/core';
 
 const TransactionsEmpty = () => {
-  const { dispatchWalletState } = useWallet();
+  const { push } = useRouter();
+  const { dispatchWalletState, setWalletOpen } = useWallet();
   return (
     <Box
       display="flex"
@@ -37,14 +40,18 @@ const TransactionsEmpty = () => {
       <Box display="flex" flexDirection="column">
         <Button
           fullWidth
-          aria-label="Expore Tribes"
+          aria-label="Explore Tribes"
           color="primary"
           style={{
             marginBottom: 10,
           }}
           variant="contained"
+          onClick={() => {
+            setWalletOpen(false);
+            push('/discovery');
+          }}
         >
-          Expore Tribes
+          Explore Tribes
         </Button>
         <Button
           fullWidth
