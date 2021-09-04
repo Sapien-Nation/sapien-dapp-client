@@ -20,7 +20,7 @@ import { Autocomplete } from '@material-ui/lab';
 import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
 
 // styles
-import { neutral } from 'styles/colors';
+import { neutral, primary } from 'styles/colors';
 
 const useStyles = makeStyles(() => ({
   inputRoot: {
@@ -60,9 +60,9 @@ const useStyles = makeStyles(() => ({
 const Search = () => {
   const classes = useStyles();
   const [inputValue, setInputValue] = useState('');
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.between(960, 1281));
-  const hasContent = inputValue !== '' && inputValue.length > 0;
 
   return (
     <Box marginRight="auto" minWidth={isMediumScreen ? 700 : 734}>
@@ -78,7 +78,7 @@ const Search = () => {
         }}
         getOptionLabel={(option) => option.name}
         inputValue={inputValue}
-        open={hasContent}
+        open={open}
         options={options}
         renderInput={(params) => (
           <TextField
@@ -86,12 +86,11 @@ const Search = () => {
             fullWidth
             InputProps={{
               ...params.InputProps,
-
               type: 'search',
               startAdornment: (
                 <SearchIcon style={{ color: '#C4C5CC', marginLeft: 10 }} />
               ),
-              endAdornment: inputValue.length > 0 && (
+              endAdornment: inputValue && (
                 <Box alignItems="center" display="flex">
                   <Typography
                     style={{
@@ -110,13 +109,25 @@ const Search = () => {
                   </IconButton>
                 </Box>
               ),
+              style: {
+                border: open ? `2px solid ${primary[400]}` : 'none',
+              },
             }}
             inputProps={{ ...params.inputProps, style: { border: '0px' } }}
           />
         )}
         renderOption={(option) => <OptionItem option={option} />}
+        onClose={() => setOpen(false)}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
+          if (!newInputValue) {
+            setOpen(false);
+          }
+        }}
+        onOpen={() => {
+          if (inputValue) {
+            setOpen(true);
+          }
         }}
       />
     </Box>
