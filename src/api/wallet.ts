@@ -35,6 +35,7 @@ export const purchaseBadge = (body: {
   parentBadgeId: string;
   ownerId: string;
   totalPrice: number;
+  isJoiningTribe: boolean;
 }) =>
   tokensInstance
     .post('/api/v3/badge/purchaseBadge', body)
