@@ -261,7 +261,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       ownerId, // user id of the buyer
       parentBadgeId, // id of the badge on Sapien
       totalPrice: number, // price of the badge x amount
-      isJoiningTribe: boolean // regular purchase / join tribe purchase
+      isJoiningTribe = false // regular purchase (default) / join tribe purchase
     ) => {
       if (!Number.isInteger(blockchainId)) {
         return Promise.reject('Badge Id not valid');
