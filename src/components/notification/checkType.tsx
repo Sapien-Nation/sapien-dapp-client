@@ -16,12 +16,12 @@ export const checkType = (type: string) => {
         color: green[200],
         icon: <ChatBubbleOutline style={{ color: green[700] }} />,
       };
-    case 'token.badge_post1':
+    case 'token.badge_post':
       return {
         color: primary[200],
         icon: <PeopleOutline style={{ color: primary[700] }} />,
       };
-    case 'token.badge_post':
+    case 'tribe.mentioned':
       return {
         color: secondary[200],
         icon: <SyncAlt style={{ color: secondary[700] }} />,

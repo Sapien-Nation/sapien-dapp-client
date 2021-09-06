@@ -19,13 +19,13 @@ export const useSocketEvent = (
   const { socket } = useSocket();
 
   useEffect(() => {
-    socket.onmessage = (event) => {
+    socket.addEventListener('message', function (event) {
       const eventData = JSON.parse(event.data);
       if (eventData.type === eventName) {
         callback(eventData);
       }
-    };
-  }, [callback, eventName, socket]);
+    });
+  }, []);
 };
 
 export const useSocketEmit = (

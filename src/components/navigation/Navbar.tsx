@@ -1,3 +1,4 @@
+import useSWR from 'swr';
 import React, { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useLocalStorage } from 'react-use';
@@ -37,7 +38,6 @@ import { NotificationsNone } from '@material-ui/icons';
 import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
 import { Search } from 'components/search';
-import { Query } from 'components/common';
 
 // todo: use this fetcher
 const fetcher = (url: string) =>
@@ -86,6 +86,9 @@ const Navbar = () => {
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
   const { query, asPath } = useRouter();
+  const { data: notifications } = useSWR('/api/v3/notification/all', {
+    fetcher,
+  });
   const isDiscoveryPage = Boolean(asPath.includes('discovery'));
   const classes = useStyles({ isDiscoveryPage });
   const [tokens] = useLocalStorage<{
@@ -202,7 +205,7 @@ const Navbar = () => {
                   vertical: 'bottom',
                   horizontal: 'right',
                 }}
-                badgeContent={1}
+                badgeContent={notifications?.count || 0}
                 color="error"
               >
                 <NotificationsNone />
@@ -259,9 +262,7 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setNotificationsAnchor(null)}
       >
-        <Query api="/api/v3/notification/all" options={{ fetcher }}>
-          {(data) => <NotificationMenu data={data} />}
-        </Query>
+        <NotificationMenu data={notifications} />
       </Menu>
     </AppBar>
   );
