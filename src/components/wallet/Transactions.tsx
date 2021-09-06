@@ -49,7 +49,7 @@ const Transactions = () => {
     { fetcher }
   );
 
-  const web3Config = getConfig(false); // replace by env var (mainnet / testnet)
+  const web3Config = getConfig();
 
   if (!transactions)
     return (

@@ -1,12 +1,13 @@
-const getConfig = (isMainnet: boolean) =>
-  isMainnet
+import { walletIsMainnet, walleBiconomyApiKey } from 'api';
+const getConfig = () => {
+  return walletIsMainnet === 'true'
     ? {
         MAINNET_NETWORK_ID: 1,
         POLY_NETWORK_ID: 137,
-        RPC_PROVIDER: 'https://rpc-mainnet.matic.network',
-        SPN_TOKEN_ADDRESS: '0x20f7a3ddf244dc9299975b4da1c39f8d5d75f05a', // Mainnet SPN
-        BADGE_STORE_ADDRESS: '',
-        BICONOMY_API_KEY: '',
+        RPC_PROVIDER: 'https://polygon-rpc.com/',
+        SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
+        BADGE_STORE_ADDRESS: '0x975dE233452b915219373bFf5A49b1C81cD807eF',
+        BICONOMY_API_KEY: walleBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
       }
     : {
@@ -15,7 +16,8 @@ const getConfig = (isMainnet: boolean) =>
         RPC_PROVIDER: 'https://rpc-mumbai.matic.today',
         SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
         BADGE_STORE_ADDRESS: '0x59cD3d76cC9EA4f626629337664A3CbD78F48474',
-        BICONOMY_API_KEY: 'tYSKReKvQ.c2fbc08c-3991-49b8-8ed8-cb945b0e55fe',
+        BICONOMY_API_KEY: walleBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://mumbai.polygonscan.com/tx/',
       };
+};
 export default getConfig;

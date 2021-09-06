@@ -1,8 +1,11 @@
 import { useState } from 'react';
-
 import { useCopyToClipboard } from 'react-use';
 import { useSnackbar } from 'notistack';
 import { useRouter } from 'next/router';
+import { mutate } from 'swr';
+
+// api
+import { joinTribe } from 'api/tribes';
 
 // components
 import { Image, PageHeaderSkeleton, Query } from 'components/common';
@@ -35,8 +38,10 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { query } = useRouter();
   const { squareID, tribeSquareID } = query;
-  const { squares } = getTribe(String(squareID));
+  const { squares, ...rest } = getTribe(String(squareID));
+
   const selectedSquare = squares?.find(({ id }) => id === tribeSquareID);
+
   const copy = () => {
     copyToClipboard(window.location.href);
     if (copyToClipboardState.error) {
@@ -56,6 +61,34 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
         },
         preventDuplicate: true,
       });
+    }
+  };
+
+  const handleJoinTribe = async () => {
+    try {
+      await joinTribe(tribeID);
+
+      mutate(
+        '/api/v3/profile/tribes',
+        (tribes: Array<any>) => [
+          ...tribes,
+          {
+            squares,
+            ...rest,
+          },
+        ],
+        false
+      );
+      mutate(
+        `/api/v3/tribe/${tribeID}`,
+        (tribe) => ({
+          ...tribe,
+          isMember: true,
+        }),
+        false
+      );
+    } catch (err) {
+      enqueueSnackbar(err.message);
     }
   };
 
@@ -130,22 +163,33 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   </Box>
                 </Box>
                 <Box display="flex" style={{ gap: '10px', marginLeft: 'auto' }}>
-                  <ButtonGroup
-                    disableElevation
-                    aria-label="split button"
-                    color="primary"
-                    variant="contained"
-                  >
-                    <Button aria-label="Invite users">Invite</Button>
-                    <Button
-                      aria-label="Copy invitation link"
+                  {tribe.isMember ? (
+                    <ButtonGroup
+                      disableElevation
+                      aria-label="split button"
                       color="primary"
-                      size="small"
-                      onClick={() => copy()}
+                      variant="contained"
                     >
-                      <FileCopyOutlinedIcon fontSize="small" />
+                      <Button aria-label="Invite users">Invite</Button>
+                      <Button
+                        aria-label="Copy invitation link"
+                        color="primary"
+                        size="small"
+                        onClick={() => copy()}
+                      >
+                        <FileCopyOutlinedIcon fontSize="small" />
+                      </Button>
+                    </ButtonGroup>
+                  ) : (
+                    <Button
+                      aria-label="Join Tribe"
+                      color="primary"
+                      variant="contained"
+                      onClick={handleJoinTribe}
+                    >
+                      Join Tribe
                     </Button>
-                  </ButtonGroup>
+                  )}
                   <Button
                     aria-label="Follow or Unfollow tribe"
                     variant="outlined"

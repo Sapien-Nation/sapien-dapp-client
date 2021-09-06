@@ -1,4 +1,10 @@
 import numeral from 'numeral';
+import { useSnackbar } from 'notistack';
+import { mutate } from 'swr';
+import { useRouter } from 'next/router';
+
+// api
+import { joinTribe } from 'api/tribes';
 
 // colors
 import { neutral } from 'styles/colors';
@@ -77,9 +83,35 @@ interface Props {
 }
 
 const Tribe = ({
-  tribe: { avatar, cover, description, isMember, name, membersCount, price },
+  tribe: {
+    id,
+    avatar,
+    cover,
+    description,
+    isMember,
+    name,
+    mainSquareId,
+    membersCount,
+    price,
+  },
 }: Props) => {
   const classes = useStyles();
+  const { push } = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleJoinTribe = async () => {
+    try {
+      await joinTribe(id);
+
+      mutate('/api/v3/tribes/discovery', (tribes: Array<any>) =>
+        tribes.filter((tribe) => id !== tribe.id)
+      );
+
+      push(`/client/${mainSquareId}`);
+    } catch (err) {
+      enqueueSnackbar(err.message);
+    }
+  };
 
   return (
     <Card className={classes.root} elevation={0}>
@@ -133,7 +165,12 @@ const Tribe = ({
             </Button>
           </ButtonGroup>
         ) : (
-          <Button aria-label="Join Tribe" color="primary" variant="contained">
+          <Button
+            aria-label="Join Tribe"
+            color="primary"
+            variant="contained"
+            onClick={handleJoinTribe}
+          >
             Join Tribe
           </Button>
         )}
