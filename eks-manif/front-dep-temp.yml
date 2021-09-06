@@ -20,15 +20,6 @@ spec:
           - name: front-v3
             image: 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
             imagePullPolicy: Always
-            env:
-              - name: NEXT_PUBLIC_RELEASE_NAME
-                value: "$NEXT_PUBLIC_RELEASE_NAME"
-              - name: NEXT_PUBLIC_API_URL
-                value: "$NEXT_PUBLIC_API_URL"
-              - name: NEXT_PUBLIC_API_AUTH_URL
-                value: "$NEXT_PUBLIC_API_AUTH_URL"
-              - name: NEXT_PUBLIC_API_TOKENS_URL
-                value: "$NEXT_PUBLIC_API_TOKENS_URL"
             ports:
               - containerPort: 3000
                 name: p3000
