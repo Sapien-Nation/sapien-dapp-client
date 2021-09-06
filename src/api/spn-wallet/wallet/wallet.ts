@@ -158,7 +158,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       fromUserId: string,
       toUserId: string,
       toAddress: string,
-      spnAmount: number
+      spnAmount: number,
+      contentId?: string
     ) => {
       try {
         if (!isAddress(toAddress)) {
@@ -187,6 +188,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
           fromUserId,
           toUserId,
           spnAmount,
+          contentId,
           rawTx,
         };
 
@@ -202,7 +204,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       amount: number, // # of badges to be transferred
       badgeId: string, // badge id on Sapien platform
       badgeBlockchainId: number, // if on the blockchain
-      userIsAdmin: boolean // current user is admin of the badge?
+      userIsAdmin: boolean, // current user is admin of the badge?
+      contentId?: string // if awarding content, this is its id
     ) => {
       if (!isAddress(toAddress)) {
         return Promise.reject('Address should be valid');
@@ -250,6 +253,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         badgeBlockchainId,
         amount,
         userIsAdmin,
+        contentId,
         rawTx,
       };
 
