@@ -31,10 +31,7 @@ const DiscoveryPage = () => (
         gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
       }}
     >
-      <DynamicQuery
-        api="/api/v3/tribes/discovery"
-        options={{ initialData: [] }}
-      >
+      <DynamicQuery api="/api/v3/tribes/discovery">
         {(tribes: Array<any>) => (
           <>
             {tribes.map((tribe: any) => (
