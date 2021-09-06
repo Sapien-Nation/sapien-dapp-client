@@ -1,4 +1,5 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { socketURL } from 'api';
 
 export const initSocket = () => {
   const options = {
@@ -6,10 +7,6 @@ export const initSocket = () => {
     maxRetries: 10,
   };
   const tokens = JSON.parse(localStorage.getItem('tokens'));
-  const socket = new ReconnectingWebSocket(
-    process.env.NEXT_PUBLIC_SOCKET_URL,
-    tokens?.token,
-    options
-  );
+  const socket = new ReconnectingWebSocket(socketURL, tokens?.token, options);
   return socket;
 };

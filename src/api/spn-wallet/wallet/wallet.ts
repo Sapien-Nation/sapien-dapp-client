@@ -22,7 +22,7 @@ const metaTransactionType = [
 ];
 
 const Wallet = async (publicAddress: string, privateKey: string) => {
-  const config = getConfig(false);
+  const config = getConfig();
 
   const biconomy = new Biconomy(
     new Web3.providers.HttpProvider(config.RPC_PROVIDER),
