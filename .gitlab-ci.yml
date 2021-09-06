@@ -18,7 +18,8 @@ variables:
 .poc_triggers: &poc_triggers
   refs:
     - poc
-    -
+
+
 build-sandbox:
   stage: build
   tags:
