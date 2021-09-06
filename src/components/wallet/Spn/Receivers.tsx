@@ -145,7 +145,6 @@ const Receivers = () => {
   const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
   const classes = useStyles();
-  console.log('spnCurrentReceiver', spnCurrentReceiver);
   return (
     <Box
       display="flex"
@@ -157,9 +156,6 @@ const Receivers = () => {
         style={{
           height: '100%',
           margin: '0 2.4rem',
-          // gridTemplateRows: spnCurrentReceiver
-          //   ? '32px 72px 1fr 90px'
-          //   : '32px 50px 1fr 200px',
         }}
       >
         <div
@@ -385,7 +381,8 @@ const Receivers = () => {
                 me.id,
                 spnCurrentReceiver.id,
                 spnCurrentReceiver.publicAddress,
-                watchReceive * 1e6
+                watchReceive * 1e6,
+                spnCurrentReceiver.contentId
               );
               enqueueSnackbar('Success!', {
                 variant: 'success',

@@ -61,7 +61,7 @@ export const BadgeItem = ({
       }}
       onClick={async () => {
         if (walletOpen && walletOpen.author?.userName) {
-          const currentUser = users.find(
+          const userToBadge = users.find(
             (user) => user.id === walletOpen.author.id
           );
           dispatchWalletState({
@@ -71,7 +71,7 @@ export const BadgeItem = ({
               myBadgesCurrentReceiver: {
                 name: walletOpen.author.userName,
                 description: walletOpen.author.displayName,
-                publicAddress: currentUser?.publicAddress,
+                publicAddress: userToBadge?.publicAddress,
               },
               showTabsMenu: false,
               showAuthorToBadge: false,
