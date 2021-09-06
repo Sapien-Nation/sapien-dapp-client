@@ -166,7 +166,8 @@ const Confirmation = () => {
                 watchBadgesAmount,
                 myBadgesCurrentBadge.id,
                 myBadgesCurrentBadge.blockchainId,
-                myBadgesCurrentBadge.userIsAdmin
+                myBadgesCurrentBadge.userIsAdmin,
+                myBadgesCurrentBadge.contentId
               );
               enqueueSnackbar('Success!', {
                 variant: 'success',

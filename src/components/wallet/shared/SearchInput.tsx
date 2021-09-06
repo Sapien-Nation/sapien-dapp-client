@@ -41,6 +41,7 @@ interface Props {
   placeholder?: string;
   list?: any;
   dispatchWalletState?: (state: any) => void;
+  users?: any;
   walletOpen?: Content | boolean;
 }
 
@@ -50,6 +51,7 @@ const SearchInput = ({
   placeholder = 'Search for a badges',
   list = mockList,
   dispatchWalletState,
+  users,
   walletOpen,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -108,6 +110,7 @@ const SearchInput = ({
             spn={item.spn}
             userIsAdmin={item.userIsAdmin}
             userName={item.userName}
+            users={users}
             walletOpen={walletOpen}
           />
         ))}

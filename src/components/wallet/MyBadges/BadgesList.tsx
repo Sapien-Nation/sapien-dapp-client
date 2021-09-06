@@ -1,3 +1,5 @@
+import useSWR from 'swr';
+
 // assets
 import { Spn as SpnIcon } from 'assets';
 
@@ -42,6 +44,7 @@ export const BadgeItem = ({
   quantity,
   spn,
   userIsAdmin,
+  users,
   walletOpen,
 }) => {
   const classes = useStyles();
@@ -56,15 +59,19 @@ export const BadgeItem = ({
       style={{
         cursor: 'pointer',
       }}
-      onClick={() => {
+      onClick={async () => {
         if (walletOpen && walletOpen.author?.userName) {
+          const currentUser = users.find(
+            (user) => user.id === walletOpen.author.id
+          );
           dispatchWalletState({
             type: 'update',
             payload: {
               myBadgesTransition: 'forward',
               myBadgesCurrentReceiver: {
-                name: walletOpen.author?.userName,
-                description: walletOpen.author?.displayName,
+                name: walletOpen.author.userName,
+                description: walletOpen.author.displayName,
+                publicAddress: currentUser?.publicAddress,
               },
               showTabsMenu: false,
               showAuthorToBadge: false,
@@ -77,6 +84,7 @@ export const BadgeItem = ({
                 price: spn,
                 quantity,
                 userIsAdmin,
+                contentId: walletOpen.id,
               },
             },
           });
@@ -143,7 +151,9 @@ export const BadgeItem = ({
 const BadgesList = () => {
   const { me } = useAuth();
   const { dispatchWalletState, walletOpen } = useWallet();
-
+  const { data: users } = useSWR('/api/v3/users', {
+    fetcher: TokenFetcher,
+  });
   return (
     <div
       style={{
@@ -164,6 +174,7 @@ const BadgesList = () => {
             ItemComponent={BadgeItem}
             dispatchWalletState={dispatchWalletState}
             list={list}
+            users={users}
             walletOpen={walletOpen}
           />
         )}
