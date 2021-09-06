@@ -34,7 +34,7 @@ build-sandbox:
     - export AWS_PROFILE=sapien-sandbox
     - export AWS_REGION=us-east-2
     ### service env vars
-    - export NODE_ENV=local
+    - export ENV=SANDBOX
     - export LOG_LEVEL=debug
     - export PORT="4000"
     - envsubst < .env-temp > .env
@@ -43,6 +43,7 @@ build-sandbox:
     - docker build -t front-v3:latest .
     - docker tag front-v3:latest 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
     - docker push 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - export ENV=sandbox
     - cd eks-manif &&  envsubst <  front-dep-temp.yml > front-dep.yml
     - cat front-dep.yml
     - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
