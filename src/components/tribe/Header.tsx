@@ -41,6 +41,7 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
   const { squares, ...rest } = getTribe(String(squareID));
 
   const selectedSquare = squares?.find(({ id }) => id === tribeSquareID);
+  const isSapienTribe = squareID === 'sapien';
 
   const copy = () => {
     copyToClipboard(window.location.href);
@@ -163,32 +164,36 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
                   </Box>
                 </Box>
                 <Box display="flex" style={{ gap: '10px', marginLeft: 'auto' }}>
-                  {tribe.isMember ? (
-                    <ButtonGroup
-                      disableElevation
-                      aria-label="split button"
-                      color="primary"
-                      variant="contained"
-                    >
-                      <Button aria-label="Invite users">Invite</Button>
-                      <Button
-                        aria-label="Copy invitation link"
-                        color="primary"
-                        size="small"
-                        onClick={() => copy()}
-                      >
-                        <FileCopyOutlinedIcon fontSize="small" />
-                      </Button>
-                    </ButtonGroup>
-                  ) : (
-                    <Button
-                      aria-label="Join Tribe"
-                      color="primary"
-                      variant="contained"
-                      onClick={handleJoinTribe}
-                    >
-                      Join Tribe
-                    </Button>
+                  {!isSapienTribe && (
+                    <>
+                      {tribe.isMember ? (
+                        <ButtonGroup
+                          disableElevation
+                          aria-label="split button"
+                          color="primary"
+                          variant="contained"
+                        >
+                          <Button aria-label="Invite users">Invite</Button>
+                          <Button
+                            aria-label="Copy invitation link"
+                            color="primary"
+                            size="small"
+                            onClick={() => copy()}
+                          >
+                            <FileCopyOutlinedIcon fontSize="small" />
+                          </Button>
+                        </ButtonGroup>
+                      ) : (
+                        <Button
+                          aria-label="Join Tribe"
+                          color="primary"
+                          variant="contained"
+                          onClick={handleJoinTribe}
+                        >
+                          Join Tribe
+                        </Button>
+                      )}
+                    </>
                   )}
                   <Button
                     aria-label="Follow or Unfollow tribe"

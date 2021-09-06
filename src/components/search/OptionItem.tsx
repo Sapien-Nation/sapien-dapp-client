@@ -17,7 +17,7 @@ const OptionItem = ({ option }: Props) => {
   const { avatar, identifier, membersCount, name, subscribersCount, type } =
     option;
   return (
-    <Box alignItems="center" display="flex" paddingY={0.5}>
+    <Box alignItems="center" display="flex" paddingY={0.5} width="100%">
       <Avatar src={avatar} variant={type === 'user' ? 'circular' : 'rounded'} />
       <Box display="flex" flexDirection="column">
         <Box alignItems="center" display="flex">
