@@ -8,6 +8,7 @@ enum Envs {
 }
 
 const nodeEnv = process.env.NEXT_PUBLIC_ENV;
+console.log(`Running App in: ${nodeEnv}`);
 
 const getVariables = () => {
   switch (nodeEnv) {
@@ -77,6 +78,8 @@ const getVariables = () => {
       };
       break;
     }
+    default:
+      return {};
   }
 };
 
