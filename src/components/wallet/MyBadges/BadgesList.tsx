@@ -57,14 +57,14 @@ export const BadgeItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
-        if (walletOpen && walletOpen.userName) {
+        if (walletOpen && walletOpen.author?.userName) {
           dispatchWalletState({
             type: 'update',
             payload: {
               myBadgesTransition: 'forward',
               myBadgesCurrentReceiver: {
-                name: walletOpen.userName,
-                description: walletOpen.displayName,
+                name: walletOpen.author?.userName,
+                description: walletOpen.author?.displayName,
               },
               showTabsMenu: false,
               showAuthorToBadge: false,

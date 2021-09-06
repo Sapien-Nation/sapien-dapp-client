@@ -57,7 +57,7 @@ const WalletTabs = () => {
     globalWalletState;
   const handleChange = (_, tab) => {
     // @ts-ignore
-    if (walletOpen?.userName) {
+    if (walletOpen?.author?.userName) {
       dispatchWalletState({
         type: 'showAuthorToBadge',
         payload: true,
@@ -121,7 +121,7 @@ const WalletTabs = () => {
   return (
     <>
       {/* @ts-ignore */}
-      {walletOpen && walletOpen.userName && showAuthorToBadge && (
+      {walletOpen && walletOpen.author?.userName && showAuthorToBadge && (
         <Box
           alignItems="center"
           bgcolor={neutral[50]}
@@ -143,10 +143,14 @@ const WalletTabs = () => {
             }}
           />
           <Box display="flex" flexDirection="column" marginLeft={1}>
-            {/* @ts-ignore */}
-            <Typography variant="button">{walletOpen.displayName}</Typography>
-            {/* @ts-ignore */}
-            <Typography variant="overline">@{walletOpen.userName}</Typography>
+            <Typography variant="button">
+              {/* @ts-ignore */}
+              {walletOpen.author?.displayName}
+            </Typography>
+            <Typography variant="overline">
+              {/* @ts-ignore eslint-disable-line */}@
+              {walletOpen.author?.userName}
+            </Typography>
           </Box>
           <IconButton
             aria-label="close"

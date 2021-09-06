@@ -22,15 +22,15 @@ const Spn = () => {
   });
   useEffect(() => {
     // @ts-ignore
-    if (walletOpen?.userName) {
+    if (walletOpen?.author?.userName) {
       dispatchWalletState({
         type: 'update',
         payload: {
           spnCurrentReceiver: {
             // @ts-ignore
-            userName: walletOpen.userName,
+            userName: walletOpen.author?.userName,
             // @ts-ignore
-            displayName: walletOpen.displayName,
+            displayName: walletOpen.author?.displayName,
           },
           showAuthorToBadge: false,
         },

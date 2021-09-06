@@ -43,7 +43,7 @@ const Confirmation = () => {
             }}
             onClick={() => {
               // @ts-ignore
-              if (walletOpen?.userName) {
+              if (walletOpen?.author?.userName) {
                 dispatchWalletState({
                   type: 'update',
                   payload: {

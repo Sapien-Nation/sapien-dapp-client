@@ -5,7 +5,7 @@ import { InputAdornment, TextField } from '@material-ui/core';
 import { Search as SearchIcon } from '@material-ui/icons';
 
 // types
-import type { ContentAuthor } from 'tools/types/content';
+import type { Content } from 'tools/types/content';
 
 const mockList = [
   {
@@ -41,7 +41,7 @@ interface Props {
   placeholder?: string;
   list?: any;
   dispatchWalletState?: (state: any) => void;
-  walletOpen?: ContentAuthor | boolean;
+  walletOpen?: Content | boolean;
 }
 
 const SearchInput = ({
