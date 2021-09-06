@@ -1,14 +1,13 @@
 import axios from 'axios';
 
 enum Envs {
-  Local = 'local',
-  Sandbox = 'sandbox',
-  QAT = 'qat',
-  POC = 'poc',
+  Local = 'LOCAL',
+  Sandbox = 'SANDBOX',
+  QAT = 'QAT',
+  POC = 'POC',
 }
 
 const nodeEnv = process.env.NEXT_PUBLIC_ENV;
-console.log(`Running App in: ${nodeEnv}`);
 
 const getVariables = () => {
   switch (nodeEnv) {
