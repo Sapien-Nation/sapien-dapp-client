@@ -10,6 +10,7 @@ export const sendSPN = (body: {
   fromUserId: string;
   toUserId: string;
   spnAmount: number;
+  contentId: string;
   rawTx: string;
 }) =>
   tokensInstance
@@ -23,6 +24,7 @@ export const sendBadge = (body: {
   badgeBlockchainId: number;
   amount: number;
   userIsAdmin: boolean;
+  contentId?: string;
   rawTx: string;
 }) =>
   tokensInstance
