@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 
 // components
 const DynamicLayout = dynamic<any>(
@@ -13,36 +14,53 @@ const DynamicQuery = dynamic<any>(
   () => import('components/common').then((mod) => mod.Query) as any,
   { ssr: false }
 );
+const DynamicJoinTribe = dynamic<any>(
+  () => import('components/tribe').then((mod) => mod.JoinTribeModal) as any,
+  { ssr: false }
+);
 
 // mui
 import { Box } from '@material-ui/core';
 
-const DiscoveryPage = () => (
-  <Box
-    className="card--rounded-gray"
-    marginTop={12.7}
-    paddingX={2.8}
-    paddingY={4}
-  >
+const DiscoveryPage = () => {
+  const [showJoinTribe, setShowJoinTribe] = useState<any>(null);
+  return (
     <Box
-      display="grid"
-      style={{
-        gap: '1.6rem',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
-      }}
+      className="card--rounded-gray"
+      marginTop={12.7}
+      paddingX={2.8}
+      paddingY={4}
     >
-      <DynamicQuery api="/api/v3/tribes/discovery">
-        {(tribes: Array<any>) => (
-          <>
-            {tribes.map((tribe: any) => (
-              <DynamicTribeCard key={tribe.id} tribe={tribe} />
-            ))}
-          </>
+      <Box
+        display="grid"
+        style={{
+          gap: '1.6rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
+        }}
+      >
+        <DynamicQuery api="/api/v3/tribes/discovery">
+          {(tribes: Array<any>) => (
+            <>
+              {tribes.map((tribe: any) => (
+                <DynamicTribeCard
+                  key={tribe.id}
+                  setShowJoinTribe={setShowJoinTribe}
+                  tribe={tribe}
+                />
+              ))}
+            </>
+          )}
+        </DynamicQuery>
+        {Boolean(showJoinTribe) && (
+          <DynamicJoinTribe
+            tribe={showJoinTribe}
+            onClose={() => setShowJoinTribe(null)}
+          />
         )}
-      </DynamicQuery>
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 DiscoveryPage.Layout = DynamicLayout;
 
