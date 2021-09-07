@@ -1,3 +1,5 @@
+import useSWR from 'swr';
+
 // assets
 import { Spn as SpnIcon } from 'assets';
 
@@ -42,6 +44,7 @@ export const BadgeItem = ({
   quantity,
   spn,
   userIsAdmin,
+  users,
   walletOpen,
 }) => {
   const classes = useStyles();
@@ -56,20 +59,26 @@ export const BadgeItem = ({
       style={{
         cursor: 'pointer',
       }}
-      onClick={() => {
-        if (walletOpen && walletOpen.userName) {
+      onClick={async () => {
+        if (walletOpen && walletOpen.author?.userName) {
+          const userToBadge = users.find(
+            (user) => user.id === walletOpen.author.id
+          );
           dispatchWalletState({
             type: 'update',
             payload: {
               myBadgesTransition: 'forward',
               myBadgesCurrentReceiver: {
-                name: walletOpen.userName,
-                description: walletOpen.displayName,
+                id: walletOpen.author.id,
+                userName: walletOpen.author.userName,
+                displayName: walletOpen.author.displayName,
+                publicAddress: userToBadge?.publicAddress,
               },
               showTabsMenu: false,
               showAuthorToBadge: false,
               myBadgesStep: MyBadgesSteps.Confirmation,
               myBadgesCurrentBadge: {
+                avatar,
                 id,
                 blockchainId,
                 description,
@@ -77,6 +86,7 @@ export const BadgeItem = ({
                 price: spn,
                 quantity,
                 userIsAdmin,
+                contentId: walletOpen.id,
               },
             },
           });
@@ -88,6 +98,7 @@ export const BadgeItem = ({
               showTabsMenu: false,
               myBadgesStep: MyBadgesSteps.Receivers,
               myBadgesCurrentBadge: {
+                avatar,
                 id,
                 blockchainId,
                 description,
@@ -143,7 +154,9 @@ export const BadgeItem = ({
 const BadgesList = () => {
   const { me } = useAuth();
   const { dispatchWalletState, walletOpen } = useWallet();
-
+  const { data: users } = useSWR('/api/v3/users', {
+    fetcher: TokenFetcher,
+  });
   return (
     <div
       style={{
@@ -164,6 +177,7 @@ const BadgesList = () => {
             ItemComponent={BadgeItem}
             dispatchWalletState={dispatchWalletState}
             list={list}
+            users={users}
             walletOpen={walletOpen}
           />
         )}

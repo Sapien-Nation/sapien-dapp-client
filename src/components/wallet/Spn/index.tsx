@@ -1,12 +1,17 @@
+import useSWR from 'swr';
 import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import Receivers from './Receivers';
 import Empty from './Empty';
+import TokenFetcher from '../shared/TokenFetcher';
 
 // context
 import { useWallet } from 'context/wallet';
+
+// types
+import type { Content } from 'tools/types/content';
 
 const form = 'spn-form';
 
@@ -14,6 +19,9 @@ const Spn = () => {
   const { wallet, walletOpen, dispatchWalletState, globalWalletState } =
     useWallet();
   const { showTabsMenu } = globalWalletState;
+  const { data: users } = useSWR('/api/v3/users', {
+    fetcher: TokenFetcher,
+  });
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
@@ -22,15 +30,20 @@ const Spn = () => {
   });
   useEffect(() => {
     // @ts-ignore
-    if (walletOpen?.userName) {
+    if (walletOpen?.author?.userName) {
+      const userToSpn = walletOpen as Content;
+      const userToSpnComplete = users.find(
+        (user) => user.id === userToSpn.author.id
+      );
       dispatchWalletState({
         type: 'update',
         payload: {
           spnCurrentReceiver: {
-            // @ts-ignore
-            userName: walletOpen.userName,
-            // @ts-ignore
-            displayName: walletOpen.displayName,
+            id: userToSpn.author?.id,
+            userName: userToSpn.author?.userName,
+            displayName: userToSpn.author?.displayName,
+            contentId: userToSpn.id,
+            publicAddress: userToSpnComplete?.publicAddress,
           },
           showAuthorToBadge: false,
         },

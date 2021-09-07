@@ -44,6 +44,7 @@ export const BadgeItem = ({
           showTabsMenu: false,
           storeStep: StoreSteps.Confirmation,
           storeCurrentBadge: {
+            avatar,
             spn,
             name,
             description,

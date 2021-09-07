@@ -87,7 +87,7 @@ const Actions = ({ content, user }: Props) => {
           marginLeft: 'auto',
           backgroundColor: primary[800],
         }}
-        onClick={() => setWalletOpen(content.author)}
+        onClick={() => setWalletOpen(content)}
       >
         <BadgeIcon />
       </IconButton>

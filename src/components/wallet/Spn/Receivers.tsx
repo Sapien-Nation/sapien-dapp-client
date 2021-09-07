@@ -86,19 +86,7 @@ const ReceiverItem = ({
         });
       }}
     >
-      <Avatar
-        alt=""
-        imgProps={{
-          style: {
-            borderRadius: 40,
-          },
-        }}
-        src="/fixtures/normal/slowpoke.jpg"
-        style={{
-          width: 40,
-          height: 40,
-        }}
-      />
+      <Avatar alt={userName}>{displayName?.[0]?.toUpperCase()}</Avatar>
       <Box display="flex" marginLeft={1}>
         <Typography variant="button">{displayName}</Typography>
       </Box>
@@ -140,12 +128,12 @@ const Receivers = () => {
   } = useFormContext();
   const { enqueueSnackbar } = useSnackbar();
   const { me } = useAuth();
-  const { wallet, dispatchWalletState, globalWalletState } = useWallet();
+  const { wallet, setWalletOpen, dispatchWalletState, globalWalletState } =
+    useWallet();
   const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
   const classes = useStyles();
-  console.log('spnCurrentReceiver', spnCurrentReceiver);
   return (
     <Box
       display="flex"
@@ -157,9 +145,6 @@ const Receivers = () => {
         style={{
           height: '100%',
           margin: '0 2.4rem',
-          // gridTemplateRows: spnCurrentReceiver
-          //   ? '32px 72px 1fr 90px'
-          //   : '32px 50px 1fr 200px',
         }}
       >
         <div
@@ -385,7 +370,8 @@ const Receivers = () => {
                 me.id,
                 spnCurrentReceiver.id,
                 spnCurrentReceiver.publicAddress,
-                watchReceive * 1e6
+                watchReceive * 1e6,
+                spnCurrentReceiver.contentId
               );
               enqueueSnackbar('Success!', {
                 variant: 'success',
@@ -399,7 +385,9 @@ const Receivers = () => {
                 type: 'spnCurrentReceiver',
                 payload: null,
               });
+              setWalletOpen(false);
             } catch (error) {
+              setLoadingResponse(false);
               enqueueSnackbar('Something went wrong.', {
                 variant: 'error',
                 anchorOrigin: {

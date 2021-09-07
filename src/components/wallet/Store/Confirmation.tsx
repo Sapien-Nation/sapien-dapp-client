@@ -25,6 +25,7 @@ import {
 } from '@material-ui/icons';
 
 // context
+import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
 // emums
@@ -38,6 +39,7 @@ const Confirmation = () => {
     formState: { errors },
   } = useFormContext();
   const watchBadgesAmount = watch('badgesAmount');
+  const { me } = useAuth();
   const { dispatchWalletState, globalWalletState } = useWallet();
   const { storeCurrentBadge } = globalWalletState;
   const NumericInputCounter = () => {
@@ -159,14 +161,7 @@ const Confirmation = () => {
             cursor: 'pointer',
           }}
         >
-          <Avatar
-            alt=""
-            src="/fixtures/normal/slowpoke.jpg"
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          <Avatar alt={me.username}>{me.firstName?.[0]?.toUpperCase()}</Avatar>
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">You</Typography>
           </Box>
@@ -221,7 +216,7 @@ const Confirmation = () => {
                 padding: 3,
               },
             }}
-            src="/fixtures/normal/slowpoke.jpg"
+            src={storeCurrentBadge.avatar}
             style={{
               width: 40,
               height: 40,

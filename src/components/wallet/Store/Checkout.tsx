@@ -116,14 +116,7 @@ const Checkout = () => {
             cursor: 'pointer',
           }}
         >
-          <Avatar
-            alt=""
-            src="/fixtures/normal/slowpoke.jpg"
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          <Avatar alt={me.username}>{me.firstName?.[0]?.toUpperCase()}</Avatar>
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">You</Typography>
           </Box>
@@ -157,7 +150,7 @@ const Checkout = () => {
                 padding: 3,
               },
             }}
-            src="/fixtures/normal/slowpoke.jpg"
+            src={storeCurrentBadge.avatar}
             style={{
               width: 64,
               height: 64,

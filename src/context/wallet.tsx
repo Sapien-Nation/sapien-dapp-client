@@ -5,13 +5,13 @@ import { reducer, initialState } from 'components/wallet/walletReducer';
 
 // types
 import type { Wallet as WalletType } from 'tools/types/wallet';
-import type { ContentAuthor } from 'tools/types/content';
+import type { Content } from 'tools/types/content';
 
 export interface Wallet {
   wallet: WalletType | null;
   setWallet: (wallet: WalletType | null) => void;
-  walletOpen: ContentAuthor | boolean;
-  setWalletOpen: (status: ContentAuthor | boolean) => void;
+  walletOpen: Content | boolean;
+  setWalletOpen: (status: Content | boolean) => void;
   dispatchWalletState: any;
   globalWalletState: any;
 }
@@ -24,7 +24,7 @@ interface Props {
 
 const WalletProvider = ({ children }: Props) => {
   const [wallet, setWallet] = useState<WalletType | null>(null);
-  const [walletOpen, setWalletOpen] = useState<ContentAuthor | boolean>(false);
+  const [walletOpen, setWalletOpen] = useState<Content | boolean>(false);
   const [globalWalletState, dispatchWalletState] = useReducer(
     reducer,
     initialState

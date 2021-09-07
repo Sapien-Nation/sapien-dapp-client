@@ -43,7 +43,7 @@ const Confirmation = () => {
             }}
             onClick={() => {
               // @ts-ignore
-              if (walletOpen?.userName) {
+              if (walletOpen?.author?.userName) {
                 dispatchWalletState({
                   type: 'update',
                   payload: {
@@ -80,14 +80,9 @@ const Confirmation = () => {
             cursor: 'pointer',
           }}
         >
-          <Avatar
-            alt=""
-            src="/fixtures/normal/slowpoke.jpg"
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          <Avatar alt={myBadgesCurrentReceiver.userName}>
+            {myBadgesCurrentReceiver.displayName?.[0]?.toUpperCase()}
+          </Avatar>
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">
               {myBadgesCurrentReceiver.displayName}
@@ -126,7 +121,7 @@ const Confirmation = () => {
                 padding: 3,
               },
             }}
-            src="/fixtures/normal/slowpoke.jpg"
+            src={myBadgesCurrentBadge.avatar}
             style={{
               width: 64,
               height: 64,
@@ -166,7 +161,8 @@ const Confirmation = () => {
                 watchBadgesAmount,
                 myBadgesCurrentBadge.id,
                 myBadgesCurrentBadge.blockchainId,
-                myBadgesCurrentBadge.userIsAdmin
+                myBadgesCurrentBadge.userIsAdmin,
+                myBadgesCurrentBadge.contentId
               );
               enqueueSnackbar('Success!', {
                 variant: 'success',
@@ -184,6 +180,7 @@ const Confirmation = () => {
                 },
               });
             } catch (error) {
+              setLoadingResponse(false);
               enqueueSnackbar('Something went wrong.', {
                 variant: 'error',
                 anchorOrigin: {

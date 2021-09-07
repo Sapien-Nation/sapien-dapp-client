@@ -1,6 +1,8 @@
 import Web3 from 'web3';
+import { walletIsMainnet } from 'api';
 import { AbiItem, isAddress } from 'web3-utils';
 import { Biconomy } from '@biconomy/mexa';
+import { BN } from 'ethereumjs-util';
 import sigUtil from 'eth-sig-util';
 import Common, { CustomChain } from '@ethereumjs/common';
 import { Transaction as Tx } from '@ethereumjs/tx';
@@ -8,6 +10,7 @@ import PLATFORM_SPN_ABI from './contracts/SapienPlatformSPN.json';
 import BADGE_STORE_ABI from './contracts/BadgeStore.json';
 import { purchaseBadge, sendSPN, sendBadge } from 'api/wallet';
 import getConfig from './config';
+import axios from 'axios';
 
 const domainType = [
   { name: 'name', type: 'string' },
@@ -129,14 +132,23 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       .executeMetaTransaction(publicAddress, functionSignature, r, s, v)
       .encodeABI();
 
+    const gasPrice = await axios
+      .get('https://gasstation-mainnet.matic.network')
+      .then((response) => response.data?.fastest)
+      .catch(() => 50); // default
+
     // Build the transaction
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       to: contractAddress,
+      gasPrice: web3.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
+      gasLimit: 300000,
       data: executeMetaTransactionData,
     };
 
-    const common = Common.custom(CustomChain.PolygonMumbai);
+    const common = Common.custom(
+      walletIsMainnet ? CustomChain.PolygonMainnet : CustomChain.PolygonMumbai
+    );
 
     const tx = Tx.fromTxData(txObject, { common });
     const signedTx = tx.sign(Buffer.from(privateKey, 'hex'));
@@ -158,7 +170,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       fromUserId: string,
       toUserId: string,
       toAddress: string,
-      spnAmount: number
+      spnAmount: number,
+      contentId?: string
     ) => {
       try {
         if (!isAddress(toAddress)) {
@@ -187,6 +200,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
           fromUserId,
           toUserId,
           spnAmount,
+          contentId,
           rawTx,
         };
 
@@ -202,7 +216,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       amount: number, // # of badges to be transferred
       badgeId: string, // badge id on Sapien platform
       badgeBlockchainId: number, // if on the blockchain
-      userIsAdmin: boolean // current user is admin of the badge?
+      userIsAdmin: boolean, // current user is admin of the badge?
+      contentId?: string // if awarding content, this is its id
     ) => {
       if (!isAddress(toAddress)) {
         return Promise.reject('Address should be valid');
@@ -250,6 +265,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         badgeBlockchainId,
         amount,
         userIsAdmin,
+        contentId,
         rawTx,
       };
 
@@ -260,7 +276,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       blockchainId: number, // id of the badge on the blockchain
       ownerId, // user id of the buyer
       parentBadgeId, // id of the badge on Sapien
-      totalPrice: number // price of the badge x amount
+      totalPrice: number, // price of the badge x amount
+      isJoiningTribe = false // regular purchase (default) / join tribe purchase
     ) => {
       if (!Number.isInteger(blockchainId)) {
         return Promise.reject('Badge Id not valid');
@@ -288,6 +305,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
         parentBadgeId,
         ownerId,
         totalPrice,
+        isJoiningTribe,
       };
 
       return purchaseBadge(body);
