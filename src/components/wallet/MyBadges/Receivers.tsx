@@ -75,19 +75,7 @@ export const ReceiverItem = ({
         });
       }}
     >
-      <Avatar
-        alt=""
-        imgProps={{
-          style: {
-            borderRadius: 40,
-          },
-        }}
-        src="/fixtures/normal/slowpoke.jpg"
-        style={{
-          width: 40,
-          height: 40,
-        }}
-      />
+      <Avatar alt={userName}>{displayName?.[0]?.toUpperCase()}</Avatar>
       <Box display="flex" marginLeft={1}>
         <Typography variant="button">{displayName}</Typography>
       </Box>

@@ -134,14 +134,11 @@ const WalletTabs = () => {
             cursor: 'pointer',
           }}
         >
-          <Avatar
-            alt=""
-            src="/fixtures/normal/slowpoke.jpg"
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          {/* @ts-ignore */}
+          <Avatar alt={walletOpen.author?.userName}>
+            {/* @ts-ignore */}
+            {walletOpen.author?.displayName?.[0]?.toUpperCase()}
+          </Avatar>
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">
               {/* @ts-ignore */}
