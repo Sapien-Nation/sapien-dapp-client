@@ -78,6 +78,7 @@ export const BadgeItem = ({
               showAuthorToBadge: false,
               myBadgesStep: MyBadgesSteps.Confirmation,
               myBadgesCurrentBadge: {
+                avatar,
                 id,
                 blockchainId,
                 description,
@@ -97,6 +98,7 @@ export const BadgeItem = ({
               showTabsMenu: false,
               myBadgesStep: MyBadgesSteps.Receivers,
               myBadgesCurrentBadge: {
+                avatar,
                 id,
                 blockchainId,
                 description,

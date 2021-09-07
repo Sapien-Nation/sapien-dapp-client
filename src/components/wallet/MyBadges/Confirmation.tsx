@@ -80,14 +80,9 @@ const Confirmation = () => {
             cursor: 'pointer',
           }}
         >
-          <Avatar
-            alt=""
-            src="/fixtures/normal/slowpoke.jpg"
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          <Avatar alt={myBadgesCurrentReceiver.userName}>
+            {myBadgesCurrentReceiver.displayName?.[0]?.toUpperCase()}
+          </Avatar>
           <Box display="flex" flexDirection="column" marginLeft={1}>
             <Typography variant="button">
               {myBadgesCurrentReceiver.displayName}
@@ -126,7 +121,7 @@ const Confirmation = () => {
                 padding: 3,
               },
             }}
-            src="/fixtures/normal/slowpoke.jpg"
+            src={myBadgesCurrentBadge.avatar}
             style={{
               width: 64,
               height: 64,
