@@ -13,7 +13,7 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
-          <link href="/static/favicon.ico" rel="icon" type="image/png" />
+          <link href="/static/favicon.png" rel="icon" type="image/png" />
           <meta content={theme.palette.primary.main} name="theme-color" />
           <meta
             content="Sapien is a Web3 social network that rewards content creators and puts users back in control of their data. Built on Ethereum ♥️."
