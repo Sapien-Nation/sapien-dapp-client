@@ -185,6 +185,7 @@ const Confirmation = () => {
                 },
               });
             } catch (error) {
+              setLoadingResponse(false);
               enqueueSnackbar('Something went wrong.', {
                 variant: 'error',
                 anchorOrigin: {

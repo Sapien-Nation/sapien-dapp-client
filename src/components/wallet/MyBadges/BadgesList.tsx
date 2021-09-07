@@ -69,8 +69,9 @@ export const BadgeItem = ({
             payload: {
               myBadgesTransition: 'forward',
               myBadgesCurrentReceiver: {
-                name: walletOpen.author.userName,
-                description: walletOpen.author.displayName,
+                id: walletOpen.author.id,
+                userName: walletOpen.author.userName,
+                displayName: walletOpen.author.displayName,
                 publicAddress: userToBadge?.publicAddress,
               },
               showTabsMenu: false,

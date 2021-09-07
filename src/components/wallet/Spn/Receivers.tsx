@@ -140,7 +140,8 @@ const Receivers = () => {
   } = useFormContext();
   const { enqueueSnackbar } = useSnackbar();
   const { me } = useAuth();
-  const { wallet, dispatchWalletState, globalWalletState } = useWallet();
+  const { wallet, setWalletOpen, dispatchWalletState, globalWalletState } =
+    useWallet();
   const [loadingResponse, setLoadingResponse] = useState<boolean>(false);
   const { spnCurrentReceiver } = globalWalletState;
   const watchReceive = watch('receive');
@@ -396,7 +397,9 @@ const Receivers = () => {
                 type: 'spnCurrentReceiver',
                 payload: null,
               });
+              setWalletOpen(false);
             } catch (error) {
+              setLoadingResponse(false);
               enqueueSnackbar('Something went wrong.', {
                 variant: 'error',
                 anchorOrigin: {

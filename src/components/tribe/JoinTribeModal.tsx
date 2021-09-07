@@ -14,7 +14,7 @@ import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
 // mui
-import { Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 interface Props {
   tribe: any;
@@ -35,15 +35,15 @@ const JoinTribeModal = ({
     setJoining(true);
     try {
       if (Number(memberBadge.price) === 0) {
-        await joinTribe(id);
         await wallet.purchaseBadge(
           1,
-          memberBadge.blockchainId,
+          Number(memberBadge.blockchainId),
           me.id,
           memberBadge.id,
-          memberBadge.price,
+          Number(memberBadge.price),
           true
         );
+        await joinTribe(id);
         setJoining(false);
         onClose();
         mutate('/api/v3/tribes/discovery', (tribes: Array<any>) =>
@@ -76,15 +76,22 @@ const JoinTribeModal = ({
       confirmLabel={joining ? 'Joining...' : 'Yes , I want to join'}
       isFetching={joining}
       maxWidth="xs"
-      title={
-        <>
-          <Typography variant="h2">Welcome, Sapien!</Typography>
-        </>
-      }
       onClose={onClose}
       onConfirm={handleJoinTribe}
     >
-      You are about to join {name}. Do you want to proceed?
+      <Box
+        alignItems="center"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        padding={4}
+        style={{
+          gap: '2rem',
+        }}
+      >
+        <Typography variant="h2">Welcome, Sapien!</Typography>
+        You are about to join {name}. Do you want to proceed?
+      </Box>
     </Dialog>
   );
 };

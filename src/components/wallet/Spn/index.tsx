@@ -39,6 +39,7 @@ const Spn = () => {
         type: 'update',
         payload: {
           spnCurrentReceiver: {
+            id: userToSpn.author?.id,
             userName: userToSpn.author?.userName,
             displayName: userToSpn.author?.displayName,
             contentId: userToSpn.id,
