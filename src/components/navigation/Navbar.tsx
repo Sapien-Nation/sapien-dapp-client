@@ -39,7 +39,8 @@ import { WalletMenu } from 'components/wallet';
 import { NotificationMenu } from 'components/notification';
 import { Search } from 'components/search';
 
-// todo: use this fetcher
+import type { UserNotificationResult } from 'tools/types/notification';
+
 const fetcher = (url: string) =>
   notificationInstance.get(url).then((res) => res.data);
 
@@ -86,9 +87,12 @@ const Navbar = () => {
   const [notificationsAnchor, setNotificationsAnchor] =
     useState<null | HTMLElement>(null);
   const { query, asPath } = useRouter();
-  const { data: notifications } = useSWR('/api/v3/notification/all', {
-    fetcher,
-  });
+  const { data: notificationData } = useSWR<UserNotificationResult>(
+    '/api/v3/notification/all',
+    {
+      fetcher,
+    }
+  );
   const isDiscoveryPage = Boolean(asPath.includes('discovery'));
   const classes = useStyles({ isDiscoveryPage });
   const [tokens] = useLocalStorage<{
@@ -166,6 +170,12 @@ const Navbar = () => {
 
   if (!me) return null;
 
+  const unreadNotifications = notificationData?.notifications?.filter(
+    (notification) => {
+      return notification.to.seen === false;
+    }
+  );
+
   return (
     <AppBar
       className={classes.navBar}
@@ -205,7 +215,7 @@ const Navbar = () => {
                   vertical: 'bottom',
                   horizontal: 'right',
                 }}
-                badgeContent={notifications?.count || 0}
+                badgeContent={unreadNotifications?.length || 0}
                 color="error"
               >
                 <NotificationsNone />
@@ -251,6 +261,11 @@ const Navbar = () => {
       </Popover>
       <Menu
         keepMounted
+        PaperProps={{
+          style: {
+            maxHeight: 680,
+          },
+        }}
         anchorEl={notificationsAnchor}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         classes={{
@@ -262,7 +277,7 @@ const Navbar = () => {
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setNotificationsAnchor(null)}
       >
-        <NotificationMenu data={notifications} />
+        <NotificationMenu data={notificationData} />
       </Menu>
     </AppBar>
   );

@@ -23,7 +23,8 @@ const NotificationMenu = ({ data }: Props) => {
       (data) => {
         const eventData = event.data;
         eventData.type = event.type;
-        const updatedNotifications = [...data?.notifications, eventData];
+        eventData.to.seen = false;
+        const updatedNotifications = [eventData, ...data?.notifications];
         return {
           count: ++data.count,
           notifications: updatedNotifications,
@@ -84,26 +85,24 @@ const NotificationMenu = ({ data }: Props) => {
 
   if (!data || data.length < 1) {
     return (
-      <div style={{ height: 'auto' }}>
-        <Typography
-          color="textSecondary"
-          component="span"
-          style={{ marginBottom: '1rem', padding: '0 1rem' }}
-          variant="subtitle1"
-        >
-          Notifications empty
-        </Typography>
-      </div>
+      <Typography
+        color="textSecondary"
+        component="li"
+        style={{ marginBottom: '1rem', padding: '0 1rem' }}
+        variant="subtitle1"
+      >
+        Notifications empty
+      </Typography>
     );
   }
 
   return (
-    <div style={{ height: 680 }}>
+    <>
       <NotificationListHeader />
       {data.notifications?.map((notification) => (
         <NotificationItem key={notification.id} notification={notification} />
       ))}
-    </div>
+    </>
   );
 };
 

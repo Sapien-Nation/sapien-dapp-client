@@ -8,6 +8,7 @@ const NotificationListHeader = () => {
   return (
     <Box
       alignItems="center"
+      component="li"
       display="flex"
       justifyContent="space-between"
       marginBottom={1}

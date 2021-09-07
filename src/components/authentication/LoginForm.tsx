@@ -165,7 +165,7 @@ const LoginForm = () => {
                   <Typography variant="overline">Remember me</Typography>
                   <Tooltip
                     arrow
-                    color="primary"
+                    color="action"
                     placement="right"
                     title={
                       <Box>
