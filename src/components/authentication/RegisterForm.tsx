@@ -55,13 +55,12 @@ const Signup = () => {
         client: window?.navigator.userAgent,
         redirect: '/client/sapien',
       });
-
+      setNewUser(true);
       setSession({
         torus: response.torus,
         token: response.token,
         refresh: response.refresh,
       });
-      setNewUser(true);
     } catch (error) {
       enqueueSnackbar('Oops, something went wrong. Please try again', {
         variant: 'error',

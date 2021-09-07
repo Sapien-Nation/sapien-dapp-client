@@ -53,6 +53,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const isLoggingIn = data === undefined;
 
   const clearSession = () => {
+    setNewUser(false);
     removeTokens();
     setWallet(null);
     mutate('/api/v3/user/me', null, false);
@@ -71,7 +72,6 @@ const AuthenticationProvider = ({ children }: Props) => {
   }) => {
     setTokens({ token, torus, refresh });
     await mutate('/api/v3/user/me');
-    push('/client/sapien');
   };
 
   return (
