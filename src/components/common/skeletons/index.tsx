@@ -1,6 +1,7 @@
 export { default as ContentDetailSkeleton } from './ContentDetailSkeleton';
 export { default as ContentFeedSkeleton } from './ContentFeedSkeleton';
 export { default as DiscoverSkeleton } from './DiscoverSkeleton';
+export { default as DiscoverySkeleton } from './DiscoverySkeleton';
 export { default as FeedSkeleton } from './FeedSkeleton';
 export { default as LayoutSkeleton } from './LayoutSkeleton';
 export { default as PageHeaderSkeleton } from './PageHeaderSkeleton';
