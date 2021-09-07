@@ -1,6 +1,8 @@
 import Web3 from 'web3';
+import { walletIsMainnet } from 'api';
 import { AbiItem, isAddress } from 'web3-utils';
 import { Biconomy } from '@biconomy/mexa';
+import { BN } from 'ethereumjs-util';
 import sigUtil from 'eth-sig-util';
 import Common, { CustomChain } from '@ethereumjs/common';
 import { Transaction as Tx } from '@ethereumjs/tx';
@@ -8,6 +10,7 @@ import PLATFORM_SPN_ABI from './contracts/SapienPlatformSPN.json';
 import BADGE_STORE_ABI from './contracts/BadgeStore.json';
 import { purchaseBadge, sendSPN, sendBadge } from 'api/wallet';
 import getConfig from './config';
+import axios from 'axios';
 
 const domainType = [
   { name: 'name', type: 'string' },
@@ -129,14 +132,23 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       .executeMetaTransaction(publicAddress, functionSignature, r, s, v)
       .encodeABI();
 
+    const gasPrice = await axios
+      .get('https://gasstation-mainnet.matic.network')
+      .then((response) => response.data?.fastest)
+      .catch(() => 50); // default
+
     // Build the transaction
     const txObject = {
       nonce: web3.utils.toHex(nonce),
       to: contractAddress,
+      gasPrice: web3.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
+      gasLimit: 300000,
       data: executeMetaTransactionData,
     };
 
-    const common = Common.custom(CustomChain.PolygonMumbai);
+    const common = Common.custom(
+      walletIsMainnet ? CustomChain.PolygonMainnet : CustomChain.PolygonMumbai
+    );
 
     const tx = Tx.fromTxData(txObject, { common });
     const signedTx = tx.sign(Buffer.from(privateKey, 'hex'));
