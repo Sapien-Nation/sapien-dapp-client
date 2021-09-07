@@ -25,6 +25,10 @@ const getVariables = () => {
           process.env.NEXT_PUBLIC_WALLET_IS_MAINNET_LOCAL,
         NEXT_PUBLIC_WALLET_BICONOMY_API_KEY:
           process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY_LOCAL,
+        NEXT_PUBLIC_WALLET_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_VERIFIER_LOCAL,
+        NEXT_PUBLIC_WALLET_SUB_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER_LOCAL,
       };
       break;
     }
@@ -42,6 +46,10 @@ const getVariables = () => {
           process.env.NEXT_PUBLIC_WALLET_IS_MAINNET_SANDBOX,
         NEXT_PUBLIC_WALLET_BICONOMY_API_KEY:
           process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY_SANDBOX,
+        NEXT_PUBLIC_WALLET_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_VERIFIER_SANDBOX,
+        NEXT_PUBLIC_WALLET_SUB_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER_SANDBOX,
       };
       break;
     }
@@ -58,6 +66,10 @@ const getVariables = () => {
           process.env.NEXT_PUBLIC_WALLET_IS_MAINNET_QAT,
         NEXT_PUBLIC_WALLET_BICONOMY_API_KEY:
           process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY_QAT,
+        NEXT_PUBLIC_WALLET_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_VERIFIER_QAT,
+        NEXT_PUBLIC_WALLET_SUB_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER_QAT,
       };
       break;
     }
@@ -74,6 +86,10 @@ const getVariables = () => {
           process.env.NEXT_PUBLIC_WALLET_IS_MAINNET_POC,
         NEXT_PUBLIC_WALLET_BICONOMY_API_KEY:
           process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY_POC,
+        NEXT_PUBLIC_WALLET_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_VERIFIER_POC,
+        NEXT_PUBLIC_WALLET_SUB_VERIFIER:
+          process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER_POC,
       };
       break;
     }
@@ -90,11 +106,15 @@ const {
   NEXT_PUBLIC_SOCKET_URL,
   NEXT_PUBLIC_WALLET_IS_MAINNET,
   NEXT_PUBLIC_WALLET_BICONOMY_API_KEY,
+  NEXT_PUBLIC_WALLET_VERIFIER,
+  NEXT_PUBLIC_WALLET_SUB_VERIFIER,
 } = getVariables();
 
 export const socketURL = NEXT_PUBLIC_SOCKET_URL;
 export const walletIsMainnet = NEXT_PUBLIC_WALLET_IS_MAINNET;
 export const walleBiconomyApiKey = NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
+export const walletVerifier = NEXT_PUBLIC_WALLET_VERIFIER;
+export const walletSubVerifier = NEXT_PUBLIC_WALLET_SUB_VERIFIER;
 
 const instance = axios.create({
   baseURL: NEXT_PUBLIC_API_URL,
