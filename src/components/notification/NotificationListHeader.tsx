@@ -1,8 +1,5 @@
-//icons
-import { Settings } from '@material-ui/icons';
-
 // mui
-import { Box, Button, IconButton, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 const NotificationListHeader = () => {
   return (
@@ -15,7 +12,7 @@ const NotificationListHeader = () => {
       paddingX={1}
     >
       <Typography variant="h3">Notifications</Typography>
-      <Box>
+      {/* <Box>
         <Button aria-label="Mark all notifications as read" variant="text">
           <Typography color="textSecondary" component="span" variant="button">
             Mark all as read
@@ -24,7 +21,7 @@ const NotificationListHeader = () => {
         <IconButton aria-label="Notification settings">
           <Settings fontSize="small" />
         </IconButton>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
