@@ -134,7 +134,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
 
     const gasPrice = await axios
       .get('https://gasstation-mainnet.matic.network')
-      .then((response) => response.data?.fastest)
+      .then((response) => response.data?.fast)
       .catch(() => 50); // default
 
     // Build the transaction
