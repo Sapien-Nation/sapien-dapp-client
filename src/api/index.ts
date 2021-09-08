@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-enum Envs {
+export enum Envs {
   Local = 'LOCAL',
   Sandbox = 'SANDBOX',
   QAT = 'QAT',

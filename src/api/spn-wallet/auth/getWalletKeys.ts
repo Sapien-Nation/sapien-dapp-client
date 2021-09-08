@@ -1,7 +1,13 @@
 import initTorus from './initTorus';
 
 // api
-import { walletVerifier, walletSubVerifier, env, walletIsMainnet } from 'api';
+import {
+  walletVerifier,
+  walletSubVerifier,
+  env,
+  Envs,
+  walletIsMainnet,
+} from 'api';
 
 const getWalletKeys = async (
   torusToken: string,
@@ -15,17 +21,20 @@ const getWalletKeys = async (
       false,
       walletIsMainnet
     );
-    if (env === 'SANDBOX') {
-      return torus.getAggregateTorusKey(verifier, userId, [
-        { verifier: subVerifier, idToken: torusToken },
-      ]);
-    } else {
-      return torus.getTorusKey(
-        verifier,
-        userId,
-        { verifier_id: userId },
-        torusToken
-      );
+
+    switch (env) {
+      case Envs.Sandbox:
+        return torus.getAggregateTorusKey(verifier, userId, [
+          { verifier: subVerifier, idToken: torusToken },
+        ]);
+        break;
+      default:
+        return torus.getTorusKey(
+          verifier,
+          userId,
+          { verifier_id: userId },
+          torusToken
+        );
     }
   } catch (error) {
     return Promise.reject(error);
