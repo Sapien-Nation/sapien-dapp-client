@@ -76,7 +76,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
       config.SPN_TOKEN_ADDRESS
     ),
     platformSPNDomainData: {
-      name: 'Sapien',
+      name: 'Sapien Network',
       version: '1',
       verifyingContract: config.SPN_TOKEN_ADDRESS,
       salt: '0x' + config.POLY_NETWORK_ID.toString(16).padStart(64, '0'),
