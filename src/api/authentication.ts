@@ -80,7 +80,7 @@ export const register = async (body: {
 
 export const verifyUser = async (token: string) => {
   try {
-    await authInstance.post('/api/v3/user/verify-user-email', { token });
+    await authInstance.post('/api/v3/user/verify-email', { token });
   } catch ({ response }) {
     return Promise.reject(response.data.message);
   }
