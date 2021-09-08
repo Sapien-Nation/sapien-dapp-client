@@ -110,6 +110,7 @@ const {
   NEXT_PUBLIC_WALLET_SUB_VERIFIER,
 } = getVariables();
 
+export const env = nodeEnv;
 export const socketURL = NEXT_PUBLIC_SOCKET_URL;
 export const walletIsMainnet = NEXT_PUBLIC_WALLET_IS_MAINNET;
 export const walleBiconomyApiKey = NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
