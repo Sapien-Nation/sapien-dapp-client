@@ -4,13 +4,14 @@ import Wallet from './wallet';
 // api
 import { addWallet } from 'api/authentication';
 import { grantSapienBadge } from 'api/wallet';
+import { walletVerifier, walletSubVerifier } from 'api';
 
 const connectWallet = async (
   torusToken: string,
   userId: string,
   isSignup = false,
-  subVerifier = 'sapien-jwt',
-  verifier = 'sandbox-sapien'
+  subVerifier = walletSubVerifier,
+  verifier = walletVerifier
 ) => {
   try {
     const { publicAddress, privateKey } = await getWalletKeys(

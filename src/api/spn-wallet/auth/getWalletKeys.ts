@@ -1,10 +1,13 @@
 import initTorus from './initTorus';
 
+// api
+import { walletVerifier, walletSubVerifier } from 'api';
+
 const getWalletKeys = async (
   torusToken: string,
   userId: string,
-  subVerifier = 'sapien-jwt',
-  verifier = 'sandbox-sapien'
+  subVerifier = walletSubVerifier,
+  verifier = walletVerifier
 ) => {
   try {
     const torus = await initTorus(
