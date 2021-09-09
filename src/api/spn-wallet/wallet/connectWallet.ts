@@ -10,15 +10,15 @@ const connectWallet = async (
   torusToken: string,
   userId: string,
   isSignup = false,
-  subVerifier = walletSubVerifier,
-  verifier = walletVerifier
+  verifier = walletVerifier,
+  subVerifier = walletSubVerifier
 ) => {
   try {
     const { publicAddress, privateKey } = await getWalletKeys(
       torusToken,
       userId,
-      subVerifier,
-      verifier
+      verifier,
+      subVerifier
     );
     if (isSignup) {
       await addWallet(publicAddress);
