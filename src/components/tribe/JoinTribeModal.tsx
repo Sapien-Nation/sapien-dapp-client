@@ -13,8 +13,11 @@ import { Dialog } from 'components/common';
 import { useAuth } from 'context/user';
 import { useWallet } from 'context/wallet';
 
+// styles
+import { neutral } from 'styles/colors';
+
 // mui
-import { Box, Typography } from '@material-ui/core';
+import { Avatar, Box, Typography } from '@material-ui/core';
 
 interface Props {
   tribe: any;
@@ -23,7 +26,7 @@ interface Props {
 
 const JoinTribeModal = ({
   onClose,
-  tribe: { name, id, mainSquareId, memberBadge },
+  tribe: { avatar, name, id, mainSquareId, memberBadge },
 }: Props) => {
   const [joining, setJoining] = useState<boolean>(false);
   const { me } = useAuth();
@@ -72,10 +75,14 @@ const JoinTribeModal = ({
   return (
     <Dialog
       open
+      PaperProps={{
+        style: {
+          maxWidth: '39rem',
+        },
+      }}
       cancelLabel="No, thank you"
       confirmLabel={joining ? 'Joining...' : 'Yes , I want to join'}
       isFetching={joining}
-      maxWidth="xs"
       onClose={onClose}
       onConfirm={handleJoinTribe}
     >
@@ -84,13 +91,28 @@ const JoinTribeModal = ({
         display="flex"
         flexDirection="column"
         justifyContent="center"
-        padding={4}
+        paddingY={3}
         style={{
           gap: '2rem',
         }}
       >
         <Typography variant="h2">Welcome, Sapien!</Typography>
-        You are about to join {name}. Do you want to proceed?
+        <Avatar
+          alt={name}
+          src={avatar}
+          style={{
+            width: 64,
+            height: 64,
+            margin: '2.4rem 0',
+          }}
+        />
+        <div
+          style={{ color: neutral[500], lineHeight: 2, textAlign: 'center' }}
+        >
+          You are about to join <b style={{ color: neutral[700] }}>{name}</b>.
+          <br />
+          Do you want to proceed?
+        </div>
       </Box>
     </Dialog>
   );

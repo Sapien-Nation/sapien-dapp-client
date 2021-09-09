@@ -156,7 +156,7 @@ const Tribe = ({
             aria-label="Join Tribe"
             color="primary"
             variant="contained"
-            onClick={() => setShowJoinTribe({ name, ...tribe })}
+            onClick={() => setShowJoinTribe({ avatar, name, ...tribe })}
           >
             Join Tribe
           </Button>
