@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 // mui
-import { Box, Typography, Button, IconButton } from '@material-ui/core';
+import { Box, Button, IconButton, List, Typography } from '@material-ui/core';
 import {
   Campaign as EchoIcon,
   ChatBubbleOutlineOutlined as CommentsIcon,
@@ -12,7 +12,7 @@ import {
 import { BadgeIcon } from 'assets';
 
 // types
-import { Content } from 'tools/types/content';
+import { Content, ContentBadge } from 'tools/types/content';
 import { User } from 'tools/types/user';
 
 // styles
@@ -26,9 +26,40 @@ interface Props {
   user: User | null;
 }
 
+interface BadgesProps {
+  badges: Array<ContentBadge> | null;
+}
+
+const Badges = ({ badges }: BadgesProps) => {
+  return (
+    <List style={{ display: 'flex', padding: '0px' }}>
+      {badges.map((badge: ContentBadge, index) => {
+        const noFirstBadge = index !== 0;
+        return (
+          <li
+            key={badge.id}
+            style={{
+              display: 'flex',
+              marginLeft: noFirstBadge ? '-7px' : '0px',
+              border: '2px solid white',
+              borderRadius: '20px',
+            }}
+          >
+            {/* 
+              // @ts-ignore */}
+            <img alt={badge.name} height="20" src={badge.avatar} width="20" />
+          </li>
+        );
+      })}
+    </List>
+  );
+};
+
 const Actions = ({ content, user }: Props) => {
   const { asPath, push } = useRouter();
   const { setWalletOpen } = useWallet();
+  const hasBadges = content.badges.length > 0;
+  const calculatedSpn = content.spn / 1e6;
 
   return (
     <Box display="flex">
@@ -80,6 +111,18 @@ const Actions = ({ content, user }: Props) => {
           0
         </Typography>
       </Button>
+      {hasBadges && (
+        <Button
+          aria-label="Share content"
+          color="primary"
+          size="small"
+          startIcon={<Badges badges={content.badges} />}
+        >
+          <Typography color="textSecondary" variant="caption">
+            {calculatedSpn}
+          </Typography>
+        </Button>
+      )}
       <IconButton
         aria-label="Badge content"
         style={{
