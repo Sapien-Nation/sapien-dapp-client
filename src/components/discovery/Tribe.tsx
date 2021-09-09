@@ -77,6 +77,9 @@ interface Props {
   setShowJoinTribe: (tribe: any) => void;
 }
 
+const FALLBACK_COVER =
+  'https://d151dmflpumpzp.cloudfront.net/images/tribes/default_temp.jpeg';
+
 const Tribe = ({
   tribe: {
     avatar,
@@ -107,12 +110,17 @@ const Tribe = ({
             <CardMedia
               className={classes.media}
               component="img"
-              image={cover}
+              image={cover || FALLBACK_COVER}
               title="Contemplative Reptile"
+              onError={(event: any) => (event.target.src = FALLBACK_COVER)}
             />
           </Badge>
           <Avatar alt="Tribe Name" className={classes.avatar} variant="rounded">
-            <img alt="Tribe name" height={72} src={avatar} width="72" />
+            {avatar ? (
+              <img alt="Tribe name" height={72} src={avatar} width="72" />
+            ) : (
+              name[0].toUpperCase()
+            )}
           </Avatar>
         </div>
         <CardContent className={classes.content}>
