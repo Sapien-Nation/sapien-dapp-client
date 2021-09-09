@@ -1,13 +1,7 @@
 import initTorus from './initTorus';
 
 // api
-import {
-  walletVerifier,
-  walletSubVerifier,
-  env,
-  Envs,
-  walletIsMainnet,
-} from 'api';
+import { walletVerifier, walletSubVerifier, env, Envs } from 'api';
 
 const getWalletKeys = async (
   torusToken: string,
@@ -18,12 +12,13 @@ const getWalletKeys = async (
   try {
     const torus = await initTorus(
       `${window.location.origin}/api/serviceworker`,
-      false,
-      walletIsMainnet
+      false
     );
 
     switch (env) {
       case Envs.Sandbox:
+      case Envs.Local:
+        // TODO: replace with getTorusKey method on sandbox
         return torus.getAggregateTorusKey(verifier, userId, [
           { verifier: subVerifier, idToken: torusToken },
         ]);
