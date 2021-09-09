@@ -7,11 +7,9 @@ import { Box } from '@material-ui/core';
 const DiscoverySkeleton = () => {
   return (
     <Box display="contents" gridGap={30}>
-      <ContentFeedSkeleton />
-      <ContentFeedSkeleton />
-      <ContentFeedSkeleton />
-      <ContentFeedSkeleton />
-      <ContentFeedSkeleton />
+      {[...Array(15)].map((e, index) => (
+        <ContentFeedSkeleton key={index} />
+      ))}
     </Box>
   );
 };
