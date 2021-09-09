@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 // components
+import Actions from './Actions';
 import Header from 'components/content/ContentItem/Header';
 import ReplyForm from 'components/reply/ReplyForm';
 import { DeleteContent } from 'components/content/Modals';
@@ -10,6 +11,9 @@ import { ContentDetailSkeleton, Query } from 'components/common';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
+
+// context
+import { useAuth } from 'context/user';
 
 // mui
 import { Box } from '@material-ui/core';
@@ -23,6 +27,7 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
   const [dialog, setDialog] = useState(false);
 
   const { push } = useRouter();
+  const { me } = useAuth();
 
   return (
     <Box
@@ -45,7 +50,26 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
             {!content.deletedAt && (
               <>
                 <div dangerouslySetInnerHTML={{ __html: content.body }} />
+              </>
+            )}
+
+            <Actions content={content} user={me} />
+
+            {!content.deletedAt && (
+              <>
                 <Box borderColor="grey.100" borderTop={1} marginX={-3} />
+                <Box>
+                  <ReplyForm
+                    contentID={contentID}
+                    onSubmit={(reply: ContentType) => {
+                      mutate(
+                        apiUrl,
+                        (replies: Array<ContentType>) => [reply, ...replies],
+                        false
+                      );
+                    }}
+                  />
+                </Box>
               </>
             )}
 
@@ -58,21 +82,6 @@ const ContentDetail = ({ apiUrl, contentID }: Props) => {
                   push(`/client/${content.group.id}`);
                 }}
               />
-            )}
-
-            {!content.deletedAt && (
-              <Box>
-                <ReplyForm
-                  contentID={contentID}
-                  onSubmit={(reply: ContentType) => {
-                    mutate(
-                      apiUrl,
-                      (replies: Array<ContentType>) => [reply, ...replies],
-                      false
-                    );
-                  }}
-                />
-              </Box>
             )}
           </>
         )}
