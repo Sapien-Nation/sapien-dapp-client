@@ -45,8 +45,6 @@ const Badges = ({ badges }: BadgesProps) => {
               borderRadius: '20px',
             }}
           >
-            {/* 
-              // @ts-ignore */}
             <img alt={badge.name} height="20" src={badge.avatar} width="20" />
           </li>
         );
@@ -58,8 +56,6 @@ const Badges = ({ badges }: BadgesProps) => {
 const Actions = ({ content, user }: Props) => {
   const { asPath, push } = useRouter();
   const { setWalletOpen } = useWallet();
-  const hasBadges = content.badges.length > 0;
-  const calculatedSpn = content.spn / 1e6;
 
   return (
     <Box display="flex">
@@ -111,7 +107,7 @@ const Actions = ({ content, user }: Props) => {
           0
         </Typography>
       </Button>
-      {hasBadges && (
+      {content.badges.length > 0 && (
         <Button
           aria-label="Share content"
           color="primary"
@@ -119,7 +115,7 @@ const Actions = ({ content, user }: Props) => {
           startIcon={<Badges badges={content.badges} />}
         >
           <Typography color="textSecondary" variant="caption">
-            {calculatedSpn}
+            {content.spn / 1e6}
           </Typography>
         </Button>
       )}
