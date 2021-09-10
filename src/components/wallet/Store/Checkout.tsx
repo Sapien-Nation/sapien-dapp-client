@@ -164,7 +164,7 @@ const Checkout = () => {
             style={{ textAlign: 'center', color: neutral[500] }}
             variant="h6"
           >
-            Velit sed turpis tellus curabitur sit habitant sit eget lorem ipsum.
+            {storeCurrentBadge.description}
           </Typography>
         </Box>
         {renderFees()}
@@ -176,7 +176,10 @@ const Checkout = () => {
           paddingY={0.6}
         >
           <Typography style={{ color: neutral[500] }} variant="overline">
-            Remaining balance: 3,082 SPN
+            Remaining balance:{' '}
+            {(Number(wallet?.balance) / 1e6 || 0) -
+              storeCurrentBadge.spn * watchBadgesAmount}{' '}
+            SPN
           </Typography>
         </Box>
       </Box>
