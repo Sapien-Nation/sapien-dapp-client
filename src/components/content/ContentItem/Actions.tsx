@@ -42,10 +42,27 @@ const Badges = ({ badges }: BadgesProps) => {
               display: 'flex',
               marginLeft: noFirstBadge ? '-7px' : '0px',
               border: '2px solid white',
+              color: 'white',
+              background: primary[800],
               borderRadius: '20px',
             }}
           >
-            <img alt={badge.name} height="20" src={badge.avatar} width="20" />
+            {badge.avatar ? (
+              <img alt={badge.name} height="20" src={badge.avatar} width="20" />
+            ) : (
+              <span
+                style={{
+                  height: 20,
+                  width: 20,
+                  fontSize: 10,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                {badge.name?.[0]?.toUpperCase()}
+              </span>
+            )}
           </li>
         );
       })}
