@@ -85,7 +85,7 @@ const DirectMessages = ({ messages }: Props) => {
                   >
                     <ListItemText
                       primary={
-                        <Typography noWrap variant="button">
+                        <Typography noWrap display="block" variant="button">
                           {displayName}
                         </Typography>
                       }
@@ -103,7 +103,7 @@ const DirectMessages = ({ messages }: Props) => {
                             align="right"
                             color="textSecondary"
                             display="block"
-                            style={{ minWidth: '5rem' }}
+                            style={{ minWidth: '4rem' }}
                             variant="overline"
                           >
                             {formatTimestampToRelative(seenAt)}

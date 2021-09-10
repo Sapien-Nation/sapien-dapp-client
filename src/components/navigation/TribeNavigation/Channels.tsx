@@ -93,11 +93,31 @@ const Channels = ({ channels }: Props) => {
                   display="flex"
                   flex={1}
                   justifyContent="space-between"
+                  minWidth={0}
                   paddingLeft={1.5}
                 >
                   <ListItemText
                     disableTypography
-                    primary={<Typography variant="button">{name}</Typography>}
+                    primary={
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                        justifyContent="space-between"
+                      >
+                        <Typography noWrap display="block" variant="button">
+                          {name}
+                        </Typography>
+                        <Typography
+                          align="right"
+                          color="textSecondary"
+                          display="block"
+                          style={{ minWidth: '4rem' }}
+                          variant="overline"
+                        >
+                          {formatTimestampToRelative(lastUpdateAt)}
+                        </Typography>
+                      </Box>
+                    }
                     secondary={
                       <>
                         <Typography
@@ -110,14 +130,6 @@ const Channels = ({ channels }: Props) => {
                       </>
                     }
                   />
-                  <Typography
-                    color="textSecondary"
-                    display="block"
-                    style={{ marginTop: '1rem' }}
-                    variant="overline"
-                  >
-                    {formatTimestampToRelative(lastUpdateAt)}
-                  </Typography>
                 </Box>
               </a>
             </Link>
