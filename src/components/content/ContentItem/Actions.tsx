@@ -55,7 +55,7 @@ const Badges = ({ badges }: BadgesProps) => {
 
 const Actions = ({ content, user }: Props) => {
   const { asPath, push } = useRouter();
-  const { setWalletOpen } = useWallet();
+  const { wallet, setWalletOpen } = useWallet();
 
   return (
     <Box display="flex">
@@ -121,10 +121,11 @@ const Actions = ({ content, user }: Props) => {
       )}
       <IconButton
         aria-label="Badge content"
+        disabled={!wallet}
         style={{
           padding: 6,
           marginLeft: 'auto',
-          backgroundColor: primary[800],
+          backgroundColor: wallet ? primary[800] : primary[100],
         }}
         onClick={() => setWalletOpen(content)}
       >
