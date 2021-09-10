@@ -33,6 +33,7 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
     control,
     formState: { isSubmitting },
     handleSubmit,
+    setValue,
   } = useForm();
   const { field: editorField } = useController({
     control,
@@ -78,6 +79,7 @@ const ReplyForm = ({ contentID, onSubmit, redirect = false }: Props) => {
       } else {
         onSubmit(reply);
       }
+      setValue('document', initialEditorValue);
     } catch (err) {
       enqueueSnackbar('Oops, something went wrong. Please try again.', {
         variant: 'error',
