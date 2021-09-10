@@ -39,7 +39,7 @@ const DiscoveryPage = () => {
         display="grid"
         style={{
           gap: '1.6rem',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 34.1rem))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(32rem, 1fr))',
         }}
       >
         <DynamicQuery
