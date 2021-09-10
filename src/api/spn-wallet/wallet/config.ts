@@ -6,7 +6,7 @@ const getConfig = () => {
         POLY_NETWORK_ID: 137,
         RPC_PROVIDER: 'https://polygon-rpc.com/',
         SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
-        BADGE_STORE_ADDRESS: '0x975dE233452b915219373bFf5A49b1C81cD807eF',
+        BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
         BICONOMY_API_KEY: walleBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
       }
