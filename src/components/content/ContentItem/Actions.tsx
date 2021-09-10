@@ -43,7 +43,7 @@ const Badges = ({ badges }: BadgesProps) => {
               marginLeft: noFirstBadge ? '-7px' : '0px',
               border: '2px solid white',
               color: 'white',
-              background: primary[800],
+              background: !badge.avatar && primary[800],
               borderRadius: '20px',
             }}
           >
