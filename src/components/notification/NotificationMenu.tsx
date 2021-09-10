@@ -11,6 +11,7 @@ import { Typography } from '@material-ui/core';
 
 // Enum
 import { EventType } from 'tools/types/notification';
+import { cloneDeep } from 'lodash';
 
 interface Props {
   data: any;
@@ -21,10 +22,11 @@ const NotificationMenu = ({ data }: Props) => {
     mutate(
       '/api/v3/notification/all',
       (data) => {
+        const allNotifications = cloneDeep(data?.notifications) || [];
         const eventData = event.data;
         eventData.type = event.type;
         eventData.to.seen = false;
-        const updatedNotifications = [eventData, ...data?.notifications];
+        const updatedNotifications = [eventData, ...allNotifications];
         return {
           count: ++data.count,
           notifications: updatedNotifications,
