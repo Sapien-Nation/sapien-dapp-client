@@ -45,7 +45,7 @@ const Badges = ({ badges }: BadgesProps) => {
               borderRadius: '20px',
             }}
           >
-            <img alt={badge.name} height="20" src={badge.avatar} width="20" />
+            <img alt="" height="20" src={badge.avatar} width="20" />
           </li>
         );
       })}
