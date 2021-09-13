@@ -98,7 +98,7 @@ const Transactions = () => {
                     TransactionType.SEND_SPN ? (
                     <Avatar
                       alt={transactions.user.displayName}
-                      src="/fixtures/normal/slowpoke.jpg"
+                      src={transactions.user.avatar}
                       style={{
                         width: 20,
                         height: 20,

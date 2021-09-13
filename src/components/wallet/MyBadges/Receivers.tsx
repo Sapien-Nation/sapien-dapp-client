@@ -57,7 +57,6 @@ export const ReceiverItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
-        console.log('watchBadgesAmount', watchBadgesAmount);
         if (Number(watchBadgesAmount) === 0) {
           setError('badgesAmount', {
             type: 'manual',
@@ -163,12 +162,24 @@ const Receivers = () => {
           />
         )}
       </Query>
+      {errors.badgesAmount && (
+        <FormHelperText
+          className="Mui-error"
+          style={{
+            margin: '2rem 0',
+            position: 'absolute',
+            right: '4rem',
+          }}
+        >
+          <ErrorMessage errors={errors} name="badgesAmount" />
+        </FormHelperText>
+      )}
       <Box
         alignItems="center"
         bgcolor={neutral[50]}
         borderRadius={10}
         display="flex"
-        marginTop={1}
+        marginY={1}
         padding={1.8}
         style={{
           cursor: 'pointer',
@@ -182,7 +193,7 @@ const Receivers = () => {
               padding: 3,
             },
           }}
-          src="/fixtures/normal/slowpoke.jpg"
+          src={myBadgesCurrentBadge?.avatar}
           style={{
             width: 40,
             height: 40,
@@ -210,14 +221,6 @@ const Receivers = () => {
           />
         </Box>
       </Box>
-      {errors.badgesAmount && (
-        <FormHelperText
-          className="Mui-error"
-          style={{ textAlign: 'center', margin: '1rem 0' }}
-        >
-          <ErrorMessage errors={errors} name="badgesAmount" />
-        </FormHelperText>
-      )}
     </div>
   );
 };

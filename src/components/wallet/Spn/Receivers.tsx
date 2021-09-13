@@ -193,7 +193,7 @@ const Receivers = () => {
           >
             <Avatar
               alt=""
-              src="/fixtures/normal/slowpoke.jpg"
+              src={spnCurrentReceiver?.avatar}
               style={{
                 width: 40,
                 height: 40,
