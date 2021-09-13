@@ -34,13 +34,6 @@ const Header = ({ content, onDelete }: Props) => {
           style={{ gap: 8 }}
         >
           <>
-            {/* <Avatar
-                alt="Message Image"
-                className={classes.avatar}
-                src={''}
-              >
-                {author.displayName?.[0].toUpperCase()}
-              </Avatar> */}
             <Link href="/">
               <a>
                 <Typography component="span" variant="button">
@@ -65,16 +58,8 @@ const Header = ({ content, onDelete }: Props) => {
         </Box>
 
         <Box alignItems="center" display="flex" justifyContent="flex-end">
-          <Typography
-            color="textSecondary"
-            component="span"
-            style={{ marginRight: 5 }}
-            variant="h6"
-          >
-            Seen {formatTimestampToRelative(seenAt)} •
-          </Typography>
           <Typography color="textSecondary" component="span" variant="h6">
-            {formatTimestampToRelative(createdAt)}
+            {formatTimestampToRelative(createdAt)} ago
           </Typography>
           <IconButton
             aria-controls="message-menu"
