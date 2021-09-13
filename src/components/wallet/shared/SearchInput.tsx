@@ -43,6 +43,8 @@ interface Props {
   dispatchWalletState?: (state: any) => void;
   users?: any;
   walletOpen?: Content | boolean;
+  setError?: any;
+  watchBadgesAmount?: string;
 }
 
 const SearchInput = ({
@@ -53,6 +55,8 @@ const SearchInput = ({
   dispatchWalletState,
   users,
   walletOpen,
+  setError,
+  watchBadgesAmount,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const handleChange = (event) => {
@@ -107,11 +111,13 @@ const SearchInput = ({
             name={item.name}
             publicAddress={item.publicAddress}
             quantity={item.quantity}
+            setError={setError}
             spn={item.spn}
             userIsAdmin={item.userIsAdmin}
             userName={item.userName}
             users={users}
             walletOpen={walletOpen}
+            watchBadgesAmount={watchBadgesAmount}
           />
         ))}
       </div>

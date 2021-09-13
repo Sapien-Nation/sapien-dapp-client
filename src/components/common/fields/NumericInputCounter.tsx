@@ -5,16 +5,21 @@ import { Add as AddIcon, Remove as RemoveIcon } from '@material-ui/icons';
 // styles
 import { neutral } from 'styles/colors';
 
-const NumericInputCounter = ({ watchBadgesAmount, setValue, register }) => {
+const NumericInputCounter = ({
+  name,
+  watchBadgesAmount,
+  setValue,
+  register,
+}) => {
   const handleIncrement = () => {
-    setValue('badgesAmount', Number(watchBadgesAmount) + 1, {
+    setValue(name, Number(watchBadgesAmount) + 1, {
       shouldValidate: true,
     });
   };
 
   const handleDecrement = () => {
     if (Number(watchBadgesAmount) < 2) return;
-    setValue('badgesAmount', Number(watchBadgesAmount) - 1, {
+    setValue(name, Number(watchBadgesAmount) - 1, {
       shouldValidate: true,
     });
   };
@@ -48,7 +53,19 @@ const NumericInputCounter = ({ watchBadgesAmount, setValue, register }) => {
         }}
         id="badges-amount"
         inputProps={{
-          ...register('badgesAmount'),
+          ...register(name, {
+            validate: {
+              positive: (value: string) => {
+                if (parseInt(value) < 1 || !value) {
+                  return 'Value should be more than 0';
+                } else if (value.length > 2) {
+                  return 'Max badges amount is 99';
+                } else {
+                  return true;
+                }
+              },
+            },
+          }),
         }}
         label=""
         style={{

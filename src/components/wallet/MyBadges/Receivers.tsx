@@ -41,6 +41,8 @@ export const ReceiverItem = ({
   id,
   publicAddress,
   userName,
+  watchBadgesAmount,
+  setError,
 }) => {
   const classes = useStyles();
   return (
@@ -55,19 +57,32 @@ export const ReceiverItem = ({
         cursor: 'pointer',
       }}
       onClick={() => {
-        dispatchWalletState({
-          type: 'update',
-          payload: {
-            myBadgesTransition: 'forward',
-            myBadgesStep: MyBadgesSteps.Confirmation,
-            myBadgesCurrentReceiver: {
-              id,
-              userName,
-              displayName,
-              publicAddress,
+        console.log('watchBadgesAmount', watchBadgesAmount);
+        if (Number(watchBadgesAmount) === 0) {
+          setError('badgesAmount', {
+            type: 'manual',
+            message: 'Value should be more than 0',
+          });
+        } else if (Number(watchBadgesAmount) > 99) {
+          setError('badgesAmount', {
+            type: 'manual',
+            message: 'Max badges amount is 99',
+          });
+        } else {
+          dispatchWalletState({
+            type: 'update',
+            payload: {
+              myBadgesTransition: 'forward',
+              myBadgesStep: MyBadgesSteps.Confirmation,
+              myBadgesCurrentReceiver: {
+                id,
+                userName,
+                displayName,
+                publicAddress,
+              },
             },
-          },
-        });
+          });
+        }
       }}
     >
       <Avatar alt={userName}>{displayName?.[0]?.toUpperCase()}</Avatar>
@@ -91,6 +106,7 @@ const Receivers = () => {
     watch,
     register,
     setValue,
+    setError,
     formState: { errors },
   } = useFormContext();
   const { dispatchWalletState, globalWalletState } = useWallet();
@@ -142,6 +158,8 @@ const Receivers = () => {
             dispatchWalletState={dispatchWalletState}
             list={list}
             placeholder="Search for a receiver"
+            setError={setError}
+            watchBadgesAmount={watchBadgesAmount}
           />
         )}
       </Query>
@@ -185,6 +203,7 @@ const Receivers = () => {
         </Box>
         <Box alignItems="center" display="flex" marginLeft="auto">
           <NumericInputCounter
+            name="badgesAmount"
             register={register}
             setValue={setValue}
             watchBadgesAmount={watchBadgesAmount}

@@ -160,6 +160,7 @@ const Confirmation = () => {
           </Box>
           <Box alignItems="center" display="flex" marginLeft="auto">
             <NumericInputCounter
+              name="badgesAmount"
               register={register}
               setValue={setValue}
               watchBadgesAmount={watchBadgesAmount}
