@@ -73,7 +73,7 @@ const ContentItem = ({ content, mutate }: Props) => {
         onDelete={() => setDialog(true)}
       />
       <div>
-        <Link href={`${asPath}/content/${content.id}`}>
+        <Link href={`${asPath.split('#')[0]}/content/${content.id}`}>
           <a className={classes.content}>
             {!content.deletedAt && (
               <Typography component="div" variant="h6">
