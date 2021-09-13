@@ -17,7 +17,7 @@ const Store = () => {
   const methods = useForm({
     defaultValues: {
       badgesAmount: 1,
-      terms: false,
+      terms: true,
     },
   });
   const { globalWalletState, dispatchWalletState } = useWallet();

@@ -193,8 +193,9 @@ const Checkout = () => {
       >
         <Controller
           control={control}
+          defaultValue={true}
           name="terms"
-          render={({ field }) => {
+          render={({ field: { value, ...rest } }) => {
             return (
               <div
                 style={{
@@ -204,12 +205,11 @@ const Checkout = () => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      disableRipple
+                      checked={Boolean(value)}
                       checkedIcon={<CheckboxCheckedIcon />}
                       color="default"
                       icon={<CheckboxIcon />}
-                      name="terms"
-                      {...field}
+                      {...rest}
                     />
                   }
                   label={
@@ -251,38 +251,40 @@ const Checkout = () => {
           disabled={loadingResponse}
           variant="contained"
           onClick={async () => {
-            setLoadingResponse(true);
-            try {
-              await wallet.purchaseBadge(
-                watchBadgesAmount,
-                storeCurrentBadge.blockchainId,
-                me.id,
-                storeCurrentBadge.id,
-                watchBadgesAmount * storeCurrentBadge.spn
-              );
-              enqueueSnackbar('Success!', {
-                variant: 'success',
-                anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                },
-              });
-              setLoadingResponse(false);
-              dispatchWalletState({
-                type: 'update',
-                payload: {
-                  showTabsMenu: true,
-                  storeStep: StoreSteps.Badges,
-                },
-              });
-            } catch (error) {
-              enqueueSnackbar('Something went wrong.', {
-                variant: 'error',
-                anchorOrigin: {
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                },
-              });
+            if (Object.keys(errors).length === 0) {
+              setLoadingResponse(true);
+              try {
+                await wallet.purchaseBadge(
+                  watchBadgesAmount,
+                  storeCurrentBadge.blockchainId,
+                  me.id,
+                  storeCurrentBadge.id,
+                  watchBadgesAmount * storeCurrentBadge.spn
+                );
+                enqueueSnackbar('Success!', {
+                  variant: 'success',
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  },
+                });
+                setLoadingResponse(false);
+                dispatchWalletState({
+                  type: 'update',
+                  payload: {
+                    showTabsMenu: true,
+                    storeStep: StoreSteps.Badges,
+                  },
+                });
+              } catch (error) {
+                enqueueSnackbar('Something went wrong.', {
+                  variant: 'error',
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                  },
+                });
+              }
             }
           }}
         >
