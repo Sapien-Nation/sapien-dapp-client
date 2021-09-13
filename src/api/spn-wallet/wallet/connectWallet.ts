@@ -23,11 +23,6 @@ const connectWallet = async (
     if (isSignup) {
       await addWallet(publicAddress);
       await grantSapienBadge(userId);
-      history?.replaceState(
-        {},
-        document?.title,
-        window?.location.href.split('#')[0]
-      );
     }
     const wallet = await Wallet(publicAddress, privateKey);
     return wallet;

@@ -100,7 +100,7 @@ const Navbar = () => {
     torus: string;
     refresh: string;
   }>('tokens');
-  const { clearSession, me } = useAuth();
+  const { newUser, setNewUser, clearSession, me } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const { wallet, setWallet, walletOpen, setWalletOpen } = useWallet();
 
@@ -111,7 +111,7 @@ const Navbar = () => {
           const walletConnected = await connectWallet(
             tokens.torus,
             me.id,
-            asPath.includes('signup')
+            newUser
           );
           enqueueSnackbar('Wallet connected', {
             variant: 'success',
@@ -121,14 +121,11 @@ const Navbar = () => {
             },
           });
           setWallet(walletConnected);
+          setNewUser(false);
         } catch (error) {
           try {
             const { token } = await refresh(tokens.refresh, 'torus');
-            const walletConnected = await connectWallet(
-              token,
-              me.id,
-              asPath.includes('signup')
-            );
+            const walletConnected = await connectWallet(token, me.id, newUser);
             enqueueSnackbar('Wallet connected', {
               variant: 'success',
               anchorOrigin: {
@@ -137,6 +134,7 @@ const Navbar = () => {
               },
             });
             setWallet(walletConnected);
+            setNewUser(false);
           } catch (err) {
             enqueueSnackbar(err, {
               variant: 'error',
