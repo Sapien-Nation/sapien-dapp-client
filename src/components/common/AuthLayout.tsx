@@ -20,7 +20,7 @@ const AuthLayout = ({ children }: Props) => {
   const matches = useMediaQuery(theme.breakpoints.down('md'));
 
   if (newUser && isLoggingIn === false && me) {
-    return <Redirect to="/client/sapien#f=signup" />;
+    return <Redirect to="/client/sapien" />;
   } else if (isLoggingIn === false && me) return <Redirect to="/" />;
 
   return (
