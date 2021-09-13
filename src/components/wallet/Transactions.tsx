@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
 // assets
-import { Transaction as TransactionIcon } from 'assets';
+import { Transaction as TransactionIcon, Swap as SwapIcon } from 'assets';
 
 // types
 import {
@@ -33,7 +33,7 @@ import { tokensInstance } from 'api';
 import getConfig from 'api/spn-wallet/wallet/config';
 
 // styles
-import { green, neutral, red } from 'styles/colors';
+import { green, neutral, red, secondary } from 'styles/colors';
 
 // utils
 import { formatTimestampToRelative } from 'utils/date';
@@ -109,42 +109,53 @@ const Transactions = () => {
                 }
                 overlap="circle"
               >
-                <Avatar
-                  style={{
-                    backgroundColor:
-                      TransactionType[transactions.type] ===
-                        TransactionType.SEND_SPN ||
-                      TransactionType[transactions.type] ===
-                        TransactionType.PURCHASE_BADGE ||
-                      TransactionType[transactions.type] ===
-                        TransactionType.WITHDRAW_SPN
-                        ? red[100]
-                        : green[100],
-                  }}
-                >
-                  <TransactionIcon
+                {TransactionType[transactions.type] ===
+                TransactionType.RECEIVE_BADGE ? (
+                  <Avatar
                     style={{
-                      fill:
+                      backgroundColor: secondary[100],
+                    }}
+                  >
+                    <SwapIcon />
+                  </Avatar>
+                ) : (
+                  <Avatar
+                    style={{
+                      backgroundColor:
                         TransactionType[transactions.type] ===
                           TransactionType.SEND_SPN ||
                         TransactionType[transactions.type] ===
                           TransactionType.PURCHASE_BADGE ||
                         TransactionType[transactions.type] ===
                           TransactionType.WITHDRAW_SPN
-                          ? red[700]
-                          : green[700],
-                      transform: `${
-                        (TransactionType[transactions.type] ===
-                          TransactionType.SEND_SPN ||
+                          ? red[100]
+                          : green[100],
+                    }}
+                  >
+                    <TransactionIcon
+                      style={{
+                        fill:
+                          TransactionType[transactions.type] ===
+                            TransactionType.SEND_SPN ||
                           TransactionType[transactions.type] ===
                             TransactionType.PURCHASE_BADGE ||
                           TransactionType[transactions.type] ===
-                            TransactionType.WITHDRAW_SPN) &&
-                        'rotate(180deg)'
-                      }`,
-                    }}
-                  />
-                </Avatar>
+                            TransactionType.WITHDRAW_SPN
+                            ? red[700]
+                            : green[700],
+                        transform: `${
+                          (TransactionType[transactions.type] ===
+                            TransactionType.SEND_SPN ||
+                            TransactionType[transactions.type] ===
+                              TransactionType.PURCHASE_BADGE ||
+                            TransactionType[transactions.type] ===
+                              TransactionType.WITHDRAW_SPN) &&
+                          'rotate(180deg)'
+                        }`,
+                      }}
+                    />
+                  </Avatar>
+                )}
               </Badge>
               <Box display="flex" flexDirection="column">
                 <Typography
@@ -169,7 +180,9 @@ const Transactions = () => {
               <Box alignItems="center" display="flex" marginLeft="auto">
                 <Box display="flex" flexDirection="column">
                   <Typography style={{ lineHeight: 1.4 }} variant="button">
-                    {transactions.amount / 1e6} SPN
+                    {TransactionType[transactions.type] !==
+                      TransactionType.RECEIVE_BADGE &&
+                      `${transactions.amount / 1e6} SPN`}
                   </Typography>
                   <Typography
                     style={{
