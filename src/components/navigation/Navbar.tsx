@@ -106,7 +106,7 @@ const Navbar = () => {
 
   useEffect(() => {
     const walletWeb3 = async () => {
-      if (tokens && Boolean(me) && query?.squareID && Boolean(!wallet))
+      if (tokens && Boolean(me) && Boolean(!wallet))
         try {
           const walletConnected = await connectWallet(
             tokens.torus,
