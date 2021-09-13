@@ -135,7 +135,7 @@ const Confirmation = () => {
             style={{ textAlign: 'center', color: neutral[500] }}
             variant="h6"
           >
-            Velit sed turpis tellus curabitur sit habitant sit eget lorem ipsum.
+            {myBadgesCurrentBadge.description}
           </Typography>
         </Box>
       </Box>
