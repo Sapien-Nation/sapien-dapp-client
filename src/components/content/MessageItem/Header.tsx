@@ -22,7 +22,7 @@ interface Props {
 const Header = ({ content, onDelete }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const { createdAt, seenAt } = content;
+  const { createdAt } = content;
 
   return (
     <>
