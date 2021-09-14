@@ -9,16 +9,15 @@ export const getTribes = (): Array<Tribe> => {
   );
 };
 
-export const getTribe = (squareID: string): Tribe => {
+export const getTribe = (squareID: string, isSapienTribe = false): Tribe => {
   const tribes: Array<Tribe> =
     useSWR('/api/v3/profile/tribes', { revalidateOnMount: false }).data ?? [];
 
   // Getting tribe from
   // mainSquareID
-  // name - This only apply for the Sapien tribe
-  const tribeFromMainSquare = tribes?.find(
-    ({ name, mainSquareId }) => mainSquareId === squareID || name === squareID
-  );
+  const tribeFromMainSquare = isSapienTribe
+    ? tribes?.find(({ isMain }) => isMain)
+    : tribes?.find(({ mainSquareId }) => mainSquareId === squareID);
 
   if (tribeFromMainSquare) return tribeFromMainSquare;
 

@@ -38,10 +38,10 @@ const Header = ({ isMainSquare, tribeID }: Props) => {
   const { enqueueSnackbar } = useSnackbar();
   const { query } = useRouter();
   const { squareID, tribeSquareID } = query;
-  const { squares, ...rest } = getTribe(String(squareID));
+  const isSapienTribe = squareID === 'sapien';
+  const { squares, ...rest } = getTribe(String(squareID), isSapienTribe);
 
   const selectedSquare = squares?.find(({ id }) => id === tribeSquareID);
-  const isSapienTribe = squareID === 'sapien';
 
   const copy = () => {
     copyToClipboard(window.location.href);

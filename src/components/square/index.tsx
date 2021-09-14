@@ -50,7 +50,8 @@ export const Square = ({ squareID, isMainSquare = true }: Props) => {
   // for query.squareID to see if we are trying to render the sapien tribe
   const isSapienTribe = squareID === 'sapien';
   const { id: tribeID, mainSquareId: sapienSquareID } = getTribe(
-    String(squareID)
+    String(squareID),
+    isSapienTribe
   );
 
   const {
