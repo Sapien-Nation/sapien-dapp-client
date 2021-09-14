@@ -53,11 +53,10 @@ const TribeBar = () => {
   const tribes = getTribes();
   const classes = useStyles();
   const { asPath } = useRouter();
-  // to test Comingsoon make this'true'
+
   const showPreview = false;
 
   const isTribeSelected = (tribe: Tribe) => {
-    // @ts-ignore
     if (tribe.isMain) {
       return asPath === '/client/sapien';
     }
@@ -84,8 +83,6 @@ const TribeBar = () => {
         }}
       >
         {tribes.map((tribe, index) => {
-          // TODO update tools
-          // @ts-ignore
           const isSapienTribe = tribe.isMain;
           return (
             <Link

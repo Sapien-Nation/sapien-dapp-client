@@ -50,15 +50,18 @@ const TribeNavigation = () => {
   const [showPreviewSquare, setShowPreviewSquare] = useState(false);
   const [showPreviewChannel, setShowPreviewChannel] = useState(false);
   const { asPath, query } = useRouter();
-  // to test Comingsoon make this'true'
+
+  // to test Comings Soon make this 'true'
   const showPreview = false;
 
   const { squareID } = query;
+  const isSapienTribe = squareID === 'sapien';
   const selectedTribe = tribes?.find(
-    ({ mainSquareId, name }) => mainSquareId === squareID || name === squareID
+    ({ mainSquareId, name }) =>
+      mainSquareId === squareID ||
+      (isSapienTribe ? name.toLocaleLowerCase() : name) === squareID
   );
 
-  // TODO fix this
   if (!selectedTribe) return <></>;
 
   return (
