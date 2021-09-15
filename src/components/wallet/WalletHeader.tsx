@@ -17,8 +17,8 @@ import {
 } from '@material-ui/core';
 import {
   ArrowBack as ArrowBackIcon,
-  ArrowDownward as ArrowDownwardIcon,
-  ArrowUpward as ArrowUpwardIcon,
+  // ArrowDownward as ArrowDownwardIcon,
+  // ArrowUpward as ArrowUpwardIcon,
   MoreHoriz as MoreHorizIcon,
   History as HistoryIcon,
 } from '@material-ui/icons';
@@ -154,7 +154,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               onClose={() => setMenuAnchor(null)}
             >
-              <MenuItem
+              {/* <MenuItem
                 style={{
                   fontSize: 14,
                   color: neutral[700],
@@ -195,7 +195,7 @@ const WalletHeader = ({ wallet, setView, currentView }: Props) => {
                   }}
                 />{' '}
                 Withdraw
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem
                 style={{
                   fontSize: 14,
