@@ -62,7 +62,7 @@ const Signup = () => {
         refresh: response.refresh,
       });
     } catch (error) {
-      enqueueSnackbar('Oops, something went wrong. Please try again', {
+      enqueueSnackbar(error.message, {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
