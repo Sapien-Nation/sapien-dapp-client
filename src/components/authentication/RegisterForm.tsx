@@ -62,7 +62,7 @@ const Signup = () => {
         refresh: response.refresh,
       });
     } catch (error) {
-      enqueueSnackbar(error.message, {
+      enqueueSnackbar(error, {
         variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',

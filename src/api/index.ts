@@ -141,14 +141,6 @@ authInstance.interceptors.request.use((config) => {
   }
   return config;
 }, undefined);
-authInstance.interceptors.response.use(undefined, async (error) => {
-  if (error.response?.status === 401) {
-    // mutate('/api/v3/user/me', null, false);
-    // window.location.reload();
-    // return;
-  }
-  return Promise.reject(error);
-});
 
 instance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
@@ -159,15 +151,6 @@ instance.interceptors.request.use((config) => {
   return config;
 }, undefined);
 
-instance.interceptors.response.use(undefined, async (error) => {
-  if (error.response?.status === 401) {
-    // mutate('/api/v3/user/me', null, false);
-    // window.location.reload();
-    // return;
-  }
-  return Promise.reject(error);
-});
-
 notificationInstance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
   if (tokens) {
@@ -176,13 +159,5 @@ notificationInstance.interceptors.request.use((config) => {
   }
   return config;
 }, undefined);
-notificationInstance.interceptors.response.use(undefined, async (error) => {
-  if (error.response?.status === 401) {
-    // mutate('/api/v3/user/me', null, false);
-    // window.location.reload();
-    // return;
-  }
-  return Promise.reject(error);
-});
 
 export default instance;
