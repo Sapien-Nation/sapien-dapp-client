@@ -1,12 +1,13 @@
-import { BaseEditor, Editor, Element as SlateElement, Transforms } from 'slate';
+import { Transforms } from 'slate';
 import { ReactEditor } from 'slate-react';
+import { isElementActive, unwrapElement } from './helpers';
 
 export const wrapOnlineVideo = (editor: any, url: string) => {
   const results = url.match('v=([a-zA-Z0-9_-]+)&?');
   const videoId = results[1];
 
-  if (isVideoActive(editor)) {
-    unwrapVideo(editor);
+  if (isElementActive(editor, 'video')) {
+    unwrapElement(editor, 'video');
   }
 
   const thumbnail = `https://img.youtube.com/vi/${videoId}/1.jpg`;
@@ -40,23 +41,4 @@ export const wrapOnlineVideo = (editor: any, url: string) => {
       children: [{ text: '' }],
     },
   ]);
-};
-
-const unwrapVideo = (editor: BaseEditor) => {
-  Transforms.unwrapNodes(editor, {
-    match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      (n as any).type === ('video' as any),
-  });
-};
-
-const isVideoActive = (editor: BaseEditor) => {
-  const [video] = Editor.nodes(editor, {
-    match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      (n as any).type === ('video' as any),
-  });
-  return !!video;
 };

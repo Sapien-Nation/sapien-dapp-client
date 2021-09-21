@@ -1,22 +1,16 @@
-import {
-  BaseEditor,
-  Descendant,
-  Editor,
-  Element as SlateElement,
-  Range,
-  Transforms,
-} from 'slate';
+import { BaseEditor, Descendant, Range, Transforms } from 'slate';
 
 // utils
 import { checkUrl, isOnlineVideo } from 'utils/url';
 import { wrapOnlineVideo } from 'utils/slate/plugins';
+import { isElementActive, unwrapElement } from './helpers';
 
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 
 export const withLinks = (editor) => {
   const { insertData, insertText, isInline, isVoid } = editor;
 
-  editor.isVoid = (element) => {
+  editor.isVoid = (element: any) => {
     return element.type === 'video' ? true : isVoid(element);
   };
 
@@ -55,18 +49,9 @@ export const withLinks = (editor) => {
   return editor;
 };
 
-const unwrapLink = (editor: BaseEditor) => {
-  Transforms.unwrapNodes(editor, {
-    match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      (n as any).type === ('link' as any),
-  });
-};
-
 const wrapLink = (editor: BaseEditor, url: string) => {
-  if (isLinkActive(editor)) {
-    unwrapLink(editor);
+  if (isElementActive(editor, 'link')) {
+    unwrapElement(editor, 'link');
   }
 
   const { selection } = editor;
@@ -83,14 +68,4 @@ const wrapLink = (editor: BaseEditor, url: string) => {
     Transforms.wrapNodes(editor, link as any, { split: true });
     Transforms.collapse(editor, { edge: 'end' });
   }
-};
-
-const isLinkActive = (editor: BaseEditor) => {
-  const [link] = Editor.nodes(editor, {
-    match: (n) =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      (n as any).type === ('link' as any),
-  });
-  return !!link;
 };

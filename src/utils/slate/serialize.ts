@@ -34,7 +34,7 @@ export const serialize = (node) => {
       return `<a 
                 target="_blank" 
                 href="${escapeHtml(node.url)}"
-                style="margin:0;" 
+                style="margin:0;color:${primary[800]};" 
               >
                 ${node.url}
               </a>`;
