@@ -113,26 +113,12 @@ const Navbar = () => {
             me.id,
             newUser
           );
-          enqueueSnackbar('Wallet connected', {
-            variant: 'success',
-            anchorOrigin: {
-              vertical: 'bottom',
-              horizontal: 'right',
-            },
-          });
           setWallet(walletConnected);
           setNewUser(false);
         } catch (error) {
           try {
             const { token } = await refresh(tokens.refresh, 'torus');
             const walletConnected = await connectWallet(token, me.id, newUser);
-            enqueueSnackbar('Wallet connected', {
-              variant: 'success',
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'right',
-              },
-            });
             setWallet(walletConnected);
             setNewUser(false);
           } catch (err) {
