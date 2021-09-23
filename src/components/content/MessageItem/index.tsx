@@ -73,7 +73,7 @@ const MessageItem = ({ message, mutate }: Props) => {
         onDelete={() => setDialog(true)}
       />
       <div>
-        <Link href={`${asPath}/message/${message.id}`}>
+        <Link href={`${asPath}/content/${message.id}`}>
           <a className={classes.content}>
             {!message.deletedAt && (
               <Typography component="div" variant="h6">

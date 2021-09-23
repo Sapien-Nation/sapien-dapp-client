@@ -47,7 +47,7 @@ interface Props {
 const Channels = ({ channels }: Props) => {
   const classes = useStyles();
   const { asPath, query } = useRouter();
-  const { squareID } = query;
+  const { squareID, channelID } = query;
 
   return (
     <List aria-label="Channels list" role="list" style={{ padding: 0 }}>
@@ -60,7 +60,7 @@ const Channels = ({ channels }: Props) => {
             classes={{
               selected: classes.listItemSelected,
             }}
-            selected={asPath === `/client/${squareID}/channel/${id}`}
+            selected={channelID === id}
             style={{
               borderRadius: 10,
               margin: '0.5rem 0',

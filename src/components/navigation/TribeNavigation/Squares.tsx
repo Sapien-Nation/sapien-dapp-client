@@ -21,8 +21,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Squares = ({ squares }: Props) => {
-  const { asPath, query } = useRouter();
-  const { id, squareID } = query;
+  const { query } = useRouter();
+  const { id, squareID, tribeSquareID } = query;
   const classes = useStyles();
 
   return (
@@ -38,7 +38,7 @@ const Squares = ({ squares }: Props) => {
           }}
           component="li"
           role="listitem"
-          selected={asPath === `/client/${squareID}/square/${square.id}`}
+          selected={tribeSquareID === square.id}
           style={{
             borderRadius: 10,
             margin: '0.5rem 0',

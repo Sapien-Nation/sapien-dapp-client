@@ -76,7 +76,11 @@ const TribeNavigation = () => {
       variant="permanent"
     >
       <div>
-        <Link href={`/client/${selectedTribe?.mainSquareId}`}>
+        <Link
+          href={`/client/${
+            selectedTribe.isMain ? 'sapien' : selectedTribe?.mainSquareId
+          }`}
+        >
           <a style={{ display: 'block' }}>
             <Box
               alignItems="center"

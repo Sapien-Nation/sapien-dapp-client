@@ -52,16 +52,14 @@ const TribeBar = () => {
 
   const tribes = getTribes();
   const classes = useStyles();
-  const { asPath } = useRouter();
+  const { query } = useRouter();
 
   const showPreview = false;
 
   const isTribeSelected = (tribe: Tribe) => {
-    if (tribe.isMain) {
-      return asPath === '/client/sapien';
-    }
-
-    return asPath.includes(`/client/${tribe.mainSquareId}`);
+    return tribe.isMain
+      ? query.squareID === 'sapien'
+      : tribe.mainSquareId === query.squareID;
   };
 
   return (

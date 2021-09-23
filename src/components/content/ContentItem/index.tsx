@@ -47,7 +47,7 @@ const ContentItem = ({ content, mutate }: Props) => {
   const [dialog, setDialog] = useState(false);
 
   const { me } = useAuth();
-  const { query } = useRouter();
+  const { asPath } = useRouter();
   const classes = useStyles();
 
   const showMore = getContentCount(content.body) > maxContentLength;
@@ -73,7 +73,7 @@ const ContentItem = ({ content, mutate }: Props) => {
         onDelete={() => setDialog(true)}
       />
       <div>
-        <Link href={`/client/${query.squareID}/content/${content.id}`}>
+        <Link href={`${asPath}/content/${content.id}`}>
           <a className={classes.content}>
             {!content.deletedAt && (
               <Typography component="div" variant="h6">
