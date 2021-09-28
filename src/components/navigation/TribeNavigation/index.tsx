@@ -9,7 +9,7 @@ import Squares from './Squares';
 import DirectMessages from './DirectMessages';
 import CreateChannelModal from 'components/channel/CreateChannelModal';
 import CreateSquareModal from 'components/square/CreateSquareModal';
-import { ComingSoon, Query } from 'components/common';
+import { Query } from 'components/common';
 
 // hooks
 import { getTribes } from 'hooks';
@@ -47,12 +47,7 @@ const TribeNavigation = () => {
   const tribes = getTribes();
   const classes = useStyles();
   const [modal, setModal] = useState<ModalType | null>(null);
-  const [showPreviewSquare, setShowPreviewSquare] = useState(false);
-  const [showPreviewChannel, setShowPreviewChannel] = useState(false);
   const { asPath, query } = useRouter();
-
-  // to test Comings Soon make this 'true'
-  const showPreview = false;
 
   const { squareID } = query;
   const isSapienTribe = squareID === 'sapien';
@@ -107,36 +102,18 @@ const TribeNavigation = () => {
         <Section
           showAction
           title="Squares"
-          onClick={() =>
-            showPreview
-              ? setShowPreviewSquare(!showPreviewSquare)
-              : setModal(ModalType.Square)
-          }
+          onClick={() => setModal(ModalType.Square)}
         >
           <Squares squares={selectedTribe.squares} />
         </Section>
 
-        <ComingSoon open={showPreviewSquare}>
-          {/* TODO define a better children, Section can't be used */}
-          <div></div>
-        </ComingSoon>
-
         <Section
           showAction
           title="Channels"
-          onClick={() =>
-            showPreview
-              ? setShowPreviewChannel(!showPreviewChannel)
-              : setModal(ModalType.Channel)
-          }
+          onClick={() => setModal(ModalType.Channel)}
         >
           <Channels channels={selectedTribe.channels} />
         </Section>
-
-        <ComingSoon open={showPreviewChannel}>
-          {/* TODO define a better children, Section can't be used */}
-          <div></div>
-        </ComingSoon>
 
         <Section showAction={false} title="My Messages" onClick={() => {}}>
           <Query

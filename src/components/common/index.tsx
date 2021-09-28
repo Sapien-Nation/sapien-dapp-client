@@ -6,7 +6,6 @@ export * from './skeletons';
 
 export { default as AuthLayout } from './AuthLayout';
 export { default as ChartCount } from './ChartCount';
-export { default as ComingSoon } from './ComingSoon';
 export { default as Dialog } from './Dialog';
 export { default as ErrorView } from './ErrorView';
 export { default as Filter } from './Filter';
