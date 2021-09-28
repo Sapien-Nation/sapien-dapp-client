@@ -122,13 +122,8 @@ const Navbar = () => {
             setWallet(walletConnected);
             setNewUser(false);
           } catch (err) {
-            enqueueSnackbar(err, {
-              variant: 'error',
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'right',
-              },
-            });
+            // TODO add Sentry ERROR
+            console.log('Wallet Error:', err);
           }
         }
     };
