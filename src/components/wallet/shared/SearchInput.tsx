@@ -113,6 +113,7 @@ const SearchInput = ({
             quantity={item.quantity}
             setError={setError}
             spn={item.spn}
+            tribeId={item.tribeId}
             userIsAdmin={item.userIsAdmin}
             userName={item.userName}
             users={users}

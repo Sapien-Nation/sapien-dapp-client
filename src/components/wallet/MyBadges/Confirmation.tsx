@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useFormContext } from 'react-hook-form';
+import { mutate } from 'swr';
+import { useRouter } from 'next/router';
 
 // styles
 import { primary, neutral } from 'styles/colors';
@@ -19,6 +21,7 @@ import { MyBadgesSteps } from '../WalletEnums';
 const Confirmation = () => {
   const { watch } = useFormContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { push } = useRouter();
   const { me } = useAuth();
   const { wallet, walletOpen, dispatchWalletState, globalWalletState } =
     useWallet();
@@ -163,6 +166,12 @@ const Confirmation = () => {
                 myBadgesCurrentBadge.blockchainId,
                 myBadgesCurrentBadge.userIsAdmin,
                 myBadgesCurrentBadge.contentId
+              );
+              push('/client/sapien');
+              mutate('/api/v3/profile/tribes', (tribes: Array<any>) =>
+                tribes.filter(
+                  (tribe) => myBadgesCurrentBadge.tribeId !== tribe.id
+                )
               );
               enqueueSnackbar('Success!', {
                 variant: 'success',

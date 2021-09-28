@@ -46,6 +46,7 @@ export const BadgeItem = ({
   userIsAdmin,
   users,
   walletOpen,
+  tribeId,
 }) => {
   const classes = useStyles();
   return (
@@ -82,6 +83,7 @@ export const BadgeItem = ({
                 id,
                 blockchainId,
                 description,
+                tribeId,
                 name,
                 price: spn,
                 quantity,
@@ -102,6 +104,7 @@ export const BadgeItem = ({
                 id,
                 blockchainId,
                 description,
+                tribeId,
                 name,
                 price: spn,
                 quantity,
