@@ -8,4 +8,5 @@ module.exports = {
   images: {
     domains: ['d151dmflpumpzp.cloudfront.net'],
   },
+  ignoreBuildErrors: true,
 };
