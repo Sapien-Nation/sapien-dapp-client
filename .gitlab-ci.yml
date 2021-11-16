@@ -28,7 +28,7 @@ build-sandbox:
     - rm -rf  tools 
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule init   &&  git submodule update --remote
-    - cd ..
+    #- cd ..
     ##- git pull --recurse-submodule
     - export KUBECONFIG=~/.kube/kubeconfig_sapien-sandbox-cluster
     - export AWS_PROFILE=sapien-sandbox
@@ -58,7 +58,7 @@ build-qat:
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule sync && git submodule update
-    - cd ..
+    #- cd ..
     #- ls -l src/tools
     - export KUBECONFIG=~/.kube/kubeconfig_sapien-qat-cluster
     - export AWS_PROFILE=sapien-qat
@@ -88,7 +88,7 @@ build-poc:
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule init   &&  git submodule update --remote
-    - cd ..
+    #- cd ..
     ##- git pull --recurse-submodule
     - export KUBECONFIG=~/.kube/kubeconfig_sapien-poc-cluster
     - export AWS_PROFILE=sapien-poc
