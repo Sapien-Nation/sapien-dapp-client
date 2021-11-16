@@ -2,7 +2,7 @@ import getWalletKeys from '../auth/getWalletKeys';
 import Wallet from './wallet';
 
 // api
-import { addWallet } from 'api/authentication';
+// import { addWallet } from 'api/authentication';
 import { grantSapienBadge } from 'api/wallet';
 import { walletVerifier, walletSubVerifier } from 'api';
 
@@ -21,7 +21,7 @@ const connectWallet = async (
       subVerifier
     );
     if (isSignup) {
-      await addWallet(publicAddress);
+      // await addWallet(publicAddress);
       await grantSapienBadge(userId);
     }
     const wallet = await Wallet(publicAddress, privateKey);
