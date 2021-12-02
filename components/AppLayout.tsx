@@ -1,8 +1,4 @@
 import { useRouter } from 'next/router';
-
-// components
-import { Navbar, Footer } from 'components/navigation';
-
 interface Props {
   children: React.ReactElement;
 }
@@ -22,9 +18,7 @@ const AppLayout = ({ children }: Props) => {
 
   return (
     <div className="relative">
-      <Navbar />
       <main>{children}</main>
-      <Footer />
     </div>
   );
 };
