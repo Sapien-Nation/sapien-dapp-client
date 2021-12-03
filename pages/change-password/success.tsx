@@ -1,7 +1,5 @@
-import Link from 'next/link';
-
-// twind
 import { tw } from 'twind';
+import Link from 'next/link';
 
 // components
 import { Layout } from 'components/auth';

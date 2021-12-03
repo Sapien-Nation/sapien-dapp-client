@@ -1,6 +1,4 @@
 import { Fragment } from 'react';
-
-// twind
 import { tw } from 'twind';
 
 // styles

@@ -1,7 +1,5 @@
-// twind
-import { tw } from 'twind';
-
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { tw } from 'twind';
 
 class MyDocument extends Document {
   render() {

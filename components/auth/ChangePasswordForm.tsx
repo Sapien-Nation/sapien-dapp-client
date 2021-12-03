@@ -1,9 +1,7 @@
-import { useRef } from 'react';
 import { RefreshIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-
-// twind
 import { tw } from 'twind';
 
 // api

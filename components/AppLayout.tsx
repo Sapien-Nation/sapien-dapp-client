@@ -1,8 +1,5 @@
-import { useRouter } from 'next/router';
-
-// twind
 import { tw } from 'twind';
-
+import { useRouter } from 'next/router';
 interface Props {
   children: React.ReactElement;
 }

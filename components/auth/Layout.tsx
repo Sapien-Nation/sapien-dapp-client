@@ -1,6 +1,4 @@
 import Image from 'next/image';
-
-// twind
 import { tw } from 'twind';
 
 // assets

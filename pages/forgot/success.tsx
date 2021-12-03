@@ -1,9 +1,8 @@
+import { tw } from 'twind';
+
 // components
 import { Layout } from 'components/auth';
 import { Head } from 'components/common';
-
-// twind
-import { tw } from 'twind';
 
 // types
 import { NextPage } from 'next';

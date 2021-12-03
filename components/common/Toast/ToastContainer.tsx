@@ -1,4 +1,3 @@
-// twind
 import { tw } from 'twind';
 
 // components

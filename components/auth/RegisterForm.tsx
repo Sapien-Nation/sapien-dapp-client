@@ -1,11 +1,9 @@
-import Link from 'next/link';
 import { RefreshIcon } from '@heroicons/react/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
-
-// twind
 import { tw } from 'twind';
+import * as Yup from 'yup';
 
 // api
 import { register as registerAction } from 'api/authentication';

@@ -2,8 +2,6 @@ import { RefreshIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-
-// twind
 import { tw } from 'twind';
 
 // api
