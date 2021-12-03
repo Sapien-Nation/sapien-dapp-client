@@ -1,5 +1,8 @@
 import Image from 'next/image';
 
+// twind
+import { tw } from 'twind';
+
 // assets
 import { FullLogo } from 'assets';
 
@@ -23,8 +26,8 @@ const Layout = ({ children, title }: Props) => {
 
   return (
     <>
-      <div className="min-h-full flex">
-        <div className="hidden lg:block relative w-0 flex-1">
+      <div className={tw`min-h-full flex`}>
+        <div className={tw`hidden lg:block relative w-0 flex-1`}>
           <Image
             alt="Login"
             layout="fill"
@@ -32,19 +35,21 @@ const Layout = ({ children, title }: Props) => {
             src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/public_images_auth.jpeg"
           />
         </div>
-        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
-          <div className="mx-auto w-full max-w-sm lg:w-96">
+        <div
+          className={tw`flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24`}
+        >
+          <div className={tw`mx-auto w-full max-w-sm lg:w-96`}>
             <div>
-              <div className="flex justify-center items-center">
+              <div className={tw`flex justify-center items-center`}>
                 <FullLogo />
               </div>
-              <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              <h2 className={tw`mt-6 text-3xl font-extrabold text-gray-900`}>
                 {title}
               </h2>
             </div>
 
-            <div className="mt-8">
-              <div className="mt-6">{children}</div>
+            <div className={tw`mt-8`}>
+              <div className={tw`mt-6`}>{children}</div>
             </div>
           </div>
         </div>

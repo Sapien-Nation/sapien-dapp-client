@@ -2,7 +2,7 @@ import { SWRConfig } from 'swr';
 import { ErrorBoundary } from 'react-error-boundary';
 
 // twind
-import withTwindApp from '@twind/next/shim/app';
+import withTwindApp from '@twind/next/app';
 import twindConfig from 'twind.config';
 
 // api

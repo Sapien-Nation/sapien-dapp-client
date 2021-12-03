@@ -2,6 +2,9 @@
 import { Layout } from 'components/auth';
 import { Head } from 'components/common';
 
+// twind
+import { tw } from 'twind';
+
 // types
 import { NextPage } from 'next';
 
@@ -9,7 +12,7 @@ const ForgotSuccessPage: NextPage = () => (
   <>
     <Head title="Check Email" />
     <Layout title="Check Your Email!">
-      <p className="text-purple-700">
+      <p className={tw`text-purple-700`}>
         Please check your email and follow the instructions to reset your
         password.
       </p>

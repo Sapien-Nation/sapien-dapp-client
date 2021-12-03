@@ -1,3 +1,6 @@
+// twind
+import { tw } from 'twind';
+
 // context
 import { useToastDispatchContext } from 'context/toast';
 
@@ -17,11 +20,11 @@ const Toast = ({ type, message, id }: Props) => {
     switch (type) {
       case ToastType.Error:
         return (
-          <div className="rounded-md bg-red-50 p-4 m-3">
-            <div className="flex">
-              <div className="flex-shrink-0">
+          <div className={tw`rounded-md bg-red-50 p-4 m-3`}>
+            <div className={tw`flex`}>
+              <div className={tw`flex-shrink-0`}>
                 <svg
-                  className="h-5 w-5 text-red-400"
+                  className={tw`h-5 w-5 text-red-400`}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -34,21 +37,23 @@ const Toast = ({ type, message, id }: Props) => {
                   />
                 </svg>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-red-800">{message}</p>
+              <div className={tw`ml-3`}>
+                <p className={tw`text-sm font-medium text-red-800`}>
+                  {message}
+                </p>
               </div>
-              <div className="ml-auto pl-3">
-                <div className="-mx-1.5 -my-1.5">
+              <div className={tw`ml-auto pl-3`}>
+                <div className={tw`-mx-1.5 -my-1.5`}>
                   <button
                     onClick={() => {
                       dispatch({ type: 'DELETE_TOAST', id });
                     }}
-                    className="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600"
+                    className={tw`inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600`}
                   >
-                    <span className="sr-only">Dismiss</span>
+                    <span className={tw`sr-only`}>Dismiss</span>
 
                     <svg
-                      className="h-5 w-5"
+                      className={tw`h-5 w-5`}
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
@@ -68,11 +73,11 @@ const Toast = ({ type, message, id }: Props) => {
         );
       case ToastType.Success:
         return (
-          <div className="rounded-md bg-green-50 p-4 m-3">
-            <div className="flex">
-              <div className="flex-shrink-0">
+          <div className={tw`rounded-md bg-green-50 p-4 m-3`}>
+            <div className={tw`flex`}>
+              <div className={tw`flex-shrink-0`}>
                 <svg
-                  className="h-5 w-5 text-green-400"
+                  className={tw`h-5 w-5 text-green-400`}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -85,21 +90,23 @@ const Toast = ({ type, message, id }: Props) => {
                   />
                 </svg>
               </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-green-800">{message}</p>
+              <div className={tw`ml-3`}>
+                <p className={tw`text-sm font-medium text-green-800`}>
+                  {message}
+                </p>
               </div>
-              <div className="ml-auto pl-3">
-                <div className="-mx-1.5 -my-1.5">
+              <div className={tw`ml-auto pl-3`}>
+                <div className={tw`-mx-1.5 -my-1.5`}>
                   <button
                     onClick={() => {
                       dispatch({ type: 'DELETE_TOAST', id });
                     }}
-                    className="inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"
+                    className={tw`inline-flex bg-green-50 rounded-md p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600`}
                   >
-                    <span className="sr-only">Dismiss</span>
+                    <span className={tw`sr-only`}>Dismiss</span>
 
                     <svg
-                      className="h-5 w-5"
+                      className={tw`h-5 w-5`}
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"

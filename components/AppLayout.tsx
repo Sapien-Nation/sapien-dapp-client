@@ -1,4 +1,8 @@
 import { useRouter } from 'next/router';
+
+// twind
+import { tw } from 'twind';
+
 interface Props {
   children: React.ReactElement;
 }
@@ -17,7 +21,7 @@ const AppLayout = ({ children }: Props) => {
   }
 
   return (
-    <div className="relative">
+    <div className={tw`relative`}>
       <main>{children}</main>
     </div>
   );
