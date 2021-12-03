@@ -26,11 +26,11 @@ const Layout = ({ children, title }: Props) => {
     <>
       <div className={tw`min-h-full flex`}>
         <div className={tw`hidden lg:block relative w-0 flex-1`}>
-          <Image
-            alt="Login"
-            layout="fill"
-            objectFit="cover"
-            src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/public_images_auth.jpeg"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="auth-image"
+            className="absolute object-cover h-0 min-h-full	min-w-full"
+            src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/public_images_auth_2.jpeg"
           />
         </div>
         <div
