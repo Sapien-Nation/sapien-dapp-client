@@ -15,9 +15,12 @@
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.3",
     "@lottiefiles/lottie-player": "^1.4.5",
+    "@twind/next": "^1.0.9",
     "axios": "^0.24.0",
+    "install": "^0.13.0",
     "lodash": "^4.17.21",
     "next": "latest",
+    "npm": "^8.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-error-boundary": "^3.1.4",
@@ -49,10 +52,8 @@
     "jest": "^27.3.1",
     "jest-axe": "^5.0.1",
     "lint-staged": "^11.2.6",
-    "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.1",
     "react-test-renderer": "^17.0.2",
-    "tailwindcss": "^2.2.19",
     "typescript": "4.4.4"
   }
 }

@@ -1,6 +1,10 @@
 import { SWRConfig } from 'swr';
 import { ErrorBoundary } from 'react-error-boundary';
 
+// twind
+import withTwindApp from '@twind/next/shim/app';
+import twindConfig from 'twind.config';
+
 // api
 import axios from 'api';
 
@@ -10,9 +14,6 @@ import { ErrorView, ToastContainer } from 'components/common';
 
 // context
 import { ToastProvider } from 'context/toast';
-
-// styles
-import '../styles/index.css';
 
 // providers
 import { AuthenticationProvider } from 'context/user';
@@ -45,4 +46,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
   </ErrorBoundary>
 );
 
-export default MyApp;
+export default withTwindApp(twindConfig, MyApp);
