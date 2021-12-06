@@ -2,6 +2,7 @@ import withTwindApp from '@twind/next/app';
 import { SWRConfig } from 'swr';
 import { ErrorBoundary } from 'react-error-boundary';
 import twindConfig from 'twind.config';
+import 'styles/global.css';
 
 // api
 import axios from 'api';
