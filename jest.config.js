@@ -1,35 +1,33 @@
 module.exports = {
-  preset: 'ts-jest',
-  globals: {
-    'ts-jest': {
-      tsconfig: 'jest-tsconfig.json',
-    },
-  },
-  transform: {
-    '^.+\\.(ts|tsx)?$': 'ts-jest',
-    '^.+\\.(js|jsx)$': 'babel-jest',
-  },
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  moduleDirectories: ['node_modules', 'src'],
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
-  coverageReporters: ['json-summary', 'lcov', 'text-summary'],
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!<rootDir>/node_modules/',
-    '!<rootDir>/pages/api/**',
+    "**/*.{js,jsx,ts,tsx}",
+    "!**/*.d.ts",
+    "!**/node_modules/**",
   ],
-  coverageThreshold: {
-    global: {
-      statements: 1,
-      branches: 1,
-      functions: 1,
-      lines: 1,
-    },
+  moduleNameMapper: {
+    /* Handle CSS imports (with CSS modules)
+    https://jestjs.io/docs/webpack#mocking-css-modules */
+    "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
+
+    // Handle CSS imports (without CSS modules)
+    "^.+\\.(css|sass|scss)$": "<rootDir>/__mocks__/styleMock.js",
+
+    /* Handle image imports
+    https://jestjs.io/docs/webpack#handling-static-assets */
+    "^.+\\.(jpg|jpeg|png|gif|webp|avif|svg)$":
+      "<rootDir>/__mocks__/fileMock.js",
   },
-  verbose: true,
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
+  testEnvironment: "jsdom",
+  transform: {
+    /* Use babel-jest to transpile tests with the next/babel preset
+    https://jestjs.io/docs/configuration#transform-objectstring-pathtotransformer--pathtotransformer-object */
+    "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
+  },
+  transformIgnorePatterns: [
+    "/node_modules/",
+    "^.+\\.module\\.(css|sass|scss)$",
+  ],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  moduleDirectories: ["<rootDir>", "node_modules"],
 };

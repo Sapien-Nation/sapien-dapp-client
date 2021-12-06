@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "buenon.scratchpads",
-    "dbaeumer.vscode-eslint",
-    "formulahendry.auto-rename-tag",
-    "ryanluker.vscode-coverage-gutters",
-    "streetsidesoftware.code-spell-checker"
-  ]
-}

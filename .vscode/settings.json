@@ -1,9 +1,5 @@
 {
   "cSpell.words": [
-    "Sapien",
-    "dropzone",
-    "rerender"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "god.tsconfig": "./tsconfig.json"
+    "Sapien"
+  ]
 }
