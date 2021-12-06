@@ -2,7 +2,6 @@ import withTwindApp from '@twind/next/app';
 import { SWRConfig } from 'swr';
 import { ErrorBoundary } from 'react-error-boundary';
 import twindConfig from 'twind.config';
-import 'styles/global.css';
 
 // api
 import axios from 'api';
@@ -19,6 +18,8 @@ import { AuthenticationProvider } from 'context/user';
 
 // types
 import type { AppProps } from 'next/app';
+
+import 'styles/global.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ErrorBoundary FallbackComponent={ErrorView}>

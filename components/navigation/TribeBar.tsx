@@ -1,6 +1,9 @@
-import { Fragment, useState } from 'react';
+/* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { tw } from 'twind';
 
 // types
@@ -13,6 +16,9 @@ interface Props {
 }
 
 const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
+  const { query } = useRouter();
+  const { tribeID } = query;
+
   return (
     <>
       <Transition.Root show={mobileMenuOpen} as={Fragment}>
@@ -73,18 +79,21 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                 <nav aria-label="Sidebar" className={tw`mt-5`}>
                   <div className={tw`px-2 space-y-1`}>
                     {tribes.map((tribe: ProfileTribe) => (
-                      <a
+                      <Link
+                        href={`/tribes/${tribe.id}/${tribe.mainSquareId}`}
                         key={tribe.id}
-                        // href={tribe.href}
-                        className={tw`group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
                       >
-                        <img
-                          className={tw`mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500`}
-                          alt="Tribe Avatar"
-                          src={tribe.avatar || '/images/sapien-tribe.png'}
-                        />
-                        {tribe.name}
-                      </a>
+                        <a
+                          className={tw`group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
+                        >
+                          <img
+                            className={tw`mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500`}
+                            alt="Tribe Avatar"
+                            src={tribe.avatar || '/images/sapien-tribe.png'}
+                          />
+                          {tribe.name}
+                        </a>
+                      </Link>
                     ))}
                   </div>
                 </nav>
@@ -109,17 +118,21 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                 className={tw`py-6 flex flex-col items-center space-y-3`}
               >
                 {tribes.map((tribe: ProfileTribe) => (
-                  <a
+                  <Link
+                    href={`/tribes/${tribe.id}/${tribe.mainSquareId}`}
                     key={tribe.id}
-                    className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
                   >
-                    <img
-                      className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
-                      alt="Tribe Avatar"
-                      src={tribe.avatar || '/images/sapien-tribe.png'}
-                    />
-                    <span className="sr-only">{tribe.name}</span>
-                  </a>
+                    <a
+                      className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                    >
+                      <img
+                        className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
+                        alt="Tribe Avatar"
+                        src={tribe.avatar || '/images/sapien-tribe.png'}
+                      />
+                      <span className="sr-only">{tribe.name}</span>
+                    </a>
+                  </Link>
                 ))}
               </nav>
             </div>
