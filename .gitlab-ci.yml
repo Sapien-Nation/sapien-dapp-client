@@ -37,7 +37,7 @@ build-sandbox:
     - export ENV=SANDBOX
     - export NODE_ENV=SANDBOX
     - export S3_BUCKET_NAME_SANDBOX=sapien-sandbox
-    - envsubst < .env-temp > .env
+    - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 994750220687.dkr.ecr.us-east-2.amazonaws.com
     - docker build -t front-v3:latest .
@@ -67,7 +67,7 @@ build-qat:
     - export S3_BUCKET_NAME_QAT=sapien-qat
     - export NODE_ENV=QAT
     - export LOG_LEVEL=debug
-    - envsubst < .env-temp > .env
+    - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
     - docker build -t front-v3:latest .
@@ -97,7 +97,7 @@ build-poc:
     - export S3_BUCKET_NAME_POC=sapien-poc
     - export NODE_ENV=POC
     - export LOG_LEVEL=debug
-    - envsubst < .env-temp > .env
+    - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
     - docker build -t front-v3:latest .
