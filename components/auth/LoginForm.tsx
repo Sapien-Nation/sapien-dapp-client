@@ -30,7 +30,6 @@ const LoginForm = () => {
 
   const onSubmit = async ({ email, password }: LoginFormValues) => {
     try {
-      console.log(email, password);
       const response = await login({
         email,
         client: window?.navigator.userAgent,

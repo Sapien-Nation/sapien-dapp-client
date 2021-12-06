@@ -1,11 +1,16 @@
 // components
-import { Head } from 'components/common';
+import { Redirect } from 'components/common';
+
+// hooks
+import { useMainSquare } from 'hooks/tribe';
 
 // types
 import { NextPage } from 'next';
 
 const IndexPage: NextPage = () => {
-  return <Head title="Home" />;
+  const { tribeID, viewID } = useMainSquare();
+
+  return <Redirect path={`/tribes/${tribeID}/${viewID}`} />;
 };
 
 export default IndexPage;

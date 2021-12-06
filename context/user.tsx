@@ -44,7 +44,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const clearSession = () => {
     removeTokens();
     mutate('/api/v3/user/me', null, false);
-    push('/tribes/sapien');
+    push('/');
   };
 
   const setSession = async ({

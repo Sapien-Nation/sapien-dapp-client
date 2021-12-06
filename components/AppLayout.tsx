@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // components
-import { Query } from 'components/common';
+import { Query, Redirect } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -31,14 +31,7 @@ const AppLayout = ({ children }: Props) => {
   }
 
   if (me === null) {
-    return (
-      <div className={tw`relative`}>
-        {children}{' '}
-        <Link href="/login">
-          <a>Login</a>
-        </Link>
-      </div>
-    );
+    return <Redirect path="/login" />;
   }
 
   if (me) {
