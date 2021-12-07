@@ -1,10 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { XIcon, GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tw } from 'twind';
+
+// components
+import { CreateTribeDialog } from 'components/tribe/dialogs';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -15,14 +18,21 @@ interface Props {
   setMobileMenuOpen: (open: boolean) => void;
 }
 
+enum Dialog {
+  CreateTribe,
+}
+
 const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
-  const { query } = useRouter();
+  const [dialog, setDialog] = useState<Dialog | null>(null);
+
+  const { pathname, query } = useRouter();
   const { tribeID } = query;
 
+  console.log(pathname);
   return (
     <>
       <Transition.Root show={mobileMenuOpen} as={Fragment}>
-        <Dialog
+        <HeadlessDialog
           as="div"
           className={tw`fixed inset-0 flex z-40 lg:hidden`}
           onClose={setMobileMenuOpen}
@@ -36,7 +46,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
             leaveFrom={tw`opacity-100`}
             leaveTo={tw`opacity-0`}
           >
-            <Dialog.Overlay
+            <HeadlessDialog.Overlay
               className={tw`fixed inset-0 bg-gray-600 bg-opacity-75`}
             />
           </Transition.Child>
@@ -109,7 +119,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
           <div className={tw`flex-shrink-0 w-14`} aria-hidden="true">
             {/* Force sidebar to shrink to fit close icon */}
           </div>
-        </Dialog>
+        </HeadlessDialog>
       </Transition.Root>
 
       {/* Static sidebar for desktop */}
@@ -146,25 +156,39 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                     </a>
                   </Link>
                 ))}
+                <Link href="/discovery">
+                  <a
+                    className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
+                      pathname === '/discovery'
+                        ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
+                        : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    <GlobeAltIcon className={tw`h-6 w-6`} />
+                    <span className={tw`sr-only`}>Go to Explore</span>
+                  </a>
+                </Link>
                 <button
-                  type="button"
-                  className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
-                >
-                  <GlobeAltIcon className={tw`h-6 w-6`} />
-                  <span className={tw`sr-only`}>Go to Explore</span>
-                </button>
-                <button
+                  onClick={() => setDialog(Dialog.CreateTribe)}
                   type="button"
                   className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
                 >
                   <PlusIcon className={tw`h-6 w-6`} />
-                  <span className={tw`sr-only`}>Go to Explore</span>
+                  <span className={tw`sr-only`}>
+                    Click here to create a new Tribe
+                  </span>
                 </button>
               </nav>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+
+      {dialog === Dialog.CreateTribe && (
+        <CreateTribeDialog onClose={() => setDialog(null)} />
+      )}
     </>
   );
 };

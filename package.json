@@ -15,6 +15,7 @@
     "@heroicons/react": "^1.0.5",
     "@hookform/resolvers": "^2.8.3",
     "@lottiefiles/lottie-player": "^1.4.5",
+    "@tailwindcss/forms": "^0.3.4",
     "@twind/next": "^1.0.9",
     "axios": "^0.24.0",
     "install": "^0.13.0",
