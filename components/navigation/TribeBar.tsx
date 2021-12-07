@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Dialog, Transition } from '@headlessui/react';
-import { XIcon } from '@heroicons/react/outline';
+import { XIcon, GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
 import { Fragment } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -129,7 +129,9 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                     key={tribe.id}
                   >
                     <a
-                      className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                      className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
+                        tribeID === tribe.id && 'bg-gray-50'
+                      }`}
                     >
                       <img
                         className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
@@ -144,6 +146,20 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                     </a>
                   </Link>
                 ))}
+                <button
+                  type="button"
+                  className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                >
+                  <GlobeAltIcon className={tw`h-6 w-6`} />
+                  <span className={tw`sr-only`}>Go to Explore</span>
+                </button>
+                <button
+                  type="button"
+                  className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                >
+                  <PlusIcon className={tw`h-6 w-6`} />
+                  <span className={tw`sr-only`}>Go to Explore</span>
+                </button>
               </nav>
             </div>
           </div>
