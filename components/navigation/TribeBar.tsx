@@ -88,10 +88,16 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                         >
                           <img
                             className={tw`mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500`}
-                            alt="Tribe Avatar"
+                            alt={
+                              tribe.avatar
+                                ? `${tribe.name} Avatar image`
+                                : 'Sapien Tribe Default logo image of human Sapiens'
+                            }
                             src={tribe.avatar || '/images/sapien-tribe.png'}
                           />
-                          {tribe.name}
+                          <span className={tw`sr-only`}>
+                            Go to {tribe.name}
+                          </span>
                         </a>
                       </Link>
                     ))}
@@ -127,10 +133,14 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                     >
                       <img
                         className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
-                        alt="Tribe Avatar"
+                        alt={
+                          tribe.avatar
+                            ? `${tribe.name} Avatar image`
+                            : 'Sapien Tribe Default logo image of human Sapiens'
+                        }
                         src={tribe.avatar || '/images/sapien-tribe.png'}
                       />
-                      <span className="sr-only">{tribe.name}</span>
+                      <span className={tw`sr-only`}>Go to {tribe.name}</span>
                     </a>
                   </Link>
                 ))}
