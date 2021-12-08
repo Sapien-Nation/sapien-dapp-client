@@ -17,6 +17,10 @@ interface Props {
 }
 
 interface FormValues {
+  avatar: null | File;
+  cover: null | File;
+  description: string;
+  identifier: string;
   name: string;
 }
 
@@ -25,8 +29,17 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const {
     formState: { errors },
     handleSubmit,
+    setValue,
     register,
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: {
+      avatar: null,
+      cover: null,
+      description: '',
+      identifier: '',
+      name: '',
+    },
+  });
   const toast = useToast();
   const { cache } = useSWRConfig();
 
@@ -43,13 +56,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     <Dialog onClose={onClose} title="Create a Tribe" form={form}>
       <>
         <div>
-          <div className={tw`md:col-span-1`}>
-            <div className={tw`px-4 sm:px-0`}>
-              <p className={tw`mt-1 text-sm text-gray-600`}>
-                We are happy that you diced to start a tribe here at Sapien
-              </p>
-            </div>
-          </div>
           <div className={tw`mt-5 md:mt-0 md:col-span-2`}>
             <form onSubmit={handleSubmit(onSubmit)} id={form}>
               <div className={tw`sm:overflow-hidden`}>
@@ -57,33 +63,34 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                   <div>
                     <div>
                       <label
-                        htmlFor="email"
+                        htmlFor="name"
                         className={tw`block text-sm font-medium mt-4 text-gray-700`}
                       >
-                        Email
+                        Name
                       </label>
                       <div className={tw`mt-1 relative rounded-md shadow-sm`}>
                         <input
                           type="text"
-                          id="email"
+                          id="name"
                           className={tw`block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
-                          placeholder="Sapien Passports Mexico"
+                          placeholder="The Sapien Tribe"
                           aria-invalid={Boolean(errors.name) ? 'true' : 'false'}
-                          aria-describedby="email-error"
+                          aria-describedby="name-error"
                           {...register('name', {
-                            required: 'You need a tribe name.',
+                            pattern: {
+                              value: /^[^-\s][a-zA-Z0-9_\s-]{1,40}$/,
+                              message: 'Invalid tribe name',
+                            },
+                            required: {
+                              value: true,
+                              message: 'Name is required',
+                            },
+                            maxLength: {
+                              value: 40,
+                              message: 'Name is too long',
+                            },
                           })}
                         />
-                        {Boolean(errors.name) && (
-                          <div
-                            className={tw`absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none`}
-                          >
-                            <ExclamationCircleIcon
-                              className={tw`h-5 w-5 text-red-500`}
-                              aria-hidden="true"
-                            />
-                          </div>
-                        )}
                       </div>
                       <label
                         htmlFor="identifier"
@@ -96,18 +103,26 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           type="text"
                           id="identifier"
                           className={tw`block w-full pr-10 pl-3 pt-3 pb-3 border-red-300 bg-gray-100 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
-                          placeholder="Identifier"
+                          placeholder="@theSapienTribe"
+                          {...register('identifier', {
+                            pattern: {
+                              value: /^[a-zA-Z0-9_]{3,20}$/,
+                              message: 'Invalid identifier',
+                            },
+                            required: {
+                              value: true,
+                              message: 'Identifier is required',
+                            },
+                            minLength: {
+                              value: 3,
+                              message: 'Identifier is too short',
+                            },
+                            maxLength: {
+                              value: 20,
+                              message: 'Identifier is too long',
+                            },
+                          })}
                         />
-                        {Boolean(errors.name) && (
-                          <div
-                            className={tw`absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none`}
-                          >
-                            <ExclamationCircleIcon
-                              className={tw`h-5 w-5 text-red-500`}
-                              aria-hidden="true"
-                            />
-                          </div>
-                        )}
                       </div>
                       <div>
                         <label
@@ -122,8 +137,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             name="description"
                             rows={3}
                             className={tw`shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-0 rounded-md`}
-                            placeholder="Description..."
+                            placeholder="Describe your tribe"
                             defaultValue={''}
+                            {...register('description', {
+                              pattern: {
+                                value: /^[a-zA-Z0-9_]/,
+                                message: 'Invalid tribe description',
+                              },
+                              maxLength: {
+                                value: 1000,
+                                message: 'Description is too long',
+                              },
+                            })}
                           />
                         </div>
                       </div>
@@ -180,15 +205,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             </svg>
                             <div className={tw`flex text-sm text-gray-600`}>
                               <label
-                                htmlFor="file-upload"
+                                htmlFor="cover-upload"
                                 className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
                               >
                                 <span>Upload a file</span>
                                 <input
-                                  id="file-upload"
-                                  name="file-upload"
+                                  id="cover-upload"
+                                  name="cover-upload"
                                   type="file"
                                   className={tw`sr-only`}
+                                  onChange={(event) =>
+                                    setValue('cover', event.target.files[0])
+                                  }
                                 />
                               </label>
                               <p className={tw`pl-1`}>or drag and drop</p>
@@ -199,11 +227,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           </div>
                         </div>
                       </div>
-                      <p
-                        className={tw`mt-2 text-sm text-red-600" id="email-error`}
-                      >
-                        {errors.name?.message}
-                      </p>
                     </div>
                   </div>
                 </div>
