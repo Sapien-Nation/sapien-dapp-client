@@ -1,5 +1,6 @@
 stages:
  - build
+ - cleanupImages
  #- push_to_ecr
  #- deploy
 
@@ -51,12 +52,19 @@ build-sandbox:
   only:
     <<: *sandbox_triggers
 
+cleanup-sandbox:
+  stage: cleanupImages
+  tags:
+    - front-sandbox
+  script:
+    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+  when: manual
+
 build-qat:
   stage: build
   tags:
     - front-qat
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule sync && git submodule update
@@ -81,6 +89,15 @@ build-qat:
     - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
   only:
     <<: *qat_triggers
+
+cleanup-qat:
+  stage: cleanupImages
+  tags:
+    - front-qat
+  script:
+    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+  when: manual
+
 
 build-poc:
   stage: build
