@@ -1,7 +1,10 @@
-import { ExclamationCircleIcon } from '@heroicons/react/solid';
 import { useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
+import { useState } from 'react';
 import { tw } from 'twind';
+
+// api
+import { uploadImage } from 'api/tribe';
 
 // components
 import { Dialog } from 'components/common';
@@ -16,21 +19,34 @@ interface Props {
   onClose: () => void;
 }
 
+type Media = {
+  key: string;
+  url: string;
+};
+
 interface FormValues {
-  avatar: null | File;
-  cover: null | File;
+  avatar: null | Media;
+  cover: null | Media;
   description: string;
   identifier: string;
   name: string;
 }
 
+enum MediaTypeUpload {
+  Avatar = 'avatar',
+  Cover = 'cover',
+}
+
 const form = 'create-tribe-form';
 const CreateTribeDialog = ({ onClose }: Props) => {
+  const [mediaTypeToUpload, setMediaTypeToUpload] =
+    useState<MediaTypeUpload | null>(null);
   const {
     formState: { errors },
     handleSubmit,
     setValue,
     register,
+    watch,
   } = useForm<FormValues>({
     defaultValues: {
       avatar: null,
@@ -43,6 +59,8 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const toast = useToast();
   const { cache } = useSWRConfig();
 
+  const [avatar, cover] = watch(['avatar', 'cover']);
+
   const onSubmit = async () => {
     try {
       // TODO api call
@@ -50,6 +68,26 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     } catch (error) {
       toast({ message: error.message });
     }
+  };
+
+  const handleUploadImage = async (file: File) => {
+    try {
+      console.log(mediaTypeToUpload);
+      const formData = new FormData();
+
+      formData.append('variant', mediaTypeToUpload);
+      formData.append('file', file);
+
+      const fileURL: string = await uploadImage(formData);
+
+      // @ts-ignore
+      setValue(mediaTypeToUpload, fileURL as Media);
+    } catch (error) {
+      toast({
+        message: error.message,
+      });
+    }
+    setMediaTypeToUpload(null);
   };
 
   return (
@@ -213,9 +251,12 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                   id="cover-upload"
                                   name="cover-upload"
                                   type="file"
+                                  onClick={() =>
+                                    setMediaTypeToUpload(MediaTypeUpload.Cover)
+                                  }
                                   className={tw`sr-only`}
                                   onChange={(event) =>
-                                    setValue('cover', event.target.files[0])
+                                    handleUploadImage(event.target.files[0])
                                   }
                                 />
                               </label>
