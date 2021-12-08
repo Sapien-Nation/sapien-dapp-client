@@ -1,39 +1,25 @@
-import { useMemo } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon, PlusSmIcon } from '@heroicons/react/solid';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tw } from 'twind';
-import Link from 'next/link';
+
+// utils
+import { getFormattedDate } from 'utils/date';
 
 // types
 import type {
-  ProfileTribe,
   ProfileTribeSquare,
   ProfileTribeChannel,
 } from 'tools/types/tribe';
+import { useTribe } from 'hooks/tribe';
 
-interface Props {
-  tribes: Array<ProfileTribe>;
-}
-
-const TribeNavigation = ({ tribes }: Props) => {
+const TribeNavigation = () => {
   const { query } = useRouter();
   const { tribeID } = query;
-  const tribeSelctor = useMemo(
-    () => tribes.find((tribe: ProfileTribe) => tribe.id === tribeID),
-    [tribes, tribeID]
-  );
 
-  const squares = tribeSelctor?.squares;
-  const channels = tribeSelctor?.channels;
-
-  const getFormattedDate = (isoString: string) => {
-    const options = { month: 'short', day: 'numeric', year: '2-digit' };
-    const date = new Date(isoString);
-    // @ts-ignore
-    const americanDate = new Intl.DateTimeFormat('en-US', options).format(date);
-    return americanDate;
-  };
+  const { channels, squares } = useTribe(tribeID as string);
 
   return (
     <div className={tw`w-full`}>
@@ -95,7 +81,9 @@ const TribeNavigation = ({ tribes }: Props) => {
                             <a
                               className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-100 hover:bg-gray-50 hover:text-gray-900`}
                             >
-                              <img
+                              <Image
+                                height={12}
+                                width={12}
                                 className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-white group-hover:text-gray-500`}
                                 alt={
                                   channel.avatar

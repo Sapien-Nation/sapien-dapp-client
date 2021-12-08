@@ -28,7 +28,6 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
   const { pathname, query } = useRouter();
   const { tribeID } = query;
 
-  console.log(pathname);
   return (
     <>
       <Transition.Root show={mobileMenuOpen} as={Fragment}>

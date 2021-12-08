@@ -9,7 +9,6 @@ interface Props {
 }
 
 const MainSquareView = ({ square }: Props) => {
-  console.log(square);
   return (
     <>
       <Head title={square.name} />

@@ -39,6 +39,7 @@ const AppLayout = ({ children }: Props) => {
   }
 
   if (me) {
+    const isHomePage = pathname === '/';
     return (
       <div className={tw`relative h-full`}>
         <Query api="/api/v3/profile/tribes">
@@ -80,23 +81,17 @@ const AppLayout = ({ children }: Props) => {
                     <>{children}</>
                   </section>
 
-                  {/* Secondary column (hidden on smaller screens) */}
-                  <aside
-                    className={tw`hidden lg:block lg:flex-shrink-0 lg:order-first`}
-                  >
-                    <div
-                      className={tw`h-full p-2 relative flex flex-col w-64 border-r border-gray-200 bg-white overflow-y-auto`}
+                  {isHomePage === false && (
+                    <aside
+                      className={tw`hidden lg:block lg:flex-shrink-0 lg:order-first`}
                     >
-                      {/* Your content */}
-                      <TribeNavigation tribes={tribes} />
-                      {/* <h2 className={tw`text-lg font-medium`}>
-                        Tribe Navigation
-                      </h2>
-                      <Link href="/logout">
-                        <a>Logout</a>
-                      </Link> */}
-                    </div>
-                  </aside>
+                      <div
+                        className={tw`h-full p-2 relative flex flex-col w-64 border-r border-gray-200 bg-white overflow-y-auto`}
+                      >
+                        <TribeNavigation />
+                      </div>
+                    </aside>
+                  )}
                 </main>
               </div>
             </main>

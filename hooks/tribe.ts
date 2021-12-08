@@ -12,6 +12,12 @@ interface CurrentView {
   type: View;
 }
 
+export const useTribe = (tribeID: string): ProfileTribe => {
+  const { cache } = useSWRConfig();
+
+  return cache.get('/api/v3/profile/tribes').find(({ id }) => tribeID);
+};
+
 export const useMainSquare = () => {
   const { cache } = useSWRConfig();
 
