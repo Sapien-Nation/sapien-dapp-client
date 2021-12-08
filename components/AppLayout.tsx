@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 // components
 import { Query, Redirect } from 'components/common';
-import { TribeBar } from 'components/navigation';
+import { TribeBar, TribeNavigation } from 'components/navigation';
 
 // context
 import { useAuth } from 'context/user';
@@ -88,12 +88,13 @@ const AppLayout = ({ children }: Props) => {
                       className={tw`h-full p-2 relative flex flex-col w-64 border-r border-gray-200 bg-white overflow-y-auto`}
                     >
                       {/* Your content */}
-                      <h2 className={tw`text-lg font-medium`}>
+                      <TribeNavigation tribes={tribes} />
+                      {/* <h2 className={tw`text-lg font-medium`}>
                         Tribe Navigation
                       </h2>
                       <Link href="/logout">
                         <a>Logout</a>
-                      </Link>
+                      </Link> */}
                     </div>
                   </aside>
                 </main>
