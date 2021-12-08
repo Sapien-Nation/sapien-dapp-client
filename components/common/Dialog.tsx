@@ -97,7 +97,7 @@ const Dialog = ({
               >
                 <button
                   type="button"
-                  className={tw`bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+                  className={tw`bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
                   onClick={onCancel}
                 >
                   <span className={tw`sr-only`}>Close</span>
