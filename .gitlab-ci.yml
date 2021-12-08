@@ -26,7 +26,6 @@ build-sandbox:
   tags:
     - front
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule init   &&  git submodule update --remote
@@ -59,6 +58,8 @@ cleanup-sandbox:
   script:
     - docker images | awk '{print $3}' | xargs -l docker rmi -f
   when: manual
+  only:
+    <<: *sandbox_triggers  
 
 build-qat:
   stage: build
@@ -97,6 +98,8 @@ cleanup-qat:
   script:
     - docker images | awk '{print $3}' | xargs -l docker rmi -f
   when: manual
+  only:
+    <<: *qat_triggers  
 
 
 build-poc:
@@ -104,7 +107,6 @@ build-poc:
   tags:
     - front-poc
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule init   &&  git submodule update --remote
@@ -129,3 +131,13 @@ build-poc:
     - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
   only:
     <<: *poc_triggers
+
+cleanup-poc:
+  stage: cleanupImages
+  tags:
+    - front-poc
+  script:
+    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+  when: manual
+  only:
+    <<: *poc_triggers   
