@@ -100,11 +100,11 @@ const Dialog = ({
                   className={tw`bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                   onClick={onCancel}
                 >
-                  <span className="sr-only">Close</span>
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
+                  <span className={tw`sr-only`}>Close</span>
+                  <XIcon className={tw`h-6 w-6`} aria-hidden="true" />
                 </button>
               </div>
-              <div className="mt-3 sm:mt-5">
+              <div className={tw`mt-3 sm:mt-5`}>
                 <HeadlessDialog.Title
                   as="h2"
                   className={tw`text-xl leading-6 font-bold text-gray-900`}
