@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon, PlusSmIcon } from '@heroicons/react/solid';
+import { UserGroupIcon } from '@heroicons/react/outline';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -19,16 +20,28 @@ const TribeNavigation = () => {
   const { query } = useRouter();
   const { tribeID } = query;
 
-  const { channels, squares } = useTribe(tribeID as string);
+  const { name, channels, squares } = useTribe(tribeID as string);
 
   return (
     <div className={tw`w-full`}>
+      <nav>
+        <ul className={tw`flex flex-col`}>
+          <li>
+            <button
+              className={tw`w-full flex tracking-wide items-center uppercase font-medium text(md gray-500) px-4 py-2 flex bg-gray-100 rounded-lg focus:outline-none`}
+            >
+              <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
+              {name}
+            </button>
+          </li>
+        </ul>
+      </nav>
       <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
         <Disclosure>
           {({ open }) => (
             <>
               <Disclosure.Button
-                className={tw`flex justify-between items-center w-full px-1 py-2 text-sm uppercase font-medium text-left text-gray-500 focus:outline-none`}
+                className={tw`flex justify-between tracking-wide items-center w-full px-1 py-2 text-sm uppercase font-medium text-left text-gray-500 focus:outline-none`}
               >
                 <div className={tw`flex items-center`}>
                   Squares
@@ -59,7 +72,7 @@ const TribeNavigation = () => {
           {({ open }) => (
             <>
               <Disclosure.Button
-                className={tw`flex justify-between items-center w-full px-1 py-2 text-sm uppercase font-medium text-left text-gray-500 focus:outline-none`}
+                className={tw`flex justify-between tracking-wide items-center w-full px-1 py-2 text-sm uppercase font-medium text-left text-gray-500 focus:outline-none`}
               >
                 <div className={tw`flex items-center`}>
                   Channels
