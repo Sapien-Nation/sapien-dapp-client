@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { tw } from 'twind';
+import { XIcon } from '@heroicons/react/outline';
 
 // api
 import { uploadImage } from 'api/tribe';
@@ -41,6 +42,7 @@ const form = 'create-tribe-form';
 const CreateTribeDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
+  const [uploadingMedia, setIsUploadingMedia] = useState(null);
   const {
     formState: { errors },
     handleSubmit,
@@ -58,8 +60,10 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   });
   const toast = useToast();
   const { cache } = useSWRConfig();
+  const fileInput = useRef(null);
 
   const [avatar, cover] = watch(['avatar', 'cover']);
+  const isUploadingMedia = mediaTypeToUpload !== null;
 
   const onSubmit = async () => {
     try {
@@ -71,6 +75,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   };
 
   const handleUploadImage = async (file: File) => {
+    setIsUploadingMedia(true);
     try {
       console.log(mediaTypeToUpload);
       const formData = new FormData();
@@ -87,11 +92,17 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         message: error.message,
       });
     }
+    setIsUploadingMedia(null);
     setMediaTypeToUpload(null);
   };
 
   return (
-    <Dialog onClose={onClose} title="Create a Tribe" form={form}>
+    <Dialog
+      disabled={isUploadingMedia}
+      onClose={onClose}
+      title="Create a Tribe"
+      form={form}
+    >
       <>
         <div>
           <div className={tw`mt-5 md:mt-0 md:col-span-2`}>
@@ -130,6 +141,11 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           })}
                         />
                       </div>
+                      <p
+                        className={tw`mt-2 text-xs max-w-md mx-auto text-base text-red-500`}
+                      >
+                        {errors?.name?.message}
+                      </p>
                       <label
                         htmlFor="identifier"
                         className={tw`block text-sm mt-4 font-medium text-gray-700`}
@@ -162,6 +178,11 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           })}
                         />
                       </div>
+                      <p
+                        className={tw`mt-2 text-xs max-w-md mx-auto text-base text-red-500`}
+                      >
+                        {errors?.identifier?.message}
+                      </p>
                       <div>
                         <label
                           htmlFor="description"
@@ -189,6 +210,11 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             })}
                           />
                         </div>
+                        <p
+                          className={tw`mt-2 text-xs max-w-md mx-auto text-base text-red-500`}
+                        >
+                          {errors?.description?.message}
+                        </p>
                       </div>
                       <div>
                         <label
@@ -196,20 +222,57 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                         >
                           Avatar
                         </label>
-                        <div className={tw`mt-1 flex items-center`}>
-                          <span
-                            className={tw`inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100`}
-                          >
-                            <svg
-                              className={tw`h-full w-full text-gray-300`}
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
+                        <div className={tw`mt-1 flex items-center relative`}>
+                          {Boolean(avatar) && (
+                            <button
+                              type="button"
+                              className={tw`absolute z-10 -top-1 left-9 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+                              onClick={() => setValue('avatar', null)}
                             >
-                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
+                              <XIcon
+                                className={tw`h-3 w-3 text-white`}
+                                aria-hidden="true"
+                              />
+                            </button>
+                          )}
+                          <span
+                            className={tw`inline-block h-12 w-12 rounded-full overflow-hidden relative`}
+                          >
+                            {Boolean(avatar) ? (
+                              <>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  alt="avatar"
+                                  className={tw`h-12 w-12 rounded-full`}
+                                  src={avatar.url}
+                                  data-key={avatar.key}
+                                />
+                              </>
+                            ) : (
+                              <svg
+                                className={tw`h-full w-full text-gray-300`}
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                              </svg>
+                            )}
                           </span>
+                          <input
+                            ref={fileInput}
+                            accept="image/*"
+                            onClick={() =>
+                              setMediaTypeToUpload(MediaTypeUpload.Avatar)
+                            }
+                            className={tw`sr-only`}
+                            onChange={(event) =>
+                              handleUploadImage(event.target.files[0])
+                            }
+                            type="file"
+                          />
                           <button
                             type="button"
+                            onClick={() => fileInput.current.click()}
                             className={tw`ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none`}
                           >
                             Upload
@@ -226,46 +289,70 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                         <div
                           className={tw`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
                         >
-                          <div className={tw`space-y-1 text-center`}>
-                            <svg
-                              className={tw`mx-auto h-12 w-12 text-gray-400`}
-                              stroke="currentColor"
-                              fill="none"
-                              viewBox="0 0 48 48"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                            <div className={tw`flex text-sm text-gray-600`}>
-                              <label
-                                htmlFor="cover-upload"
-                                className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+                          {Boolean(cover) ? (
+                            <span className={tw`relative`}>
+                              <button
+                                type="button"
+                                className={tw`absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+                                onClick={() => setValue('cover', null)}
                               >
-                                <span>Upload a file</span>
-                                <input
-                                  id="cover-upload"
-                                  name="cover-upload"
-                                  type="file"
-                                  onClick={() =>
-                                    setMediaTypeToUpload(MediaTypeUpload.Cover)
-                                  }
-                                  className={tw`sr-only`}
-                                  onChange={(event) =>
-                                    handleUploadImage(event.target.files[0])
-                                  }
+                                <XIcon
+                                  className={tw`h-3 w-3 text-white`}
+                                  aria-hidden="true"
                                 />
-                              </label>
-                              <p className={tw`pl-1`}>or drag and drop</p>
+                              </button>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                alt="cover"
+                                className={tw`w-100 relative rounded-md`}
+                                src={cover.url}
+                                data-key={cover.key}
+                              />
+                            </span>
+                          ) : (
+                            <div className={tw`space-y-1 text-center`}>
+                              <svg
+                                className={tw`mx-auto h-12 w-12 text-gray-400`}
+                                stroke="currentColor"
+                                fill="none"
+                                viewBox="0 0 48 48"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                  strokeWidth={2}
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                              <div className={tw`flex text-sm text-gray-600`}>
+                                <label
+                                  htmlFor="cover-upload"
+                                  className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+                                >
+                                  <span>Upload a file</span>
+                                  <input
+                                    id="cover-upload"
+                                    name="cover-upload"
+                                    type="file"
+                                    onClick={() =>
+                                      setMediaTypeToUpload(
+                                        MediaTypeUpload.Cover
+                                      )
+                                    }
+                                    className={tw`sr-only`}
+                                    onChange={(event) =>
+                                      handleUploadImage(event.target.files[0])
+                                    }
+                                  />
+                                </label>
+                                <p className={tw`pl-1`}>or drag and drop</p>
+                              </div>
+                              <p className={tw`text-xs text-gray-500`}>
+                                PNG, JPG, GIF up to 10MB
+                              </p>
                             </div>
-                            <p className={tw`text-xs text-gray-500`}>
-                              PNG, JPG, GIF up to 10MB
-                            </p>
-                          </div>
+                          )}
                         </div>
                       </div>
                     </div>
