@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { tw } from 'twind';
 
+// components
+import { PasswordInput } from 'components/common';
+
 // api
 import { login } from 'api/authentication';
 
@@ -71,13 +74,12 @@ const LoginForm = () => {
           Password
         </label>
         <div className={tw`mt-1`}>
-          <input
+          <PasswordInput
+            register={register}
             id="password"
-            type="password"
             autoComplete="current-password"
             required
-            className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('password')}
+            placeholder="Mypassword123*"
           />
         </div>
       </div>

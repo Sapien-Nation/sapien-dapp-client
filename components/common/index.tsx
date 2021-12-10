@@ -7,4 +7,5 @@ export { default as Image } from './Image';
 export { default as Redirect } from './Redirect';
 export { default as Spinner } from './Spinner';
 export { default as Query } from './Query';
+export { default as PasswordInput } from './PasswordInput';
 export { default as LottiePlayer } from './LottiePlayer';
