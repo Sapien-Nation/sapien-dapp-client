@@ -13,6 +13,7 @@ import { useAuth } from 'context/user';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import { partialRight } from 'lodash';
 
 interface Props {
   children: React.ReactElement;
@@ -40,6 +41,9 @@ const AppLayout = ({ children }: Props) => {
 
   if (me) {
     const isHomePage = pathname === '/';
+    const isDiscoveryPage = pathname === '/discovery';
+
+    const hideTribeNavigation = isHomePage || isDiscoveryPage;
     return (
       <div className={tw`relative h-full`}>
         <Query api="/api/v3/profile/tribes">
@@ -81,7 +85,7 @@ const AppLayout = ({ children }: Props) => {
                     <>{children}</>
                   </section>
 
-                  {isHomePage === false && (
+                  {hideTribeNavigation === false && (
                     <aside
                       className={tw`hidden lg:block lg:flex-shrink-0 lg:order-first`}
                     >

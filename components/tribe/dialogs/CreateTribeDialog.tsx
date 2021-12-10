@@ -5,7 +5,7 @@ import { tw } from 'twind';
 import { XIcon } from '@heroicons/react/outline';
 
 // api
-import { uploadImage } from 'api/tribe';
+import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
 
 // components
 import { Dialog } from 'components/common';
@@ -42,9 +42,9 @@ const form = 'create-tribe-form';
 const CreateTribeDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
-  const [uploadingMedia, setIsUploadingMedia] = useState(null);
+
   const {
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     setValue,
     register,
@@ -63,21 +63,47 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const fileInput = useRef(null);
 
   const [avatar, cover] = watch(['avatar', 'cover']);
-  const isUploadingMedia = mediaTypeToUpload !== null;
 
-  const onSubmit = async () => {
+  const onSubmit = async ({
+    description,
+    identifier,
+    name,
+    ...rest
+  }: FormValues) => {
     try {
-      // TODO api call
-      cache.set('/api/v3/profile/tribes', (tribes: ProfileTribe) => tribes);
+      const body = {
+        description,
+        identifier,
+        name,
+      };
+
+      if (rest.avatar) {
+        Object.assign(body, {
+          avatar: rest.avatar.key,
+        });
+      }
+
+      if (rest.cover) {
+        Object.assign(body, {
+          cover: rest.cover.key,
+        });
+      }
+
+      const response = await createTribe(body);
+
+      cache.set('/api/v3/profile/tribes', (tribes: Array<ProfileTribe>) => [
+        ...tribes,
+        response,
+      ]);
+
+      onClose();
     } catch (error) {
       toast({ message: error.message });
     }
   };
 
   const handleUploadImage = async (file: File) => {
-    setIsUploadingMedia(true);
     try {
-      console.log(mediaTypeToUpload);
       const formData = new FormData();
 
       formData.append('variant', mediaTypeToUpload);
@@ -92,13 +118,12 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         message: error.message,
       });
     }
-    setIsUploadingMedia(null);
     setMediaTypeToUpload(null);
   };
 
   return (
     <Dialog
-      disabled={isUploadingMedia}
+      isFetching={mediaTypeToUpload !== null || isSubmitting}
       onClose={onClose}
       title="Create a Tribe"
       form={form}
@@ -157,7 +182,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           type="text"
                           id="identifier"
                           className={tw`block w-full pr-10 pl-3 pt-3 pb-3 border-red-300 bg-gray-100 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
-                          placeholder="@theSapienTribe"
+                          placeholder="TheSapienTribe"
                           {...register('identifier', {
                             pattern: {
                               value: /^[a-zA-Z0-9_]{3,20}$/,
@@ -261,9 +286,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           <input
                             ref={fileInput}
                             accept="image/*"
-                            onClick={() =>
-                              setMediaTypeToUpload(MediaTypeUpload.Avatar)
-                            }
                             className={tw`sr-only`}
                             onChange={(event) =>
                               handleUploadImage(event.target.files[0])
@@ -272,7 +294,10 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           />
                           <button
                             type="button"
-                            onClick={() => fileInput.current.click()}
+                            onClick={() => {
+                              setMediaTypeToUpload(MediaTypeUpload.Avatar);
+                              fileInput.current.click();
+                            }}
                             className={tw`ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none`}
                           >
                             Upload

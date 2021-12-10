@@ -122,7 +122,7 @@ const TribeNavigation = () => {
               <Disclosure.Panel className={tw`text-sm text-gray-500`}>
                 <nav aria-label="Sidebar" className={tw`flex flex-col py-2`}>
                   <ul className={tw`flex flex-col gap-3 text-md text-black`}>
-                    {channels.length ? (
+                    {channels.length === 0 ? (
                       channels.map((channel: ProfileTribeChannel) => (
                         <li
                           key={channel.id}
