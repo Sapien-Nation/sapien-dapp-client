@@ -1,17 +1,15 @@
+import { XIcon } from '@heroicons/react/outline';
 import { useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { tw } from 'twind';
-import { XIcon } from '@heroicons/react/outline';
 
 // api
 import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
 
 // components
 import { Dialog } from 'components/common';
-
-// context
-import { useToast } from 'context/toast';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -58,8 +56,10 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       name: '',
     },
   });
-  const toast = useToast();
+
+  const { push } = useRouter();
   const { cache } = useSWRConfig();
+
   const fileInput = useRef(null);
 
   const [avatar, cover] = watch(['avatar', 'cover']);
@@ -71,7 +71,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     ...rest
   }: FormValues) => {
     try {
-      const body = {
+      const body: CreateTribeBody = {
         description,
         identifier,
         name,
@@ -97,8 +97,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       ]);
 
       onClose();
+      push(`/tribes/${response.id}/${response.mainSquareId}`);
     } catch (error) {
-      toast({ message: error.message });
+      // TODO show error in the form
     }
   };
 
@@ -114,9 +115,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       // @ts-ignore
       setValue(mediaTypeToUpload, fileURL as Media);
     } catch (error) {
-      toast({
-        message: error.message,
-      });
+      // TODO show error in the field
     }
     setMediaTypeToUpload(null);
   };

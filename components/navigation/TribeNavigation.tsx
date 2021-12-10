@@ -5,24 +5,39 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tw } from 'twind';
 
+// constants
+import { View } from 'constants/tribe';
+
 // components
 import { Image, NoContent } from 'components/common';
+
+// hooks
+import { useTribe } from 'hooks/tribe';
 
 // utils
 import { getFormattedDate } from 'utils/date';
 
 // types
 import type {
+  ProfileTribe,
   ProfileTribeSquare,
   ProfileTribeChannel,
 } from 'tools/types/tribe';
-import { useTribe } from 'hooks/tribe';
 
 const TribeNavigation = () => {
   const { query } = useRouter();
   const { tribeID } = query;
 
-  const { name, channels, squares, permissions } = useTribe(tribeID as string);
+  const tribe = useTribe(tribeID as string);
+  const { name, channels, squares, mainSquareId, permissions } = tribe;
+
+  const handleViewLeftClick = (
+    view: ProfileTribeChannel | ProfileTribeSquare | ProfileTribe,
+    type: View
+  ) => {
+    console.log('clicked view', { view });
+    console.log('clicked view type', type);
+  };
 
   const renderSquares = () => {
     if (squares.length > 0) {
@@ -31,7 +46,20 @@ const TribeNavigation = () => {
           <ul className={tw`flex flex-col gap-3 text-md text-black`}>
             {squares.map((square: ProfileTribeSquare) => (
               <Link href={`/tribes/${tribeID}/${square.id}`} key={square.id}>
-                <a>
+                <a
+                  onClick={(event) => {
+                    if (event.type === 'contextmenu') {
+                      event.preventDefault();
+                      handleViewLeftClick(square, View.Square);
+                    }
+                  }}
+                  onContextMenu={(event) => {
+                    if (event.type === 'contextmenu') {
+                      event.preventDefault();
+                      handleViewLeftClick(square, View.Square);
+                    }
+                  }}
+                >
                   <li
                     className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100`}
                   >
@@ -77,6 +105,18 @@ const TribeNavigation = () => {
                 <div className={tw`flex items-center`}>
                   <Link href={`/tribes/${tribeID}/${channel.id}`}>
                     <a
+                      onClick={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                          handleViewLeftClick(channel, View.Channel);
+                        }
+                      }}
+                      onContextMenu={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                          handleViewLeftClick(channel, View.Channel);
+                        }
+                      }}
                       className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-100 hover:bg-gray-50 hover:text-gray-900`}
                     >
                       <Image
@@ -136,12 +176,26 @@ const TribeNavigation = () => {
       <nav className={tw`py-4`}>
         <ul className={tw`flex flex-col`}>
           <li>
-            <button
-              className={tw`w-full flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex bg-gray-100 rounded-lg focus:outline-none`}
-            >
-              <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
-              {name}
-            </button>
+            <Link href={`/tribes/${tribeID}/${mainSquareId}`}>
+              <a
+                onClick={(event) => {
+                  if (event.type === 'contextmenu') {
+                    event.preventDefault();
+                    handleViewLeftClick(tribe, View.MainSquare);
+                  }
+                }}
+                onContextMenu={(event) => {
+                  if (event.type === 'contextmenu') {
+                    event.preventDefault();
+                    handleViewLeftClick(tribe, View.MainSquare);
+                  }
+                }}
+                className={tw`w-full flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex bg-gray-100 rounded-lg focus:outline-none`}
+              >
+                <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
+                {name}
+              </a>
+            </Link>
           </li>
         </ul>
       </nav>

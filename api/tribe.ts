@@ -1,6 +1,10 @@
 // api
 import axios from '.';
 
+// types
+import type { AxiosResponse } from 'axios';
+import type { ProfileTribe } from 'tools/types/tribe';
+
 export interface CreateTribeBody {
   avatar?: string;
   cover?: string;
@@ -9,7 +13,7 @@ export interface CreateTribeBody {
   name: string;
 }
 
-export const createTribe = (body: CreateTribeBody) =>
+export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
   axios
     .post('api/v3/tribe', body)
     .then(({ data }) => data)

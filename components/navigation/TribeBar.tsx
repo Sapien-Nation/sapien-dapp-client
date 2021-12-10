@@ -28,6 +28,10 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
   const { pathname, query } = useRouter();
   const { tribeID } = query;
 
+  const handleTribeLeftClick = (tribe: ProfileTribe) => {
+    console.log('clicked tribe', { tribe });
+  };
+
   return (
     <>
       <Transition.Root show={mobileMenuOpen} as={Fragment}>
@@ -145,6 +149,18 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                       className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
                         tribeID === tribe.id && 'bg-gray-50'
                       }`}
+                      onClick={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                          handleTribeLeftClick(tribe);
+                        }
+                      }}
+                      onContextMenu={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                          handleTribeLeftClick(tribe);
+                        }
+                      }}
                     >
                       <img
                         className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
