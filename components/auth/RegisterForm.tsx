@@ -10,11 +10,11 @@ import { register as registerAction } from 'api/authentication';
 
 // utils
 import {
-  EmailRegex,
-  NameRegex,
-  UsernameRegex,
-  PasswordRegex,
-} from 'utils/regex';
+  EmailPattern,
+  NamePattern,
+  UsernamePattern,
+  PasswordPattern,
+} from 'utils/patterns';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -91,7 +91,7 @@ const RegisterForm = () => {
             type="email"
             autoComplete="email"
             required
-            // pattern={new RegExp(EmailRegex)}
+            pattern={EmailPattern}
             placeholder="jhon@example.com"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             {...register('email')}
@@ -114,7 +114,7 @@ const RegisterForm = () => {
             required
             maxLength={20}
             minLength={2}
-            // pattern={UsernameRegex}
+            pattern={UsernamePattern}
             placeholder="johndoe"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             {...register('username')}
@@ -137,7 +137,7 @@ const RegisterForm = () => {
             required
             maxLength={40}
             minLength={2}
-            // pattern={NameRegex}
+            pattern={NamePattern}
             placeholder="Jonathan Doe"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             {...register('displayName')}
@@ -160,7 +160,7 @@ const RegisterForm = () => {
             type="password"
             autoComplete="current-password"
             required
-            // pattern={PasswordRegex}
+            pattern={PasswordPattern}
             minLength={8}
             placeholder="Thisismypassword123*"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
