@@ -9,7 +9,7 @@ import { tw } from 'twind';
 import { View } from 'constants/tribe';
 
 // components
-import { Image, NoContent } from 'components/common';
+import { NoContent } from 'components/common';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
@@ -98,55 +98,57 @@ const TribeNavigation = () => {
         <nav aria-label="Sidebar" className={tw`flex flex-col py-2`}>
           <ul className={tw`flex flex-col gap-3 text-md text-black`}>
             {channels.map((channel: ProfileTribeChannel) => (
-              <li
-                key={channel.id}
-                className={tw`flex justify-between rounded-xl cursor-pointer hover:bg-gray-100`}
-              >
-                <div className={tw`flex items-center`}>
-                  <Link href={`/tribes/${tribeID}/${channel.id}`}>
-                    <a
-                      onClick={(event) => {
-                        if (event.type === 'contextmenu') {
-                          event.preventDefault();
-                          handleViewLeftClick(channel, View.Channel);
-                        }
-                      }}
-                      onContextMenu={(event) => {
-                        if (event.type === 'contextmenu') {
-                          event.preventDefault();
-                          handleViewLeftClick(channel, View.Channel);
-                        }
-                      }}
-                      className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-100 hover:bg-gray-50 hover:text-gray-900`}
-                    >
-                      <Image
-                        height={12}
-                        width={12}
-                        className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-white group-hover:text-gray-500`}
-                        alt={
-                          channel.avatar
-                            ? `${channel.name} Avatar image`
-                            : 'Sapien Channel Default logo image of human Sapiens'
-                        }
-                        src={channel.avatar || '/images/sapien-tribe.png'}
-                        fallbackSrc="/images/default_temp.jpeg"
-                      />
+              <Link key={channel.id} href={`/tribes/${tribeID}/${channel.id}`}>
+                <a
+                  onClick={(event) => {
+                    if (event.type === 'contextmenu') {
+                      event.preventDefault();
+                      handleViewLeftClick(channel, View.Channel);
+                    }
+                  }}
+                  onContextMenu={(event) => {
+                    if (event.type === 'contextmenu') {
+                      event.preventDefault();
+                      handleViewLeftClick(channel, View.Channel);
+                    }
+                  }}
+                  className={tw`cursor-pointer rounded-xl flex items-center text-base font-medium hover:bg-gray-100 hover:text-gray-900`}
+                >
+                  <li className={tw`flex justify-between`}>
+                    <div className={tw`flex items-center`}>
+                      <div
+                        className={tw`p-0.5 group rounded-xl text-gray-600 bg-gray-100`}
+                      >
+                        <img
+                          className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-white group-hover:text-gray-500`}
+                          alt={
+                            channel.avatar
+                              ? `${channel.name} Avatar image`
+                              : 'Sapien Channel Default logo image of human Sapiens'
+                          }
+                          src={channel.avatar || '/images/sapien-tribe.png'}
+                          onError={(event) => {
+                            (event.target as HTMLImageElement).src =
+                              '/images/default_temp.jpeg';
+                          }}
+                        />
+                      </div>
                       <span className={tw`sr-only`}>
                         Go to {channel.name} Channel
                       </span>
-                    </a>
-                  </Link>
-                  <div className={tw`flex flex-col gap-1 ml-2`}>
-                    <span className={tw`font-lg`}>Poetry</span>
+                      <div className={tw`flex flex-col gap-1 ml-2`}>
+                        <span className={tw`font-lg`}>Poetry</span>
+                        <span className={tw`text-gray-500`}>
+                          {channel.membersCount} members
+                        </span>
+                      </div>
+                    </div>
                     <span className={tw`text-gray-500`}>
-                      {channel.membersCount} members
+                      {getFormattedDate(channel.lastUpdatedAt)}
                     </span>
-                  </div>
-                </div>
-                <span className={tw`text-gray-500`}>
-                  {getFormattedDate(channel.lastUpdatedAt)}
-                </span>
-              </li>
+                  </li>
+                </a>
+              </Link>
             ))}
           </ul>
         </nav>
