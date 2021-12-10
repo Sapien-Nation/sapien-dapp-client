@@ -10,9 +10,6 @@ import { forgot } from 'api/authentication';
 // hooks
 import { useToast } from 'context/toast';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 interface ForgotPasswordFormValues {
   email: string;
 }
@@ -25,7 +22,11 @@ const ForgotPasswordForm = () => {
     formState: { isSubmitting },
     register,
     handleSubmit,
-  } = useForm<ForgotPasswordFormValues>();
+  } = useForm<ForgotPasswordFormValues>({
+    defaultValues: {
+      email: '',
+    },
+  });
 
   const onSubmit = async ({ email }: ForgotPasswordFormValues) => {
     try {
@@ -34,7 +35,7 @@ const ForgotPasswordForm = () => {
       push('/forgot/success');
     } catch (error) {
       toast({
-        message: error,
+        message: 'Invalid Email',
       });
     }
   };

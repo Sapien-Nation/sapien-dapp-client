@@ -10,9 +10,6 @@ import { login } from 'api/authentication';
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 interface LoginFormValues {
   email: string;
   password: string;
@@ -40,7 +37,7 @@ const LoginForm = () => {
       setSession(response);
     } catch (error) {
       toast({
-        message: error,
+        message: 'Invalid Credentials',
       });
     }
   };
@@ -79,7 +76,6 @@ const LoginForm = () => {
             type="password"
             autoComplete="current-password"
             required
-            minLength={8}
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             {...register('password')}
           />

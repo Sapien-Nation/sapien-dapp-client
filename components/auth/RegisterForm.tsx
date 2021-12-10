@@ -9,7 +9,12 @@ import * as Yup from 'yup';
 import { register as registerAction } from 'api/authentication';
 
 // utils
-import { EmailRegex, NameRegex, UsernameRegex } from 'utils/regex';
+import {
+  EmailRegex,
+  NameRegex,
+  UsernameRegex,
+  PasswordRegex,
+} from 'utils/regex';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -86,25 +91,12 @@ const RegisterForm = () => {
             type="email"
             autoComplete="email"
             required
-            placeholder="myemailaddress@email.com"
+            // pattern={new RegExp(EmailRegex)}
+            placeholder="jhon@example.com"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('email', {
-              pattern: {
-                value: EmailRegex,
-                message: 'Invalid email address',
-              },
-              required: {
-                value: true,
-                message: 'Invalid email address',
-              },
-            })}
-            aria-invalid="true"
-            aria-describedby="email-error"
+            {...register('email')}
           />
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="email-error`}>
-          {errors.email?.message}
-        </p>
       </div>
 
       <div>
@@ -120,33 +112,14 @@ const RegisterForm = () => {
             type="text"
             autoComplete="username"
             required
+            maxLength={20}
+            minLength={2}
+            // pattern={UsernameRegex}
             placeholder="johndoe"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('username', {
-              pattern: {
-                value: UsernameRegex,
-                message: 'Invalid username',
-              },
-              required: {
-                value: true,
-                message: 'Invalid username',
-              },
-              maxLength: {
-                value: 20,
-                message: 'Invalid username',
-              },
-              minLength: {
-                value: 2,
-                message: 'Invalid username',
-              },
-            })}
-            aria-invalid="true"
-            aria-describedby="username-error"
+            {...register('username')}
           />
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="username-error`}>
-          {errors.username?.message}
-        </p>
       </div>
 
       <div>
@@ -162,29 +135,16 @@ const RegisterForm = () => {
             type="text"
             autoComplete="name"
             required
+            maxLength={40}
+            minLength={2}
+            // pattern={NameRegex}
             placeholder="Jonathan Doe"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('displayName', {
-              pattern: {
-                value: NameRegex,
-                message: 'Invalid name',
-              },
-              required: {
-                value: true,
-                message: 'Invalid name',
-              },
-              maxLength: {
-                value: 40,
-                message: 'Invalid name',
-              },
-            })}
+            {...register('displayName')}
             aria-invalid="true"
             aria-describedby="displayName-error"
           />
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="displayName-error`}>
-          {errors.displayName?.message}
-        </p>
       </div>
 
       <div className={tw`space-y-1`}>
@@ -200,40 +160,13 @@ const RegisterForm = () => {
             type="password"
             autoComplete="current-password"
             required
+            // pattern={PasswordRegex}
+            minLength={8}
             placeholder="Thisismypassword123*"
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('password', {
-              minLength: {
-                value: 8,
-                message: 'Invalid password',
-              },
-              validate: (value: string) => {
-                if (!/[a-z]/.test(value)) {
-                  return 'At least one lowercase letter.';
-                }
-
-                if (!/[A-Z]/.test(value)) {
-                  return 'At least one uppercase letter.';
-                }
-
-                if (!/[\d]/.test(value)) {
-                  return 'At least one number.';
-                }
-
-                if (value?.length < 8) {
-                  return 'At least 8 characters.';
-                }
-
-                return true;
-              },
-            })}
-            aria-invalid="true"
-            aria-describedby="password-error"
+            {...register('password')}
           />
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="password-error`}>
-          {errors.password?.message}
-        </p>
       </div>
 
       <div className={tw`flex items-center justify-between`}>
@@ -242,6 +175,7 @@ const RegisterForm = () => {
             id="terms"
             name="terms"
             type="checkbox"
+            required
             className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
             aria-invalid="true"
             aria-describedby="terms-error"
@@ -262,9 +196,6 @@ const RegisterForm = () => {
             </a>
           </label>
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="terms-error`}>
-          {errors.terms?.message}
-        </p>
       </div>
 
       <div className={tw`flex items-center justify-between`}>
@@ -275,6 +206,7 @@ const RegisterForm = () => {
             type="checkbox"
             className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
             aria-invalid="true"
+            required
             aria-describedby="wallet-error"
             {...register('wallet')}
           />
@@ -285,9 +217,6 @@ const RegisterForm = () => {
             I understand that a wallet will be created for me
           </label>
         </div>
-        <p className={tw`mt-2 text-sm text-red-600" id="wallet-error`}>
-          {errors.wallet?.message}
-        </p>
       </div>
 
       <div>

@@ -12,6 +12,39 @@ interface CurrentView {
   type: View;
 }
 
+export const useIsValidView = (tribeID: string, viewID: string): boolean => {
+  const { cache } = useSWRConfig();
+
+  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
+
+  const tribe = tribes.find(({ id }) => id === tribeID);
+
+  if (tribe) {
+    const views = [
+      {
+        type: View.MainSquare,
+        name: 'sapien',
+        id: tribe.mainSquareId,
+      },
+      ...tribe.channels.map((channel) => ({
+        ...channel,
+        type: View.Channel,
+      })),
+      ...tribe.squares.map((square) => ({
+        ...square,
+        type: View.Square,
+      })),
+    ];
+
+    const view = views.find(({ id }) => id === viewID);
+
+    if (view) return true;
+    return false;
+  }
+
+  return false;
+};
+
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 

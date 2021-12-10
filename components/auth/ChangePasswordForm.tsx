@@ -10,6 +10,9 @@ import { changePassword } from 'api/authentication';
 // hooks
 import { useToast } from 'context/toast';
 
+// utils
+import { PasswordRegex } from 'utils/regex';
+
 interface ChangePasswordFormValues {
   password: string;
   repeatPassword: string;
@@ -22,6 +25,7 @@ interface Props {
 const ChangePasswordForm = ({ token }: Props) => {
   const toast = useToast();
   const { push } = useRouter();
+
   const passwordField = useRef<HTMLInputElement | null>(null);
   const confirmPasswordField = useRef<HTMLInputElement | null>(null);
 
@@ -43,7 +47,7 @@ const ChangePasswordForm = ({ token }: Props) => {
       push('/change-password/success');
     } catch (error) {
       toast({
-        message: error,
+        message: 'Invalid Token',
       });
     }
   };
@@ -72,6 +76,7 @@ const ChangePasswordForm = ({ token }: Props) => {
             type="password"
             autoComplete="current-password"
             required
+            // pattern={PasswordRegex}
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             ref={passwordField}
             onChange={validatePassword}
@@ -92,6 +97,7 @@ const ChangePasswordForm = ({ token }: Props) => {
             type="password"
             autoComplete="repeat-password"
             required
+            // pattern={PasswordRegex}
             className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             ref={confirmPasswordField}
             onKeyUp={validatePassword}
