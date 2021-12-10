@@ -62,7 +62,7 @@ const TribeNavigation = () => {
         </ul>
       </nav>
       <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
-        <Disclosure>
+        <Disclosure defaultOpen>
           {({ open }) => (
             <>
               <Disclosure.Button
@@ -85,7 +85,7 @@ const TribeNavigation = () => {
                       squares.map((square: ProfileTribeSquare) => (
                         <li
                           key={square.id}
-                          className={tw`flex justify-between`}
+                          className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100`}
                         >
                           <span>#{square.name}</span>
                           <span className={tw`text-gray-500`}>3 min</span>
@@ -103,7 +103,7 @@ const TribeNavigation = () => {
             </>
           )}
         </Disclosure>
-        <Disclosure as="div" className={tw`mt-2`}>
+        <Disclosure defaultOpen as="div" className={tw`mt-2`}>
           {({ open }) => (
             <>
               <Disclosure.Button
@@ -126,7 +126,7 @@ const TribeNavigation = () => {
                       channels.map((channel: ProfileTribeChannel) => (
                         <li
                           key={channel.id}
-                          className={tw`flex justify-between`}
+                          className={tw`flex justify-between rounded-xl cursor-pointer hover:bg-gray-100`}
                         >
                           <div className={tw`flex items-center`}>
                             <Link href={`/tribes/todo`}>
@@ -145,6 +145,10 @@ const TribeNavigation = () => {
                                   src={
                                     channel.avatar || '/images/sapien-tribe.png'
                                   }
+                                  onError={(event) => {
+                                    (event.target as HTMLImageElement).src =
+                                      '/images/default_temp.jpeg';
+                                  }}
                                 />
                                 <span className={tw`sr-only`}>
                                   Go to Channel

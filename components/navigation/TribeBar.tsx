@@ -102,6 +102,10 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                                 ? `${tribe.name} Avatar image`
                                 : 'Sapien Tribe Default logo image of human Sapiens'
                             }
+                            onError={(event) => {
+                              (event.target as HTMLImageElement).src =
+                                '/images/default_temp.jpeg';
+                            }}
                             src={tribe.avatar || '/images/sapien-tribe.png'}
                           />
                           <span className={tw`sr-only`}>
@@ -150,6 +154,10 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                             : 'Sapien Tribe Default logo image of human Sapiens'
                         }
                         src={tribe.avatar || '/images/sapien-tribe.png'}
+                        onError={(event) => {
+                          (event.target as HTMLImageElement).src =
+                            '/images/default_temp.jpeg';
+                        }}
                       />
                       <span className={tw`sr-only`}>Go to {tribe.name}</span>
                     </a>
