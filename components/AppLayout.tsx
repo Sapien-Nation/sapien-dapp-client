@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { MenuIcon } from '@heroicons/react/outline';
 import { tw } from 'twind';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // components
 import { Query, Redirect } from 'components/common';
-import { TribeBar, TribeNavigation } from 'components/navigation';
+import {
+  DiscoveryNavigation,
+  TribeBar,
+  TribeNavigation,
+} from 'components/navigation';
 
 // context
 import { useAuth } from 'context/user';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { partialRight } from 'lodash';
 
 interface Props {
   children: React.ReactElement;
@@ -43,7 +45,6 @@ const AppLayout = ({ children }: Props) => {
     const isHomePage = pathname === '/';
     const isDiscoveryPage = pathname === '/discovery';
 
-    const hideTribeNavigation = isHomePage || isDiscoveryPage;
     return (
       <div className={tw`relative h-full`}>
         <Query api="/api/v3/profile/tribes">
@@ -80,19 +81,20 @@ const AppLayout = ({ children }: Props) => {
                     className={tw`min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last`}
                   >
                     <h1 id="primary-heading" className={tw`sr-only`}>
-                      Sapien
+                      Sapien View Section
                     </h1>
-                    <>{children}</>
+                    {children}
                   </section>
 
-                  {hideTribeNavigation === false && (
+                  {isHomePage === false && (
                     <aside
                       className={tw`hidden lg:block lg:flex-shrink-0 lg:order-first`}
                     >
                       <div
                         className={tw`h-full p-2 relative flex flex-col w-64 border-r border-gray-200 bg-white overflow-y-auto`}
                       >
-                        <TribeNavigation />
+                        {isDiscoveryPage === true && <DiscoveryNavigation />}
+                        {isDiscoveryPage === false && <TribeNavigation />}
                       </div>
                     </aside>
                   )}

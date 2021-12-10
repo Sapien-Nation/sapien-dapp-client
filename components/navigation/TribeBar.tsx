@@ -192,7 +192,6 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
       </div>
 
       {/* Modals */}
-
       {dialog === Dialog.CreateTribe && (
         <CreateTribeDialog onClose={() => setDialog(null)} />
       )}
