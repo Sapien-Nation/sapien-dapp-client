@@ -97,6 +97,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                         key={tribe.id}
                       >
                         <a
+                          onClick={() => setMobileMenuOpen(false)}
                           className={tw`group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900`}
                         >
                           <img
@@ -112,6 +113,13 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                             }}
                             src={tribe.avatar || '/images/sapien-tribe.png'}
                           />
+                          <span
+                            className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
+                              tribe.id === tribeID ? 'font-extrabold' : ''
+                            }`}
+                          >
+                            {tribe.name} TODO show channels and squares
+                          </span>
                           <span className={tw`sr-only`}>
                             Go to {tribe.name}
                           </span>
