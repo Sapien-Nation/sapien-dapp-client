@@ -48,7 +48,7 @@ export const useIsValidView = (tribeID: string, viewID: string): boolean => {
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/api/v3/profile/tribes').find(({ id }) => tribeID);
+  return cache.get('/api/v3/profile/tribes').find(({ id }) => id === tribeID);
 };
 
 export const useMainSquare = () => {

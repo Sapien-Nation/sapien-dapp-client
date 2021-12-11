@@ -74,10 +74,10 @@ const TribeNavigation = () => {
       );
     }
 
-    return (
-      <NoContent
-        action={
-          permissions.canAddSquare ? (
+    if (permissions.canAddSquare) {
+      return (
+        <NoContent
+          action={
             <>
               <p className={tw`absolute text-gray-500`}>No Squares</p>
               <button
@@ -86,10 +86,10 @@ const TribeNavigation = () => {
                 Create the first one
               </button>
             </>
-          ) : null
-        }
-      />
-    );
+          }
+        />
+      );
+    }
   };
 
   const renderChannels = () => {
@@ -155,10 +155,10 @@ const TribeNavigation = () => {
       );
     }
 
-    return (
-      <NoContent
-        action={
-          permissions.canAddChannel ? (
+    if (permissions.canAddChannel) {
+      return (
+        <NoContent
+          action={
             <>
               <p className={tw`absolute text-gray-500`}>No Channels</p>
               <button
@@ -167,10 +167,10 @@ const TribeNavigation = () => {
                 Create the first
               </button>
             </>
-          ) : null
-        }
-      />
-    );
+          }
+        />
+      );
+    }
   };
 
   return (
