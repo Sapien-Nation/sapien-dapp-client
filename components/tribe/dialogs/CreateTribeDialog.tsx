@@ -151,7 +151,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           required
                           maxLength={40}
                           id="name"
-                          // pattern={TribeNamePattern}
+                          pattern={TribeNamePattern}
                           className={tw`block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
                           placeholder="The Sapien Tribe"
                           aria-describedby="name-error"
@@ -173,7 +173,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           required
                           minLength={3}
                           maxLength={20}
-                          // pattern={TribeIdentifierPattern}
+                          pattern={TribeIdentifierPattern}
                           {...register('identifier')}
                         />
                       </div>
