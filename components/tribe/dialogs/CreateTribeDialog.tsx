@@ -202,7 +202,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           </button>
                         </div>
                       </div>
-                      <div className="grid grid-cols-1 gap-x-4 sm:grid-cols-2">
+                      <div
+                        className={tw`grid grid-cols-1 gap-x-4 sm:grid-cols-2`}
+                      >
                         <div>
                           <label
                             htmlFor="name"
