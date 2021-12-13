@@ -33,7 +33,9 @@ const Dialog = ({
       {showConfirm && (
         <button
           type={form ? 'submit' : 'button'}
-          className={tw`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm`}
+          className={tw`${
+            isFetching ? 'cursor-not-allowed disabled:opacity-75' : ''
+          } w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm`}
           onClick={onConfirm}
           disabled={isFetching}
           form={form}
