@@ -99,7 +99,9 @@ const TribeNavigation = () => {
                         >
                           <li
                             className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
-                              square.id === viewID ? 'font-extrabold' : ''
+                              square.id === viewID
+                                ? 'font-extrabold bg-gray-100'
+                                : ''
                             }`}
                           >
                             <span>#{square.name}</span>
