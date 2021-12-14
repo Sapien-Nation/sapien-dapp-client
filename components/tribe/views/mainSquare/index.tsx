@@ -23,11 +23,14 @@ const MainSquareView = ({
         <div>
           <img
             className={tw`h-32 w-full object-cover lg:h-48`}
-            src={cover || '/images/default_cover.jpeg'}
+            src={
+              cover ||
+              'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_cover.jpeg'
+            }
             alt={`Square ${name} Cover Picture`}
             onError={(event) => {
               (event.target as HTMLImageElement).src =
-                '/images/default_temp.jpeg';
+                'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
             }}
           />
         </div>
@@ -38,10 +41,13 @@ const MainSquareView = ({
             <div className={tw`flex`}>
               <img
                 className={tw`h-28 w-28 rounded-3xl ring-4 ring-white`}
-                src={avatar || '/images/default_temp.jpeg'}
+                src={
+                  avatar ||
+                  'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg'
+                }
                 onError={(event) => {
                   (event.target as HTMLImageElement).src =
-                    '/images/default_temp.jpeg';
+                    'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
                 }}
                 alt={`Square ${name} Profile Picture`}
               />

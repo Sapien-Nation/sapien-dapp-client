@@ -59,10 +59,13 @@ function TribeBarItem({ tribe, handleClick }: Props) {
                 ? `${tribe.name} Avatar image`
                 : 'Sapien Tribe Default logo image of human Sapiens'
             }
-            src={tribe.avatar || '/images/sapien-tribe.png'}
+            src={
+              tribe.avatar ||
+              'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+            }
             onError={(event) => {
               (event.target as HTMLImageElement).src =
-                '/images/default_temp.jpeg';
+                'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
             }}
           />
           <span className={tw`sr-only`}>Go to {tribe.name}</span>

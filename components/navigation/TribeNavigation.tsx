@@ -201,11 +201,11 @@ const TribeNavigation = () => {
                                       }
                                       src={
                                         channel.avatar ||
-                                        '/images/sapien-tribe.png'
+                                        'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
                                       }
                                       onError={(event) => {
                                         (event.target as HTMLImageElement).src =
-                                          '/images/default_temp.jpeg';
+                                          'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
                                       }}
                                     />
                                   </div>

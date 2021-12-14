@@ -145,9 +145,12 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                             }
                             onError={(event) => {
                               (event.target as HTMLImageElement).src =
-                                '/images/default_temp.jpeg';
+                                'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
                             }}
-                            src={tribe.avatar || '/images/sapien-tribe.png'}
+                            src={
+                              tribe.avatar ||
+                              'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+                            }
                           />
                           <span
                             className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
