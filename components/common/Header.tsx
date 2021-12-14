@@ -18,11 +18,11 @@ const Header = ({ tribe }: Props) => {
           alt=""
         />
       </div>
-      <div className={tw`max-w-5xl mx-auto px-4 sm:px-6 lg:px-8`}>
-        <div className={tw`-mt-12 sm:-mt-6 sm:flex sm:items-end sm:space-x-5`}>
+      <div className={tw`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8`}>
+        <div className={tw`-mt-12 sm:-mt-6 sm:flex sm:items-end sm:space-x-8`}>
           <div className={tw`flex`}>
             <img
-              className={tw`h-24 w-24 rounded-3xl ring-4 ring-white sm:h-32 sm:w-32`}
+              className={tw`h-28 w-28 rounded-3xl ring-4 ring-white`}
               src={avatar}
               onError={(event) => {
                 (event.target as HTMLImageElement).src =
@@ -34,13 +34,18 @@ const Header = ({ tribe }: Props) => {
           <div
             className={tw`mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1`}
           >
-            <div className={tw`sm:hidden md:block mt-6 min-w-0 flex-1`}>
-              <h1 className={tw`text-2xl font-bold text-gray-900 truncate`}>
+            <div className={tw`sm:hidden md:block min-w-0 flex-1`}>
+              <h1
+                className={tw`text-2xl font-bold mb-2 text-gray-900 truncate`}
+              >
                 {name}
               </h1>
+              <h5 className={tw`text-sm text-gray-400 mb-2 truncate`}>
+                1.2k Followers • 840 Members
+              </h5>
             </div>
             <div
-              className={tw`mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4`}
+              className={tw`flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4`}
             >
               <button
                 type="button"
