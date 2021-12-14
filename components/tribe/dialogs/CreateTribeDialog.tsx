@@ -1,4 +1,4 @@
-import { XIcon, CameraIcon } from '@heroicons/react/outline';
+import { XIcon, CameraIcon, CloudUploadIcon } from '@heroicons/react/outline';
 import { useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useState, useRef } from 'react';
@@ -43,6 +43,7 @@ const form = 'create-tribe-form';
 const CreateTribeDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
+  const [isUploading, setUploading] = useState<boolean>(false);
 
   const {
     formState: { isSubmitting },
@@ -113,11 +114,13 @@ const CreateTribeDialog = ({ onClose }: Props) => {
 
       formData.append('variant', mediaTypeToUpload);
       formData.append('file', file);
+      setUploading(true);
 
       const fileURL: string = await uploadImage(formData);
 
       // @ts-ignore
       setValue(mediaTypeToUpload, fileURL as Media);
+      setUploading(false);
     } catch (error) {
       // TODO show error
     }
@@ -191,9 +194,20 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                               </svg>
                             )}
                           </span>
-                          <CameraIcon
-                            className={tw`absolute w-5 right-0.5 bottom-0 text-gray-400`}
-                          />
+                          {isUploading && (
+                            <span
+                              className={tw`absolute w-5 transform top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+                            >
+                              <CloudUploadIcon
+                                className={tw`animate-bounce text-gray-400`}
+                              />
+                            </span>
+                          )}
+                          {!isUploading && (
+                            <CameraIcon
+                              className={tw`absolute w-5 right-0.5 bottom-0 text-gray-400`}
+                            />
+                          )}
                           <input
                             ref={fileInput}
                             accept="image/*"
@@ -280,7 +294,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                         Cover photo
                       </label>
                       <div
-                        className={tw`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
+                        className={tw`mt-1 relative min-h-[8.75rem] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
                       >
                         {Boolean(cover) ? (
                           <span className={tw`relative`}>
@@ -303,45 +317,59 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             />
                           </span>
                         ) : (
-                          <div className={tw`space-y-1 text-center`}>
-                            <svg
-                              className={tw`mx-auto h-12 w-12 text-gray-400`}
-                              stroke="currentColor"
-                              fill="none"
-                              viewBox="0 0 48 48"
-                              aria-hidden="true"
-                            >
-                              <path
-                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                            <div className={tw`text-sm text-gray-600`}>
-                              <label
-                                htmlFor="cover-upload"
-                                className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+                          <>
+                            {isUploading ? (
+                              <span
+                                className={tw`absolute w-5 transform top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
                               >
-                                <span>Upload a file</span>
-                                <input
-                                  id="cover-upload"
-                                  name="cover-upload"
-                                  type="file"
-                                  onClick={() =>
-                                    setMediaTypeToUpload(MediaTypeUpload.Cover)
-                                  }
-                                  className={tw`sr-only`}
-                                  onChange={(event) =>
-                                    handleUploadImage(event.target.files[0])
-                                  }
+                                <CloudUploadIcon
+                                  className={tw`animate-bounce text-gray-400`}
                                 />
-                              </label>
-                            </div>
-                            <p className={tw`text-xs text-gray-500`}>
-                              PNG, JPG, GIF up to 10MB
-                            </p>
-                          </div>
+                              </span>
+                            ) : (
+                              <div className={tw`space-y-1 text-center`}>
+                                <svg
+                                  className={tw`mx-auto h-12 w-12 text-gray-400`}
+                                  stroke="currentColor"
+                                  fill="none"
+                                  viewBox="0 0 48 48"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                    strokeWidth={2}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                                <div className={tw`text-sm text-gray-600`}>
+                                  <label
+                                    htmlFor="cover-upload"
+                                    className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+                                  >
+                                    <span>Upload a file</span>
+                                    <input
+                                      id="cover-upload"
+                                      name="cover-upload"
+                                      type="file"
+                                      onClick={() =>
+                                        setMediaTypeToUpload(
+                                          MediaTypeUpload.Cover
+                                        )
+                                      }
+                                      className={tw`sr-only`}
+                                      onChange={(event) =>
+                                        handleUploadImage(event.target.files[0])
+                                      }
+                                    />
+                                  </label>
+                                </div>
+                                <p className={tw`text-xs text-gray-500`}>
+                                  PNG, JPG, GIF up to 10MB
+                                </p>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
