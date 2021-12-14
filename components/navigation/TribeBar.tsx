@@ -5,6 +5,7 @@ import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tw } from 'twind';
+import TribeBarItem from './TribeBarItem';
 
 // components
 import { CreateTribeDialog } from 'components/tribe/dialogs';
@@ -24,7 +25,6 @@ enum Dialog {
 
 const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
-
   const { pathname, query } = useRouter();
   const { tribeID } = query;
 
@@ -149,43 +149,11 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                 className={tw`py-6 flex flex-col items-center space-y-3`}
               >
                 {tribes.map((tribe: ProfileTribe) => (
-                  <Link
-                    href={`/tribes/${tribe.id}/${tribe.mainSquareId}`}
+                  <TribeBarItem
+                    handleClick={handleTribeLeftClick}
                     key={tribe.id}
-                  >
-                    <a
-                      className={tw`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
-                        tribeID === tribe.id && 'bg-gray-50'
-                      }`}
-                      onClick={(event) => {
-                        if (event.type === 'contextmenu') {
-                          event.preventDefault();
-                          handleTribeLeftClick(tribe);
-                        }
-                      }}
-                      onContextMenu={(event) => {
-                        if (event.type === 'contextmenu') {
-                          event.preventDefault();
-                          handleTribeLeftClick(tribe);
-                        }
-                      }}
-                    >
-                      <img
-                        className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
-                        alt={
-                          tribe.avatar
-                            ? `${tribe.name} Avatar image`
-                            : 'Sapien Tribe Default logo image of human Sapiens'
-                        }
-                        src={tribe.avatar || '/images/sapien-tribe.png'}
-                        onError={(event) => {
-                          (event.target as HTMLImageElement).src =
-                            '/images/default_temp.jpeg';
-                        }}
-                      />
-                      <span className={tw`sr-only`}>Go to {tribe.name}</span>
-                    </a>
-                  </Link>
+                    tribe={tribe}
+                  />
                 ))}
                 <Link href="/discovery">
                   <a
