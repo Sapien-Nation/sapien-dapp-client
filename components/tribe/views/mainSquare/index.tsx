@@ -3,6 +3,9 @@ import { tw } from 'twind';
 // components
 import { Head } from 'components/common';
 
+// icons
+import { DotsHorizontalIcon } from '@heroicons/react/outline';
+
 // types
 import type { MainSquare } from 'tools/types/square';
 
@@ -79,6 +82,21 @@ const MainSquareView = ({
               {name}
             </h1>
           </div>
+        </div>
+        <div
+          className={tw`flex max-w-6xl mt-6 mx-auto px-4 sm:px-6 lg:px-8 text-gray-400`}
+        >
+          <div>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis
+            purus elit, quis eleifend nunc ullamcor per id. liquam molestie orci
+            et gravida mollis.
+          </div>
+          <button
+            type="button"
+            className={tw`bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
+          >
+            <DotsHorizontalIcon className={tw`h-6 w-6`} aria-hidden="true" />
+          </button>
         </div>
       </div>
     </>
