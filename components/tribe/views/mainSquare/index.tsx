@@ -105,7 +105,7 @@ const MainSquareView = ({
             <DotsHorizontalIcon className={tw`h-6 w-6`} aria-hidden="true" />
           </button>
         </div>
-        <div>
+        <div className={tw`flex justify-center`}>
           <Editor />
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { StyleHTMLAttributes, useMemo, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { BaseEditor, createEditor, Descendant } from 'slate';
 import {
@@ -8,6 +8,10 @@ import {
   Slate,
   withReact,
 } from 'slate-react';
+import { tw } from 'twind';
+
+// context
+import { useAuth } from 'context/user';
 
 // import 'emoji-mart/css/emoji-mart.css'; TODO emoji picker
 
@@ -27,6 +31,8 @@ declare module 'slate' {
 }
 
 const EditorField = () => {
+  const { me } = useAuth();
+  console.log('me', me);
   const editor = useMemo(() => withReact(withHistory(createEditor())), []);
   const [value, setValue] = useState<Array<Descendant>>([
     {
@@ -51,7 +57,12 @@ const EditorField = () => {
 
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <div>
+    <div className={tw`max-w-2xl flex w-full mt-6`}>
+      <img
+        className="inline-block h-10 w-10 rounded-full mr-4"
+        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+        alt=""
+      />
       <Slate
         editor={editor}
         value={value}
@@ -63,6 +74,7 @@ const EditorField = () => {
           onKeyDown={handleKeyDown}
           renderLeaf={renderLeaf}
           renderElement={renderElement}
+          className={tw`w-full bg-gray-50 rounded-xl px-4 py-2`}
         />
       </Slate>
     </div>
