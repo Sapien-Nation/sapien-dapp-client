@@ -1,14 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
+import ReactDOM from 'react-dom';
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { XIcon, GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { tw } from 'twind';
-import TribeBarItem from './TribeBarItem';
+import { usePopperTooltip } from 'react-popper-tooltip';
 
 // components
 import { CreateTribeDialog } from 'components/tribe/dialogs';
+import TribeBarItem from './TribeBarItem';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -26,6 +28,40 @@ enum Dialog {
 const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { pathname, query } = useRouter();
+  const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
+    usePopperTooltip(
+      {},
+      {
+        placement: 'right',
+        modifiers: [
+          {
+            name: 'offset',
+            options: {
+              offset: [0, 25],
+            },
+          },
+        ],
+      }
+    );
+  const {
+    getTooltipProps: getTooltipPropsCreateTribe,
+    setTooltipRef: setTooltipRefCreateTribe,
+    setTriggerRef: setTriggerRefCreateTribe,
+    visible: visibleCreateTribe,
+  } = usePopperTooltip(
+    {},
+    {
+      placement: 'right',
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 25],
+          },
+        },
+      ],
+    }
+  );
   const { tribeID } = query;
 
   const handleTribeLeftClick = (tribe: ProfileTribe) => {
@@ -162,21 +198,53 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                         ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
                         : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
                     }`}
+                    ref={setTriggerRef}
                   >
                     <GlobeAltIcon className={tw`h-6 w-6`} />
                     <span className={tw`sr-only`}>Go to Explore</span>
                   </a>
                 </Link>
+                {visible &&
+                  ReactDOM.createPortal(
+                    <div
+                      ref={setTooltipRef}
+                      {...getTooltipProps({
+                        className: tw`relative p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded`,
+                      })}
+                    >
+                      <div
+                        className={tw`w-4 h-4 bg-black block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute`}
+                      />
+                      Discover New Sapien Tribes
+                    </div>,
+                    document.body
+                  )}
                 <button
                   onClick={() => setDialog(Dialog.CreateTribe)}
                   type="button"
                   className={tw`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900`}
+                  ref={setTriggerRefCreateTribe}
                 >
                   <PlusIcon className={tw`h-6 w-6`} />
                   <span className={tw`sr-only`}>
                     Click here to create a new Tribe
                   </span>
                 </button>
+                {visibleCreateTribe &&
+                  ReactDOM.createPortal(
+                    <div
+                      ref={setTooltipRefCreateTribe}
+                      {...getTooltipPropsCreateTribe({
+                        className: tw`relative p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded`,
+                      })}
+                    >
+                      <div
+                        className={tw`w-4 h-4 bg-black block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute`}
+                      />
+                      Create a new Tribe
+                    </div>,
+                    document.body
+                  )}
               </nav>
             </div>
           </div>

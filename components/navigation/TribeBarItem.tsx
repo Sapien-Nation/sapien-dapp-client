@@ -20,6 +20,14 @@ function TribeBarItem({ tribe, handleClick }: Props) {
       {},
       {
         placement: 'right',
+        modifiers: [
+          {
+            name: 'offset',
+            options: {
+              offset: [0, 23],
+            },
+          },
+        ],
       }
     );
 
@@ -66,9 +74,12 @@ function TribeBarItem({ tribe, handleClick }: Props) {
           <div
             ref={setTooltipRef}
             {...getTooltipProps({
-              className: tw`relative z-10 p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded`,
+              className: tw`relative p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded`,
             })}
           >
+            <div
+              className={tw`w-4 h-4 bg-black block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute`}
+            />
             {tribe.name}
           </div>,
           document.body
