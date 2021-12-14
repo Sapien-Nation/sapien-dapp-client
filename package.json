@@ -18,6 +18,7 @@
     "@tailwindcss/forms": "^0.3.4",
     "@twind/next": "^1.0.9",
     "axios": "^0.24.0",
+    "emoji-mart": "^3.0.1",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
     "next": "latest",
@@ -29,6 +30,9 @@
     "react-hook-form": "^7.20.0",
     "react-popper-tooltip": "^4.3.1",
     "react-use": "^17.3.1",
+    "slate": "^0.72.0",
+    "slate-history": "^0.66.0",
+    "slate-react": "^0.72.1",
     "swr": "^1.0.1",
     "twind": "^0.16.16",
     "yup": "^0.32.11"

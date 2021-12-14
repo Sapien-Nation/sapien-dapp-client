@@ -2,6 +2,7 @@ import { tw } from 'twind';
 
 // components
 import { Head } from 'components/common';
+import Editor from 'components/slate';
 
 // icons
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
@@ -103,6 +104,9 @@ const MainSquareView = ({
           >
             <DotsHorizontalIcon className={tw`h-6 w-6`} aria-hidden="true" />
           </button>
+        </div>
+        <div>
+          <Editor />
         </div>
       </div>
     </>
