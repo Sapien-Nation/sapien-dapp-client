@@ -4,7 +4,7 @@ import { tw } from 'twind';
 import { useRouter } from 'next/router';
 
 // components
-import { Query, Redirect } from 'components/common';
+import { Head, Redirect, Query } from 'components/common';
 import {
   DiscoveryNavigation,
   TribeBar,
@@ -38,7 +38,12 @@ const AppLayout = ({ children }: Props) => {
   }
 
   if (me === null) {
-    return <Redirect path="/login" />;
+    return (
+      <>
+        <Head title="" />
+        <Redirect path="/login" />
+      </>
+    );
   }
 
   if (me) {

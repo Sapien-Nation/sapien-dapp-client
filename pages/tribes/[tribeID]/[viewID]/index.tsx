@@ -12,7 +12,7 @@ import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
-import type { Square } from 'tools/types/square';
+import type { MainSquare, Square } from 'tools/types/square';
 
 interface Props {
   tribeID: string;
@@ -35,7 +35,7 @@ const TribePage = ({ tribeID, viewID }: Props) => {
       case View.MainSquare:
         return (
           <Query api={`/api/v3/tribe/${tribeID}/square/${viewID}`}>
-            {(square: Square) => <MainSquareView square={square} />}
+            {(square: MainSquare) => <MainSquareView square={square} />}
           </Query>
         );
     }
