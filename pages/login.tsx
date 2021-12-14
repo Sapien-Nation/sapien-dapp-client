@@ -8,9 +8,7 @@ import { NextPage } from 'next';
 const LoginPage: NextPage = () => {
   return (
     <>
-      <Head title="Access">
-        <meta content="Login to your Sapien Account" name="description" />
-      </Head>
+      <Head title="Access" />
       <Layout title="Log in">
         <LoginForm />
       </Layout>
