@@ -1,11 +1,11 @@
-import ReactDOM from 'react-dom';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { usePopperTooltip } from 'react-popper-tooltip';
+import { useRef } from 'react';
 import { tw } from 'twind';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import { Tooltip } from 'components/common';
 
 interface Props {
   tribe: ProfileTribe;
@@ -15,21 +15,8 @@ interface Props {
 function TribeBarItem({ tribe, handleClick }: Props) {
   const { query } = useRouter();
   const { tribeID } = query;
-  const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
-    usePopperTooltip(
-      {},
-      {
-        placement: 'right',
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: [0, 23],
-            },
-          },
-        ],
-      }
-    );
+
+  const tooltipRef = useRef(null);
 
   return (
     <>
@@ -50,7 +37,7 @@ function TribeBarItem({ tribe, handleClick }: Props) {
               handleClick(tribe);
             }
           }}
-          ref={setTriggerRef}
+          ref={tooltipRef.current?.setTriggerRef}
         >
           <img
             className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500`}
@@ -72,21 +59,7 @@ function TribeBarItem({ tribe, handleClick }: Props) {
         </a>
       </Link>
 
-      {visible &&
-        ReactDOM.createPortal(
-          <div
-            ref={setTooltipRef}
-            {...getTooltipProps({
-              className: tw`relative p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded`,
-            })}
-          >
-            <div
-              className={tw`w-4 h-4 bg-black block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute`}
-            />
-            {tribe.name}
-          </div>,
-          document.body
-        )}
+      <Tooltip ref={tooltipRef} text={tribe.name} />
     </>
   );
 }
