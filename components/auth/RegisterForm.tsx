@@ -136,49 +136,51 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <div>
-          <TextInputLabel
-            label="First Name"
-            name="firstName"
-            error={errors.firstName?.message}
-          />
-          <div className={tw`mt-1`}>
-            <TextInput
+        <div className={tw`grid grid-cols-6 gap-6`}>
+          <div className={tw`col-span-6 sm:col-span-3`}>
+            <TextInputLabel
+              label="First Name"
               name="firstName"
-              maxLength={50}
-              autoComplete="firstName"
-              placeholder="John"
-              pattern={/^[a-zA-Z\s]*$/}
-              rules={{
-                validate: {
-                  required: (value) => value.length > 0 || 'is required',
-                },
-              }}
-              className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              error={errors.firstName?.message}
             />
+            <div className={tw`mt-1`}>
+              <TextInput
+                name="firstName"
+                maxLength={50}
+                autoComplete="firstName"
+                placeholder="John"
+                pattern={/^[a-zA-Z\s]*$/}
+                rules={{
+                  validate: {
+                    required: (value) => value.length > 0 || 'is required',
+                  },
+                }}
+                className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <TextInputLabel
-            label="Last Name"
-            name="lastName"
-            error={errors.lastName?.message}
-          />
-          <div className={tw`mt-1`}>
-            <TextInput
+          <div className={tw`col-span-6 sm:col-span-3`}>
+            <TextInputLabel
+              label="Last Name"
               name="lastName"
-              maxLength={50}
-              autoComplete="lastName"
-              placeholder="Doe"
-              pattern={/^[a-zA-Z\s]*$/}
-              rules={{
-                validate: {
-                  required: (value) => value.length > 0 || 'is required',
-                },
-              }}
-              className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              error={errors.lastName?.message}
             />
+            <div className={tw`mt-1`}>
+              <TextInput
+                name="lastName"
+                maxLength={50}
+                autoComplete="lastName"
+                placeholder="Doe"
+                pattern={/^[a-zA-Z\s]*$/}
+                rules={{
+                  validate: {
+                    required: (value) => value.length > 0 || 'is required',
+                  },
+                }}
+                className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              />
+            </div>
           </div>
         </div>
 
