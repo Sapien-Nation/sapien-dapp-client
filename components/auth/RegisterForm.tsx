@@ -119,7 +119,7 @@ const RegisterForm = () => {
               maxLength={20}
               autoComplete="username"
               placeholder="johndoe"
-              pattern={/^[a-zA-Z\s]*$/}
+              pattern={/^[a-zA-Z0-9]*$/}
               rules={{
                 validate: {
                   required: (value) => value.length > 0 || 'is required',

@@ -1,5 +1,5 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
-import { useState } from 'react';
+import { InputHTMLAttributes, useState } from 'react';
 import { tw } from 'twind';
 import { Control, useController, useFormState } from 'react-hook-form';
 
@@ -57,8 +57,6 @@ const PasswordInput = ({
         : undefined,
     },
   });
-  const { errors } = useFormState({ control });
-  const error = errors[name]?.message;
 
   return (
     <>

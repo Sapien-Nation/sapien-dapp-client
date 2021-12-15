@@ -34,9 +34,7 @@ const TextInput = ({
           }
 
           if (pattern) {
-            if (pattern.test(value)) {
-              value = value;
-            } else {
+            if (!pattern.test(value)) {
               value = value.slice(0, -1);
             }
           }
