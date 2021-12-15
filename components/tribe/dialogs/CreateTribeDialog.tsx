@@ -11,6 +11,9 @@ import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
 // components
 import { Dialog } from 'components/common';
 
+//hooks
+import { useToast } from 'context/toast';
+
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
@@ -44,6 +47,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
   const [isUploading, setUploading] = useState<boolean>(false);
+  const toast = useToast();
 
   const {
     formState: { isSubmitting },
@@ -104,7 +108,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       onClose();
       push(`/tribes/${response.id}/${response.mainSquareId}`);
     } catch (error) {
-      // TODO show error
+      toast({
+        message: 'Invalid Content',
+      });
     }
   };
 

@@ -19,7 +19,9 @@ const Toast = ({ type, message, id }: Props) => {
     switch (type) {
       case ToastType.Error:
         return (
-          <div className={tw`rounded-md bg-red-50 p-4 m-3`}>
+          <div
+            className={tw`rounded-md bg-red-50 p-5 m-3 animate-fade-in-down`}
+          >
             <div className={tw`flex`}>
               <div className={tw`flex-shrink-0`}>
                 <svg
@@ -72,7 +74,9 @@ const Toast = ({ type, message, id }: Props) => {
         );
       case ToastType.Success:
         return (
-          <div className={tw`rounded-md bg-green-50 p-4 m-3`}>
+          <div
+            className={tw`rounded-md bg-green-50 p-4 m-3 animate-fade-in-down`}
+          >
             <div className={tw`flex`}>
               <div className={tw`flex-shrink-0`}>
                 <svg
