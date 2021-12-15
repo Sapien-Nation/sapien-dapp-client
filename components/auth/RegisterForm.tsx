@@ -18,11 +18,11 @@ import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 interface RegisterFormValues {
-  displayName: string;
   email: string;
   firstName: string;
   password: string;
   username: string;
+  lastName: string;
   terms: boolean;
   wallet: boolean;
 }
@@ -30,11 +30,11 @@ interface RegisterFormValues {
 const RegisterForm = () => {
   const methods = useForm<RegisterFormValues>({
     defaultValues: {
-      displayName: '',
       email: '',
       firstName: '',
       password: '',
       username: '',
+      lastName: '',
       terms: false,
       wallet: false,
     },
@@ -50,14 +50,16 @@ const RegisterForm = () => {
   const { setSession } = useAuth();
 
   const onSubmit = async ({
-    displayName,
     email,
+    firstName,
+    lastName,
     password,
     username,
   }: RegisterFormValues) => {
     try {
       const response = await registerAction({
-        displayName,
+        firstName,
+        lastName,
         email,
         password,
         username,
@@ -91,6 +93,7 @@ const RegisterForm = () => {
               aria-describedby="email-error"
               autoComplete="email"
               name="email"
+              maxLength={100}
               placeholder="email@example.com"
               type="text"
               className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
@@ -142,11 +145,15 @@ const RegisterForm = () => {
           <div className={tw`mt-1`}>
             <TextInput
               name="firstName"
-              maxLength={40}
+              maxLength={50}
               autoComplete="firstName"
-              placeholder="Jonathan"
+              placeholder="John"
               pattern={/^[a-zA-Z\s]*$/}
-              rules={{}}
+              rules={{
+                validate: {
+                  required: (value) => value.length > 0 || 'is required',
+                },
+              }}
               className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             />
           </div>
@@ -156,16 +163,20 @@ const RegisterForm = () => {
           <TextInputLabel
             label="Last Name"
             name="lastName"
-            error={errors.displayName?.message}
+            error={errors.lastName?.message}
           />
           <div className={tw`mt-1`}>
             <TextInput
               name="lastName"
-              maxLength={40}
+              maxLength={50}
               autoComplete="lastName"
               placeholder="Doe"
               pattern={/^[a-zA-Z\s]*$/}
-              rules={{}}
+              rules={{
+                validate: {
+                  required: (value) => value.length > 0 || 'is required',
+                },
+              }}
               className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             />
           </div>

@@ -47,6 +47,7 @@ const PasswordInput = ({
     name,
     rules: {
       minLength: { value: 8, message: 'should be at least 8 characters long' },
+      maxLength: { value: 100, message: 'is to long' },
       validate: shouldValidate
         ? (value) => {
             if (!required && value.length === 0) return true;
