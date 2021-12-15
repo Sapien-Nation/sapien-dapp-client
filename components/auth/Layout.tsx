@@ -38,10 +38,12 @@ const Layout = ({ children, title }: Props) => {
         >
           <div className={tw`mx-auto w-full max-w-sm lg:w-96`}>
             <div>
-              <div className={tw`flex justify-center items-center`}>
+              {/* <div className={tw`flex justify-center items-center`}>
                 <FullLogo />
-              </div>
-              <h2 className={tw`mt-6 text-3xl font-extrabold text-gray-900`}>
+              </div> */}
+              <h2
+                className={tw`mt-6 text-3xl font-extrabold text-gray-900 text-center`}
+              >
                 {title}
               </h2>
             </div>

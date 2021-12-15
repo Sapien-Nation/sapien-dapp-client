@@ -11,7 +11,7 @@ const RegisterPage: NextPage = () => {
       <Head title="Access">
         <meta content="Register to your Sapien Account" name="description" />
       </Head>
-      <Layout title="Log in">
+      <Layout title="Create your Sapien account">
         <RegisterForm />
       </Layout>
     </>

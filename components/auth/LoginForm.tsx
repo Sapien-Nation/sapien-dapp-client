@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { tw } from 'twind';
 
 // components
-import { PasswordInput } from 'components/common';
+import { TextInput, TextInputLabel, PasswordInput } from 'components/common';
 
 // api
 import { login } from 'api/authentication';
@@ -11,6 +11,7 @@ import { login } from 'api/authentication';
 // hooks
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
+import { FormLabel } from 'react-native-elements';
 
 interface LoginFormValues {
   email: string;
@@ -18,11 +19,12 @@ interface LoginFormValues {
 }
 
 const LoginForm = () => {
+  const methods = useForm<LoginFormValues>();
   const {
-    formState: { isSubmitting },
-    register,
+    control,
+    formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm<LoginFormValues>();
+  } = methods;
 
   const toast = useToast();
   const { setSession } = useAuth();
@@ -44,81 +46,84 @@ const LoginForm = () => {
     }
   };
 
+  const passwordError = errors.password?.message;
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={tw`space-y-6`}>
-      <div>
-        <label
-          htmlFor="email"
-          className={tw`block text-sm font-medium text-gray-700`}
-        >
-          Email address
-        </label>
-        <div className={tw`mt-1`}>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            required
-            className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            {...register('email')}
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)} className={tw`space-y-6`}>
+        <div>
+          <TextInputLabel
+            label="Email"
+            name="email"
+            error={errors.email?.message}
           />
+          <div className={tw`mt-1`}>
+            <TextInput
+              autoComplete="email"
+              className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              name="email"
+              placeholder="email@example.com"
+              type="text"
+              rules={{
+                validate: {
+                  required: (value) => value.length > 0 || 'is required',
+                },
+              }}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className={tw`space-y-1`}>
-        <label
-          htmlFor="password"
-          className={tw`block text-sm font-medium text-gray-700`}
-        >
-          Password
-        </label>
-        <div className={tw`mt-1`}>
-          <PasswordInput
-            register={register}
-            id="password"
-            autoComplete="current-password"
-            required
-            placeholder="Mypassword123*"
+        <div className={tw`mt-8`}>
+          <TextInputLabel
+            label="Password"
+            name="password"
+            error={errors.password?.message}
+            extraLabel={
+              <Link href="/forgot">
+                <a
+                  className={tw`text-xs text-purple-600 hover:text-purple-500 float-right`}
+                >
+                  Forgot your password?
+                </a>
+              </Link>
+            }
           />
+          <div className={tw`mt-1`}>
+            <PasswordInput
+              control={control}
+              validate={(value) => value.length > 0 || 'is required'}
+              inputProps={{
+                'aria-invalid': Boolean(passwordError),
+                'aria-describedby': 'password-error',
+              }}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className={tw`flex items-center justify-between`}>
-        <div className={tw`text-sm`}>
-          <Link href="/forgot">
-            <a
-              className={tw`font-medium text-purple-600 hover:text-purple-500`}
-            >
-              Forgot your password?
-            </a>
-          </Link>
+        <div className={tw`mt-8`}>
+          <button
+            type="submit"
+            className={tw`${
+              isSubmitting ? 'cursor-not-allowed disabled:opacity-75' : ''
+            }
+            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+            disabled={isSubmitting}
+          >
+            Sign in
+          </button>
+
+          <div className={tw`mt-8 text-center`}>
+            <p className={tw`text-sm inline`}>{`Don't have an account?`}</p>
+            <Link href="/register">
+              <a
+                className={tw`font-medium text-sm text-purple-600 hover:text-purple-500`}
+              >
+                &nbsp;register
+              </a>
+            </Link>
+          </div>
         </div>
-      </div>
-
-      <div>
-        <button
-          type="submit"
-          className={tw`${
-            isSubmitting ? 'cursor-not-allowed disabled:opacity-75' : ''
-          }
-            'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
-          disabled={isSubmitting}
-        >
-          Sign in
-        </button>
-
-        <div className={tw`mt-2`}>
-          <p className={tw`text-sm inline`}>{`Don't have an account?`}</p>
-          <Link href="/register">
-            <a
-              className={tw`font-medium text-sm text-purple-600 hover:text-purple-500`}
-            >
-              &nbsp;register
-            </a>
-          </Link>
-        </div>
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 

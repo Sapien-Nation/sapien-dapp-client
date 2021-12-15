@@ -13,7 +13,7 @@ const ChangePasswordSuccessPage: NextPage = () => (
     <Head title="Password Changed" />
     <Layout title="Password Changed!">
       <>
-        <p className={tw`text-purple-500`}>
+        <p className={tw`text-purple-500 text-center`}>
           Please{' '}
           <Link href="/login">
             <a

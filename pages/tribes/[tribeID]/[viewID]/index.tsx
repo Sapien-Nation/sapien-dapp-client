@@ -34,7 +34,7 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         );
       case View.MainSquare:
         return (
-          <Query api={`/api/v3/tribe/${tribeID}/square/${viewID}`}>
+          <Query api={`/api/v3/mainsquare/${viewID}`}>
             {(square: MainSquare) => <MainSquareView square={square} />}
           </Query>
         );

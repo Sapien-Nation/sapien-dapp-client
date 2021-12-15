@@ -15,7 +15,7 @@ interface Props {
 }
 
 const MainSquareView = ({
-  square: { followersCount, avatar, cover, name, membersCount },
+  square: { avatar, description, cover, followersCount, name, membersCount },
 }: Props) => {
   return (
     <>
@@ -91,13 +91,9 @@ const MainSquareView = ({
           </div>
         </div>
         <div
-          className={tw`flex max-w-6xl mt-6 mx-auto px-4 sm:px-6 lg:px-8 text-gray-400`}
+          className={tw`flex max-w-6xl mt-6 mx-auto px-4 sm:px-6 lg:px-8 text-gray-400 justify-between`}
         >
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut mattis
-            purus elit, quis eleifend nunc ullamcor per id. liquam molestie orci
-            et gravida mollis.
-          </div>
+          <div>{description}</div>
           <button
             type="button"
             className={tw`bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}

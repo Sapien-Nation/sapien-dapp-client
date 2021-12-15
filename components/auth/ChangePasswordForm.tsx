@@ -1,16 +1,15 @@
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { tw } from 'twind';
 
 // api
 import { changePassword } from 'api/authentication';
 
+// components
+import { PasswordInput, TextInputLabel } from 'components/common';
+
 // hooks
 import { useToast } from 'context/toast';
-
-// utils
-import { PasswordPattern } from 'utils/patterns';
 
 interface ChangePasswordFormValues {
   password: string;
@@ -25,21 +24,19 @@ const ChangePasswordForm = ({ token }: Props) => {
   const toast = useToast();
   const { push } = useRouter();
 
-  const passwordField = useRef<HTMLInputElement | null>(null);
-  const confirmPasswordField = useRef<HTMLInputElement | null>(null);
-
   const {
-    formState: { isSubmitting },
+    control,
+    formState: { errors, isSubmitting },
+    getValues,
+    register,
     handleSubmit,
   } = useForm<ChangePasswordFormValues>();
 
-  const onSubmit = async ({
-    password,
-    repeatPassword,
-  }: ChangePasswordFormValues) => {
+  const onSubmit = async (values: ChangePasswordFormValues) => {
+    console.log(values);
     try {
       await changePassword({
-        password: passwordField.current.value,
+        password: values.password,
         token,
       });
 
@@ -51,55 +48,45 @@ const ChangePasswordForm = ({ token }: Props) => {
     }
   };
 
-  const validatePassword = () => {
-    if (passwordField.current.value !== confirmPasswordField.current.value) {
-      confirmPasswordField.current.setCustomValidity("Passwords Don't Match");
-      return;
-    } else {
-      confirmPasswordField.current.setCustomValidity('');
-    }
-  };
-
+  const passwordError = errors.password?.message;
+  const repeatPasswordError = errors.repeatPassword?.message;
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={tw`space-y-6`}>
-      <div>
-        <label
-          htmlFor="email"
-          className={tw`block text-sm font-medium text-gray-700`}
-        >
-          Password
-        </label>
+      <div className={tw`mt-8`}>
+        <TextInputLabel
+          label="Password"
+          name="password"
+          error={errors.password?.message}
+        />
         <div className={tw`mt-1`}>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            pattern={PasswordPattern}
-            className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            ref={passwordField}
-            onChange={validatePassword}
+          <PasswordInput
+            control={control}
+            validate={(value) => value.length > 0 || 'is required'}
+            inputProps={{
+              'aria-invalid': Boolean(passwordError),
+              'aria-describedby': `password-error`,
+            }}
           />
         </div>
       </div>
 
-      <div className={tw`space-y-1`}>
-        <label
-          htmlFor="password"
-          className={tw`block text-sm font-medium text-gray-700`}
-        >
-          Repeat Password
-        </label>
+      <div className={tw`mt-8`}>
+        <TextInputLabel
+          label="Repeat Password"
+          name="repeatPassword"
+          error={errors.repeatPassword?.message}
+        />
         <div className={tw`mt-1`}>
-          <input
-            id="confirmPassword"
-            type="password"
-            autoComplete="repeat-password"
-            required
-            pattern={PasswordPattern}
-            className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
-            ref={confirmPasswordField}
-            onKeyUp={validatePassword}
+          <PasswordInput
+            name="repeatPassword"
+            control={control}
+            validate={(value) =>
+              value === getValues('password') || 'should be equal as password'
+            }
+            inputProps={{
+              'aria-invalid': Boolean(passwordError),
+              'aria-describedby': `repeat-error`,
+            }}
           />
         </div>
       </div>
@@ -110,7 +97,7 @@ const ChangePasswordForm = ({ token }: Props) => {
           className={tw`${
             isSubmitting ? 'cursor-not-allowed disabled:opacity-75' : ''
           }
-            'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+            w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
           disabled={isSubmitting}
         >
           Change Password
