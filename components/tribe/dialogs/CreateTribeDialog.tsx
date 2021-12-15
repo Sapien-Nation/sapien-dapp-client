@@ -8,9 +8,6 @@ import { tw } from 'twind';
 // api
 import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
 
-// context
-import { useToast } from 'context/toast';
-
 // components
 import {
   Dialog,
@@ -52,7 +49,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
   const [isUploading, setUploading] = useState<boolean>(false);
-  const toast = useToast();
 
   const toast = useToast();
   const methods = useForm<FormValues>({
