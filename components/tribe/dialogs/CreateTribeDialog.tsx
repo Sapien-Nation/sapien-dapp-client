@@ -173,7 +173,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   alt="avatar"
-                                  className={tw`h-14 w-14 rounded-full`}
+                                  className={tw`h-14 w-14 rounded-full object-cover`}
                                   src={avatar.url}
                                   data-key={avatar.key}
                                   onClick={() => {
@@ -194,16 +194,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                               </svg>
                             )}
                           </span>
-                          {isUploading && (
-                            <span
-                              className={tw`absolute w-5 transform top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
-                            >
-                              <CloudUploadIcon
-                                className={tw`animate-bounce text-gray-400`}
-                              />
-                            </span>
-                          )}
-                          {!isUploading && (
+                          {isUploading &&
+                            mediaTypeToUpload === MediaTypeUpload.Avatar && (
+                              <span
+                                className={tw`absolute w-5 transform top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
+                              >
+                                <CloudUploadIcon
+                                  className={tw`animate-bounce text-gray-400`}
+                                />
+                              </span>
+                            )}
+                          {((!isUploading && !mediaTypeToUpload) ||
+                            mediaTypeToUpload === MediaTypeUpload.Avatar) && (
                             <CameraIcon
                               className={tw`absolute w-5 right-0.5 bottom-0 text-gray-400`}
                             />
@@ -318,7 +320,8 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           </span>
                         ) : (
                           <>
-                            {isUploading ? (
+                            {isUploading &&
+                            mediaTypeToUpload === MediaTypeUpload.Cover ? (
                               <span
                                 className={tw`absolute w-5 transform top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
                               >
