@@ -12,10 +12,11 @@ export const login = async (body: {
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const register = async (body: {
-  displayName: string;
   email: string;
+  firstName: string;
   password: string;
   username: string;
+  lastName: string;
   redirect: string;
   client: string;
 }) =>
