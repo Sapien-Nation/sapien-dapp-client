@@ -14,7 +14,7 @@ interface Props {
 const ChangePassword = ({ token }: Props) => (
   <>
     <Head title="Change Password" />
-    <Layout title="Enter New password">
+    <Layout title="Change Password">
       <ChangePasswordForm token={token} />
     </Layout>
   </>

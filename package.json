@@ -13,7 +13,6 @@
   "dependencies": {
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
-    "@hookform/resolvers": "^2.8.3",
     "@lottiefiles/lottie-player": "^1.4.5",
     "@tailwindcss/forms": "^0.3.4",
     "@twind/next": "^1.0.9",
@@ -34,8 +33,7 @@
     "slate-history": "^0.66.0",
     "slate-react": "^0.72.1",
     "swr": "^1.0.1",
-    "twind": "^0.16.16",
-    "yup": "^0.32.11"
+    "twind": "^0.16.16"
   },
   "lint-staged": {
     "*/**/*.{ts,tsx}": [
