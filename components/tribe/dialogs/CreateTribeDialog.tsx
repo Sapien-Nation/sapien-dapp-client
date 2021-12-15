@@ -133,6 +133,8 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     setMediaTypeToUpload(null);
   };
 
+  console.log(mediaTypeToUpload, isUploading);
+
   return (
     <Dialog
       isFetching={mediaTypeToUpload !== null || isSubmitting}
