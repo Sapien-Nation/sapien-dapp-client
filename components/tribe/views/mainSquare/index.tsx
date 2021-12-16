@@ -1,7 +1,9 @@
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { tw } from 'twind';
 
 // components
-import { Head } from 'components/common';
+import { Head, Query } from 'components/common';
 import Editor from 'components/slate';
 
 // icons
@@ -14,12 +16,42 @@ interface Props {
   square: MainSquare;
 }
 
+// TODO move to tools
+interface Content {
+  id: string;
+}
+
 const MainSquareView = ({
   square: { avatar, description, cover, followersCount, name, membersCount },
 }: Props) => {
+  const { query } = useRouter();
+  const { tribeID, viewID } = query;
+
+  const baseApiKey = `/api/v3/tribe/${tribeID}/square/${viewID}/feed`;
+  const [posts, setPosts] = useState<Array<Content>>([]);
+  const [cursor, setCursor] = useState(null);
+  const [apiKey, setApiKey] = useState(baseApiKey);
+
   return (
     <>
       <Head title={name} />
+      <Query
+        api={apiKey}
+        loader={null}
+        options={{
+          onSuccess: ({ data, nextCursor }) => {
+            if (nextCursor) {
+              setCursor(nextCursor);
+            } else {
+              setCursor(null);
+            }
+
+            if (data.length > 0) {
+              setPosts([...posts, ...data]);
+            }
+          },
+        }}
+      />
       <div>
         <div>
           <img
@@ -104,6 +136,20 @@ const MainSquareView = ({
         <div className={tw`flex justify-center`}>
           <Editor />
         </div>
+      </div>
+
+      {/* Feed */}
+      <div>
+        <span>Current Posts {posts.length}</span>
+        {cursor && (
+          <button
+            onClick={() => {
+              setApiKey(`${baseApiKey}?nextCursor=${cursor}`);
+            }}
+          >
+            Load More
+          </button>
+        )}
       </div>
     </>
   );
