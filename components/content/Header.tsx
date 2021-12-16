@@ -5,7 +5,19 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/outline';
 
-const Header = () => {
+// types
+import type { ContentAuthor, ContentTribe } from 'tools/types/content';
+
+// utils
+import { getFormattedDate } from 'utils/date';
+
+interface Props {
+  author: ContentAuthor;
+  tribe: ContentTribe;
+  createdAt: string;
+}
+
+const Header = ({ author, tribe, createdAt }: Props) => {
   return (
     <div className={tw`flex items-center justify-between`}>
       <div className={tw`flex items-center gap-2 text-sm`}>
@@ -16,19 +28,19 @@ const Header = () => {
             TW
           </span>
         </span>
-        <p className={tw`text-black font-bold`}>Sapien Name</p>
-        <p className={tw`text-gray-600 font-bold`}>@username</p>
+        <p className={tw`text-black font-bold`}>{author.displayName}</p>
+        <p className={tw`text-gray-600 font-bold`}>@{author.userName}</p>
         <ChevronRightIcon className={tw`h-4 w-4`} />
         <GlobeIcon className={tw`h-4 w-4`} />
-        <p className={tw`text-gray-900 font-bold`}>My Square</p>
+        <p className={tw`text-gray-900 font-bold`}>{tribe.name}</p>
         <span
           className={tw`bg-indigo-50 font-bold text-indigo-700 rounded-full flex gap-1 items-center px-2 py-1`}
         >
           <UserGroupIcon className={tw`h-4 w-4`} />
-          Sapien
+          {tribe.name}
         </span>
       </div>
-      <div className={tw`text(xs gray-500)`}>29 days</div>
+      <div className={tw`text(xs gray-500)`}>{getFormattedDate(createdAt)}</div>
     </div>
   );
 };

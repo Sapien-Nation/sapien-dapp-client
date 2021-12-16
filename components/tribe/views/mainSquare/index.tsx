@@ -131,9 +131,14 @@ const MainSquareView = ({
       </div>
 
       {/* Feed */}
-      <div className={tw`bg-gray-50 h-full pt-6 flex flex-col items-center`}>
+      <div
+        className={tw`bg-gray-50 h-scree-full pt-6 flex flex-col items-center`}
+      >
         <div>
-          <span>Current Posts {posts.length}</span>
+          {posts?.map((post) => (
+            <ContentItem key={post.id} content={post} />
+          ))}
+          {/* <span>Current Posts {posts.length}</span> */}
           {data?.nextCursor && (
             <button
               onClick={() => {
@@ -144,7 +149,6 @@ const MainSquareView = ({
             </button>
           )}
         </div>
-        <ContentItem />
       </div>
     </>
   );

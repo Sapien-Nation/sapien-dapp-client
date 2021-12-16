@@ -6,14 +6,28 @@ import {
 } from '@heroicons/react/outline';
 import { StarIcon } from '@heroicons/react/solid';
 
+//types
+import type { Content } from 'tools/types/content';
+
 // components
 import Header from './Header';
 
-const ContentItem = () => {
+interface Props {
+  content: Content;
+}
+
+const ContentItem = ({ content }: Props) => {
   return (
-    <div className={tw`w-full max-w-4xl rounded-2xl bg-white px-6 py-4`}>
-      <Header />
-      <div className={tw`py-6`}>Hey, how´s it going 😇</div>
+    <div className={tw`w-full max-w-4xl rounded-2xl bg-white px-6 py-4 mb-8`}>
+      <Header
+        author={content.author}
+        tribe={content.tribe}
+        createdAt={content.createdAt}
+      />
+      <div
+        className={tw`pb-6`}
+        dangerouslySetInnerHTML={{ __html: content.body }}
+      />
       <div className={tw`flex justify-between`}>
         <div className={tw`flex items-center justify-center`}>
           <button
