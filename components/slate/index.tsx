@@ -74,7 +74,9 @@ const EditorField = () => {
 
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <div className={tw`max-w-3xl flex items-center w-full mt-6`}>
+    <div
+      className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8`}
+    >
       <img
         className="inline-block h-10 w-10 rounded-full mr-4"
         src={

@@ -5,6 +5,7 @@ import { tw } from 'twind';
 // components
 import { Head, Query } from 'components/common';
 import Editor from 'components/slate';
+import ContentItem from 'components/content';
 
 // icons
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
@@ -124,23 +125,26 @@ const MainSquareView = ({
             <DotsHorizontalIcon className={tw`h-6 w-6`} aria-hidden="true" />
           </button>
         </div>
-        <div className={tw`flex justify-center`}>
+        <div className={tw`flex justify-center bg-gray-50`}>
           <Editor />
         </div>
       </div>
 
       {/* Feed */}
-      <div>
-        <span>Current Posts {posts.length}</span>
-        {data?.nextCursor && (
-          <button
-            onClick={() => {
-              setCursor(data.nextCursor);
-            }}
-          >
-            Load More
-          </button>
-        )}
+      <div className={tw`bg-gray-50 h-full pt-6 flex flex-col items-center`}>
+        <div>
+          <span>Current Posts {posts.length}</span>
+          {data?.nextCursor && (
+            <button
+              onClick={() => {
+                setCursor(data.nextCursor);
+              }}
+            >
+              Load More
+            </button>
+          )}
+        </div>
+        <ContentItem />
       </div>
     </>
   );
