@@ -15,12 +15,20 @@ const Image = ({ attributes, children, element }: Props) => {
 
   if (isFetching) {
     return (
-      <img
-        className={tw`mx-auto filter blur-sm`}
-        src="/images/logo.png"
-        width="90"
-        alt="loading-image"
-      />
+      <div className={tw`relative flex justify-center items-center`}>
+        <div
+          className={tw`inline-block rounded-full animate-pulse delay-100 w-2 h-2 bg-indigo-500 mx-1`}
+        ></div>
+        <div
+          className={tw`inline-block rounded-full animate-pulse delay-200 w-2 h-2 bg-indigo-500 mx-1`}
+        ></div>
+        <div
+          className={tw`inline-block rounded-full animate-pulse delay-300 w-2 h-2 bg-indigo-500 mx-1`}
+        ></div>
+        <div
+          className={tw`inline-block rounded-full animate-pulse delay-400 w-2 h-2 bg-indigo-500 mx-1`}
+        ></div>
+      </div>
     );
   }
 
