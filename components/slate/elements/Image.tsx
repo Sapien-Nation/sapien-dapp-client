@@ -1,5 +1,8 @@
-// constants
-import { ElementType } from '../constants';
+import { XIcon } from '@heroicons/react/outline';
+import { tw } from 'twind';
+
+// components
+import { Spinner } from 'components/common';
 
 // types
 import type { CustomElement } from '../types';
@@ -11,14 +14,21 @@ interface Props {
 }
 
 const Image = ({ attributes, children, element }: Props) => {
-  const { caption, isFetching, url, imageFallback } = element;
+  const { caption, isFetching, url, onRemove, imageFallback } = element;
 
   if (isFetching) {
-    return <span>Uploading Image...</span>;
+    return <Spinner />;
   }
 
   return (
-    <>
+    <span className={tw`relative`}>
+      <button
+        type="button"
+        className={tw`absolute z-10 -top-2 -left-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+        onClick={() => onRemove()}
+      >
+        <XIcon className={tw`h-3 w-3 text-white`} aria-hidden="true" />
+      </button>
       <img
         {...attributes}
         src={url}
@@ -28,7 +38,7 @@ const Image = ({ attributes, children, element }: Props) => {
         alt={caption}
       />
       {children}
-    </>
+    </span>
   );
 };
 
