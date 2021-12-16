@@ -22,13 +22,13 @@ const Header = () => {
         <GlobeIcon className={tw`h-6 w-6`} />
         <p className={tw`text-gray-900 font-bold`}>My Square</p>
         <span
-          className={tw`bg-indigo-50 text-indigo-700 rounded-full flex items-center px-4 py-2`}
+          className={tw`bg-indigo-50 font-bold text-indigo-700 rounded-full flex gap-1 items-center px-2 py-1`}
         >
-          <UserGroupIcon className={tw`h-6 w-6 mr-2`} />
+          <UserGroupIcon className={tw`h-4 w-4`} />
           Sapien
         </span>
       </div>
-      <div>29 days</div>
+      <div className={tw`text(xs gray-500)`}>29 days</div>
     </div>
   );
 };
