@@ -35,7 +35,7 @@ const MainSquareView = ({
             }}
           />
         </div>
-        <div className={tw`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8`}>
+        <div className={tw`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`}>
           <div
             className={tw`-mt-12 sm:-mt-6 sm:flex sm:items-end sm:space-x-8`}
           >

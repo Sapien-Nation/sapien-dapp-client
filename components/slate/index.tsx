@@ -63,7 +63,7 @@ const EditorField = () => {
 
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <div className={tw`max-w-2xl flex items-center w-full mt-6`}>
+    <div className={tw`max-w-3xl flex items-center w-full mt-6`}>
       <img
         className="inline-block h-10 w-10 rounded-full mr-4"
         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -81,21 +81,29 @@ const EditorField = () => {
             onKeyDown={handleKeyDown}
             renderLeaf={renderLeaf}
             renderElement={renderElement}
-            className={tw`w-full bg-gray-50 rounded-xl px-4 py-2`}
+            className={tw`w-full px-4 py-2`}
           />
         </Slate>
-        <div className={tw`flex justify-end items-end`}>
-          <button className={tw`h-10 w-10 flex items-center justify-center`}>
-            <LinkIcon className={tw`h-6 w-6 text-gray-300`} />
+        <div className={tw`flex justify-end items-end gap-1`}>
+          <button
+            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+          >
+            <LinkIcon className={tw`h-6 w-6`} />
           </button>
-          <button className={tw`h-10 w-10 flex items-center justify-center`}>
-            <CodeIcon className={tw`h-6 w-6 text-gray-300`} />
+          <button
+            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+          >
+            <CodeIcon className={tw`h-6 w-6`} />
           </button>
-          <button className={tw`h-10 w-10 flex items-center justify-center`}>
-            <PhotographIcon className={tw`h-6 w-6 text-gray-300`} />
+          <button
+            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+          >
+            <PhotographIcon className={tw`h-6 w-6`} />
           </button>
-          <button className={tw`h-10 w-10 flex items-center justify-center`}>
-            <PaperAirplaneIcon className={tw`h-6 w-6 text-gray-300`} />
+          <button
+            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+          >
+            <PaperAirplaneIcon className={tw`h-6 w-6`} />
           </button>
         </div>
       </div>
