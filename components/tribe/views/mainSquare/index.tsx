@@ -10,48 +10,39 @@ import Editor from 'components/slate';
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // types
+import { Content } from 'tools/types/content';
 import type { MainSquare } from 'tools/types/square';
+import useSWR from 'swr';
 
 interface Props {
   square: MainSquare;
 }
 
-// TODO move to tools
-interface Content {
-  id: string;
-}
-
 const MainSquareView = ({
   square: { avatar, description, cover, followersCount, name, membersCount },
 }: Props) => {
+  const [posts, setPosts] = useState<Array<Content>>([]);
+  const [cursor, setCursor] = useState<string | null>(null);
+
   const { query } = useRouter();
   const { tribeID, viewID } = query;
 
-  const baseApiKey = `/api/v3/tribe/${tribeID}/square/${viewID}/feed`;
-  const [posts, setPosts] = useState<Array<Content>>([]);
-  const [cursor, setCursor] = useState(null);
-  const [apiKey, setApiKey] = useState(baseApiKey);
+  const apiKey = `/api/v3/tribe/${tribeID}/square/${viewID}/feed${
+    cursor ? `?nextCursor=${cursor}` : ''
+  }`;
 
+  const { error, data, isValidating } = useSWR(apiKey, {
+    onSuccess: ({ data: successData }) => {
+      if (successData.length > 0) {
+        setPosts([...posts, ...successData]);
+      }
+    },
+  });
+
+  const isLoading = (data?.length === 0 && error === undefined) || isValidating;
   return (
     <>
       <Head title={name} />
-      <Query
-        api={apiKey}
-        loader={null}
-        options={{
-          onSuccess: ({ data, nextCursor }) => {
-            if (nextCursor) {
-              setCursor(nextCursor);
-            } else {
-              setCursor(null);
-            }
-
-            if (data.length > 0) {
-              setPosts([...posts, ...data]);
-            }
-          },
-        }}
-      />
       <div>
         <div>
           <img
@@ -141,10 +132,10 @@ const MainSquareView = ({
       {/* Feed */}
       <div>
         <span>Current Posts {posts.length}</span>
-        {cursor && (
+        {data?.nextCursor && (
           <button
             onClick={() => {
-              setApiKey(`${baseApiKey}?nextCursor=${cursor}`);
+              setCursor(data.nextCursor);
             }}
           >
             Load More

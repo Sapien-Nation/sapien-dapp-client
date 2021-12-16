@@ -28,7 +28,6 @@ const TribeNavigation = () => {
   const tribe = useTribe(tribeID as string);
   const { name, channels, squares, mainSquareId, permissions } = tribe;
 
-  console.log(viewID);
   const handleViewLeftClick = (
     view: ProfileTribeChannel | ProfileTribeSquare | ProfileTribe,
     type: View

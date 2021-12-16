@@ -40,10 +40,6 @@ declare module 'slate' {
 
 const createEditorWithPlugins = pipe(withReact, withHistory);
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
 const EditorField = () => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const [value, setValue] = useState<Array<Descendant>>([
@@ -59,7 +55,6 @@ const EditorField = () => {
   const fileRef = useRef(null);
 
   const { me } = useAuth();
-
   //--------------------------------------------------------------------------------------------------------------------
   const { handler: handleAddImage, isFetching: isUploadingImage } = useImage(
     editor,
