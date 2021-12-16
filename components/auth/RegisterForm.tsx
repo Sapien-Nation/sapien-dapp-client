@@ -75,6 +75,7 @@ const RegisterForm = () => {
     }
   };
 
+  console.log(errors);
   const termsError = errors.terms?.message;
   const passwordError = errors.password?.message;
   const walletError = errors.wallet?.message;
@@ -101,9 +102,8 @@ const RegisterForm = () => {
                 validate: {
                   required: (value) => value.length > 0 || 'is required',
                   email: (value) =>
-                    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                      value
-                    ) || 'is not valid',
+                    /^\b[\w\.-]+@[\w\.-]+\.\w{1,15}\b$/.test(value) ||
+                    'is not valid',
                 },
               }}
             />
@@ -119,16 +119,16 @@ const RegisterForm = () => {
           <div className={tw`mt-1`}>
             <TextInput
               name="username"
-              maxLength={20}
+              maxLength={30}
               autoComplete="username"
               placeholder="johndoe"
-              pattern={/^[a-zA-Z0-9]*$/}
+              pattern={/^[a-zA-Z0-9](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/}
               rules={{
                 validate: {
                   required: (value) => value.length > 0 || 'is required',
                   maxLength: (value) =>
-                    value?.length <= 21 ||
-                    'Must be Between 2 and 21 characters long',
+                    value?.length <= 31 ||
+                    'Must be Between 2 and 31 characters long',
                 },
               }}
               className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
@@ -244,9 +244,9 @@ const RegisterForm = () => {
                 <label
                   htmlFor="wallet"
                   className={tw`ml-2 block text-xs ${
-                    termsError ? 'text-red-500' : 'text-gray-900'
+                    walletError ? 'text-red-500' : 'text-gray-900'
                   }`}
-                  id={walletError ? 'terms-error' : ''}
+                  id={walletError ? 'wallet-error' : ''}
                 >
                   I understand that a wallet will be created for me{' '}
                   {walletError}

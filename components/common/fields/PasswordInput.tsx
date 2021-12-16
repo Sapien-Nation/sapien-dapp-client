@@ -51,7 +51,12 @@ const PasswordInput = ({
       validate: shouldValidate
         ? (value) => {
             if (!required && value.length === 0) return true;
-            if (softPasswords.includes(value!)) return 'Is to Weak';
+
+            if (softPasswords.includes(value!)) return 'is to Weak';
+
+            if (!/[A-Z]/.test(value!)) return 'should have an uppercase';
+
+            if (!/[a-z]/.test(value!)) return 'should have a lowercase';
 
             return validate?.(value) || true;
           }

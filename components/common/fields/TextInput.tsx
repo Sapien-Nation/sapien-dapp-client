@@ -22,6 +22,25 @@ const TextInput = ({
 
   return (
     <input
+      onKeyPress={(event) => {
+        if (pattern) {
+          if (!pattern.test(event.key)) {
+            console.log('entro?');
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }
+
+        if (replaceWhiteSpace === true) {
+          if (event.key === ' ') {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+          }
+        }
+        return true;
+      }}
       {...rest}
       {...register(name, {
         ...rules,
@@ -32,20 +51,6 @@ const TextInput = ({
           if (value.length > maxLength) {
             value = value.slice(0, maxLength);
           }
-
-          if (pattern) {
-            if (!pattern.test(value)) {
-              value = value.slice(0, -1);
-            }
-          }
-
-          if (replaceWhiteSpace === true) {
-            const lastCharacter = value.substr(-1);
-            if (lastCharacter === ' ') {
-              value = `${value.slice(0, -1)}-`;
-            }
-          }
-
           event.target.value = value;
         },
       })}
