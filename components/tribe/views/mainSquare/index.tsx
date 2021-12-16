@@ -115,7 +115,7 @@ const MainSquareView = ({
           </div>
         </div>
         <div
-          className={tw`flex max-w-6xl mt-6 mx-auto px-4 sm:px-6 lg:px-8 text-gray-400 justify-between`}
+          className={tw`flex max-w-6xl pb-6 mt-6 mx-auto px-4 sm:px-6 lg:px-8 text-gray-400 justify-between`}
         >
           <div>{description}</div>
           <button
