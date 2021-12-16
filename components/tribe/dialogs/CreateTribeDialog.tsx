@@ -229,9 +229,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                               ref={avatarFileInput}
                               accept="image/*"
                               className={tw`sr-only`}
-                              onChange={(event) => {
-                                handleUploadImage(event.target.files[0]);
-                              }}
+                              onChange={(event) =>
+                                handleUploadImage(event.target.files[0])
+                              }
                               type="file"
                             />
                           </div>
