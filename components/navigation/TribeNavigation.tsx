@@ -219,9 +219,6 @@ const TribeNavigation = () => {
                                     </span>
                                   </div>
                                 </div>
-                                <span className={tw`text-gray-500`}>
-                                  {getFormattedDate(channel.lastUpdatedAt)}
-                                </span>
                               </li>
                             </a>
                           </Link>

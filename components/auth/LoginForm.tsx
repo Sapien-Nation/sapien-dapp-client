@@ -11,7 +11,6 @@ import { login } from 'api/authentication';
 // hooks
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
-import { FormLabel } from 'react-native-elements';
 
 interface LoginFormValues {
   email: string;

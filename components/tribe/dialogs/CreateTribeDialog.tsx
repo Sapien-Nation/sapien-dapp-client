@@ -247,11 +247,14 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             name="name"
                             placeholder="The Sapien Tribe"
                             maxLength={50}
-                            pattern={/^[a-zA-Z\s]*$/}
+                            pattern={/^[a-zA-Z\s]$/}
                             rules={{
                               validate: {
                                 required: (value) =>
                                   value.length > 0 || 'is required',
+                                minLength: (value) =>
+                                  value?.length > 2 ||
+                                  'Must be Between 2 and 50 characters long',
                                 maxLength: (value) =>
                                   value?.length <= 51 ||
                                   'Must be Between 2 and 50 characters long',
@@ -283,7 +286,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 'Must be Between 2 and 51 characters long',
                             },
                           }}
-                          pattern={/^[a-zA-Z0-9]*$/}
+                          pattern={/^[a-zA-Z0-9]$/}
                         />
                       </div>
                       <div>
