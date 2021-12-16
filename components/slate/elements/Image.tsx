@@ -1,9 +1,6 @@
 import { XIcon } from '@heroicons/react/outline';
 import { tw } from 'twind';
 
-// components
-import { Spinner } from 'components/common';
-
 // types
 import type { CustomElement } from '../types';
 
@@ -17,7 +14,14 @@ const Image = ({ attributes, children, element }: Props) => {
   const { caption, isFetching, url, onRemove, imageFallback } = element;
 
   if (isFetching) {
-    return <Spinner />;
+    return (
+      <img
+        className={tw`mx-auto filter blur-sm`}
+        src="/images/logo.png"
+        width="90"
+        alt="loading-image"
+      />
+    );
   }
 
   return (
