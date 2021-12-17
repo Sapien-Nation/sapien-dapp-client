@@ -4,7 +4,7 @@ import { DefaultLeaf } from 'slate-react';
 import { ElementType } from '../constants';
 
 // components
-import { Image as ImageElement, Paragraph } from '../elements';
+import { Image as ImageElement, Paragraph, Video } from '../elements';
 
 const renderLeaf = (props) => {
   return <DefaultLeaf {...props} />;
@@ -14,6 +14,8 @@ const renderElement = (props) => {
   switch (props.element.type) {
     case ElementType.Image:
       return <ImageElement {...props} />;
+    case ElementType.Video:
+      return <Video {...props} />;
   }
   return <Paragraph {...props} />;
 };

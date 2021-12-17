@@ -11,6 +11,7 @@ export interface CustomElement {
   id?: string;
   isFetching?: boolean;
   imageFallback?: string;
+  image?: any;
   key?: string | null;
   caption?: string;
   url?: string;

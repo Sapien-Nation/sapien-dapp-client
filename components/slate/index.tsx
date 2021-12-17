@@ -25,7 +25,13 @@ import { useAuth } from 'context/user';
 import { ElementType } from './constants';
 
 // hooks
-import { useEditorConfig, useEmoji, useImage, useSelection } from './hooks';
+import {
+  useEditorConfig,
+  useEmoji,
+  useImage,
+  useLink,
+  useSelection,
+} from './hooks';
 
 // types
 import type { CustomElement, CustomText } from './types';
@@ -38,7 +44,7 @@ declare module 'slate' {
   }
 }
 
-const createEditorWithPlugins = pipe(withReact, withHistory);
+const createEditorWithPlugins = pipe(withReact, withHistory, useLink);
 
 const EditorField = () => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
