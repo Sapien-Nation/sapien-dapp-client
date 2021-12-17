@@ -15,6 +15,7 @@ import { ToastProvider } from 'context/toast';
 
 // providers
 import { AuthenticationProvider } from 'context/user';
+import SocketProvider from 'context/socket';
 
 // types
 import type { AppProps } from 'next/app';
@@ -36,11 +37,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
       }}
     >
       <ToastProvider>
-        <AuthenticationProvider>
-          <AppLayout>
-            <Component {...pageProps} />
-          </AppLayout>
-        </AuthenticationProvider>
+        <SocketProvider>
+          <AuthenticationProvider>
+            <AppLayout>
+              <Component {...pageProps} />
+            </AppLayout>
+          </AuthenticationProvider>
+        </SocketProvider>
         <ToastContainer />
       </ToastProvider>
     </SWRConfig>
