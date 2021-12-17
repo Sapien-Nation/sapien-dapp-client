@@ -40,7 +40,7 @@ const LoginForm = () => {
       setSession(response);
     } catch (error) {
       toast({
-        message: 'Invalid Credentials',
+        message: error || 'Invalid Credentials',
       });
     }
   };

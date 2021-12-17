@@ -113,14 +113,13 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       push(`/tribes/${response.id}/${response.mainSquareId}`);
     } catch (error) {
       toast({
-        message: 'Invalid Content',
+        message: error || 'Service unavailable',
       });
     }
   };
 
   const handleUploadImage = async (file: File) => {
     try {
-      console.log(file);
       const formData = new FormData();
 
       formData.append('variant', mediaTypeToUpload);
@@ -134,7 +133,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       setUploading(false);
     } catch (error) {
       toast({
-        message: 'There was an Error uploading your image',
+        message: error || 'There was an Error uploading your image',
       });
     }
     setMediaTypeToUpload(null);

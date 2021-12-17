@@ -37,7 +37,7 @@ const ForgotPasswordForm = () => {
       push('/forgot/success');
     } catch (error) {
       toast({
-        message: 'Invalid Email',
+        message: error || 'Invalid Email',
       });
     }
   };

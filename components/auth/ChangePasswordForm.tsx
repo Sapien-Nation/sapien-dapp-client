@@ -43,7 +43,7 @@ const ChangePasswordForm = ({ token }: Props) => {
       push('/change-password/success');
     } catch (error) {
       toast({
-        message: 'Invalid Token',
+        message: error || 'Invalid Token',
       });
     }
   };

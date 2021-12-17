@@ -70,7 +70,7 @@ const RegisterForm = () => {
       setSession(response);
     } catch (error) {
       toast({
-        message: error,
+        message: error || 'Please contact support',
       });
     }
   };
