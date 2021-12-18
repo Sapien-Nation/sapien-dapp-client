@@ -79,6 +79,8 @@ const wrapLink = (editor, url) => {
 };
 
 const isLinkActive = (editor) => {
+  // TODO
+  // @ts-ignore
   const [link] = Editor.nodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) &&
