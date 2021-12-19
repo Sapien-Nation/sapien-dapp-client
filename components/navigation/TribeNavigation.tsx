@@ -11,6 +11,7 @@ import { View } from 'constants/tribe';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
+import { useTribeNotifications } from 'hooks/notifications';
 
 // types
 import type {
@@ -27,10 +28,11 @@ enum Dialog {
 const TribeNavigation = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
-  const { query } = useRouter();
+  const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
 
   const tribe = useTribe(tribeID as string);
+  const { unreadNotifications } = useTribeNotifications(tribeID as string);
   const { name, channels, squares, mainSquareId, permissions } = tribe;
 
   const handleViewLeftClick = (
@@ -52,7 +54,23 @@ const TribeNavigation = () => {
               <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
               {name}
             </div>
-            <li></li>
+            <li>
+              <Link href={`/tribes/${tribeID}/notifications`}>
+                <a>
+                  <li
+                    className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
+                      unreadNotifications.length > 0 ? 'font-extrabold' : ''
+                    } ${
+                      asPath === `/tribes/${tribeID}/notifications`
+                        ? 'bg-gray-100'
+                        : ''
+                    }`}
+                  >
+                    <span>Whats new?</span>
+                  </li>
+                </a>
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>

@@ -23,22 +23,13 @@ const SocketProvider = ({ children }: Props) => {
   useEffect(() => {
     if (socket) {
       socket.onopen = () => {
-        console.log('Socket connection established!');
         socket.send(JSON.stringify({ type: 'ping', data: {} }));
       };
 
-      // TODO Sentry ERROR
-      socket.onclose = () => {
-        console.log('Socket connection closed!');
-      };
+      socket.onclose = () => {};
+      socket.onerror = () => {};
 
-      socket.onerror = (event) => {
-        console.error('WebSocket error observed:', event);
-      };
-
-      return () => {
-        socket.close();
-      };
+      return () => socket.close();
     }
   }, [socket]);
 

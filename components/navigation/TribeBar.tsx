@@ -8,11 +8,14 @@ import { tw } from 'twind';
 
 // components
 import TribeBarItem from './TribeBarItem';
+import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
+
+// hooks
+import { useUserNotifications } from 'hooks/notifications';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { Tooltip } from 'components/common';
 
 interface Props {
   tribes: Array<ProfileTribe>;
@@ -32,6 +35,8 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
 
   const tooltipRef = useRef(null);
   const createTribeRef = useRef(null);
+
+  const notifications = useUserNotifications();
 
   const handleTribeLeftClick = (tribe: ProfileTribe) => {
     console.log('clicked tribe', { tribe });
