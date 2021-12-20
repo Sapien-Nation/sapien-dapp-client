@@ -28,12 +28,10 @@ const ChangePasswordForm = ({ token }: Props) => {
     control,
     formState: { errors, isSubmitting },
     getValues,
-    register,
     handleSubmit,
   } = useForm<ChangePasswordFormValues>();
 
   const onSubmit = async (values: ChangePasswordFormValues) => {
-    console.log(values);
     try {
       await changePassword({
         password: values.password,

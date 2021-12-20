@@ -15,6 +15,7 @@ import { tw } from 'twind';
 
 // context
 import { useAuth } from 'context/user';
+import { useToast } from 'context/toast';
 
 // components
 import { Tooltip } from 'components/common';
@@ -60,6 +61,7 @@ const EditorField = () => {
       key: null,
     },
   ]);
+  const [isFetching, setIsFetching] = useState(false);
 
   const isEditorEmpty = useIsEditorEmpty(value);
   const { renderLeaf, renderElement } = useEditorConfig(editor);
@@ -69,6 +71,7 @@ const EditorField = () => {
   const tooltipRef = useRef(null);
 
   const { me } = useAuth();
+  const toast = useToast();
   //--------------------------------------------------------------------------------------------------------------------
   const { handler: handleAddImage, isFetching: isUploadingImage } = useImage(
     editor,
@@ -77,7 +80,21 @@ const EditorField = () => {
   const addEmoji = useEmoji(editor, previousSelection);
 
   //--------------------------------------------------------------------------------------------------------------------
-  const handleSubmit = () => {};
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsFetching(true);
+    try {
+      console.log(`submitting...`);
+      // TODO serializer and API call
+    } catch (error) {
+      toast({
+        message:
+          error ||
+          'Error while creating the content, please try again in 10seconds',
+      });
+    }
+    setIsFetching(false);
+  };
   const handleOnChange = useCallback(
     (doc) => {
       setValue(doc);
@@ -90,7 +107,9 @@ const EditorField = () => {
   return (
     <>
       <div
-        className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8`}
+        className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8 ${
+          isFetching ? 'cursor-wait' : 'cursor-default'
+        }`}
       >
         <img
           className="inline-block h-10 w-10 rounded-full mr-4"
@@ -105,8 +124,9 @@ const EditorField = () => {
           }}
         />
         {view === View.Normal && (
-          <div
+          <form
             className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
+            onSubmit={handleSubmit}
           >
             <Slate editor={editor} value={value} onChange={handleOnChange}>
               <Editable
@@ -160,8 +180,12 @@ const EditorField = () => {
 
               {/* Submit */}
               <button
-                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
-                disabled={isUploadingImage}
+                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white ${
+                  isEditorEmpty
+                    ? 'disabled:opacity-75 pointer-events-none'
+                    : 'pointer-events-auto'
+                }`}
+                disabled={isUploadingImage || isEditorEmpty}
                 onClick={handleSubmit}
               >
                 <PaperAirplaneIcon
@@ -171,7 +195,7 @@ const EditorField = () => {
                 />
               </button>
             </div>
-          </div>
+          </form>
         )}
 
         {/* Expand */}
