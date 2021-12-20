@@ -1,9 +1,13 @@
-import { Disclosure } from '@headlessui/react';
-import { ChevronUpIcon, PlusSmIcon } from '@heroicons/react/solid';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import {
+  ChevronUpIcon,
+  PlusSmIcon,
+  SelectorIcon,
+} from '@heroicons/react/solid';
 import { BellIcon, UserGroupIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { tw } from 'twind';
 
 // api
@@ -50,11 +54,63 @@ const TribeNavigation = () => {
   return (
     <>
       <div className={tw`w-full`}>
-        <div className={tw`border-b border-black-100`}>
-          <nav className={tw`py-1`}>
+        {/* <Menu as="div" className={tw`w-full inline-block text-left mt-4`}>
+          <div>
+            <Menu.Button className={tw`group w-full rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-indigo-50 focus:outline-none`}>
+              <span className={tw`flex w-full justify-between items-center`}>
+                <span className={tw`flex min-w-0 items-center w-full justify-between space-x-3`}>
+                  <img
+                    className={tw`w-10 h-10 bg-gray-300 rounded-full flex-shrink-0`}
+                    src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
+                    alt=""
+                  />
+                  <span className={tw`flex-1 flex flex-col min-w-0`}>
+                    <span className={tw`text-indigo-600 bg-indigo-50 py-2 px-4 rounded-full text-sm truncate`}>0</span>
+                  </span>
+                  <SelectorIcon
+                    className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                </span>
+              </span>
+            </Menu.Button>
+          </div>
+          <Transition
+            as={Fragment}
+            enter={tw`transition ease-out duration-100`}
+            enterFrom={tw`transform opacity-0 scale-95`}
+            enterTo={tw`transform opacity-100 scale-100`}
+            leave={tw`transition ease-in duration-75`}
+            leaveFrom={tw`"transform opacity-100 scale-100`}
+            leaveTo={tw`"transform opacity-0 scale-95`}
+          >
+            <Menu.Items className={tw`fixed z-10 w-96 mx-3 origin-top fixed right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none`}>
+              <div className={tw`py-1 h-96 flex justify-center items-center`}>
+                Wallet component
+              </div>
+              <div className={tw`py-1`}>
+                <Menu.Item>
+                  {({ active }) => (
+                    <Link href={`/logout`}>
+                      <a
+                        href="#"
+                        className={tw`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}
+                          block px-4 py-2 text-sm`}
+                      >
+                        Logout
+                      </a>
+                    </Link>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu> */}
+        <div>
+          <nav>
             <ul className={tw`flex flex-col`}>
               <div
-                className={tw`w-full flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
+                className={tw`w-full mt-3 flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
               >
                 <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
                 {name}
@@ -62,40 +118,38 @@ const TribeNavigation = () => {
             </ul>
           </nav>
         </div>
-        <div className={tw`border-b border-black-100`}>
-          <nav className={tw`py-2`}>
+        <div>
+          <nav>
             <ul>
               <li>
                 <Link href={`/tribes/${tribeID}/notifications`}>
-                  <a>
-                    <li
-                      className={tw`relative mt-3 w-full flex cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
-                        asPath === `/tribes/${tribeID}/notifications`
-                          ? 'font-extrabold'
-                          : ''
-                      }`}
-                    >
-                      <span className={tw`flex`}>
-                        <BellIcon className={tw`h-5 w-5 mr-4`} />
-                        <Query
-                          api="/api/v3/notification/all"
-                          loader={null}
-                          options={{
-                            fetcher: async (url) =>
-                              notificationInstance
-                                .get(url)
-                                .then((res) => res.data),
-                          }}
-                        >
-                          {() => (
-                            <span
-                              className={tw`absolute animate-ping h-1 w-1 rounded-full bg-purple-400 opacity-75 top-1 left-8`}
-                            />
-                          )}
-                        </Query>
-                      </span>
-                      Whats new ?
-                    </li>
+                  <a
+                    className={tw`relative mt-2 w-full flex cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
+                      asPath === `/tribes/${tribeID}/notifications`
+                        ? 'font-extrabold'
+                        : ''
+                    }`}
+                  >
+                    <span className={tw`flex`}>
+                      <BellIcon className={tw`h-5 w-5 mr-4`} />
+                      <Query
+                        api="/api/v3/notification/all"
+                        loader={null}
+                        options={{
+                          fetcher: async (url) =>
+                            notificationInstance
+                              .get(url)
+                              .then((res) => res.data),
+                        }}
+                      >
+                        {() => (
+                          <span
+                            className={tw`absolute animate-ping h-1 w-1 rounded-full bg-purple-400 opacity-75 top-1 left-8`}
+                          />
+                        )}
+                      </Query>
+                    </span>
+                    Whats new ?
                   </a>
                 </Link>
               </li>
