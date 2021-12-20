@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react';
 import { ChevronUpIcon, PlusSmIcon } from '@heroicons/react/solid';
-import { UserGroupIcon } from '@heroicons/react/outline';
+import { BellIcon, UserGroupIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -46,33 +46,47 @@ const TribeNavigation = () => {
   return (
     <>
       <div className={tw`w-full`}>
-        <nav className={tw`py-4`}>
-          <ul className={tw`flex flex-col`}>
-            <div
-              className={tw`w-full flex cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex bg-gray-100 rounded-lg focus:outline-none`}
-            >
-              <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
-              {name}
-            </div>
-            <li>
-              <Link href={`/tribes/${tribeID}/notifications`}>
-                <a>
-                  <li
-                    className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
-                      unreadNotifications.length > 0 ? 'font-extrabold' : ''
-                    } ${
-                      asPath === `/tribes/${tribeID}/notifications`
-                        ? 'bg-gray-100'
-                        : ''
-                    }`}
-                  >
-                    <span>Whats new?</span>
-                  </li>
-                </a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <div className={tw`border-b border-black-100`}>
+          <nav className={tw`py-1`}>
+            <ul className={tw`flex flex-col`}>
+              <div
+                className={tw`w-full flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
+              >
+                <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
+                {name}
+              </div>
+            </ul>
+          </nav>
+        </div>
+        <div className={tw`border-b border-black-100`}>
+          <nav className={tw`py-2`}>
+            <ul>
+              <li>
+                <Link href={`/tribes/${tribeID}/notifications`}>
+                  <a>
+                    <li
+                      className={tw`relative mt-3 w-full flex cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
+                        asPath === `/tribes/${tribeID}/notifications`
+                          ? 'font-extrabold'
+                          : ''
+                      }`}
+                    >
+                      <span className={tw`flex`}>
+                        <BellIcon className={tw`h-5 w-5 mr-4`} />
+                        {unreadNotifications.length > 0 && (
+                          <span
+                            className={tw`absolute animate-ping h-1 w-1 rounded-full bg-purple-400 opacity-75 top-1 left-8`}
+                          />
+                        )}
+                      </span>
+                      Whats new ?
+                    </li>
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
         <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
           <Disclosure defaultOpen>
             {({ open }) => (
@@ -190,9 +204,19 @@ const TribeNavigation = () => {
                   <Disclosure.Panel className={tw`text-sm text-gray-500`}>
                     {channels.length === 0 &&
                       permissions.canAddChannel === true && (
-                        <p className="mt-1 text-sm text-justify text-gray-500">
-                          Get started with channels by creating a new one.
-                        </p>
+                        <>
+                          <p
+                            className={tw`mt-1 text-sm text-justify text-gray-500`}
+                          >
+                            Get started with channels by .
+                          </p>{' '}
+                          <span
+                            className={tw`cursor-pointer inline text-purple-700`}
+                            onClick={() => setDialog(Dialog.Square)}
+                          >
+                            creating a new one
+                          </span>
+                        </>
                       )}
                     {channels.length > 0 && (
                       <nav
