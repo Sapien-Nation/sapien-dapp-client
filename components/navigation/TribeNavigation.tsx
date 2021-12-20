@@ -267,7 +267,7 @@ const TribeNavigation = () => {
                                       className={tw`p-0.5 group rounded-xl text-gray-600 bg-gray-100`}
                                     >
                                       <img
-                                        className={tw`h-12 w-12 p-1 rounded-xl text-gray-400 bg-white group-hover:text-gray-500`}
+                                        className={tw`h-8 w-8 p-1 rounded-xl text-gray-400 bg-white group-hover:text-gray-500`}
                                         alt={
                                           channel.avatar
                                             ? `${channel.name} Avatar image`
@@ -291,11 +291,15 @@ const TribeNavigation = () => {
                                     <div
                                       className={tw`flex flex-col gap-1 ml-2`}
                                     >
-                                      <span className={tw`font-lg`}>
-                                        Poetry
-                                      </span>
-                                      <span className={tw`text-gray-500`}>
-                                        {channel.membersCount} members
+                                      <span className={tw`font-lg flex`}>
+                                        <p className={tw`truncate	w-20`}>
+                                          Poetry
+                                        </p>
+                                        <small
+                                          className={tw`font-xs text-gray-300 ml-4`}
+                                        >
+                                          {channel.membersCount} members
+                                        </small>
                                       </span>
                                     </div>
                                   </div>
