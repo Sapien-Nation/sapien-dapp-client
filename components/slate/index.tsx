@@ -1,5 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
 import {
+  ArrowsExpandIcon,
   EmojiHappyIcon,
   PaperAirplaneIcon,
   PhotographIcon,
@@ -48,6 +49,8 @@ const createEditorWithPlugins = pipe(withReact, withHistory, useLink);
 
 const EditorField = () => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
+  const [content, setContent] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
   const [value, setValue] = useState<Array<Descendant>>([
     {
       children: [{ text: '' }],
@@ -55,6 +58,7 @@ const EditorField = () => {
       key: null,
     },
   ]);
+  const hasMultipleLines = editor.children.length > 1;
 
   const { renderLeaf, renderElement } = useEditorConfig(editor);
   const [previousSelection, _, setSelection] = useSelection(editor);
@@ -101,6 +105,9 @@ const EditorField = () => {
             placeholder="What do you want to share?"
             renderLeaf={renderLeaf}
             renderElement={renderElement}
+            onKeyDown={(event) => {
+              if (event.key) setContent(true);
+            }}
             className={tw`w-full px-4 py-2`}
           />
         </Slate>
@@ -146,13 +153,27 @@ const EditorField = () => {
             type="file"
           />
 
-          {/* Submit */}
+          {/* Expand */}
           <button
             className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+            onClick={() => {}}
+          >
+            <ArrowsExpandIcon className={tw`h-6 w-6`} />
+          </button>
+
+          {/* Submit */}
+          <button
+            className={tw`h-10 w-10 flex items-center text-gray-400 ${
+              hasMultipleLines || content ? 'bg-indigo-500' : ''
+            } justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
             disabled={isUploadingImage}
             onClick={handleSubmit}
           >
-            <PaperAirplaneIcon className={tw`h-6 w-6`} />
+            <PaperAirplaneIcon
+              className={tw`h-6 w-6 ${
+                hasMultipleLines || content ? 'text-white' : ''
+              }`}
+            />
           </button>
         </div>
       </div>
