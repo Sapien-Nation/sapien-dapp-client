@@ -6,12 +6,17 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { tw } from 'twind';
 
+// api
+import { notificationInstance } from 'api';
+
 // constants
 import { View } from 'constants/tribe';
 
+// components
+import { Query } from 'components/common';
+
 // hooks
 import { useTribe } from 'hooks/tribe';
-import { useTribeNotifications } from 'hooks/notifications';
 
 // types
 import type {
@@ -32,7 +37,6 @@ const TribeNavigation = () => {
   const { tribeID, viewID } = query;
 
   const tribe = useTribe(tribeID as string);
-  const { unreadNotifications } = useTribeNotifications(tribeID as string);
   const { name, channels, squares, mainSquareId, permissions } = tribe;
 
   const handleViewLeftClick = (
@@ -73,11 +77,22 @@ const TribeNavigation = () => {
                     >
                       <span className={tw`flex`}>
                         <BellIcon className={tw`h-5 w-5 mr-4`} />
-                        {unreadNotifications.length > 0 && (
-                          <span
-                            className={tw`absolute animate-ping h-1 w-1 rounded-full bg-purple-400 opacity-75 top-1 left-8`}
-                          />
-                        )}
+                        <Query
+                          api="/api/v3/notification/all"
+                          loader={null}
+                          options={{
+                            fetcher: async (url) =>
+                              notificationInstance
+                                .get(url)
+                                .then((res) => res.data),
+                          }}
+                        >
+                          {() => (
+                            <span
+                              className={tw`absolute animate-ping h-1 w-1 rounded-full bg-purple-400 opacity-75 top-1 left-8`}
+                            />
+                          )}
+                        </Query>
                       </span>
                       Whats new ?
                     </li>

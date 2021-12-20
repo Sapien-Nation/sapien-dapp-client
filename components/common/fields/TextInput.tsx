@@ -25,7 +25,6 @@ const TextInput = ({
       onKeyPress={(event) => {
         if (pattern) {
           if (!pattern.test(event.key)) {
-            console.log('entro?');
             event.preventDefault();
             event.stopPropagation();
             return false;

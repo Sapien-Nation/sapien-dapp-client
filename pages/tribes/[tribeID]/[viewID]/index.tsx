@@ -1,5 +1,8 @@
 import { useRouter } from 'next/router';
 
+// api
+import { notificationInstance } from 'api';
+
 // constants
 import { View } from 'constants/tribe';
 
@@ -30,7 +33,18 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
 
   const renderView = () => {
     if (isNotificationsView)
-      return <NotificationView tribeID={tribeID as string} />;
+      return (
+        <Query
+          api="/api/v3/notification/all"
+          loader={null}
+          options={{
+            fetcher: async (url) =>
+              notificationInstance.get(url).then((res) => res.data),
+          }}
+        >
+          {() => <NotificationView tribeID={tribeID as string} />}
+        </Query>
+      );
 
     switch (view.type) {
       case View.Channel:

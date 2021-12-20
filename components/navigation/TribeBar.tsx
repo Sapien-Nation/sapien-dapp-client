@@ -11,9 +11,6 @@ import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
 
-// hooks
-import { useUserNotifications } from 'hooks/notifications';
-
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
@@ -35,8 +32,6 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
 
   const tooltipRef = useRef(null);
   const createTribeRef = useRef(null);
-
-  const notifications = useUserNotifications();
 
   const handleTribeLeftClick = (tribe: ProfileTribe) => {
     console.log('clicked tribe', { tribe });
