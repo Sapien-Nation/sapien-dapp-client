@@ -29,7 +29,6 @@ import {
   useEmoji,
   useImage,
   useIsEditorEmpty,
-  useLink,
   useSelection,
 } from './hooks';
 
@@ -49,7 +48,7 @@ enum View {
   Normal,
 }
 
-const createEditorWithPlugins = pipe(withReact, withHistory, useLink);
+const createEditorWithPlugins = pipe(withReact, withHistory);
 
 const EditorField = () => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
@@ -64,6 +63,7 @@ const EditorField = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const isEditorEmpty = useIsEditorEmpty(value);
+
   const { renderLeaf, renderElement } = useEditorConfig(editor);
   const [previousSelection, _, setSelection] = useSelection(editor);
 
@@ -95,6 +95,7 @@ const EditorField = () => {
     }
     setIsFetching(false);
   };
+
   const handleOnChange = useCallback(
     (doc) => {
       setValue(doc);

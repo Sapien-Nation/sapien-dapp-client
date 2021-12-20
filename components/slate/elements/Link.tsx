@@ -1,36 +1,25 @@
-// constants
-import { ElementType } from '../constants';
 import { tw } from 'twind';
+
+// types
+import type { CustomElement } from '../types';
 
 interface Props {
   attributes: any;
   children: React.ReactElement;
-  element: ElementType;
+  element: CustomElement;
 }
 
 const Link = ({ attributes, children, element }: Props) => {
-  if (element?.url.includes('sapien')) {
+  if (element?.url.includes('sapien.network/')) {
     return (
-      <div className={tw`flex items-center`}>
-        <img
-          className="inline-block h-5 w-5 rounded-full mr-4"
-          src={
-            'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
-          }
-          alt="Sapien logo"
-          onError={(event) => {
-            (event.target as HTMLImageElement).src =
-              'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png';
-          }}
-        />
-        <a target="_blank" className={tw`text-indigo-500`} {...attributes}>
-          {children}
-        </a>
-      </div>
+      <a {...attributes} href={element.url} className={tw`text-indigo-500`}>
+        {children}
+      </a>
     );
   }
+
   return (
-    <a target="_blank" {...attributes}>
+    <a {...attributes} href={element.url} className={tw`text-indigo-500`}>
       {children}
     </a>
   );
