@@ -3,3 +3,4 @@ export { default as useEmoji } from './useEmoji';
 export { default as useImage } from './useImage';
 export { default as useLink } from './useLink';
 export { default as useSelection } from './useSelection';
+export { default as useIsEditorEmpty } from './useIsEditorEmpty';

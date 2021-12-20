@@ -9,14 +9,8 @@ import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
-import { BaseEditor, createEditor, Descendant } from 'slate';
-import {
-  DefaultLeaf,
-  Editable,
-  ReactEditor,
-  Slate,
-  withReact,
-} from 'slate-react';
+import { BaseEditor, createEditor } from 'slate';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
 
 // context
@@ -30,6 +24,7 @@ import {
   useEditorConfig,
   useEmoji,
   useImage,
+  useIsEditorEmpty,
   useLink,
   useSelection,
 } from './hooks';
@@ -49,17 +44,15 @@ const createEditorWithPlugins = pipe(withReact, withHistory, useLink);
 
 const EditorField = () => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
-  const [content, setContent] = useState(null);
-  const [isFetching, setIsFetching] = useState(false);
-  const [value, setValue] = useState<Array<Descendant>>([
+  const [value, setValue] = useState<Array<CustomElement>>([
     {
       children: [{ text: '' }],
       type: ElementType.Paragraph,
       key: null,
     },
   ]);
-  const hasMultipleLines = editor.children.length > 1;
 
+  const isEditorEmpty = useIsEditorEmpty(value);
   const { renderLeaf, renderElement } = useEditorConfig(editor);
   const [previousSelection, _, setSelection] = useSelection(editor);
   const fileRef = useRef(null);
@@ -105,9 +98,6 @@ const EditorField = () => {
             placeholder="What do you want to share?"
             renderLeaf={renderLeaf}
             renderElement={renderElement}
-            onKeyDown={(event) => {
-              if (event.key) setContent(true);
-            }}
             className={tw`w-full px-4 py-2`}
           />
         </Slate>
@@ -163,15 +153,13 @@ const EditorField = () => {
 
           {/* Submit */}
           <button
-            className={tw`h-10 w-10 flex items-center text-gray-400 ${
-              hasMultipleLines || content ? 'bg-indigo-500' : ''
-            } justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
             disabled={isUploadingImage}
             onClick={handleSubmit}
           >
             <PaperAirplaneIcon
               className={tw`h-6 w-6 ${
-                hasMultipleLines || content ? 'text-white' : ''
+                isEditorEmpty ? '' : 'rotate-90 text-indigo-500'
               }`}
             />
           </button>
