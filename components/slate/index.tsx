@@ -112,7 +112,7 @@ const EditorField = () => {
         }`}
       >
         <img
-          className="inline-block h-10 w-10 rounded-full mr-4"
+          className={tw`self-start inline-block h-10 w-10 rounded-full mr-4`}
           src={
             me.avatar ||
             'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
@@ -201,7 +201,7 @@ const EditorField = () => {
         {/* Expand */}
         {isEditorEmpty === false && view === View.Normal && (
           <button
-            className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+            className={tw`self-end h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
             onClick={() => setView(View.Expanded)}
             ref={tooltipRef.current?.setTriggerRef}
           >
