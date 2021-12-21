@@ -19,6 +19,7 @@ import { useAuth } from 'context/user';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import { user } from 'utils/testUtils';
 
 interface Props {
   children: React.ReactElement;
@@ -61,7 +62,9 @@ const AppLayout = ({ children }: Props) => {
               <Subscriber />
               <main className={tw`h-full flex`}>
                 <div className={tw`flex flex-col`}>
-                  <div className={tw`flex-1 flex min-h-0`}>
+                  <div
+                    className={tw`flex-1 flex min-h-0 border-r border-gray-200`}
+                  >
                     <TribeBar
                       tribes={tribes}
                       mobileMenuOpen={mobileMenuOpen}
@@ -70,7 +73,7 @@ const AppLayout = ({ children }: Props) => {
                     {isHomePage === false && (
                       <div className={tw`hidden lg:block lg:flex-shrink-0`}>
                         <div
-                          className={tw`h-full p-2 relative flex flex-col w-64 border-r border-gray-200 bg-white overflow-y-auto`}
+                          className={tw`h-full p-2 relative flex flex-col w-64 bg-white overflow-y-auto`}
                         >
                           {isDiscoveryPage === true && <DiscoveryNavigation />}
                           {isDiscoveryPage === false && <TribeNavigation />}
@@ -133,7 +136,7 @@ const AppLayout = ({ children }: Props) => {
                             <span
                               className={tw`flex min-w-0 items-center w-full justify-between`}
                             >
-                              <div className={tw`bg-gray-700 px-5 py-3 `}>
+                              <div className={tw`bg-gray-900 px-5 py-3 `}>
                                 <img
                                   className={tw`w-10 h-10 bg-gray-300 rounded-full flex-shrink-0`}
                                   src={
@@ -147,19 +150,77 @@ const AppLayout = ({ children }: Props) => {
                                   }}
                                 />
                               </div>
-                              <span
-                                className={tw`flex-1 flex flex-col min-w-0 px-4`}
+                              <div
+                                className={tw`flex items-center justify-center w-64`}
                               >
-                                <span
-                                  className={tw`text-indigo-600 bg-indigo-50 py-2 px-4 rounded-full text-sm truncate`}
-                                >
-                                  0
+                                <span className={tw`pl-2 flex flex-col`}>
+                                  <span className={tw`text-xs truncate w-32`}>
+                                    @{me.username}
+                                  </span>
+                                  <span
+                                    className={tw`text(xs gray-400) truncate w-32`}
+                                  >
+                                    {me.displayName}
+                                  </span>
                                 </span>
-                              </span>
-                              <SelectorIcon
-                                className="flex-shrink-0 h-5 w-5 text-gray-400 mr-4 group-hover:text-gray-500"
-                                aria-hidden="true"
-                              />
+                                <span
+                                  className={tw`flex-1 flex flex-col min-w-0 px-2`}
+                                >
+                                  <span
+                                    className={tw`text-indigo-600 bg-indigo-50 py-2 px-4 rounded-full text-sm truncate flex items-center`}
+                                  >
+                                    <svg
+                                      fill="none"
+                                      height="18"
+                                      viewBox="0 0 18 18"
+                                      width="18"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18Z"
+                                        fill="#6200EA"
+                                      ></path>
+                                      <path
+                                        d="M9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18Z"
+                                        fill="url(#paint0_linear)"
+                                        fillOpacity="0.5"
+                                      ></path>
+                                      <path
+                                        d="M8.94111 2.93555C6.79826 2.97077 5.08984 4.47959 5.08984 6.45806C5.08984 8.77116 6.85109 9.6166 8.65932 10.233C8.95285 10.327 9.19941 10.415 9.41082 10.5031C9.36897 10.2032 9.23091 9.92513 9.01743 9.71047C8.38338 8.92968 7.73172 8.09015 7.64366 7.40326C7.60072 7.18045 7.60306 6.95127 7.65055 6.7294C7.69804 6.50751 7.78971 6.29745 7.92009 6.11174C8.05047 5.92603 8.2169 5.76846 8.40946 5.64842C8.60202 5.52839 8.81677 5.44834 9.04092 5.41305C9.70431 5.41305 10.4675 5.74181 11.4656 6.54024L13.0448 4.47959C11.9107 3.48222 10.4514 2.93318 8.94111 2.93555Z"
+                                        fill="white"
+                                        opacity="0.6"
+                                      ></path>
+                                      <path
+                                        d="M9.66936 7.63211C9.29361 7.48534 8.98835 7.36206 8.74765 7.23877C8.77194 7.36238 8.80529 7.48405 8.84746 7.60277C8.88855 7.70257 8.93552 7.80237 8.98249 7.90218C9.13512 8.21333 9.33474 8.48926 9.47568 8.75345C9.92181 9.49319 10.6498 10.2153 10.5911 11.3895C10.5427 11.7423 10.3587 12.0624 10.078 12.2817C9.79734 12.5009 9.4422 12.6021 9.08814 12.5636C8.55515 12.5276 8.03491 12.3843 7.55871 12.1422C7.08252 11.9001 6.66019 11.5642 6.31713 11.1546L4.69678 13.1683C5.25801 13.7595 5.93226 14.232 6.67955 14.5578C7.42683 14.8836 8.23192 15.0559 9.0471 15.0646C10.9433 15.0646 13.3504 14.049 13.3504 11.2779C13.3269 8.9648 11.7418 8.41881 9.66936 7.63211Z"
+                                        fill="white"
+                                        opacity="0.6"
+                                      ></path>
+                                      <defs>
+                                        <linearGradient
+                                          gradientUnits="userSpaceOnUse"
+                                          id="paint0_linear"
+                                          x1="3.44707"
+                                          x2="15.5971"
+                                          y1="16.2"
+                                          y2="2.7"
+                                        >
+                                          <stop stopColor="white"></stop>
+                                          <stop
+                                            offset="1"
+                                            stopColor="white"
+                                            stopOpacity="0"
+                                          ></stop>
+                                        </linearGradient>
+                                      </defs>
+                                    </svg>
+                                    <span className={tw`ml-2`}>0</span>
+                                  </span>
+                                </span>
+                                <SelectorIcon
+                                  className="flex-shrink-0 h-5 w-5 text-gray-500 mr-4 group-hover:text-gray-500"
+                                  aria-hidden="true"
+                                />
+                              </div>
                             </span>
                           </span>
                         </Menu.Button>
