@@ -86,6 +86,44 @@ const AppLayout = ({ children }: Props) => {
                       className={tw`w-full inline-block text-left`}
                     >
                       <div>
+                        <Transition
+                          as={Fragment}
+                          enter={tw`transition ease-out duration-100`}
+                          enterFrom={tw`transform opacity-0 scale-95`}
+                          enterTo={tw`transform opacity-100 scale-100`}
+                          leave={tw`transition ease-in duration-75`}
+                          leaveFrom={tw`"transform opacity-100 scale-100`}
+                          leaveTo={tw`"transform opacity-0 scale-95`}
+                        >
+                          <Menu.Items
+                            className={tw`z-100 w-96 mx-3 origin-top absolute bottom-16 right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none`}
+                          >
+                            <div
+                              className={tw`py-1 h-96 flex justify-center items-center`}
+                            >
+                              Wallet component
+                            </div>
+                            <div className={tw`py-1`}>
+                              <Menu.Item>
+                                {({ active }) => (
+                                  <Link href={`/logout`}>
+                                    <a
+                                      href="#"
+                                      className={tw`${
+                                        active
+                                          ? 'bg-gray-100 text-gray-900'
+                                          : 'text-gray-700'
+                                      }
+                          block px-4 py-2 text-sm`}
+                                    >
+                                      Logout
+                                    </a>
+                                  </Link>
+                                )}
+                              </Menu.Item>
+                            </div>
+                          </Menu.Items>
+                        </Transition>
                         <Menu.Button
                           className={tw`group w-full flex text-sm text-left font-medium text-gray-700 hover:bg-indigo-50 focus:outline-none`}
                         >
@@ -119,44 +157,6 @@ const AppLayout = ({ children }: Props) => {
                           </span>
                         </Menu.Button>
                       </div>
-                      <Transition
-                        as={Fragment}
-                        enter={tw`transition ease-out duration-100`}
-                        enterFrom={tw`transform opacity-0 scale-95`}
-                        enterTo={tw`transform opacity-100 scale-100`}
-                        leave={tw`transition ease-in duration-75`}
-                        leaveFrom={tw`"transform opacity-100 scale-100`}
-                        leaveTo={tw`"transform opacity-0 scale-95`}
-                      >
-                        <Menu.Items
-                          className={tw`z-100 w-96 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none`}
-                        >
-                          <div
-                            className={tw`py-1 h-96 flex justify-center items-center`}
-                          >
-                            Wallet component
-                          </div>
-                          <div className={tw`py-1`}>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <Link href={`/logout`}>
-                                  <a
-                                    href="#"
-                                    className={tw`${
-                                      active
-                                        ? 'bg-gray-100 text-gray-900'
-                                        : 'text-gray-700'
-                                    }
-                          block px-4 py-2 text-sm`}
-                                  >
-                                    Logout
-                                  </a>
-                                </Link>
-                              )}
-                            </Menu.Item>
-                          </div>
-                        </Menu.Items>
-                      </Transition>
                     </Menu>
                   </div>
                 </div>
