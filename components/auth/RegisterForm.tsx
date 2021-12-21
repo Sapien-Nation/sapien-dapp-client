@@ -122,15 +122,13 @@ const RegisterForm = () => {
               maxLength={30}
               autoComplete="username"
               placeholder="johndoe"
-              pattern={/^[a-zA-Z0-9](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$/}
               rules={{
-                validate: {
-                  required: (value) => value.length > 0 || 'is required',
-                  maxLength: (value) =>
-                    value?.length <= 31 ||
-                    'Must be Between 2 and 31 characters long',
-                },
+                maxLength: { value: 30, message: 'is to long' },
+                required: { value: true, message: 'is required' },
+                validate: (value) =>
+                  !/[-|\.|_]+|[-|\.|_]{2,2}/.test(value) || 'is invalid',
               }}
+              replaceWhiteSpace
               className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
             />
           </div>

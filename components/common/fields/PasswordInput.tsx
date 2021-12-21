@@ -54,9 +54,17 @@ const PasswordInput = ({
 
             if (softPasswords.includes(value!)) return 'is to Weak';
 
-            if (!/[A-Z]/.test(value!)) return 'should have an uppercase';
+            if (
+              !/[A-Z]/.test(value) ||
+              !/[a-z]/.test(value) ||
+              !/\d/.test(value)
+            ) {
+              if (!/\d/.test(value)) return 'should have a number';
 
-            if (!/[a-z]/.test(value!)) return 'should have a lowercase';
+              if (!/[A-Z]/.test(value!)) return 'should have an uppercase';
+
+              if (!/[a-z]/.test(value!)) return 'should have a lowercase';
+            }
 
             return validate?.(value) || true;
           }
