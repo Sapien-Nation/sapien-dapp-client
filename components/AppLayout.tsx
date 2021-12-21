@@ -136,8 +136,15 @@ const AppLayout = ({ children }: Props) => {
                               <div className={tw`bg-gray-700 px-5 py-3 `}>
                                 <img
                                   className={tw`w-10 h-10 bg-gray-300 rounded-full flex-shrink-0`}
-                                  src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
-                                  alt=""
+                                  src={
+                                    me.avatar ||
+                                    'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png'
+                                  }
+                                  alt="this is your avatar picture on the bottom of the tribe bar navigation"
+                                  onError={(event) => {
+                                    (event.target as HTMLImageElement).src =
+                                      'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
+                                  }}
                                 />
                               </div>
                               <span

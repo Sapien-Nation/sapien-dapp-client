@@ -50,12 +50,12 @@ const MainSquareView = ({
             className={tw`h-32 w-full object-cover lg:h-48`}
             src={
               cover ||
-              'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_cover.jpeg'
+              'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/cover/sapien_cover-774x200.png'
             }
             alt={`Square ${name} Cover Picture`}
             onError={(event) => {
               (event.target as HTMLImageElement).src =
-                'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
+                'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
             }}
           />
         </div>
@@ -68,11 +68,11 @@ const MainSquareView = ({
                 className={tw`h-28 w-28 rounded-3xl ring-4 ring-white`}
                 src={
                   avatar ||
-                  'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg'
+                  'https://dutuyaq1w3dqh.cloudfront.net/images/sapien_logo.png'
                 }
                 onError={(event) => {
                   (event.target as HTMLImageElement).src =
-                    'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
+                    'https://dutuyaq1w3dqh.cloudfront.net/images/sapien_logo.png';
                 }}
                 alt={`Square ${name} Profile Picture`}
               />

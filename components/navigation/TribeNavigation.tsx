@@ -54,58 +54,6 @@ const TribeNavigation = () => {
   return (
     <>
       <div className={tw`w-full`}>
-        {/* <Menu as="div" className={tw`w-full inline-block text-left mt-4`}>
-          <div>
-            <Menu.Button className={tw`group w-full rounded-md px-3.5 py-2 text-sm text-left font-medium text-gray-700 hover:bg-indigo-50 focus:outline-none`}>
-              <span className={tw`flex w-full justify-between items-center`}>
-                <span className={tw`flex min-w-0 items-center w-full justify-between space-x-3`}>
-                  <img
-                    className={tw`w-10 h-10 bg-gray-300 rounded-full flex-shrink-0`}
-                    src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80"
-                    alt=""
-                  />
-                  <span className={tw`flex-1 flex flex-col min-w-0`}>
-                    <span className={tw`text-indigo-600 bg-indigo-50 py-2 px-4 rounded-full text-sm truncate`}>0</span>
-                  </span>
-                  <SelectorIcon
-                    className="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                </span>
-              </span>
-            </Menu.Button>
-          </div>
-          <Transition
-            as={Fragment}
-            enter={tw`transition ease-out duration-100`}
-            enterFrom={tw`transform opacity-0 scale-95`}
-            enterTo={tw`transform opacity-100 scale-100`}
-            leave={tw`transition ease-in duration-75`}
-            leaveFrom={tw`"transform opacity-100 scale-100`}
-            leaveTo={tw`"transform opacity-0 scale-95`}
-          >
-            <Menu.Items className={tw`fixed z-10 w-96 mx-3 origin-top fixed right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none`}>
-              <div className={tw`py-1 h-96 flex justify-center items-center`}>
-                Wallet component
-              </div>
-              <div className={tw`py-1`}>
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link href={`/logout`}>
-                      <a
-                        href="#"
-                        className={tw`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}
-                          block px-4 py-2 text-sm`}
-                      >
-                        Logout
-                      </a>
-                    </Link>
-                  )}
-                </Menu.Item>
-              </div>
-            </Menu.Items>
-          </Transition>
-        </Menu> */}
         <div>
           <nav>
             <ul className={tw`flex flex-col`}>
@@ -329,13 +277,13 @@ const TribeNavigation = () => {
                                         }
                                         src={
                                           channel.avatar ||
-                                          'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+                                          'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png'
                                         }
                                         onError={(event) => {
                                           (
                                             event.target as HTMLImageElement
                                           ).src =
-                                            'https://d151dmflpumpzp.cloudfront.net/tribe-images/default_temp.jpeg';
+                                            'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
                                         }}
                                       />
                                     </div>
@@ -373,7 +321,6 @@ const TribeNavigation = () => {
       </div>
 
       {/* Dialogs */}
-
       {dialog === Dialog.Channel && <></>}
       {dialog === Dialog.Square && <></>}
     </>

@@ -114,11 +114,11 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                             }
                             onError={(event) => {
                               (event.target as HTMLImageElement).src =
-                                'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png';
+                                'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
                             }}
                             src={
                               tribe.avatar ||
-                              'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+                              'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png'
                             }
                           />
                           <span
