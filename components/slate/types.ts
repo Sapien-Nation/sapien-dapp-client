@@ -6,6 +6,7 @@ export interface CustomText {
 }
 
 export interface CustomElement {
+  href?: string;
   type: ElementType;
   children: Array<CustomText>;
   id?: string;
