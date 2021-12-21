@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#6200eaf" />
           <link href="/static/favicon.ico" rel="icon" type="image/png" />
         </Head>
-        <body className={tw`h-full`}>
+        <body className={tw`h-full relative`}>
           <Main />
           <NextScript />
         </body>
