@@ -2,15 +2,15 @@ import { Fragment, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Transition } from '@headlessui/react';
 import { tw } from 'twind';
-import { XIcon } from '@heroicons/react/outline';
 
 interface props {
   children: React.ReactElement;
   onClose: () => void;
   show: boolean;
+  actionIcon: React.ReactElement;
 }
 
-const Overlay = ({ children, show, onClose }: props) => (
+const Overlay = ({ actionIcon, children, show, onClose }: props) => (
   <>
     {ReactDOM.createPortal(
       <Transition
@@ -30,7 +30,7 @@ const Overlay = ({ children, show, onClose }: props) => (
               onClick={onClose}
               className={tw`inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 absolute top-10 -right-10`}
             >
-              <XIcon className="h-6 w-6" aria-hidden="true" />
+              {actionIcon}
             </button>
             {children}
           </div>

@@ -4,6 +4,7 @@ import {
   EmojiHappyIcon,
   PaperAirplaneIcon,
   PhotographIcon,
+  XIcon,
 } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
@@ -200,6 +201,7 @@ const EditorField = () => {
         )}
 
         <Overlay
+          actionIcon={<XIcon className="h-6 w-6" aria-hidden="true" />}
           show={view === View.Expanded}
           onClose={() => setView(View.Normal)}
         >
