@@ -23,7 +23,7 @@ const Overlay = ({ children, show, onClose }: props) => (
         leaveFrom={tw`"transform opacity-100 scale-100`}
         leaveTo={tw`"transform opacity-0 scale-95`}
       >
-        <div className={tw`absolute inset-0 bg-gray-900 overflow-auto`}>
+        <div className={tw`absolute inset-0 bg-white overflow-auto`}>
           <div className={tw`max-w-5xl w-full mx-auto relative`}>
             <button
               type="button"

@@ -204,7 +204,7 @@ const EditorField = () => {
           onClose={() => setView(View.Normal)}
         >
           <form
-            className={tw`w-full rounded-xl px-4 py-2 flex flex-row pt-32 text-gray-200`}
+            className={tw`w-full rounded-xl px-4 py-2 flex flex-row pt-32 text-black`}
             onSubmit={handleSubmit}
           >
             <Slate editor={editor} value={value} onChange={handleOnChange}>
