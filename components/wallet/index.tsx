@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { tw } from 'twind';
 
@@ -14,6 +14,13 @@ enum WalletTabs {
 
 const Wallet = () => {
   const [tab, setTab] = useState<WalletTabs>(WalletTabs.NFT);
+
+  const prevTabReference = useRef<WalletTabs>();
+  useEffect(() => {
+    prevTabReference.current = tab;
+  });
+  const prevTab = prevTabReference.current;
+
   const renderTab = () => {
     return (
       <div className={tw`relative h-full`}>
@@ -21,14 +28,16 @@ const Wallet = () => {
           show={tab === WalletTabs.NFT}
           as={Fragment}
           enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`-translate-x-full`}
+          enterFrom={tw`${
+            prevTab > WalletTabs.NFT ? '-translate-x-full' : 'translate-x-full'
+          }`}
           enterTo={tw`translate-x-0`}
           leave={tw`transition ease-in-out duration-300 transform`}
           leaveFrom={tw`translate-x-0`}
           leaveTo={tw`-translate-x-full`}
         >
           <div
-            className={tw`flex justify-center items-center w-full h-64 absolute bg-gray-300`}
+            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
             My Nft
           </div>
@@ -38,14 +47,18 @@ const Wallet = () => {
           show={tab === WalletTabs.Spn}
           as={Fragment}
           enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`translate-x-full`}
+          enterFrom={tw`${
+            prevTab > WalletTabs.Spn ? '-translate-x-full' : 'translate-x-full'
+          }`}
           enterTo={tw`translate-x-0`}
           leave={tw`transition ease-in-out duration-300 transform`}
+          leaveTo={tw`${
+            tab < WalletTabs.Spn ? 'translate-x-full' : 'translate-x-0'
+          }`}
           leaveFrom={tw`translate-x-0`}
-          leaveTo={tw`-translate-x-full`}
         >
           <div
-            className={tw`flex justify-center items-center w-full h-64 absolute bg-gray-300`}
+            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
             Spn
           </div>
@@ -62,7 +75,7 @@ const Wallet = () => {
           leaveTo={tw`translate-x-full`}
         >
           <div
-            className={tw`flex justify-center items-center w-full h-64 absolute bg-gray-300`}
+            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
             Store
           </div>
@@ -148,7 +161,7 @@ const Wallet = () => {
           Store
         </button>
       </div>
-      <div className={tw`h-full overflow-hidden`}>{renderTab()}</div>
+      <div className={tw`h-96 overflow-hidden`}>{renderTab()}</div>
     </>
   );
 };

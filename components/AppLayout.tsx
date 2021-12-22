@@ -102,7 +102,7 @@ const AppLayout = ({ children }: Props) => {
                           <Menu.Items
                             className={tw`z-100 w-96 mx-3 origin-top absolute bottom-16 right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none`}
                           >
-                            <div className={tw`h-96`}>
+                            <div className={tw`h-full`}>
                               <Wallet />
                             </div>
                             <div className={tw`py-1`}>
