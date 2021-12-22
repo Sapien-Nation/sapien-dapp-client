@@ -24,6 +24,9 @@ import { useToast } from 'context/toast';
 // constants
 import { ElementType } from './constants';
 
+// icons
+import { CollapseIcon } from 'assets';
+
 // hooks
 import { useEditorConfig, useImage } from './hooks';
 
@@ -92,7 +95,7 @@ const EditorField = () => {
   return (
     <>
       <div
-        className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8 ${
+        className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8 relative ${
           isFetching ? 'cursor-wait' : 'cursor-default'
         }`}
       >
@@ -184,7 +187,9 @@ const EditorField = () => {
         )}
 
         <Overlay
-          actionIcon={<XIcon className="h-6 w-6" aria-hidden="true" />}
+          actionIcon={
+            <CollapseIcon className="h-4 w-4 fill-white" aria-hidden="true" />
+          }
           show={view === View.Expanded}
           onClose={() => {
             setView(View.Normal);
@@ -268,14 +273,14 @@ const EditorField = () => {
         {/* Expand */}
         {view === View.Normal && (
           <button
-            className={tw`self-end h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+            className={tw`absolute top-0.5 right-0.5 self-end h-8 w-8 flex items-center text-gray-400 justify-center rounded-full hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
             onClick={() => {
               setView(View.Expanded);
               ReactEditor.focus(editor);
             }}
             ref={tooltipRef.current?.setTriggerRef}
           >
-            <ArrowsExpandIcon className={tw`h-6 w-6`} />
+            <ArrowsExpandIcon className={tw`h-4 w-4`} />
           </button>
         )}
 
