@@ -8,30 +8,27 @@ import {
 } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { BaseEditor, createEditor } from 'slate';
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
 
+// components
+import { Overlay, Tooltip } from 'components/common';
+
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
-
-// components
-import { Overlay, Tooltip } from 'components/common';
 
 // constants
 import { ElementType } from './constants';
 
 // hooks
-import {
-  useEditorConfig,
-  useEmoji,
-  useImage,
-  useIsEditorEmpty,
-  useSelection,
-} from './hooks';
+import { useEditorConfig, useImage } from './hooks';
+
+// utils
+import { insertEmoji } from './utils';
 
 // types
 import type { CustomElement, CustomText } from './types';
@@ -63,10 +60,7 @@ const EditorField = () => {
   ]);
   const [isFetching, setIsFetching] = useState(false);
 
-  const isEditorEmpty = useIsEditorEmpty(value);
-
   const { renderLeaf, renderElement } = useEditorConfig(editor);
-  const [previousSelection, _, setSelection] = useSelection(editor);
 
   const fileRef = useRef(null);
   const tooltipRef = useRef(null);
@@ -74,11 +68,8 @@ const EditorField = () => {
   const { me } = useAuth();
   const toast = useToast();
   //--------------------------------------------------------------------------------------------------------------------
-  const { handler: handleAddImage, isFetching: isUploadingImage } = useImage(
-    editor,
-    previousSelection
-  );
-  const addEmoji = useEmoji(editor, previousSelection);
+  const { handler: handleAddImage, isFetching: isUploadingImage } =
+    useImage(editor);
 
   //--------------------------------------------------------------------------------------------------------------------
   const handleSubmit = async (event) => {
@@ -96,14 +87,6 @@ const EditorField = () => {
     }
     setIsFetching(false);
   };
-
-  const handleOnChange = useCallback(
-    (doc) => {
-      setValue(doc);
-      setSelection(editor.selection);
-    },
-    [setSelection, editor]
-  );
 
   //--------------------------------------------------------------------------------------------------------------------
   return (
@@ -130,7 +113,11 @@ const EditorField = () => {
             className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
             onSubmit={handleSubmit}
           >
-            <Slate editor={editor} value={value} onChange={handleOnChange}>
+            <Slate
+              editor={editor}
+              value={value}
+              onChange={(val: any) => setValue(val)}
+            >
               <Editable
                 placeholder="What do you want to share?"
                 renderLeaf={renderLeaf}
@@ -158,7 +145,9 @@ const EditorField = () => {
                       leaveTo={tw`opacity-0 translate-y-1`}
                     >
                       <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0">
-                        <Picker onSelect={(event) => addEmoji(event)} />
+                        <Picker
+                          onSelect={(event) => insertEmoji(editor, event)}
+                        />
                       </Popover.Panel>
                     </Transition>
                   </>
@@ -182,18 +171,12 @@ const EditorField = () => {
 
               {/* Submit */}
               <button
-                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white ${
-                  isEditorEmpty
-                    ? 'disabled:opacity-75 pointer-events-none'
-                    : 'pointer-events-auto'
-                }`}
-                disabled={isUploadingImage || isEditorEmpty}
+                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto`}
+                disabled={isUploadingImage}
                 onClick={handleSubmit}
               >
                 <PaperAirplaneIcon
-                  className={tw`h-6 w-6 ${
-                    isEditorEmpty ? '' : 'rotate-90 text-indigo-500'
-                  }`}
+                  className={tw`h-6 w-6 rotate-90 text-indigo-500`}
                 />
               </button>
             </div>
@@ -212,7 +195,11 @@ const EditorField = () => {
             className={tw`w-full rounded-xl px-4 py-2 flex flex-row pt-32 text-black`}
             onSubmit={handleSubmit}
           >
-            <Slate editor={editor} value={value} onChange={handleOnChange}>
+            <Slate
+              editor={editor}
+              value={value}
+              onChange={(doc: any) => setValue(doc)}
+            >
               <Editable
                 placeholder="What do you want to share?"
                 renderLeaf={renderLeaf}
@@ -240,7 +227,9 @@ const EditorField = () => {
                       leaveTo={tw`opacity-0 translate-y-1`}
                     >
                       <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0">
-                        <Picker onSelect={(event) => addEmoji(event)} />
+                        <Picker
+                          onSelect={(event) => insertEmoji(editor, event)}
+                        />
                       </Popover.Panel>
                     </Transition>
                   </>
@@ -264,25 +253,20 @@ const EditorField = () => {
 
               {/* Submit */}
               <button
-                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white ${
-                  isEditorEmpty
-                    ? 'disabled:opacity-75 pointer-events-none'
-                    : 'pointer-events-auto'
-                }`}
-                disabled={isUploadingImage || isEditorEmpty}
+                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+                disabled={isUploadingImage}
                 onClick={handleSubmit}
               >
                 <PaperAirplaneIcon
-                  className={tw`h-6 w-6 ${
-                    isEditorEmpty ? '' : 'rotate-90 text-indigo-500'
-                  }`}
+                  className={tw`h-6 w-6 rotate-90 text-indigo-500`}
                 />
               </button>
             </div>
           </form>
         </Overlay>
+
         {/* Expand */}
-        {isEditorEmpty === false && view === View.Normal && (
+        {view === View.Normal && (
           <button
             className={tw`self-end h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
             onClick={() => {

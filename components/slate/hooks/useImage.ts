@@ -15,7 +15,7 @@ import { useToast } from 'context/toast';
 // types
 import type { CustomElement } from '../types';
 
-const useImageUploadHandler = (editor, selection) => {
+const useImageUploadHandler = (editor) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
@@ -46,7 +46,7 @@ const useImageUploadHandler = (editor, selection) => {
             children: [{ text: '' }],
           },
         ],
-        { at: selection, select: true }
+        { select: true }
       );
 
       const newImageEntry = Editor.nodes(editor, {
@@ -87,7 +87,7 @@ const useImageUploadHandler = (editor, selection) => {
               children: [{ text: '' }],
             },
           ],
-          { at: selection, select: true }
+          { select: true }
         );
         ReactEditor.focus(editor);
       } catch (err) {
@@ -120,7 +120,7 @@ const useImageUploadHandler = (editor, selection) => {
       setIsFetching(false);
       event.target.value = null;
     },
-    [editor, selection, toast]
+    [editor, toast]
   );
 
   return { handler, isFetching };
