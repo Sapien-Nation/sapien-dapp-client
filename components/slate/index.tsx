@@ -203,7 +203,10 @@ const EditorField = () => {
         <Overlay
           actionIcon={<XIcon className="h-6 w-6" aria-hidden="true" />}
           show={view === View.Expanded}
-          onClose={() => setView(View.Normal)}
+          onClose={() => {
+            setView(View.Normal);
+            ReactEditor.focus(editor);
+          }}
         >
           <form
             className={tw`w-full rounded-xl px-4 py-2 flex flex-row pt-32 text-black`}
@@ -282,7 +285,10 @@ const EditorField = () => {
         {isEditorEmpty === false && view === View.Normal && (
           <button
             className={tw`self-end h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
-            onClick={() => setView(View.Expanded)}
+            onClick={() => {
+              setView(View.Expanded);
+              ReactEditor.focus(editor);
+            }}
             ref={tooltipRef.current?.setTriggerRef}
           >
             <ArrowsExpandIcon className={tw`h-6 w-6`} />
