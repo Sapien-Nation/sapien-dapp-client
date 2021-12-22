@@ -63,9 +63,7 @@ const AppLayout = ({ children }: Props) => {
               <Subscriber />
               <main className={tw`h-full flex`}>
                 <div className={tw`flex flex-col`}>
-                  <div
-                    className={tw`flex-1 flex min-h-0 border-r border-gray-200`}
-                  >
+                  <div className={tw`flex-1 flex min-h-0`}>
                     <TribeBar
                       tribes={tribes}
                       mobileMenuOpen={mobileMenuOpen}
@@ -82,9 +80,7 @@ const AppLayout = ({ children }: Props) => {
                       </div>
                     )}
                   </div>
-                  <div
-                    className={tw`flex-shrink-0 hidden lg:flex border-r border-gray-200`}
-                  >
+                  <div className={tw`flex-shrink-0 hidden lg:flex`}>
                     <Menu
                       as="div"
                       className={tw`w-full inline-block text-left`}

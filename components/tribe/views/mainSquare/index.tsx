@@ -65,7 +65,7 @@ const MainSquareView = ({
           >
             <div className={tw`flex`}>
               <img
-                className={tw`h-28 w-28 rounded-3xl ring-4 ring-white`}
+                className={tw`h-28 w-28 rounded-3xl ring-4 ring-white bg-gray-200`}
                 src={
                   avatar ||
                   'https://dutuyaq1w3dqh.cloudfront.net/images/sapien_logo.png'
@@ -95,13 +95,13 @@ const MainSquareView = ({
               >
                 <button
                   type="button"
-                  className={tw`inline-flex justify-center px-4 py-2  shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500`}
+                  className={tw`inline-flex justify-center px-4 py-2  shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none`}
                 >
                   <span>Join Tribe</span>
                 </button>
                 <button
                   type="button"
-                  className={tw`inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500`}
+                  className={tw`inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none`}
                 >
                   <span>Follow</span>
                 </button>

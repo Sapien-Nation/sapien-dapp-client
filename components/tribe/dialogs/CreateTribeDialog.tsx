@@ -273,7 +273,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           error={errors.identifier?.message}
                         />
                         <TextInput
-                          className={tw`block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md`}
+                          className={tw`block w-full rounded-md pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md`}
                           name="identifier"
                           placeholder="TheSapienTribe"
                           maxLength={20}
@@ -303,7 +303,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             name="description"
                             maxLength={1000}
                             placeholder="Describe your tribe"
-                            className={tw`shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-0 rounded-md`}
+                            className={tw`shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md`}
                             rules={{
                               validate: {
                                 maxLength: (value) => {
