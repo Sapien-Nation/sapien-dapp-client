@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { Popover, Transition } from '@headlessui/react';
 import { tw } from 'twind';
 
 // icons
 import { DotsHorizontalIcon, StarIcon } from '@heroicons/react/solid';
-import { ShoppingCartIcon } from '@heroicons/react/outline';
+import { ShoppingCartIcon, SwitchVerticalIcon } from '@heroicons/react/outline';
 
 enum WalletTabs {
   NFT,
@@ -89,12 +89,55 @@ const Wallet = () => {
         className={tw`flex justify-between items-center px-4 py-6 border-b border-gray-200`}
       >
         <h5 className={tw`text-xl font-extrabold`}>Wallet</h5>
-        <button
-          type="button"
-          className={tw`bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
-        >
-          <DotsHorizontalIcon className={tw`h-6 w-6`} aria-hidden="true" />
-        </button>
+        <Popover className="relative">
+          {({ open }) => (
+            <>
+              <Popover.Button
+                className={tw`bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
+              >
+                <DotsHorizontalIcon
+                  className={tw`h-6 w-6`}
+                  aria-hidden="true"
+                />
+              </Popover.Button>
+              <Transition
+                as={Fragment}
+                enter={tw`transition ease-out duration-200`}
+                enterFrom={tw`opacity-0 translate-y-1`}
+                enterTo={tw`opacity-100 translate-y-0`}
+                leave={tw`transition ease-in duration-150`}
+                leaveFrom={tw`opacity-100 translate-y-0`}
+                leaveTo={tw`opacity-0 translate-y-1`}
+              >
+                <Popover.Panel
+                  className={tw`absolute z-10 w-56 max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl`}
+                >
+                  <div
+                    className={tw`overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5`}
+                  >
+                    <div className={tw`relative bg-white p-1`}>
+                      <button
+                        className={tw`flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50`}
+                      >
+                        <div>
+                          <p
+                            className={tw`text-sm font-medium text-gray-900 flex items-center`}
+                          >
+                            <SwitchVerticalIcon
+                              className={tw`h-5 w-5 text-gray-400 mr-4`}
+                              aria-hidden="true"
+                            />
+                            Transaction History
+                          </p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </>
+          )}
+        </Popover>
       </div>
       <div className={tw`flex p-2`}>
         <button

@@ -83,7 +83,7 @@ const AppLayout = ({ children }: Props) => {
                     )}
                   </div>
                   <div
-                    className={tw`flex-shrink-0 flex border-r border-gray-200`}
+                    className={tw`flex-shrink-0 hidden lg:flex border-r border-gray-200`}
                   >
                     <Menu
                       as="div"
