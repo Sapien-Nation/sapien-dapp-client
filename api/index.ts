@@ -9,7 +9,8 @@ export const authInstance = axios.create({
 });
 
 export const notificationInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
+  // baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
+  baseURL: 'https://notif-sandbox.sapien.network/',
 });
 
 instance.interceptors.request.use((config) => {
