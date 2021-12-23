@@ -9,7 +9,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { tw } from 'twind';
 
 // components
-import TxHistory from './TxHistory';
+import TxHistory from 'components/wallet/TxHistory';
 import WorkInProgressView from 'components/common/views/WorkInProgressView';
 
 enum WalletTabs {
@@ -36,12 +36,16 @@ const Wallet = () => {
           onClick={() => setTab(WalletTabs.NFT)}
         >
           <StarIcon
-            className={tw`h-5 w-5 p-0.5 rounded-full border-2 border-gray-400`}
+            className={tw`h-5 w-5 p-0.5 rounded-full border-2 border-gray-400 ${
+              tab === WalletTabs.NFT && 'text-indigo-600 border-indigo-600'
+            }`}
           />
           My NFTs
         </button>
         <button
-          className={tw`text(gray-400 sm) group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale hover:grayscale-0`}
+          className={tw`text(gray-400 sm) group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale ${
+            tab === WalletTabs.Spn && 'grayscale-0'
+          }`}
           onClick={() => setTab(WalletTabs.Spn)}
         >
           <svg
@@ -50,7 +54,9 @@ const Wallet = () => {
             viewBox="0 0 18 18"
             width="18"
             xmlns="http://www.w3.org/2000/svg"
-            className={tw`opacity-60 group-hover:opacity-100`}
+            className={tw`${
+              tab === WalletTabs.Spn ? 'opacity-100' : 'opacity-60'
+            }`}
           >
             <path
               d="M9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18Z"
@@ -91,7 +97,11 @@ const Wallet = () => {
           className={tw`text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none`}
           onClick={() => setTab(WalletTabs.Store)}
         >
-          <ShoppingCartIcon className={tw`h-6 w-6 rounded-full`} />
+          <ShoppingCartIcon
+            className={tw`h-6 w-6 ${
+              tab === WalletTabs.Store && 'text-indigo-600'
+            } `}
+          />
           Store
         </button>
       </div>
