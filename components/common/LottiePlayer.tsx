@@ -14,19 +14,15 @@ const LottiePlayer = ({ lottie, width = '300px', height = '300px' }: Props) => {
   });
 
   return (
-    <div>
-      <main>
-        <lottie-player
-          id="firstLottie"
-          ref={ref}
-          autoplay
-          loop
-          mode="normal"
-          src={lottie}
-          style={{ width, height }}
-        ></lottie-player>
-      </main>
-    </div>
+    <lottie-player
+      id="firstLottie"
+      ref={ref}
+      autoplay
+      loop
+      mode="normal"
+      src={lottie}
+      style={{ width, height }}
+    />
   );
 };
 
