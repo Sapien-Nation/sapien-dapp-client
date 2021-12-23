@@ -57,7 +57,7 @@ const ExpandedEditor = ({ defaultValue, setView }: Props) => {
         setView(value);
       }}
     >
-      <>
+      <div className={tw`pt-20`}>
         <Slate
           editor={editor}
           value={value}
@@ -123,7 +123,7 @@ const ExpandedEditor = ({ defaultValue, setView }: Props) => {
             />
           </button>
         </div>
-      </>
+      </div>
     </Overlay>
   );
 };
