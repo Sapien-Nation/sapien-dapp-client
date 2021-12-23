@@ -7,9 +7,9 @@ import {
 } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
-import { createEditor } from 'slate';
+import { createEditor, Text } from 'slate';
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
 
@@ -41,6 +41,31 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
   const { handler: handleAddImage, isFetching: isUploadingImage } =
     useImage(editor);
 
+  const decorate = useCallback(([node, path]) => {
+    const ranges = [];
+    if (!Text.isText(node)) {
+      return ranges;
+    }
+    const match = node.text.match(/(ftp|http|https):\/\/\S+/);
+    if (match) {
+      const offset = node.text.indexOf(match[0]);
+
+      ranges.push({
+        link: true,
+        anchor: {
+          path,
+          offset,
+        },
+        focus: {
+          path,
+          offset: offset + match[0].length,
+        },
+      });
+    }
+
+    return ranges;
+  }, []);
+
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <form
@@ -56,6 +81,7 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
         onChange={(val: any) => setValue(val)}
       >
         <Editable
+          decorate={decorate}
           placeholder="What do you want to share?"
           renderLeaf={renderLeaf}
           renderElement={renderElement}

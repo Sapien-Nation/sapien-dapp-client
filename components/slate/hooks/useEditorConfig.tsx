@@ -1,5 +1,5 @@
-import { Transforms } from 'slate';
 import { DefaultLeaf } from 'slate-react';
+import { tw } from 'twind';
 
 // constants
 import { ElementType } from '../constants';
@@ -8,6 +8,13 @@ import { ElementType } from '../constants';
 import { Image as ImageElement, Paragraph, Video } from '../elements';
 
 const renderLeaf = (props) => {
+  if (props?.leaf.link) {
+    return (
+      <a {...props.attributes} className={tw`text-indigo-500`}>
+        {props.children}
+      </a>
+    );
+  }
   return <DefaultLeaf {...props} />;
 };
 
