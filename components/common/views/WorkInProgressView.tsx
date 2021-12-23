@@ -3,7 +3,7 @@ import { tw } from 'twind';
 // components
 import { LottiePlayer } from 'components/common';
 
-const WorkInProgress = () => (
+const WorkInProgressView = () => (
   <div className={tw`flex flex-col items-center`}>
     <LottiePlayer
       lottie="https://assets10.lottiefiles.com/packages/lf20_a9thB9.json"
@@ -16,4 +16,4 @@ const WorkInProgress = () => (
   </div>
 );
 
-export default WorkInProgress;
+export default WorkInProgressView;

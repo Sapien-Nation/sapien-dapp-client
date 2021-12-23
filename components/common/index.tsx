@@ -1,3 +1,4 @@
+export * from './dialogs';
 export * from './Toast';
 export * from './views';
 export * from './fields';
@@ -13,4 +14,3 @@ export { default as Redirect } from './Redirect';
 export { default as Tooltip } from './Tooltip';
 export { default as Spinner } from './Spinner';
 export { default as Query } from './Query';
-export { default as WorkInProgress } from './dialogs/WorkInProgress';

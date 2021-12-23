@@ -1,15 +1,16 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-import { tw } from 'twind';
-
-// icons
 import { DotsHorizontalIcon, StarIcon } from '@heroicons/react/solid';
 import {
   ArrowLeftIcon,
   ShoppingCartIcon,
   SwitchVerticalIcon,
 } from '@heroicons/react/outline';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { tw } from 'twind';
+
+// components
 import TxHistory from './TxHistory';
+import WorkInProgressView from 'components/common/views/WorkInProgressView';
 
 enum WalletTabs {
   NFT,
@@ -115,7 +116,7 @@ const Wallet = () => {
           <div
             className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
-            My Nft
+            <WorkInProgressView />
           </div>
         </Transition>
         <Transition
@@ -136,7 +137,7 @@ const Wallet = () => {
           <div
             className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
-            Spn
+            <WorkInProgressView />
           </div>
         </Transition>
         <Transition
@@ -153,7 +154,7 @@ const Wallet = () => {
           <div
             className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
           >
-            Store
+            <WorkInProgressView />
           </div>
         </Transition>
       </div>

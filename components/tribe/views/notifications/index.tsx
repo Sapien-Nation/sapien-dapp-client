@@ -1,5 +1,5 @@
 // components
-import { Head } from 'components/common';
+import { Head, WorkInProgressView } from 'components/common';
 import {
   BadgePost,
   BadgePriceUpdatedForAdmin,
@@ -80,6 +80,7 @@ const NotificationView = ({ tribeID }: Props) => {
           <li key={notification.id}>{renderNotification(notification)}</li>
         ))}
       </ul>
+      <WorkInProgressView />
     </>
   );
 };

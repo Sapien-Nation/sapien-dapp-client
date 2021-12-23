@@ -1,4 +1,4 @@
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 import {
   ChevronUpIcon,
   PlusSmIcon,
@@ -17,7 +17,7 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query } from 'components/common';
+import { Query, WorkInProgressDialog } from 'components/common';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
@@ -321,8 +321,12 @@ const TribeNavigation = () => {
       </div>
 
       {/* Dialogs */}
-      {dialog === Dialog.Channel && <></>}
-      {dialog === Dialog.Square && <></>}
+      {dialog === Dialog.Channel && (
+        <WorkInProgressDialog onClose={() => setDialog(null)} />
+      )}
+      {dialog === Dialog.Square && (
+        <WorkInProgressDialog onClose={() => setDialog(null)} />
+      )}
     </>
   );
 };
