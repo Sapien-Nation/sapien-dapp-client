@@ -27,7 +27,7 @@ const Overlay = ({ actionIcon, children, show, onClose }: props) => (
           <div className={tw`max-w-5xl w-full mx-auto relative`}>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => onClose()}
               className={tw`inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 absolute top-10 -right-10`}
             >
               {actionIcon}

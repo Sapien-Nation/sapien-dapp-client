@@ -27,9 +27,10 @@ const createEditorWithPlugins = pipe(withReact, withHistory);
 interface Props {
   defaultValue: Array<CustomElement>;
   setView: (value: Array<CustomElement>) => void;
+  onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
-const NormalEditor = ({ defaultValue, setView }: Props) => {
+const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const [value, setValue] = useState<Array<CustomElement>>(defaultValue);
 
@@ -42,7 +43,13 @@ const NormalEditor = ({ defaultValue, setView }: Props) => {
 
   //--------------------------------------------------------------------------------------------------------------------
   return (
-    <>
+    <form
+      className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit(value, editor);
+      }}
+    >
       <Slate
         editor={editor}
         value={value}
@@ -119,7 +126,7 @@ const NormalEditor = ({ defaultValue, setView }: Props) => {
       >
         <ArrowsExpandIcon className={tw`h-4 w-4`} />
       </button>
-    </>
+    </form>
   );
 };
 

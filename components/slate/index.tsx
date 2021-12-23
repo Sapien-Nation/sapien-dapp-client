@@ -1,20 +1,11 @@
-import { Popover, Transition } from '@headlessui/react';
-import {
-  EmojiHappyIcon,
-  PaperAirplaneIcon,
-  PhotographIcon,
-  XIcon,
-} from '@heroicons/react/outline';
-import { Picker } from 'emoji-mart';
-import pipe from 'lodash/fp/pipe';
-import { useMemo, useRef, useState } from 'react';
-import { withHistory } from 'slate-history';
-import { BaseEditor, createEditor } from 'slate';
-import { ReactEditor, withReact } from 'slate-react';
+import { useState } from 'react';
+import { BaseEditor } from 'slate';
+import { ReactEditor } from 'slate-react';
 import { tw } from 'twind';
 
 // components
 import { ExpandedEditor, NormalEditor } from './mainSquare';
+import { Overlay } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -23,8 +14,8 @@ import { useToast } from 'context/toast';
 // constants
 import { ElementType } from './constants';
 
-// hooks
-import { useEditorConfig, useImage } from './hooks';
+// icons
+import { CollapseIcon } from 'assets';
 
 // types
 import type { CustomElement, CustomText } from './types';
@@ -42,11 +33,9 @@ enum View {
   Normal,
 }
 
-const createEditorWithPlugins = pipe(withReact, withHistory);
-
 const EditorField = () => {
   const [view, setView] = useState<View>(View.Normal);
-  const [value, setValue] = useState<Array<CustomElement>>([
+  const [cacheValue, setCacheValue] = useState<Array<CustomElement>>([
     {
       children: [{ text: '' }],
       type: ElementType.Paragraph,
@@ -58,7 +47,7 @@ const EditorField = () => {
   const { me } = useAuth();
   const toast = useToast();
   //--------------------------------------------------------------------------------------------------------------------
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (values, editor) => {
     event.preventDefault();
     setIsFetching(true);
     try {
@@ -95,33 +84,25 @@ const EditorField = () => {
           }}
         />
         {view === View.Normal && (
-          <form
-            className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
+          <NormalEditor
+            defaultValue={cacheValue}
+            setView={(doc) => {
+              setCacheValue(doc);
+              setView(View.Expanded);
+            }}
             onSubmit={handleSubmit}
-          >
-            <NormalEditor
-              defaultValue={value}
-              setView={(newValue) => {
-                setValue(newValue);
-                setView(View.Expanded);
-              }}
-            />
-          </form>
+          />
         )}
 
         {view === View.Expanded && (
-          <form
-            className={tw`w-full rounded-xl px-4 py-2 flex flex-row pt-32 text-black`}
+          <ExpandedEditor
+            defaultValue={cacheValue}
+            setView={(doc) => {
+              setCacheValue(doc);
+              setView(View.Normal);
+            }}
             onSubmit={handleSubmit}
-          >
-            <ExpandedEditor
-              setView={(newValue) => {
-                setValue(newValue);
-                setView(View.Normal);
-              }}
-              defaultValue={value}
-            />
-          </form>
+          />
         )}
       </div>
     </>
