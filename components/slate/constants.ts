@@ -3,3 +3,8 @@ export enum ElementType {
   Paragraph = 'paragraph',
   Video = 'video',
 }
+
+export enum LeafType {
+  Hashtag,
+  Link,
+}

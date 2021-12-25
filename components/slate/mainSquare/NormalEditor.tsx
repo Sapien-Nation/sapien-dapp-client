@@ -7,14 +7,14 @@ import {
 } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
-import { createEditor, Text } from 'slate';
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import { createEditor } from 'slate';
+import { Editable, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
 
 // hooks
-import { useEditorConfig, useImage } from '../hooks';
+import { useDecorator, useEditorConfig, useImage } from '../hooks';
 
 // utils
 import { insertEmoji } from '../utils';
@@ -26,7 +26,7 @@ const createEditorWithPlugins = pipe(withReact, withHistory);
 
 interface Props {
   defaultValue: Array<CustomElement>;
-  setView: (value: Array<CustomElement>) => void;
+  setView: (value: Array<CustomElement>, selection: any) => void;
   onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
@@ -40,32 +40,7 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
   //--------------------------------------------------------------------------------------------------------------------
   const { handler: handleAddImage, isFetching: isUploadingImage } =
     useImage(editor);
-
-  const decorate = useCallback(([node, path]) => {
-    const ranges = [];
-    if (!Text.isText(node)) {
-      return ranges;
-    }
-    const match = node.text.match(/(ftp|http|https):\/\/\S+/);
-    if (match) {
-      const offset = node.text.indexOf(match[0]);
-
-      ranges.push({
-        link: true,
-        anchor: {
-          path,
-          offset,
-        },
-        focus: {
-          path,
-          offset: offset + match[0].length,
-        },
-      });
-    }
-
-    return ranges;
-  }, []);
-
+  const decorator = useDecorator();
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <form
@@ -81,7 +56,7 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
         onChange={(val: any) => setValue(val)}
       >
         <Editable
-          decorate={decorate}
+          decorate={decorator}
           placeholder="What do you want to share?"
           renderLeaf={renderLeaf}
           renderElement={renderElement}
@@ -146,8 +121,7 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
       <button
         className={tw`absolute top-0.5 right-0.5 self-end h-8 w-8 flex items-center text-gray-400 justify-center rounded-full hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
         onClick={() => {
-          setView(value);
-          ReactEditor.focus(editor);
+          setView(value, editor.selection);
         }}
       >
         <ArrowsExpandIcon className={tw`h-4 w-4`} />

@@ -2,20 +2,28 @@ import { DefaultLeaf } from 'slate-react';
 import { tw } from 'twind';
 
 // constants
-import { ElementType } from '../constants';
+import { ElementType, LeafType } from '../constants';
 
 // components
 import { Image as ImageElement, Paragraph, Video } from '../elements';
 
 const renderLeaf = (props) => {
-  if (props?.leaf.link) {
-    return (
-      <a {...props.attributes} className={tw`text-indigo-500`}>
-        {props.children}
-      </a>
-    );
+  switch (props?.leaf.type) {
+    case LeafType.Hashtag:
+      return (
+        <a {...props.attributes} className={tw`text-indigo-800`}>
+          {props.children}
+        </a>
+      );
+    case LeafType.Link:
+      return (
+        <a {...props.attributes} className={tw`text-indigo-500`}>
+          {props.children}
+        </a>
+      );
+    default:
+      return <DefaultLeaf {...props} />;
   }
-  return <DefaultLeaf {...props} />;
 };
 
 const renderElement = (props) => {

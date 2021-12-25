@@ -5,7 +5,6 @@ import { tw } from 'twind';
 
 // components
 import { ExpandedEditor, NormalEditor } from './mainSquare';
-import { Overlay } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -13,9 +12,6 @@ import { useToast } from 'context/toast';
 
 // constants
 import { ElementType } from './constants';
-
-// icons
-import { CollapseIcon } from 'assets';
 
 // types
 import type { CustomElement, CustomText } from './types';
@@ -86,9 +82,11 @@ const EditorField = () => {
         {view === View.Normal && (
           <NormalEditor
             defaultValue={cacheValue}
-            setView={(doc) => {
+            setView={(doc, selection) => {
               setCacheValue(doc);
               setView(View.Expanded);
+              // TODO handle set editor selection for better UX
+              console.log(selection);
             }}
             onSubmit={handleSubmit}
           />
@@ -97,9 +95,11 @@ const EditorField = () => {
         {view === View.Expanded && (
           <ExpandedEditor
             defaultValue={cacheValue}
-            setView={(doc) => {
+            setView={(doc, selection) => {
               setCacheValue(doc);
               setView(View.Normal);
+              // TODO handle set editor selection for better UX
+              console.log(selection);
             }}
             onSubmit={handleSubmit}
           />

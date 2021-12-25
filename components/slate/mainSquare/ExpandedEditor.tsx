@@ -3,14 +3,13 @@ import {
   EmojiHappyIcon,
   PaperAirplaneIcon,
   PhotographIcon,
-  XIcon,
 } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import pipe from 'lodash/fp/pipe';
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
-import { createEditor, Text } from 'slate';
-import { Editable, Slate, withReact } from 'slate-react';
+import { createEditor } from 'slate';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
 
 // components
@@ -20,7 +19,7 @@ import { Overlay } from 'components/common';
 import { CollapseIcon } from 'assets';
 
 // hooks
-import { useEditorConfig, useImage } from '../hooks';
+import { useDecorator, useEditorConfig, useImage } from '../hooks';
 
 // utils
 import { insertEmoji } from '../utils';
@@ -32,7 +31,7 @@ const createEditorWithPlugins = pipe(withReact, withHistory);
 
 interface Props {
   defaultValue: Array<CustomElement>;
-  setView: (value: Array<CustomElement>) => void;
+  setView: (value: Array<CustomElement>, selection: any) => void;
   onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
@@ -40,39 +39,19 @@ const ExpandedEditor = ({ defaultValue, setView, onSubmit }: Props) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const [value, setValue] = useState<Array<CustomElement>>(defaultValue);
 
+  useEffect(() => {
+    setTimeout(() => {
+      ReactEditor.focus(editor);
+    }, 500);
+  }, [editor]);
+
   const { renderLeaf, renderElement } = useEditorConfig(editor);
 
   const fileRef = useRef(null);
   //--------------------------------------------------------------------------------------------------------------------
   const { handler: handleAddImage, isFetching: isUploadingImage } =
     useImage(editor);
-
-  const decorate = useCallback(([node, path]) => {
-    const ranges = [];
-    if (!Text.isText(node)) {
-      return ranges;
-    }
-
-    const match = node.text.match(/(ftp|http|https):\/\/\S+/);
-    if (match) {
-      const offset = node.text.indexOf(match[0]);
-
-      ranges.push({
-        link: true,
-        anchor: {
-          path,
-          offset,
-        },
-        focus: {
-          path,
-          offset: offset + match[0].length,
-        },
-      });
-    }
-
-    return ranges;
-  }, []);
-
+  const decorator = useDecorator();
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <Overlay
@@ -81,7 +60,7 @@ const ExpandedEditor = ({ defaultValue, setView, onSubmit }: Props) => {
       }
       show
       onClose={() => {
-        setView(value);
+        setView(value, editor.selection);
       }}
     >
       <form
@@ -98,7 +77,7 @@ const ExpandedEditor = ({ defaultValue, setView, onSubmit }: Props) => {
             onChange={(doc: any) => setValue(doc)}
           >
             <Editable
-              decorate={decorate}
+              decorate={decorator}
               placeholder="What do you want to share?"
               renderLeaf={renderLeaf}
               renderElement={renderElement}
