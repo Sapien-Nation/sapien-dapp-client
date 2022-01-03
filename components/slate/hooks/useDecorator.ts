@@ -5,7 +5,9 @@ import { Text } from 'slate';
 import { LeafType } from 'components/slate/constants';
 
 export const isNodeAHashtag = (node, path) => {
-  const match = node.text.match(/^#[^ !@#$%^&*(),.?":{}|<>]*$/);
+  const match = node.text.match(
+    /(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/g
+  );
   if (match) {
     const offset = node.text.indexOf(match[0]);
 
