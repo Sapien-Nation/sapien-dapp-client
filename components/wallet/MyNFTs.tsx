@@ -2,6 +2,7 @@ import { useState, Fragment, useEffect, useRef } from 'react';
 import { tw } from 'twind';
 import { Transition } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon } from '@heroicons/react/solid';
 
 // components
 import { NumericInputCounter } from 'components/common';
@@ -34,6 +35,21 @@ const NFTMock = [
 ];
 
 const UsersMock = [
+  {
+    id: '1',
+    userName: 'javierocanas',
+    displayName: 'Javier Ocanas',
+  },
+  {
+    id: '2',
+    userName: 'sandyflores',
+    displayName: 'Sandy Flores',
+  },
+  {
+    id: '3',
+    userName: 'aaronlugo',
+    displayName: 'Aaron Lugo',
+  },
   {
     id: '1',
     userName: 'javierocanas',
@@ -215,7 +231,13 @@ const MyNFTs = () => {
           }`}
           leaveFrom={tw`translate-x-0`}
         >
-          <div className={tw`flex w-full h-96 absolute`}>
+          <div className={tw`flex flex-col w-full h-96 absolute`}>
+            <div className={tw`flex items-center font-bold text-xs px-5 mb-2`}>
+              <button onClick={() => setStep(MyNFTsSteps.BadgesList)}>
+                <ArrowLeftIcon className={tw`h-4 h-4 mr-1`} />
+              </button>{' '}
+              Receiver
+            </div>
             <div className={tw`w-full px-5 py-1`}>
               <div className={tw`relative w-full mb-3`}>
                 <span
@@ -237,34 +259,35 @@ const MyNFTs = () => {
                   autoComplete="off"
                 />
               </div>
-
-              {filteredUsers.map((user) => (
-                <button
-                  onClick={() => setStep(MyNFTsSteps.Confirmation)}
-                  key={user.id}
-                  className={tw`flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer focus:outline-none hover:bg-gray-50`}
-                >
-                  <div className={tw`flex items-center`}>
-                    <span className={tw`inline-block relative rounded-full`}>
-                      <img
-                        className={tw`h-10 w-10 rounded-full`}
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
-                    </span>
-                  </div>
-                  <div className={tw`flex items-center ml-4`}>
-                    <div className={tw`flex gap-2`}>
-                      <span className={tw`text-xs font-bold`}>
-                        {user.displayName}
-                      </span>
-                      <span className={tw`text(xs gray-500)`}>
-                        @{user.userName}
+              <div className={tw`max-h-52 overflow-scroll`}>
+                {filteredUsers.map((user) => (
+                  <button
+                    onClick={() => setStep(MyNFTsSteps.Confirmation)}
+                    key={user.id}
+                    className={tw`flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer focus:outline-none hover:bg-gray-50`}
+                  >
+                    <div className={tw`flex items-center`}>
+                      <span className={tw`inline-block relative rounded-full`}>
+                        <img
+                          className={tw`h-10 w-10 rounded-full`}
+                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          alt=""
+                        />
                       </span>
                     </div>
-                  </div>
-                </button>
-              ))}
+                    <div className={tw`flex items-center ml-4`}>
+                      <div className={tw`flex gap-2`}>
+                        <span className={tw`text-xs font-bold`}>
+                          {user.displayName}
+                        </span>
+                        <span className={tw`text(xs gray-500)`}>
+                          @{user.userName}
+                        </span>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
               <div
                 onClick={() => {
                   if (step === MyNFTsSteps.ReceiversList) {
