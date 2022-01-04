@@ -211,10 +211,7 @@ const AppLayout = ({ children }: Props) => {
                                     <span className={tw`ml-2`}>0</span>
                                   </span>
                                 </span>
-                                <SelectorIcon
-                                  className="flex-shrink-0 h-5 w-5 text-gray-500 mr-4 group-hover:text-gray-500"
-                                  aria-hidden="true"
-                                />
+                                <SelectorIcon className="flex-shrink-0 h-5 w-5 text-gray-500 mr-4 group-hover:text-gray-500" />
                               </div>
                             </span>
                           </span>

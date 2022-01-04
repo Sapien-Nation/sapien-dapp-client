@@ -1,11 +1,11 @@
 import { useState, Fragment, useEffect, useRef } from 'react';
 import { tw } from 'twind';
 import { Transition } from '@headlessui/react';
-
+import { useFormContext } from 'react-hook-form';
 import { SearchIcon } from '@heroicons/react/outline';
 
 // components
-import WorkInProgressView from 'components/common/views/WorkInProgressView';
+import { NumericInputCounter } from 'components/common';
 
 enum MyNFTsSteps {
   BadgesList,
@@ -55,6 +55,8 @@ const UsersMock = [
 const MyNFTs = () => {
   const [step, setStep] = useState<MyNFTsSteps>(MyNFTsSteps.BadgesList);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const { watch, register, setValue } = useFormContext();
+  const watchBadgesAmount = watch('badgesAmount');
 
   const filteredNFTs = searchTerm
     ? NFTMock.filter(({ name }) =>
@@ -265,6 +267,40 @@ const MyNFTs = () => {
                   </div>
                 </button>
               ))}
+              <div
+                onClick={() => setStep(MyNFTsSteps.ReceiversList)}
+                className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+              >
+                <div className={tw`flex items-center`}>
+                  <span
+                    className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
+                  >
+                    <img
+                      className={tw`h-10 w-10 rounded-full border-4 border-white`}
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                  </span>
+                </div>
+                <div className={tw`flex items-center ml-4`}>
+                  <div className={tw`flex flex-col`}>
+                    <span className={tw`text-xs font-bold`}>
+                      This is NFT Name
+                    </span>
+                    <span className={tw`text(xs gray-500)`}>
+                      NF description
+                    </span>
+                  </div>
+                </div>
+                <div className={tw`flex items-center ml-auto gap-2`}>
+                  <NumericInputCounter
+                    name="badgesAmount"
+                    register={register}
+                    setValue={setValue}
+                    watchBadgesAmount={watchBadgesAmount}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </Transition>

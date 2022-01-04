@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/outline';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { tw } from 'twind';
+import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import TxHistory from 'components/wallet/TxHistory';
@@ -22,6 +23,13 @@ enum WalletTabs {
 
 const Wallet = () => {
   const [tab, setTab] = useState<WalletTabs>(WalletTabs.NFT);
+
+  const methods = useForm({
+    defaultValues: {
+      badgesAmount: 1,
+      terms: false,
+    },
+  });
 
   const prevTabReference = useRef<WalletTabs>();
   useEffect(() => {
@@ -241,7 +249,11 @@ const Wallet = () => {
       </div>
       {tab !== WalletTabs.TxHistory && renderMenu()}
       <div className={tw`h-96 overflow-hidden`}>
-        {tab === WalletTabs.TxHistory ? <TxHistory /> : renderTab()}
+        {tab === WalletTabs.TxHistory ? (
+          <TxHistory />
+        ) : (
+          <FormProvider {...methods}>{renderTab()}</FormProvider>
+        )}
       </div>
       {tab === WalletTabs.TxHistory && <div className={tw`h-16`}></div>}
     </>
