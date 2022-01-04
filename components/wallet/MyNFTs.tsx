@@ -1,7 +1,6 @@
 import { useState, Fragment, useEffect, useRef } from 'react';
 import { tw } from 'twind';
 import { Transition } from '@headlessui/react';
-import { useFormContext } from 'react-hook-form';
 import { SearchIcon } from '@heroicons/react/outline';
 
 // components
@@ -55,9 +54,14 @@ const UsersMock = [
 const MyNFTs = () => {
   const [step, setStep] = useState<MyNFTsSteps>(MyNFTsSteps.BadgesList);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { watch, register, setValue } = useFormContext();
-  const watchBadgesAmount = watch('badgesAmount');
 
+  const prevStepReference = useRef<MyNFTsSteps>();
+  useEffect(() => {
+    prevStepReference.current = step;
+  });
+  const prevStep = prevStepReference.current;
+
+  // TODO remove this data
   const filteredNFTs = searchTerm
     ? NFTMock.filter(({ name }) =>
         name.toLocaleLowerCase().includes(searchTerm)
@@ -70,14 +74,8 @@ const MyNFTs = () => {
       )
     : UsersMock;
 
-  const prevStepReference = useRef<MyNFTsSteps>();
-  useEffect(() => {
-    prevStepReference.current = step;
-  });
-  const prevStep = prevStepReference.current;
-
-  const renderStep = () => {
-    return (
+  return (
+    <div>
       <div className={tw`flex w-full h-96 absolute`}>
         <Transition
           show={step === MyNFTsSteps.BadgesList}
@@ -268,7 +266,12 @@ const MyNFTs = () => {
                 </button>
               ))}
               <div
-                onClick={() => setStep(MyNFTsSteps.ReceiversList)}
+                onClick={() => {
+                  if (step === MyNFTsSteps.ReceiversList) {
+                    return;
+                  }
+                  setStep(MyNFTsSteps.ReceiversList);
+                }}
                 className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
               >
                 <div className={tw`flex items-center`}>
@@ -293,12 +296,7 @@ const MyNFTs = () => {
                   </div>
                 </div>
                 <div className={tw`flex items-center ml-auto gap-2`}>
-                  <NumericInputCounter
-                    name="badgesAmount"
-                    register={register}
-                    setValue={setValue}
-                    watchBadgesAmount={watchBadgesAmount}
-                  />
+                  <NumericInputCounter name="badgesAmount" />
                 </div>
               </div>
             </div>
@@ -329,10 +327,8 @@ const MyNFTs = () => {
           </div>
         </Transition>
       </div>
-    );
-  };
-
-  return <div>{renderStep()}</div>;
+    </div>
+  );
 };
 
 export default MyNFTs;

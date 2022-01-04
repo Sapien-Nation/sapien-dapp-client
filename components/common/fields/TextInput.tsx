@@ -16,6 +16,7 @@ const TextInput = ({
   maxLength = 100,
   replaceWhiteSpace = false,
   rules = {},
+  inputMode,
   ...rest
 }: Props) => {
   const { register } = useFormContext();
@@ -38,6 +39,7 @@ const TextInput = ({
             return false;
           }
         }
+
         return true;
       }}
       {...rest}
@@ -50,6 +52,11 @@ const TextInput = ({
           if (value.length > maxLength) {
             value = value.slice(0, maxLength);
           }
+
+          if (inputMode === 'numeric' && Number(value) > maxLength) {
+            value = maxLength;
+          }
+
           event.target.value = value;
         },
       })}

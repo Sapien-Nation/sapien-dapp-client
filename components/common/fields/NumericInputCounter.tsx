@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import { tw } from 'twind';
 
 // components
@@ -6,67 +7,61 @@ import { TextInput } from 'components/common';
 // icons
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/outline';
 
-const NumericInputCounter = ({
-  name,
-  watchBadgesAmount,
-  setValue,
-  register,
-}) => {
+interface Props {
+  maxLength?: number;
+  name: string;
+}
+
+const NumericInputCounter = ({ maxLength = 99, name }: Props) => {
+  const { getValues, setValue, watch } = useFormContext();
+
   const handleIncrement = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    setValue(name, Number(watchBadgesAmount) + 1, {
-      shouldValidate: true,
-    });
+
+    const amount = Number(getValues(name));
+    if (amount < maxLength) {
+      setValue(name, amount + 1);
+    }
   };
 
   const handleDecrement = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (Number(watchBadgesAmount) < 2) return;
-    setValue(name, Number(watchBadgesAmount) - 1, {
-      shouldValidate: true,
-    });
+    const amount = Number(getValues(name));
+
+    if (amount >= 1) {
+      setValue(name, amount - 1);
+    }
   };
+
+  const [watchedValue] = watch([name]);
+
   return (
     <div>
       <button
-        aria-label="Decrement amount"
-        disabled={Number(watchBadgesAmount) < 2}
+        aria-label="Decrement badge amount"
+        disabled={Number(watchedValue) === 1}
         onClick={handleDecrement}
         className={tw`bg-gray-100 rounded-full p-1`}
       >
         <MinusSmIcon className={tw`h-4 w-4`} aria-hidden="true" />
       </button>
       <TextInput
-        style={{
-          width:
-            36 +
-            (String(watchBadgesAmount)?.length > 1 &&
-              String(watchBadgesAmount)?.length) *
-              5,
-          height: 34,
-          minHeight: 32,
-        }}
         name={name}
-        id="badges-amount"
-        type="number"
-        {...register(name, {
-          validate: {
-            positive: (value: string) => {
-              if (parseInt(value) < 1 || !value) {
-                return 'Value should be more than 0';
-              } else if (value.length > 2) {
-                return 'Max badges amount is 99';
-              } else {
-                return true;
-              }
-            },
-          },
-        })}
+        className={tw`w-10`}
+        type="text"
+        inputMode="numeric"
+        pattern={/^\d+$/}
+        maxLength={maxLength}
+        rules={{
+          maxLength: { value: maxLength + 1, message: 'is to long' },
+          required: { value: true, message: 'is required' },
+        }}
       />
       <button
-        aria-label="Increment amount"
+        aria-label="Increment badge amount"
+        disabled={Number(watchedValue) > maxLength}
         onClick={handleIncrement}
         className={tw`bg-gray-100 rounded-full p-1`}
       >
