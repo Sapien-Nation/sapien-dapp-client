@@ -41,7 +41,9 @@ const Wallet = () => {
     return (
       <div className={tw`flex p-2`}>
         <button
-          className={tw`text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none`}
+          className={tw`text(gray-400 sm) ${
+            tab === WalletTabs.NFT && 'text-black'
+          } gap-1.5 font-bold flex items-center p-3 focus:outline-none`}
           onClick={() => setTab(WalletTabs.NFT)}
         >
           <StarIcon
@@ -52,7 +54,9 @@ const Wallet = () => {
           My NFTs
         </button>
         <button
-          className={tw`text(gray-400 sm) group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale ${
+          className={tw`text(gray-400 sm) ${
+            tab === WalletTabs.Spn && 'text-black'
+          } group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale ${
             tab === WalletTabs.Spn && 'grayscale-0'
           }`}
           onClick={() => setTab(WalletTabs.Spn)}
@@ -103,7 +107,9 @@ const Wallet = () => {
           Spn
         </button>
         <button
-          className={tw`text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none`}
+          className={tw`text(gray-400 sm) ${
+            tab === WalletTabs.Store && 'text-black'
+          } gap-1.5 p-3 font-bold flex items-center focus:outline-none`}
           onClick={() => setTab(WalletTabs.Store)}
         >
           <ShoppingCartIcon
