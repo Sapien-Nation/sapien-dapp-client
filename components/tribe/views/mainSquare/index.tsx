@@ -140,13 +140,17 @@ const MainSquareView = ({
           ))}
           {/* <span>Current Posts {posts.length}</span> */}
           {data?.nextCursor && (
-            <button
-              onClick={() => {
-                setCursor(data.nextCursor);
-              }}
-            >
-              Load More
-            </button>
+            <div className={tw`text-center mb-5`}>
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => {
+                  setCursor(data.nextCursor);
+                }}
+              >
+                Load More
+              </button>
+            </div>
           )}
         </div>
       </div>
