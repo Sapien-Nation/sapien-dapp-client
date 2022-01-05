@@ -336,17 +336,71 @@ const MyNFTs = () => {
           leaveFrom={tw`translate-x-0`}
           leaveTo={tw`translate-x-full`}
         >
-          <div
-            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
-          >
-            <button
-              className={tw`text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none`}
-              onClick={() => setStep(MyNFTsSteps.ReceiversList)}
-            >
-              Go back
-            </button>
-            New life
-            {/* <WorkInProgressView /> */}
+          <div className={tw`flex flex-col w-full h-96 absolute`}>
+            <div className={tw`flex items-center font-bold text-xs px-5 mb-2`}>
+              <button onClick={() => setStep(MyNFTsSteps.ReceiversList)}>
+                <ArrowLeftIcon className={tw`h-4 h-4 mr-1`} />
+              </button>{' '}
+              Confirmation
+            </div>
+            <div className={tw`w-full px-5 py-1`}>
+              <div
+                className={tw`flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer bg-gray-50`}
+              >
+                <div className={tw`flex items-center`}>
+                  <span className={tw`inline-block relative rounded-full`}>
+                    <img
+                      className={tw`h-10 w-10 rounded-full`}
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                  </span>
+                </div>
+                <div className={tw`flex items-center ml-4`}>
+                  <div className={tw`flex flex-col gap-1`}>
+                    <span className={tw`text-xs font-bold`}>Javier Ocanas</span>
+                    <span className={tw`text(xs gray-500)`}>@javierocanas</span>
+                  </div>
+                </div>
+              </div>
+              <h2 className={tw`text(gray-400 xs) font-bold uppercase mt-4`}>
+                Will Receive
+              </h2>
+              <div
+                className={tw`flex flex-col items-center w-full text-left py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+              >
+                <div className={tw`flex items-center`}>
+                  <span
+                    className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
+                  >
+                    <img
+                      className={tw`h-14 w-14 rounded-full border-4 border-white`}
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt=""
+                    />
+                  </span>
+                </div>
+                <div className={tw`flex items-center mt-4`}>
+                  <div className={tw`flex flex-col items-center`}>
+                    <span className={tw`text-md font-bold`}>
+                      This is NFT Name (x2)
+                    </span>
+                    <span className={tw`text(sm gray-400) mt-2`}>
+                      NF description
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={tw`px-5 py-2.5 absolute bottom-2 w-full`}>
+              <button
+                type="submit"
+                className={tw`
+            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+              >
+                Gift Token
+              </button>
+            </div>
           </div>
         </Transition>
       </div>
