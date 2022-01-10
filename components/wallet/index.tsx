@@ -13,6 +13,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import TxHistory from 'components/wallet/TxHistory';
 import WorkInProgressView from 'components/common/views/WorkInProgressView';
 import MyNFTs from 'components/wallet/MyNFTs';
+import Store from 'components/wallet/Store';
 
 enum WalletTabs {
   NFT,
@@ -174,10 +175,8 @@ const Wallet = () => {
           leaveFrom={tw`translate-x-0`}
           leaveTo={tw`translate-x-full`}
         >
-          <div
-            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
-          >
-            <WorkInProgressView />
+          <div>
+            <Store />
           </div>
         </Transition>
       </div>
