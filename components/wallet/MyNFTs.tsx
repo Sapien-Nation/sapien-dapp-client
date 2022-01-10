@@ -36,32 +36,32 @@ const NFTMock = [
 
 const UsersMock = [
   {
-    id: '1',
+    id: 'u1',
     userName: 'javierocanas',
     displayName: 'Javier Ocanas',
   },
   {
-    id: '2',
+    id: 'u2',
     userName: 'sandyflores',
     displayName: 'Sandy Flores',
   },
   {
-    id: '3',
+    id: 'u3',
     userName: 'aaronlugo',
     displayName: 'Aaron Lugo',
   },
   {
-    id: '1',
+    id: 'u4',
     userName: 'javierocanas',
     displayName: 'Javier Ocanas',
   },
   {
-    id: '2',
+    id: 'u5',
     userName: 'sandyflores',
     displayName: 'Sandy Flores',
   },
   {
-    id: '3',
+    id: 'u6',
     userName: 'aaronlugo',
     displayName: 'Aaron Lugo',
   },
@@ -132,7 +132,10 @@ const MyNFTs = () => {
 
               {filteredNFTs.map((NFT) => (
                 <button
-                  onClick={() => setStep(MyNFTsSteps.ReceiversList)}
+                  onClick={() => {
+                    setSearchTerm('');
+                    setStep(MyNFTsSteps.ReceiversList);
+                  }}
                   key={NFT.id}
                   className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
                 >
@@ -233,7 +236,12 @@ const MyNFTs = () => {
         >
           <div className={tw`flex flex-col w-full h-96 absolute`}>
             <div className={tw`flex items-center font-bold text-xs px-5 mb-2`}>
-              <button onClick={() => setStep(MyNFTsSteps.BadgesList)}>
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setStep(MyNFTsSteps.BadgesList);
+                }}
+              >
                 <ArrowLeftIcon className={tw`h-4 h-4 mr-1`} />
               </button>{' '}
               Receiver
