@@ -53,7 +53,7 @@ const Store = () => {
 
   return (
     <div>
-      <div className={tw`flex w-full h-96 absolute`}>
+      <div className={tw`flex w-full h-96 absolute overflow-scroll`}>
         <Transition
           show={step === StoreSteps.BadgesList}
           as={Fragment}
@@ -330,7 +330,7 @@ const Store = () => {
                 Will Receive
               </h2>
               <div
-                className={tw`flex flex-col items-center w-full text-left py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+                className={tw`max-h-52 overflow-scroll flex flex-col items-center w-full text-left py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
               >
                 <div className={tw`flex items-center`}>
                   <span
@@ -354,8 +354,30 @@ const Store = () => {
                   </div>
                 </div>
               </div>
+              <div className={tw`flex flex-col items-center w-full`}>
+                <div
+                  className={tw`flex flex items-center justify-between w-full`}
+                >
+                  <span>Badges cost</span>
+                  <span>500 SPN</span>
+                </div>
+                <div
+                  className={tw`flex flex items-center justify-between w-full`}
+                >
+                  <span>Transaction fee</span>
+                  <span>5%</span>
+                </div>
+                <div
+                  className={tw`flex flex items-center justify-between w-full`}
+                >
+                  <span className={tw`font-extrabold`}>Total</span>
+                  <span className={tw`font-extrabold text-sapien`}>
+                    525 SPN
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className={tw`px-5 py-2.5 absolute bottom-2 w-full`}>
+            <div className={tw`px-5 py-2.5 bottom-2 w-full`}>
               <button
                 type="submit"
                 className={tw`

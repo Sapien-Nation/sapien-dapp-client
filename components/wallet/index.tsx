@@ -1,5 +1,10 @@
 import { Popover, Transition } from '@headlessui/react';
-import { DotsHorizontalIcon, StarIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
+import {
+  DotsHorizontalIcon,
+  StarIcon,
+  LogoutIcon,
+} from '@heroicons/react/solid';
 import {
   ArrowLeftIcon,
   ShoppingCartIcon,
@@ -244,6 +249,24 @@ const Wallet = () => {
                           </p>
                         </div>
                       </button>
+                    </div>
+                    <div className={tw`relative bg-white p-1`}>
+                      <div
+                        className={tw`flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50`}
+                      >
+                        <Link href={`/logout`}>
+                          <a
+                            href="#"
+                            className={tw`text-sm font-medium text-gray-900 flex items-center`}
+                          >
+                            <LogoutIcon
+                              className={tw`h-5 w-5 text-gray-400 mr-4`}
+                              aria-hidden="true"
+                            />
+                            Disconnect
+                          </a>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </Popover.Panel>

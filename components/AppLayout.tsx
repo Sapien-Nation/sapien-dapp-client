@@ -3,7 +3,6 @@ import { MenuIcon, SelectorIcon } from '@heroicons/react/outline';
 import { tw } from 'twind';
 import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
-import Link from 'next/link';
 
 // components
 import { Head, Redirect, Query } from 'components/common';
@@ -100,25 +99,6 @@ const AppLayout = ({ children }: Props) => {
                           >
                             <div className={tw`h-full`}>
                               <Wallet />
-                            </div>
-                            <div className={tw`py-1`}>
-                              <Menu.Item>
-                                {({ active }) => (
-                                  <Link href={`/logout`}>
-                                    <a
-                                      href="#"
-                                      className={tw`${
-                                        active
-                                          ? 'bg-gray-100 text-gray-900'
-                                          : 'text-gray-700'
-                                      }
-                          block px-4 py-2 text-sm`}
-                                    >
-                                      Logout
-                                    </a>
-                                  </Link>
-                                )}
-                              </Menu.Item>
                             </div>
                           </Menu.Items>
                         </Transition>
