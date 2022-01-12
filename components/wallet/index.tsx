@@ -16,6 +16,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import TxHistory from 'components/wallet/TxHistory';
+import { NoSpn } from './EmptyState';
 import WorkInProgressView from 'components/common/views/WorkInProgressView';
 import MyNFTs from 'components/wallet/MyNFTs';
 import Store from 'components/wallet/Store';
@@ -163,10 +164,8 @@ const Wallet = () => {
           }`}
           leaveFrom={tw`translate-x-0`}
         >
-          <div
-            className={tw`flex justify-center items-center w-full h-96 absolute bg-gray-300`}
-          >
-            <WorkInProgressView />
+          <div>
+            <NoSpn />
           </div>
         </Transition>
         <Transition
