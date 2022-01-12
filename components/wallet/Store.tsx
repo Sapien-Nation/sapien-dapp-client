@@ -5,7 +5,7 @@ import { SearchIcon, XIcon, ShoppingCartIcon } from '@heroicons/react/outline';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
 
 // components
-import { NumericInputCounter } from 'components/common';
+import { NumericInputCounter, Checkbox } from 'components/common';
 
 import { StoreSteps } from 'components/wallet/WalletEnums';
 
@@ -350,7 +350,7 @@ const Store = () => {
                   </div>
                 </div>
               </div>
-              <div className={tw`flex flex-col items-center w-full`}>
+              <div className={tw`flex gap-2 flex-col items-center w-full`}>
                 <div
                   className={tw`flex flex items-center justify-between w-full`}
                 >
@@ -372,8 +372,37 @@ const Store = () => {
                   </span>
                 </div>
               </div>
+              <div
+                className={tw`px-8 py-4 mt-4 text(center gray-400 xs) rounded-md bg-gray-50`}
+              >
+                Remaining balance: 3,082 SPN
+              </div>
             </div>
             <div className={tw`px-5 py-2.5 bottom-2 w-full`}>
+              <div className={tw`flex items-center justify-center mb-4`}>
+                <Checkbox
+                  name="terms"
+                  className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
+                  aria-invalid="true"
+                  aria-describedby="terms-error"
+                  label={
+                    <label
+                      htmlFor="terms"
+                      className={tw`ml-2 block text-gray-900`}
+                    >
+                      I agree to{' '}
+                      <a
+                        className={tw`text-blue-500`}
+                        href="https://common.sapien.network/terms.html"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Terms & Conditions
+                      </a>{' '}
+                    </label>
+                  }
+                />
+              </div>
               <button
                 type="submit"
                 className={tw`
