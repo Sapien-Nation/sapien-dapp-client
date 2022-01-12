@@ -7,11 +7,8 @@ import { ArrowLeftIcon } from '@heroicons/react/solid';
 // components
 import { NumericInputCounter } from 'components/common';
 
-enum MyNFTsSteps {
-  BadgesList,
-  ReceiversList,
-  Confirmation,
-}
+// enums
+import { MyNFTsSteps } from 'components/wallet/WalletEnums';
 
 const NFTMock = [
   {
