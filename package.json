@@ -19,6 +19,7 @@
     "axios": "^0.24.0",
     "deep-equal": "^2.0.5",
     "emoji-mart": "^3.0.1",
+    "escape-html": "^1.0.3",
     "install": "^0.13.0",
     "lodash": "^4.17.21",
     "next": "latest",
