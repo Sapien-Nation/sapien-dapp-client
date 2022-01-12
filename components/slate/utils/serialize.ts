@@ -14,13 +14,15 @@ export const serialize = (node) => {
 
   switch (node.type) {
     case ElementType.Paragraph:
-      if (children.match(/(ftp|http|https):\/\/\S+/)) {
-        return `<a href='${children}'>${children}</a>`;
-      }
-      if (children.match(/(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/g)) {
-        return `<p>#${children}</>`;
-      }
-      return `<p>${children}</p>`;
+      return `<p>${children?.split(' ').map((elem) => {
+        if (elem.match(/(ftp|http|https):\/\/\S+/)) {
+          return `<a href='${elem}'>${elem}</a>`;
+        }
+        if (elem.match(/(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/g)) {
+          return `<span>#${elem}</span>`;
+        }
+        return `<p>${elem}</p>`;
+      })}</p>`;
     case ElementType.Image:
       return `<div>
                 <img
