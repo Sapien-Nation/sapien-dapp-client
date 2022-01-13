@@ -16,6 +16,9 @@ import { ElementType } from './constants';
 // types
 import type { CustomElement, CustomText } from './types';
 
+// utils
+import { serialize } from './utils';
+
 declare module 'slate' {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor;
@@ -43,17 +46,15 @@ const EditorField = () => {
   const { me } = useAuth();
   const toast = useToast();
   //--------------------------------------------------------------------------------------------------------------------
-  const handleSubmit = async (values, editor) => {
-    event.preventDefault();
+  const handleSubmit = async (values) => {
     setIsFetching(true);
     try {
-      console.log(`submitting...`);
-      // TODO serializer and API call
+      console.log(
+        values.map((node: CustomElement) => serialize(node)).join('')
+      );
     } catch (error) {
       toast({
-        message:
-          error ||
-          'Error while creating the content, please try again in 10seconds',
+        message: error || 'Error while creating the content, please try again',
       });
     }
     setIsFetching(false);
