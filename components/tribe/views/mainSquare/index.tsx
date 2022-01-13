@@ -32,7 +32,7 @@ const MainSquareView = ({
     cursor ? `?nextCursor=${cursor}` : ''
   }`;
 
-  const { error, data, isValidating } = useSWR(apiKey, {
+  const { error, data, isValidating, mutate } = useSWR(apiKey, {
     onSuccess: ({ data: successData }) => {
       if (successData.length > 0) {
         setPosts([...posts, ...successData]);
@@ -126,7 +126,7 @@ const MainSquareView = ({
           </button>
         </div>
         <div className={tw`flex justify-center bg-gray-50`}>
-          <Editor />
+          <Editor tribeID={tribeID} onSave={() => mutate()} />
         </div>
       </div>
 

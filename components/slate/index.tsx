@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { tw } from 'twind';
+import { parse } from 'node-html-parser';
+
+// api
+import { createContent } from 'api/content';
 
 // components
 import { ExpandedEditor, NormalEditor } from './mainSquare';
@@ -32,7 +36,12 @@ enum View {
   Normal,
 }
 
-const EditorField = () => {
+interface Props {
+  onSave: () => void;
+  tribeID: string;
+}
+
+const EditorField = ({ onSave, tribeID }) => {
   const [view, setView] = useState<View>(View.Normal);
   const [cacheValue, setCacheValue] = useState<Array<CustomElement>>([
     {
@@ -49,9 +58,23 @@ const EditorField = () => {
   const handleSubmit = async (values) => {
     setIsFetching(true);
     try {
-      console.log(
+      const body = {
+        data: values.map((node: CustomElement) => serialize(node)).join(''),
+        groupId: tribeID,
+      };
+
+      const rawHTML = parse(
         values.map((node: CustomElement) => serialize(node)).join('')
       );
+      const preview =
+        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
+
+      if (preview) {
+        (body as any).preview = preview;
+      }
+
+      await createContent(body);
+      onSave();
     } catch (error) {
       toast({
         message: error || 'Error while creating the content, please try again',
