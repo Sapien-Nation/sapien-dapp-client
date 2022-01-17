@@ -18,9 +18,3 @@ export const deleteContent = (contentID: string) =>
     .delete(`/api/v3/post/${contentID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
-
-export const uploadContentImage = (data: FormData) =>
-  axios
-    .post('api/v3/content/image', data)
-    .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
