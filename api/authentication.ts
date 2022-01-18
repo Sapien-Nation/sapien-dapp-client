@@ -48,3 +48,18 @@ export const changePassword = async ({
       token,
     })
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const refresh = async (
+  refresh: string,
+  type: string
+): Promise<{ token: string }> => {
+  try {
+    const { data } = await authInstance.post('/api/v3/auth/refresh', {
+      refresh,
+      type,
+    });
+    return data;
+  } catch ({ response }) {
+    return Promise.reject(response.data.message);
+  }
+};

@@ -1,8 +1,9 @@
-import { useState, Fragment } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { MenuIcon, SelectorIcon } from '@heroicons/react/outline';
 import { tw } from 'twind';
 import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
+import { useLocalStorage } from 'react-use';
 
 // components
 import { Head, Redirect, Query } from 'components/common';
@@ -13,8 +14,13 @@ import {
 } from 'components/navigation';
 import { Subscriber } from 'components/notifications';
 
+// api
+import { connectWallet } from 'api/spn-wallet';
+import { refresh } from 'api/authentication';
+
 // context
 import { useAuth } from 'context/user';
+import { useWallet } from 'context/wallet';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -26,9 +32,41 @@ interface Props {
 }
 
 const AppLayout = ({ children }: Props) => {
-  const { me } = useAuth();
-  const { pathname } = useRouter();
+  const { newUser, setNewUser, me } = useAuth();
+  const { pathname, query } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const [tokens] = useLocalStorage<{
+    token: string;
+    torus: string;
+    refresh: string;
+  }>('tokens');
+  const { wallet, setWallet } = useWallet();
+  useEffect(() => {
+    const walletWeb3 = async () => {
+      if (tokens && Boolean(me) && Boolean(!wallet))
+        try {
+          const walletConnected = await connectWallet(
+            tokens.torus,
+            me.id,
+            newUser
+          );
+          setWallet(walletConnected);
+          setNewUser(false);
+        } catch (error) {
+          try {
+            const { token } = await refresh(tokens.refresh, 'torus');
+            const walletConnected = await connectWallet(token, me.id, newUser);
+            setWallet(walletConnected);
+            setNewUser(false);
+          } catch (err) {
+            // TODO add Sentry ERROR
+            console.log('Wallet Error:', err);
+          }
+        }
+    };
+    walletWeb3();
+  }, [me, query]);
 
   // Auth Pages
   if (

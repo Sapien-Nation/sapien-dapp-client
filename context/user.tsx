@@ -13,6 +13,8 @@ export interface Authentication {
   me: User | null;
   clearSession: () => void;
   isLoggingIn: boolean;
+  newUser: boolean;
+  setNewUser: (status: boolean) => void;
   setSession: (tokens: {
     token: string;
     torus: string;
@@ -32,7 +34,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     torus: string;
     refresh: string;
   }>('tokens', null);
-
+  const [newUser, setNewUser] = useState<boolean>(false);
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
   const { data, mutate: authMutate } = useSWR<User>('/api/v3/user/me', {
@@ -42,6 +44,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   const isLoggingIn = data === undefined;
 
   const clearSession = () => {
+    setNewUser(false);
     removeTokens();
     mutate('/api/v3/user/me', null, false);
     push('/');
@@ -68,6 +71,8 @@ const AuthenticationProvider = ({ children }: Props) => {
         me: data,
         isLoggingIn,
         setSession,
+        newUser,
+        setNewUser,
       }}
     >
       {children}
