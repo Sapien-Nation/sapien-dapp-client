@@ -17,9 +17,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 // components
 import TxHistory from 'components/wallet/TxHistory';
 import { NoSpn } from './EmptyState';
-import WorkInProgressView from 'components/common/views/WorkInProgressView';
 import MyNFTs from 'components/wallet/MyNFTs';
 import Store from 'components/wallet/Store';
+import { FilterScreen } from './LoadingState';
 
 enum WalletTabs {
   NFT,
@@ -146,7 +146,7 @@ const Wallet = () => {
           leaveTo={tw`-translate-x-full`}
         >
           <div>
-            <MyNFTs />
+            <FilterScreen />
           </div>
         </Transition>
         <Transition
