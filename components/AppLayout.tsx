@@ -43,6 +43,7 @@ const AppLayout = ({ children }: Props) => {
   }>('tokens');
   const { wallet, setWallet } = useWallet();
   useEffect(() => {
+    console.log('hi!');
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && Boolean(!wallet))
         try {
