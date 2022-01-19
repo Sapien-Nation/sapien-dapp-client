@@ -16,6 +16,7 @@ import { ToastProvider } from 'context/toast';
 // providers
 import { AuthenticationProvider } from 'context/user';
 import SocketProvider from 'context/socket';
+import { WalletProvider } from 'context/wallet';
 
 // types
 import type { AppProps } from 'next/app';
@@ -38,11 +39,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
     >
       <ToastProvider>
         <SocketProvider>
-          <AuthenticationProvider>
-            <AppLayout>
-              <Component {...pageProps} />
-            </AppLayout>
-          </AuthenticationProvider>
+          <WalletProvider>
+            <AuthenticationProvider>
+              <AppLayout>
+                <Component {...pageProps} />
+              </AppLayout>
+            </AuthenticationProvider>
+          </WalletProvider>
         </SocketProvider>
         <ToastContainer />
       </ToastProvider>
