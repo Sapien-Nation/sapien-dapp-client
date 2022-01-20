@@ -42,7 +42,7 @@ const useEditorConfig = (editor) => {
   const { insertData, isVoid } = editor;
 
   editor.isVoid = (element) =>
-    element.type === ElementType.Image || ElementType.Link || isVoid(element);
+    element.type === ElementType.Image || isVoid(element);
 
   editor.insertData = (data) => {
     insertData(data);
