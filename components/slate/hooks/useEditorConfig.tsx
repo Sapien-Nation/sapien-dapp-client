@@ -5,7 +5,7 @@ import { tw } from 'twind';
 import { ElementType, LeafType } from '../constants';
 
 // components
-import { Image as ImageElement, Paragraph, Video } from '../elements';
+import { Embed, Image as ImageElement, Paragraph, Video } from '../elements';
 
 const renderLeaf = (props) => {
   switch (props?.leaf.type) {
@@ -28,6 +28,8 @@ const renderLeaf = (props) => {
 
 const renderElement = (props) => {
   switch (props.element.type) {
+    case ElementType.Link:
+      return <Embed {...props} />;
     case ElementType.Image:
       return <ImageElement {...props} />;
     case ElementType.Video:
@@ -37,10 +39,14 @@ const renderElement = (props) => {
 };
 
 const useEditorConfig = (editor) => {
-  const { isVoid } = editor;
+  const { insertData, isVoid } = editor;
 
   editor.isVoid = (element) =>
-    element.type === ElementType.Image || isVoid(element);
+    element.type === ElementType.Image || ElementType.Link || isVoid(element);
+
+  editor.insertData = (data) => {
+    insertData(data);
+  };
 
   return { renderElement, renderLeaf };
 };
