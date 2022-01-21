@@ -7,6 +7,9 @@ import { ElementType, LeafType } from '../constants';
 // components
 import { Embed, Image as ImageElement, Paragraph, Video } from '../elements';
 
+// utils
+import { wrapLink } from '../hooks';
+
 const renderLeaf = (props) => {
   switch (props?.leaf.type) {
     case LeafType.Hashtag:
@@ -39,13 +42,30 @@ const renderElement = (props) => {
 };
 
 const useEditorConfig = (editor) => {
-  const { insertData, isVoid } = editor;
+  const { insertData, insertText, isInline, isVoid } = editor;
 
   editor.isVoid = (element) =>
     element.type === ElementType.Image || isVoid(element);
 
+  editor.isInline = (element) =>
+    element.type === ElementType.Link ? true : isInline(element);
+
+  editor.insertText = (text) => {
+    if (text && text.match(/(ftp|http|https):\/\/\S+/)) {
+      wrapLink(editor, text);
+    } else {
+      insertText(text);
+    }
+  };
+
   editor.insertData = (data) => {
-    insertData(data);
+    const text = data.getData('text/plain');
+
+    if (text && text.match(/(ftp|http|https):\/\/\S+/)) {
+      wrapLink(editor, text);
+    } else {
+      insertData(data);
+    }
   };
 
   return { renderElement, renderLeaf };
