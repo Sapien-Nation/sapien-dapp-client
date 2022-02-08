@@ -10,6 +10,7 @@ import {
 type LinkElement = { type: 'link'; url: string; children: Array<Descendant> };
 
 const unwrapLink = (editor: BaseEditor) => {
+  // @ts-ignore
   Transforms.unwrapNodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) &&
@@ -32,14 +33,18 @@ const wrapLink = (editor: BaseEditor, url: string) => {
   };
 
   if (isCollapsed) {
+    // @ts-ignore
     Transforms.insertNodes(editor, link as any);
   } else {
+    // @ts-ignore
     Transforms.wrapNodes(editor, link as any, { split: true });
+    // @ts-ignore
     Transforms.collapse(editor, { edge: 'end' });
   }
 };
 
 const isLinkActive = (editor: BaseEditor) => {
+  // @ts-ignore
   const [link] = Editor.nodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) &&

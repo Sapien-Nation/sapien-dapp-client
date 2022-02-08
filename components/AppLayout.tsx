@@ -67,7 +67,7 @@ const AppLayout = ({ children }: Props) => {
         }
     };
     walletWeb3();
-  }, [me, query]);
+  }, [me, newUser, query, setNewUser, setWallet, tokens, wallet]);
 
   // Auth Pages
   if (

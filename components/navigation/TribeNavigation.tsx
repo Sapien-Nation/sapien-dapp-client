@@ -38,10 +38,10 @@ const TribeNavigation = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const { asPath, query } = useRouter();
-  const { tribeID, viewID } = query;
+  const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
-  const { name, channels, squares, mainSquareId, permissions } = tribe;
+  const { name, channels, mainSquareId, permissions } = tribe;
 
   const handleViewLeftClick = (
     view: ProfileTribeChannel | ProfileTribeSquare | ProfileTribe,
@@ -58,7 +58,7 @@ const TribeNavigation = () => {
           <nav>
             <ul className={tw`flex flex-col`}>
               <div
-                className={tw`w-full mt-3 flex tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
+                className={tw`w-full mt-3 tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
               >
                 <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
                 {name}
@@ -72,7 +72,7 @@ const TribeNavigation = () => {
               <li>
                 <Link href={`/tribes/${tribeID}/notifications`}>
                   <a
-                    className={tw`relative mt-2 w-full flex cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
+                    className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
                       asPath === `/tribes/${tribeID}/notifications`
                         ? 'font-extrabold'
                         : ''
@@ -105,79 +105,6 @@ const TribeNavigation = () => {
           </nav>
         </div>
         <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
-          <Disclosure defaultOpen>
-            {({ open }) => (
-              <>
-                <Disclosure.Button
-                  className={tw`flex justify-between tracking-wide items-center w-full px-1 py-2 text-sm uppercase font-medium text-left text-gray-500 focus:outline-none`}
-                >
-                  <div className={tw`flex items-center`}>
-                    Squares
-                    {permissions.canAddSquare ? (
-                      <button
-                        className={tw`bg-gray-100 p-0.5 ml-2 rounded-full`}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setDialog(Dialog.Square);
-                        }}
-                      >
-                        <PlusSmIcon className={tw`w-5 h-5`} />
-                      </button>
-                    ) : null}
-                  </div>
-                  <ChevronUpIcon
-                    className={tw`${
-                      open ? '' : 'transform rotate-180'
-                    } w-5 h-5`}
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className={tw`text-sm text-gray-500`}>
-                  <nav aria-label="Sidebar" className={tw`flex flex-col py-2`}>
-                    <ul className={tw`flex flex-col gap-3 text-md text-black`}>
-                      {[
-                        {
-                          id: mainSquareId,
-                          name: 'Main',
-                        },
-                        ...squares,
-                      ].map((square: ProfileTribeSquare) => (
-                        <Link
-                          href={`/tribes/${tribeID}/${square.id}`}
-                          key={square.id}
-                        >
-                          <a
-                            onClick={(event) => {
-                              if (event.type === 'contextmenu') {
-                                event.preventDefault();
-                                handleViewLeftClick(square, View.Square);
-                              }
-                            }}
-                            onContextMenu={(event) => {
-                              if (event.type === 'contextmenu') {
-                                event.preventDefault();
-                                handleViewLeftClick(square, View.Square);
-                              }
-                            }}
-                          >
-                            <li
-                              className={tw`flex justify-between py-1 px-2 rounded-lg cursor-pointer hover:bg-gray-100 ${
-                                square.id === viewID
-                                  ? 'font-extrabold bg-gray-100'
-                                  : ''
-                              }`}
-                            >
-                              <span>#{square.name}</span>
-                              {/* <span className={tw`text-gray-500`}>TODO</span> */}
-                            </li>
-                          </a>
-                        </Link>
-                      ))}
-                    </ul>
-                  </nav>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
           <Disclosure defaultOpen as="div" className={tw`mt-2`}>
             {({ open }) => {
               return (

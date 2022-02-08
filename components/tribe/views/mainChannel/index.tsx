@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { tw } from 'twind';
+import useSWR from 'swr';
 
 // components
 import { Head, Query } from 'components/common';
@@ -11,15 +12,14 @@ import ContentItem from 'components/content';
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // types
-import { Content } from 'tools/types/content';
-import type { MainSquare } from 'tools/types/square';
-import useSWR from 'swr';
+import type { Content } from 'tools/types/content';
+import type { MainChannel } from 'tools/types/channel';
 
 interface Props {
-  square: MainSquare;
+  square: MainChannel;
 }
 
-const MainSquareView = ({
+const MainChannelView = ({
   square: { avatar, description, cover, followersCount, name, membersCount },
 }: Props) => {
   const [posts, setPosts] = useState<Array<Content>>([]);
@@ -158,4 +158,4 @@ const MainSquareView = ({
   );
 };
 
-export default MainSquareView;
+export default MainChannelView;

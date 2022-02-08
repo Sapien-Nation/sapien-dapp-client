@@ -8,19 +8,13 @@ import { View } from 'constants/tribe';
 
 // components
 import { Query, Redirect } from 'components/common';
-import {
-  ChannelView,
-  MainSquareView,
-  NotificationView,
-  SquareView,
-} from 'components/tribe';
+import { NotificationView } from 'components/tribe';
 
 // hooks
 import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
-import type { MainSquare, Square } from 'tools/types/square';
 
 interface Props {
   tribeID: string;
@@ -48,19 +42,9 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
 
     switch (view.type) {
       case View.Channel:
-        return <ChannelView />;
-      case View.MainSquare:
-        return (
-          <Query api={`/api/v3/mainsquare/${viewID}`}>
-            {(square: MainSquare) => <MainSquareView square={square} />}
-          </Query>
-        );
-      case View.Square:
-        return (
-          <Query api={`/api/v3/tribe/${tribeID}/square/${viewID}`}>
-            {(square: Square) => <SquareView square={square} />}
-          </Query>
-        );
+        return <h1>TODO Channel View</h1>;
+      case View.MainChannel:
+        return <h1>TODO Main Channel</h1>;
     }
   };
 

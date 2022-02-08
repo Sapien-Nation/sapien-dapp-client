@@ -8,7 +8,7 @@ import { parse } from 'node-html-parser';
 import { createContent } from 'api/content';
 
 // components
-import { ExpandedEditor, NormalEditor } from './mainSquare';
+import { ExpandedEditor, NormalEditor } from './mainChanel';
 
 // context
 import { useAuth } from 'context/user';

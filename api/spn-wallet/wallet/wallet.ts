@@ -134,8 +134,8 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
     };
 
     //await isBiconomyReady();
-
     const signature = sigUtil.signTypedData_v4(Buffer.from(privateKey, 'hex'), {
+      // @ts-ignore
       data: dataToSign,
     });
     const { r, s, v } = getSignatureParameters(web3, signature); // same helper used in SDK frontend code
