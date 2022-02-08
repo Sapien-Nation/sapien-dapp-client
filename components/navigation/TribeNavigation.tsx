@@ -4,7 +4,7 @@ import {
   PlusSmIcon,
   SelectorIcon,
 } from '@heroicons/react/solid';
-import { BellIcon, UserGroupIcon } from '@heroicons/react/outline';
+import { BellIcon, StarIcon, UserGroupIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, Fragment } from 'react';
@@ -98,6 +98,24 @@ const TribeNavigation = () => {
                       </Query>
                     </span>
                     Whats new ?
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link href={`/tribes/${tribeID}/notifications`}>
+                  <a
+                    className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
+                  >
+                    <span className={tw`flex`}>
+                      <StarIcon className={tw`h-5 w-5 mr-4`} />
+                    </span>
+                    Favorites
                   </a>
                 </Link>
               </li>
