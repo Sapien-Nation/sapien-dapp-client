@@ -1,13 +1,15 @@
 import { useState, useEffect, Fragment } from 'react';
 import { MenuIcon, SelectorIcon } from '@heroicons/react/outline';
+import { SearchIcon } from '@heroicons/react/solid';
 import { tw } from 'twind';
 import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
 import { useLocalStorage } from 'react-use';
 
 // components
-import { Head, Redirect, Query } from 'components/common';
+import { Head, Redirect, Query, Search } from 'components/common';
 import {
+  Navbar,
   DiscoveryNavigation,
   TribeBar,
   TribeNavigation,
@@ -100,7 +102,7 @@ const AppLayout = ({ children }: Props) => {
             <>
               <Subscriber />
               <main className={tw`h-full flex`}>
-                <div className={tw`flex flex-col`}>
+                <div className={tw`flex flex-col border-r-1`}>
                   <div className={tw`flex-1 flex min-h-0`}>
                     <TribeBar
                       tribes={tribes}
@@ -249,24 +251,21 @@ const AppLayout = ({ children }: Props) => {
                     <div
                       className={tw`bg-gray-900 py-2 px-4 flex items-center justify-between sm:px-6 lg:px-8`}
                     >
-                      <div>
-                        <button
-                          type="button"
-                          className={tw`-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-900 rounded-md text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
-                          onClick={() => setMobileMenuOpen(true)}
-                        >
-                          <span className={tw`sr-only`}>Open sidebar</span>
-                          <MenuIcon
-                            className={tw`h-6 w-6`}
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        className={tw`-mr-3 h-12 w-12 inline-flex items-center justify-center bg-gray-900 rounded-md text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
+                        onClick={() => setMobileMenuOpen(true)}
+                      >
+                        <span className={tw`sr-only`}>Open sidebar</span>
+                        <MenuIcon className={tw`h-6 w-6`} aria-hidden="true" />
+                      </button>
+                      <Search />
                     </div>
                   </div>
-
+                  <div className={tw`hidden lg:block`}>
+                    <Navbar />
+                  </div>
                   <div className={tw`flex-1 flex overflow-hidden`}>
-                    {/* Primary column */}
                     <section
                       aria-labelledby="primary-heading"
                       className={tw`min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last`}
