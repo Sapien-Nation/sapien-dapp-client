@@ -70,7 +70,7 @@ const ExpandedEditor = ({ defaultValue, setView, onSubmit }: Props) => {
           onSubmit(value, editor);
         }}
       >
-        <div className={tw`pt-20`}>
+        <div className={tw`pt-20 w-full`}>
           <Slate
             editor={editor}
             value={value}

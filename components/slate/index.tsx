@@ -87,7 +87,7 @@ const EditorField = ({ onSave, tribeID }) => {
   return (
     <>
       <div
-        className={tw`flex items-center w-full mt-6 max-w-4xl rounded-2xl bg-white px-6 py-8 relative ${
+        className={tw`flex items-center w-full mt-6 bg-white px-6 py-8 relative ${
           isFetching ? 'cursor-wait' : 'cursor-default'
         }`}
       >

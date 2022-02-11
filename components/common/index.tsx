@@ -14,4 +14,5 @@ export { default as Redirect } from './Redirect';
 export { default as Tooltip } from './Tooltip';
 export { default as Search } from './Search';
 export { default as Spinner } from './Spinner';
+export { default as Page } from './Page';
 export { default as Query } from './Query';
