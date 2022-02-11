@@ -7,8 +7,9 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query, Redirect } from 'components/common';
+import { Query, Page, Redirect } from 'components/common';
 import { NotificationView } from 'components/tribe';
+import Editor from 'components/slate';
 
 // hooks
 import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
@@ -48,7 +49,14 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
     }
   };
 
-  return <>{renderView()}</>;
+  return (
+    <Page
+      header={<p>Header</p>}
+      footer={<Editor tribeID={tribeID} onSave={() => {}} />}
+    >
+      {renderView()}
+    </Page>
+  );
 };
 
 const TribePageProxy: NextPage = () => {
