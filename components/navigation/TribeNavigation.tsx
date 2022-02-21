@@ -56,13 +56,21 @@ const TribeNavigation = () => {
       <div className={tw`w-full`}>
         <div>
           <nav>
-            <ul className={tw`flex flex-col`}>
-              <div
-                className={tw`w-full mt-3 tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
-              >
-                <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
-                {name}
-              </div>
+            <ul>
+              <li>
+                <Link href={`/tribes/${tribeID}/${mainSquareId}`}>
+                  <a
+                    className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
+                      asPath === `/tribes/${tribeID}/${mainSquareId}`
+                        ? 'font-extrabold'
+                        : ''
+                    }`}
+                  >
+                    <UserGroupIcon className={tw`h-5 w-5 mr-4`} />
+                    {name}
+                  </a>
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
