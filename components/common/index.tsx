@@ -6,6 +6,7 @@ export * from './fields';
 export { default as Dialog } from './Dialog';
 export { default as Dropdown } from './Dropdown';
 export { default as Head } from './Head';
+export { default as Header } from './Header';
 export { default as Image } from './Image';
 export { default as Overlay } from './Overlay';
 export { default as InputField } from './fields/TextInput';

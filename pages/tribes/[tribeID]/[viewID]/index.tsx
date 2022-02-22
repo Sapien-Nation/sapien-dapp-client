@@ -7,7 +7,7 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query, Page, Redirect } from 'components/common';
+import { Header, Query, Page, Redirect } from 'components/common';
 import { NotificationView } from 'components/tribe';
 import Editor from 'components/slate';
 
