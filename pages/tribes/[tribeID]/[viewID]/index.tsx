@@ -8,7 +8,7 @@ import { View } from 'constants/tribe';
 
 // components
 import { Header, Query, Page, Redirect } from 'components/common';
-import { NotificationView } from 'components/tribe';
+import { MainChannelView, NotificationView } from 'components/tribe';
 import Editor from 'components/slate';
 
 // hooks
@@ -16,6 +16,7 @@ import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
+import type { MainChannel } from 'tools/types/channel';
 
 interface Props {
   tribeID: string;
@@ -45,18 +46,23 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
       case View.Channel:
         return <h1>TODO Channel View</h1>;
       case View.MainChannel:
-        return <h1>TODO Main Channel</h1>;
+        return (
+          <Query
+            api="/api/v3/channels/main"
+            loader={null}
+            options={{
+              fetcher: async () => ({ cover: 'https://' }),
+            }}
+          >
+            {(channel: MainChannel) => (
+              <MainChannelView mainChannel={channel} />
+            )}
+          </Query>
+        );
     }
   };
 
-  return (
-    <Page
-      header={<p>Header</p>}
-      footer={<Editor tribeID={tribeID} onSave={() => {}} />}
-    >
-      {renderView()}
-    </Page>
-  );
+  return <>{renderView()}</>;
 };
 
 const TribePageProxy: NextPage = () => {
