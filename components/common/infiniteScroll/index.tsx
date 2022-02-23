@@ -7,8 +7,6 @@ import fetcher from 'api';
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
 
-const PAGE_SIZE = 20;
-
 const getKey = (pageIndex, previousPageData, apiUrl) => {
   if (previousPageData && !previousPageData.nextCursor) return null;
 
@@ -27,6 +25,7 @@ interface Props {
   refreshComponent?: React.ReactNode | null;
   reachingEndComponent?: React.ReactNode | null;
   topPlaceholder?: React.ReactNode | null;
+  pageSize?: number;
 }
 
 const InfiniteScroll = ({
@@ -39,6 +38,7 @@ const InfiniteScroll = ({
   loadingComponent = null,
   reachingEndComponent = null,
   topPlaceholder = null,
+  pageSize = 10,
 }: Props) => {
   const ref = useRef();
   const isVisible = useOnScreen(ref);
@@ -55,7 +55,7 @@ const InfiniteScroll = ({
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined');
-  const isReachingEnd = size === PAGE_SIZE;
+  const isReachingEnd = size === pageSize;
   const isRefreshing = isValidating && data && data.length === size;
 
   useEffect(() => {
