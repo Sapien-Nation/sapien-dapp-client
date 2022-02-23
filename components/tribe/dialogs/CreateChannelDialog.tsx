@@ -2,24 +2,20 @@ import { XIcon, CameraIcon, CloudUploadIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useState, useRef } from 'react';
-import { useSWRConfig } from 'swr';
 import { tw } from 'twind';
+import { useSWRConfig } from 'swr';
 
 // api
-import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
+import { createChannel, uploadImage } from 'api/channel';
 
 // components
-import {
-  Dialog,
-  TextareaInput,
-  TextInput,
-  TextInputLabel,
-} from 'components/common';
+import { Dialog, TextInput, TextInputLabel } from 'components/common';
 
-//hooks
+// hooks
 import { useToast } from 'context/toast';
 
 // types
+import type { CreateChannelBody } from 'api/channel';
 import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
@@ -34,8 +30,6 @@ type Media = {
 interface FormValues {
   avatar: null | Media;
   cover: null | Media;
-  description: string;
-  identifier: string;
   name: string;
 }
 
@@ -44,19 +38,20 @@ enum MediaTypeUpload {
   Cover = 'cover',
 }
 
-const form = 'create-tribe-form';
-const CreateTribeDialog = ({ onClose }: Props) => {
+const form = 'create-channel-form';
+const CreateChannelDialog = ({ onClose }: Props) => {
   const [mediaTypeToUpload, setMediaTypeToUpload] =
     useState<MediaTypeUpload | null>(null);
   const [isUploading, setUploading] = useState<boolean>(false);
+
+  const { push, query } = useRouter();
+  const { mutate } = useSWRConfig();
 
   const toast = useToast();
   const methods = useForm<FormValues>({
     defaultValues: {
       avatar: null,
       cover: null,
-      description: '',
-      identifier: '',
       name: '',
     },
   });
@@ -67,25 +62,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     watch,
   } = methods;
 
-  const { push } = useRouter();
-  const { mutate } = useSWRConfig();
-
   const avatarFileInput = useRef(null);
   const coverFileInput = useRef(null);
 
   const [avatar, cover] = watch(['avatar', 'cover']);
 
-  const onSubmit = async ({
-    description,
-    identifier,
-    name,
-    ...rest
-  }: FormValues) => {
+  const onSubmit = async ({ name, ...rest }: FormValues) => {
     try {
-      const body: CreateTribeBody = {
-        description,
-        identifier,
+      const { tribeID } = query;
+
+      const body: CreateChannelBody = {
         name,
+        tribeId: tribeID as string,
       };
 
       if (rest.avatar) {
@@ -100,20 +88,24 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         });
       }
 
-      const response = await createTribe(body);
+      const response = await createChannel(body);
 
       mutate(
         '/api/v3/profile/tribes',
-        (tribes: Array<ProfileTribe>) => [
-          tribes[0],
-          response,
-          ...tribes.slice(1),
-        ],
+        (tribes: Array<ProfileTribe>) => {
+          return tribes.map((tribe) => ({
+            ...tribe,
+            channels:
+              tribe.id === tribeID
+                ? [...tribe.channels, response]
+                : tribe.channels,
+          }));
+        },
         false
       );
 
       onClose();
-      push(`/tribes/${response.id}/home`);
+      push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {
       toast({
         message: error || 'Service unavailable',
@@ -146,7 +138,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     <Dialog
       isFetching={mediaTypeToUpload !== null || isSubmitting}
       onClose={onClose}
-      title="Create a Tribe"
+      title="Create a Channel"
       form={form}
       confirmLabel="Create"
     >
@@ -215,7 +207,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             {isUploading &&
                               mediaTypeToUpload === MediaTypeUpload.Avatar && (
                                 <span
-                                  className={tw`absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+                                  className={tw`absolute w-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2`}
                                 >
                                   <CloudUploadIcon
                                     className={tw`animate-bounce text-gray-400`}
@@ -248,7 +240,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           <TextInput
                             className={tw`block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
                             name="name"
-                            placeholder="The Sapien Tribe"
+                            placeholder="Channel Name"
                             maxLength={50}
                             pattern={/^[a-zA-Z\s]$/}
                             rules={{
@@ -261,59 +253,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 maxLength: (value) =>
                                   value?.length <= 51 ||
                                   'Must be Between 2 and 50 characters long',
-                              },
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <TextInputLabel
-                          label="Tribe ID"
-                          name="identifier"
-                          error={errors.identifier?.message}
-                        />
-                        <TextInput
-                          className={tw`block w-full rounded-md pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md`}
-                          name="identifier"
-                          placeholder="TheSapienTribe"
-                          maxLength={20}
-                          rules={{
-                            validate: {
-                              required: (value) =>
-                                value.length > 0 || 'is required',
-                              minLength: (value) =>
-                                value?.length > 2 ||
-                                'Must be Between 2 and 20 characters long',
-                              maxLength: (value) =>
-                                value?.length <= 21 ||
-                                'Must be Between 2 and 51 characters long',
-                            },
-                          }}
-                          pattern={/^[a-zA-Z0-9]$/}
-                        />
-                      </div>
-                      <div>
-                        <TextInputLabel
-                          label="Description"
-                          name="description"
-                          error={errors.description?.message}
-                        />
-                        <div className={tw`mt-1 relative rounded-md shadow-sm`}>
-                          <TextareaInput
-                            name="description"
-                            maxLength={1000}
-                            placeholder="Describe your tribe"
-                            className={tw`shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md`}
-                            rules={{
-                              validate: {
-                                maxLength: (value) => {
-                                  if (value?.length > 0) {
-                                    return (
-                                      value?.length <= 1001 ||
-                                      'Must be only 1000 characters long'
-                                    );
-                                  }
-                                },
                               },
                             }}
                           />
@@ -425,4 +364,4 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   );
 };
 
-export default CreateTribeDialog;
+export default CreateChannelDialog;

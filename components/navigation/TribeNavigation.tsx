@@ -1,13 +1,9 @@
 import { Disclosure } from '@headlessui/react';
-import {
-  ChevronUpIcon,
-  PlusSmIcon,
-  SelectorIcon,
-} from '@heroicons/react/solid';
+import { ChevronUpIcon, PlusSmIcon } from '@heroicons/react/solid';
 import { BellIcon, StarIcon, UserGroupIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { tw } from 'twind';
 
 // api
@@ -17,7 +13,8 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query, WorkInProgressDialog } from 'components/common';
+import { Query } from 'components/common';
+import { CreateChannelDialog } from 'components/tribe/dialogs';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
@@ -31,7 +28,6 @@ import type {
 
 enum Dialog {
   Channel,
-  Square,
 }
 
 const TribeNavigation = () => {
@@ -186,7 +182,7 @@ const TribeNavigation = () => {
                           </p>{' '}
                           <span
                             className={tw`cursor-pointer inline text-purple-700`}
-                            onClick={() => setDialog(Dialog.Square)}
+                            onClick={() => setDialog(Dialog.Channel)}
                           >
                             creating a new one
                           </span>
@@ -252,7 +248,7 @@ const TribeNavigation = () => {
                                     >
                                       <span className={tw`font-lg flex`}>
                                         <p className={tw`truncate	w-20`}>
-                                          Poetry
+                                          {channel.name}
                                         </p>
                                         <small
                                           className={tw`font-xs text-gray-300 ml-4`}
@@ -279,10 +275,7 @@ const TribeNavigation = () => {
 
       {/* Dialogs */}
       {dialog === Dialog.Channel && (
-        <WorkInProgressDialog onClose={() => setDialog(null)} />
-      )}
-      {dialog === Dialog.Square && (
-        <WorkInProgressDialog onClose={() => setDialog(null)} />
+        <CreateChannelDialog onClose={() => setDialog(null)} />
       )}
     </>
   );
