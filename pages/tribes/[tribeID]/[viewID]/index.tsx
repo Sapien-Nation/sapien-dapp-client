@@ -1,3 +1,4 @@
+import { ErrorBoundary } from 'react-error-boundary';
 import { useRouter } from 'next/router';
 
 // api
@@ -7,7 +8,7 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query, Redirect } from 'components/common';
+import { ErrorView, Query, Redirect } from 'components/common';
 import {
   ChannelView,
   FavoritesView,
@@ -79,7 +80,9 @@ const TribePage = ({
   };
 
   // TODO ErrorBoundaries
-  return <>{renderView()}</>;
+  return (
+    <ErrorBoundary FallbackComponent={ErrorView}>{renderView()}</ErrorBoundary>
+  );
 };
 
 const TribePageProxy: NextPage = (props) => {

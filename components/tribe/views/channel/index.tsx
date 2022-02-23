@@ -1,5 +1,11 @@
 // components
-import { Head, Header, InfiniteScroll, Page } from 'components/common';
+import {
+  DefaultCover,
+  InfiniteScroll,
+  Head,
+  Header,
+  Page,
+} from 'components/common';
 
 // types
 import type { Channel } from 'tools/types/channel';
@@ -18,7 +24,9 @@ const ChannelView = ({ channelID, channel }: Props) => {
         header={
           channel.cover ? (
             <Header alt={channel.name} src={channel.cover} />
-          ) : null
+          ) : (
+            <DefaultCover name={channel.name} />
+          )
         }
       >
         <h1>
