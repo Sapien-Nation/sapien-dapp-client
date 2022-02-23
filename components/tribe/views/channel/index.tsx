@@ -1,15 +1,16 @@
 // components
-import { Head, Header, Page } from 'components/common';
+import { Head, Header, InfiniteScroll, Page } from 'components/common';
 
 // types
 import type { Channel } from 'tools/types/channel';
+import type { Content } from 'tools/types/content';
 
 interface Props {
   channel: Channel;
+  channelID: string;
 }
 
-const ChannelView = ({ channel }: Props) => {
-  console.log(channel);
+const ChannelView = ({ channelID, channel }: Props) => {
   return (
     <>
       <Head title={channel.name} />
@@ -25,7 +26,12 @@ const ChannelView = ({ channel }: Props) => {
           cases
         </h1>
         <h1>TODO Editor for create Content (Rooms)</h1>
-        TODO fetch {`/api/v3/channel/${channel.id}/feed`}
+
+        <InfiniteScroll apiUrl={`/api/v3/channel/${channelID}/feed`}>
+          {(data: Array<Content>) => {
+            return <h1>TODO Items Feed {data.length}</h1>;
+          }}
+        </InfiniteScroll>
       </Page>
     </>
   );

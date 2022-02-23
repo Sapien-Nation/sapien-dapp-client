@@ -64,7 +64,9 @@ const TribePage = ({
       case View.Channel:
         return (
           <Query api={`/api/v3/channel/${viewID}`}>
-            {(channel: Channel) => <ChannelView channel={channel} />}
+            {(channel: Channel) => (
+              <ChannelView channel={channel} channelID={viewID} />
+            )}
           </Query>
         );
       case View.HomeFeed:

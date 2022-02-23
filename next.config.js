@@ -5,4 +5,7 @@ module.exports = {
     formats: ['image/avif', 'image/webp'],
   },
   reactStrictMode: true,
+  experimental: {
+    scrollRestoration: true,
+  },
 };
