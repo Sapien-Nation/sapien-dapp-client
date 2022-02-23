@@ -29,10 +29,6 @@ const ChannelView = ({ channelID, channel }: Props) => {
           )
         }
       >
-        <h1>
-          TODO SVG with random color and tribe name for channel.cover === null
-          cases
-        </h1>
         <h1>TODO Editor for create Content (Rooms)</h1>
 
         <InfiniteScroll apiUrl={`/api/v3/channel/${channelID}/feed`}>

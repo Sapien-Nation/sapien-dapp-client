@@ -1,5 +1,5 @@
 // components
-import { Head, Page } from 'components/common';
+import { DefaultCover, Head, Header, Page } from 'components/common';
 
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
@@ -8,11 +8,19 @@ interface Props {
   tribe: MainFeedTribe;
 }
 
-const HomeFeedView = (_: Props) => {
+const HomeFeedView = ({ tribe }: Props) => {
   return (
     <>
       <Head title="Home" />
-      <Page header={<h2>Header</h2>} footer={<h1>Footer</h1>}>
+      <Page
+        header={
+          tribe.cover ? (
+            <Header alt={tribe.name} src={tribe.cover} />
+          ) : (
+            <DefaultCover name={tribe.name} />
+          )
+        }
+      >
         <div>children</div>
       </Page>
     </>
