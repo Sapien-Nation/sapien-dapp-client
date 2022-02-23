@@ -7,8 +7,8 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Header, Query, Page, Redirect } from 'components/common';
-import { MainChannelView, NotificationView } from 'components/tribe';
+import { Query, Page, Redirect } from 'components/common';
+import { HomeFeedView, NotificationView } from 'components/tribe';
 import Editor from 'components/slate';
 
 // hooks
@@ -16,7 +16,7 @@ import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
-import type { MainChannel } from 'tools/types/channel';
+import type { HomeFeed } from 'tools/types/channel';
 
 interface Props {
   tribeID: string;
@@ -45,7 +45,7 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
     switch (view.type) {
       case View.Channel:
         return <h1>TODO Channel View</h1>;
-      case View.MainChannel:
+      case View.HomeFeed:
         return (
           <Query
             api="/api/v3/channels/main"
@@ -54,9 +54,7 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
               fetcher: async () => ({ cover: 'https://' }),
             }}
           >
-            {(channel: MainChannel) => (
-              <MainChannelView mainChannel={channel} />
-            )}
+            {(channel: HomeFeed) => <HomeFeedView homeFeed={channel} />}
           </Query>
         );
     }
@@ -65,7 +63,7 @@ const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
   return <>{renderView()}</>;
 };
 
-const TribePageProxy: NextPage = () => {
+const TribePageProxy: NextPage = (props) => {
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
 

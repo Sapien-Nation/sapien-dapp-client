@@ -22,7 +22,7 @@ export const useIsValidView = (tribeID: string, viewID: string): boolean => {
   if (tribe) {
     const views = [
       {
-        type: View.MainChannel,
+        type: View.homeFeed,
         name: 'sapien',
         // TODO rename to tribe.mainChanelId
         id: tribe.mainSquareId,
@@ -69,7 +69,7 @@ export const useGetCurrentView = (
 
   const views = [
     {
-      type: View.MainChannel,
+      type: View.HomeFeed,
       name: 'sapien',
       // TODO rename to tribe.mainChanelId
       id: tribe.mainSquareId,

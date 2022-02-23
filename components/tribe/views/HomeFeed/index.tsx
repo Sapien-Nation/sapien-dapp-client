@@ -1,24 +1,25 @@
 // components
-import { Head, Page } from 'components/common';
+import { Head, Header, Page } from 'components/common';
 import Editor from 'components/slate';
 
 // hooks
 import { useMainSquare } from 'hooks/tribe';
 
 // types
-import type { MainChannel } from 'tools/types/channel';
+import type { HomeFeed } from 'tools/types/channel';
 
 interface Props {
-  mainChannel: MainChannel;
+  homeFeed: HomeFeed;
 }
 
-const MainChannelView = ({ mainChannel: { name } }: Props) => {
+const HomeFeedView = ({ homeFeed: { name } }: Props) => {
   const { tribeID } = useMainSquare();
   return (
     <>
       <Head title={name} />
       <Page
-        header={<h1>Header</h1>}
+        // header={<Header alt={name} src={avatarOriginal} />}
+        header={<h2>Header</h2>}
         footer={<Editor tribeID={tribeID} onSave={() => {}} />}
       >
         <div>children</div>
@@ -27,4 +28,4 @@ const MainChannelView = ({ mainChannel: { name } }: Props) => {
   );
 };
 
-export default MainChannelView;
+export default HomeFeedView;
