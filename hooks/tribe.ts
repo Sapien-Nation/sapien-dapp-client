@@ -48,15 +48,6 @@ export const useTribe = (tribeID: string): ProfileTribe => {
   return cache.get('/api/v3/profile/tribes').find(({ id }) => id === tribeID);
 };
 
-export const useMainSquare = () => {
-  const { cache } = useSWRConfig();
-
-  const tribe: ProfileTribe = cache.get('/api/v3/profile/tribes')[0];
-
-  // TODO rename to tribe.mainChanelId
-  return { tribeID: tribe.id, viewID: tribe.mainSquareId };
-};
-
 export const useGetCurrentView = (
   tribeID: string,
   viewID: string

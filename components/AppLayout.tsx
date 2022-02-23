@@ -45,7 +45,6 @@ const AppLayout = ({ children }: Props) => {
   }>('tokens');
   const { wallet, setWallet } = useWallet();
   useEffect(() => {
-    console.log('hi!');
     const walletWeb3 = async () => {
       if (tokens && Boolean(me) && Boolean(!wallet))
         try {
@@ -64,7 +63,6 @@ const AppLayout = ({ children }: Props) => {
             setNewUser(false);
           } catch (err) {
             // TODO add Sentry ERROR
-            console.log('Wallet Error:', err);
           }
         }
     };
