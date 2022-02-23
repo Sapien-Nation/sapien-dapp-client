@@ -104,16 +104,7 @@ const EditorField = ({ onSave, tribeID }) => {
           }}
         />
         {view === View.Normal && (
-          <NormalEditor
-            defaultValue={cacheValue}
-            setView={(doc, selection) => {
-              setCacheValue(doc);
-              setView(View.Expanded);
-              // TODO handle set editor selection for better UX
-              console.log(selection);
-            }}
-            onSubmit={handleSubmit}
-          />
+          <NormalEditor defaultValue={cacheValue} onSubmit={handleSubmit} />
         )}
 
         {view === View.Expanded && (

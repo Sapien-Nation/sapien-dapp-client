@@ -9,6 +9,7 @@ import { View } from 'constants/tribe';
 // components
 import { Query, Redirect } from 'components/common';
 import {
+  ChannelView,
   FavoritesView,
   HomeFeedView,
   NotificationView,
@@ -57,7 +58,7 @@ const TribePage = ({
 
     switch (view.type) {
       case View.Channel:
-        return <h1>TODO Channel View</h1>;
+        return <ChannelView />;
       case View.HomeFeed:
         return (
           <Query
