@@ -19,14 +19,13 @@ const ChannelView = ({ channel }: Props) => {
             <Header alt={channel.name} src={channel.cover} />
           ) : null
         }
-        footer={<h1>TODO Editor for create Content (Rooms)</h1>}
       >
         <h1>
           TODO SVG with random color and tribe name for channel.cover === null
           cases
         </h1>
+        <h1>TODO Editor for create Content (Rooms)</h1>
         TODO fetch {`/api/v3/channel/${channel.id}/feed`}
-        TODO integrate Editor
       </Page>
     </>
   );

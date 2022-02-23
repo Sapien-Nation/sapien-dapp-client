@@ -43,7 +43,7 @@ const TribePage = ({
       return <FavoritesView />;
     }
 
-    if (isNotificationsView)
+    if (isNotificationsView) {
       return (
         <Query
           api="/api/v3/notification/all"
@@ -56,8 +56,11 @@ const TribePage = ({
           {() => <NotificationView tribeID={tribeID as string} />}
         </Query>
       );
+    }
 
     switch (view.type) {
+      case View.Room:
+        return <h1>TODO Room</h1>;
       case View.Channel:
         return (
           <Query api={`/api/v3/channel/${viewID}`}>
@@ -73,6 +76,7 @@ const TribePage = ({
     }
   };
 
+  // TODO ErrorBoundaries
   return <>{renderView()}</>;
 };
 
