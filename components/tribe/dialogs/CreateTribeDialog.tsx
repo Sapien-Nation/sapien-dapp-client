@@ -114,7 +114,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       );
 
       onClose();
-      push(`/tribes/${response.id}/${response.mainSquareId}`);
+      push(`/tribes/${response.id}/home`);
     } catch (error) {
       toast({
         message: error || 'Service unavailable',

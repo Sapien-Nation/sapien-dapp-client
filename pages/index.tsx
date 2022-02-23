@@ -2,15 +2,15 @@
 import { Redirect } from 'components/common';
 
 // hooks
-import { useMainSquare } from 'hooks/tribe';
+import { useMainTribe } from 'hooks/tribe';
 
 // types
 import { NextPage } from 'next';
 
 const IndexPage: NextPage = () => {
-  const { tribeID, viewID } = useMainSquare();
+  const { tribeID } = useMainTribe();
 
-  return <Redirect path={`/tribes/${tribeID}/${viewID}`} />;
+  return <Redirect path={`/tribes/${tribeID}/home`} />;
 };
 
 export default IndexPage;

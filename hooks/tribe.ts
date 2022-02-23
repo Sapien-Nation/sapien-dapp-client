@@ -22,10 +22,9 @@ export const useIsValidView = (tribeID: string, viewID: string): boolean => {
   if (tribe) {
     const views = [
       {
-        type: View.homeFeed,
+        type: View.HomeFeed,
         name: 'sapien',
-        // TODO rename to tribe.mainChanelId
-        id: tribe.mainSquareId,
+        id: 'home',
       },
       ...tribe.channels.map((channel) => ({
         ...channel,
@@ -36,6 +35,7 @@ export const useIsValidView = (tribeID: string, viewID: string): boolean => {
     const view = views.find(({ id }) => id === viewID);
 
     if (view) return true;
+
     return false;
   }
 
@@ -46,6 +46,14 @@ export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
   return cache.get('/api/v3/profile/tribes').find(({ id }) => id === tribeID);
+};
+
+export const useMainTribe = (): { tribeID: string } => {
+  const { cache } = useSWRConfig();
+
+  const tribe: ProfileTribe = cache.get('/api/v3/profile/tribes')[0];
+
+  return { tribeID: tribe.id };
 };
 
 export const useGetCurrentView = (
@@ -62,8 +70,7 @@ export const useGetCurrentView = (
     {
       type: View.HomeFeed,
       name: 'sapien',
-      // TODO rename to tribe.mainChanelId
-      id: tribe.mainSquareId,
+      id: 'home',
     },
     ...tribe.channels.map((channel) => ({
       ...channel,

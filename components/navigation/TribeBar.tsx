@@ -97,10 +97,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                 <nav aria-label="Sidebar" className={tw`mt-5`}>
                   <div className={tw`px-2 space-y-1`}>
                     {tribes.map((tribe: ProfileTribe) => (
-                      <Link
-                        href={`/tribes/${tribe.id}/${tribe.mainSquareId}`}
-                        key={tribe.id}
-                      >
+                      <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
                         <a
                           onClick={() => setMobileMenuOpen(false)}
                           className={tw`group p-2 rounded-md flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900`}

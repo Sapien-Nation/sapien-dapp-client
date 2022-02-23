@@ -41,7 +41,7 @@ const TribeNavigation = () => {
   const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
-  const { name, channels, mainSquareId, permissions } = tribe;
+  const { name, channels, permissions } = tribe;
 
   const handleViewLeftClick = (
     view: ProfileTribeChannel | ProfileTribeSquare | ProfileTribe,
@@ -58,10 +58,10 @@ const TribeNavigation = () => {
           <nav>
             <ul>
               <li>
-                <Link href={`/tribes/${tribeID}/${mainSquareId}`}>
+                <Link href={`/tribes/${tribeID}/home`}>
                   <a
                     className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
-                      asPath === `/tribes/${tribeID}/${mainSquareId}`
+                      asPath === `/tribes/${tribeID}/home`
                         ? 'font-extrabold'
                         : ''
                     }`}
