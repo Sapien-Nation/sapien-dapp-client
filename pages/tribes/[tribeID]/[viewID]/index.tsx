@@ -7,9 +7,12 @@ import { notificationInstance } from 'api';
 import { View } from 'constants/tribe';
 
 // components
-import { Query, Page, Redirect } from 'components/common';
-import { HomeFeedView, NotificationView } from 'components/tribe';
-import Editor from 'components/slate';
+import { Query, Redirect } from 'components/common';
+import {
+  FavoritesView,
+  HomeFeedView,
+  NotificationView,
+} from 'components/tribe';
 
 // hooks
 import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
@@ -22,12 +25,22 @@ interface Props {
   tribeID: string;
   viewID: string;
   isNotificationsView: boolean;
+  isFavoritesView: boolean;
 }
 
-const TribePage = ({ tribeID, viewID, isNotificationsView }: Props) => {
+const TribePage = ({
+  tribeID,
+  viewID,
+  isNotificationsView,
+  isFavoritesView,
+}: Props) => {
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
   const renderView = () => {
+    if (isFavoritesView) {
+      return <FavoritesView />;
+    }
+
     if (isNotificationsView)
       return (
         <Query
@@ -68,9 +81,17 @@ const TribePageProxy: NextPage = (props) => {
   const { tribeID, viewID } = query;
 
   const isValidView = useIsValidView(tribeID as string, viewID as string);
-  const isNotificationsView = asPath === `/tribes/${tribeID}/notifications`;
 
-  if (isValidView === false && isNotificationsView === false)
+  // NOTE
+  // I don't like this, but due POC, we will check this 2 routes manually, it might just grow to n = 3
+  const isNotificationsView = asPath === `/tribes/${tribeID}/notifications`;
+  const isFavoritesView = asPath === `/tribes/${tribeID}/favorites`;
+
+  if (
+    isValidView === false &&
+    isNotificationsView === false &&
+    isFavoritesView === false
+  )
     return <Redirect path="/" />;
 
   return (
@@ -78,6 +99,7 @@ const TribePageProxy: NextPage = (props) => {
       tribeID={tribeID as string}
       viewID={viewID as string}
       isNotificationsView={isNotificationsView}
+      isFavoritesView={isFavoritesView}
     />
   );
 };

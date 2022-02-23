@@ -8,10 +8,10 @@ interface Props {
   homeFeed: HomeFeed;
 }
 
-const HomeFeedView = ({ homeFeed: { name } }: Props) => {
+const HomeFeedView = ({ homeFeed }: Props) => {
   return (
     <>
-      <Head title={name} />
+      <Head title="Home" />
       <Page header={<h2>Header</h2>} footer={<h1>Footer</h1>}>
         <div>children</div>
       </Page>

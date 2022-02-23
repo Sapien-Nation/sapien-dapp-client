@@ -116,9 +116,13 @@ const TribeNavigation = () => {
           <nav>
             <ul>
               <li>
-                <Link href={`/tribes/${tribeID}/notifications`}>
+                <Link href={`/tribes/${tribeID}/favorites`}>
                   <a
-                    className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none`}
+                    className={tw`relative mt-2 w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) px-4 py-2 flex rounded-lg focus:outline-none ${
+                      asPath === `/tribes/${tribeID}/favorites`
+                        ? 'font-extrabold'
+                        : ''
+                    }`}
                   >
                     <span className={tw`flex`}>
                       <StarIcon className={tw`h-5 w-5 mr-4`} />
