@@ -20,7 +20,8 @@ import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
-import type { HomeFeed } from 'tools/types/channel';
+import type { Channel } from 'tools/types/channel';
+import type { MainFeedTribe } from 'tools/types/tribe';
 
 interface Props {
   tribeID: string;
@@ -58,17 +59,15 @@ const TribePage = ({
 
     switch (view.type) {
       case View.Channel:
-        return <ChannelView />;
+        return (
+          <Query api={`/api/v3/channel/${viewID}`}>
+            {(channel: Channel) => <ChannelView channel={channel} />}
+          </Query>
+        );
       case View.HomeFeed:
         return (
-          <Query
-            api="/api/v3/channels/main"
-            loader={null}
-            options={{
-              fetcher: async () => ({ cover: 'https://' }),
-            }}
-          >
-            {(channel: HomeFeed) => <HomeFeedView homeFeed={channel} />}
+          <Query api={`/api/v3/tribe/${tribeID}`}>
+            {(tribe: MainFeedTribe) => <HomeFeedView tribe={tribe} />}
           </Query>
         );
     }

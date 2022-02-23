@@ -2,13 +2,13 @@
 import { Head, Page } from 'components/common';
 
 // types
-import type { HomeFeed } from 'tools/types/channel';
+import type { MainFeedTribe } from 'tools/types/tribe';
 
 interface Props {
-  homeFeed: HomeFeed;
+  tribe: MainFeedTribe;
 }
 
-const HomeFeedView = ({ homeFeed }: Props) => {
+const HomeFeedView = (_: Props) => {
   return (
     <>
       <Head title="Home" />

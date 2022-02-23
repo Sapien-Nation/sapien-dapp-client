@@ -1,7 +1,7 @@
 import { tw } from 'twind';
 
 interface Props {
-  children: React.ReactElement;
+  children: React.ReactNode;
   header?: React.ReactElement;
   footer?: React.ReactElement;
 }
