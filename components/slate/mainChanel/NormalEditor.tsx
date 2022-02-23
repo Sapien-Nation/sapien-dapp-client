@@ -26,11 +26,10 @@ const createEditorWithPlugins = pipe(withReact, withHistory);
 
 interface Props {
   defaultValue: Array<CustomElement>;
-  setView: (value: Array<CustomElement>, selection: any) => void;
   onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
-const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
+const NormalEditor = ({ defaultValue, onSubmit }: Props) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const [value, setValue] = useState<Array<CustomElement>>(defaultValue);
 
@@ -116,16 +115,6 @@ const NormalEditor = ({ defaultValue, setView, onSubmit }: Props) => {
           />
         </button>
       </div>
-
-      {/* Expand */}
-      <button
-        className={tw`absolute top-0.5 right-0.5 self-end h-8 w-8 flex items-center text-gray-400 justify-center rounded-full hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
-        onClick={() => {
-          setView(value, editor.selection);
-        }}
-      >
-        <ArrowsExpandIcon className={tw`h-4 w-4`} />
-      </button>
     </form>
   );
 };
