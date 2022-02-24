@@ -1,3 +1,4 @@
 [submodule "tools"]
 	path = tools
 	url = http://gitlab.tooling-sapien.network/group-tools/tools.git
+	branch = main
