@@ -14,9 +14,6 @@ import { ErrorView, ToastContainer } from 'components/common';
 // context
 import { ToastProvider } from 'context/toast';
 
-// hooks
-import useScrollRestoration from 'hooks/useScrollRestoration';
-
 // providers
 import { AuthenticationProvider } from 'context/user';
 import SocketProvider from 'context/socket';
