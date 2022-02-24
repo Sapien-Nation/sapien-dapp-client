@@ -1,27 +1,15 @@
-import { useState } from 'react';
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
 import { tw } from 'twind';
-import { parse } from 'node-html-parser';
-
-// api
-import { createContent } from 'api/content';
 
 // components
-import { ExpandedEditor, NormalEditor } from './mainChanel';
+import { DefaultEditor } from './editors';
 
 // context
 import { useAuth } from 'context/user';
-import { useToast } from 'context/toast';
-
-// constants
-import { ElementType } from './constants';
 
 // types
 import type { CustomElement, CustomText } from './types';
-
-// utils
-import { serialize } from './utils';
 
 declare module 'slate' {
   interface CustomTypes {
@@ -37,52 +25,12 @@ enum View {
 }
 
 interface Props {
-  onSave: () => void;
-  tribeID: string;
+  onSubmit: (values: any) => void;
+  isFetching: boolean;
 }
 
-const EditorField = ({ onSave, tribeID }) => {
-  const [view, setView] = useState<View>(View.Normal);
-  const [cacheValue, setCacheValue] = useState<Array<CustomElement>>([
-    {
-      children: [{ text: '' }],
-      type: ElementType.Paragraph,
-      key: null,
-    },
-  ]);
-  const [isFetching, setIsFetching] = useState(false);
-
+const EditorField = ({ onSubmit, isFetching }: Props) => {
   const { me } = useAuth();
-  const toast = useToast();
-  //--------------------------------------------------------------------------------------------------------------------
-  const handleSubmit = async (values) => {
-    setIsFetching(true);
-    try {
-      const body = {
-        data: values.map((node: CustomElement) => serialize(node)).join(''),
-        groupId: tribeID,
-      };
-
-      const rawHTML = parse(
-        values.map((node: CustomElement) => serialize(node)).join('')
-      );
-      const preview =
-        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
-
-      if (preview) {
-        (body as any).preview = preview;
-      }
-
-      await createContent(body);
-      onSave();
-    } catch (error) {
-      toast({
-        message: error || 'Error while creating the content, please try again',
-      });
-    }
-    setIsFetching(false);
-  };
-
   //--------------------------------------------------------------------------------------------------------------------
   return (
     <>
@@ -91,6 +39,7 @@ const EditorField = ({ onSave, tribeID }) => {
           isFetching ? 'cursor-wait' : 'cursor-default'
         }`}
       >
+        {/* Avatar */}
         <img
           className={tw`self-start inline-block h-10 w-10 rounded-full mr-4`}
           src={
@@ -103,22 +52,9 @@ const EditorField = ({ onSave, tribeID }) => {
               'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png';
           }}
         />
-        {view === View.Normal && (
-          <NormalEditor defaultValue={cacheValue} onSubmit={handleSubmit} />
-        )}
 
-        {view === View.Expanded && (
-          <ExpandedEditor
-            defaultValue={cacheValue}
-            setView={(doc, selection) => {
-              setCacheValue(doc);
-              setView(View.Normal);
-              // TODO handle set editor selection for better UX
-              console.log(selection);
-            }}
-            onSubmit={handleSubmit}
-          />
-        )}
+        {/* Editor */}
+        <DefaultEditor onSubmit={onSubmit} />
       </div>
     </>
   );

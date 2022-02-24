@@ -1,6 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
 import {
-  ArrowsExpandIcon,
   EmojiHappyIcon,
   PaperAirplaneIcon,
   PhotographIcon,
@@ -12,6 +11,9 @@ import { withHistory } from 'slate-history';
 import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
+
+// constants
+import { ElementType } from '../constants';
 
 // hooks
 import { useDecorator, useEditorConfig, useImage } from '../hooks';
@@ -25,11 +27,20 @@ import type { CustomElement } from '../types';
 const createEditorWithPlugins = pipe(withReact, withHistory);
 
 interface Props {
-  defaultValue: Array<CustomElement>;
+  defaultValue?: Array<CustomElement>;
   onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
-const NormalEditor = ({ defaultValue, onSubmit }: Props) => {
+const DefaultEditor = ({
+  defaultValue = [
+    {
+      children: [{ text: '' }],
+      type: ElementType.Paragraph,
+      key: null,
+    },
+  ],
+  onSubmit,
+}: Props) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
   const [value, setValue] = useState<Array<CustomElement>>(defaultValue);
 
@@ -41,6 +52,7 @@ const NormalEditor = ({ defaultValue, onSubmit }: Props) => {
     useImage(editor);
   const decorator = useDecorator();
   //--------------------------------------------------------------------------------------------------------------------
+
   return (
     <form
       className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
@@ -119,4 +131,4 @@ const NormalEditor = ({ defaultValue, onSubmit }: Props) => {
   );
 };
 
-export default NormalEditor;
+export default DefaultEditor;

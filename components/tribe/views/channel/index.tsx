@@ -1,3 +1,9 @@
+import { useState } from 'react';
+import { parse } from 'node-html-parser';
+
+// api
+import { createContent } from 'api/content';
+
 // components
 import {
   DefaultCover,
@@ -7,16 +13,61 @@ import {
   Page,
 } from 'components/common';
 
+// components
+import Editor from 'components/slate';
+
+// context
+import { useToast } from 'context/toast';
+
+// utils
+import { serialize } from 'components/slate/utils';
+
 // types
 import type { Channel } from 'tools/types/channel';
 import type { Content } from 'tools/types/content';
+import type { CustomElement } from 'components/slate/types';
 
 interface Props {
   channel: Channel;
   channelID: string;
 }
 
+enum State {
+  Idle,
+  Submitting,
+}
+
 const ChannelView = ({ channelID, channel }: Props) => {
+  const [state, setState] = useState<State>(State.Idle);
+
+  const toast = useToast();
+  const handleSubmit = async (values) => {
+    setState(State.Submitting);
+    try {
+      const body = {
+        data: values.map((node: CustomElement) => serialize(node)).join(''),
+        groupId: channelID,
+      };
+
+      const rawHTML = parse(
+        values.map((node: CustomElement) => serialize(node)).join('')
+      );
+      const preview =
+        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
+
+      if (preview) {
+        (body as any).preview = preview;
+      }
+
+      await createContent(body);
+    } catch (error) {
+      toast({
+        message: error || 'Error while creating the content, please try again',
+      });
+    }
+    setState(State.Idle);
+  };
+
   return (
     <>
       <Head title={channel.name} />
@@ -29,11 +80,14 @@ const ChannelView = ({ channelID, channel }: Props) => {
           )
         }
       >
-        <h1>TODO Editor for create Content (Rooms)</h1>
+        <Editor
+          onSubmit={handleSubmit}
+          isFetching={state === State.Submitting}
+        />
 
         <InfiniteScroll apiUrl={`/api/v3/channel/${channelID}/feed`}>
           {(data: Array<Content>) => {
-            return <h1>TODO Items Feed {data.length}</h1>;
+            return 'TODO';
           }}
         </InfiniteScroll>
       </Page>
