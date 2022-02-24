@@ -28,7 +28,7 @@ const Web3ReactManager = ({ children }: Props) => {
     return null;
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default Web3ReactManager;
