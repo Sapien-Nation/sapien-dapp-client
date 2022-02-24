@@ -18,7 +18,11 @@ const Content = ({
     <div className={tw`flex-none py-10`}>
       <img
         src={avatar}
-        alt=""
+        alt={userName}
+        onError={(event) => {
+          (event.target as HTMLImageElement).src =
+            'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
+        }}
         className={tw`w-10 h-10 bg-gray-100 rounded-full`}
       />
     </div>

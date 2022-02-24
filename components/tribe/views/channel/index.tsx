@@ -37,6 +37,7 @@ interface Props {
 enum State {
   Idle,
   Submitting,
+  Success,
 }
 
 const ChannelView = ({ channelID, channel }: Props) => {
@@ -62,6 +63,7 @@ const ChannelView = ({ channelID, channel }: Props) => {
       }
 
       await createContent(body);
+      setState(State.Success);
     } catch (error) {
       toast({
         message: error || 'Error while creating the content, please try again',
@@ -91,18 +93,18 @@ const ChannelView = ({ channelID, channel }: Props) => {
 
         <InfiniteScroll
           apiUrl={`/api/v3/channel/${channelID}/feed`}
-          emptyComponent={<h1>Seems like this feed is empty</h1>}
-          topPlaceholder={<PlaceholderContent />}
+          hardReload={state === State.Success}
+          topPlaceholder={
+            state === State.Submitting ? <h1>Submitting</h1> : null
+          }
         >
-          {(contentList: Array<ContentType>) => {
-            return (
-              <div>
-                {contentList.map((content) => (
-                  <Content key={content.id} content={content} />
-                ))}
-              </div>
-            );
-          }}
+          {(contentList: Array<ContentType>) => (
+            <>
+              {contentList.map((content) => (
+                <Content key={content.id} content={content} />
+              ))}
+            </>
+          )}
         </InfiniteScroll>
       </Page>
     </>

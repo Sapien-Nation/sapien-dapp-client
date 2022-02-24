@@ -30,7 +30,7 @@ const TxHistory = () => {
           <span className={tw`font-bold`}>0 SPN</span>
           <span className={tw`text-gray-400`}>$ 0</span>
         </div>
-        <ExternalLinkIcon className="h-5 w-5 text-gray-400" />
+        <ExternalLinkIcon className={tw`h-5 w-5 text-gray-400`} />
       </div>
     </div>
   );

@@ -202,7 +202,7 @@ const Wallet = () => {
           )}
           {tab === WalletTabs.TxHistory ? 'Transactions' : 'Wallet'}
         </h5>
-        <Popover className="relative">
+        <Popover className={tw`relative`}>
           {({ close }) => (
             <>
               <Popover.Button

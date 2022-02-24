@@ -1,5 +1,6 @@
-import { useRef, useEffect, Fragment } from 'react';
+import { useRef, useEffect } from 'react';
 import useSWRInfinite from 'swr/infinite';
+import { tw } from 'twind';
 
 // api
 import { fetcher } from 'api';
@@ -19,6 +20,7 @@ interface Props {
   apiUrl: string;
   children: any;
   emptyComponent?: React.ReactNode | null;
+  hardReload?: boolean;
   loadingComponent?: React.ReactNode | null;
   showRefresh?: boolean;
   refreshLabel?: string;
@@ -32,6 +34,7 @@ const InfiniteScroll = ({
   apiUrl,
   children,
   emptyComponent = null,
+  hardReload = false,
   showRefresh = false,
   refreshLabel = 'New Content',
   refreshComponent = null,
@@ -47,6 +50,12 @@ const InfiniteScroll = ({
     (...args) => getKey(...args, apiUrl),
     fetcher
   );
+
+  useEffect(() => {
+    if (hardReload) {
+      mutate();
+    }
+  }, [hardReload, mutate]);
 
   const isEmpty = data?.[0]?.data.length === 0;
 
@@ -65,7 +74,7 @@ const InfiniteScroll = ({
   }, [isVisible, isRefreshing]);
 
   return (
-    <>
+    <div className={tw`overflow-auto w-full min-h-full`}>
       {/* Above the list */}
       {topPlaceholder}
       {isRefreshing && refreshComponent}
@@ -88,7 +97,7 @@ const InfiniteScroll = ({
         {isLoadingMore && loadingComponent}
         {isReachingEnd && reachingEndComponent}
       </div>
-    </>
+    </div>
   );
 };
 

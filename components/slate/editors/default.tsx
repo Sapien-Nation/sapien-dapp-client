@@ -76,7 +76,7 @@ const DefaultEditor = ({
       </Slate>
       <div className={tw`flex justify-end items-end gap-1`}>
         {/* Emoji Upload */}
-        <Popover className="relative">
+        <Popover className={tw`relative`}>
           {() => (
             <>
               <Popover.Button
@@ -93,7 +93,9 @@ const DefaultEditor = ({
                 leaveFrom={tw`opacity-100 translate-y-0`}
                 leaveTo={tw`opacity-0 translate-y-1`}
               >
-                <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0">
+                <Popover.Panel
+                  className={tw`absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0`}
+                >
                   <Picker onSelect={(event) => insertEmoji(editor, event)} />
                 </Popover.Panel>
               </Transition>
