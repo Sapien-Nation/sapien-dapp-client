@@ -84,7 +84,9 @@ const ChannelView = ({ channelID, channel }: Props) => {
           )
         }
       >
-        <div className={tw`max-w-3xl mx-auto border-1 my-6`}>
+        <div
+          className={tw`max-w-2xl w-full mx-4 md:mx-auto md:max-w-2xl rounded-xl border-1 my-6`}
+        >
           <Editor
             onSubmit={handleSubmit}
             isFetching={state === State.Submitting}

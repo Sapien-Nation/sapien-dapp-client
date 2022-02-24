@@ -4,7 +4,7 @@ import { tw } from 'twind';
 const Header = ({ alt, src, ...rest }) => (
   <div
     className={tw`m-4 shadow-md rounded-lg`}
-    style={{ position: 'relative', height: '250px' }}
+    style={{ position: 'relative', minHeight: '250px' }}
   >
     {/* @ts-ignore */}
     <Image
