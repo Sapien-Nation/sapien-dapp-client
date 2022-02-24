@@ -2,7 +2,7 @@ import { useRef, useEffect, Fragment } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
 // api
-import fetcher from 'api';
+import { fetcher } from 'api';
 
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
@@ -43,10 +43,15 @@ const InfiniteScroll = ({
   const ref = useRef();
   const isVisible = useOnScreen(ref);
 
-  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
-    (...args) => getKey(...args, apiUrl),
-    fetcher
-  );
+  const {
+    // @ts-ignore
+    data: { data },
+    error,
+    mutate,
+    size,
+    setSize,
+    isValidating,
+  } = useSWRInfinite((...args) => getKey(...args, apiUrl), fetcher);
 
   // @ts-ignore
   const isEmpty = data?.[0]?.length === 0;

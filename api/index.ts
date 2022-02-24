@@ -1,5 +1,26 @@
 import axios from 'axios';
 
+export enum Envs {
+  Local = 'LOCAL',
+  Sandbox = 'SANDBOX',
+  QAT = 'QAT',
+  POC = 'POC',
+}
+
+const nodeEnv = process.env.NEXT_PUBLIC_ENV;
+export const env = nodeEnv;
+export const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL;
+export const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
+export const walleBiconomyApiKey =
+  process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
+export const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
+export const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
+
+/*
+ ***
+ ***  Instances
+ ***
+ */
 export const localInstance = axios.create();
 
 const instance = axios.create({
@@ -10,15 +31,15 @@ export const authInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
 });
 
-export const tokensInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_TOKENS_URL,
-});
-
 export const notificationInstance = axios.create({
-  // baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
-  baseURL: 'https://notif-sandbox.sapien.network/',
+  baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
 });
 
+/*
+ ***
+ ***  Interceptors
+ ***
+ */
 instance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
   if (tokens) {
@@ -46,20 +67,17 @@ notificationInstance.interceptors.request.use((config) => {
   return config;
 }, undefined);
 
+/*
+ ***
+ ***  Fetchers
+ ***
+ */
+export const fetcher = (url: string) => {
+  console.log(url);
+  return instance
+    .get(url)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.error));
+};
+
 export default instance;
-
-export enum Envs {
-  Local = 'LOCAL',
-  Sandbox = 'SANDBOX',
-  QAT = 'QAT',
-  POC = 'POC',
-}
-
-const nodeEnv = process.env.NEXT_PUBLIC_ENV;
-export const env = nodeEnv;
-export const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL;
-export const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
-export const walleBiconomyApiKey =
-  process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
-export const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
-export const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
