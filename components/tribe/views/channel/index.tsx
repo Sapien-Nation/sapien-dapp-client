@@ -12,6 +12,7 @@ import {
   Header,
   Page,
 } from 'components/common';
+import { Content, PlaceholderContent } from 'components/content';
 
 // components
 import Editor from 'components/slate';
@@ -24,7 +25,7 @@ import { serialize } from 'components/slate/utils';
 
 // types
 import type { Channel } from 'tools/types/channel';
-import type { Content } from 'tools/types/content';
+import type { Content as ContentType } from 'tools/types/content';
 import type { CustomElement } from 'components/slate/types';
 
 interface Props {
@@ -85,9 +86,19 @@ const ChannelView = ({ channelID, channel }: Props) => {
           isFetching={state === State.Submitting}
         />
 
-        <InfiniteScroll apiUrl={`/api/v3/channel/${channelID}/feed`}>
-          {(data: Array<Content>) => {
-            return 'TODO';
+        <InfiniteScroll
+          apiUrl={`/api/v3/channel/${channelID}/feed`}
+          emptyComponent={<h1>Seems like this feed is empty</h1>}
+          topPlaceholder={<PlaceholderContent />}
+        >
+          {(contentList: Array<ContentType>) => {
+            return (
+              <div>
+                {contentList.map((content) => (
+                  <Content key={content.id} content={content} />
+                ))}
+              </div>
+            );
           }}
         </InfiniteScroll>
       </Page>

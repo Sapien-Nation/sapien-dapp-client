@@ -1,5 +1,19 @@
 import { tw } from 'twind';
-const Content = ({ avatar, createdAt, content, userName }) => (
+
+// types
+import type { Content as ContentType } from 'tools/types/content';
+
+interface Props {
+  content: ContentType;
+}
+
+const Content = ({
+  content: {
+    author: { avatar, userName },
+    createdAt,
+    body,
+  },
+}: Props) => (
   <div className={tw`flex text-sm text-gray-500 space-x-4`}>
     <div className={tw`flex-none py-10`}>
       <img
@@ -15,7 +29,7 @@ const Content = ({ avatar, createdAt, content, userName }) => (
       </p>
       <div
         className={tw`mt-4 prose prose-sm max-w-none text-gray-500`}
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: body }}
       />
     </div>
   </div>

@@ -43,18 +43,12 @@ const InfiniteScroll = ({
   const ref = useRef();
   const isVisible = useOnScreen(ref);
 
-  const {
-    // @ts-ignore
-    data: { data },
-    error,
-    mutate,
-    size,
-    setSize,
-    isValidating,
-  } = useSWRInfinite((...args) => getKey(...args, apiUrl), fetcher);
+  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
+    (...args) => getKey(...args, apiUrl),
+    fetcher
+  );
 
-  // @ts-ignore
-  const isEmpty = data?.[0]?.length === 0;
+  const isEmpty = data?.[0]?.data.length === 0;
 
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
@@ -84,7 +78,7 @@ const InfiniteScroll = ({
       )}
 
       {/* List */}
-      {children(data ? [].concat(...data) : [])}
+      {children(data ? [].concat(...data[0].data) : [])}
 
       {/* Under the list List */}
       {isEmpty && emptyComponent}
