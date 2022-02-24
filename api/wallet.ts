@@ -1,7 +1,7 @@
-import { tokensInstance } from '.';
+import instance from '.';
 
 export const sendRawTransaction = (body: { rawTx: string }) =>
-  tokensInstance
+  instance
     .post('/api/v3/wallet/send', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
@@ -13,7 +13,7 @@ export const sendSPN = (body: {
   contentId: string;
   rawTx: string;
 }) =>
-  tokensInstance
+  instance
     .post('/api/v3/wallet/sendSPN', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
@@ -27,7 +27,7 @@ export const sendBadge = (body: {
   contentId?: string;
   rawTx: string;
 }) =>
-  tokensInstance
+  instance
     .post('/api/v3/wallet/sendBadge', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
@@ -39,13 +39,13 @@ export const purchaseBadge = (body: {
   totalPrice: number;
   isJoiningTribe: boolean;
 }) =>
-  tokensInstance
+  instance
     .post('/api/v3/badge/purchaseBadge', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const grantSapienBadge = (userId: string) =>
-  tokensInstance
+  instance
     .post('/api/v3/badge/grantSapienBadge', { userId: userId })
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
