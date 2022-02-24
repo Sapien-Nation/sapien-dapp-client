@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { parse } from 'node-html-parser';
+import { tw } from 'twind';
 
 // api
 import { createContent } from 'api/content';
@@ -81,10 +82,12 @@ const ChannelView = ({ channelID, channel }: Props) => {
           )
         }
       >
-        <Editor
-          onSubmit={handleSubmit}
-          isFetching={state === State.Submitting}
-        />
+        <div className={tw`max-w-3xl mx-auto border-1 my-6`}>
+          <Editor
+            onSubmit={handleSubmit}
+            isFetching={state === State.Submitting}
+          />
+        </div>
 
         <InfiniteScroll
           apiUrl={`/api/v3/channel/${channelID}/feed`}
