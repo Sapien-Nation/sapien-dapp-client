@@ -1,9 +1,20 @@
 import { Image } from '.';
+import { tw } from 'twind';
 
 const Header = ({ alt, src, ...rest }) => (
-  <div style={{ position: 'relative', width: '100%', height: '250px' }}>
+  <div
+    className={tw`m-4 shadow-md rounded-lg`}
+    style={{ position: 'relative', height: '250px' }}
+  >
     {/* @ts-ignore */}
-    <Image {...rest} alt={alt} src={src} layout="fill" objectFit="cover" />
+    <Image
+      {...rest}
+      alt={alt}
+      src={src}
+      className={tw`rounded-lg m-4`}
+      layout="fill"
+      objectFit="cover"
+    />
   </div>
 );
 
