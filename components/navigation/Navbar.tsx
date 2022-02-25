@@ -102,20 +102,20 @@ const Navbar = () => {
         className={tw`flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8`}
       >
         <button
-          className={tw`bg-transparent py-2 px-4 border border-blue-500 rounded mr-2`}
+          className={tw`bg-transparent py-2 px-4 border text-sapien font-extrabold border border-2 rounded-lg shadow-sm mr-2`}
           onClick={handleConnectWallet}
         >
           {active ? displayAddress(account) : 'Connect Wallet'}
         </button>
         <button
-          className={tw` py-2 px-4 border border-blue-500 rounded ${
+          className={tw` py-2 px-4 border border text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
             isFetching ? 'cursor-not-allowed' : ''
           }`}
           onClick={handleBuyPassport}
         >
           {isFetching ? (
             <div
-              className="animate-spin w-6 h-6 border-4 rounded-full"
+              className="animate-spin w-6 h-6 border-4 border-2 rounded-full"
               role="status"
             ></div>
           ) : (
