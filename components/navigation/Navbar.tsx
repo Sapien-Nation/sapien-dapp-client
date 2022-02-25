@@ -5,11 +5,15 @@ import { ethers } from 'ethers';
 // api
 import { reservePassport } from 'api/passport';
 
+//constants
+import { ToastType } from 'constants/toast';
+
 // components
 import { Search } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
+import { useToast } from 'context/toast';
 
 // hooks
 import { useWeb3React } from 'hooks/web3';
@@ -24,14 +28,34 @@ const Navbar = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const { me } = useAuth();
-  const { deactivate, account, activate, active } = useWeb3React();
+  const toast = useToast();
+  const { deactivate, account, activate, active, chainId } = useWeb3React();
 
   const handleConnectWallet = () =>
     active ? deactivate() : activate(injected);
 
   const handleBuyPassport = async () => {
-    setIsFetching(true);
+    if (
+      process.env.NODE_ENV === 'development' &&
+      chainId !== 3 &&
+      chainId !== 4
+    ) {
+      toast({
+        message: 'Switch Network to Ropsten or Rinkeby',
+      });
 
+      return;
+    }
+
+    if (process.env.NODE_ENV === 'production' && chainId !== 1) {
+      toast({
+        message: 'Switch Network to MainNet',
+      });
+
+      return;
+    }
+
+    setIsFetching(true);
     const provider = new ethers.providers.Web3Provider(
       (window as any).ethereum
     );
@@ -55,10 +79,18 @@ const Navbar = () => {
           address: account,
           status: '',
         };
+
         await reservePassport(body);
+
+        toast({
+          message: 'Operation successful',
+          type: ToastType.Success,
+        });
       }
     } catch (e) {
-      // TODO error
+      toast({
+        message: e.message || 'error',
+      });
     }
 
     setIsFetching(false);
