@@ -64,7 +64,7 @@ const TribePage = ({
         return <h1>TODO Room</h1>;
       case View.Channel:
         return (
-          <Query api={`/api/v3/channel/${viewID}`}>
+          <Query api={`/api/v3/channel/${viewID}`} loader={null}>
             {(channel: Channel) => (
               <ChannelView channel={channel} channelID={viewID} />
             )}
