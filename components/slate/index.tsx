@@ -54,7 +54,7 @@ const EditorField = ({ onSubmit, isFetching }: Props) => {
         />
 
         {/* Editor */}
-        <DefaultEditor onSubmit={onSubmit} />
+        <DefaultEditor isFetching={isFetching} onSubmit={onSubmit} />
       </div>
     </>
   );

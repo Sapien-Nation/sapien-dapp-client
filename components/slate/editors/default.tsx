@@ -11,6 +11,7 @@ import { withHistory } from 'slate-history';
 import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
 import { tw } from 'twind';
+import { Spinner } from 'components/common';
 
 // constants
 import { ElementType } from '../constants';
@@ -28,6 +29,7 @@ const createEditorWithPlugins = pipe(withReact, withHistory);
 
 interface Props {
   defaultValue?: Array<CustomElement>;
+  isFetching?: boolean;
   onSubmit: (value: Array<CustomElement>, editor: any) => void;
 }
 
@@ -39,6 +41,7 @@ const DefaultEditor = ({
       key: null,
     },
   ],
+  isFetching = false,
   onSubmit,
 }: Props) => {
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
@@ -55,12 +58,15 @@ const DefaultEditor = ({
 
   return (
     <form
-      className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row`}
+      className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row ${
+        isFetching && 'opacity-50'
+      }`}
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit(value, editor);
       }}
     >
+      {isFetching && <Spinner />}
       <Slate
         editor={editor}
         value={value}

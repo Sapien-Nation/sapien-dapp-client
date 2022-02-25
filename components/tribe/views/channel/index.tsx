@@ -96,9 +96,6 @@ const ChannelView = ({ channelID, channel }: Props) => {
         <InfiniteScroll
           apiUrl={`/api/v3/channel/${channelID}/feed`}
           hardReload={state === State.Success}
-          topPlaceholder={
-            state === State.Submitting ? <h1>Submitting</h1> : null
-          }
         >
           {(contentList: Array<ContentType>) => (
             <>
