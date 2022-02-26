@@ -1,4 +1,5 @@
 import { tw } from 'twind';
+import * as timeago from 'timeago.js';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
@@ -32,7 +33,7 @@ const Content = ({
       <div className={tw`flex justify-between pr-5`}>
         <h3 className={tw`font-medium text-gray-900`}>{userName}</h3>
         <p>
-          <time dateTime={createdAt}>{createdAt}</time>
+          <time dateTime={createdAt}>{timeago.format(createdAt)}</time>
         </p>
       </div>
       <div

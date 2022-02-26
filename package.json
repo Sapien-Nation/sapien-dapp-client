@@ -50,6 +50,7 @@
     "slate-history": "^0.66.0",
     "slate-react": "^0.72.1",
     "swr": "^1.0.1",
+    "timeago.js": "^4.0.2",
     "twind": "^0.16.16",
     "uuid": "^8.3.2",
     "web3": "^1.7.0"
