@@ -48,12 +48,12 @@ const ChannelView = ({ channelID, channel }: Props) => {
     setState(State.Submitting);
     try {
       const body = {
-        data: values.map((node: CustomElement) => serialize(node)).join(''),
+        data: values.map((node: CustomElement) => JSON.stringify(node)),
         groupId: channelID,
       };
 
       const rawHTML = parse(
-        values.map((node: CustomElement) => serialize(node)).join('')
+        values.map((node: CustomElement) => JSON.stringify(node))
       );
       const preview =
         rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
