@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { parse } from 'node-html-parser';
 import { tw } from 'twind';
 
 // api
@@ -13,16 +12,13 @@ import {
   Header,
   Page,
 } from 'components/common';
-import { Content, PlaceholderContent } from 'components/content';
+import { Content } from 'components/content';
 
 // components
 import Editor from 'components/slate';
 
 // context
 import { useToast } from 'context/toast';
-
-// utils
-import { serialize } from 'components/slate/utils';
 
 // types
 import type { Channel } from 'tools/types/channel';
@@ -48,19 +44,9 @@ const ChannelView = ({ channelID, channel }: Props) => {
     setState(State.Submitting);
     try {
       const body = {
-        data: values.map((node: CustomElement) => JSON.stringify(node)),
+        data: JSON.stringify(values),
         groupId: channelID,
       };
-
-      const rawHTML = parse(
-        values.map((node: CustomElement) => JSON.stringify(node))
-      );
-      const preview =
-        rawHTML.querySelector('img')?.rawAttributes?.['data-fileKey'];
-
-      if (preview) {
-        (body as any).preview = preview;
-      }
 
       await createContent(body);
       setState(State.Success);

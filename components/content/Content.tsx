@@ -1,6 +1,9 @@
 import { tw } from 'twind';
 import * as timeago from 'timeago.js';
 
+// components
+import { SlatePreview } from 'components/common';
+
 // types
 import type { Content as ContentType } from 'tools/types/content';
 
@@ -36,10 +39,9 @@ const Content = ({
           <time dateTime={createdAt}>{timeago.format(createdAt)}</time>
         </p>
       </div>
-      <div
-        className={tw`mt-3 prose prose-sm max-w-none text-gray-500`}
-        dangerouslySetInnerHTML={{ __html: body }}
-      />
+
+      {/* // @ts-ignore */}
+      <SlatePreview preview={JSON.parse(body)} />
     </div>
   </div>
 );
