@@ -25,10 +25,10 @@ import { injected } from 'connectors';
 import { displayAddress } from 'utils/web3';
 
 const Navbar = () => {
+  const toast = useToast();
   const [isFetching, setIsFetching] = useState(false);
 
   const { me } = useAuth();
-  const toast = useToast();
   const { deactivate, account, activate, active, chainId } = useWeb3React();
 
   const handleConnectWallet = () =>
@@ -36,7 +36,7 @@ const Navbar = () => {
 
   const handleBuyPassport = async () => {
     if (
-      process.env.NODE_ENV === 'development' &&
+      process.env.NEXT_PUBLIC_WALLET_IS_MAINNET === 'false' &&
       chainId !== 3 &&
       chainId !== 4
     ) {
@@ -45,9 +45,10 @@ const Navbar = () => {
       });
 
       return;
-    }
-
-    if (process.env.NODE_ENV === 'production' && chainId !== 1) {
+    } else if (
+      process.env.NEXT_PUBLIC_WALLET_IS_MAINNET === 'true' &&
+      chainId != 1
+    ) {
       toast({
         message: 'Switch Network to MainNet',
       });
@@ -69,6 +70,10 @@ const Navbar = () => {
       const receipt = await tx.wait();
 
       if (receipt.transactionHash && receipt.status) {
+        toast({
+          message: 'Transaction successful',
+          type: ToastType.Success,
+        });
         const body = {
           passportId: '',
           partyId: me.id,
@@ -81,16 +86,21 @@ const Navbar = () => {
         };
 
         await reservePassport(body);
-
         toast({
           message: 'Operation successful',
           type: ToastType.Success,
         });
       }
     } catch (e) {
-      toast({
-        message: e.message || 'error',
-      });
+      if (e.code === 'INSUFFICIENT_FUNDS') {
+        toast({
+          message: 'Not enough balance in the wallet!',
+        });
+      } else {
+        toast({
+          message: e.message || 'error',
+        });
+      }
     }
 
     setIsFetching(false);
@@ -102,20 +112,20 @@ const Navbar = () => {
         className={tw`flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8`}
       >
         <button
-          className={tw`bg-transparent py-2 px-4 border text-sapien font-extrabold border border-2 rounded-lg shadow-sm mr-2`}
+          className={tw`bg-transparent py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm mr-2`}
           onClick={handleConnectWallet}
         >
           {active ? displayAddress(account) : 'Connect Wallet'}
         </button>
         <button
-          className={tw` py-2 px-4 border border text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
+          className={tw` py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
             isFetching ? 'cursor-not-allowed' : ''
           }`}
           onClick={handleBuyPassport}
         >
           {isFetching ? (
             <div
-              className="animate-spin w-6 h-6 border-4 border-2 rounded-full"
+              className="animate-spin w-6 h-6 border-2 rounded-full"
               role="status"
             ></div>
           ) : (
