@@ -64,6 +64,7 @@ const DefaultEditor = ({
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit(value, editor);
+        setValue(defaultValue);
       }}
     >
       {isFetching && <Spinner />}
