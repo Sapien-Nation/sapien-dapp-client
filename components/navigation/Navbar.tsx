@@ -82,7 +82,7 @@ const Navbar = () => {
           units: 'ETHER',
           type: 'METAMASK',
           address: account,
-          status: '',
+          status: 'A',
         };
 
         await reservePassport(body);
@@ -120,8 +120,9 @@ const Navbar = () => {
         <button
           className={tw` py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
             isFetching ? 'cursor-not-allowed' : ''
-          }`}
+          } ${active ? '' : 'opacity-50 cursor-not-allowed'}`}
           onClick={handleBuyPassport}
+          disabled={!active}
         >
           {isFetching ? (
             <div

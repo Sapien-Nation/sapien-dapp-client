@@ -8,6 +8,7 @@ export const reservePassport = (body: {
   units: string;
   type: string;
   address: string;
+  status: string;
 }) =>
   instance
     .post('/api/v3/passportPurchase/reserve', body)
