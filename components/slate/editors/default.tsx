@@ -113,7 +113,10 @@ const DefaultEditor = ({
         {/* File Upload */}
         <button
           className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
-          onClick={() => fileRef.current.click()}
+          onClick={(event) => {
+            event.preventDefault();
+            fileRef.current.click();
+          }}
         >
           <PhotographIcon className={tw`h-6 w-6`} />
         </button>
