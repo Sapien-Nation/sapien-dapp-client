@@ -23,7 +23,6 @@ import { useToast } from 'context/toast';
 // types
 import type { Channel } from 'tools/types/channel';
 import type { Content as ContentType } from 'tools/types/content';
-import type { CustomElement } from 'components/slate/types';
 
 interface Props {
   channel: Channel;

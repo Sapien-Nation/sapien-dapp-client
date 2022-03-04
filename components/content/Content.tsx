@@ -32,7 +32,7 @@ const Content = ({
         className={tw`w-10 h-10 bg-gray-100 rounded-full`}
       />
     </div>
-    <div className={tw`py-5 w-full`}>
+    <div className={tw`py-5 pr-5 w-full`}>
       <div className={tw`flex justify-between pr-5`}>
         <h3 className={tw`font-medium text-gray-900`}>{userName}</h3>
         <p>
