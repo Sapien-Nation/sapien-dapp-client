@@ -1,6 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
+
+// hooks
+import { useEditorConfig } from '../slate/hooks';
 
 interface Props {
   preview: Array<Descendant>;
@@ -8,6 +11,7 @@ interface Props {
 
 function SlatePreview({ preview }: Props) {
   const editor = useMemo(() => withReact(createEditor()), []);
+  const { renderElement } = useEditorConfig(editor);
 
   return (
     <Slate
@@ -17,7 +21,7 @@ function SlatePreview({ preview }: Props) {
         //
       }}
     >
-      <Editable readOnly />
+      <Editable readOnly renderElement={renderElement} />
     </Slate>
   );
 }

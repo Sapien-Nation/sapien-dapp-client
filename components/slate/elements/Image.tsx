@@ -34,13 +34,15 @@ const Image = ({ attributes, children, element }: Props) => {
 
   return (
     <span className={tw`relative`}>
-      <button
-        type="button"
-        className={tw`absolute z-10 -top-2 -left-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
-        onClick={() => onRemove()}
-      >
-        <XIcon className={tw`h-3 w-3 text-white`} aria-hidden="true" />
-      </button>
+      {onRemove && (
+        <button
+          type="button"
+          className={tw`absolute z-10 -top-2 -left-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+          onClick={() => onRemove()}
+        >
+          <XIcon className={tw`h-3 w-3 text-white`} aria-hidden="true" />
+        </button>
+      )}
       <img
         {...attributes}
         src={url}
