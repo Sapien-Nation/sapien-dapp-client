@@ -58,7 +58,7 @@ const DefaultEditor = ({
 
   return (
     <form
-      className={tw`w-full bg-gray-50 rounded-xl px-4 py-2 flex flex-row ${
+      className={tw`w-full bg-gray-50 rounded-xl boder px-4 py-2 flex flex-row ${
         isFetching && 'opacity-50'
       }`}
       onSubmit={(event) => {

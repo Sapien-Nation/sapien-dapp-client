@@ -19,9 +19,9 @@ const Content = ({
   },
 }: Props) => (
   <div
-    className={tw`flex text-sm text-gray-500 border w-full mx-4 md:mx-auto md:max-w-2xl rounded-xl space-x-4 mb-4`}
+    className={tw`flex text-sm text-gray-500 border shadow w-full mx-4 md:mx-auto md:max-w-2xl rounded-2xl space-x-4 mb-4`}
   >
-    <div className={tw`flex-none py-5 pl-5`}>
+    <div className={tw`flex-none py-9 pl-7`}>
       <img
         src={avatar}
         alt={userName}
@@ -33,8 +33,8 @@ const Content = ({
       />
     </div>
     <div className={tw`py-5 pr-5 w-full`}>
-      <div className={tw`flex justify-between pr-5`}>
-        <h3 className={tw`font-medium text-gray-900`}>{userName}</h3>
+      <div className={tw`flex justify-between pr-7`}>
+        <h3 className={tw`font-medium text-base text-gray-900`}>{userName}</h3>
         <p>
           <time dateTime={createdAt}>{timeago.format(createdAt)}</time>
         </p>
