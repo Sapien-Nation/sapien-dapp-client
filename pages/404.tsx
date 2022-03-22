@@ -7,14 +7,10 @@ import { FullLogo } from 'assets';
 // components
 import { Head } from 'components/common';
 
-// hooks
-import { useMainTribe } from 'hooks/tribe';
-
 // types
 import { NextPage } from 'next';
 
 const ErrorPage: NextPage = () => {
-  const { tribeID } = useMainTribe();
   return (
     <>
       <Head title="404" />
@@ -27,7 +23,7 @@ const ErrorPage: NextPage = () => {
             Whoops looks like something went wrong...
           </h1>
           <div className={tw`mt-6 text-center`}>
-            <Link href={`/tribes/${tribeID}/home`}>
+            <Link href={`/`}>
               <a
                 className={tw`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
               >
