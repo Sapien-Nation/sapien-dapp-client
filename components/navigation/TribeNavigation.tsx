@@ -70,7 +70,7 @@ const TribeNavigation = () => {
             </ul>
           </nav>
         </div>
-        <div>
+        {/*<div>
           <nav>
             <ul>
               <li>
@@ -107,8 +107,8 @@ const TribeNavigation = () => {
               </li>
             </ul>
           </nav>
-        </div>
-        <div>
+        </div>*/}
+        {/*<div>
           <nav>
             <ul>
               <li>
@@ -129,8 +129,8 @@ const TribeNavigation = () => {
               </li>
             </ul>
           </nav>
-        </div>
-        <div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
+                  </div>*/}
+        {/*<div className={tw`w-full max-w-md p-2 mx-auto bg-white rounded-2xl`}>
           <Disclosure defaultOpen as="div" className={tw`mt-2`}>
             {({ open }) => {
               return (
@@ -270,7 +270,7 @@ const TribeNavigation = () => {
               );
             }}
           </Disclosure>
-        </div>
+          </div>*/}
       </div>
 
       {/* Dialogs */}
