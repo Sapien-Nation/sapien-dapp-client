@@ -1,4 +1,3 @@
-import { tw } from 'twind';
 import Link from 'next/link';
 
 // components
@@ -13,11 +12,11 @@ const ChangePasswordSuccessPage: NextPage = () => (
     <Head title="Password Changed" />
     <Layout title="Password Changed!">
       <>
-        <p className={tw`text-purple-500 text-center`}>
+        <p className="text-purple-500 text-center">
           Please{' '}
           <Link href="/login">
             <a
-              className={tw`text-purple-700`}
+              className="text-purple-700"
               style={{ textDecoration: 'underline' }}
             >
               Login

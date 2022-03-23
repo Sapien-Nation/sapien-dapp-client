@@ -6,6 +6,7 @@ interface Props {
   text: string;
 }
 
+// eslint-disable-next-line react/display-name
 const Tooltip = forwardRef(({ text }: Props, ref) => {
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip(
