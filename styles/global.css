@@ -4,6 +4,8 @@
 /* purgecss end ignore */
 @tailwind utilities;
 
+/* purgecss start ignore */
 #__next {
   height: 100%;
 }
+/* purgecss end ignore */
