@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { SWRConfig } from 'swr';
 import { useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
+import { ThemeProvider } from 'next-themes';
 import twindConfig from 'twind.config';
 import { Web3ReactProvider } from '@web3-react/core';
 
@@ -38,34 +39,36 @@ const Web3Provider = dynamic(() => import('components/provider'), {
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <Web3ReactProvider getLibrary={getLibrary}>
     <Web3Provider getLibrary={getLibrary}>
-      <ErrorBoundary FallbackComponent={ErrorView}>
-        <SWRConfig
-          value={{
-            provider: () => new Map(),
-            errorRetryCount: 0,
-            fetcher: (url: string) =>
-              axios(url)
-                .then(({ data }) => data)
-                .catch(({ response }) => Promise.reject(response.data.error)),
-            revalidateOnFocus: false,
-          }}
-        >
-          <ToastProvider>
-            <SocketProvider>
-              <WalletProvider>
-                <AuthenticationProvider>
-                  <AppLayout>
-                    <Web3ReactManager>
-                      <Component {...pageProps} />
-                    </Web3ReactManager>
-                  </AppLayout>
-                </AuthenticationProvider>
-              </WalletProvider>
-            </SocketProvider>
-            <ToastContainer />
-          </ToastProvider>
-        </SWRConfig>
-      </ErrorBoundary>
+      <ThemeProvider defaultTheme="dark" attribute="class">
+        <ErrorBoundary FallbackComponent={ErrorView}>
+          <SWRConfig
+            value={{
+              provider: () => new Map(),
+              errorRetryCount: 0,
+              fetcher: (url: string) =>
+                axios(url)
+                  .then(({ data }) => data)
+                  .catch(({ response }) => Promise.reject(response.data.error)),
+              revalidateOnFocus: false,
+            }}
+          >
+            <ToastProvider>
+              <SocketProvider>
+                <WalletProvider>
+                  <AuthenticationProvider>
+                    <AppLayout>
+                      <Web3ReactManager>
+                        <Component {...pageProps} />
+                      </Web3ReactManager>
+                    </AppLayout>
+                  </AuthenticationProvider>
+                </WalletProvider>
+              </SocketProvider>
+              <ToastContainer />
+            </ToastProvider>
+          </SWRConfig>
+        </ErrorBoundary>
+      </ThemeProvider>
     </Web3Provider>
   </Web3ReactProvider>
 );

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
 import { tw } from 'twind';
 
@@ -18,6 +19,7 @@ interface LoginFormValues {
 }
 
 const LoginForm = () => {
+  const { query } = useRouter();
   const methods = useForm<LoginFormValues>();
   const {
     control,
@@ -33,11 +35,11 @@ const LoginForm = () => {
       const response = await login({
         email,
         client: window?.navigator.userAgent,
-        redirect: '/',
+        redirect: (query.redirect as string) || '/',
         password,
       });
 
-      setSession(response);
+      setSession(response, (query.redirect as string) || null);
     } catch (error) {
       toast({
         message: error || 'Invalid Credentials',
@@ -58,7 +60,7 @@ const LoginForm = () => {
           <div className={tw`mt-1`}>
             <TextInput
               autoComplete="email"
-              className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+              className={tw`appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
               name="email"
               placeholder="email@example.com"
               type="text"
@@ -79,7 +81,7 @@ const LoginForm = () => {
             extraLabel={
               <Link href="/forgot">
                 <a
-                  className={tw`text-xs text-purple-600 hover:text-purple-500 float-right`}
+                  className={tw`text-xs text-sapien hover:text-purple-500 float-right`}
                 >
                   Forgot your password?
                 </a>
@@ -89,7 +91,7 @@ const LoginForm = () => {
           <div className={tw`mt-1`}>
             <PasswordInput
               control={control}
-              validate={(value) => value.length > 0 || 'is required'}
+              shouldValidate={false}
               inputProps={{
                 'aria-invalid': Boolean(passwordError),
                 'aria-describedby': 'password-error',
@@ -104,7 +106,7 @@ const LoginForm = () => {
             className={tw`${
               isSubmitting ? 'cursor-not-allowed disabled:opacity-75' : ''
             }
-            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
             disabled={isSubmitting}
           >
             Sign in
@@ -112,9 +114,15 @@ const LoginForm = () => {
 
           <div className={tw`mt-8 text-center`}>
             <p className={tw`text-sm inline`}>{`Don't have an account?`}</p>
-            <Link href="/register">
+            <Link
+              href={
+                query.redirect
+                  ? `/register?redirect=${query.redirect}`
+                  : '/register'
+              }
+            >
               <a
-                className={tw`font-medium text-sm text-purple-600 hover:text-purple-500`}
+                className={tw`font-medium text-sm text-sapien hover:text-purple-500`}
               >
                 &nbsp;register
               </a>

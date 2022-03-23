@@ -11,9 +11,7 @@ const TextInputLabel = ({ error, extraLabel = null, name, label }: Props) => {
   return (
     <label
       htmlFor={name}
-      className={tw`text-sm mt-4 block text-sm ${
-        error ? 'text-red-500' : 'text-gray-700'
-      }`}
+      className={tw`text-sm mt-4 block text-sm ${error && 'text-red-500'}`}
       id={error ? `${name}-error` : ''}
     >
       <span className={tw`${error ? 'font-extrabold' : 'font-medium'}`}>

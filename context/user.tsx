@@ -15,11 +15,14 @@ export interface Authentication {
   isLoggingIn: boolean;
   newUser: boolean;
   setNewUser: (status: boolean) => void;
-  setSession: (tokens: {
-    token: string;
-    torus: string;
-    refresh: string;
-  }) => void;
+  setSession: (
+    tokens: {
+      token: string;
+      torus: string;
+      refresh: string;
+    },
+    redirect?: string | null
+  ) => void;
 }
 
 export const AuthenticationContext = createContext<Authentication>(null);

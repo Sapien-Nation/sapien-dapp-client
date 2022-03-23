@@ -20,7 +20,7 @@ const Layout = ({ children, title }: Props) => {
 
   return (
     <>
-      <div className={tw`min-h-full flex`}>
+      <div className={tw`min-h-screen flex`}>
         <div className={tw`hidden lg:block relative w-0 flex-1`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -37,7 +37,7 @@ const Layout = ({ children, title }: Props) => {
               <div className={tw`flex justify-center items-center`}>
                 <img
                   className={tw`pr-1 w-16`}
-                  src="/landing/logooutlined.svg"
+                  src="/images/logooutlined.svg"
                   alt="sapien"
                 />
               </div>

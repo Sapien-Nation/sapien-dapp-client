@@ -21,6 +21,7 @@ interface RegisterFormValues {
   email: string;
   firstName: string;
   password: string;
+  confirm: string;
   username: string;
   lastName: string;
   terms: boolean;
@@ -33,6 +34,7 @@ const RegisterForm = () => {
       email: '',
       firstName: '',
       password: '',
+      confirm: '',
       username: '',
       lastName: '',
       terms: false,
@@ -44,6 +46,7 @@ const RegisterForm = () => {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = methods;
 
   const toast = useToast();
@@ -54,9 +57,20 @@ const RegisterForm = () => {
     firstName,
     lastName,
     password,
+    confirm,
     username,
   }: RegisterFormValues) => {
     try {
+      if (confirm !== password) {
+        setError('password', { message: 'Passwords must match' });
+        setError(
+          'confirm',
+          { message: 'Passwords must match' },
+          { shouldFocus: true }
+        );
+        return false;
+      }
+
       const response = await registerAction({
         firstName,
         lastName,
@@ -134,7 +148,7 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <div className={tw`grid grid-cols-6 gap-6`}>
+        {/* <div className={tw`grid grid-cols-6 gap-6`}>
           <div className={tw`col-span-6 sm:col-span-3`}>
             <TextInputLabel
               label="First Name"
@@ -180,7 +194,7 @@ const RegisterForm = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className={tw`space-y-1`}>
           <TextInputLabel
@@ -200,33 +214,20 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <div className={tw`flex items-center justify-between`}>
-          <div className={tw`flex items-center`}>
-            <Checkbox
-              name="terms"
-              className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
-              aria-invalid="true"
-              aria-describedby="terms-error"
-              label={
-                <label
-                  htmlFor="terms"
-                  className={tw`ml-2 block text-xs ${
-                    termsError ? 'text-red-500' : 'text-gray-900'
-                  }`}
-                  id={termsError ? 'terms-error' : ''}
-                >
-                  I have read and agree to the{' '}
-                  <a
-                    className={tw`text-blue-500`}
-                    href="https://common.sapien.network/terms.html"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Terms & Conditions
-                  </a>{' '}
-                  {termsError}
-                </label>
-              }
+        <div className="space-y-1">
+          <TextInputLabel
+            label="Confirm Password"
+            name="confirm"
+            error={errors.confirm?.message}
+          />
+          <div className="mt-1">
+            <PasswordInput
+              name="confirm"
+              shouldValidate={false}
+              inputProps={{
+                'aria-invalid': Boolean(passwordError),
+                'aria-describedby': `password-error`,
+              }}
             />
           </div>
         </div>
@@ -234,15 +235,47 @@ const RegisterForm = () => {
         <div className={tw`flex items-center justify-between`}>
           <div className={tw`flex items-center`}>
             <Checkbox
+              name="terms"
+              className={tw`h-4 w-4 text-sapien focus:ring-purple-500 border-gray-600 rounded`}
+              aria-invalid="true"
+              aria-describedby="terms-error"
+              label={
+                <label
+                  htmlFor="terms"
+                  className={tw`ml-2 block text-xs ${
+                    termsError && 'text-red-500'
+                  }`}
+                  id={termsError ? 'terms-error' : ''}
+                >
+                  I have read and agree to the{' '}
+                  <Link passHref href="/terms">
+                    <a
+                      className={tw`text-blue-500`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Terms & Conditions
+                    </a>
+                  </Link>{' '}
+                  {termsError}
+                </label>
+              }
+            />
+          </div>
+        </div>
+
+        {/* <div className={tw`flex items-center justify-between`}>
+          <div className={tw`flex items-center`}>
+            <Checkbox
               name="wallet"
-              className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
+              className={tw`h-4 w-4 text-sapien focus:ring-purple-500 border-gray-600 rounded`}
               aria-invalid="true"
               aria-describedby="wallet-error"
               label={
                 <label
                   htmlFor="wallet"
                   className={tw`ml-2 block text-xs ${
-                    walletError ? 'text-red-500' : 'text-gray-900'
+                    walletError && 'text-red-500'
                   }`}
                   id={walletError ? 'wallet-error' : ''}
                 >
@@ -252,7 +285,7 @@ const RegisterForm = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
 
         <div className={tw`mt-8`}>
           <button

@@ -1,11 +1,15 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { InputHTMLAttributes, useState } from 'react';
-import { tw } from 'twind';
 import { Control, useController, useFormState } from 'react-hook-form';
+import { useTheme } from 'next-themes';
+import { tw } from 'twind';
+
+// utils
+import { mergeClassNames } from 'utils/styles';
 
 interface Props {
   autoComplete?: string;
-  control: Control<any>;
+  control?: Control<any>;
   name?: string;
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
   required?: boolean;
@@ -13,22 +17,22 @@ interface Props {
   validate?: (value: string) => boolean | string;
 }
 
-const softPasswords = [
-  '12345678',
-  'qwertyui',
-  'qwertzui',
-  'asdfghjk',
-  'abcdefgh',
-  '09876543',
-  '98765432',
-  '1q2w3e4r',
-  '12345asd',
-  'test1234',
-  'Test1234',
-  'password',
-  'sapien',
-  'passw0rd',
-];
+// const softPasswords = [
+//   '12345678',
+//   'qwertyui',
+//   'qwertzui',
+//   'asdfghjk',
+//   'abcdefgh',
+//   '09876543',
+//   '98765432',
+//   '1q2w3e4r',
+//   '12345asd',
+//   'test1234',
+//   'Test1234',
+//   'password',
+//   'sapien',
+//   'passw0rd',
+// ];
 
 const PasswordInput = ({
   autoComplete,
@@ -40,6 +44,7 @@ const PasswordInput = ({
   validate,
 }: Props) => {
   const [show, setShow] = useState<boolean>(false);
+  const { theme } = useTheme();
 
   const { field: passwordControl } = useController({
     defaultValue: '',
@@ -47,12 +52,12 @@ const PasswordInput = ({
     name,
     rules: {
       minLength: { value: 8, message: 'should be at least 8 characters long' },
-      maxLength: { value: 100, message: 'is to long' },
+      maxLength: { value: 100, message: 'is too long' },
       validate: shouldValidate
         ? (value) => {
             if (!required && value.length === 0) return true;
 
-            if (softPasswords.includes(value!)) return 'is to Weak';
+            // if (softPasswords.includes(value!)) return 'is too Weak';
 
             if (
               !/[A-Z]/.test(value) ||
@@ -61,9 +66,11 @@ const PasswordInput = ({
             ) {
               if (!/\d/.test(value)) return 'should have a number';
 
-              if (!/[A-Z]/.test(value!)) return 'should have an uppercase';
+              if (!/[A-Z]/.test(value!))
+                return 'should have an uppercase character';
 
-              if (!/[a-z]/.test(value!)) return 'should have a lowercase';
+              if (!/[a-z]/.test(value!))
+                return 'should have a lowercase character';
             }
 
             return validate?.(value) || true;
@@ -74,10 +81,13 @@ const PasswordInput = ({
 
   return (
     <>
-      <div className={tw`relative mb-2`}>
+      <div className="relative mb-2">
         <input
           autoComplete={autoComplete}
-          className={tw`appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm`}
+          className={tw`${mergeClassNames(
+            theme && theme === 'dark' ? 'bg-gray-800' : '',
+            'appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
+          )}`}
           id={name}
           placeholder="Thisismypassword123*"
           type={show ? 'text' : 'password'}
