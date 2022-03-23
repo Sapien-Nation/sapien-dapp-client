@@ -1,7 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { InputHTMLAttributes } from 'react';
 import { useTheme } from 'next-themes';
-import { tw } from 'twind';
 
 // utils
 import { mergeClassNames } from 'utils/styles';
@@ -31,10 +30,10 @@ const Input = ({ name, className, rules = {}, maxLength, ...rest }: Props) => {
         },
       })}
       {...rest}
-      className={tw`${mergeClassNames(
+      className={mergeClassNames(
         theme && theme === 'dark' ? 'bg-gray-800' : '',
         className
-      )}`}
+      )}
     />
   );
 };

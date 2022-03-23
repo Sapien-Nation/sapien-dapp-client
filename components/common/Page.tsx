@@ -1,5 +1,3 @@
-import { tw } from 'twind';
-
 interface Props {
   children: React.ReactNode;
   header?: React.ReactElement;
@@ -9,8 +7,8 @@ interface Props {
 const Page = ({ children, header, footer }: Props) => (
   <>
     {header}
-    <div className={tw`flex-1`}>{children}</div>
-    {footer && <div className={tw`sticky bottom-0`}>{footer}</div>}
+    <div className="flex-1">{children}</div>
+    {footer && <div className="sticky bottom-0">{footer}</div>}
   </>
 );
 

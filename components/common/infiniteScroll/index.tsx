@@ -1,6 +1,5 @@
 import { useRef, useEffect } from 'react';
 import useSWRInfinite from 'swr/infinite';
-import { tw } from 'twind';
 
 // api
 import { fetcher } from 'api';
@@ -74,7 +73,7 @@ const InfiniteScroll = ({
   }, [isVisible, isRefreshing]);
 
   return (
-    <div className={tw`overflow-auto w-full min-h-full`}>
+    <div className="overflow-auto w-full min-h-full">
       {/* Above the list */}
       {topPlaceholder}
       {isRefreshing && refreshComponent}

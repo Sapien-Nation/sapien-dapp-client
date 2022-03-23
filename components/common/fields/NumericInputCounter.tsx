@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form';
-import { tw } from 'twind';
 
 // components
 import { TextInput } from 'components/common';
@@ -43,13 +42,13 @@ const NumericInputCounter = ({ maxLength = 99, name }: Props) => {
         aria-label="Decrement badge amount"
         disabled={Number(watchedValue) === 1}
         onClick={handleDecrement}
-        className={tw`bg-gray-100 rounded-full p-1`}
+        className="bg-gray-100 rounded-full p-1"
       >
-        <MinusSmIcon className={tw`h-4 w-4`} aria-hidden="true" />
+        <MinusSmIcon className="h-4 w-4" aria-hidden="true" />
       </button>
       <TextInput
         name={name}
-        className={tw`w-10`}
+        className="w-10"
         type="text"
         inputMode="numeric"
         pattern={/^\d+$/}
@@ -63,9 +62,9 @@ const NumericInputCounter = ({ maxLength = 99, name }: Props) => {
         aria-label="Increment badge amount"
         disabled={Number(watchedValue) > maxLength}
         onClick={handleIncrement}
-        className={tw`bg-gray-100 rounded-full p-1`}
+        className="bg-gray-100 rounded-full p-1"
       >
-        <PlusSmIcon className={tw`h-4 w-4`} aria-hidden="true" />
+        <PlusSmIcon className="h-4 w-4" aria-hidden="true" />
       </button>
     </div>
   );

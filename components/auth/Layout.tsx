@@ -1,5 +1,3 @@
-import { tw } from 'twind';
-
 // components
 import { Redirect } from 'components/common';
 
@@ -20,32 +18,30 @@ const Layout = ({ children, title }: Props) => {
 
   return (
     <>
-      <div className={tw`min-h-screen flex`}>
-        <div className={tw`hidden lg:block relative w-0 flex-1`}>
+      <div className="min-h-screen flex">
+        <div className="hidden lg:block relative w-0 flex-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="auth-image"
-            className={tw`absolute object-cover h-0 min-h-full	min-w-full`}
+            className="absolute object-cover h-0 min-h-full	min-w-full"
             src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg"
           />
         </div>
-        <div
-          className={tw`flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24`}
-        >
-          <div className={tw`mx-auto w-full max-w-sm lg:w-96`}>
+        <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+          <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
-              <div className={tw`flex justify-center items-center`}>
+              <div className="flex justify-center items-center">
                 <img
-                  className={tw`pr-1 w-16`}
+                  className="pr-1 w-16"
                   src="/images/logooutlined.svg"
                   alt="sapien"
                 />
               </div>
-              <h2 className={tw`mt-6 text-3xl font-extrabold`}>{title}</h2>
+              <h2 className="mt-6 text-3xl font-extrabold">{title}</h2>
             </div>
 
-            <div className={tw`mt-8`}>
-              <div className={tw`mt-6`}>{children}</div>
+            <div className="mt-8">
+              <div className="mt-6">{children}</div>
             </div>
           </div>
         </div>

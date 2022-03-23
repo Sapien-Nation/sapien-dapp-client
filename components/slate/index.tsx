@@ -1,6 +1,5 @@
 import { BaseEditor } from 'slate';
 import { ReactEditor } from 'slate-react';
-import { tw } from 'twind';
 
 // components
 import { DefaultEditor } from './editors';
@@ -10,6 +9,7 @@ import { useAuth } from 'context/user';
 
 // types
 import type { CustomElement, CustomText } from './types';
+import { mergeClassNames } from 'utils/styles';
 
 declare module 'slate' {
   interface CustomTypes {
@@ -35,13 +35,14 @@ const EditorField = ({ onSubmit, isFetching }: Props) => {
   return (
     <>
       <div
-        className={tw`flex items-center w-full bg-white rounded-2xl shadow px-6 py-8 relative ${
-          isFetching ? 'cursor-wait' : 'cursor-default'
-        }`}
+        className={mergeClassNames(
+          isFetching ? 'cursor-wait' : 'cursor-default',
+          'flex items-center w-full bg-white rounded-2xl shadow px-6 py-8 relative '
+        )}
       >
         {/* Avatar */}
         <img
-          className={tw`self-start inline-block h-10 w-10 rounded-full mr-4`}
+          className="self-start inline-block h-10 w-10 rounded-full mr-4"
           src={
             me.avatar ||
             'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'

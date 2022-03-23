@@ -1,11 +1,7 @@
-import { tw } from 'twind';
-
 const NoSpn = () => {
   return (
-    <div
-      className={tw`flex flex-col justify-between items-center w-full h-96 absolute`}
-    >
-      <div className={tw`flex flex-col justify-center items-center p-8`}>
+    <div className="flex flex-col justify-between items-center w-full h-96 absolute">
+      <div className="flex flex-col justify-center items-center p-8">
         <div>
           <svg
             width="88"
@@ -234,21 +230,19 @@ const NoSpn = () => {
             />
           </svg>
         </div>
-        <div className={tw`mt-8 text-center`}>
-          <h2 className={tw`font-bold mb-2 text-lg`}>
-            You do not have enough SPN
-          </h2>
-          <h5 className={tw`text-gray-400`}>
+        <div className="mt-8 text-center">
+          <h2 className="font-bold mb-2 text-lg">You do not have enough SPN</h2>
+          <h5 className="text-gray-400">
             To be able to gift SPN to others, you need to have at least 100 SPN
             in your balance.
           </h5>
         </div>
       </div>
-      <div className={tw`px-5 py-4 w-full border-t`}>
+      <div className="px-5 py-4 w-full border-t">
         <button
           type="submit"
-          className={tw`
-            w-full py-2 px-4 flex justify-center items-center gap-2 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black`}
+          className="
+            w-full py-2 px-4 flex justify-center items-center gap-2 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
         >
           <svg
             width="25"

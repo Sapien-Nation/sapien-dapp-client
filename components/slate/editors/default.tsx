@@ -10,7 +10,6 @@ import { Fragment, useMemo, useRef, useState } from 'react';
 import { withHistory } from 'slate-history';
 import { createEditor } from 'slate';
 import { Editable, Slate, withReact } from 'slate-react';
-import { tw } from 'twind';
 import { Spinner } from 'components/common';
 
 // constants
@@ -21,6 +20,7 @@ import { useDecorator, useEditorConfig, useImage } from '../hooks';
 
 // utils
 import { insertEmoji } from '../utils';
+import { mergeClassNames } from 'utils/styles';
 
 // types
 import type { CustomElement } from '../types';
@@ -58,9 +58,10 @@ const DefaultEditor = ({
 
   return (
     <form
-      className={tw`w-full bg-gray-50 rounded-xl boder px-4 py-2 flex flex-row ${
-        isFetching && 'opacity-50'
-      }`}
+      className={mergeClassNames(
+        isFetching ? 'opacity-50' : '',
+        'w-full bg-gray-50 rounded-xl boder px-4 py-2 flex flex-row'
+      )}
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit(value, editor);
@@ -78,31 +79,27 @@ const DefaultEditor = ({
           placeholder="What do you want to share?"
           renderLeaf={renderLeaf}
           renderElement={renderElement}
-          className={tw`w-full px-4 py-2`}
+          className="w-full px-4 py-2"
         />
       </Slate>
-      <div className={tw`flex justify-end items-end gap-1`}>
+      <div className="flex justify-end items-end gap-1">
         {/* Emoji Upload */}
-        <Popover className={tw`relative`}>
+        <Popover className="relative">
           {() => (
             <>
-              <Popover.Button
-                className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
-              >
-                <EmojiHappyIcon className={tw`h-6 w-6`} />
+              <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white">
+                <EmojiHappyIcon className="h-6 w-6" />
               </Popover.Button>
               <Transition
                 as={Fragment}
-                enter={tw`transition ease-out duration-200`}
-                enterFrom={tw`opacity-0 translate-y-1`}
-                enterTo={tw`opacity-100 translate-y-0`}
-                leave={tw`transition ease-in duration-150`}
-                leaveFrom={tw`opacity-100 translate-y-0`}
-                leaveTo={tw`opacity-0 translate-y-1`}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel
-                  className={tw`absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0`}
-                >
+                <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-screen max-w-xs sm:px-0">
                   <Picker onSelect={(event) => insertEmoji(editor, event)} />
                 </Popover.Panel>
               </Transition>
@@ -112,31 +109,29 @@ const DefaultEditor = ({
 
         {/* File Upload */}
         <button
-          className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white`}
+          className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white"
           onClick={(event) => {
             event.preventDefault();
             fileRef.current.click();
           }}
         >
-          <PhotographIcon className={tw`h-6 w-6`} />
+          <PhotographIcon className="h-6 w-6" />
         </button>
         <input
           ref={fileRef}
           accept="image/*"
-          className={tw`sr-only`}
+          className="sr-only"
           onChange={handleAddImage}
           type="file"
         />
 
         {/* Submit */}
         <button
-          className={tw`h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto`}
+          className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
           disabled={isUploadingImage}
           type="submit"
         >
-          <PaperAirplaneIcon
-            className={tw`h-6 w-6 rotate-90 text-indigo-500`}
-          />
+          <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
         </button>
       </div>
     </form>

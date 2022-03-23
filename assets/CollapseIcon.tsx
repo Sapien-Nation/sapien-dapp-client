@@ -1,4 +1,5 @@
-import { tw } from 'twind';
+// utils
+import { mergeClassNames } from 'utils/styles';
 
 interface Props {
   className?: string;
@@ -6,7 +7,10 @@ interface Props {
 
 const CollapseIcon = ({ className }: Props) => (
   <svg
-    className={tw`svg-icon align-middle fill-current overflow-hidden ${className}`}
+    className={mergeClassNames(
+      className,
+      'svg-icon align-middle fill-current overflow-hidden'
+    )}
     viewBox="0 0 1024 1024"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

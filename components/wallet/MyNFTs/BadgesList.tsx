@@ -1,5 +1,4 @@
 import { useState, Fragment, useEffect, useRef } from 'react';
-import { tw } from 'twind';
 import { SearchIcon } from '@heroicons/react/outline';
 
 // enums
@@ -82,24 +81,22 @@ const BadgesList = () => {
       )
     : UsersMock;
   return (
-    <div className={tw`flex w-full h-96 absolute`}>
-      <div className={tw`w-full px-5 py-1`}>
-        <div className={tw`relative w-full mb-3`}>
-          <span
-            className={tw`absolute inset-y-0 left-0 flex items-center pl-2`}
-          >
+    <div className="flex w-full h-96 absolute">
+      <div className="w-full px-5 py-1">
+        <div className="relative w-full mb-3">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-2">
             <button
               type="submit"
-              className={tw`pl-4 focus:outline-none focus:shadow-outline`}
+              className="pl-4 focus:outline-none focus:shadow-outline"
             >
-              <SearchIcon className={tw`w-5 h-5 text-gray-400`} />
+              <SearchIcon className="w-5 h-5 text-gray-400" />
             </button>
           </span>
           <input
             onChange={(event) => setSearchTerm(event.currentTarget.value)}
             type="search"
             name="search"
-            className={tw`py-3 px-6 w-full text-sm bg-gray-50 rounded-full pl-14 focus:outline-none`}
+            className="py-3 px-6 w-full text-sm bg-gray-50 rounded-full pl-14 focus:outline-none"
             placeholder="Search for a badge"
             autoComplete="off"
           />
@@ -112,31 +109,27 @@ const BadgesList = () => {
               setStep(MyNFTsSteps.ReceiversList);
             }}
             key={NFT.id}
-            className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+            className="flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none"
           >
-            <div className={tw`flex items-center`}>
-              <span
-                className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
-              >
+            <div className="flex items-center">
+              <span className="inline-block relative border-2 border-indigo-600 rounded-full">
                 <img
-                  className={tw`h-10 w-10 rounded-full border-4 border-white`}
+                  className="h-10 w-10 rounded-full border-4 border-white"
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   alt=""
                 />
-                <span
-                  className={tw`absolute -top-1 -right-1 block px-1 text(xs white) font-bold rounded-full ring-4 ring-white bg-black`}
-                >
+                <span className="absolute -top-1 -right-1 block px-1 text(xs white) font-bold rounded-full ring-4 ring-white bg-black">
                   {NFT.amount}
                 </span>
               </span>
             </div>
-            <div className={tw`flex items-center ml-4`}>
-              <div className={tw`flex flex-col`}>
-                <span className={tw`text-xs font-bold`}>{NFT.name}</span>
-                <span className={tw`text(xs gray-500)`}>{NFT.description}</span>
+            <div className="flex items-center ml-4">
+              <div className="flex flex-col">
+                <span className="text-xs font-bold">{NFT.name}</span>
+                <span className="text(xs gray-500)">{NFT.description}</span>
               </div>
             </div>
-            <div className={tw`flex items-center ml-auto gap-2`}>
+            <div className="flex items-center ml-auto gap-2">
               <svg
                 fill="none"
                 height="18"
@@ -177,7 +170,7 @@ const BadgesList = () => {
                   </linearGradient>
                 </defs>
               </svg>
-              <span className={tw`text-xs font-bold`}>0</span>
+              <span className="text-xs font-bold">0</span>
             </div>
           </button>
         ))}

@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useState, useRef } from 'react';
 import { useSWRConfig } from 'swr';
-import { tw } from 'twind';
 
 // api
 import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
@@ -152,16 +151,16 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     >
       <>
         <div>
-          <div className={tw`mt-5 md:mt-0 md:col-span-2`}>
+          <div className="mt-5 md:mt-0 md:col-span-2">
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)} id={form}>
-                <div className={tw`sm:overflow-hidden`}>
-                  <div className={tw`px-4 py-5 bg-white space-y-6 sm:p-6`}>
+                <div className="sm:overflow-hidden">
+                  <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                     <div>
-                      <div className={tw`flex gap-x-4 items-end`}>
+                      <div className="flex gap-x-4 items-end">
                         <div>
                           <div
-                            className={tw`flex items-center relative cursor-pointer`}
+                            className="flex items-center relative cursor-pointer"
                             onClick={() => {
                               setMediaTypeToUpload(MediaTypeUpload.Avatar);
                               avatarFileInput.current.click();
@@ -170,7 +169,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             {Boolean(avatar) && (
                               <button
                                 type="button"
-                                className={tw`absolute z-10 -top-1 left-9 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+                                className="absolute z-10 -top-1 left-9 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                                 onClick={(event) => {
                                   event.stopPropagation();
                                   setValue('avatar', null);
@@ -178,20 +177,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 }}
                               >
                                 <XIcon
-                                  className={tw`h-3 w-3 text-white`}
+                                  className="h-3 w-3 text-white"
                                   aria-hidden="true"
                                 />
                               </button>
                             )}
-                            <span
-                              className={tw`inline-block h-14 w-14 border border-gray-300 rounded-full overflow-hidden relative`}
-                            >
+                            <span className="inline-block h-14 w-14 border border-gray-300 rounded-full overflow-hidden relative">
                               {Boolean(avatar) ? (
                                 <>
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
                                     alt="avatar"
-                                    className={tw`h-14 w-14 rounded-full object-cover`}
+                                    className="h-14 w-14 rounded-full object-cover"
                                     src={avatar.url}
                                     data-key={avatar.key}
                                     onClick={() => {
@@ -204,7 +201,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 </>
                               ) : (
                                 <svg
-                                  className={tw`h-full w-full text-gray-300`}
+                                  className="h-full w-full text-gray-300"
                                   fill="currentColor"
                                   viewBox="0 0 24 24"
                                 >
@@ -214,24 +211,18 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             </span>
                             {isUploading &&
                               mediaTypeToUpload === MediaTypeUpload.Avatar && (
-                                <span
-                                  className={tw`absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                                >
-                                  <CloudUploadIcon
-                                    className={tw`animate-bounce text-gray-400`}
-                                  />
+                                <span className="absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                  <CloudUploadIcon className="animate-bounce text-gray-400" />
                                 </span>
                               )}
                             {((!isUploading && !mediaTypeToUpload) ||
                               mediaTypeToUpload === MediaTypeUpload.Avatar) && (
-                              <CameraIcon
-                                className={tw`absolute w-5 right-0.5 bottom-0 text-gray-400`}
-                              />
+                              <CameraIcon className="absolute w-5 right-0.5 bottom-0 text-gray-400" />
                             )}
                             <input
                               ref={avatarFileInput}
                               accept="image/*"
-                              className={tw`sr-only`}
+                              className="sr-only"
                               onChange={(event) =>
                                 handleUploadImage(event.target.files[0])
                               }
@@ -239,14 +230,14 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             />
                           </div>
                         </div>
-                        <div className={tw`flex-1`}>
+                        <div className="flex-1">
                           <TextInputLabel
                             label="Name"
                             name="name"
                             error={errors.name?.message}
                           />
                           <TextInput
-                            className={tw`block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md`}
+                            className="block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
                             name="name"
                             placeholder="The Sapien Tribe"
                             maxLength={50}
@@ -273,7 +264,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           error={errors.identifier?.message}
                         />
                         <TextInput
-                          className={tw`block w-full rounded-md pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md`}
+                          className="block w-full rounded-md pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md"
                           name="identifier"
                           placeholder="TheSapienTribe"
                           maxLength={20}
@@ -298,12 +289,12 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           name="description"
                           error={errors.description?.message}
                         />
-                        <div className={tw`mt-1 relative rounded-md shadow-sm`}>
+                        <div className="mt-1 relative rounded-md shadow-sm">
                           <TextareaInput
                             name="description"
                             maxLength={1000}
                             placeholder="Describe your tribe"
-                            className={tw`shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md`}
+                            className="shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md"
                             rules={{
                               validate: {
                                 maxLength: (value) => {
@@ -320,33 +311,29 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                         </div>
                       </div>
                       <div>
-                        <label
-                          className={tw`block text-sm font-medium mt-4 text-gray-700`}
-                        >
+                        <label className="block text-sm font-medium mt-4 text-gray-700">
                           Cover photo
                         </label>
-                        <div
-                          className={tw`mt-1 relative min-h-[8.75rem] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
-                        >
+                        <div className="mt-1 relative min-h-[8.75rem] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                           {Boolean(cover) ? (
-                            <span className={tw`relative`}>
+                            <span className="relative">
                               <button
                                 type="button"
-                                className={tw`absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none`}
+                                className="absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                                 onClick={() => {
                                   setValue('cover', null);
                                   coverFileInput.current.value = null;
                                 }}
                               >
                                 <XIcon
-                                  className={tw`h-3 w-3 text-white`}
+                                  className="h-3 w-3 text-white"
                                   aria-hidden="true"
                                 />
                               </button>
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 alt="cover"
-                                className={tw`w-100 relative rounded-md`}
+                                className="w-100 relative rounded-md"
                                 src={cover.url}
                                 data-key={cover.key}
                               />
@@ -355,17 +342,13 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             <>
                               {isUploading &&
                               mediaTypeToUpload === MediaTypeUpload.Cover ? (
-                                <span
-                                  className={tw`absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
-                                >
-                                  <CloudUploadIcon
-                                    className={tw`animate-bounce text-gray-400`}
-                                  />
+                                <span className="absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                                  <CloudUploadIcon className="animate-bounce text-gray-400" />
                                 </span>
                               ) : (
-                                <div className={tw`space-y-1 text-center`}>
+                                <div className="space-y-1 text-center">
                                   <svg
-                                    className={tw`mx-auto h-12 w-12 text-gray-400`}
+                                    className="mx-auto h-12 w-12 text-gray-400"
                                     stroke="currentColor"
                                     fill="none"
                                     viewBox="0 0 48 48"
@@ -378,10 +361,10 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                       strokeLinejoin="round"
                                     />
                                   </svg>
-                                  <div className={tw`text-sm text-gray-600`}>
+                                  <div className="text-sm text-gray-600">
                                     <label
                                       htmlFor="cover-upload"
-                                      className={tw`relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+                                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                                     >
                                       <span>Upload a file</span>
                                       <input
@@ -394,7 +377,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                             MediaTypeUpload.Cover
                                           )
                                         }
-                                        className={tw`sr-only`}
+                                        className="sr-only"
                                         onChange={(event) => {
                                           handleUploadImage(
                                             event.target.files[0]
@@ -404,7 +387,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                       />
                                     </label>
                                   </div>
-                                  <p className={tw`text-xs text-gray-500`}>
+                                  <p className="text-xs text-gray-500">
                                     PNG, JPG, GIF up to 40MB
                                   </p>
                                 </div>

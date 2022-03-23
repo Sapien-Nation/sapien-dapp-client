@@ -1,5 +1,4 @@
 import { XIcon } from '@heroicons/react/outline';
-import { tw } from 'twind';
 
 // types
 import type { CustomElement } from '../types';
@@ -16,21 +15,21 @@ const Video = ({ attributes, children, element }: Props) => {
   return (
     <div {...attributes}>
       <div contentEditable={false}>
-        <div className={tw`relative flex w-full my-1 p-5 rounded-md bg-white`}>
-          <button className={tw`absolute top-1 right-1`}>
+        <div className="relative flex w-full my-1 p-5 rounded-md bg-white">
+          <button className="absolute top-1 right-1">
             <XIcon />
           </button>
           <img
             alt={image?.url || ''}
             height="auto"
             src={image?.url}
-            className={tw`relative h-auto w-130 rounded-md`}
+            className="relative h-auto w-130 rounded-md"
           />
-          <div className={tw`w-full p-2`}>
+          <div className="w-full p-2">
             <a
               href={url}
               rel="noreferrer"
-              className={tw`m-0 text-indigo-500`}
+              className="m-0 text-indigo-500"
               target="_blank"
             >
               {children}

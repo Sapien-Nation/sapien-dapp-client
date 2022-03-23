@@ -11,15 +11,14 @@ import {
   SwitchVerticalIcon,
 } from '@heroicons/react/outline';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { tw } from 'twind';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // components
 import TxHistory from 'components/wallet/TxHistory';
 import { NoSpn } from './EmptyState';
-import MyNFTs from 'components/wallet/MyNFTs';
 import Store from 'components/wallet/Store';
 import { FilterScreen } from './LoadingState';
+import { mergeClassNames } from 'utils/styles';
 
 enum WalletTabs {
   NFT,
@@ -46,26 +45,29 @@ const Wallet = () => {
 
   const renderMenu = () => {
     return (
-      <div className={tw`flex p-2`}>
+      <div className="flex p-2">
         <button
-          className={tw`text(gray-400 sm) ${
-            tab === WalletTabs.NFT && 'text-black'
-          } gap-1.5 font-bold flex items-center p-3 focus:outline-none`}
+          className={mergeClassNames(
+            tab === WalletTabs.NFT ? 'text-black' : '',
+            'text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none'
+          )}
           onClick={() => setTab(WalletTabs.NFT)}
         >
           <StarIcon
-            className={tw`h-5 w-5 p-0.5 rounded-full border-2 border-gray-400 ${
-              tab === WalletTabs.NFT && 'text-indigo-600 border-indigo-600'
-            }`}
+            className={mergeClassNames(
+              tab === WalletTabs.NFT ? 'text-indigo-600 border-indigo-600' : '',
+              'h-5 w-5 p-0.5 rounded-full border-2 border-gray-400'
+            )}
           />
           My NFTs
         </button>
         <button
-          className={tw`text(gray-400 sm) ${
-            tab === WalletTabs.Spn && 'text-black'
-          } group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale ${
-            tab === WalletTabs.Spn && 'grayscale-0'
-          }`}
+          className={mergeClassNames(
+            'text(gray-400 sm)',
+            tab === WalletTabs.Spn ? 'text-black' : '',
+            tab === WalletTabs.Spn ? 'grayscale-0' : '',
+            'group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale'
+          )}
           onClick={() => setTab(WalletTabs.Spn)}
         >
           <svg
@@ -74,9 +76,7 @@ const Wallet = () => {
             viewBox="0 0 18 18"
             width="18"
             xmlns="http://www.w3.org/2000/svg"
-            className={tw`${
-              tab === WalletTabs.Spn ? 'opacity-100' : 'opacity-60'
-            }`}
+            className={tab === WalletTabs.Spn ? 'opacity-100' : 'opacity-60'}
           >
             <path
               d="M9 18C13.9705 18 18 13.9705 18 9C18 4.02943 13.9705 0 9 0C4.02943 0 0 4.02943 0 9C0 13.9705 4.02943 18 9 18Z"
@@ -114,13 +114,14 @@ const Wallet = () => {
           Spn
         </button>
         <button
-          className={tw`text(gray-400 sm) ${
-            tab === WalletTabs.Store && 'text-black'
-          } gap-1.5 p-3 font-bold flex items-center focus:outline-none`}
+          className={mergeClassNames(
+            tab === WalletTabs.Store ? 'text-black' : '',
+            'text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none'
+          )}
           onClick={() => setTab(WalletTabs.Store)}
         >
           <ShoppingCartIcon
-            className={tw`h-6 w-6 ${
+            className={mergeClassNames`h-6 w-6 ${
               tab === WalletTabs.Store && 'text-indigo-600'
             } `}
           />
@@ -132,18 +133,18 @@ const Wallet = () => {
 
   const renderTab = () => {
     return (
-      <div className={tw`relative h-full`}>
+      <div className="relative h-full">
         <Transition
           show={tab === WalletTabs.NFT}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`${
-            prevTab > WalletTabs.NFT ? '-translate-x-full' : 'translate-x-full'
-          }`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveFrom={tw`translate-x-0`}
-          leaveTo={tw`-translate-x-full`}
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom={
+            prevTab > WalletTabs.NFT ? '-translate-x-full' : 'translate-x-ful'
+          }
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveFrom="translate-x-0"
+          leaveTo="-translate-x-full"
         >
           <div>
             <FilterScreen />
@@ -153,16 +154,16 @@ const Wallet = () => {
           appear
           show={tab === WalletTabs.Spn}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`${
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom={
             prevTab > WalletTabs.Spn ? '-translate-x-full' : 'translate-x-full'
-          }`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveTo={tw`${
+          }
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveTo={
             tab < WalletTabs.Spn ? 'translate-x-full' : '-translate-x-full'
-          }`}
-          leaveFrom={tw`translate-x-0`}
+          }
+          leaveFrom="translate-x-0"
         >
           <div>
             <NoSpn />
@@ -172,12 +173,12 @@ const Wallet = () => {
           appear
           show={tab === WalletTabs.Store}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`translate-x-full`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveFrom={tw`translate-x-0`}
-          leaveTo={tw`translate-x-full`}
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom="translate-x-full"
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-full"
         >
           <div>
             <Store />
@@ -188,60 +189,47 @@ const Wallet = () => {
   };
   return (
     <>
-      <div
-        className={tw`flex justify-between items-center px-4 py-6 border-b border-gray-200`}
-      >
-        <h5 className={tw`text-xl font-extrabold flex gap-4 items-center`}>
+      <div className="flex justify-between items-center px-4 py-6 border-b border-gray-200">
+        <h5 className="text-xl font-extrabold flex gap-4 items-center">
           {tab === WalletTabs.TxHistory && (
             <button
               onClick={() => setTab(prevTab)}
-              className={tw`bg-white rounded-md hover:text-gray-500 focus:outline-none`}
+              className="bg-white rounded-md hover:text-gray-500 focus:outline-none"
             >
-              <ArrowLeftIcon className={tw`h-5 w-5`} />
+              <ArrowLeftIcon className="h-5 w-5" />
             </button>
           )}
           {tab === WalletTabs.TxHistory ? 'Transactions' : 'Wallet'}
         </h5>
-        <Popover className={tw`relative`}>
+        <Popover className="relative">
           {({ close }) => (
             <>
-              <Popover.Button
-                className={tw`bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
-              >
-                <DotsHorizontalIcon
-                  className={tw`h-6 w-6`}
-                  aria-hidden="true"
-                />
+              <Popover.Button className="bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none">
+                <DotsHorizontalIcon className="h-6 w-6" aria-hidden="true" />
               </Popover.Button>
               <Transition
                 as={Fragment}
-                enter={tw`transition ease-out duration-200`}
-                enterFrom={tw`opacity-0 translate-y-1`}
-                enterTo={tw`opacity-100 translate-y-0`}
-                leave={tw`transition ease-in duration-150`}
-                leaveFrom={tw`opacity-100 translate-y-0`}
-                leaveTo={tw`opacity-0 translate-y-1`}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel
-                  className={tw`absolute z-10 w-56 max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl`}
-                >
-                  <div
-                    className={tw`overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5`}
-                  >
-                    <div className={tw`relative bg-white p-1`}>
+                <Popover.Panel className="absolute z-10 w-56 max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
+                  <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div className="relative bg-white p-1">
                       <button
                         onClick={() => {
                           setTab(WalletTabs.TxHistory);
                           close();
                         }}
-                        className={tw`flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50`}
+                        className="flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                       >
                         <div>
-                          <p
-                            className={tw`text-sm font-medium text-gray-900 flex items-center`}
-                          >
+                          <p className="text-sm font-medium text-gray-900 flex items-center">
                             <SwitchVerticalIcon
-                              className={tw`h-5 w-5 text-gray-400 mr-4`}
+                              className="h-5 w-5 text-gray-400 mr-4"
                               aria-hidden="true"
                             />
                             Transaction History
@@ -249,17 +237,15 @@ const Wallet = () => {
                         </div>
                       </button>
                     </div>
-                    <div className={tw`relative bg-white p-1`}>
-                      <div
-                        className={tw`flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50`}
-                      >
-                        <Link href={`/logout`}>
+                    <div className="relative bg-white p-1">
+                      <div className="flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                        <Link href="/logout">
                           <a
                             href="#"
-                            className={tw`text-sm font-medium text-gray-900 flex items-center`}
+                            className="text-sm font-medium text-gray-900 flex items-center"
                           >
                             <LogoutIcon
-                              className={tw`h-5 w-5 text-gray-400 mr-4`}
+                              className="h-5 w-5 text-gray-400 mr-4"
                               aria-hidden="true"
                             />
                             Disconnect
@@ -275,14 +261,14 @@ const Wallet = () => {
         </Popover>
       </div>
       {tab !== WalletTabs.TxHistory && renderMenu()}
-      <div className={tw`h-96 overflow-hidden`}>
+      <div className="h-96 overflow-hidden">
         {tab === WalletTabs.TxHistory ? (
           <TxHistory />
         ) : (
           <FormProvider {...methods}>{renderTab()}</FormProvider>
         )}
       </div>
-      {tab === WalletTabs.TxHistory && <div className={tw`h-16`}></div>}
+      {tab === WalletTabs.TxHistory && <div className="h-16"></div>}
     </>
   );
 };

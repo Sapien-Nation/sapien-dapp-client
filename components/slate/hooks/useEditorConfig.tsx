@@ -1,5 +1,4 @@
 import { DefaultLeaf } from 'slate-react';
-import { tw } from 'twind';
 
 // constants
 import { ElementType, LeafType } from '../constants';
@@ -14,13 +13,13 @@ const renderLeaf = (props) => {
   switch (props?.leaf.type) {
     case LeafType.Hashtag:
       return (
-        <a {...props.attributes} className={tw`text-indigo-800`}>
+        <a {...props.attributes} className="text-indigo-800">
           {props.children}
         </a>
       );
     case LeafType.Link:
       return (
-        <a {...props.attributes} className={tw`text-indigo-500`}>
+        <a {...props.attributes} className="text-indigo-500">
           {props.children}
         </a>
       );

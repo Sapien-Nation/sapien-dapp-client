@@ -1,10 +1,7 @@
-import withTwindApp from '@twind/next/app';
 import dynamic from 'next/dynamic';
 import { SWRConfig } from 'swr';
-import { useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ThemeProvider } from 'next-themes';
-import twindConfig from 'twind.config';
 import { Web3ReactProvider } from '@web3-react/core';
 
 // api
@@ -13,7 +10,7 @@ import axios from 'api';
 // components
 import { AppLayout } from 'components';
 import { ErrorView, ToastContainer } from 'components/common';
-import Web3ReactManager from 'components/Web3ReactManager';
+import Web3ReactManager from 'components/wallet/Web3ReactManager';
 
 // context
 import { ToastProvider } from 'context/toast';
@@ -26,13 +23,16 @@ import { WalletProvider } from 'context/wallet';
 // types
 import type { AppProps } from 'next/app';
 
+// styles
+import '../styles/global.css';
+
 // utils
 import getLibrary from 'utils/web3';
 
 import 'styles/global.css';
 import 'emoji-mart/css/emoji-mart.css';
 
-const Web3Provider = dynamic(() => import('components/provider'), {
+const Web3Provider = dynamic(() => import('components/wallet/provider'), {
   ssr: false,
 });
 
@@ -73,4 +73,4 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
   </Web3ReactProvider>
 );
 
-export default withTwindApp(twindConfig, MyApp);
+export default MyApp;

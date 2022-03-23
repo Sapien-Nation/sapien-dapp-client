@@ -1,5 +1,4 @@
 import { useState, Fragment, useEffect, useRef } from 'react';
-import { tw } from 'twind';
 import { Transition } from '@headlessui/react';
 import { SearchIcon, XIcon, ShoppingCartIcon } from '@heroicons/react/outline';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
@@ -49,39 +48,37 @@ const Store = () => {
 
   return (
     <div>
-      <div className={tw`flex w-full h-96 absolute overflow-scroll`}>
+      <div className="flex w-full h-96 absolute overflow-scroll">
         <Transition
           show={step === StoreSteps.BadgesList}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`${
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom={
             prevStep > StoreSteps.BadgesList
               ? '-translate-x-full'
               : 'translate-x-full'
-          }`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveFrom={tw`translate-x-0`}
-          leaveTo={tw`-translate-x-full`}
+          }
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveFrom="translate-x-0"
+          leaveTo="-translate-x-full"
         >
-          <div className={tw`flex w-full h-96 absolute`}>
-            <div className={tw`w-full px-5 py-1`}>
-              <div className={tw`relative w-full mb-3`}>
-                <span
-                  className={tw`absolute inset-y-0 left-0 flex items-center pl-2`}
-                >
+          <div className="flex w-full h-96 absolute">
+            <div className="w-full px-5 py-1">
+              <div className="relative w-full mb-3">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                   <button
                     type="submit"
-                    className={tw`pl-4 focus:outline-none focus:shadow-outline`}
+                    className="pl-4 focus:outline-none focus:shadow-outline"
                   >
-                    <SearchIcon className={tw`w-5 h-5 text-gray-400`} />
+                    <SearchIcon className="w-5 h-5 text-gray-400" />
                   </button>
                 </span>
                 <input
                   onChange={(event) => setSearchTerm(event.currentTarget.value)}
                   type="search"
                   name="search"
-                  className={tw`py-3 px-6 w-full text-sm bg-gray-50 rounded-full pl-14 focus:outline-none`}
+                  className="py-3 px-6 w-full text-sm bg-gray-50 rounded-full pl-14 focus:outline-none"
                   placeholder="Search for a badge"
                   autoComplete="off"
                 />
@@ -94,33 +91,29 @@ const Store = () => {
                     setStep(StoreSteps.Confirmation);
                   }}
                   key={NFT.id}
-                  className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+                  className="flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none"
                 >
-                  <div className={tw`flex items-center`}>
-                    <span
-                      className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
-                    >
+                  <div className="flex items-center">
+                    <span className="inline-block relative border-2 border-indigo-600 rounded-full">
                       <img
-                        className={tw`h-10 w-10 rounded-full border-4 border-white`}
+                        className="h-10 w-10 rounded-full border-4 border-white"
                         src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                         alt=""
                       />
-                      <span
-                        className={tw`absolute -top-1 -right-1 block px-1 text(xs white) font-bold rounded-full ring-4 ring-white bg-black`}
-                      >
+                      <span className="absolute -top-1 -right-1 block px-1 text(xs white) font-bold rounded-full ring-4 ring-white bg-black">
                         {NFT.amount}
                       </span>
                     </span>
                   </div>
-                  <div className={tw`flex items-center ml-4`}>
-                    <div className={tw`flex flex-col`}>
-                      <span className={tw`text-xs font-bold`}>{NFT.name}</span>
-                      <span className={tw`text(xs gray-500)`}>
+                  <div className="flex items-center ml-4">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold">{NFT.name}</span>
+                      <span className="text(xs gray-500)">
                         {NFT.description}
                       </span>
                     </div>
                   </div>
-                  <div className={tw`flex items-center ml-auto gap-2`}>
+                  <div className="flex items-center ml-auto gap-2">
                     <svg
                       fill="none"
                       height="18"
@@ -165,7 +158,7 @@ const Store = () => {
                         </linearGradient>
                       </defs>
                     </svg>
-                    <span className={tw`text-xs font-bold`}>0</span>
+                    <span className="text-xs font-bold">0</span>
                   </div>
                 </button>
               ))}
@@ -176,64 +169,62 @@ const Store = () => {
           appear
           show={step === StoreSteps.Confirmation}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`${
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom="${
             prevStep > StoreSteps.Confirmation
               ? '-translate-x-full'
               : 'translate-x-full'
-          }`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveTo={tw`${
+          }"
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveTo="${
             step < StoreSteps.Confirmation
               ? 'translate-x-full'
               : '-translate-x-full'
-          }`}
-          leaveFrom={tw`translate-x-0`}
+          }"
+          leaveFrom="translate-x-0"
         >
-          <div className={tw`flex flex-col w-full h-96 absolute`}>
-            <div className={tw`flex items-center font-bold text-xs px-5 mb-2`}>
+          <div className="flex flex-col w-full h-96 absolute">
+            <div className="flex items-center font-bold text-xs px-5 mb-2">
               <button
                 onClick={() => {
                   setSearchTerm('');
                   setStep(StoreSteps.BadgesList);
                 }}
               >
-                <ArrowLeftIcon className={tw`h-4 h-4 mr-1`} />
+                <ArrowLeftIcon className="h-4 mr-1" />
               </button>{' '}
               Confirmation
             </div>
-            <div className={tw`w-full px-5 py-1`}>
-              <div
-                className={tw`flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer bg-gray-50`}
-              >
-                <div className={tw`flex items-center`}>
-                  <span className={tw`inline-block relative rounded-full`}>
+            <div className="w-full px-5 py-1">
+              <div className="flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer bg-gray-50">
+                <div className="flex items-center">
+                  <span className="inline-block relative rounded-full">
                     <img
-                      className={tw`h-10 w-10 rounded-full`}
+                      className="h-10 w-10 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
                   </span>
                 </div>
-                <div className={tw`flex items-center jusitfy-between ml-4`}>
-                  <div className={tw`flex flex-col gap-1 w-full`}>
-                    <span className={tw`text-xs font-bold`}>Javier Ocanas</span>
-                    <span className={tw`text(xs gray-500)`}>@javierocanas</span>
+                <div className="flex items-center jusitfy-between ml-4">
+                  <div className="flex flex-col gap-1 w-full">
+                    <span className="text-xs font-bold">Javier Ocanas</span>
+                    <span className="text(xs gray-500)">@javierocanas</span>
                   </div>
                   <button
                     type="button"
-                    className={tw`inline-flex items-center p-1 rounded-full focus:outline-none`}
+                    className="inline-flex items-center p-1 rounded-full focus:outline-none"
                     onClick={() => setStep(StoreSteps.BadgesList)}
                   >
                     <XIcon
-                      className={tw`h-5 w-5 text-gray-400`}
+                      className="h-5 w-5 text-gray-400"
                       aria-hidden="true"
                     />
                   </button>
                 </div>
               </div>
-              <h2 className={tw`text(gray-400 xs) font-bold uppercase mt-4`}>
+              <h2 className="text(gray-400 xs) font-bold uppercase mt-4">
                 Will Receive
               </h2>
               <div
@@ -243,42 +234,36 @@ const Store = () => {
                   }
                   setStep(StoreSteps.Confirmation);
                 }}
-                className={tw`flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
+                className="flex items-center w-full text-left bg-gray-50 py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none"
               >
-                <div className={tw`flex items-center`}>
-                  <span
-                    className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
-                  >
+                <div className="flex items-center">
+                  <span className="inline-block relative border-2 border-indigo-600 rounded-full">
                     <img
-                      className={tw`h-10 w-10 rounded-full border-4 border-white`}
+                      className="h-10 w-10 rounded-full border-4 border-white"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
                   </span>
                 </div>
-                <div className={tw`flex items-center ml-4`}>
-                  <div className={tw`flex flex-col`}>
-                    <span className={tw`text-xs font-bold`}>
-                      This is NFT Name
-                    </span>
-                    <span className={tw`text(xs gray-500)`}>
-                      NF description
-                    </span>
+                <div className="flex items-center ml-4">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold">This is NFT Name</span>
+                    <span className="text(xs gray-500)">NF description</span>
                   </div>
                 </div>
-                <div className={tw`flex items-center ml-auto gap-2`}>
+                <div className="flex items-center ml-auto gap-2">
                   <NumericInputCounter name="badgesAmount" />
                 </div>
               </div>
             </div>
-            <div className={tw`px-5 py-2.5 absolute bottom-2 w-full`}>
+            <div className="px-5 py-2.5 absolute bottom-2 w-full">
               <button
                 onClick={() => setStep(StoreSteps.Checkout)}
                 type="submit"
-                className={tw`
-            w-full py-2 px-4 border border-transparent flex items-center justify-center rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+                className="
+            w-full py-2 px-4 border border-transparent flex items-center justify-center rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
-                <ShoppingCartIcon className={tw`h-5 w-5 mr-2`} />
+                <ShoppingCartIcon className="h-5 w-5 mr-2" />
                 500
               </button>
             </div>
@@ -288,111 +273,92 @@ const Store = () => {
           appear
           show={step === StoreSteps.Checkout}
           as={Fragment}
-          enter={tw`transition ease-in-out duration-300 transform`}
-          enterFrom={tw`translate-x-full`}
-          enterTo={tw`translate-x-0`}
-          leave={tw`transition ease-in-out duration-300 transform`}
-          leaveFrom={tw`translate-x-0`}
-          leaveTo={tw`translate-x-full`}
+          enter="transition ease-in-out duration-300 transform"
+          enterFrom="translate-x-full"
+          enterTo="translate-x-0"
+          leave="transition ease-in-out duration-300 transform"
+          leaveFrom="translate-x-0"
+          leaveTo="translate-x-full"
         >
-          <div className={tw`flex flex-col w-full h-96 absolute`}>
-            <div className={tw`flex items-center font-bold text-xs px-5 mb-2`}>
+          <div className="flex flex-col w-full h-96 absolute">
+            <div className="flex items-center font-bold text-xs px-5 mb-2">
               <button onClick={() => setStep(StoreSteps.Confirmation)}>
-                <ArrowLeftIcon className={tw`h-4 h-4 mr-1`} />
+                <ArrowLeftIcon className="h-4 h-4 mr-1" />
               </button>{' '}
               Check Out
             </div>
-            <div className={tw`w-full px-5 py-1`}>
-              <div
-                className={tw`flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer bg-gray-50`}
-              >
-                <div className={tw`flex items-center`}>
-                  <span className={tw`inline-block relative rounded-full`}>
+            <div className="w-full px-5 py-1">
+              <div className="flex items-center w-full text-left py-3 px-5 rounded-xl cursor-pointer bg-gray-50">
+                <div className="flex items-center">
+                  <span className="inline-block relative rounded-full">
                     <img
-                      className={tw`h-10 w-10 rounded-full`}
+                      className="h-10 w-10 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
                   </span>
                 </div>
-                <div className={tw`flex items-center ml-4`}>
-                  <div className={tw`flex flex-col gap-1`}>
-                    <span className={tw`text-xs font-bold`}>Javier Ocanas</span>
-                    <span className={tw`text(xs gray-500)`}>@javierocanas</span>
+                <div className="flex items-center ml-4">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs font-bold">Javier Ocanas</span>
+                    <span className="text(xs gray-500)">@javierocanas</span>
                   </div>
                 </div>
               </div>
-              <h2 className={tw`text(gray-400 xs) font-bold uppercase mt-4`}>
+              <h2 className="text(gray-400 xs) font-bold uppercase mt-4">
                 Will Receive
               </h2>
-              <div
-                className={tw`max-h-52 overflow-scroll flex flex-col items-center w-full text-left py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none`}
-              >
-                <div className={tw`flex items-center`}>
-                  <span
-                    className={tw`inline-block relative border-2 border-indigo-600 rounded-full`}
-                  >
+              <div className="max-h-52 overflow-scroll flex flex-col items-center w-full text-left py-4 px-6 rounded-xl cursor-pointer mb-3 focus:outline-none">
+                <div className="flex items-center">
+                  <span className="inline-block relative border-2 border-indigo-600 rounded-full">
                     <img
-                      className={tw`h-14 w-14 rounded-full border-4 border-white`}
+                      className="h-14 w-14 rounded-full border-4 border-white"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt=""
                     />
                   </span>
                 </div>
-                <div className={tw`flex items-center mt-4`}>
-                  <div className={tw`flex flex-col items-center`}>
-                    <span className={tw`text-md font-bold`}>
+                <div className="flex items-center mt-4">
+                  <div className="flex flex-col items-center">
+                    <span className="text-md font-bold">
                       This is NFT Name (x2)
                     </span>
-                    <span className={tw`text(sm gray-400) mt-2`}>
+                    <span className="text(sm gray-400) mt-2">
                       NF description
                     </span>
                   </div>
                 </div>
               </div>
-              <div className={tw`flex gap-2 flex-col items-center w-full`}>
-                <div
-                  className={tw`flex flex items-center justify-between w-full`}
-                >
+              <div className="flex gap-2 flex-col items-center w-full">
+                <div className="flex flex items-center justify-between w-full">
                   <span>Badges cost</span>
                   <span>500 SPN</span>
                 </div>
-                <div
-                  className={tw`flex flex items-center justify-between w-full`}
-                >
+                <div className="flex flex items-center justify-between w-full">
                   <span>Transaction fee</span>
                   <span>5%</span>
                 </div>
-                <div
-                  className={tw`flex flex items-center justify-between w-full`}
-                >
-                  <span className={tw`font-extrabold`}>Total</span>
-                  <span className={tw`font-extrabold text-sapien`}>
-                    525 SPN
-                  </span>
+                <div className="flex flex items-center justify-between w-full">
+                  <span className="font-extrabold">Total</span>
+                  <span className="font-extrabold text-sapien">525 SPN</span>
                 </div>
               </div>
-              <div
-                className={tw`px-8 py-4 mt-4 text(center gray-400 xs) rounded-md bg-gray-50`}
-              >
+              <div className="px-8 py-4 mt-4 text(center gray-400 xs) rounded-md bg-gray-50">
                 Remaining balance: 3,082 SPN
               </div>
             </div>
-            <div className={tw`px-5 py-2.5 bottom-2 w-full`}>
-              <div className={tw`flex items-center justify-center mb-4`}>
+            <div className="px-5 py-2.5 bottom-2 w-full">
+              <div className="flex items-center justify-center mb-4">
                 <Checkbox
                   name="terms"
-                  className={tw`h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded`}
+                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                   aria-invalid="true"
                   aria-describedby="terms-error"
                   label={
-                    <label
-                      htmlFor="terms"
-                      className={tw`ml-2 block text-gray-900`}
-                    >
+                    <label htmlFor="terms" className="ml-2 block text-gray-900">
                       I agree to{' '}
                       <a
-                        className={tw`text-blue-500`}
+                        className="text-blue-500"
                         href="https://common.sapien.network/terms.html"
                         target="_blank"
                         rel="noreferrer"
@@ -405,8 +371,8 @@ const Store = () => {
               </div>
               <button
                 type="submit"
-                className={tw`
-            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500`}
+                className="
+            w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm  text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               >
                 Purchase Token
               </button>

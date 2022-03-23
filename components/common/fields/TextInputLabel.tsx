@@ -1,4 +1,4 @@
-import { tw } from 'twind';
+import { mergeClassNames } from 'utils/styles';
 
 export interface Props {
   error: string;
@@ -11,10 +11,15 @@ const TextInputLabel = ({ error, extraLabel = null, name, label }: Props) => {
   return (
     <label
       htmlFor={name}
-      className={tw`text-sm mt-4 block text-sm ${error && 'text-red-500'}`}
+      className={mergeClassNames(
+        error ? 'text-red-500' : '',
+        'text-sm mt-4 block'
+      )}
       id={error ? `${name}-error` : ''}
     >
-      <span className={tw`${error ? 'font-extrabold' : 'font-medium'}`}>
+      <span
+        className={mergeClassNames(error ? 'font-extrabold' : 'font-medium')}
+      >
         {label}
       </span>{' '}
       {error}

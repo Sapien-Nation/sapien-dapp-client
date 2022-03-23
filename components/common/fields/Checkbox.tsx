@@ -1,6 +1,5 @@
 import { InputHTMLAttributes } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { tw } from 'twind';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: React.ReactElement;

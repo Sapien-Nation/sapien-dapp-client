@@ -39,7 +39,7 @@ const Query = ({
     }
   }
   if (error) {
-    return <ErrorView error={error as Error} onClick={() => mutate(api)} />;
+    return <ErrorView />;
   }
 
   return children ? (children as Function)(data) : null;

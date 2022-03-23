@@ -26,10 +26,6 @@ export const useIsValidView = (tribeID: string, viewID: string): boolean => {
         name: 'sapien',
         id: 'home',
       },
-      ...tribe.channels.map((channel) => ({
-        ...channel,
-        type: View.Channel,
-      })),
     ];
 
     const view = views.find(({ id }) => id === viewID);
@@ -64,18 +60,12 @@ export const useGetCurrentView = (
 
   const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
 
-  const tribe = tribes.find(({ id }) => id === tribeID);
-
   const views = [
     {
       type: View.HomeFeed,
       name: 'sapien',
       id: 'home',
     },
-    ...tribe.channels.map((channel) => ({
-      ...channel,
-      type: View.Channel,
-    })),
   ];
 
   return views.find(({ id }) => id === viewID);

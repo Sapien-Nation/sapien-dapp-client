@@ -1,10 +1,9 @@
-import { tw } from 'twind';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 const TxHistory = () => {
   return (
-    <div className={tw`flex gap-2 justify-between items-center p-6`}>
-      <div className={tw`bg-red-50 p-4 rounded-full`}>
+    <div className="flex gap-2 justify-between items-center p-6">
+      <div className="bg-red-50 p-4 rounded-full">
         <svg
           fill="none"
           height="14"
@@ -21,16 +20,16 @@ const TxHistory = () => {
         </svg>
       </div>
 
-      <div className={tw`flex flex-col`}>
-        <span className={tw`font-bold`}>Purchase</span>
-        <span className={tw`text-gray-400`}>14 days, confirmed</span>
+      <div className="flex flex-col">
+        <span className="font-bold">Purchase</span>
+        <span className="text-gray-400">14 days, confirmed</span>
       </div>
-      <div className={tw`flex items-center gap-3`}>
-        <div className={tw`flex flex-col`}>
-          <span className={tw`font-bold`}>0 SPN</span>
-          <span className={tw`text-gray-400`}>$ 0</span>
+      <div className="flex items-center gap-3">
+        <div className="flex flex-col">
+          <span className="font-bold">0 SPN</span>
+          <span className="text-gray-400">$ 0</span>
         </div>
-        <ExternalLinkIcon className={tw`h-5 w-5 text-gray-400`} />
+        <ExternalLinkIcon className="h-5 w-5 text-gray-400" />
       </div>
     </div>
   );

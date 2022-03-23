@@ -2,7 +2,6 @@ import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { InputHTMLAttributes, useState } from 'react';
 import { Control, useController, useFormState } from 'react-hook-form';
 import { useTheme } from 'next-themes';
-import { tw } from 'twind';
 
 // utils
 import { mergeClassNames } from 'utils/styles';
@@ -16,23 +15,6 @@ interface Props {
   shouldValidate?: boolean;
   validate?: (value: string) => boolean | string;
 }
-
-// const softPasswords = [
-//   '12345678',
-//   'qwertyui',
-//   'qwertzui',
-//   'asdfghjk',
-//   'abcdefgh',
-//   '09876543',
-//   '98765432',
-//   '1q2w3e4r',
-//   '12345asd',
-//   'test1234',
-//   'Test1234',
-//   'password',
-//   'sapien',
-//   'passw0rd',
-// ];
 
 const PasswordInput = ({
   autoComplete,
@@ -84,30 +66,28 @@ const PasswordInput = ({
       <div className="relative mb-2">
         <input
           autoComplete={autoComplete}
-          className={tw`${mergeClassNames(
+          className={mergeClassNames(
             theme && theme === 'dark' ? 'bg-gray-800' : '',
             'appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
-          )}`}
+          )}
           id={name}
           placeholder="Thisismypassword123*"
           type={show ? 'text' : 'password'}
           {...passwordControl}
           {...inputProps}
         />
-        <div
-          className={tw`absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5`}
-        >
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
           <EyeIcon
             onClick={() => setShow(!show)}
-            className={tw`cursor-pointer h-6 w-6 text-gray-700 ${
+            className="cursor-pointer h-6 w-6 text-gray-700 ${
               show ? 'hidden' : 'block'
-            }`}
+            }"
           />
           <EyeOffIcon
             onClick={() => setShow(!show)}
-            className={tw`cursor-pointer h-6 w-6 text-gray-700 ${
+            className="cursor-pointer h-6 w-6 text-gray-700 ${
               show ? 'block' : 'hidden'
-            }`}
+            }"
           />
         </div>
       </div>

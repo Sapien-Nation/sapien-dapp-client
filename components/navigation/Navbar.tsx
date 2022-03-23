@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { tw } from 'twind';
 import { ethers } from 'ethers';
 
 // api
@@ -107,20 +106,18 @@ const Navbar = () => {
   };
 
   return (
-    <div className={tw`bg-white shadow`}>
-      <div
-        className={tw`flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8`}
-      >
+    <div className="bg-white shadow">
+      <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <button
-          className={tw`bg-transparent py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm mr-2`}
+          className="bg-transparent py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm mr-2"
           onClick={handleConnectWallet}
         >
           {active ? displayAddress(account) : 'Connect Wallet'}
         </button>
         <button
-          className={tw` py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
+          className=" py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm ${
             isFetching ? 'cursor-not-allowed' : ''
-          } ${active ? '' : 'opacity-50 cursor-not-allowed'}`}
+          } ${active ? '' : 'opacity-50 cursor-not-allowed'}"
           onClick={handleBuyPassport}
           disabled={!active}
         >

@@ -1,24 +1,16 @@
 import { Fragment } from 'react';
-import { tw } from 'twind';
 
 // styles
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 
-const classNames = (...classes) => classes.filter(Boolean).join(' ');
-
 const Dropdown = () => {
   return (
-    <Menu as="div" className={tw`relative inline-block text-left`}>
+    <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button
-          className={tw`inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500`}
-        >
+        <Menu.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
           Options
-          <ChevronDownIcon
-            className={tw`-mr-1 ml-2 h-5 w-5`}
-            aria-hidden="true"
-          />
+          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </Menu.Button>
       </div>
 
@@ -31,31 +23,29 @@ const Dropdown = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items
-          className={tw`origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none`}
-        >
-          <div className={tw`py-1`}>
+        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
             <Menu.Item>
-              {({ active }) => (
+              {() => (
                 <a
                   href="#"
-                  className={tw`${
+                  className="${
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   }
-                    'block px-4 py-2 text-sm`}
+                    'block px-4 py-2 text-sm"
                 >
                   Account settings
                 </a>
               )}
             </Menu.Item>
             <Menu.Item>
-              {({ active }) => (
+              {() => (
                 <a
                   href="#"
-                  className={tw`${
+                  className="${
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   }
-                    'block px-4 py-2 text-sm`}
+                    'block px-4 py-2 text-sm"
                 >
                   Support
                 </a>
@@ -65,10 +55,10 @@ const Dropdown = () => {
               {({ active }) => (
                 <a
                   href="#"
-                  className={tw`${
+                  className="${
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   }
-                    'block px-4 py-2 text-sm'`}
+                    'block px-4 py-2 text-sm'"
                 >
                   License
                 </a>
@@ -79,9 +69,9 @@ const Dropdown = () => {
                 {({ active }) => (
                   <button
                     type="submit"
-                    className={tw`
+                    className="
                       ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}
-                      'block w-full text-left px-4 py-2 text-sm'`}
+                      'block w-full text-left px-4 py-2 text-sm'"
                   >
                     Sign out
                   </button>
