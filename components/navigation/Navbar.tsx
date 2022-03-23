@@ -106,7 +106,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-white shadow">
+    <div className="shadow border-b">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <button
           className="bg-transparent py-2 px-4 text-sapien font-extrabold border-2 rounded-lg shadow-sm mr-2"

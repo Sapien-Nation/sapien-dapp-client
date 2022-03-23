@@ -64,7 +64,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white focus:outline-none">
+            <div className="relative flex-1 flex flex-col max-w-xs w-full focus:outline-none">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"

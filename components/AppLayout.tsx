@@ -103,8 +103,8 @@ const AppLayout = ({ children }: Props) => {
                       setMobileMenuOpen={setMobileMenuOpen}
                     />
                     {isHomePage === false && (
-                      <div className="hidden lg:block lg:flex-shrink-0">
-                        <div className="h-full p-2 relative flex flex-col w-64 bg-white overflow-y-auto">
+                      <div className="hidden lg:block lg:flex-shrink-0 border-r">
+                        <div className="h-full p-2 relative flex flex-col w-64 overflow-y-auto">
                           {isDiscoveryPage === true && <DiscoveryNavigation />}
                           {isDiscoveryPage === false && <TribeNavigation />}
                         </div>
@@ -123,7 +123,7 @@ const AppLayout = ({ children }: Props) => {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="z-100 w-64 p-4 mx-3 origin-top absolute bottom-16 right-0 left-16 mt-1 rounded-xl shadow-2xl bg-white divide-y divide-gray-200 focus:outline-none">
+                          <Menu.Items className="z-100 w-64 p-4 mx-3 origin-top absolute bottom-16 right-0 left-16 mt-1 rounded-xl shadow-2xl divide-y divide-gray-200 focus:outline-none">
                             <div className="h-full">
                               <Link href="/logout">
                                 <a className="mt-8 text-center font-medium text-sm text-purple-600 hover:text-purple-500">
@@ -133,7 +133,7 @@ const AppLayout = ({ children }: Props) => {
                             </div>
                           </Menu.Items>
                         </Transition>
-                        <Menu.Button className="group w-full flex text-sm text-left font-medium text-gray-700 hover:bg-indigo-50 focus:outline-none">
+                        <Menu.Button className="group w-full flex text-sm text-left font-mediumπsea hover:bg-indigo-50 focus:outline-none">
                           <span className="flex w-full items-center">
                             <span className="flex min-w-0 items-center w-full justify-between">
                               <div className="bg-gray-900 px-5 py-3 ">
@@ -155,11 +155,11 @@ const AppLayout = ({ children }: Props) => {
                                   <span className="text-xs truncate w-32">
                                     @{me.username}
                                   </span>
-                                  <span className="text(xs gray-400) truncate w-32">
+                                  <span className="truncate w-32">
                                     {me.displayName}
                                   </span>
                                 </span>
-                                <SelectorIcon className="flex-shrink-0 h-5 w-5 text-gray-500 mr-4 group-hover:text-gray-500" />
+                                <SelectorIcon className="flex-shrink-0 h-5 w-5 text-gray-500 mr-4" />
                               </div>
                             </span>
                           </span>
