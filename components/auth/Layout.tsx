@@ -1,8 +1,4 @@
-import Image from 'next/image';
 import { tw } from 'twind';
-
-// assets
-import { FullLogo } from 'assets';
 
 // components
 import { Redirect } from 'components/common';
@@ -24,13 +20,13 @@ const Layout = ({ children, title }: Props) => {
 
   return (
     <>
-      <div className={tw`min-h-screen flex`}>
+      <div className={tw`min-h-full flex`}>
         <div className={tw`hidden lg:block relative w-0 flex-1`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="auth-image"
             className={tw`absolute object-cover h-0 min-h-full	min-w-full`}
-            src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/public_images_auth_2.jpeg"
+            src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg"
           />
         </div>
         <div
@@ -38,14 +34,14 @@ const Layout = ({ children, title }: Props) => {
         >
           <div className={tw`mx-auto w-full max-w-sm lg:w-96`}>
             <div>
-              {/* <div className={tw`flex justify-center items-center`}>
-                <FullLogo />
-              </div> */}
-              <h2
-                className={tw`mt-6 text-3xl font-extrabold text-gray-900 text-center`}
-              >
-                {title}
-              </h2>
+              <div className={tw`flex justify-center items-center`}>
+                <img
+                  className={tw`pr-1 w-16`}
+                  src="/landing/logooutlined.svg"
+                  alt="sapien"
+                />
+              </div>
+              <h2 className={tw`mt-6 text-3xl font-extrabold`}>{title}</h2>
             </div>
 
             <div className={tw`mt-8`}>
