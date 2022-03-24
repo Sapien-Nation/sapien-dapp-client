@@ -1,7 +1,10 @@
 import initTorus from './initTorus';
 
 // api
-import { walletVerifier, walletSubVerifier, env, Envs } from 'api';
+import { env, Envs } from 'api';
+
+// constants
+import { walletVerifier, walletSubVerifier } from '../constants';
 
 const getWalletKeys = async (
   torusToken: string,

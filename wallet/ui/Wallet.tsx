@@ -14,10 +14,12 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 // components
-import TxHistory from 'components/wallet/TxHistory';
-import { NoSpn } from './EmptyState';
-import Store from 'components/wallet/Store';
-import { FilterScreen } from './LoadingState';
+import Store from './Store';
+import NoSpn from './NoSpn';
+import TxHistory from './TxHistory';
+import FilterScreen from './FilterScreen';
+
+// utils
 import { mergeClassNames } from 'utils/styles';
 
 enum WalletTabs {

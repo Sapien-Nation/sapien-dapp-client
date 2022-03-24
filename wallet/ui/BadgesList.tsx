@@ -1,8 +1,8 @@
-import { useState, Fragment, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { SearchIcon } from '@heroicons/react/outline';
 
 // enums
-import { MyNFTsSteps } from 'components/wallet/WalletEnums';
+import { MyNFTsSteps } from '../constants';
 
 const NFTMock = [
   {

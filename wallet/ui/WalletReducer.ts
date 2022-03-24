@@ -1,5 +1,5 @@
 // enums
-import { MyNFTsSteps, StoreSteps } from 'components/wallet/WalletEnums';
+import { MyNFTsSteps, StoreSteps } from '../constants';
 
 enum WalletTab {
   MyBadges = 0,

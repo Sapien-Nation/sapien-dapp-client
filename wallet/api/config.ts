@@ -1,4 +1,6 @@
-import { walletIsMainnet, walleBiconomyApiKey } from 'api';
+// constants
+import { walletIsMainnet, walleBiconomyApiKey } from '../constants';
+
 const getConfig = () => {
   return walletIsMainnet === 'true'
     ? {

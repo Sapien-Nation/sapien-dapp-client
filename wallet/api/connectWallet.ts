@@ -1,10 +1,11 @@
-import getWalletKeys from '../auth/getWalletKeys';
+import getWalletKeys from './getWalletKeys';
 import Wallet from './wallet';
 
 // api
-// import { addWallet } from 'api/authentication';
-import { grantSapienBadge } from 'api/wallet';
-import { walletVerifier, walletSubVerifier } from 'api';
+import { grantSapienBadge } from '.';
+
+// constants
+import { walletVerifier, walletSubVerifier } from '../constants';
 
 const connectWallet = async (
   torusToken: string,

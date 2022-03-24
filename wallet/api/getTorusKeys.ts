@@ -1,8 +1,8 @@
+// constants
+import { walletVerifier, walletSubVerifier } from '../constants';
+
 // types
 import type TorusWebSdk from '@toruslabs/torus-direct-web-sdk/dist/types/login';
-
-// api
-import { walletVerifier, walletSubVerifier } from 'api';
 
 const getTorusKeys = (
   torus: TorusWebSdk,

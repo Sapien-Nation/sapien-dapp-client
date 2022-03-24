@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { useState, useEffect, Fragment } from 'react';
 import { MenuIcon, SelectorIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
-import { useLocalStorage } from 'react-use';
+import { useState, Fragment } from 'react';
 
 // components
 import { Head, Redirect, Query, Search } from 'components/common';
@@ -14,56 +13,20 @@ import {
   TribeNavigation,
 } from 'components/navigation';
 
-// api
-import { connectWallet } from 'api/spn-wallet';
-import { refresh } from 'api/authentication';
-
 // context
 import { useAuth } from 'context/user';
-import { useWallet } from 'context/wallet';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { user } from 'utils/testUtils';
+
 interface Props {
   children: React.ReactElement;
 }
 
 const AppLayout = ({ children }: Props) => {
-  const { newUser, setNewUser, me } = useAuth();
-  const { pathname, query } = useRouter();
+  const { me } = useAuth();
+  const { pathname } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const [tokens] = useLocalStorage<{
-    token: string;
-    torus: string;
-    refresh: string;
-  }>('tokens');
-  const { wallet, setWallet } = useWallet();
-  useEffect(() => {
-    const walletWeb3 = async () => {
-      if (tokens && Boolean(me) && Boolean(!wallet))
-        try {
-          const walletConnected = await connectWallet(
-            tokens.torus,
-            me.id,
-            newUser
-          );
-          setWallet(walletConnected);
-          setNewUser(false);
-        } catch (error) {
-          try {
-            const { token } = await refresh(tokens.refresh, 'torus');
-            const walletConnected = await connectWallet(token, me.id, newUser);
-            setWallet(walletConnected);
-            setNewUser(false);
-          } catch (err) {
-            // TODO add Sentry ERROR
-          }
-        }
-    };
-    walletWeb3();
-  }, [me, newUser, query, setNewUser, setWallet, tokens, wallet]);
 
   // Auth Pages
   if (

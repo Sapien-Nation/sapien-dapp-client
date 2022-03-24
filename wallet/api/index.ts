@@ -1,4 +1,4 @@
-import instance from '.';
+import instance from 'api';
 
 export const sendRawTransaction = (body: { rawTx: string }) =>
   instance

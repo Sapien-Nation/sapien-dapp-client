@@ -1,17 +1,23 @@
-import Web3 from 'web3';
-import { walletIsMainnet } from 'api';
-import { AbiItem, isAddress } from 'web3-utils';
+import axios from 'axios';
 import { Biconomy } from '@biconomy/mexa';
+import Web3 from 'web3';
+import { AbiItem, isAddress } from 'web3-utils';
 import { BN } from 'ethereumjs-util';
 import sigUtil from 'eth-sig-util';
 import Common, { CustomChain } from '@ethereumjs/common';
 import { Transaction as Tx } from '@ethereumjs/tx';
-import PLATFORM_SPN_ABI from './contracts/SapienPlatformSPN.json';
-import BADGE_STORE_ABI from './contracts/BadgeStore.json';
-import PASSPORT_ABI from './contracts/Passport.json';
-import { purchaseBadge, sendSPN, sendBadge } from 'api/wallet';
+
+// api
+import { purchaseBadge, sendSPN, sendBadge } from '../api';
+
+// constants
+import { walletIsMainnet } from '../constants';
+
+import BADGE_STORE_ABI from '../contracts/BadgeStore.json';
+import PLATFORM_SPN_ABI from '../contracts/SapienPlatformSPN.json';
+import PASSPORT_ABI from '../contracts/Passport.json';
+
 import getConfig from './config';
-import axios from 'axios';
 
 const domainType = [
   { name: 'name', type: 'string' },

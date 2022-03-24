@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { ErrorView, Redirect } from 'components/common';
+import { Head, ErrorView, Redirect } from 'components/common';
 
 // hooks
 import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
@@ -44,7 +44,12 @@ const TribePageProxy: NextPage = () => {
 
   if (isValidView === false) return <Redirect path="/" />;
 
-  return <TribePage tribeID={tribeID as string} viewID={viewID as string} />;
+  return (
+    <>
+      <Head title="Home" />
+      <TribePage tribeID={tribeID as string} viewID={viewID as string} />
+    </>
+  );
 };
 
 export default TribePageProxy;

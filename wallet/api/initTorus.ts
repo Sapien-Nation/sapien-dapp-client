@@ -1,5 +1,10 @@
 import torusWebSdk from '@toruslabs/torus-direct-web-sdk';
-import { env, Envs, walletIsMainnet } from 'api';
+
+// api
+import { env, Envs } from 'api';
+
+// constants
+import { walletIsMainnet } from '../constants';
 
 enum Network {
   Mainnet = 'mainnet',

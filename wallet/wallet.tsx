@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useReducer } from 'react';
 
 // reducers
-import { reducer, initialState } from 'components/wallet/WalletReducer';
+import { reducer, initialState } from './ui/WalletReducer';
 
 // types
 import type { Wallet as WalletType } from 'tools/types/wallet';

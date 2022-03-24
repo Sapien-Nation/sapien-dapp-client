@@ -6,7 +6,8 @@ import { ArrowLeftIcon } from '@heroicons/react/solid';
 // components
 import { NumericInputCounter, Checkbox } from 'components/common';
 
-import { StoreSteps } from 'components/wallet/WalletEnums';
+// constants
+import { StoreSteps } from '../constants';
 
 const NFTMock = [
   {
@@ -283,7 +284,7 @@ const Store = () => {
           <div className="flex flex-col w-full h-96 absolute">
             <div className="flex items-center font-bold text-xs px-5 mb-2">
               <button onClick={() => setStep(StoreSteps.Confirmation)}>
-                <ArrowLeftIcon className="h-4 h-4 mr-1" />
+                <ArrowLeftIcon className="h-4 mr-1" />
               </button>{' '}
               Check Out
             </div>
@@ -330,15 +331,15 @@ const Store = () => {
                 </div>
               </div>
               <div className="flex gap-2 flex-col items-center w-full">
-                <div className="flex flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full">
                   <span>Badges cost</span>
                   <span>500 SPN</span>
                 </div>
-                <div className="flex flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full">
                   <span>Transaction fee</span>
                   <span>5%</span>
                 </div>
-                <div className="flex flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full">
                   <span className="font-extrabold">Total</span>
                   <span className="font-extrabold text-sapien">525 SPN</span>
                 </div>

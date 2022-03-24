@@ -10,11 +10,6 @@ export enum Envs {
 const nodeEnv = process.env.NEXT_PUBLIC_ENV;
 export const env = nodeEnv;
 export const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL;
-export const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
-export const walleBiconomyApiKey =
-  process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
-export const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
-export const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
 
 /*
  ***
