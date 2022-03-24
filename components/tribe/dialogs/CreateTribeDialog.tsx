@@ -155,7 +155,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)} id={form}>
                 <div className="sm:overflow-hidden">
-                  <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+                  <div className="px-4 py-5 bg-gray-900 space-y-6 sm:p-6">
                     <div>
                       <div className="flex gap-x-4 items-end">
                         <div>
@@ -237,7 +237,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             error={errors.name?.message}
                           />
                           <TextInput
-                            className="block w-full pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            className="block w-full bg-gray-800 pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
                             name="name"
                             placeholder="The Sapien Tribe"
                             maxLength={50}
@@ -264,7 +264,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           error={errors.identifier?.message}
                         />
                         <TextInput
-                          className="block w-full rounded-md pr-10 pl-3 pt-3 pb-3 bg-gray-100 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md"
+                          className="block w-full rounded-md bg-gray-800 pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md"
                           name="identifier"
                           placeholder="TheSapienTribe"
                           maxLength={20}
@@ -294,7 +294,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                             name="description"
                             maxLength={1000}
                             placeholder="Describe your tribe"
-                            className="shadow-sm r-10 pl-3 pt-3 pb-3 bg-gray-100 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md"
+                            className="shadow-sm r-10 pl-3 pt-3 pb-3 focus:outline-none mt-1 block w-full sm:text-sm border-0 rounded-md"
                             rules={{
                               validate: {
                                 maxLength: (value) => {
@@ -311,7 +311,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                         </div>
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mt-4 text-gray-700">
+                        <label className="block text-sm font-medium mt-4">
                           Cover photo
                         </label>
                         <div className="mt-1 relative min-h-[8.75rem] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -364,7 +364,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                   <div className="text-sm text-gray-600">
                                     <label
                                       htmlFor="cover-upload"
-                                      className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                                      className="relative cursor-pointer rounded-md font-medium text-white hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                                     >
                                       <span>Upload a file</span>
                                       <input
