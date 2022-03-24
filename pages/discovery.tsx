@@ -5,7 +5,12 @@ import { Head } from 'components/common';
 import { NextPage } from 'next';
 
 const DiscoveryPage: NextPage = () => {
-  return <Head title="Discover Tribes" />;
+  return (
+    <>
+      <Head title="Discover Tribes" />
+      <h1>TODO Discovery page</h1>
+    </>
+  );
 };
 
 export default DiscoveryPage;
