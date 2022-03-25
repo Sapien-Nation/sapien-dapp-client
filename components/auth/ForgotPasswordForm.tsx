@@ -53,6 +53,7 @@ const ForgotPasswordForm = () => {
           <input
             id="email"
             type="email"
+            aria-label="email"
             autoComplete="email"
             required
             placeholder="email@example.com"

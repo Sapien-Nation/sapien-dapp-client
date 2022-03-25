@@ -30,6 +30,7 @@ const ChangePasswordForm = ({ token }: Props) => {
   const {
     formState: { isSubmitting },
     handleSubmit,
+    setError,
   } = useForm<ChangePasswordFormValues>();
 
   const onSubmit = async ({
@@ -37,6 +38,16 @@ const ChangePasswordForm = ({ token }: Props) => {
     repeatPassword,
   }: ChangePasswordFormValues) => {
     try {
+      if (repeatPassword !== password) {
+        setError('password', { message: 'Passwords must match' });
+        setError(
+          'repeatPassword',
+          { message: 'Passwords must match' },
+          { shouldFocus: true }
+        );
+        return false;
+      }
+
       await changePassword({
         password: passwordField.current.value,
         token,

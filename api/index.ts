@@ -68,11 +68,16 @@ notificationInstance.interceptors.request.use((config) => {
  ***
  */
 export const fetcher = (url: string) => {
-  console.log(url);
   return instance
     .get(url)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.error));
 };
+
+export const authFetcher = () =>
+  authInstance
+    .get('/api/v3/user/me')
+    .then(({ data }) => data)
+    .catch((response) => Promise.reject(response.data.message));
 
 export default instance;

@@ -1,12 +1,42 @@
+/* istanbul ignore file */
 import { axe } from 'jest-axe';
-import { render } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Cache, SWRConfig, SWRConfiguration } from 'swr';
+
+// constats
+import { Types as UserTypes, Status as UserStatus } from 'tools/types/user';
 
 // types
 import type { NextRouter } from 'next/router';
+import type { User } from 'tools/types/user';
 
 // providers
+import { AuthenticationProvider } from 'context/user';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { ToastProvider } from 'context/toast';
+import { ToastContainer } from 'components/common';
+
+export const cache = new Map();
+
+// Mocks
+export const mockUser = ({
+  id = '1000',
+  ...rest
+}: Partial<User> = {}): User => ({
+  avatar: '',
+  id,
+  type: UserTypes.User,
+  username: 'jhon',
+  status: UserStatus.A,
+  firstName: 'doe',
+  lastName: 'doe',
+  displayName: 'Jhon Doe',
+  email: 'jhon@test.com',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  ...rest,
+});
 
 export const mockRouter = (props: Partial<NextRouter> = {}): NextRouter => ({
   asPath: '/',
@@ -32,26 +62,88 @@ export const mockRouter = (props: Partial<NextRouter> = {}): NextRouter => ({
   ...props,
 });
 
-interface AllTheProvidersProps {
-  children: React.ReactElement;
+export interface ProviderOptions extends RenderOptions {
   route?: Partial<NextRouter>;
+  swrConfig?: SWRConfiguration;
 }
 
-const AllTheProviders = ({ children, route = {} }: AllTheProvidersProps) => {
+interface AllTheProvidersProps extends ProviderOptions {
+  children: React.ReactElement;
+  swrCache?: Cache<any>;
+}
+
+const AllTheProviders = ({
+  children,
+  route = {},
+  swrConfig = {},
+  swrCache,
+}: AllTheProvidersProps) => {
   return (
-    <RouterContext.Provider value={mockRouter(route)}>
-      {children}
-    </RouterContext.Provider>
+    <SWRConfig
+      value={{
+        dedupingInterval: 0,
+        errorRetryCount: 0,
+        fetcher: undefined,
+        revalidateOnFocus: false,
+        ...swrConfig,
+        provider: () => swrCache,
+      }}
+    >
+      <RouterContext.Provider value={mockRouter(route)}>
+        <AuthenticationProvider>
+          <ToastProvider>
+            {children}
+            <ToastContainer />
+          </ToastProvider>
+        </AuthenticationProvider>
+      </RouterContext.Provider>
+    </SWRConfig>
   );
 };
 
-interface OptionsProps {}
+const renderWithProviders = (
+  ui: React.ReactElement,
+  options: ProviderOptions = {}
+) => {
+  const { route, swrConfig, ...rest } = options;
+  const swrCache = new Map(cache);
 
-const customRender = (ui: React.ReactElement, options: OptionsProps = {}) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
+  const rtl = render(ui, {
+    wrapper: ({ children }) => (
+      <AllTheProviders route={route} swrCache={swrCache} swrConfig={swrConfig}>
+        {children}
+      </AllTheProviders>
+    ),
+    ...rest,
+  });
+
+  return {
+    ...rtl,
+    rerender: (ui: React.ReactElement, rerenderOptions?: ProviderOptions) =>
+      renderWithProviders(ui, {
+        container: rtl.container,
+        ...options,
+        ...rerenderOptions,
+      }),
+    history,
+    swrCache,
+  };
+};
+
+// Cache Set
+export const setUser = (user = mockUser()) => {
+  cache.set('/api/v3/user/me', user);
+  return user;
+};
+
+export const setAllTribes = (tribes = []) =>
+  cache.set('/api/v3/profile/tribes', tribes);
+
+export const setLoggedOutUser = (user = mockUser()) =>
+  cache.set('/api/v3/user/me', null);
 
 // re-export everything
 export * from '@testing-library/react';
 
 // override render method
-export { axe, customRender as render, userEvent as user };
+export { axe, renderWithProviders as render, userEvent as user };

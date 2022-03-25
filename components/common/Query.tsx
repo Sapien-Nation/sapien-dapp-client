@@ -1,7 +1,7 @@
-import useSWR, { mutate } from 'swr';
+import useSWR from 'swr';
 
 // components
-import ErrorView from './views/ErrorView';
+import { ErrorView } from './views';
 import Spinner from './Spinner';
 
 // types

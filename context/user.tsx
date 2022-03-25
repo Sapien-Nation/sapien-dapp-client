@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use';
 import useSWR, { useSWRConfig } from 'swr';
 
 // api
-import { authFetcher as fetcher } from 'api/fetchers';
+import { authFetcher as fetcher } from 'api';
 
 // types
 import type { User } from 'tools/types/user';

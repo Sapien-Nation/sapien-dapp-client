@@ -104,6 +104,7 @@ const RegisterForm = () => {
               aria-invalid={Boolean(errors.email?.message)}
               aria-describedby="email-error"
               autoComplete="email"
+              aria-label="email"
               name="email"
               maxLength={100}
               placeholder="email@example.com"
@@ -132,6 +133,7 @@ const RegisterForm = () => {
               maxLength={30}
               autoComplete="username"
               placeholder="johndoe"
+              aria-label="username"
               rules={{
                 maxLength: { value: 30, message: 'is to long' },
                 required: { value: true, message: 'is required' },

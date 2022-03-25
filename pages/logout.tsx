@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 // api
 import { logout } from 'api/authentication';
@@ -9,7 +10,11 @@ import { useAuth } from 'context/user';
 // types
 import { NextPage } from 'next';
 
+// context
+import { useToast } from 'context/toast';
+
 const LogoutPage: NextPage = () => {
+  const toast = useToast();
   const { clearSession, me } = useAuth();
 
   useEffect(() => {
@@ -18,7 +23,11 @@ const LogoutPage: NextPage = () => {
         try {
           await logout({ email: me.email });
         } catch (err) {
-          // err
+          Sentry.captureException(err);
+
+          toast({
+            message: err,
+          });
         }
       }
 
@@ -26,7 +35,7 @@ const LogoutPage: NextPage = () => {
     };
 
     logoutUser();
-  }, [clearSession, me]);
+  }, [clearSession, me, toast]);
 
   return <></>;
 };

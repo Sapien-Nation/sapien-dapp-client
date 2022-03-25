@@ -1,4 +1,5 @@
 import { createContext, useReducer, useContext } from 'react';
+import { nanoid } from 'nanoid';
 
 // constants
 import { ToastType } from 'constants/toast';
@@ -50,7 +51,7 @@ export const useToast = (delay = 4000) => {
     type?: ToastType;
     message: string;
   }) => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = nanoid();
     dispatch({
       type: 'ADD_TOAST',
       toast: {
