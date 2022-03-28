@@ -1,12 +1,13 @@
 import { UserGroupIcon, PlusIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useState } from 'react';
 
 // components
 import { CreateRoomDialog } from 'components/tribe/dialogs';
 
 // hooks
-import { useTribe } from 'hooks/tribe';
+import { useTribe, useTribeRooms } from 'hooks/tribe';
 
 // utils
 import { mergeClassNames } from 'utils/styles';
@@ -21,6 +22,7 @@ const TribeNavigation = () => {
   const { tribeID } = query;
 
   const { name } = useTribe(tribeID as string);
+  const rooms = useTribeRooms(tribeID as string);
 
   return (
     <>
@@ -42,8 +44,16 @@ const TribeNavigation = () => {
             >
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
-            <ul className="px-4 py-2">
-              <li className="text-sm">General</li>
+            <ul className="px-4 py-2 cursor-pointer">
+              {rooms.map(({ id, name }) => {
+                return (
+                  <Link href={`/tribes/${tribeID}/${id}`} passHref key={id}>
+                    <a>
+                      <li className="text-sm">{name}</li>
+                    </a>
+                  </Link>
+                );
+              })}
             </ul>
           </nav>
         </div>

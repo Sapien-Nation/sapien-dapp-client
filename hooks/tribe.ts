@@ -12,32 +12,6 @@ interface CurrentView {
   type: View;
 }
 
-export const useIsValidView = (tribeID: string, viewID: string): boolean => {
-  const { cache } = useSWRConfig();
-
-  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
-
-  const tribe = tribes.find(({ id }) => id === tribeID);
-
-  if (tribe) {
-    const views = [
-      {
-        type: View.HomeFeed,
-        name: 'sapien',
-        id: 'home',
-      },
-    ];
-
-    const view = views.find(({ id }) => id === viewID);
-
-    if (view) return true;
-
-    return false;
-  }
-
-  return false;
-};
-
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
@@ -52,13 +26,40 @@ export const useMainTribe = (): { tribeID: string } => {
   return { tribeID: tribe.id };
 };
 
+export const useTribeRooms = (tribeID: string) => {
+  const { cache } = useSWRConfig();
+  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
+
+  const tribe = tribes.find(({ id }) => id === tribeID);
+
+  if (tribe) {
+    return [
+      {
+        type: View.Room,
+        name: 'general',
+        id: '123456789',
+      },
+      {
+        type: View.Room,
+        name: 'random',
+        id: '987654321',
+      },
+    ];
+  }
+
+  return [];
+};
+
 export const useGetCurrentView = (
   tribeID: string,
   viewID: string
 ): CurrentView => {
   const { cache } = useSWRConfig();
 
-  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
+  const tribe: ProfileTribe = cache
+    .get('/api/v3/profile/tribes')
+    .find(({ id }) => id === tribeID);
+  const rooms = useTribeRooms(tribe.id);
 
   const views = [
     {
@@ -66,6 +67,7 @@ export const useGetCurrentView = (
       name: 'sapien',
       id: 'home',
     },
+    ...rooms,
   ];
 
   return views.find(({ id }) => id === viewID);

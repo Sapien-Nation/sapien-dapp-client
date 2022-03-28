@@ -4,7 +4,7 @@ import { SearchIcon, XIcon, ShoppingCartIcon } from '@heroicons/react/outline';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
 
 // components
-import { NumericInputCounter, Checkbox } from 'components/common';
+import { Checkbox } from 'components/common';
 
 // constants
 import { StoreSteps } from '../constants';
@@ -252,9 +252,7 @@ const Store = () => {
                     <span className="text(xs gray-500)">NF description</span>
                   </div>
                 </div>
-                <div className="flex items-center ml-auto gap-2">
-                  <NumericInputCounter name="badgesAmount" />
-                </div>
+                <div className="flex items-center ml-auto gap-2"></div>
               </div>
             </div>
             <div className="px-5 py-2.5 absolute bottom-2 w-full">

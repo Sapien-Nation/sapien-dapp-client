@@ -6,10 +6,11 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { Head, ErrorView, Redirect } from 'components/common';
+import { Head, ErrorView } from 'components/common';
+import { RoomView } from 'components/tribe';
 
 // hooks
-import { useGetCurrentView, useIsValidView } from 'hooks/tribe';
+import { useGetCurrentView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
@@ -25,7 +26,7 @@ const TribePage = ({ tribeID, viewID }: Props) => {
   const renderView = () => {
     switch (view.type) {
       case View.Room:
-        return <h1>TODO Room</h1>;
+        return <RoomView />;
       default:
         return <h1>TODO</h1>;
     }
@@ -39,10 +40,6 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 const TribePageProxy: NextPage = () => {
   const { query } = useRouter();
   const { tribeID, viewID } = query;
-
-  const isValidView = useIsValidView(tribeID as string, viewID as string);
-
-  if (isValidView === false) return <Redirect path="/" />;
 
   return (
     <>

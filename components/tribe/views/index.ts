@@ -1,1 +1,1 @@
-export * from './rooms';
+export { default as RoomView } from './rooms';
