@@ -35,8 +35,10 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         return <RoomView />;
       case View.HomeFeed:
         return <RedirectToGeneral tribeID={tribeID} />;
+      case View.NotFound:
+        return <h1>This View dont exist</h1>;
       default:
-        return <Head title="Home" />;
+        return <h1>This View dont exist</h1>;
     }
   };
 

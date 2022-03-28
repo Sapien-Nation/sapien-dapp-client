@@ -70,5 +70,13 @@ export const useGetCurrentView = (
     ...rooms,
   ];
 
-  return views.find(({ id }) => id === viewID);
+  const view = views.find(({ id }) => id === viewID);
+
+  if (view) return view;
+
+  return {
+    type: View.NotFound,
+    name: 'not_found',
+    id: 'not_found',
+  };
 };
