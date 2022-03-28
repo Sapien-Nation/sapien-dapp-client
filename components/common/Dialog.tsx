@@ -37,7 +37,7 @@ const Dialog = ({
           type={form ? 'submit' : 'button'}
           className={mergeClassNames(
             isFetching ? 'cursor-not-allowed disabled:opacity-75' : '',
-            'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm'
+            'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm'
           )}
           onClick={onConfirm}
           disabled={isFetching}
@@ -94,7 +94,7 @@ const Dialog = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden bg-gray-900 shadow-gray-500 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <div className="inline-block align-bottom rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-8">
               <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                 <button
                   type="button"
@@ -114,9 +114,7 @@ const Dialog = ({
                 </HeadlessDialog.Title>
               </div>
               <div>{children}</div>
-              <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                {actions}
-              </div>
+              <div className="py-3 sm:flex sm:flex-row-reverse">{actions}</div>
             </div>
           </Transition.Child>
         </div>

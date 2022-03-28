@@ -21,9 +21,9 @@ function TribeBarItem({ tribe, handleClick }: Props) {
     <>
       <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
         <a
-          className="group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
+          className={`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
             tribeID === tribe.id && 'bg-gray-50'
-          }"
+          }`}
           onClick={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();

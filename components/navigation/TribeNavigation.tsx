@@ -27,29 +27,23 @@ const TribeNavigation = () => {
       <div className="w-full">
         <div>
           <nav>
-            <ul>
-              <li className="px-4 py-4 border-b">
-                <span
-                  className={mergeClassNames(
-                    asPath === `/tribes/${tribeID}/home`
-                      ? 'font-extrabold'
-                      : '',
-                    'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text(sm gray-500) flex rounded-lg focus:outline-none'
-                  )}
-                >
-                  <UserGroupIcon className="h-5 w-5 mr-4" />
-                  {name}
-                </span>
-              </li>
-            </ul>
             <button
-              className="px-4 py-2 mt-4 text-base w-full flex justify-between items-center"
+              className={mergeClassNames(
+                asPath === `/tribes/${tribeID}/home` ? 'font-extrabold' : '',
+                'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+              )}
+            >
+              <UserGroupIcon className="h-5 w-5 mr-4" />
+              {name}
+            </button>
+            <button
+              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
               onClick={() => setDialog(Dialog.CreateRoom)}
             >
-              ROOMS <PlusIcon className="text-white w-5" />
+              ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
             <ul className="px-4 py-2">
-              <li className="text-base">General</li>
+              <li className="text-sm">General</li>
             </ul>
           </nav>
         </div>

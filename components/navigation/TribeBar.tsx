@@ -135,7 +135,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
       {/* Static sidebar for desktop */}
       <div className="hidden lg:flex lg:flex-shrink-0">
         <div className="flex flex-col w-20">
-          <div className="flex-1 flex flex-col min-h-0 overflow-y-auto bg-gray-900">
+          <div className="flex-1 flex flex-col min-h-0 overflow-y-auto bg-sapien-neutral-800">
             <div className="flex-1">
               <nav
                 aria-label="Sidebar"
@@ -150,11 +150,11 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                 ))}
                 <Link href="/discovery">
                   <a
-                    className="group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
+                    className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
                       pathname === '/discovery'
                         ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
                         : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                    }"
+                    }`}
                     ref={tooltipRef.current?.setTriggerRef}
                   >
                     <GlobeAltIcon className="h-6 w-6" />

@@ -9,6 +9,8 @@ module.exports = {
         extrabold: ['Averta Bold', 'sans-serif'],
       },
       colors: {
+        "primary": "#6200EA",
+        "primary-200": "#A185F2",
         "sapien": "#6200EA",
         "sapien-80": "#8133EE",
         "sapien-60": "#A166F2",
@@ -34,6 +36,9 @@ module.exports = {
         "sapien-orange-60": "#FFBF9B",
         "sapien-orange-40": "#FFD4BD",
         "sapien-orange-20": "#FFEADE",
+        "sapien-neutral-200": "#656067",
+        "sapien-neutral-600": "#231C27",
+        "sapien-neutral-800": "#171219"
       },
     },
   },

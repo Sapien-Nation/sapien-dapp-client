@@ -3,6 +3,7 @@ import { MenuIcon, SelectorIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
 import { useState, Fragment } from 'react';
+import { useTheme } from 'next-themes';
 
 // components
 import { Head, Redirect, Query, Search } from 'components/common';
@@ -19,6 +20,9 @@ import { useAuth } from 'context/user';
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
+// utils
+import { mergeClassNames } from 'utils/styles';
+
 interface Props {
   children: React.ReactElement;
 }
@@ -27,6 +31,7 @@ const AppLayout = ({ children }: Props) => {
   const { me } = useAuth();
   const { pathname } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { theme } = useTheme();
 
   // Auth Pages
   if (
@@ -53,7 +58,12 @@ const AppLayout = ({ children }: Props) => {
     const isDiscoveryPage = pathname === '/discovery';
 
     return (
-      <div className="relative h-full">
+      <div
+        className={mergeClassNames(
+          theme && theme === 'dark' ? 'bg-sapien-neutral-600' : '',
+          'relative h-full'
+        )}
+      >
         <Query api="/api/v3/profile/tribes" loader={null}>
           {(tribes: Array<ProfileTribe>) => (
             <>
@@ -66,8 +76,8 @@ const AppLayout = ({ children }: Props) => {
                       setMobileMenuOpen={setMobileMenuOpen}
                     />
                     {isHomePage === false && (
-                      <div className="hidden lg:block lg:flex-shrink-0 border-r">
-                        <div className="h-full p-2 relative flex flex-col w-64 overflow-y-auto">
+                      <div className="hidden lg:block lg:flex-shrink-0">
+                        <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto">
                           {isDiscoveryPage === true && <DiscoveryNavigation />}
                           {isDiscoveryPage === false && <TribeNavigation />}
                         </div>
@@ -86,7 +96,7 @@ const AppLayout = ({ children }: Props) => {
                           leaveFrom="transform opacity-100 scale-100"
                           leaveTo="transform opacity-0 scale-95"
                         >
-                          <Menu.Items className="z-100 w-64 p-4 mx-3 origin-top absolute bottom-16 right-0 left-16 mt-1 rounded-xl shadow-2xl divide-y divide-gray-200 focus:outline-none">
+                          <Menu.Items className="z-100 w-64 px-2 py-4 origin-top absolute bottom-16 right-0 left-20 divide-y divide-sapien-neutral-800 focus:outline-none bg-sapien-neutral-800 shadow-md">
                             <div className="h-full">
                               <Link href="/logout">
                                 <a className="mt-8 text-center font-medium text-sm text-purple-600 hover:text-purple-500">
@@ -96,7 +106,7 @@ const AppLayout = ({ children }: Props) => {
                             </div>
                           </Menu.Items>
                         </Transition>
-                        <Menu.Button className="group w-full flex text-sm text-left font-mediumπsea hover:bg-indigo-50 focus:outline-none">
+                        <Menu.Button className="group w-full flex text-sm text-left font-medium hover:bg-sapien-neutral-800 focus:outline-none">
                           <span className="flex w-full items-center">
                             <span className="flex min-w-0 items-center w-full justify-between">
                               <div className="bg-gray-900 px-5 py-3 ">
@@ -149,7 +159,7 @@ const AppLayout = ({ children }: Props) => {
                   <div className="hidden lg:block">
                     <Navbar />
                   </div>
-                  <div className="flex-1 flex overflow-hidden">
+                  <div className="flex-1 flex overflow-hidden bg-sapien-neutral-800 rounded-t-3xl p-8">
                     <section
                       aria-labelledby="primary-heading"
                       className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
