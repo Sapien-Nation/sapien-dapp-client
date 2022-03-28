@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { Head, ErrorView } from 'components/common';
+import { Head, ErrorView, Redirect } from 'components/common';
 import { RoomView } from 'components/tribe';
 
 // hooks
-import { useGetCurrentView } from 'hooks/tribe';
+import { useGetCurrentView, useTribeRooms } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
@@ -20,6 +20,12 @@ interface Props {
   viewID: string;
 }
 
+const RedirectToGeneral = ({ tribeID }: { tribeID: string }) => {
+  const [{ id }] = useTribeRooms(tribeID);
+
+  return <Redirect path={`/tribes/${tribeID}/${id}`} />;
+};
+
 const TribePage = ({ tribeID, viewID }: Props) => {
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
@@ -27,8 +33,10 @@ const TribePage = ({ tribeID, viewID }: Props) => {
     switch (view.type) {
       case View.Room:
         return <RoomView />;
+      case View.HomeFeed:
+        return <RedirectToGeneral tribeID={tribeID} />;
       default:
-        return <h1>TODO</h1>;
+        return <Head title="Home" />;
     }
   };
 
@@ -43,7 +51,7 @@ const TribePageProxy: NextPage = () => {
 
   return (
     <>
-      <Head title="Home" />
+      <Head title="Sapien" />
       <TribePage tribeID={tribeID as string} viewID={viewID as string} />
     </>
   );
