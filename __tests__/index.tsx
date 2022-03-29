@@ -12,7 +12,7 @@ const router = mockRouter({
   push,
 });
 
-const mainTribe = mockProfileTribe({ isMain: true });
+const mainTribe = mockProfileTribe();
 beforeEach(() => {
   setAllTribes([mainTribe, mockProfileTribe({ id: '2000' })]);
 });
