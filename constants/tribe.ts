@@ -1,5 +1,6 @@
 export enum View {
+  Channel,
   NotFound,
-  HomeFeed,
+  MainChannel,
   Room,
 }

@@ -7,7 +7,7 @@ import { View } from 'constants/tribe';
 
 // components
 import { Head, ErrorView, Redirect, NotFound } from 'components/common';
-import { RoomView } from 'components/tribe';
+import { Channel, MainChannel, RoomView } from 'components/tribe';
 
 // hooks
 import { useGetCurrentView, useTribeRooms } from 'hooks/tribe';
@@ -33,8 +33,10 @@ const TribePage = ({ tribeID, viewID }: Props) => {
     switch (view.type) {
       case View.Room:
         return <RoomView />;
-      case View.HomeFeed:
-        return <RedirectToGeneral tribeID={tribeID} />;
+      case View.Channel:
+        return <Channel />;
+      case View.MainChannel:
+        return <MainChannel />;
       case View.NotFound:
         return (
           <NotFound

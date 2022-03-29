@@ -1,8 +1,7 @@
-import { Head } from 'components/common';
 import { useRouter } from 'next/router';
 
 //components
-import { ErrorView } from 'components/common';
+import { Head, ErrorView } from 'components/common';
 
 // hooks
 import { useRoom } from 'hooks/room';
@@ -21,7 +20,10 @@ const Room = () => {
     <>
       <Head title={room.name} />
       <h1 className="sr-only">Room View for {room.name}</h1>
-      <h1>TODO room data for {room.name}</h1>
+      <div>InfiniteScroll Feed Goes here</div>
+      <div>
+        <span>Editor goes here</span>
+      </div>
     </>
   );
 };

@@ -26,11 +26,26 @@ export const useMainTribe = (): { tribeID: string } => {
   return { tribeID: tribe.id };
 };
 
+export const useTribeChannels = (tribeID: string) => {
+  const { cache } = useSWRConfig();
+  const tribe: ProfileTribe = cache
+    .get('/api/v3/profile/tribes')
+    .find(({ id }) => id === tribeID);
+
+  return tribe
+    ? tribe.channels.map(({ name, id }) => ({
+        type: View.Channel,
+        name,
+        id,
+      }))
+    : [];
+};
+
 export const useTribeRooms = (tribeID: string) => {
   const { cache } = useSWRConfig();
-  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
-
-  const tribe = tribes.find(({ id }) => id === tribeID);
+  const tribe: ProfileTribe = cache
+    .get('/api/v3/profile/tribes')
+    .find(({ id }) => id === tribeID);
 
   if (tribe) {
     return [
@@ -60,13 +75,15 @@ export const useGetCurrentView = (
     .get('/api/v3/profile/tribes')
     .find(({ id }) => id === tribeID);
   const rooms = useTribeRooms(tribe.id);
+  const channels = useTribeChannels(tribe.id);
 
   const views = [
     {
-      type: View.HomeFeed,
-      name: 'sapien',
+      type: View.MainChannel,
+      name: tribe.name,
       id: 'home',
     },
+    ...channels,
     ...rooms,
   ];
 
