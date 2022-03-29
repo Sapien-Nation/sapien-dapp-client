@@ -9,4 +9,8 @@
 #__next {
   height: 100%;
 }
+
+input {
+  background-color: #3B3B3B !important;
+}
 /* purgecss end ignore */
