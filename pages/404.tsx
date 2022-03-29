@@ -42,7 +42,7 @@ const ErrorPage: NextPage = () => {
           <div className="max-w-xl mx-auto py-16 sm:py-24">
             <div className="text-center">
               <p className="text-2xl font-semibold text-white uppercase tracking-wide">
-                404 error
+                Ops..
               </p>
               <h1 className="mt-2 text-4xl font-extrabold text-gray-400 tracking-tight sm:text-5xl">
                 This page does not exist.
