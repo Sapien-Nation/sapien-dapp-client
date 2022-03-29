@@ -14,12 +14,12 @@ export interface CreateTribeBody {
 
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
   axios
-    .post('api/v3/tribe', body)
+    .post('/api/v3/tribe', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const uploadImage = (data: FormData) =>
   axios
-    .post('api/v3/tribe/image', data)
+    .post('/api/v3/tribe/image', data)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
