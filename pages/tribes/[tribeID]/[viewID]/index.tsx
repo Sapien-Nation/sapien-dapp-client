@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { Head, ErrorView, Redirect } from 'components/common';
+import { Head, ErrorView, Redirect, NotFound } from 'components/common';
 import { RoomView } from 'components/tribe';
 
 // hooks
@@ -36,9 +36,19 @@ const TribePage = ({ tribeID, viewID }: Props) => {
       case View.HomeFeed:
         return <RedirectToGeneral tribeID={tribeID} />;
       case View.NotFound:
-        return <h1>This View dont exist</h1>;
+        return (
+          <NotFound
+            message="This page don't exists"
+            subtitle="We could not find any room or channel for this route"
+          />
+        );
       default:
-        return <h1>This View dont exist</h1>;
+        return (
+          <NotFound
+            message="This page don't exists"
+            subtitle="We could not find any room or channel for this route"
+          />
+        );
     }
   };
 
