@@ -19,7 +19,7 @@ enum Dialog {
 const TribeNavigation = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { asPath, query } = useRouter();
-  const { tribeID } = query;
+  const { tribeID, viewID } = query;
 
   const { name } = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
@@ -44,14 +44,20 @@ const TribeNavigation = () => {
             >
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
-            <ul className="px-4 py-2 cursor-pointer">
+            <ul className="px-2 py-2 cursor-pointer">
               {rooms.map(({ id, name }) => {
                 return (
-                  <Link href={`/tribes/${tribeID}/${id}`} passHref key={id}>
-                    <a>
-                      <li className="text-sm">{name}</li>
-                    </a>
-                  </Link>
+                  <li
+                    className={`${mergeClassNames(
+                      id === viewID ? 'font-semibold' : 'text-gray-300',
+                      'text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                    )}`}
+                    key={id}
+                  >
+                    <Link href={`/tribes/${tribeID}/${id}`} passHref>
+                      <a className="block px-2 py-2"># {name}</a>
+                    </Link>
+                  </li>
                 );
               })}
             </ul>
