@@ -1,13 +1,13 @@
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, useFieldArray, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/router';
 
 // components
 import {
   Dialog,
-  TextareaInput,
   TextInput,
   TextInputLabel,
+  TopicsInput,
 } from 'components/common';
 
 //hooks
@@ -19,6 +19,7 @@ interface Props {
 
 interface FormValues {
   name: string;
+  topics?: Array<object>;
 }
 
 const form = 'create-room-form';
@@ -27,18 +28,26 @@ const CreateRoomDialog = ({ onClose }: Props) => {
   const methods = useForm<FormValues>({
     defaultValues: {
       name: '',
+      topics: [{ value: '' }],
     },
   });
+
   const {
     formState: { errors, isSubmitting },
+    control,
     handleSubmit,
     setValue,
   } = methods;
 
+  const { fields, append, insert, remove } = useFieldArray({
+    name: 'topics',
+    control,
+  });
+
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
 
-  const onSubmit = async ({ name }: FormValues) => {
+  const onSubmit = async ({ name, topics }: FormValues) => {
     try {
       onClose();
     } catch (error) {
@@ -73,6 +82,34 @@ const CreateRoomDialog = ({ onClose }: Props) => {
                     placeholder="The Sapien Tribe"
                     maxLength={50}
                     pattern={/^[a-zA-Z\s]$/}
+                    rules={{
+                      validate: {
+                        required: (value) => value.length > 0 || 'is required',
+                        minLength: (value) =>
+                          value?.length > 2 ||
+                          'Must be Between 2 and 50 characters long',
+                        maxLength: (value) =>
+                          value?.length <= 51 ||
+                          'Must be Between 2 and 50 characters long',
+                      },
+                    }}
+                  />
+                </div>
+                <div className="flex-1">
+                  <TextInputLabel
+                    label="Topics"
+                    name="topics"
+                    error={errors.name?.message}
+                  />
+                  <TopicsInput
+                    className="block w-full bg-gray-800 pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                    name="topics"
+                    placeholder="Add your topics..."
+                    remove={remove}
+                    maxLength={50}
+                    insert={insert}
+                    pattern={/^[a-zA-Z\s]$/}
+                    options={fields}
                     rules={{
                       validate: {
                         required: (value) => value.length > 0 || 'is required',
