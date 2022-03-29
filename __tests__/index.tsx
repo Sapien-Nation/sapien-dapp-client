@@ -20,5 +20,5 @@ beforeEach(() => {
 test('should direct to main tribe', () => {
   render(<IndexPage />, { route: router });
 
-  expect(push).toHaveBeenCalledWith(`/tribes/${mainTribe.id}/home`);
+  expect(push).toHaveBeenCalledWith(`/tribes/${mainTribe.id}/123456789`);
 });

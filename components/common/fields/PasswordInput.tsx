@@ -1,10 +1,6 @@
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 import { InputHTMLAttributes, useState } from 'react';
-import { Control, useController, useFormState } from 'react-hook-form';
-import { useTheme } from 'next-themes';
-
-// utils
-import { mergeClassNames } from 'utils/styles';
+import { Control, useController } from 'react-hook-form';
 
 interface Props {
   autoComplete?: string;
@@ -26,7 +22,6 @@ const PasswordInput = ({
   validate,
 }: Props) => {
   const [show, setShow] = useState<boolean>(false);
-  const { theme } = useTheme();
 
   const { field: passwordControl } = useController({
     defaultValue: '',
@@ -66,9 +61,7 @@ const PasswordInput = ({
       <div className="relative mb-2">
         <input
           autoComplete={autoComplete}
-          className={mergeClassNames(
-            'appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
-          )}
+          className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
           id={name}
           placeholder="Thisismypassword123*"
           type={show ? 'text' : 'password'}
@@ -76,18 +69,21 @@ const PasswordInput = ({
           {...inputProps}
         />
         <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-          <EyeIcon
-            onClick={() => setShow(!show)}
-            className="cursor-pointer h-6 w-6 text-gray-700 ${
+          {show ? (
+            <EyeIcon
+              onClick={() => setShow(!show)}
+              className="cursor-pointer h-6 w-6 text-white ${
               show ? 'hidden' : 'block'
             }"
-          />
-          <EyeOffIcon
-            onClick={() => setShow(!show)}
-            className="cursor-pointer h-6 w-6 text-gray-700 ${
-              show ? 'block' : 'hidden'
-            }"
-          />
+            />
+          ) : (
+            <EyeOffIcon
+              onClick={() => setShow(!show)}
+              className="cursor-pointer h-6 w-6 text-white ${
+            show ? 'block' : 'hidden'
+          }"
+            />
+          )}
         </div>
       </div>
     </>

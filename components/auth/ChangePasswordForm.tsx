@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { RefreshIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 // api
 import { changePassword } from 'api/authentication';
@@ -11,10 +11,11 @@ import { useToast } from 'context/toast';
 
 // utils
 import { mergeClassNames } from 'utils/styles';
+import { PasswordInput, TextInputLabel } from 'components/common';
 
 interface ChangePasswordFormValues {
   password: string;
-  repeatPassword: string;
+  confirm: string;
 }
 
 interface Props {
@@ -24,24 +25,21 @@ interface Props {
 const ChangePasswordForm = ({ token }: Props) => {
   const toast = useToast();
   const { push } = useRouter();
-  const passwordField = useRef<HTMLInputElement | null>(null);
-  const confirmPasswordField = useRef<HTMLInputElement | null>(null);
 
+  const methods = useForm<ChangePasswordFormValues>();
   const {
-    formState: { isSubmitting },
+    control,
+    formState: { errors, isSubmitting },
     handleSubmit,
     setError,
-  } = useForm<ChangePasswordFormValues>();
+  } = methods;
 
-  const onSubmit = async ({
-    password,
-    repeatPassword,
-  }: ChangePasswordFormValues) => {
+  const onSubmit = async ({ password, confirm }: ChangePasswordFormValues) => {
     try {
-      if (repeatPassword !== password) {
+      if (confirm !== password) {
         setError('password', { message: 'Passwords must match' });
         setError(
-          'repeatPassword',
+          'confirm',
           { message: 'Passwords must match' },
           { shouldFocus: true }
         );
@@ -49,7 +47,7 @@ const ChangePasswordForm = ({ token }: Props) => {
       }
 
       await changePassword({
-        password: passwordField.current.value,
+        password,
         token,
       });
 
@@ -61,73 +59,62 @@ const ChangePasswordForm = ({ token }: Props) => {
     }
   };
 
-  const validatePassword = () => {
-    if (passwordField.current.value !== confirmPasswordField.current.value) {
-      confirmPasswordField.current.setCustomValidity("Passwords Don't Match");
-      return;
-    } else {
-      confirmPasswordField.current.setCustomValidity('');
-    }
-  };
-
+  const passwordError = errors.password?.message;
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-70"
-        >
-          Password
-        </label>
-        <div className="mt-1">
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-s"
-            ref={passwordField}
-            onChange={validatePassword}
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-1">
+          <TextInputLabel
+            label="Password"
+            name="password"
+            error={errors.password?.message}
           />
+          <div className="mt-1">
+            <PasswordInput
+              control={control}
+              validate={(value) => value.length > 0 || 'is required'}
+              inputProps={{
+                'aria-invalid': Boolean(passwordError),
+                'aria-describedby': `password-error`,
+              }}
+            />
+          </div>
         </div>
-      </div>
-
-      <div className="space-y-1">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-70"
-        >
-          Repeat Password
-        </label>
-        <div className="mt-1">
-          <input
-            id="confirmPassword"
-            type="password"
-            autoComplete="repeat-password"
-            required
-            className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-s"
-            ref={confirmPasswordField}
-            onKeyUp={validatePassword}
+        <div className="space-y-1">
+          <TextInputLabel
+            label="Confirm Password"
+            name="confirm"
+            error={errors.confirm?.message}
           />
+          <div className="mt-1">
+            <PasswordInput
+              name="confirm"
+              shouldValidate={false}
+              inputProps={{
+                'aria-invalid': Boolean(passwordError),
+                'aria-describedby': `password-error`,
+              }}
+            />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <button
-          type="submit"
-          className={mergeClassNames(
-            isSubmitting ? 'cursor-not-allowed' : '',
-            'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
-          )}
-          disabled={isSubmitting}
-        >
-          {isSubmitting && (
-            <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
-          )}
-          Change Password
-        </button>
-      </div>
-    </form>
+        <div>
+          <button
+            type="submit"
+            className={mergeClassNames(
+              isSubmitting ? 'cursor-not-allowed' : '',
+              'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+            )}
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+            )}
+            Change Password
+          </button>
+        </div>
+      </form>
+    </FormProvider>
   );
 };
 
