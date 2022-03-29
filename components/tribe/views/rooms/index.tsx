@@ -1,6 +1,9 @@
 import { Head } from 'components/common';
 import { useRouter } from 'next/router';
 
+//components
+import { ErrorView } from 'components/common';
+
 // hooks
 import { useRoom } from 'hooks/room';
 
@@ -10,7 +13,9 @@ const Room = () => {
 
   const room = useRoom(tribeID as string, viewID as string);
 
-  if (room === null) return <h1>TODO Error View</h1>;
+  if (room === null) {
+    return <ErrorView message="There was a problem rendering this room!" />;
+  }
 
   return (
     <>

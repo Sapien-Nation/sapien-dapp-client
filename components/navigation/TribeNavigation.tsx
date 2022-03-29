@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 // components
 import { CreateRoomDialog } from 'components/tribe/dialogs';
+import { ErrorView } from 'components/common';
 
 // hooks
 import { useTribe, useTribeRooms } from 'hooks/tribe';
@@ -21,8 +22,14 @@ const TribeNavigation = () => {
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
 
-  const { name } = useTribe(tribeID as string);
+  const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
+
+  if (!tribe || !rooms) {
+    return <ErrorView message="There was a problem loading room list!" />;
+  }
+
+  const { name } = tribe;
 
   return (
     <>

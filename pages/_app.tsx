@@ -26,7 +26,7 @@ import 'emoji-mart/css/emoji-mart.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ThemeProvider defaultTheme="dark" attribute="class">
-    <ErrorBoundary FallbackComponent={ErrorView}>
+    <ErrorBoundary FallbackComponent={() => <ErrorView />}>
       <SWRConfig
         value={{
           provider: () => new Map(),

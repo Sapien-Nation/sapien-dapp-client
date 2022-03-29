@@ -38,7 +38,8 @@ module.exports = {
         "sapien-orange-20": "#FFEADE",
         "sapien-neutral-200": "#656067",
         "sapien-neutral-600": "#231C27",
-        "sapien-neutral-800": "#171219"
+        "sapien-neutral-800": "#171219",
+        "sapien-red-700": "#FF4279"
       },
     },
   },

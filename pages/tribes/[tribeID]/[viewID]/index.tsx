@@ -43,7 +43,9 @@ const TribePage = ({ tribeID, viewID }: Props) => {
   };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorView}>{renderView()}</ErrorBoundary>
+    <ErrorBoundary FallbackComponent={() => <ErrorView />}>
+      {renderView()}
+    </ErrorBoundary>
   );
 };
 
