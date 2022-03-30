@@ -21,6 +21,10 @@ const customJestConfig = {
     '<rootDir>/utils/testUtils.tsx',
     'node_modules',
   ],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
