@@ -1,5 +1,5 @@
 // utils
-import { mockRouter, render, screen, setAllTribes } from 'utils/testUtils';
+import { mockRouter, render, setAllTribes } from 'utils/testUtils';
 
 // components
 import IndexPage from 'pages/index';

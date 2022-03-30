@@ -53,6 +53,7 @@ const TribeNavigation = () => {
               </a>
             </Link>
             <button
+              aria-label="Create Channel"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
               onClick={() => setDialog(Dialog.CreateChannel)}
             >
@@ -69,7 +70,7 @@ const TribeNavigation = () => {
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="block px-2 py-2"># {name}</a>
+                      <a className="block px-2 py-2">{name}</a>
                     </Link>
                   </li>
                 );
@@ -81,6 +82,7 @@ const TribeNavigation = () => {
         <div>
           <nav>
             <button
+              aria-label="Create Room"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
               onClick={() => setDialog(Dialog.CreateRoom)}
             >
