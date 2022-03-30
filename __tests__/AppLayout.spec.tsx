@@ -42,7 +42,8 @@ const push = jest.fn();
 const error = { message: 'Error' };
 
 const channel1 = mockProfileTribeChannel();
-const tribe1 = mockProfileTribe({ channels: [channel1] });
+const room1 = mockProfileTribeRoom();
+const tribe1 = mockProfileTribe({ channels: [channel1], rooms: [room1] });
 const tribe2 = mockProfileTribe({ id: '2000' });
 const tribes = [tribe1, tribe2];
 

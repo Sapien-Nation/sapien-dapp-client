@@ -22,11 +22,10 @@ enum Dialog {
   CreateTribe,
 }
 
-const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
+const TribeBar = ({ tribes, setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const { pathname, query } = useRouter();
-  const { tribeID } = query;
 
   const tooltipRef = useRef(null);
   const createTribeRef = useRef(null);

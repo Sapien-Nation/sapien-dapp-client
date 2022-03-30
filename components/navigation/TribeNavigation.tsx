@@ -25,11 +25,11 @@ const TribeNavigation = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
-
+  console.log(tribeID);
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
   const channels = useTribeChannels(tribeID as string);
-
+  console.log(rooms);
   if (!tribe || !rooms) {
     return <ErrorView message="There was a problem loading room list!" />;
   }
