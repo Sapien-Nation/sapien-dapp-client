@@ -41,9 +41,9 @@ build-sandbox:
     - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 994750220687.dkr.ecr.us-east-2.amazonaws.com
-    - docker build -t front-v3:latest .
-    - docker tag front-v3:latest 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
-    - docker push 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - docker build -t front-v3:$CI_COMMIT_SHORT_SHA .
+    - docker tag front-v3:$CI_COMMIT_SHORT_SHA 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
+    - docker push 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
     - export ENV=sandbox
     - cd eks-manif &&  envsubst <  front-dep-temp.yml > front-dep.yml
     - cat front-dep.yml
@@ -81,9 +81,9 @@ build-qat:
     - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
-    - docker build -t front-v3:latest .
-    - docker tag front-v3:latest 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
-    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - docker build -t front-v3:$CI_COMMIT_SHORT_SHA .
+    - docker tag front-v3:$CI_COMMIT_SHORT_SHA 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
+    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
     - export ENV=qat
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
@@ -122,9 +122,9 @@ build-poc:
     - envsubst < .env.example > .env
     ### login to ecr
     - aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 081984521558.dkr.ecr.us-east-2.amazonaws.com
-    - docker build -t front-v3:latest .
-    - docker tag front-v3:latest 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
-    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+    - docker build -t front-v3:$CI_COMMIT_SHORT_SHA .
+    - docker tag front-v3:$CI_COMMIT_SHORT_SHA 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
+    - docker push 081984521558.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
     - export ENV=poc
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
