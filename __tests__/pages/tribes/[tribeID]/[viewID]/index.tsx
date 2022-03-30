@@ -1,5 +1,5 @@
 // utils
-import { render, screen, setAllTribes } from 'utils/testUtils';
+import { render, screen, setAllTribes, setUser } from 'utils/testUtils';
 
 // components
 import MainPage from 'pages/tribes/[tribeID]/[viewID]';
@@ -13,6 +13,7 @@ const tribe2 = mockProfileTribe();
 const tribes = [tribe1, tribe2];
 
 beforeEach(() => {
+  setUser();
   setAllTribes(tribes);
 });
 
@@ -38,9 +39,6 @@ test('Channel', () => {
       },
     },
   });
-
-  expect(screen.getByText('Editor goes here')).toBeInTheDocument();
-  expect(screen.getByText('InfiniteScroll Feed Goes here')).toBeInTheDocument();
 });
 
 test('Room', () => {
@@ -52,9 +50,6 @@ test('Room', () => {
       },
     },
   });
-
-  expect(screen.getByText('Editor goes here')).toBeInTheDocument();
-  expect(screen.getByText('InfiniteScroll Feed Goes here')).toBeInTheDocument();
 });
 
 test('NotFound', () => {

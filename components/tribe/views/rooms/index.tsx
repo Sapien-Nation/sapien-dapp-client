@@ -36,9 +36,7 @@ const Room = () => {
           ))}
         </ul>
       </div>
-      <div>
-        <Editor onSubmit={() => {}} isFetching={false} />
-      </div>
+      <div>{/* <Editor onSubmit={() => {}} isFetching={false} /> */}</div>
     </div>
   );
 };
