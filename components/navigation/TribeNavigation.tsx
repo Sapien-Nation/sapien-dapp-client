@@ -108,7 +108,10 @@ const TribeNavigation = () => {
 
         {/* Modals */}
         {dialog === Dialog.CreateRoom && (
-          <CreateRoomDialog onClose={() => setDialog(null)} />
+          <CreateRoomDialog
+            onClose={() => setDialog(null)}
+            tribeID={tribeID as string}
+          />
         )}
 
         {dialog === Dialog.CreateChannel && (

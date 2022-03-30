@@ -5,20 +5,22 @@ import { mockRouter, render, screen, setAllTribes } from 'utils/testUtils';
 import IndexPage from 'pages/index';
 
 // mocks
-import { mockProfileTribe } from 'tools/mocks/tribe';
+import { mockProfileTribe, mockProfileTribeRoom } from 'tools/mocks/tribe';
+
+const room = mockProfileTribeRoom();
+const mainTribe = mockProfileTribe({ rooms: [room] });
+beforeEach(() => {
+  setAllTribes([mainTribe, mockProfileTribe({ id: '2000' })]);
+});
 
 const push = jest.fn();
 const router = mockRouter({
   push,
-});
-
-const mainTribe = mockProfileTribe();
-beforeEach(() => {
-  setAllTribes([mainTribe, mockProfileTribe({ id: '2000' })]);
+  query: { tribeID: mainTribe.id, viewID: room.id },
 });
 
 test('should direct to main tribe', () => {
   render(<IndexPage />, { route: router });
 
-  expect(push).toHaveBeenCalledWith(`/tribes/${mainTribe.id}/123456789`);
+  expect(push).toHaveBeenCalledWith(`/tribes/${mainTribe.id}/${room.id}`);
 });

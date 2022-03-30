@@ -12,7 +12,7 @@ const MainChannel = () => {
 
   return (
     <>
-      <Head title={`${tribe.name} Main Channel`} />
+      <Head title={tribe.name} />
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <div>InfiniteScroll Feed Goes here</div>
     </>

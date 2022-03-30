@@ -47,22 +47,13 @@ export const useTribeRooms = (tribeID: string) => {
     .get('/api/v3/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  if (tribe) {
-    return [
-      {
+  return tribe
+    ? tribe.rooms.map(({ name, id }) => ({
         type: View.Room,
-        name: 'general',
-        id: '123456789',
-      },
-      {
-        type: View.Room,
-        name: 'random',
-        id: '987654321',
-      },
-    ];
-  }
-
-  return [];
+        name,
+        id,
+      }))
+    : [];
 };
 
 export const useGetCurrentView = (
