@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 
 // components
 import { Head } from 'components/common';
-import Editor from 'components/slate';
+import { ChannelEditor } from 'slatejs';
 
 // hooks
 import { useTribeChannels } from 'hooks/tribe';
@@ -20,7 +20,7 @@ const Channel = () => {
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <div>
-        <Editor onSubmit={() => {}} isFetching={false} />
+        <ChannelEditor onSubmit={() => {}} isFetching={false} />
       </div>
       <div>InfiniteScroll Feed Goes here</div>
     </>

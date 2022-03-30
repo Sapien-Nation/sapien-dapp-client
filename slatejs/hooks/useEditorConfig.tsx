@@ -7,7 +7,7 @@ import { ElementType, LeafType } from '../constants';
 import { Embed, Image as ImageElement, Paragraph, Video } from '../elements';
 
 // utils
-import { wrapLink } from '../hooks';
+import { wrapLink } from '.';
 
 const renderLeaf = (props) => {
   switch (props?.leaf.type) {

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 //components
 import { Head } from 'components/common';
-import Editor from 'components/slate';
+import { RoomEditor } from 'slatejs';
 import { FeedItem } from 'components/feed';
 
 // helpers
@@ -135,7 +135,7 @@ const Room = () => {
         </ul>
       </div>
       <div>
-        <Editor onSubmit={() => {}} isFetching={false} />
+        <RoomEditor onSubmit={() => {}} isFetching={false} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Text } from 'slate';
 
 // constants
-import { LeafType } from 'components/slate/constants';
+import { LeafType } from 'slatejs/constants';
 
 export const isNodeAHashtag = (node, path) => {
   const match = node.text.match(

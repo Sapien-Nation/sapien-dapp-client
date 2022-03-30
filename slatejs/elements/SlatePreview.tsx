@@ -3,7 +3,7 @@ import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 
 // hooks
-import { useEditorConfig } from '../slate/hooks';
+import { useEditorConfig } from '../hooks';
 
 interface Props {
   preview: Array<Descendant>;
