@@ -76,7 +76,7 @@ const AppLayout = ({ children }: Props) => {
                   )}
                 >
                   <div className="flex-1 flex min-h-0 lg:h-auto h-full">
-                    <div className="absolute top-0 -right-10 bg-sapien-red-700/50">
+                    <div className="absolute top-0 -right-10 bg-sapien-red-700/50 lg:hidden">
                       <button
                         type="button"
                         className="flex items-center justify-center h-10 w-10 focus:outline-none"
