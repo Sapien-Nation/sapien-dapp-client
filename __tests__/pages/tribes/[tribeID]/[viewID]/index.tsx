@@ -3,6 +3,8 @@ import { render, screen, setAllTribes } from 'utils/testUtils';
 
 // components
 import MainPage from 'pages/tribes/[tribeID]/[viewID]';
+
+// mocks
 import { mockProfileTribe, mockProfileTribeChannel } from 'tools/mocks/tribe';
 
 const channel1 = mockProfileTribeChannel();
@@ -53,4 +55,31 @@ test('Room', () => {
 
   expect(screen.getByText('Editor goes here')).toBeInTheDocument();
   expect(screen.getByText('InfiniteScroll Feed Goes here')).toBeInTheDocument();
+});
+
+test('NotFound', () => {
+  render(<MainPage />, {
+    route: {
+      query: {
+        tribeID: tribe1.id,
+        viewID: 'not_found',
+      },
+    },
+  });
+
+  expect(
+    screen.getByRole('img', { name: 'People working on laptops' })
+  ).toHaveAttribute(
+    'src',
+    'https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg'
+  );
+
+  expect(
+    screen.getByRole('heading', {
+      name: "This page don't exists",
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText('We could not find any room or channel for this route')
+  ).toBeInTheDocument();
 });

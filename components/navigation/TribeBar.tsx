@@ -96,11 +96,7 @@ const TribeBar = ({ tribes, mobileMenuOpen, setMobileMenuOpen }: Props) => {
                         >
                           <img
                             className="mr-4 h-6 w-6 text-gray-400 group-hover:text-gray-500"
-                            alt={
-                              tribe.avatar
-                                ? `${tribe.name} Avatar image`
-                                : 'Sapien Tribe Default logo image of human Sapiens'
-                            }
+                            alt={''}
                             onError={(event) => {
                               (event.target as HTMLImageElement).src =
                                 'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';

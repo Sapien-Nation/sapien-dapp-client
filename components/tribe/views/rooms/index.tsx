@@ -1,20 +1,16 @@
 import { useRouter } from 'next/router';
 
 //components
-import { Head, ErrorView } from 'components/common';
+import { Head } from 'components/common';
 
 // hooks
-import { useRoom } from 'hooks/room';
+import { useTribeRooms } from 'hooks/tribe';
 
 const Room = () => {
   const { query } = useRouter();
   const { tribeID, viewID } = query;
 
-  const room = useRoom(tribeID as string, viewID as string);
-
-  if (room === null) {
-    return <ErrorView message="There was a problem rendering this room!" />;
-  }
+  const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
 
   return (
     <>

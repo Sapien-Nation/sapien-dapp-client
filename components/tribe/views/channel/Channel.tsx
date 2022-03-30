@@ -1,20 +1,18 @@
 import { useRouter } from 'next/router';
 
 // components
-import { Head, ErrorView } from 'components/common';
+import { Head } from 'components/common';
 
 // hooks
-import { useChannel } from 'hooks/channel';
+import { useTribeChannels } from 'hooks/tribe';
 
 const Channel = () => {
   const { query } = useRouter();
   const { tribeID, viewID } = query;
 
-  const channel = useChannel(tribeID as string, viewID as string);
-
-  if (channel === null) {
-    return <ErrorView message="There was a problem rendering this Channel!" />;
-  }
+  const channel = useTribeChannels(tribeID as string).find(
+    ({ id }) => id === viewID
+  );
 
   return (
     <>

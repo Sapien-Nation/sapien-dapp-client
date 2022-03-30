@@ -40,11 +40,7 @@ function TribeBarItem({ tribe, handleClick }: Props) {
         >
           <img
             className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
-            alt={
-              tribe.avatar
-                ? `${tribe.name} Avatar image`
-                : 'Sapien Tribe Default logo image of human Sapiens'
-            }
+            alt={''}
             src={
               tribe.avatar ||
               'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png'

@@ -6,7 +6,7 @@ import { useTribe } from 'hooks/tribe';
 
 const MainChannel = () => {
   const { query } = useRouter();
-  const { tribeID, viewID } = query;
+  const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
 
