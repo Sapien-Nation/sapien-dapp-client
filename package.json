@@ -62,7 +62,8 @@
   "lint-staged": {
     "*/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint --fix"
+      "eslint --fix",
+      "jest --bail --findRelatedTests"
     ]
   },
   "devDependencies": {
