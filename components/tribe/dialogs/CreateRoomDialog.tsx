@@ -59,7 +59,7 @@ const CreateRoomDialog = ({ onClose, tribeID }: Props) => {
       );
 
       toast({
-        message: 'Tribe created successfully',
+        message: 'Room created successfully',
       });
 
       onClose();

@@ -103,6 +103,10 @@ const CreateChannelDialog = ({ onClose }: Props) => {
         false
       );
 
+      toast({
+        message: 'Channel created successfully',
+      });
+
       onClose();
       push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {
@@ -231,6 +235,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                           <TextInput
                             className="block w-full pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
                             name="name"
+                            aria-label="name"
                             placeholder="Channel Name"
                             maxLength={50}
                             pattern={/^[a-zA-Z\s]$/}

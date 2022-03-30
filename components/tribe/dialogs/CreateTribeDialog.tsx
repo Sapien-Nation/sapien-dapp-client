@@ -111,6 +111,10 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         false
       );
 
+      toast({
+        message: 'Tribe created successfully',
+      });
+
       onClose();
       push(`/tribes/${response.id}/home`);
     } catch (error) {
@@ -241,6 +245,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           name="name"
                           placeholder="The Sapien Tribe"
                           maxLength={50}
+                          aria-label="name"
                           pattern={/^[a-zA-Z\s]$/}
                           rules={{
                             validate: {
@@ -266,6 +271,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                       <TextInput
                         className="block w-full rounded-md bg-gray-800 pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-tr-md rounder-br-md"
                         name="identifier"
+                        aria-label="identifier"
                         placeholder="TheSapienTribe"
                         maxLength={20}
                         rules={{

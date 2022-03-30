@@ -1,5 +1,7 @@
 // api
+import { createChannel } from 'api/channel';
 import { createRoom } from 'api/room';
+import { createTribe } from 'api/tribe';
 
 // utils
 import {
@@ -23,10 +25,18 @@ import {
   mockProfileTribeRoom,
 } from 'tools/mocks/tribe';
 
+jest.mock('api/channel');
 jest.mock('api/room');
+jest.mock('api/tribe');
 
 const newRoom = mockProfileTribeRoom({ id: '10000' });
+const newTribe = mockProfileTribe({ id: '20000' });
+const newChannel = mockProfileTribeChannel({ id: '30000' });
+
 (createRoom as jest.Mock).mockReturnValue(newRoom);
+(createTribe as jest.Mock).mockReturnValue(newTribe);
+(createChannel as jest.Mock).mockReturnValue(newChannel);
+
 const push = jest.fn();
 
 const error = { message: 'Error' };
@@ -107,6 +117,8 @@ describe('LoggedIn', () => {
   beforeEach(() => {
     loggedInUser = setUser(mockUser({ avatar: 'http://someurl.com' }));
     setAllTribes([mainTribe, mockProfileTribe({ id: '2000' })]);
+
+    jest.clearAllMocks();
   });
 
   const getCreateChannelButton = () =>
@@ -168,11 +180,12 @@ describe('LoggedIn', () => {
     expect(screen.getByText(loggedInUser.displayName)).toBeInTheDocument();
   });
 
-  test('can create tribe', () => {
+  test('can create tribe', async () => {
     render(
       <AppLayout>
         <span>Some View</span>
-      </AppLayout>
+      </AppLayout>,
+      { route: { push } }
     );
 
     user.click(
@@ -183,7 +196,62 @@ describe('LoggedIn', () => {
       screen.getByRole('dialog', { name: 'Create a Tribe' })
     ).toBeInTheDocument();
 
-    // TODO finish test
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    await waitFor(() => {
+      expect(createTribe).not.toBeCalled();
+    });
+
+    const tribeName = 'tribe new';
+    const tribeIdentifier = 'tribe_new';
+
+    await waitFor(() => {
+      user.type(screen.getByRole('textbox', { name: 'name' }), tribeName);
+      user.type(
+        screen.getByRole('textbox', { name: 'identifier' }),
+        tribeIdentifier
+      );
+    });
+
+    // image upload
+    // TODO
+
+    // on error
+    (createTribe as jest.Mock).mockRejectedValueOnce(error.message);
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    expect(await screen.findByText(error.message)).toBeInTheDocument();
+    expect(createTribe).toHaveBeenCalledWith({
+      name: tribeName,
+      description: '',
+      identifier: tribeIdentifier,
+    });
+
+    // on success
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    expect(
+      await screen.findByText('Tribe created successfully')
+    ).toBeInTheDocument();
+    expect(createTribe).toHaveBeenCalledWith({
+      name: tribeName,
+      description: '',
+      identifier: tribeIdentifier,
+    });
+
+    expect(push).toHaveBeenCalledWith(`/tribes/${newTribe.id}/home`);
+
+    // tribe should be on the tribe bar and modal closed
+    expect(
+      screen.queryByRole('dialog', { name: 'Create a Tribe' })
+    ).not.toBeInTheDocument();
+    expect(
+      (
+        screen.getByRole('link', {
+          name: `Go to ${newTribe.name}`,
+        }) as HTMLLinkElement
+      ).href
+    ).toBe(`http://localhost/tribes/${newTribe.id}/home`);
   });
 
   test('tribe navigation', () => {
@@ -235,8 +303,73 @@ describe('LoggedIn', () => {
     });
   });
 
-  test('can create channel', () => {
+  test('can create channel', async () => {
+    render(
+      <AppLayout>
+        <span>Some View</span>
+      </AppLayout>,
+      {
+        route: {
+          push,
+          pathname: `/tribes/${tribeID}/${rooms[0].id}`,
+          query: { tribeID, viewID: rooms[0].id },
+        },
+      }
+    );
+
+    user.click(getCreateChannelButton());
+
+    expect(
+      screen.getByRole('dialog', { name: 'Create a Channel' })
+    ).toBeInTheDocument();
+
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    await waitFor(() => {
+      expect(createChannel).not.toBeCalled();
+    });
+
+    const channelName = 'channel new';
+
+    user.type(screen.getByRole('textbox', { name: 'name' }), channelName);
+
+    // image upload
     // TODO
+
+    // on error
+    (createChannel as jest.Mock).mockRejectedValueOnce(error.message);
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    expect(await screen.findByText(error.message)).toBeInTheDocument();
+    expect(createChannel).toHaveBeenCalledWith({
+      name: channelName,
+      tribeId: tribeID,
+    });
+
+    // on success
+    user.click(screen.getByRole('button', { name: 'Create' }));
+
+    expect(
+      await screen.findByText('Channel created successfully')
+    ).toBeInTheDocument();
+    expect(createChannel).toHaveBeenCalledWith({
+      name: channelName,
+      tribeId: tribeID,
+    });
+
+    expect(push).toHaveBeenCalledWith(`/tribes/${tribeID}/${newChannel.id}`);
+
+    // channel should be on the tribe navigation and modal closed
+    expect(
+      screen.queryByRole('dialog', { name: 'Create a Channel' })
+    ).not.toBeInTheDocument();
+    expect(
+      (
+        screen.getByRole('link', {
+          name: newChannel.name,
+        }) as HTMLLinkElement
+      ).href
+    ).toBe(`http://localhost/tribes/${tribeID}/${newChannel.id}`);
   });
 
   test('can create rooms', async () => {
@@ -260,7 +393,6 @@ describe('LoggedIn', () => {
     ).toBeInTheDocument();
 
     const roomName = 'Typescript';
-
     user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(await screen.findByText(/is required/i)).toBeInTheDocument();
@@ -281,7 +413,7 @@ describe('LoggedIn', () => {
     user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(
-      await screen.findByText('Tribe created successfully')
+      await screen.findByText('Room created successfully')
     ).toBeInTheDocument();
     expect(createRoom).toHaveBeenCalledWith({
       name: roomName,
