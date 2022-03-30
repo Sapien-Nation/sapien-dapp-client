@@ -60,7 +60,7 @@ const DefaultEditor = ({
     <form
       className={mergeClassNames(
         isFetching ? 'opacity-50' : '',
-        'w-full bg-gray-50 rounded-xl boder px-4 py-2 flex flex-row'
+        'w-full bg-sapien-neutral-800 rounded-xl boder px-4 py-2 flex flex-row'
       )}
       onSubmit={(event) => {
         event.preventDefault();

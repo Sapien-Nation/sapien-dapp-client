@@ -37,7 +37,7 @@ const EditorField = ({ onSubmit, isFetching }: Props) => {
       <div
         className={mergeClassNames(
           isFetching ? 'cursor-wait' : 'cursor-default',
-          'flex items-center w-full bg-white rounded-2xl shadow px-6 py-8 relative '
+          'flex items-center w-full bg-sapien-neutral-600 rounded-2xl shadow px-6 py-8 relative '
         )}
       >
         {/* Avatar */}
