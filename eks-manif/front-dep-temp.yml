@@ -18,7 +18,7 @@ spec:
       spec:
         containers:
           - name: front-v3
-            image: 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:latest
+            image: 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
             imagePullPolicy: Always
             ports:
               - containerPort: 3000
@@ -56,6 +56,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/proxy-buffering: "on"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "125k"
+    nginx.ingress.kubernetes.io/limit-connections: "10"
+    nginx.ingress.kubernetes.io/limit-rpm: "2000"
+    nginx.ingress.kubernetes.io/limit-rps: "200"
+
 spec:
   tls:
   - hosts:
