@@ -100,11 +100,10 @@ const CreateRoomDialog = ({ onClose }: Props) => {
                 remove={remove}
                 maxLength={50}
                 insert={insert}
-                pattern={/^[a-zA-Z\s]$/}
+                pattern={/^[[a-z]*$/}
                 options={fields}
                 rules={{
                   validate: {
-                    required: (value) => value.length > 0 || 'is required',
                     minLength: (value) =>
                       value?.length > 2 ||
                       'Must be Between 2 and 50 characters long',

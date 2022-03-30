@@ -54,14 +54,13 @@ const TopicsInput = ({
         {...rest}
         ref={ref}
       />
-      <div className="mt-6">
+      <div className="mt-2 flex flex-wrap">
         {options.map((option, index) => {
           return (
             <Fragment key={option.id}>
               <Controller
                 render={() => (
-                  <span className="inline-flex rounded-full items-center py-1 px-2.5 text-sm font-medium bg-primary text-white">
-                    {option.value}
+                  <span className="max-w-xs truncate ml-1 mt-2 rounded-full items-center py-1 px-2.5 text-sm font-medium bg-primary text-white">
                     <button
                       type="button"
                       className="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center text-white  focus:outline-none focus:bg-indigo-500 focus:text-white"
@@ -81,6 +80,7 @@ const TopicsInput = ({
                         />
                       </svg>
                     </button>
+                    {option.value}
                   </span>
                 )}
                 name={`topics[${index}].lastName`}
