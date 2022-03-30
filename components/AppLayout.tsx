@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Menu, Transition } from '@headlessui/react';
 import { useState, Fragment } from 'react';
 import { useTheme } from 'next-themes';
+import { XIcon } from '@heroicons/react/outline';
 
 // components
 import { Head, Redirect, Query, Search } from 'components/common';
@@ -68,15 +69,33 @@ const AppLayout = ({ children }: Props) => {
           {(tribes: Array<ProfileTribe>) => (
             <>
               <main className="h-full flex">
-                <div className="flex flex-col border-r-1">
-                  <div className="flex-1 flex min-h-0">
+                <div
+                  className={mergeClassNames(
+                    mobileMenuOpen ? 'left-0' : '-left-full',
+                    'flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                  )}
+                >
+                  <div className="flex-1 flex min-h-0 lg:h-auto h-full">
+                    <div className="absolute top-0 -right-10 bg-sapien-red-700/50">
+                      <button
+                        type="button"
+                        className="flex items-center justify-center h-10 w-10 focus:outline-none"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <span className="sr-only">Close sidebar</span>
+                        <XIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
                     <TribeBar
                       tribes={tribes}
                       mobileMenuOpen={mobileMenuOpen}
                       setMobileMenuOpen={setMobileMenuOpen}
                     />
                     {isHomePage === false && (
-                      <div className="hidden lg:block lg:flex-shrink-0">
+                      <div className="block flex-shrink-0 bg-sapien-neutral-600">
                         <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto">
                           {isDiscoveryPage === true && <DiscoveryNavigation />}
                           {isDiscoveryPage === false && <TribeNavigation />}
@@ -159,7 +178,7 @@ const AppLayout = ({ children }: Props) => {
                   <div className="hidden lg:block">
                     <Navbar />
                   </div>
-                  <div className="flex-1 flex overflow-hidden bg-sapien-neutral-800 rounded-t-3xl p-8">
+                  <div className="flex-1 flex overflow-hidden bg-sapien-neutral-800 lg:rounded-t-3xl p-8">
                     <section
                       aria-labelledby="primary-heading"
                       className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
