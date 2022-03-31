@@ -26,8 +26,8 @@ const Navbar = () => {
               >
                 <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                   <div className="h-full">
-                    <div className="flex items-center justify-around w-64">
-                      <div className=" px-5 py-3 ">
+                    <div className="flex items-center w-64">
+                      <div className="px-3 py-3">
                         <img
                           className="w-10 h-10 rounded-full flex-shrink-0"
                           src={
@@ -42,11 +42,11 @@ const Navbar = () => {
                         />
                       </div>
                       <Link href="/profile" passHref>
-                        <a className="flex flex-col">
-                          <span className="text-xs truncate w-32">
+                        <a className="flex flex-col flex-wrap break-words">
+                          <span className="text-xs truncate w-30">
                             @{me.username}
                           </span>
-                          <span className="truncate w-32">
+                          <span className="truncate w-32 pr-2">
                             {me.displayName}
                           </span>
                         </a>

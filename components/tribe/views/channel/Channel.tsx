@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { createContent } from 'api/content';
 
 // components
-import Content from './Content';
+import { ContentItem } from 'components/content';
 import { Head, InfiniteScroll } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 
@@ -71,7 +71,7 @@ const Channel = () => {
         {(contentList: Array<ContentType>) => (
           <>
             {contentList.map((content) => (
-              <Content key={content.id} content={content} />
+              <ContentItem key={content.id} content={content} />
             ))}
           </>
         )}
