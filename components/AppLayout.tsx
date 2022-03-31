@@ -55,12 +55,12 @@ const AppLayout = ({ children }: Props) => {
 
   if (me === undefined) {
     return (
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
+      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full bg-sapien-neutral-600">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
             <div className="flex justify-center items-center">
               <img
-                className="pr-1 w-16 animate-bounce"
+                className="pr-1 w-16 "
                 src="/images/logooutlined.svg"
                 alt="sapien"
               />
@@ -90,13 +90,25 @@ const AppLayout = ({ children }: Props) => {
   };
 
   return (
-    <div
-      className={mergeClassNames(
-        theme && theme === 'dark' ? 'bg-sapien-neutral-600' : '',
-        'relative h-full'
-      )}
-    >
-      <Query api="/api/v3/profile/tribes" loader={null}>
+    <div className="relative h-full bg-sapien-neutral-600">
+      <Query
+        api="/api/v3/profile/tribes"
+        loader={
+          <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
+            <div className="mx-auto w-full max-w-sm lg:w-96">
+              <div>
+                <div className="flex justify-center items-center">
+                  <img
+                    className="pr-1 w-16 "
+                    src="/images/logooutlined.svg"
+                    alt="sapien"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      >
         {(tribes: Array<ProfileTribe>) => (
           <>
             <main className="h-full flex">
