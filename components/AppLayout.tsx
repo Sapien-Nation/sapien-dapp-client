@@ -74,11 +74,23 @@ const AppLayout = ({ children }: Props) => {
   const isHomePage = pathname === '/';
 
   const renderNavigation = () => {
-    if (pathname.includes('/discovery')) return <DiscoveryNavigation />;
-    if (pathname.includes('/profile')) return <ProfileNavigation />;
+    let children = null;
 
-    return <TribeNavigation />;
+    if (pathname.includes('/discovery')) children = null;
+    else if (pathname.includes('/profile')) children = <ProfileNavigation />;
+    else children = <TribeNavigation />;
+
+    if (children === null) return <div className="ml-4"></div>;
+
+    return (
+      <div className="block flex-shrink-0 bg-sapien-neutral-600">
+        <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto">
+          {children}
+        </div>
+      </div>
+    );
   };
+
   return (
     <div
       className={mergeClassNames(
@@ -111,13 +123,7 @@ const AppLayout = ({ children }: Props) => {
                     </button>
                   </div>
                   <TribeBar tribes={tribes} mobileMenuOpen={mobileMenuOpen} />
-                  {isHomePage === false && (
-                    <div className="block flex-shrink-0 bg-sapien-neutral-600">
-                      <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto">
-                        {renderNavigation()}
-                      </div>
-                    </div>
-                  )}
+                  {isHomePage === false && <>{renderNavigation()}</>}
                 </div>
               </div>
               <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
