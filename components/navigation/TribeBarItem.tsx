@@ -78,7 +78,11 @@ function TribeBarItem({ tribe }: Props) {
         </a>
       </Link>
 
-      <Tooltip ref={tooltipRef} text={tribe.name} />
+      <Tooltip
+        ref={tooltipRef}
+        text={tribe.name}
+        forceHidden={showContextMenu === true}
+      />
       {showContextMenu && (
         <div className="absolute w-40 bottom-1 left-14 bg-sapien-neutral-800 rounded-md shadow-lg py-2 px-4 ring-black ring-opacity-5 focus:outline-none">
           <div className="h-full relative z-10">

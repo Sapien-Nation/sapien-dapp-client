@@ -6,6 +6,7 @@ import { mergeClassNames } from 'utils/styles';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
+import { SlatePreview } from 'slatejs';
 
 interface Props {
   content: ContentType;
@@ -13,7 +14,7 @@ interface Props {
 
 const ContentItem = ({
   content: {
-    author: { avatar, userName },
+    owner: { avatar, userName },
     createdAt,
     body,
   },
@@ -29,7 +30,9 @@ const ContentItem = ({
               {formatDateRelative(createdAt)}
             </p>
           </div>
-          <p className={mergeClassNames('text-sm text-gray-500 ')}>{body}</p>
+          <p className={mergeClassNames('text-sm text-gray-500 ')}>
+            <SlatePreview preview={JSON.parse(body)} />
+          </p>
         </div>
       </div>
     </div>

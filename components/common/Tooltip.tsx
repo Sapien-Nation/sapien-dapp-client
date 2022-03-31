@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom';
 import { usePopperTooltip } from 'react-popper-tooltip';
 
 interface Props {
+  forceHidden: boolean;
   text: string;
 }
 
 // eslint-disable-next-line react/display-name
-const Tooltip = forwardRef(({ text }: Props, ref) => {
+const Tooltip = forwardRef(({ forceHidden = false, text }: Props, ref) => {
   const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
     usePopperTooltip(
       {},
@@ -35,6 +36,7 @@ const Tooltip = forwardRef(({ text }: Props, ref) => {
   return (
     <>
       {visible &&
+        forceHidden == false &&
         ReactDOM.createPortal(
           <div
             ref={setTooltipRef}
