@@ -18,6 +18,7 @@ interface Props {
   showCancel?: boolean;
   showConfirm?: boolean;
   title?: string;
+  show: boolean;
 }
 
 const Dialog = ({
@@ -25,6 +26,7 @@ const Dialog = ({
   confirmLabel = 'Confirm',
   isFetching = false,
   form = '',
+  show,
   showCancel = true,
   showConfirm = true,
   onClose,
@@ -37,7 +39,7 @@ const Dialog = ({
           type={form ? 'submit' : 'button'}
           className={mergeClassNames(
             isFetching ? 'cursor-not-allowed disabled:opacity-75' : '',
-            'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm'
+            'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
           )}
           onClick={onConfirm}
           disabled={isFetching}
@@ -49,7 +51,7 @@ const Dialog = ({
       {showCancel && (
         <button
           type="button"
-          className="mt-3 w-full inline-flex justify-center rounded-md border-0 px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+          className="mt-3 w-full inline-flex justify-center rounded-md border-0 px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-sapien-red-700 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
           onClick={onCancel}
         >
           {cancelLabel}
@@ -61,7 +63,7 @@ const Dialog = ({
   title,
 }: Props) => {
   return (
-    <Transition.Root show as={Fragment}>
+    <Transition.Root show={show} as={Fragment}>
       <HeadlessDialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
@@ -94,27 +96,30 @@ const Dialog = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-8">
-              <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
-                <button
-                  type="button"
-                  className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
-                  onClick={onCancel}
-                >
-                  <span className="sr-only">Close</span>
-                  <XIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+            <div className="inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              <div className='px-4 sm:p-8 pb-4'>
+                <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
+                  <button
+                    type="button"
+                    className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                    onClick={onCancel}
+                  >
+                    <span className="sr-only">Close</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="mt-3 sm:mt-5">
+                  <HeadlessDialog.Title
+                    as="h2"
+                    className="text-xl leading-6 font-extrabold text-center"
+                  >
+                    {title}
+                  </HeadlessDialog.Title>
+                </div>
+                <div>{children}</div>
+                
               </div>
-              <div className="mt-3 sm:mt-5">
-                <HeadlessDialog.Title
-                  as="h2"
-                  className="text-xl leading-6 font-bold"
-                >
-                  {title}
-                </HeadlessDialog.Title>
-              </div>
-              <div>{children}</div>
-              <div className="py-3 sm:flex sm:flex-row-reverse">{actions}</div>
+              <div className="py-3 px-4 sm:px-8 mt-4 sm:flex sm:flex-row-reverse border-t-[1px] border-gray-800 shadow-inner shadow-sapien-neutral-600">{actions}</div>
             </div>
           </Transition.Child>
         </div>
