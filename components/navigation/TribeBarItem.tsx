@@ -25,7 +25,7 @@ function TribeBarItem({ tribe }: Props) {
   useEffect(() => {
     document.addEventListener('click', handleClick);
     return () => {
-      document.addEventListener('click', handleClick);
+      document.removeEventListener('click', handleClick);
     };
   });
 
@@ -80,9 +80,9 @@ function TribeBarItem({ tribe }: Props) {
 
       <Tooltip ref={tooltipRef} text={tribe.name} />
       {showContextMenu && (
-        <div className="absolute w-40 bottom-1 left-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-2 ring-black ring-opacity-5 focus:outline-none">
-          <div className="h-full">
-            <div className="flex items-center w-64">{tribe.name}</div>
+        <div className="absolute w-40 bottom-1 left-14 bg-sapien-neutral-800 rounded-md shadow-lg py-2 px-4 ring-black ring-opacity-5 focus:outline-none">
+          <div className="h-full relative z-10">
+            <div className="w-64">{tribe.name}</div>
           </div>
         </div>
       )}

@@ -35,7 +35,7 @@ const TribeBar = ({ tribes }: Props) => {
       {/* Static sidebar for desktop */}
       <div className="flex flex-shrink-0">
         <div className="flex flex-col w-20">
-          <div className="flex-1 flex flex-col min-h-0 overflow-y-auto bg-sapien-neutral-800">
+          <div className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-800">
             <div className="flex-1">
               <nav
                 aria-label="Sidebar"
