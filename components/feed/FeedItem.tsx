@@ -1,6 +1,9 @@
 // helpers
 import { formatDateRelative } from 'utils/date';
 
+// utils
+import { mergeClassNames } from 'utils/styles';
+
 // types
 import type { ISOString } from 'tools/types/common';
 
@@ -19,10 +22,10 @@ interface Props {
 
 const FeedItem = ({
   isAContinuosMessage,
-  message: { id, avatarUrl, createdAt, displayName, message },
+  message: { avatarUrl, createdAt, displayName, message },
 }: Props) => {
   return (
-    <li key={id} className="py-4 hover:bg-gray-800 rounded-md px-6">
+    <div className="py-2 hover:bg-gray-800 rounded-md px-6">
       <div className="flex space-x-3">
         {isAContinuosMessage && (
           <img className="h-10 w-10 rounded-full" src={avatarUrl} alt="" />
@@ -36,10 +39,17 @@ const FeedItem = ({
               </p>
             </div>
           )}
-          <p className="text-sm text-gray-500">{message}</p>
+          <p
+            className={mergeClassNames(
+              !isAContinuosMessage ? 'pl-[52px]' : '',
+              'text-sm text-gray-500 '
+            )}
+          >
+            {message}
+          </p>
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 
