@@ -1,4 +1,3 @@
-export * from './dialogs';
 export * from './Toast';
 export * from './views';
 export * from './fields';
