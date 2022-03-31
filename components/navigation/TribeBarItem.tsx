@@ -1,7 +1,8 @@
 import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState, useRef } from 'react';
+import { Menu, Transition } from '@headlessui/react';
+import { Fragment, useCallback, useEffect, useState, useRef } from 'react';
 
 // components
 import { Tooltip } from 'components/common';
@@ -21,8 +22,24 @@ function TribeBarItem({ tribe }: Props) {
 
   const tooltipRef = useRef(null);
 
+  useEffect(() => {
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.addEventListener('click', handleClick);
+    };
+  });
+
+  const handleContextMenu = useCallback((e) => {
+    e.preventDefault();
+    setShowContextMenu(true);
+  }, []);
+
+  const handleClick = useCallback(() => {
+    showContextMenu && setShowContextMenu(false);
+  }, [showContextMenu]);
+
   return (
-    <>
+    <div className="relative">
       <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
         <a
           className={`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
@@ -31,13 +48,13 @@ function TribeBarItem({ tribe }: Props) {
           onClick={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              setShowContextMenu(true);
+              handleContextMenu(event);
             }
           }}
           onContextMenu={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              setShowContextMenu(true);
+              handleContextMenu(event);
             }
           }}
           ref={tooltipRef.current?.setTriggerRef}
@@ -62,8 +79,14 @@ function TribeBarItem({ tribe }: Props) {
       </Link>
 
       <Tooltip ref={tooltipRef} text={tribe.name} />
-      {showContextMenu && <></>}
-    </>
+      {showContextMenu && (
+        <div className="absolute w-40 bottom-1 left-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-2 ring-black ring-opacity-5 focus:outline-none">
+          <div className="h-full">
+            <div className="flex items-center w-64">{tribe.name}</div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
