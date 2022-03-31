@@ -1,7 +1,7 @@
 import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 
 // components
 import { Tooltip } from 'components/common';
@@ -11,10 +11,11 @@ import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   tribe: ProfileTribe;
-  handleClick: (tribe: ProfileTribe) => void;
 }
 
-function TribeBarItem({ tribe, handleClick }: Props) {
+function TribeBarItem({ tribe }: Props) {
+  const [showContextMenu, setShowContextMenu] = useState(false);
+
   const { query } = useRouter();
   const { tribeID } = query;
 
@@ -30,13 +31,13 @@ function TribeBarItem({ tribe, handleClick }: Props) {
           onClick={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              handleClick(tribe);
+              setShowContextMenu(true);
             }
           }}
           onContextMenu={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              handleClick(tribe);
+              setShowContextMenu(true);
             }
           }}
           ref={tooltipRef.current?.setTriggerRef}
@@ -61,6 +62,7 @@ function TribeBarItem({ tribe, handleClick }: Props) {
       </Link>
 
       <Tooltip ref={tooltipRef} text={tribe.name} />
+      {showContextMenu && <></>}
     </>
   );
 }

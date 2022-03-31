@@ -29,10 +29,6 @@ const TribeBar = ({ tribes }: Props) => {
   const tooltipRef = useRef(null);
   const createTribeRef = useRef(null);
 
-  const handleTribeLeftClick = (tribe: ProfileTribe) => {
-    console.log('clicked tribe', { tribe });
-  };
-
   const isOnProfilePage = pathname.includes('/profile');
   return (
     <>
@@ -75,11 +71,7 @@ const TribeBar = ({ tribes }: Props) => {
                   </Link>
                 )}
                 {tribes.map((tribe: ProfileTribe) => (
-                  <TribeBarItem
-                    handleClick={handleTribeLeftClick}
-                    key={tribe.id}
-                    tribe={tribe}
-                  />
+                  <TribeBarItem key={tribe.id} tribe={tribe} />
                 ))}
                 <Link href="/discovery">
                   <a
