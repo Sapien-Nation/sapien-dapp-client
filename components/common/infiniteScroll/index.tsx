@@ -58,7 +58,7 @@ const InfiniteScroll = ({
 
   const isEmpty = data?.[0]?.data.length === 0;
 
-  const isLoadingInitialData = !data && !error;
+  const isLoadingInitialData = data === undefined && error === undefined;
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined');
@@ -86,7 +86,11 @@ const InfiniteScroll = ({
       )}
 
       {/* List */}
-      {children(data ? [].concat(...data[0].data) : [])}
+      {isLoadingInitialData ? (
+        <h1>Loading Feed...</h1>
+      ) : (
+        <> {children(data ? [].concat(...data[0].data) : [])}</>
+      )}
 
       {/* Under the list List */}
       {isEmpty && emptyComponent}

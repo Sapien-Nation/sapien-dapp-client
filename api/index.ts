@@ -71,7 +71,7 @@ export const fetcher = (url: string) => {
   return instance
     .get(url)
     .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.error));
+    .catch(({ response }) => Promise.reject(response.data.message));
 };
 
 export const authFetcher = () =>
