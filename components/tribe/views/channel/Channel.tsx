@@ -68,16 +68,13 @@ const Channel = () => {
         apiUrl={`/api/v3/channel/${channel.id}/feed`}
         hardReload={transition === Transition.Success}
       >
-        {(contentList: Array<ContentType>) => {
-          if (contentList.length === 0) return <h1>Empty View</h1>;
-          return (
-            <>
-              {contentList.map((content) => (
-                <Content key={content.id} content={content} />
-              ))}
-            </>
-          );
-        }}
+        {(contentList: Array<ContentType>) => (
+          <>
+            {contentList.map((content) => (
+              <Content key={content.id} content={content} />
+            ))}
+          </>
+        )}
       </InfiniteScroll>
     </>
   );

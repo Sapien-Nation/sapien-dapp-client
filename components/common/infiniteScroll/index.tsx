@@ -29,10 +29,24 @@ interface Props {
   pageSize?: number;
 }
 
+const Empty = () => {
+  return (
+    <div className="flex justify-center h-full items-center flex-col">
+      <img
+        src="https://assets.website-files.com/5e51c674258ffe10d286d30a/5e532a2aeba259dc7140a0e2_peep-1.svg"
+        alt="Free open source Peep visit https://www.openpeeps.com/"
+      />
+      <p className="mt-6 text-sm text-white font-semibold">
+        This is the beginning of a beautiful history at Sapien{' '}
+      </p>
+    </div>
+  );
+};
+
 const InfiniteScroll = ({
   apiUrl,
   children,
-  emptyComponent = null,
+  emptyComponent = <Empty />,
   hardReload = false,
   showRefresh = false,
   refreshLabel = 'New Content',
@@ -72,6 +86,7 @@ const InfiniteScroll = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, isRefreshing]);
 
+  const feedData = data ? [].concat(...data[0].data) : [];
   return (
     <div className="overflow-auto w-full min-h-full">
       {/* Above the list */}
@@ -86,10 +101,14 @@ const InfiniteScroll = ({
       )}
 
       {/* List */}
-      {isLoadingInitialData ? (
-        <h1>Loading Feed...</h1>
-      ) : (
-        <> {children(data ? [].concat(...data[0].data) : [])}</>
+      {isLoadingInitialData ? null : (
+        <>
+          {feedData.length === 0 ? (
+            <>{emptyComponent}</>
+          ) : (
+            <>{children(feedData)}</>
+          )}
+        </>
       )}
 
       {/* Under the list List */}
