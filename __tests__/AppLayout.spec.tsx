@@ -127,8 +127,16 @@ describe('LoggedIn', () => {
   const getCreateRoomButton = () =>
     screen.getByRole('button', { name: 'Create Room' });
 
-  test.skip('Desktop Navbar', () => {
-    user.click(screen.getByRole('button', { name: 'Open Profile Menu' }));
+  test('Desktop Navbar', () => {
+    render(
+      <AppLayout>
+        <span>Some View</span>
+      </AppLayout>
+    );
+
+    user.click(
+      screen.getByRole('button', { name: 'Open Desktop Profile Menu' })
+    );
     expect(
       (
         screen.getByRole('link', {
@@ -239,9 +247,11 @@ describe('LoggedIn', () => {
     expect(push).toHaveBeenCalledWith(`/tribes/${newTribe.id}/home`);
 
     // tribe should be on the tribe bar and modal closed
-    expect(
-      screen.queryByRole('dialog', { name: 'Create a Tribe' })
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('dialog', { name: 'Create a Tribe' })
+      ).not.toBeInTheDocument();
+    });
     expect(
       (
         screen.getByRole('link', {
@@ -357,9 +367,12 @@ describe('LoggedIn', () => {
     expect(push).toHaveBeenCalledWith(`/tribes/${tribeID}/${newChannel.id}`);
 
     // channel should be on the tribe navigation and modal closed
-    expect(
-      screen.queryByRole('dialog', { name: 'Create a Channel' })
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('dialog', { name: 'Create a Channel' })
+      ).not.toBeInTheDocument();
+    });
+
     expect(
       (
         screen.getByRole('link', {
@@ -420,9 +433,11 @@ describe('LoggedIn', () => {
     expect(push).toHaveBeenCalledWith(`/tribes/${tribeID}/${newRoom.id}`);
 
     // rooms should be on the tribe navigation and modal closed
-    expect(
-      screen.queryByRole('dialog', { name: 'Create a Room' })
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('dialog', { name: 'Create a Room' })
+      ).not.toBeInTheDocument();
+    });
     expect(
       (
         screen.getByRole('link', {

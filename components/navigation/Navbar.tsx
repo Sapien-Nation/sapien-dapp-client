@@ -47,7 +47,7 @@ const Navbar = () => {
               </Transition>
               <Menu.Button
                 className="group w-full flex text-sm text-left font-medium  focus:outline-none"
-                aria-label="Open Profile Menu"
+                aria-label="Open Desktop Profile Menu"
               >
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
