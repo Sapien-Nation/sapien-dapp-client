@@ -82,8 +82,7 @@ const RoomEditor = ({
         <img
           className="self-start inline-block h-10 w-10 rounded-full mr-4"
           src={
-            me.avatar ||
-            'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
           }
           alt="This is your profile picture"
           onError={(event) => {
@@ -94,7 +93,7 @@ const RoomEditor = ({
         <form
           className={mergeClassNames(
             isFetching ? 'opacity-50' : '',
-            'w-full bg-sapien-neutral-800 rounded-xl boder px-4 py-2 flex flex-row'
+            'w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2 flex flex-row'
           )}
           onSubmit={(event) => {
             event.preventDefault();

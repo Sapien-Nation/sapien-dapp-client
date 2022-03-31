@@ -83,7 +83,7 @@ const ChannelEditor = ({
           className="self-start inline-block h-10 w-10 rounded-full mr-4"
           src={
             me.avatar ||
-            'https://d151dmflpumpzp.cloudfront.net/tribe-images/sapien-tribe.png'
+            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
           }
           alt="This is your profile picture"
           onError={(event) => {

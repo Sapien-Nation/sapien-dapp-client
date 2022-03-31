@@ -43,25 +43,27 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       className="w-10 h-10 rounded-full flex-shrink-0"
                       src={
                         me.avatar ||
-                        'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg'
+                        'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
                       }
                       alt=""
                       onError={(event) => {
                         (event.target as HTMLImageElement).src =
-                          'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg';
+                          'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240';
                       }}
                     />
                   </div>
                   <Link href="/profile" passHref>
-                    <a className="flex flex-col">
-                      <span className="text-xs truncate max-w-30 break-words">
+                    <a className="flex flex-col flex-wrap break-words">
+                      <span className="text-xs truncate w-30">
                         @{me.username}
                       </span>
-                      <span className="truncate w-32">{me.displayName}</span>
+                      <span className="truncate w-32 pr-2">
+                        {me.displayName}
+                      </span>
                     </a>
                   </Link>
                 </div>
-                <div className="text-center flex flex-col">
+                <div className="flex flex-col text-left mt-4">
                   <Link href="/">
                     <a className="font-medium text-sm text-white">
                       View Profile
@@ -72,12 +74,11 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       Terms & Conditions
                     </a>
                   </Link>
+                </div>
+                <div className="mt-4 text-left">
                   <Link href="/logout">
-                    <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex justify-center">
-                      <LogoutIcon
-                        className="mr-3 ml-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
+                    <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
+                      <LogoutIcon className="mr-3 h-5 w-5" aria-hidden="true" />
                       Logout
                     </a>
                   </Link>
@@ -96,12 +97,12 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                     className="w-10 h-10 rounded-full flex-shrink-0"
                     src={
                       me.avatar ||
-                      'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg'
+                      'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
                     }
                     alt=""
                     onError={(event) => {
                       (event.target as HTMLImageElement).src =
-                        'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg';
+                        'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240';
                     }}
                   />
                 </div>

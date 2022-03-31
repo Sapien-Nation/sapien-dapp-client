@@ -32,12 +32,12 @@ const Navbar = () => {
                           className="w-10 h-10 rounded-full flex-shrink-0"
                           src={
                             me.avatar ||
-                            'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg'
+                            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
                           }
                           alt=""
                           onError={(event) => {
                             (event.target as HTMLImageElement).src =
-                              'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg';
+                              'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240';
                           }}
                         />
                       </div>
@@ -52,7 +52,7 @@ const Navbar = () => {
                         </a>
                       </Link>
                     </div>
-                    <div className="text-center flex flex-col">
+                    <div className="flex flex-col text-left mt-4">
                       <Link href="/">
                         <a className="font-medium text-sm text-white">
                           View Profile
@@ -63,10 +63,12 @@ const Navbar = () => {
                           Terms & Conditions
                         </a>
                       </Link>
+                    </div>
+                    <div className="mt-4 text-left">
                       <Link href="/logout">
-                        <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex justify-center">
+                        <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
                           <LogoutIcon
-                            className="mr-3 ml-2 h-5 w-5"
+                            className="mr-3 h-5 w-5"
                             aria-hidden="true"
                           />
                           Logout
@@ -87,12 +89,12 @@ const Navbar = () => {
                         className="w-10 h-10 rounded-full flex-shrink-0"
                         src={
                           me.avatar ||
-                          'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg'
+                          'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
                         }
                         alt=""
                         onError={(event) => {
                           (event.target as HTMLImageElement).src =
-                            'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg';
+                            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240';
                         }}
                       />
                     </div>

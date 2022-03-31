@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
+// components
+import { Tooltip } from 'components/common';
+
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { Tooltip } from 'components/common';
 
 interface Props {
   tribe: ProfileTribe;

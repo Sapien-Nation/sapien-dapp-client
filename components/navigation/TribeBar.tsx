@@ -64,7 +64,7 @@ const TribeBar = ({ tribes }: Props) => {
                       <img
                         className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
                         alt={''}
-                        src="https://assets.website-files.com/5e51c674258ffe10d286d30a/5e53570264109d16a7014c37_peep-46.svg"
+                        src="https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240"
                         onError={(event) => {
                           (event.target as HTMLImageElement).src =
                             'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
@@ -114,7 +114,10 @@ const TribeBar = ({ tribes }: Props) => {
       </div>
 
       {/* Modals */}
-      <CreateTribeDialog onClose={() => setDialog(null)} show={dialog === Dialog.CreateTribe} />
+      <CreateTribeDialog
+        onClose={() => setDialog(null)}
+        show={dialog === Dialog.CreateTribe}
+      />
     </>
   );
 };

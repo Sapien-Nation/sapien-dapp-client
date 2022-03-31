@@ -40,10 +40,10 @@ const Tooltip = forwardRef(({ text }: Props, ref) => {
             ref={setTooltipRef}
             {...getTooltipProps({
               className:
-                'relative p-2 text-xs leading-none text-white whitespace-no-wrap bg-black shadow-lg rounded',
+                'absolute p-2 text-xs leading-none text-white whitespace-no-wrap bg-sapien-neutral-800 shadow-lg rounded z-10',
             })}
           >
-            <div className="w-4 h-4 bg-black block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute" />
+            <div className="w-4 h-4 bg-sapien-neutral-600block -z-10 rotate-45 -left-0.5 top-1/2 transform -translate-y-1/2 absolute" />
             {text}
           </div>,
           document.body
