@@ -15,17 +15,16 @@ import type { ProfileTribe } from 'tools/types/tribe';
 interface Props {
   tribes: Array<ProfileTribe>;
   mobileMenuOpen: boolean;
-  setMobileMenuOpen: (open: boolean) => void;
 }
 
 enum Dialog {
   CreateTribe,
 }
 
-const TribeBar = ({ tribes, setMobileMenuOpen }: Props) => {
+const TribeBar = ({ tribes }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
-  const { pathname, query } = useRouter();
+  const { pathname } = useRouter();
 
   const tooltipRef = useRef(null);
   const createTribeRef = useRef(null);
@@ -34,6 +33,7 @@ const TribeBar = ({ tribes, setMobileMenuOpen }: Props) => {
     console.log('clicked tribe', { tribe });
   };
 
+  const isOnProfilePage = pathname.includes('/profile');
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -45,6 +45,35 @@ const TribeBar = ({ tribes, setMobileMenuOpen }: Props) => {
                 aria-label="Sidebar"
                 className="py-6 flex flex-col items-center space-y-3"
               >
+                {isOnProfilePage && (
+                  <Link href="/profile">
+                    <a
+                      className="group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 bg-gray-50"
+                      onClick={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                        }
+                      }}
+                      onContextMenu={(event) => {
+                        if (event.type === 'contextmenu') {
+                          event.preventDefault();
+                        }
+                      }}
+                      ref={tooltipRef.current?.setTriggerRef}
+                    >
+                      <img
+                        className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
+                        alt={''}
+                        src="https://assets.website-files.com/5e51c674258ffe10d286d30a/5e53570264109d16a7014c37_peep-46.svg"
+                        onError={(event) => {
+                          (event.target as HTMLImageElement).src =
+                            'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
+                        }}
+                      />
+                      <span className="sr-only">Go to profile page</span>
+                    </a>
+                  </Link>
+                )}
                 {tribes.map((tribe: ProfileTribe) => (
                   <TribeBarItem
                     handleClick={handleTribeLeftClick}

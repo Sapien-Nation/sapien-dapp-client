@@ -31,6 +31,8 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
   const renderView = () => {
     switch (view.type) {
+      case View.Profile:
+        return 'TODO Profile';
       case View.Room:
         return <RoomView />;
       case View.Channel:
