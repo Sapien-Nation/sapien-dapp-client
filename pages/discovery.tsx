@@ -8,7 +8,7 @@ const DiscoveryPage: NextPage = () => {
   return (
     <>
       <Head title="Discover Tribes" />
-      <h1>TODO Discovery page</h1>
+      <h1 className="sr-only">Discovery Tribes Page</h1>
     </>
   );
 };

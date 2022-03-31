@@ -76,11 +76,9 @@ const AppLayout = ({ children }: Props) => {
   const renderNavigation = () => {
     let children = null;
 
-    if (pathname.includes('/discovery')) children = null;
+    if (pathname.includes('/discovery')) children = <DiscoveryNavigation />;
     else if (pathname.includes('/profile')) children = <ProfileNavigation />;
     else children = <TribeNavigation />;
-
-    if (children === null) return <div className="ml-4"></div>;
 
     return (
       <div className="block flex-shrink-0 bg-sapien-neutral-600">
