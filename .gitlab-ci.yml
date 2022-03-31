@@ -47,7 +47,7 @@ build-sandbox:
     - export ENV=sandbox
     - cd eks-manif &&  envsubst <  front-dep-temp.yml > front-dep.yml
     - cat front-dep.yml
-    - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
+    - kubectl apply -f front-dep.yml
   only:
     <<: *sandbox_triggers
 
@@ -87,7 +87,7 @@ build-qat:
     - export ENV=qat
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
-    - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
+    - kubectl apply -f front-dep.yml
   only:
     <<: *qat_triggers
 
@@ -128,7 +128,7 @@ build-poc:
     - export ENV=poc
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
-    - kubectl delete -f  front-dep.yml && kubectl apply -f front-dep.yml
+    - kubectl apply -f front-dep.yml
   only:
     <<: *poc_triggers
 
