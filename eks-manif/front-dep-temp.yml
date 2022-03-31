@@ -20,6 +20,22 @@ spec:
           - name: front-v3
             image: 994750220687.dkr.ecr.us-east-2.amazonaws.com/front-v3:$CI_COMMIT_SHORT_SHA
             imagePullPolicy: Always
+            livenessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 20
+              periodSeconds: 10
+              successThreshold: 1
+              tcpSocket:
+                port: 3000
+              timeoutSeconds: 1
+            readinessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 20
+              periodSeconds: 10
+              successThreshold: 1
+              tcpSocket:
+                port: 3000
+              timeoutSeconds: 1
             ports:
               - containerPort: 3000
                 name: p3000
