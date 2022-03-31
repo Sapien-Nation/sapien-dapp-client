@@ -70,11 +70,6 @@ test('NotFound', () => {
   );
 
   expect(
-    screen.getByRole('heading', {
-      name: "This page don't exists",
-    })
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText('We could not find any room or channel for this route')
+    screen.getByText('You dont have access to see this content')
   ).toBeInTheDocument();
 });

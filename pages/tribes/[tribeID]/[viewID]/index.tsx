@@ -6,11 +6,11 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { Head, ErrorView, Redirect, NotFound } from 'components/common';
-import { Channel, MainChannel, RoomView } from 'components/tribe';
+import { Head, ErrorView, NotFound } from 'components/common';
+import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
 
 // hooks
-import { useGetCurrentView, useTribeRooms } from 'hooks/tribe';
+import { useGetCurrentView } from 'hooks/tribe';
 
 // types
 import type { NextPage } from 'next';
@@ -20,19 +20,13 @@ interface Props {
   viewID: string;
 }
 
-const RedirectToGeneral = ({ tribeID }: { tribeID: string }) => {
-  const [{ id }] = useTribeRooms(tribeID);
-
-  return <Redirect path={`/tribes/${tribeID}/${id}`} />;
-};
-
 const TribePage = ({ tribeID, viewID }: Props) => {
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
   const renderView = () => {
     switch (view.type) {
-      case View.Profile:
-        return 'TODO Profile';
+      case View.Content:
+        return <ContentView />;
       case View.Room:
         return <RoomView />;
       case View.Channel:
@@ -40,19 +34,9 @@ const TribePage = ({ tribeID, viewID }: Props) => {
       case View.MainChannel:
         return <MainChannel />;
       case View.NotFound:
-        return (
-          <NotFound
-            message="This page don't exists"
-            subtitle="We could not find any room or channel for this route"
-          />
-        );
+        return <NotFound message="You dont have access to see this content" />;
       default:
-        return (
-          <NotFound
-            message="This page don't exists"
-            subtitle="We could not find any room or channel for this route"
-          />
-        );
+        return <NotFound message="You dont have access to see this content" />;
     }
   };
 

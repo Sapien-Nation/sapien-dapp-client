@@ -74,6 +74,11 @@ export const useGetCurrentView = (
       name: tribe.name,
       id: 'home',
     },
+    {
+      type: View.Content,
+      name: 'content',
+      id: 'content',
+    },
     ...channels,
     ...rooms,
   ];
