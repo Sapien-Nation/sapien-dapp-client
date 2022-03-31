@@ -23,9 +23,9 @@ const Navbar = () => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 w-56 mt-12 py-4 px-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                   <div className="h-full">
-                    <div className="flex items-center justify-between w-64 text-black">
+                    <div className="flex items-center justify-between w-64">
                       <Link href="/profile" passHref>
                         <a className="flex flex-col">
                           <span className="text-xs truncate w-32">
@@ -37,11 +37,13 @@ const Navbar = () => {
                         </a>
                       </Link>
                     </div>
+                    <div className="text-center">
                     <Link href="/logout">
-                      <a className="mt-8 text-center font-medium text-sm text-purple-600 hover:text-purple-500">
+                      <a className="mt-8 font-medium text-sm text-purple-600 hover:text-purple-500">
                         Logout
                       </a>
                     </Link>
+                    </div>
                   </div>
                 </Menu.Items>
               </Transition>
