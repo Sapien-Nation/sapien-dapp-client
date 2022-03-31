@@ -5,15 +5,15 @@ import { SlatePreview } from 'slatejs';
 import { formatDateRelative } from 'utils/date';
 
 // types
-import type { Content as ContentType } from 'tools/types/content';
+import type { Content } from 'tools/types/content';
 
 interface Props {
-  content: ContentType;
+  content: Content;
 }
 
-const Content = ({
+const ContentComponent = ({
   content: {
-    author: { avatar, userName },
+    owner: { avatar, userName },
     createdAt,
     body,
   },
@@ -44,4 +44,4 @@ const Content = ({
   </div>
 );
 
-export default Content;
+export default ContentComponent;

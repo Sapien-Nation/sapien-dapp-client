@@ -2,7 +2,7 @@
 import { GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Fragment, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // components
 import TribeBarItem from './TribeBarItem';
@@ -23,6 +23,8 @@ enum Dialog {
 
 const TribeBar = ({ tribes }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+  const [rightClickedTribe, setRightClickedTribe] =
+    useState<ProfileTribe | null>(null);
 
   const { pathname } = useRouter();
 
@@ -30,6 +32,17 @@ const TribeBar = ({ tribes }: Props) => {
   const createTribeRef = useRef(null);
 
   const isOnProfilePage = pathname.includes('/profile');
+
+  useEffect(() => {
+    document.body.addEventListener('click', () => setRightClickedTribe(null));
+
+    return () => {
+      document.body.removeEventListener('click', () =>
+        setRightClickedTribe(null)
+      );
+    };
+  }, []);
+
   return (
     <>
       {/* Static sidebar for desktop */}
@@ -71,8 +84,22 @@ const TribeBar = ({ tribes }: Props) => {
                   </Link>
                 )}
                 {tribes.map((tribe: ProfileTribe) => (
-                  <TribeBarItem key={tribe.id} tribe={tribe} />
+                  <TribeBarItem
+                    key={tribe.id}
+                    tribe={tribe}
+                    onRightClick={setRightClickedTribe}
+                    isContextMenuOpen={Boolean(rightClickedTribe)}
+                  />
                 ))}
+
+                {/* TODO make this follow a ref to be next to the clicked tribe */}
+                {rightClickedTribe && (
+                  <div className="absolute h-44 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-4 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="h-full w-full relative">
+                      <div className="w-64">{rightClickedTribe.name}</div>
+                    </div>
+                  </div>
+                )}
                 <Link href="/discovery">
                   <a
                     className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${

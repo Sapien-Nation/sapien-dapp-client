@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { usePopperTooltip } from 'react-popper-tooltip';
 
 interface Props {
-  forceHidden: boolean;
+  forceHidden?: boolean;
   text: string;
 }
 

@@ -1,8 +1,7 @@
 import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 
 // components
 import { Tooltip } from 'components/common';
@@ -11,32 +10,16 @@ import { Tooltip } from 'components/common';
 import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
+  isContextMenuOpen: boolean;
   tribe: ProfileTribe;
+  onRightClick: (tribe: ProfileTribe) => void;
 }
 
-function TribeBarItem({ tribe }: Props) {
-  const [showContextMenu, setShowContextMenu] = useState(false);
-
+function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
   const { query } = useRouter();
   const { tribeID } = query;
 
   const tooltipRef = useRef(null);
-
-  useEffect(() => {
-    document.addEventListener('click', handleClick);
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  });
-
-  const handleContextMenu = useCallback((e) => {
-    e.preventDefault();
-    setShowContextMenu(true);
-  }, []);
-
-  const handleClick = useCallback(() => {
-    showContextMenu && setShowContextMenu(false);
-  }, [showContextMenu]);
 
   return (
     <div className="relative">
@@ -48,13 +31,13 @@ function TribeBarItem({ tribe }: Props) {
           onClick={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              handleContextMenu(event);
+              onRightClick(tribe);
             }
           }}
           onContextMenu={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              handleContextMenu(event);
+              onRightClick(tribe);
             }
           }}
           ref={tooltipRef.current?.setTriggerRef}
@@ -81,15 +64,8 @@ function TribeBarItem({ tribe }: Props) {
       <Tooltip
         ref={tooltipRef}
         text={tribe.name}
-        forceHidden={showContextMenu === true}
+        forceHidden={isContextMenuOpen}
       />
-      {showContextMenu && (
-        <div className="absolute w-40 bottom-1 left-14 bg-sapien-neutral-800 rounded-md shadow-lg py-2 px-4 ring-black ring-opacity-5 focus:outline-none">
-          <div className="h-full relative z-10">
-            <div className="w-64">{tribe.name}</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
