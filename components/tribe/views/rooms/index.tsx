@@ -11,6 +11,7 @@ import { formatDate, subtractDays } from 'utils/date';
 
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
+import { useEffect, useRef } from 'react';
 
 const messages = [
   {
@@ -92,19 +93,91 @@ const messages = [
     displayName: 'Moises Ocañas',
     avatarUrl: 'https://i.pravatar.cc/80?img=2',
     message: 'Yeah i have it, let me find it (=',
-    createdAt: '2022-03-30T15:42:32.761Z',
+    createdAt: '2022-03-30T15:42:36.761Z',
+  },
+  {
+    id: '11',
+    authorID: '3000',
+    displayName: 'Moises Ocañas',
+    avatarUrl: 'https://i.pravatar.cc/80?img=2',
+    message: 'Here is the link',
+    createdAt: '2022-03-30T15:42:39.761Z',
+  },
+  {
+    id: '12',
+    authorID: '1000',
+    displayName: 'Ethan Escareño',
+    avatarUrl: 'https://i.pravatar.cc/80?img=3',
+    message: 'Awesome!',
+    createdAt: '2022-03-30T15:42:55.761Z',
+  },
+  {
+    id: '13',
+    authorID: '1000',
+    displayName: 'Ethan Escareño',
+    avatarUrl: 'https://i.pravatar.cc/80?img=3',
+    message:
+      'Alright i think the next work to do will be start with the Rooms UI',
+    createdAt: '2022-03-30T15:43:32.761Z',
+  },
+  {
+    id: '14',
+    authorID: '1000',
+    displayName: 'Ethan Escareño',
+    avatarUrl: 'https://i.pravatar.cc/80?img=3',
+    message: 'And wait for Mabed for the Websockets thing',
+    createdAt: '2022-03-30T15:44:32.761Z',
+  },
+  {
+    id: '15',
+    authorID: '2000',
+    displayName: 'Sabbir Ahmed',
+    avatarUrl: 'https://i.pravatar.cc/80?img=1',
+    message: 'I can start making the scroll UI',
+    createdAt: '2022-04-30T11:44:32.761Z',
+  },
+  {
+    id: '16',
+    authorID: '2000',
+    displayName: 'Sabbir Ahmed',
+    avatarUrl: 'https://i.pravatar.cc/80?img=1',
+    message: 'Then we just need to focus on the Chat and Websockets',
+    createdAt: '2022-04-30T12:44:32.761Z',
+  },
+  {
+    id: '17',
+    authorID: '2000',
+    displayName: 'Sabbir Ahmed',
+    avatarUrl: 'https://i.pravatar.cc/80?img=1',
+    message: 'makes sense?',
+    createdAt: '2022-04-30T15:44:32.761Z',
+  },
+  {
+    id: '18',
+    authorID: '1000',
+    displayName: 'Ethan Escareño',
+    avatarUrl: 'https://i.pravatar.cc/80?img=3',
+    message: 'yes!',
+    createdAt: '2022-04-30T15:46:32.761Z',
   },
 ];
 
 const Room = () => {
   const { query } = useRouter();
   const { tribeID, viewID } = query;
-
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
 
+  const bottomFeedRef = useRef(null);
   const feedMessages = _groupBy(messages, ({ createdAt }) =>
     formatDate(createdAt)
   );
+
+  useEffect(() => {
+    // Start chat at the bottom
+    if (bottomFeedRef.current) {
+      bottomFeedRef.current.scrollIntoView();
+    }
+  }, []);
 
   return (
     <div className="h-full flex flex-col">
@@ -137,6 +210,7 @@ const Room = () => {
               </li>
             );
           })}
+          <li ref={bottomFeedRef} />
         </ul>
       </div>
       <div>
