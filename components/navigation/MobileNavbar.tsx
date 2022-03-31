@@ -1,6 +1,6 @@
 import { MenuIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { SelectorIcon } from '@heroicons/react/outline';
+import { LogoutIcon } from '@heroicons/react/solid';
 import { Fragment } from 'react';
 import Link from 'next/link';
 
@@ -37,7 +37,21 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
           >
             <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
               <div className="h-full">
-                <div className="flex items-center justify-between w-64">
+                <div className="flex items-center justify-around w-64">
+                  <div className=" px-5 py-3 ">
+                    <img
+                      className="w-10 h-10 rounded-full flex-shrink-0"
+                      src={
+                        me.avatar ||
+                        'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg'
+                      }
+                      alt=""
+                      onError={(event) => {
+                        (event.target as HTMLImageElement).src =
+                          'https://assets.website-files.com/5e51c674258ffe10d286d30a/5e535652f5fa1ac5ecf7d744_peep-40.svg';
+                      }}
+                    />
+                  </div>
                   <Link href="/profile" passHref>
                     <a className="flex flex-col">
                       <span className="text-xs truncate w-32">
@@ -47,9 +61,23 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                     </a>
                   </Link>
                 </div>
-                <div className="text-center">
+                <div className="text-center flex flex-col">
+                  <Link href="/">
+                    <a className="font-medium text-sm text-white">
+                      View Profile
+                    </a>
+                  </Link>
+                  <Link href="/terms">
+                    <a className="mt-2 font-medium text-sm text-white">
+                      Terms & Conditions
+                    </a>
+                  </Link>
                   <Link href="/logout">
-                    <a className="mt-8 font-medium text-sm text-purple-600 hover:text-purple-500">
+                    <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex justify-center">
+                      <LogoutIcon
+                        className="mr-3 ml-2 h-5 w-5"
+                        aria-hidden="true"
+                      />
                       Logout
                     </a>
                   </Link>
