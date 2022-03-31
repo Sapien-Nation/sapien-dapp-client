@@ -5,10 +5,13 @@ import { useSWRConfig } from 'swr';
 // api
 import { createRoom } from 'api/room';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // components
 import { Dialog, TextInput, TextInputLabel } from 'components/common';
 
-//hooks
+// hooks
 import { useToast } from 'context/toast';
 import { ProfileTribe } from 'tools/types/tribe';
 
@@ -60,6 +63,7 @@ const CreateRoomDialog = ({ onClose, tribeID }: Props) => {
 
       toast({
         message: 'Room created successfully',
+        type: ToastType.Success,
       });
 
       onClose();

@@ -7,6 +7,9 @@ import { useSWRConfig } from 'swr';
 // api
 import { createTribe, CreateTribeBody, uploadImage } from 'api/tribe';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // components
 import {
   Dialog,
@@ -113,6 +116,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
 
       toast({
         message: 'Tribe created successfully',
+        type: ToastType.Success,
       });
 
       onClose();
