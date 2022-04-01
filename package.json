@@ -20,12 +20,12 @@
     "@heroicons/react": "^1.0.5",
     "@lottiefiles/lottie-player": "^1.4.5",
     "@sentry/nextjs": "^6.19.1",
-    "@tailwindcss/forms": "^0.4.0",
+    "@tailwindcss/forms": "^0.5.0",
     "@toruslabs/torus-direct-web-sdk": "^5.0.3",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/network-connector": "^6.2.9",
-    "axios": "^0.24.0",
+    "axios": "^0.26.1",
     "babel-jest": "^27.5.1",
     "date-fns": "^2.28.0",
     "deep-equal": "^2.0.5",
@@ -53,7 +53,7 @@
     "reconnecting-websocket": "^4.4.0",
     "slate": "^0.72.0",
     "slate-history": "^0.66.0",
-    "slate-react": "^0.72.1",
+    "slate-react": "^0.76.0",
     "swr": "^1.0.1",
     "tailwindcss": "^3.0.23",
     "timeago.js": "^4.0.2",
@@ -78,7 +78,7 @@
     "@types/react-dom": "^17.0.11",
     "axios-mock-adapter": "^1.20.0",
     "eslint": "7.32.0",
-    "eslint-config-next": "12.0.2",
+    "eslint-config-next": "12.1.4",
     "eslint-config-prettier": "^8.3.0",
     "husky": "^7.0.0",
     "identity-obj-proxy": "^3.0.0",
@@ -89,6 +89,6 @@
     "postcss-preset-env": "^7.3.3",
     "prettier": "^2.4.1",
     "react-test-renderer": "^17.0.2",
-    "typescript": "4.4.4"
+    "typescript": "4.6.3"
   }
 }
