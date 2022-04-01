@@ -16,7 +16,7 @@ const ContentView = () => {
   }
 
   return (
-    <Query api={`/api/v3/post/${id}`}>
+    <Query api={`/api/v3/post/${id}`} loader={null}>
       {(content: Content) => <ContentDetail content={content} />}
     </Query>
   );
