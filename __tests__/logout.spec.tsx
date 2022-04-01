@@ -49,8 +49,9 @@ describe('', () => {
     (logout as jest.Mock).mockRejectedValueOnce(error.message);
     renderPage();
 
-    expect(await screen.findByText(error.message)).toBeInTheDocument();
-    expect(logout).toHaveBeenCalledWith({ email: loggedInUser.email });
+    await waitFor(() => {
+      expect(logout).toHaveBeenCalledWith({ email: loggedInUser.email });
+    });
     expect(Sentry.captureException).toHaveBeenCalledWith(error.message);
 
     expect(push).toHaveBeenCalledWith('/');
@@ -64,7 +65,6 @@ describe('', () => {
       expect(screen.queryByText(error.message)).not.toBeInTheDocument();
     });
 
-    expect(logout).toHaveBeenCalledWith({ email: loggedInUser.email });
     expect(Sentry.captureException).not.toHaveBeenCalled();
 
     expect(push).toHaveBeenCalledWith('/');

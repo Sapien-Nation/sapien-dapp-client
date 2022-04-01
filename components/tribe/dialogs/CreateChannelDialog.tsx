@@ -7,6 +7,9 @@ import { useSWRConfig } from 'swr';
 // api
 import { createChannel, uploadImage } from 'api/channel';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // components
 import { Dialog, TextInput, TextInputLabel } from 'components/common';
 
@@ -106,6 +109,7 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
 
       toast({
         message: 'Channel created successfully',
+        type: ToastType.Success,
       });
 
       onClose();

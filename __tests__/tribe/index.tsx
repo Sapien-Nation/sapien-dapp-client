@@ -1,5 +1,11 @@
 // utils
-import { render, screen, setAllTribes, setUser } from 'utils/testUtils';
+import {
+  render,
+  screen,
+  setAllTribes,
+  setUser,
+  waitFor,
+} from 'utils/testUtils';
 
 // components
 import MainPage from 'pages/tribes/[tribeID]/[viewID]';
@@ -17,7 +23,7 @@ beforeEach(() => {
   setAllTribes(tribes);
 });
 
-test('MainChannel', () => {
+test('MainChannel', async () => {
   render(<MainPage />, {
     route: {
       query: {
@@ -27,10 +33,12 @@ test('MainChannel', () => {
     },
   });
 
-  expect(true).toBe(true);
+  await waitFor(() => {
+    expect(true).toBe(true);
+  });
 });
 
-test('Channel', () => {
+test('Channel', async () => {
   render(<MainPage />, {
     route: {
       query: {
@@ -38,6 +46,10 @@ test('Channel', () => {
         viewID: tribe1.channels[0].id,
       },
     },
+  });
+
+  await waitFor(() => {
+    expect(true).toBe(true);
   });
 });
 

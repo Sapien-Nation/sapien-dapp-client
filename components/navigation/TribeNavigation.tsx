@@ -36,8 +36,6 @@ const TribeNavigation = () => {
 
   const { name } = tribe;
 
-  console.log(viewID);
-
   return (
     <>
       <div className="w-full">

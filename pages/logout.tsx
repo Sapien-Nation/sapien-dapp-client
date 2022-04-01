@@ -24,10 +24,6 @@ const LogoutPage: NextPage = () => {
           await logout({ email: me.email });
         } catch (err) {
           Sentry.captureException(err);
-
-          toast({
-            message: err,
-          });
         }
       }
 
