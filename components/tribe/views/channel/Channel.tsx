@@ -69,15 +69,19 @@ const Channel = () => {
         hardReload={transition === Transition.Success}
       >
         {(contentList: Array<ContentType>) => (
-          <>
+          <ul className="py-4">
             {contentList.map((content) => (
-              <ContentItemChannel
+              <li
                 key={content.id}
-                content={content}
-                tribeID={tribeID as string}
-              />
+                className="my-2 border-[1px] border-gray-800 rounded-md"
+              >
+                <ContentItemChannel
+                  content={content}
+                  tribeID={tribeID as string}
+                />
+              </li>
             ))}
-          </>
+          </ul>
         )}
       </InfiniteScroll>
     </>

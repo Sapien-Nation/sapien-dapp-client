@@ -16,23 +16,39 @@ interface Props {
 
 const ContentItem = ({
   content: {
-    owner: { avatar, userName },
+    owner: { avatar, username },
     createdAt,
     body,
+    imagePreview,
   },
 }: Props) => {
   return (
-    <div className="py-2 hover:bg-gray-800 rounded-md px-6">
-      <div className="flex space-x-3">
-        <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
-        <div className="flex-1 space-y-1">
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-medium">{userName}</h3>
-            <p className="text-xs text-gray-500">
-              {formatDateRelative(createdAt)}
-            </p>
+    <div className="max-w-2xl mx-auto w-full text-gray-300">
+      <img
+        className="object-cover rounded-md h-40 w-full"
+        src={
+          imagePreview ||
+          'https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg'
+        }
+        alt="Sapien Post Image"
+      />
+      <div className="mt-4">
+        <SlatePreview preview={JSON.parse(body)} />
+        <div className="flex items-center mt-2 gap-2">
+          <div className="flex gap-1">
+            <img
+              className="w-5 h-5 object-cover rounded-full"
+              src={
+                avatar ||
+                'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
+              }
+              alt="Sapien Post Image"
+            />
+            <h3 className="text-sm font-medium text-gray-400">{username}</h3>
           </div>
-          <SlatePreview preview={JSON.parse(body)} />
+          <p className="text-xs text-gray-500">
+            {formatDateRelative(createdAt)}
+          </p>
         </div>
       </div>
     </div>

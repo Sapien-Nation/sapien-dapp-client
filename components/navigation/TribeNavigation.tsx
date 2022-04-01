@@ -36,6 +36,8 @@ const TribeNavigation = () => {
 
   const { name } = tribe;
 
+  console.log(viewID);
+
   return (
     <>
       <div className="w-full">
@@ -110,10 +112,10 @@ const TribeNavigation = () => {
 
         {/* Modals */}
         <CreateRoomDialog
-            onClose={() => setDialog(null)}
-            tribeID={tribeID as string}
-            show={dialog === Dialog.CreateRoom}
-          />
+          onClose={() => setDialog(null)}
+          tribeID={tribeID as string}
+          show={dialog === Dialog.CreateRoom}
+        />
         <CreateChannelDialog
           onClose={() => setDialog(null)}
           show={dialog === Dialog.CreateChannel}
