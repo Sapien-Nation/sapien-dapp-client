@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { createContent } from 'api/content';
 
 // components
-import { ContentItem } from 'components/content';
+import { ContentItemChannel } from 'components/content';
 import { Head, InfiniteScroll } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 
@@ -71,7 +71,11 @@ const Channel = () => {
         {(contentList: Array<ContentType>) => (
           <>
             {contentList.map((content) => (
-              <ContentItem key={content.id} content={content} />
+              <ContentItemChannel
+                key={content.id}
+                content={content}
+                tribeID={tribeID as string}
+              />
             ))}
           </>
         )}

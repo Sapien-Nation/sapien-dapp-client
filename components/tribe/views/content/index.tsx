@@ -1,7 +1,11 @@
 import { useRouter } from 'next/router';
 
 // components
-import { NotFound } from 'components/common';
+import { NotFound, Query } from 'components/common';
+import { ContentDetail } from 'components/content';
+
+// types
+import type { Content } from 'tools/types/content';
 
 const ContentView = () => {
   const { query } = useRouter();
@@ -11,7 +15,11 @@ const ContentView = () => {
     return <NotFound message="We could't find any content for this search" />;
   }
 
-  return <h1>TODO Query Content for id {id}</h1>;
+  return (
+    <Query api={`/api/v3/post/${id}`}>
+      {(content: Content) => <ContentDetail content={content} />}
+    </Query>
+  );
 };
 
 export default ContentView;

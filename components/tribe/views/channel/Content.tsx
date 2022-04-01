@@ -38,7 +38,6 @@ const ContentComponent = ({
         </p>
       </div>
 
-      {/* // @ts-ignore */}
       <SlatePreview preview={JSON.parse(body)} />
     </div>
   </div>

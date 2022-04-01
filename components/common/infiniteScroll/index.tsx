@@ -111,9 +111,6 @@ const InfiniteScroll = ({
         </>
       )}
 
-      {/* Under the list List */}
-      {isEmpty && emptyComponent}
-
       {/* Ref Target */}
       <div ref={ref}>
         {isLoadingMore && loadingComponent}

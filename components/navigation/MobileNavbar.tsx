@@ -64,7 +64,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                   </Link>
                 </div>
                 <div className="flex flex-col text-left mt-4">
-                  <Link href="/">
+                  <Link href="/profile">
                     <a className="font-medium text-sm text-white">
                       View Profile
                     </a>
