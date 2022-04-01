@@ -12,15 +12,16 @@ const DiscoveryPage: NextPage = () => {
       <Head title="Discover Tribes" />
       <h1 className="sr-only">Discovery Tribes Page</h1>
       <Query api="/api/v3/tribe/discovery">
-        {(tribes: Array<DiscoveryTribe>) => {
-          return (
-            <div className="grid gap-4 grid-cols-discovery-grid">
-              {tribes.map((tribe) => (
-                <DiscoveryCard key={tribe.id} tribe={tribe} />
-              ))}
-            </div>
-          );
-        }}
+        {(tribes: Array<DiscoveryTribe>) => (
+          <ul
+            aria-label="Tribes list"
+            className="grid gap-4 grid-cols-discovery-grid"
+          >
+            {tribes.map((tribe) => (
+              <DiscoveryCard key={tribe.id} tribe={tribe} />
+            ))}
+          </ul>
+        )}
       </Query>
     </>
   );

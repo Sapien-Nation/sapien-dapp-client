@@ -7,17 +7,16 @@ interface Props {
 
 const DiscoveryCard = ({ tribe }: Props) => {
   return (
-    <div className="rounded-xl flex-1 p-5 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col">
+    <li
+      aria-label={tribe.name}
+      className="rounded-xl flex-1 p-5 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col"
+    >
       <div className="flex-1">
         <div className="shadow-md hover:shadow-3xl rounded-lg relative">
           {tribe.cover ? (
             <img
               className="w-full rounded-xl -mb-16 h-20 object-cover flex-shrink-0"
               src={tribe.cover}
-              onError={(event) => {
-                (event.target as HTMLImageElement).src =
-                  'https://data.pixiz.com/output/user/frame/preview/400x400/9/2/2/1/2071229_96fa2.jpg';
-              }}
               alt=""
             />
           ) : (
@@ -31,10 +30,6 @@ const DiscoveryCard = ({ tribe }: Props) => {
                 className="w-20 h-20 ml-4 rounded-xl flex-shrink-0"
                 src={tribe.avatar}
                 alt=""
-                onError={(event) => {
-                  (event.target as HTMLImageElement).src =
-                    'https://data.pixiz.com/output/user/frame/preview/400x400/9/2/2/1/2071229_96fa2.jpg';
-                }}
               />
             ) : (
               <div className="w-20 h-20 ml-4 rounded-xl flex-shrink-0 bg-sapien-40 shadow shadow-sapien-neutral-600" />
@@ -42,7 +37,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
           </div>
         </div>
         <div className="p-3">
-          <div className="text-lg font-bold">{tribe.name}</div>
+          <h1 className="text-lg font-bold">{tribe.name}</h1>
           <p className="text-gray-400 overflow-hidden h-[70px]">
             {tribe.description || '[No Description]'}
           </p>
@@ -56,7 +51,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
           Join
         </button>
       </div>
-    </div>
+    </li>
   );
 };
 
