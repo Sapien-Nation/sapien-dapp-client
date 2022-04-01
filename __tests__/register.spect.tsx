@@ -72,37 +72,37 @@ test('can register', async () => {
   const username = 'jhondoe';
   const password = 'Sapien123456';
 
-  user.type(screen.getByRole('textbox', { name: 'email' }), email);
-  user.type(screen.getByRole('textbox', { name: 'username' }), username);
+  await user.type(screen.getByRole('textbox', { name: 'email' }), email);
+  await user.type(screen.getByRole('textbox', { name: 'username' }), username);
 
   const passwordInputs = screen.getAllByLabelText(/Password/i);
-  user.type(passwordInputs[0], password);
-  user.type(passwordInputs[1], `${password}r`);
+  await user.type(passwordInputs[0], password);
+  await user.type(passwordInputs[1], `${password}r`);
 
   // no checked
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   expect(await screen.findByText(/Please check/i)).toBeInTheDocument();
 
-  user.click(
+  await user.click(
     screen.getByRole('checkbox', {
       name: 'I have read and agree to the Terms & Conditions Please check',
     })
   );
 
   // on password dont match
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   const matchErrors = await screen.findAllByText(/Passwords must match/i);
   expect(matchErrors.length).toBe(2);
   expect(register).not.toHaveBeenCalled();
 
   // on api error
-  user.clear(passwordInputs[1]);
-  user.type(passwordInputs[1], password);
+  await user.clear(passwordInputs[1]);
+  await user.type(passwordInputs[1], password);
 
   (register as jest.Mock).mockRejectedValueOnce(error.message);
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   expect(await screen.findByText(error.message)).toBeInTheDocument();
   expect(register).toHaveBeenCalledWith({
@@ -117,7 +117,7 @@ test('can register', async () => {
 
   // on success
   (register as jest.Mock).mockClear();
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   await waitFor(() => {
     expect(register).toHaveBeenCalledWith({

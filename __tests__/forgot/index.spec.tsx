@@ -64,18 +64,18 @@ test('forgot page', async () => {
   ).toBeInTheDocument();
 
   const email = 'jhon@doe.com';
-  user.type(screen.getByRole('textbox', { name: 'email' }), email);
+  await user.type(screen.getByRole('textbox', { name: 'email' }), email);
 
   // on error
   (forgot as jest.Mock).mockRejectedValueOnce(error.message);
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   expect(await screen.findByText(error.message)).toBeInTheDocument();
   expect(forgot).toHaveBeenCalledWith({ email });
 
   // on success
   (forgot as jest.Mock).mockClear();
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   await waitFor(() => {
     expect(forgot).toHaveBeenCalledWith({ email });

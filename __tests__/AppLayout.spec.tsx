@@ -127,14 +127,14 @@ describe('LoggedIn', () => {
   const getCreateRoomButton = () =>
     screen.getByRole('button', { name: 'Create Room' });
 
-  test('Desktop Navbar', () => {
+  test('Desktop Navbar', async () => {
     render(
       <AppLayout>
         <span>Some View</span>
       </AppLayout>
     );
 
-    user.click(
+    await user.click(
       screen.getByRole('button', { name: 'Open Desktop Profile Menu' })
     );
     expect(
@@ -193,7 +193,7 @@ describe('LoggedIn', () => {
       { route: { push } }
     );
 
-    user.click(
+    await user.click(
       screen.getByRole('button', { name: 'Click here to create a new Tribe' })
     );
 
@@ -201,29 +201,27 @@ describe('LoggedIn', () => {
       screen.getByRole('dialog', { name: 'Create a Tribe' })
     ).toBeInTheDocument();
 
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     await waitFor(() => {
       expect(createTribe).not.toBeCalled();
     });
 
     const tribeName = 'tribe new';
-    const tribeIdentifier = 'tribe_new';
+    const tribeIdentifier = 'tribenew';
 
-    await waitFor(() => {
-      user.type(screen.getByRole('textbox', { name: 'name' }), tribeName);
-      user.type(
-        screen.getByRole('textbox', { name: 'identifier' }),
-        tribeIdentifier
-      );
-    });
+    await user.type(screen.getByRole('textbox', { name: 'name' }), tribeName);
+    await user.type(
+      screen.getByRole('textbox', { name: 'identifier' }),
+      tribeIdentifier
+    );
 
     // image upload
     // TODO
 
     // on error
     (createTribe as jest.Mock).mockRejectedValueOnce(error.message);
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createTribe).toHaveBeenCalledWith({
@@ -233,7 +231,7 @@ describe('LoggedIn', () => {
     });
 
     // on success
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(
       await screen.findByText('Tribe created successfully')
@@ -324,28 +322,27 @@ describe('LoggedIn', () => {
       }
     );
 
-    user.click(getCreateChannelButton());
+    await user.click(getCreateChannelButton());
 
     expect(
       screen.getByRole('dialog', { name: 'Create a Channel' })
     ).toBeInTheDocument();
 
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     await waitFor(() => {
       expect(createChannel).not.toBeCalled();
     });
 
     const channelName = 'channel new';
-
-    user.type(screen.getByRole('textbox', { name: 'name' }), channelName);
+    await user.type(screen.getByRole('textbox', { name: 'name' }), channelName);
 
     // image upload
     // TODO
 
     // on error
     (createChannel as jest.Mock).mockRejectedValueOnce(error.message);
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createChannel).toHaveBeenCalledWith({
@@ -354,7 +351,7 @@ describe('LoggedIn', () => {
     });
 
     // on success
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(
       await screen.findByText('Channel created successfully')
@@ -396,22 +393,22 @@ describe('LoggedIn', () => {
       }
     );
 
-    user.click(getCreateRoomButton());
+    await user.click(getCreateRoomButton());
 
     expect(
       screen.getByRole('dialog', { name: 'Create a Room' })
     ).toBeInTheDocument();
 
     const roomName = 'Typescript';
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(await screen.findByText(/is required/i)).toBeInTheDocument();
 
-    user.type(screen.getByRole('textbox', { name: 'name' }), roomName);
+    await user.type(screen.getByRole('textbox', { name: 'name' }), roomName);
 
     // on error
     (createRoom as jest.Mock).mockRejectedValueOnce(error.message);
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createRoom).toHaveBeenCalledWith({
@@ -420,7 +417,7 @@ describe('LoggedIn', () => {
     });
 
     // on success
-    user.click(screen.getByRole('button', { name: 'Create' }));
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     expect(
       await screen.findByText('Room created successfully')

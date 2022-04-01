@@ -68,12 +68,12 @@ test('should change password', async () => {
 
   const password = 'Sapien123456';
   const passwordInputs = screen.getAllByLabelText(/Password/i);
-  user.type(passwordInputs[0], password);
-  user.type(passwordInputs[1], password);
+  await user.type(passwordInputs[0], password);
+  await user.type(passwordInputs[1], password);
 
   // on error
   (changePassword as jest.Mock).mockRejectedValueOnce(error.message);
-  user.click(getChangePassword());
+  await user.click(getChangePassword());
 
   expect(await screen.findByText(error.message)).toBeInTheDocument();
   expect(changePassword).toHaveBeenCalledWith({
@@ -83,7 +83,7 @@ test('should change password', async () => {
 
   // on success
   (changePassword as jest.Mock).mockClear();
-  user.click(getChangePassword());
+  await user.click(getChangePassword());
 
   await waitFor(() => {
     expect(changePassword).toHaveBeenCalledWith({

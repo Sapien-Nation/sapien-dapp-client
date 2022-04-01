@@ -70,12 +70,12 @@ test('can login', async () => {
 
   const email = 'jhon@doe.com';
   const password = '12345678';
-  user.type(screen.getByRole('textbox', { name: 'email' }), email);
-  user.type(screen.getByLabelText(/Password/i), password);
+  await user.type(screen.getByRole('textbox', { name: 'email' }), email);
+  await user.type(screen.getByLabelText(/Password/i), password);
 
   // on error
   (login as jest.Mock).mockRejectedValueOnce(error.message);
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   expect(await screen.findByText(error.message)).toBeInTheDocument();
   expect(login).toHaveBeenCalledWith({
@@ -87,7 +87,7 @@ test('can login', async () => {
 
   // on success
   (login as jest.Mock).mockClear();
-  user.click(getSignupButton());
+  await user.click(getSignupButton());
 
   await waitFor(() => {
     expect(login).toHaveBeenCalledWith({
