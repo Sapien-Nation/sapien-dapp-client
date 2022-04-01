@@ -6,9 +6,6 @@ import { DiscoveryCard } from 'components/tribe';
 import type { NextPage } from 'next';
 import type { DiscoveryTribe } from 'tools/types/tribe';
 
-// mocks
-import { mockDiscoveryTribe } from 'tools/mocks/tribe';
-
 const DiscoveryPage: NextPage = () => {
   return (
     <>
@@ -17,7 +14,7 @@ const DiscoveryPage: NextPage = () => {
       <Query api="/api/v3/tribe/discovery">
         {(tribes: Array<DiscoveryTribe>) => {
           return (
-            <div className="flex flex-wrap gap-4">
+            <div className="grid gap-4 grid-cols-discovery-grid">
               {tribes.map((tribe) => (
                 <DiscoveryCard key={tribe.id} tribe={tribe} />
               ))}

@@ -7,12 +7,12 @@ interface Props {
 
 const DiscoveryCard = ({ tribe }: Props) => {
   return (
-    <div className="rounded-xl flex-1 p-5 min-w-[300px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer h-[450px] flex flex-col">
+    <div className="rounded-xl flex-1 p-5 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col">
       <div className="flex-1">
         <div className="shadow-md hover:shadow-3xl rounded-lg relative">
           {tribe.cover ? (
             <img
-              className="w-full rounded-xl -mb-16 h-28 object-cover flex-shrink-0"
+              className="w-full rounded-xl -mb-16 h-20 object-cover flex-shrink-0"
               src={tribe.cover}
               onError={(event) => {
                 (event.target as HTMLImageElement).src =
@@ -21,7 +21,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-full h-28 rounded-xl -mb-16 flex-shrink-0 bg-sapien-80" />
+            <div className="w-full h-20 rounded-xl -mb-16 flex-shrink-0 bg-sapien-80" />
           )}
         </div>
         <div className="relative">
@@ -43,15 +43,17 @@ const DiscoveryCard = ({ tribe }: Props) => {
         </div>
         <div className="p-3">
           <div className="text-lg font-bold">{tribe.name}</div>
-          <div className="text-gray-400">
+          <p className="text-gray-400 overflow-hidden h-[70px]">
             {tribe.description || '[No Description]'}
-          </div>
+          </p>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-4">
-        <div>{tribe.membersCount} Members</div>
-        <button className="w-40 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary-200 hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-          Join Tribe
+      <div className="flex justify-between items-center">
+        <span className="text-xs">
+          {tribe.membersCount} {tribe.membersCount > 1 ? 'members' : 'member'}
+        </span>
+        <button className="w-20 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary-200 hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+          Join
         </button>
       </div>
     </div>

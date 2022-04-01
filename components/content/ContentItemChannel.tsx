@@ -20,7 +20,7 @@ interface Props {
 const ContentItem = ({
   content: {
     id,
-    owner: { avatar, username },
+    owner: { avatar, displayName },
     createdAt,
     body,
     imagePreview,
@@ -52,7 +52,7 @@ const ContentItem = ({
                   alt="Sapien Post Image"
                 />
                 <h3 className="text-sm font-medium text-gray-400">
-                  {username}
+                  {displayName}
                 </h3>
               </div>
               <p className="text-xs text-gray-500">
