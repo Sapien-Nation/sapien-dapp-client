@@ -1,10 +1,11 @@
-import _groupBy from 'lodash/groupBy';
+import { groupBy, isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 
 //components
 import { Head } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import { FeedItem } from 'components/feed';
+import EmptyRoom from './EmptyRoom';
 
 // helpers
 import { formatDate, subtractDays } from 'utils/date';
@@ -195,50 +196,54 @@ const Room = () => {
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
 
   const bottomFeedRef = useRef(null);
-  const feedMessages = _groupBy(messages, ({ createdAt }) =>
+  const feedMessages = groupBy(messages, ({ createdAt }) =>
     formatDate(createdAt)
   );
 
   useEffect(() => {
     // Start chat at the bottom
     if (bottomFeedRef.current) {
-      bottomFeedRef.current.scrollIntoView();
+      bottomFeedRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
 
   return (
     <div className="h-full flex flex-col">
       <Head title={room.name} />
-      <div className="flex-1 overflow-auto py-5">
+      <div className="flex-1 overflow-auto py-5 mb-2">
         <h1 className="sr-only">Room View for {room.name}</h1>
-        <ul role="list" className="h-full w-full flex flex-col">
-          {Object.keys(feedMessages).map((timestamp) => {
-            const timestampMessages = feedMessages[timestamp];
-            return (
-              <li key={timestamp}>
-                <time
-                  className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-[1px] before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-[1px] after:block after:bg-gray-800 after:-right-8"
-                  dateTime={timestamp}
-                >
-                  {timestamp}
-                </time>
-                {timestampMessages.map((message, index) => {
-                  return (
-                    <FeedItem
-                      key={message.id}
-                      message={message}
-                      isAContinuosMessage={
-                        timestampMessages[index - 1]?.authorID !==
-                        message.authorID
-                      }
-                    />
-                  );
-                })}
-              </li>
-            );
-          })}
-          <li ref={bottomFeedRef} />
-        </ul>
+        {!isEmpty(feedMessages) ? (
+          <ul role="list" className="h-full w-full flex flex-col">
+            {Object.keys(feedMessages).map((timestamp) => {
+              const timestampMessages = feedMessages[timestamp];
+              return (
+                <li key={timestamp}>
+                  <time
+                    className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-[1px] before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-[1px] after:block after:bg-gray-800 after:-right-8"
+                    dateTime={timestamp}
+                  >
+                    {timestamp}
+                  </time>
+                  {timestampMessages.map((message, index) => {
+                    return (
+                      <FeedItem
+                        key={message.id}
+                        message={message}
+                        isAContinuosMessage={
+                          timestampMessages[index - 1]?.authorID !==
+                          message.authorID
+                        }
+                      />
+                    );
+                  })}
+                </li>
+              );
+            })}
+            <li ref={bottomFeedRef} />
+          </ul>
+        ) : (
+          <EmptyRoom />
+        )}
       </div>
       <div>
         <RoomEditor onSubmit={() => {}} isFetching={false} />

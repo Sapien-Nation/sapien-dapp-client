@@ -88,7 +88,7 @@ const InfiniteScroll = ({
 
   const feedData = data ? [].concat(...data[0].data) : [];
   return (
-    <div className="overflow-auto w-full min-h-full">
+    <div className="overflow-auto w-full flex-1">
       {/* Above the list */}
       {topPlaceholder}
       {isRefreshing && refreshComponent}
