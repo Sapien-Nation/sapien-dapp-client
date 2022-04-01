@@ -7,12 +7,12 @@ interface Props {
 
 const DiscoveryCard = ({ tribe }: Props) => {
   return (
-    <div className="rounded-xl p-5 max-w-sm bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer h-[450px]">
-      <div>
-        <div className="shadow-md hover:shadow-3xl rounded-lg relative h-full">
+    <div className="rounded-xl flex-1 p-5 min-w-[300px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer h-[450px] flex flex-col">
+      <div className="flex-1">
+        <div className="shadow-md hover:shadow-3xl rounded-lg relative">
           {tribe.cover ? (
             <img
-              className="w-full rounded-xl -mb-16 flex-shrink-0"
+              className="w-full rounded-xl -mb-16 h-28 object-cover flex-shrink-0"
               src={tribe.cover}
               onError={(event) => {
                 (event.target as HTMLImageElement).src =
@@ -21,7 +21,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-full rounded-xl -mb-16 flex-shrink-0 bg-purple-700" />
+            <div className="w-full h-28 rounded-xl -mb-16 flex-shrink-0 bg-sapien-80" />
           )}
         </div>
         <div className="relative">
@@ -37,7 +37,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
                 }}
               />
             ) : (
-              <div className="w-20 h-20 ml-4 rounded-xl flex-shrink-0 bg-purple-500" />
+              <div className="w-20 h-20 ml-4 rounded-xl flex-shrink-0 bg-sapien-40 shadow shadow-sapien-neutral-600" />
             )}
           </div>
         </div>

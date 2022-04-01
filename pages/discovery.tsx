@@ -17,7 +17,7 @@ const DiscoveryPage: NextPage = () => {
       <Query api="/api/v3/tribe/discovery">
         {(tribes: Array<DiscoveryTribe>) => {
           return (
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-wrap gap-4">
               {tribes.map((tribe) => (
                 <DiscoveryCard key={tribe.id} tribe={tribe} />
               ))}
