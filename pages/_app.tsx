@@ -1,6 +1,7 @@
 import { SWRConfig } from 'swr';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ThemeProvider } from 'next-themes';
+import * as Sentry from '@sentry/nextjs';
 
 // api
 import axios from 'api';
@@ -34,7 +35,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
           fetcher: (url: string) =>
             axios(url)
               .then(({ data }) => data)
-              .catch(({ response }) => Promise.reject(response.data.error)),
+              .catch(({ response }) => {
+                Sentry.captureException(response);
+                return Promise.reject(response.data.message);
+              }),
           revalidateOnFocus: false,
         }}
       >

@@ -14,40 +14,10 @@ const DiscoveryPage: NextPage = () => {
     <>
       <Head title="Discover Tribes" />
       <h1 className="sr-only">Discovery Tribes Page</h1>
-      <Query
-        api="/api/v3/discovery"
-        options={{
-          fetcher: () => [
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-            mockDiscoveryTribe({
-              description:
-                'A tribe is a group of people who live and work together in a shared geographical area. A tribe has a common culture, dialect and religion. They also have a strong sense of unity. The tribe is usually headed by a chief.',
-            }),
-          ],
-        }}
-      >
+      <Query api="/api/v3/tribe/discovery">
         {(tribes: Array<DiscoveryTribe>) => {
           return (
-            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
               {tribes.map((tribe) => (
                 <DiscoveryCard key={tribe.id} tribe={tribe} />
               ))}
