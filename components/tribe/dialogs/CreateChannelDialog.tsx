@@ -116,29 +116,29 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
       push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {
       toast({
-        message: error || 'Service unavailable',
+        message: error,
       });
     }
   };
 
   const handleUploadImage = async (file: File) => {
+    setUploading(true);
     try {
       const formData = new FormData();
 
       formData.append('variant', mediaTypeToUpload);
       formData.append('file', file);
-      setUploading(true);
 
-      const fileURL: string = await uploadImage(formData);
+      const fileData: Media = await uploadImage(formData);
 
       // @ts-ignore
-      setValue(mediaTypeToUpload, fileURL as Media);
-      setUploading(false);
+      setValue(mediaTypeToUpload, fileData);
     } catch (error) {
       toast({
-        message: error || 'There was an Error uploading your image',
+        message: error,
       });
     }
+    setUploading(false);
     setMediaTypeToUpload(null);
   };
 
@@ -171,11 +171,11 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
                             {Boolean(avatar) && (
                               <button
                                 type="button"
+                                aria-label="Remove Selected Avatar"
                                 className="absolute z-10 -top-1 left-9 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                                 onClick={(event) => {
                                   event.stopPropagation();
                                   setValue('avatar', null);
-                                  avatarFileInput.current.value = null;
                                 }}
                               >
                                 <XIcon
@@ -228,6 +228,7 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
                               onChange={(event) =>
                                 handleUploadImage(event.target.files[0])
                               }
+                              id="avatar-upload"
                               type="file"
                             />
                           </div>
@@ -268,11 +269,11 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
                           {Boolean(cover) ? (
                             <span className="relative">
                               <button
+                                aria-label="Remove Selected Cover"
                                 type="button"
                                 className="absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                                 onClick={() => {
                                   setValue('cover', null);
-                                  coverFileInput.current.value = null;
                                 }}
                               >
                                 <XIcon
@@ -332,7 +333,6 @@ const CreateChannelDialog = ({ onClose, show }: Props) => {
                                           handleUploadImage(
                                             event.target.files[0]
                                           );
-                                          event.target.value = null;
                                         }}
                                       />
                                     </label>

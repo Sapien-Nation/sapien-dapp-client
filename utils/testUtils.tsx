@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import { nanoid } from 'nanoid';
 import { axe } from 'jest-axe';
 import { render, RenderOptions } from '@testing-library/react';

@@ -1,4 +1,5 @@
-import { groupBy, isEmpty } from 'lodash';
+import _isEmpty from 'lodash/isEmpty';
+import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 
 //components
@@ -196,23 +197,25 @@ const Room = () => {
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
 
   const bottomFeedRef = useRef(null);
-  const feedMessages = groupBy(messages, ({ createdAt }) =>
+  const feedMessages = _groupBy(messages, ({ createdAt }) =>
     formatDate(createdAt)
   );
 
   useEffect(() => {
     // Start chat at the bottom
     if (bottomFeedRef.current) {
-      bottomFeedRef.current.scrollIntoView({ behavior: 'smooth' });
+      bottomFeedRef.current.scrollIntoView();
     }
   }, []);
-
+  console.log(feedMessages);
   return (
     <div className="h-full flex flex-col">
       <Head title={room.name} />
       <div className="flex-1 overflow-auto py-5 mb-2">
         <h1 className="sr-only">Room View for {room.name}</h1>
-        {!isEmpty(feedMessages) ? (
+        {_isEmpty(feedMessages) ? (
+          <EmptyRoom />
+        ) : (
           <ul role="list" className="h-full w-full flex flex-col">
             {Object.keys(feedMessages).map((timestamp) => {
               const timestampMessages = feedMessages[timestamp];
@@ -241,8 +244,6 @@ const Room = () => {
             })}
             <li ref={bottomFeedRef} />
           </ul>
-        ) : (
-          <EmptyRoom />
         )}
       </div>
       <div>

@@ -1,7 +1,7 @@
 // api
-import { createChannel } from 'api/channel';
+import { createChannel, uploadImage as uploadImageChannel } from 'api/channel';
 import { createRoom } from 'api/room';
-import { createTribe, uploadImage } from 'api/tribe';
+import { createTribe, uploadImage as uploadImageTribe } from 'api/tribe';
 
 // utils
 import {
@@ -34,7 +34,8 @@ const newRoom = mockProfileTribeRoom({ id: '10000' });
 const newTribe = mockProfileTribe({ id: '20000' });
 const newChannel = mockProfileTribeChannel({ id: '30000' });
 
-(uploadImage as jest.Mock).mockReturnValue({ url: 'url', key: 'key' });
+// (uploadImageTribe as jest.Mock).mockResolvedValue({ url: 'url', key: 'key' });
+// (uploadImageChannel as jest.Mock).mockResolvedValue({ url: 'url', key: 'key' });
 (createRoom as jest.Mock).mockReturnValue(newRoom);
 (createTribe as jest.Mock).mockReturnValue(newTribe);
 (createChannel as jest.Mock).mockReturnValue(newChannel);
@@ -220,7 +221,7 @@ describe('LoggedIn', () => {
     );
 
     // avatar image upload on error
-    (uploadImage as jest.Mock).mockRejectedValueOnce(avatarError.message);
+    (uploadImageTribe as jest.Mock).mockRejectedValueOnce(avatarError.message);
     await user.upload(
       document.getElementById('avatar-upload') as HTMLElement,
       createFile()
@@ -230,7 +231,7 @@ describe('LoggedIn', () => {
 
     // avatar image upload on success
     const avatarImage = 'avatar.png';
-    (uploadImage as jest.Mock).mockResolvedValueOnce({
+    (uploadImageTribe as jest.Mock).mockResolvedValueOnce({
       url: avatarImage,
       key: 'key',
     });
@@ -245,7 +246,7 @@ describe('LoggedIn', () => {
 
     // cover image upload on error
     const coverImage = 'cover.png';
-    (uploadImage as jest.Mock).mockRejectedValueOnce(coverError.message);
+    (uploadImageTribe as jest.Mock).mockRejectedValueOnce(coverError.message);
     await user.upload(
       document.getElementById('cover-upload') as HTMLElement,
       createFile(coverImage)
@@ -254,7 +255,7 @@ describe('LoggedIn', () => {
     expect(await screen.findByText(coverError.message)).toBeInTheDocument();
 
     // cover image upload on success
-    (uploadImage as jest.Mock).mockResolvedValueOnce({
+    (uploadImageTribe as jest.Mock).mockResolvedValueOnce({
       url: coverImage,
       key: 'key',
     });
@@ -288,7 +289,7 @@ describe('LoggedIn', () => {
     });
 
     // re-upload images
-    (uploadImage as jest.Mock).mockResolvedValueOnce({
+    (uploadImageTribe as jest.Mock).mockResolvedValueOnce({
       url: avatarImage,
       key: 'key',
     });
@@ -297,7 +298,7 @@ describe('LoggedIn', () => {
       createFile(avatarImage)
     );
 
-    (uploadImage as jest.Mock).mockResolvedValueOnce({
+    (uploadImageTribe as jest.Mock).mockResolvedValueOnce({
       url: coverImage,
       key: 'key',
     });
@@ -428,8 +429,94 @@ describe('LoggedIn', () => {
     const channelName = 'channel new';
     await user.type(screen.getByRole('textbox', { name: 'name' }), channelName);
 
-    // image upload
-    // TODO
+    // avatar image upload on error
+    (uploadImageChannel as jest.Mock).mockRejectedValueOnce(
+      avatarError.message
+    );
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile()
+    );
+
+    expect(await screen.findByText(avatarError.message)).toBeInTheDocument();
+
+    // avatar image upload on success
+    const avatarImage = 'avatar.png';
+    (uploadImageChannel as jest.Mock).mockResolvedValueOnce({
+      url: avatarImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile(avatarImage)
+    );
+    expect(screen.getByRole('img', { name: 'avatar' })).toHaveAttribute(
+      'src',
+      avatarImage
+    );
+
+    // cover image upload on error
+    const coverImage = 'cover.png';
+    (uploadImageChannel as jest.Mock).mockRejectedValueOnce(coverError.message);
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
+
+    expect(await screen.findByText(coverError.message)).toBeInTheDocument();
+
+    // cover image upload on success
+    (uploadImageChannel as jest.Mock).mockResolvedValueOnce({
+      url: coverImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
+
+    expect(screen.getByRole('img', { name: 'cover' })).toHaveAttribute(
+      'src',
+      coverImage
+    );
+
+    // can delete uploaded images
+    await user.click(
+      screen.getByRole('button', { name: 'Remove Selected Avatar' })
+    );
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('img', { name: 'avatar' })
+      ).not.toBeInTheDocument();
+    });
+
+    await user.click(
+      screen.getByRole('button', { name: 'Remove Selected Cover' })
+    );
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('img', { name: 'cover' })
+      ).not.toBeInTheDocument();
+    });
+
+    // re-upload images
+    (uploadImageChannel as jest.Mock).mockResolvedValueOnce({
+      url: avatarImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile(avatarImage)
+    );
+
+    (uploadImageChannel as jest.Mock).mockResolvedValueOnce({
+      url: coverImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
 
     // on error
     (createChannel as jest.Mock).mockRejectedValueOnce(error.message);
@@ -437,6 +524,8 @@ describe('LoggedIn', () => {
 
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createChannel).toHaveBeenCalledWith({
+      avatar: 'key',
+      cover: 'key',
       name: channelName,
       tribeId: tribeID,
     });
@@ -448,6 +537,8 @@ describe('LoggedIn', () => {
       await screen.findByText('Channel created successfully')
     ).toBeInTheDocument();
     expect(createChannel).toHaveBeenCalledWith({
+      avatar: 'key',
+      cover: 'key',
       name: channelName,
       tribeId: tribeID,
     });
