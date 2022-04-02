@@ -43,6 +43,7 @@ const Toast = ({ type, message, id }: Props) => {
                     onClick={() => {
                       dispatch({ type: 'DELETE_TOAST', id });
                     }}
+                    aria-label="Close Notification"
                     className="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-red-600"
                   >
                     <span className="sr-only">Dismiss</span>

@@ -1,10 +1,11 @@
 // api
 import { createChannel } from 'api/channel';
 import { createRoom } from 'api/room';
-import { createTribe } from 'api/tribe';
+import { createTribe, uploadImage } from 'api/tribe';
 
 // utils
 import {
+  createFile,
   mockUser,
   render,
   screen,
@@ -33,6 +34,7 @@ const newRoom = mockProfileTribeRoom({ id: '10000' });
 const newTribe = mockProfileTribe({ id: '20000' });
 const newChannel = mockProfileTribeChannel({ id: '30000' });
 
+(uploadImage as jest.Mock).mockReturnValue({ url: 'url', key: 'key' });
 (createRoom as jest.Mock).mockReturnValue(newRoom);
 (createTribe as jest.Mock).mockReturnValue(newTribe);
 (createChannel as jest.Mock).mockReturnValue(newChannel);
@@ -40,7 +42,8 @@ const newChannel = mockProfileTribeChannel({ id: '30000' });
 const push = jest.fn();
 
 const error = { message: 'Error' };
-
+const avatarError = { message: 'Avatar Upload Error' };
+const coverError = { message: 'Cover Upload Error' };
 const channel1 = mockProfileTribeChannel();
 const room1 = mockProfileTribeRoom();
 const tribe1 = mockProfileTribe({ channels: [channel1], rooms: [room1] });
@@ -137,13 +140,13 @@ describe('LoggedIn', () => {
     await user.click(
       screen.getByRole('button', { name: 'Open Desktop Profile Menu' })
     );
-    expect(
-      (
-        screen.getByRole('link', {
-          name: 'Logout',
-        }) as HTMLLinkElement
-      ).href
-    ).toBe(`http://localhost/logout`);
+    // expect(
+    //   (
+    //     screen.getByRole('link', {
+    //       name: 'Logout',
+    //     }) as HTMLLinkElement
+    //   ).href
+    // ).toBe(`http://localhost/logout`);
 
     expect(screen.getByText(`@${loggedInUser.username}`)).toBeInTheDocument();
     expect(screen.getByText(loggedInUser.displayName)).toBeInTheDocument();
@@ -216,8 +219,92 @@ describe('LoggedIn', () => {
       tribeIdentifier
     );
 
-    // image upload
-    // TODO
+    // avatar image upload on error
+    (uploadImage as jest.Mock).mockRejectedValueOnce(avatarError.message);
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile()
+    );
+
+    expect(await screen.findByText(avatarError.message)).toBeInTheDocument();
+
+    // avatar image upload on success
+    const avatarImage = 'avatar.png';
+    (uploadImage as jest.Mock).mockResolvedValueOnce({
+      url: avatarImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile(avatarImage)
+    );
+    expect(screen.getByRole('img', { name: 'avatar' })).toHaveAttribute(
+      'src',
+      avatarImage
+    );
+
+    // cover image upload on error
+    const coverImage = 'cover.png';
+    (uploadImage as jest.Mock).mockRejectedValueOnce(coverError.message);
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
+
+    expect(await screen.findByText(coverError.message)).toBeInTheDocument();
+
+    // cover image upload on success
+    (uploadImage as jest.Mock).mockResolvedValueOnce({
+      url: coverImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
+
+    expect(screen.getByRole('img', { name: 'cover' })).toHaveAttribute(
+      'src',
+      coverImage
+    );
+
+    // can delete uploaded images
+    await user.click(
+      screen.getByRole('button', { name: 'Remove Selected Avatar' })
+    );
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('img', { name: 'avatar' })
+      ).not.toBeInTheDocument();
+    });
+
+    await user.click(
+      screen.getByRole('button', { name: 'Remove Selected Cover' })
+    );
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('img', { name: 'cover' })
+      ).not.toBeInTheDocument();
+    });
+
+    // re-upload images
+    (uploadImage as jest.Mock).mockResolvedValueOnce({
+      url: avatarImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('avatar-upload') as HTMLElement,
+      createFile(avatarImage)
+    );
+
+    (uploadImage as jest.Mock).mockResolvedValueOnce({
+      url: coverImage,
+      key: 'key',
+    });
+    await user.upload(
+      document.getElementById('cover-upload') as HTMLElement,
+      createFile(coverImage)
+    );
 
     // on error
     (createTribe as jest.Mock).mockRejectedValueOnce(error.message);
@@ -225,6 +312,8 @@ describe('LoggedIn', () => {
 
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createTribe).toHaveBeenCalledWith({
+      avatar: 'key',
+      cover: 'key',
       name: tribeName,
       description: '',
       identifier: tribeIdentifier,
@@ -237,6 +326,8 @@ describe('LoggedIn', () => {
       await screen.findByText('Tribe created successfully')
     ).toBeInTheDocument();
     expect(createTribe).toHaveBeenCalledWith({
+      avatar: 'key',
+      cover: 'key',
       name: tribeName,
       description: '',
       identifier: tribeIdentifier,

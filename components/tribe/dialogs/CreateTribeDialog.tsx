@@ -124,29 +124,29 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
       push(`/tribes/${response.id}/home`);
     } catch (error) {
       toast({
-        message: error || 'Service unavailable',
+        message: error,
       });
     }
   };
 
   const handleUploadImage = async (file: File) => {
+    setUploading(true);
     try {
       const formData = new FormData();
 
       formData.append('variant', mediaTypeToUpload);
       formData.append('file', file);
-      setUploading(true);
 
-      const fileURL: string = await uploadImage(formData);
+      const fileData: Media = await uploadImage(formData);
 
       // @ts-ignore
-      setValue(mediaTypeToUpload, fileURL as Media);
-      setUploading(false);
+      setValue(mediaTypeToUpload, fileData);
     } catch (error) {
       toast({
-        message: error || 'There was an Error uploading your image',
+        message: error,
       });
     }
+    setUploading(false);
     setMediaTypeToUpload(null);
   };
 
@@ -178,11 +178,11 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                           {Boolean(avatar) && (
                             <button
                               type="button"
+                              aria-label="Remove Selected Avatar"
                               className="absolute z-10 -top-1 left-9 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                               onClick={(event) => {
                                 event.stopPropagation();
                                 setValue('avatar', null);
-                                avatarFileInput.current.value = null;
                               }}
                             >
                               <XIcon
@@ -233,9 +233,11 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                             ref={avatarFileInput}
                             accept="image/*"
                             className="sr-only"
+                            id="avatar-upload"
                             onChange={(event) =>
                               handleUploadImage(event.target.files[0])
                             }
+                            aria-labelledby="Upload Avatar"
                             type="file"
                           />
                         </div>
@@ -331,10 +333,10 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                           <span className="relative">
                             <button
                               type="button"
+                              aria-label="Remove Selected Cover"
                               className="absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
                               onClick={() => {
                                 setValue('cover', null);
-                                coverFileInput.current.value = null;
                               }}
                             >
                               <XIcon
@@ -382,8 +384,8 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                                     <input
                                       ref={coverFileInput}
                                       id="cover-upload"
-                                      name="cover-upload"
                                       type="file"
+                                      aria-labelledby="Upload Cover"
                                       onClick={() =>
                                         setMediaTypeToUpload(
                                           MediaTypeUpload.Cover
@@ -394,7 +396,6 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                                         handleUploadImage(
                                           event.target.files[0]
                                         );
-                                        event.target.value = null;
                                       }}
                                     />
                                   </label>

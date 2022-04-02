@@ -1,10 +1,11 @@
 /* istanbul ignore file */
+import { nanoid } from 'nanoid';
 import { axe } from 'jest-axe';
 import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Cache, SWRConfig, SWRConfiguration } from 'swr';
 
-// constats
+// constants
 import { Types as UserTypes, Status as UserStatus } from 'tools/types/user';
 
 // types
@@ -109,6 +110,7 @@ const renderWithProviders = (
   const swrCache = new Map(cache);
 
   const rtl = render(ui, {
+    // eslint-disable-next-line react/display-name
     wrapper: ({ children }) => (
       <AllTheProviders route={route} swrCache={swrCache} swrConfig={swrConfig}>
         {children}
@@ -141,6 +143,10 @@ export const setAllTribes = (tribes = []) =>
 
 export const setLoggedOutUser = (user = mockUser()) =>
   cache.set('/api/v3/user/me', null);
+
+// helpers
+export const createFile = (name = 'tet.png', type = 'image/png') =>
+  new File([nanoid()], name, { type });
 
 // re-export everything
 export * from '@testing-library/react';

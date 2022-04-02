@@ -67,10 +67,6 @@ const Navbar = () => {
                     <div className="mt-4 text-left">
                       <Link href="/logout">
                         <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
-                          <LogoutIcon
-                            className="mr-3 h-5 w-5"
-                            aria-hidden="true"
-                          />
                           Logout
                         </a>
                       </Link>
