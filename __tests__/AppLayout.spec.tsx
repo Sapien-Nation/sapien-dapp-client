@@ -141,13 +141,14 @@ describe('LoggedIn', () => {
     await user.click(
       screen.getByRole('button', { name: 'Open Desktop Profile Menu' })
     );
-    // expect(
-    //   (
-    //     screen.getByRole('link', {
-    //       name: 'Logout',
-    //     }) as HTMLLinkElement
-    //   ).href
-    // ).toBe(`http://localhost/logout`);
+
+    expect(
+      (
+        screen.getByRole('link', {
+          name: 'Logout',
+        }) as HTMLLinkElement
+      ).href
+    ).toBe(`http://localhost/logout`);
 
     expect(screen.getByText(`@${loggedInUser.username}`)).toBeInTheDocument();
     expect(screen.getByText(loggedInUser.displayName)).toBeInTheDocument();
@@ -446,6 +447,7 @@ describe('LoggedIn', () => {
       url: avatarImage,
       key: 'key',
     });
+
     await user.upload(
       document.getElementById('avatar-upload') as HTMLElement,
       createFile(avatarImage)
@@ -454,6 +456,16 @@ describe('LoggedIn', () => {
       'src',
       avatarImage
     );
+
+    // remove
+    await user.click(
+      screen.getByRole('button', { name: 'Remove Selected Avatar' })
+    );
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('img', { name: 'avatar' })
+      ).not.toBeInTheDocument();
+    });
 
     // cover image upload on error
     const coverImage = 'cover.png';
@@ -480,16 +492,7 @@ describe('LoggedIn', () => {
       coverImage
     );
 
-    // can delete uploaded images
-    await user.click(
-      screen.getByRole('button', { name: 'Remove Selected Avatar' })
-    );
-    await waitFor(() => {
-      expect(
-        screen.queryByRole('img', { name: 'avatar' })
-      ).not.toBeInTheDocument();
-    });
-
+    // can remove
     await user.click(
       screen.getByRole('button', { name: 'Remove Selected Cover' })
     );
@@ -583,8 +586,7 @@ describe('LoggedIn', () => {
 
     const roomName = 'Typescript';
     await user.click(screen.getByRole('button', { name: 'Create' }));
-
-    expect(await screen.findByText(/is required/i)).toBeInTheDocument();
+    expect(createRoom).not.toHaveBeenCalled();
 
     await user.type(screen.getByRole('textbox', { name: 'name' }), roomName);
 

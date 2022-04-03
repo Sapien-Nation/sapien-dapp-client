@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const withPreact = require('next-plugin-preact');
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
@@ -7,6 +8,9 @@ const moduleExports = {
     formats: ['image/avif', 'image/webp'],
   },
   reactStrictMode: true,
+  experimental: {
+    esmExternals: false,
+  },
 };
 
 const sentryWebpackPluginOptions = {
@@ -17,4 +21,6 @@ const sentryWebpackPluginOptions = {
   silent: true, // Suppresses all logs
 };
 
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+module.exports = withPreact(
+  withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+);

@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import { axe } from 'jest-axe';
-import { render, RenderOptions } from '@testing-library/react';
+import { render, RenderOptions } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Cache, SWRConfig, SWRConfiguration } from 'swr';
 
@@ -148,7 +148,7 @@ export const createFile = (name = 'tet.png', type = 'image/png') =>
   new File([nanoid()], name, { type });
 
 // re-export everything
-export * from '@testing-library/react';
+export * from '@testing-library/preact';
 
 // override render method
 export { axe, renderWithProviders as render, userEvent as user };

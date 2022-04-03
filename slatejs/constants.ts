@@ -1,12 +1,11 @@
 export enum ElementType {
-  Embed = 'embed',
-  Image = 'image',
-  Link = 'link',
   Paragraph = 'paragraph',
-  Video = 'video',
 }
 
-export enum LeafType {
-  Hashtag,
-  Link,
-}
+export const defaultValue = [
+  {
+    children: [{ text: '' }],
+    type: ElementType.Paragraph,
+    key: null,
+  },
+];

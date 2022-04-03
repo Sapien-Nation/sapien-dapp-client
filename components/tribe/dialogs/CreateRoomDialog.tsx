@@ -18,7 +18,6 @@ import { ProfileTribe } from 'tools/types/tribe';
 interface Props {
   onClose: () => void;
   tribeID: string;
-  show: boolean;
 }
 
 interface FormValues {
@@ -26,7 +25,7 @@ interface FormValues {
 }
 
 const form = 'create-room-form';
-const CreateRoomDialog = ({ onClose, tribeID, show }: Props) => {
+const CreateRoomDialog = ({ onClose, tribeID }: Props) => {
   const toast = useToast();
   const methods = useForm<FormValues>({
     defaultValues: {
@@ -78,7 +77,7 @@ const CreateRoomDialog = ({ onClose, tribeID, show }: Props) => {
 
   return (
     <Dialog
-      show={show}
+      show
       isFetching={false}
       onClose={onClose}
       title="Create a Room"

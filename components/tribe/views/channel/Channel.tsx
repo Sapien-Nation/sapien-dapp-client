@@ -36,11 +36,11 @@ const Channel = () => {
 
   const toast = useToast();
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async () => {
     setTransition(Transition.Submitting);
     try {
       const body = {
-        data: JSON.stringify(values),
+        data: 'Content',
         groupId: channel.id,
       };
 
@@ -59,10 +59,7 @@ const Channel = () => {
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <div>
-        <ChannelEditor
-          onSubmit={handleSubmit}
-          isFetching={transition === Transition.Submitting}
-        />
+        <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
       </div>
       <InfiniteScroll
         apiUrl={`/api/v3/channel/${channel.id}/feed`}

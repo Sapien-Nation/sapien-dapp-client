@@ -68,6 +68,7 @@ const Dialog = ({
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
         onClose={onClose}
+        aria-label={title}
       >
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child
@@ -97,7 +98,7 @@ const Dialog = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div className="inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className='px-4 sm:p-8 pb-4'>
+              <div className="px-4 sm:p-8 pb-4">
                 <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                   <button
                     type="button"
@@ -117,9 +118,10 @@ const Dialog = ({
                   </HeadlessDialog.Title>
                 </div>
                 <div>{children}</div>
-                
               </div>
-              <div className="py-3 px-4 sm:px-8 mt-4 sm:flex sm:flex-row-reverse border-t-[1px] border-gray-800 shadow-inner shadow-sapien-neutral-600">{actions}</div>
+              <div className="py-3 px-4 sm:px-8 mt-4 sm:flex sm:flex-row-reverse border-t-[1px] border-gray-800 shadow-inner shadow-sapien-neutral-600">
+                {actions}
+              </div>
             </div>
           </Transition.Child>
         </div>

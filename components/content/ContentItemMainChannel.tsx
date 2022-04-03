@@ -1,8 +1,5 @@
 import Link from 'next/link';
 
-// components
-import { SlatePreview } from 'slatejs';
-
 // helpers
 import { formatDateRelative } from 'utils/date';
 
@@ -40,7 +37,7 @@ const ContentItemMainChannel = ({
             alt="Sapien Post Image"
           />
           <div className="flex-1 space-y-2">
-            <SlatePreview preview={JSON.parse(body)} />
+            {body}
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
                 <img

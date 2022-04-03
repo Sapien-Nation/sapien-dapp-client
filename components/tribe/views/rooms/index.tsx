@@ -2,7 +2,7 @@ import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 
-//components
+// components
 import { Head } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import { FeedItem } from 'components/feed';
@@ -207,7 +207,9 @@ const Room = () => {
       bottomFeedRef.current.scrollIntoView();
     }
   }, []);
-  console.log(feedMessages);
+
+  const handleMessageSubmit = () => {};
+
   return (
     <div className="h-full flex flex-col">
       <Head title={room.name} />
@@ -247,7 +249,8 @@ const Room = () => {
         )}
       </div>
       <div>
-        <RoomEditor onSubmit={() => {}} isFetching={false} />
+        {/* @ts-ignore */}
+        <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
       </div>
     </div>
   );

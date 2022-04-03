@@ -1,2 +1,2 @@
 export * from './emoji';
-export * from './serialize';
+export * from './serializer';

@@ -1,11 +1,5 @@
-// components
-import { SlatePreview } from 'slatejs';
-
 // helpers
 import { formatDateRelative } from 'utils/date';
-
-// utils
-import { mergeClassNames } from 'utils/styles';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
@@ -33,7 +27,7 @@ const ContentItem = ({
         alt="Sapien Post Image"
       />
       <div className="mt-4">
-        <SlatePreview preview={JSON.parse(body)} />
+        {body}
         <div className="flex items-center mt-2 gap-2">
           <div className="flex gap-1">
             <img

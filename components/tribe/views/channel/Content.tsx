@@ -1,6 +1,3 @@
-// components
-import { SlatePreview } from 'slatejs';
-
 // utilss
 import { formatDateRelative } from 'utils/date';
 
@@ -38,7 +35,7 @@ const ContentComponent = ({
         </p>
       </div>
 
-      <SlatePreview preview={JSON.parse(body)} />
+      {body}
     </div>
   </div>
 );

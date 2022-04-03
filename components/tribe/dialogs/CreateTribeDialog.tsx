@@ -26,7 +26,6 @@ import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   onClose: () => void;
-  show: boolean;
 }
 
 type Media = {
@@ -48,10 +47,8 @@ enum MediaTypeUpload {
 }
 
 const form = 'create-tribe-form';
-const CreateTribeDialog = ({ onClose, show }: Props) => {
-  const [mediaTypeToUpload, setMediaTypeToUpload] =
-    useState<MediaTypeUpload | null>(null);
-  const [isUploading, setUploading] = useState<boolean>(false);
+const CreateTribeDialog = ({ onClose }: Props) => {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const toast = useToast();
   const methods = useForm<FormValues>({
@@ -129,8 +126,11 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
     }
   };
 
-  const handleUploadImage = async (file: File) => {
-    setUploading(true);
+  const handleUploadImage = async (
+    file: File,
+    mediaTypeToUpload: MediaTypeUpload
+  ) => {
+    setIsUploading(true);
     try {
       const formData = new FormData();
 
@@ -146,14 +146,13 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
         message: error,
       });
     }
-    setUploading(false);
-    setMediaTypeToUpload(null);
+    setIsUploading(false);
   };
 
   return (
     <Dialog
-      show={show}
-      isFetching={mediaTypeToUpload !== null || isSubmitting}
+      show
+      isFetching={isUploading || isSubmitting}
       onClose={onClose}
       title="Create a Tribe"
       form={form}
@@ -171,7 +170,6 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                         <div
                           className="flex items-center relative cursor-pointer"
                           onClick={() => {
-                            setMediaTypeToUpload(MediaTypeUpload.Avatar);
                             avatarFileInput.current.click();
                           }}
                         >
@@ -201,9 +199,6 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                                   src={avatar.url}
                                   data-key={avatar.key}
                                   onClick={() => {
-                                    setMediaTypeToUpload(
-                                      MediaTypeUpload.Avatar
-                                    );
                                     avatarFileInput.current.click();
                                   }}
                                 />
@@ -219,24 +214,20 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                               </svg>
                             )}
                           </span>
-                          {isUploading &&
-                            mediaTypeToUpload === MediaTypeUpload.Avatar && (
-                              <span className="absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                <CloudUploadIcon className="animate-bounce text-gray-400" />
-                              </span>
-                            )}
-                          {((!isUploading && !mediaTypeToUpload) ||
-                            mediaTypeToUpload === MediaTypeUpload.Avatar) && (
-                            <CameraIcon className="absolute w-5 right-0.5 bottom-0 text-gray-400" />
-                          )}
+                          <CameraIcon className="absolute w-5 right-0.5 bottom-0 text-gray-400" />
+
                           <input
                             ref={avatarFileInput}
                             accept="image/*"
                             className="sr-only"
                             id="avatar-upload"
                             onChange={(event) =>
-                              handleUploadImage(event.target.files[0])
+                              handleUploadImage(
+                                event.target.files[0],
+                                MediaTypeUpload.Avatar
+                              )
                             }
+                            disabled={isUploading}
                             aria-labelledby="Upload Avatar"
                             type="file"
                           />
@@ -353,59 +344,47 @@ const CreateTribeDialog = ({ onClose, show }: Props) => {
                             />
                           </span>
                         ) : (
-                          <>
-                            {isUploading &&
-                            mediaTypeToUpload === MediaTypeUpload.Cover ? (
-                              <span className="absolute w-5 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                                <CloudUploadIcon className="animate-bounce text-gray-400" />
-                              </span>
-                            ) : (
-                              <div className="space-y-1 text-center">
-                                <svg
-                                  className="mx-auto h-12 w-12 text-gray-400"
-                                  stroke="currentColor"
-                                  fill="none"
-                                  viewBox="0 0 48 48"
-                                  aria-hidden="true"
-                                >
-                                  <path
-                                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                    strokeWidth={2}
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  />
-                                </svg>
-                                <div className="text-sm text-gray-600">
-                                  <label
-                                    htmlFor="cover-upload"
-                                    className="relative cursor-pointer rounded-md font-medium text-white hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                                  >
-                                    <span>Upload a file</span>
-                                    <input
-                                      ref={coverFileInput}
-                                      id="cover-upload"
-                                      type="file"
-                                      aria-labelledby="Upload Cover"
-                                      onClick={() =>
-                                        setMediaTypeToUpload(
-                                          MediaTypeUpload.Cover
-                                        )
-                                      }
-                                      className="sr-only"
-                                      onChange={(event) => {
-                                        handleUploadImage(
-                                          event.target.files[0]
-                                        );
-                                      }}
-                                    />
-                                  </label>
-                                </div>
-                                <p className="text-xs text-gray-500">
-                                  PNG, JPG, GIF up to 40MB
-                                </p>
-                              </div>
-                            )}
-                          </>
+                          <div className="space-y-1 text-center">
+                            <svg
+                              className="mx-auto h-12 w-12 text-gray-400"
+                              stroke="currentColor"
+                              fill="none"
+                              viewBox="0 0 48 48"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                            <div className="text-sm text-gray-600">
+                              <label
+                                htmlFor="cover-upload"
+                                className="relative cursor-pointer rounded-md font-medium text-white hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                              >
+                                <span>Upload a file</span>
+                                <input
+                                  ref={coverFileInput}
+                                  id="cover-upload"
+                                  type="file"
+                                  disabled={isUploading}
+                                  aria-labelledby="Upload Cover"
+                                  className="sr-only"
+                                  onChange={(event) => {
+                                    handleUploadImage(
+                                      event.target.files[0],
+                                      MediaTypeUpload.Cover
+                                    );
+                                  }}
+                                />
+                              </label>
+                            </div>
+                            <p className="text-xs text-gray-500">
+                              PNG, JPG, GIF up to 40MB
+                            </p>
+                          </div>
                         )}
                       </div>
                     </div>

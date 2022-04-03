@@ -137,10 +137,9 @@ const TribeBar = ({ tribes }: Props) => {
       </div>
 
       {/* Modals */}
-      <CreateTribeDialog
-        onClose={() => setDialog(null)}
-        show={dialog === Dialog.CreateTribe}
-      />
+      {dialog === Dialog.CreateTribe && (
+        <CreateTribeDialog onClose={() => setDialog(null)} />
+      )}
     </>
   );
 };
