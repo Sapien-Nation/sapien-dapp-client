@@ -5,10 +5,15 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Head, InfiniteScroll, Query } from 'components/common';
+import {
+  DefaultCover,
+  Head,
+  Header,
+  InfiniteScroll,
+  Query,
+} from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
-import ChannelHeader from './ChannelHeader';
 
 // context
 import { useToast } from 'context/toast';
@@ -52,7 +57,13 @@ const Channel = () => {
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query api={`/api/v3/channel/${viewID}`}>
-        {(channel: ChannelType) => <ChannelHeader channel={channel} />}
+        {(channel: ChannelType) =>
+          channel.cover ? (
+            <Header alt={channel.name} src={channel.cover} />
+          ) : (
+            <DefaultCover name={channel.name} />
+          )
+        }
       </Query>
       <div>
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
