@@ -1,13 +1,14 @@
 import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
 
 // api
-// import { joinTribe } from 'api/tribe';
+import { joinTribe } from 'api/tribe';
 
 // hooks
 import { useToast } from 'context/toast';
 
 // types
-import type { DiscoveryTribe } from 'tools/types/tribe';
+import type { DiscoveryTribe, ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   tribe: DiscoveryTribe;
@@ -16,12 +17,22 @@ interface Props {
 const DiscoveryCard = ({ tribe }: Props) => {
   const toast = useToast();
   const { push } = useRouter();
+  const { mutate } = useSWRConfig();
 
   const handleJoinTribe = async () => {
     try {
-      // await joinTribe(tribe.id);
+      const response = await joinTribe(tribe.id);
 
-      // TODO mutate
+      mutate(
+        '/api/v3/profile/tribes',
+        (tribes: Array<ProfileTribe>) => [
+          tribes[0],
+          response,
+          ...tribes.slice(1),
+        ],
+        false
+      );
+
       push(`/tribes/${tribe.id}/home`);
     } catch (error) {
       toast({
