@@ -19,7 +19,6 @@ import { useToast } from 'context/toast';
 // types
 import type { CreateChannelBody } from 'api/channel';
 import type { ProfileTribe } from 'tools/types/tribe';
-import { Avatar } from 'react-native-elements';
 
 interface Props {
   onClose: () => void;

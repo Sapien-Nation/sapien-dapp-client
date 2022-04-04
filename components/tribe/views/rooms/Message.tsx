@@ -20,7 +20,7 @@ interface Props {
   message: Message;
 }
 
-const FeedItem = ({
+const Message = ({
   isAContinuosMessage,
   message: { avatarUrl, createdAt, displayName, message },
 }: Props) => {
@@ -53,4 +53,4 @@ const FeedItem = ({
   );
 };
 
-export default FeedItem;
+export default Message;

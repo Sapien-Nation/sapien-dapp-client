@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 // components
 import { Head } from 'components/common';
 import { RoomEditor } from 'slatejs';
-import { FeedItem } from 'components/feed';
 import EmptyRoom from './EmptyRoom';
+import Message from './Message';
 
 // helpers
 import { formatDate, subtractDays } from 'utils/date';
@@ -231,7 +231,7 @@ const Room = () => {
                   </time>
                   {timestampMessages.map((message, index) => {
                     return (
-                      <FeedItem
+                      <Message
                         key={message.id}
                         message={message}
                         isAContinuosMessage={
