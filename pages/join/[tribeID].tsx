@@ -1,99 +1,91 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useSWRConfig } from 'swr';
+import { useState } from 'react';
 
 // api
 import { joinTribe } from 'api/tribe';
+import { useAuth } from 'context/user';
+import { Head, Query, Redirect } from 'components/common';
 
 // types
-import type { ProfileTribe } from 'tools/types/tribe';
+import type { TribeInvite } from 'tools/types/tribe';
 
 enum View {
   Error,
-  Joining,
+  Join,
 }
 
 interface Props {
-  tribeID: string;
+  tribe: TribeInvite;
 }
 
-const Join = ({ tribeID }: Props) => {
-  const [view, setView] = useState<View>(View.Joining);
+const Join = ({ tribe }: Props) => {
+  const [view, setView] = useState<View>(View.Join);
 
   const { push } = useRouter();
-  const { mutate } = useSWRConfig();
+
+  const handleJoin = async () => {
+    try {
+      await joinTribe(tribe.id);
+      push(`/tribes/${tribe.id}/home`);
+    } catch (err) {
+      setView(View.Error);
+    }
+  };
 
   const renderView = () => {
     switch (view) {
       case View.Error:
         return (
-          <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden  h-full w-full">
-            <div className="absolute inset-0">
-              <img
-                className="h-full w-full object-cover"
-                src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
-                alt="People working on laptops"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
-            </div>
-            <div className="px-4 py-4 bottom-0 absolute w-full text-center">
-              <p className="mt-6 text-xl text-white font-semibold">
-                Error View
-              </p>
-            </div>
-          </div>
+          <p className="mt-6 text-xl text-white font-semibold">Error View</p>
         );
-      case View.Joining:
+      case View.Join:
         return (
-          <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden  h-full w-full">
-            <div className="absolute inset-0">
-              <img
-                className="h-full w-full object-cover"
-                src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
-                alt="People working on laptops"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
-            </div>
-            <div className="px-4 py-4 bottom-0 absolute w-full text-center">
-              <p className="mt-6 text-xl text-white font-semibold">
-                Joining Tribe
-              </p>
-            </div>
-          </div>
+          <p className="mt-6 text-xl text-white font-semibold">
+            <button onClick={handleJoin}>Join Invite</button>
+          </p>
         );
     }
   };
 
-  useEffect(() => {
-    const handleJoin = async () => {
-      try {
-        const response = await joinTribe(tribeID);
-        mutate(
-          '/api/v3/profile/tribes',
-          (tribes: Array<ProfileTribe>) => [
-            tribes[0],
-            response,
-            ...tribes.slice(1),
-          ],
-          false
-        );
-        push(`/tribes/${tribeID}/home`);
-      } catch (err) {
-        setView(View.Error);
-      }
-    };
-
-    handleJoin();
-  }, [mutate, push, tribeID]);
-
-  return <div>{renderView()}</div>;
+  return (
+    <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden  h-full w-full">
+      <div className="absolute inset-0">
+        <img
+          className="h-full w-full object-cover"
+          src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+          alt="People working on laptops"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+      </div>
+      <div className="px-4 py-4 bottom-0 absolute w-full text-center">
+        {renderView()}
+      </div>
+    </div>
+  );
 };
 
 const JoinProxy = () => {
+  const { me } = useAuth();
   const { query } = useRouter();
+
+  if (me === null) {
+    return (
+      <>
+        <Head title="" />
+        <Redirect path="/login" />
+      </>
+    );
+  }
 
   if (!query.tribeID) return null;
 
-  return <Join tribeID={query.tribeID as string} />;
+  return (
+    <>
+      <Head title="Accept invite" />
+      <Query api={`/api/v3/tribe/${query.tribeID as string}/invite`}>
+        {(tribe: TribeInvite) => <Join tribe={tribe} />}
+      </Query>
+    </>
+  );
 };
 export default JoinProxy;
