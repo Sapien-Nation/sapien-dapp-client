@@ -2,9 +2,6 @@ import { Fragment } from 'react';
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 interface Props {
   actions?: React.ReactElement;
   cancelLabel?: string;
@@ -37,10 +34,11 @@ const Dialog = ({
       {showConfirm && (
         <button
           type={form ? 'submit' : 'button'}
-          className={mergeClassNames(
-            isFetching ? 'cursor-not-allowed disabled:opacity-75' : '',
-            'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
-          )}
+          className={
+            isFetching
+              ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+              : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+          }
           onClick={onConfirm}
           disabled={isFetching}
           form={form}

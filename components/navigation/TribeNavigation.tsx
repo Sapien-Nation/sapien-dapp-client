@@ -13,9 +13,6 @@ import { ErrorView } from 'components/common';
 // hooks
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 enum Dialog {
   CreateChannel,
   CreateRoom,
@@ -42,10 +39,11 @@ const TribeNavigation = () => {
           <nav>
             <Link href={`/tribes/${tribeID}/home`} passHref>
               <a
-                className={mergeClassNames(
-                  asPath === `/tribes/${tribeID}/home` ? 'font-extrabold' : '',
-                  'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
-                )}
+                className={
+                  asPath === `/tribes/${tribeID}/home`
+                    ? 'font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+                }
               >
                 <UserGroupIcon className="h-5 w-5 mr-4" />
                 {name}
@@ -62,10 +60,11 @@ const TribeNavigation = () => {
               {channels.map(({ id, name }) => {
                 return (
                   <li
-                    className={`${mergeClassNames(
-                      id === viewID ? 'font-semibold' : 'text-gray-300',
-                      'text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
-                    )}`}
+                    className={
+                      id === viewID
+                        ? 'font-semibold text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                    }
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
@@ -91,10 +90,11 @@ const TribeNavigation = () => {
               {rooms.map(({ id, name }) => {
                 return (
                   <li
-                    className={`${mergeClassNames(
-                      id === viewID ? 'font-semibold' : 'text-gray-300',
-                      'text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
-                    )}`}
+                    className={
+                      id === viewID
+                        ? 'font-semibold text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                    }
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>

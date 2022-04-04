@@ -1,16 +1,6 @@
-// utils
-import { mergeClassNames } from 'utils/styles';
-
-interface Props {
-  className?: string;
-}
-
-const CollapseIcon = ({ className }: Props) => (
+const CollapseIcon = () => (
   <svg
-    className={mergeClassNames(
-      className,
-      'svg-icon align-middle fill-current overflow-hidden'
-    )}
+    className="svg-icon align-middle fill-current overflow-hidden"
     viewBox="0 0 1024 1024"
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"

@@ -1,9 +1,6 @@
 // helpers
 import { formatDateRelative } from 'utils/date';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 // types
 import type { ISOString } from 'tools/types/common';
 
@@ -40,10 +37,11 @@ const Message = ({
             </div>
           )}
           <p
-            className={mergeClassNames(
-              !isAContinuosMessage ? 'pl-[52px]' : '',
-              'text-sm text-gray-500 '
-            )}
+            className={
+              isAContinuosMessage
+                ? 'pl-[52px] text-sm text-gray-500'
+                : 'text-sm text-gray-500'
+            }
           >
             {message}
           </p>

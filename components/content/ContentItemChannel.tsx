@@ -3,9 +3,6 @@ import Link from 'next/link';
 // helpers
 import { formatDateRelative } from 'utils/date';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 // types
 import type { Content as ContentType } from 'tools/types/content';
 

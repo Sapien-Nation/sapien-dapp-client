@@ -1,5 +1,3 @@
-import { mergeClassNames } from 'utils/styles';
-
 export interface Props {
   error: string;
   extraLabel?: React.ReactElement;
@@ -11,17 +9,14 @@ const TextInputLabel = ({ error, extraLabel = null, name, label }: Props) => {
   return (
     <label
       htmlFor={name}
-      className={mergeClassNames(
-        error ? 'text-red-500' : '',
-        'text-sm mt-4 mb-2 block'
-      )}
+      className={
+        error
+          ? 'text-red-500 text-sm mt-4 mb-2 block'
+          : 'text-sm mt-4 mb-2 block'
+      }
       id={error ? `${name}-error` : ''}
     >
-      <span
-        className={mergeClassNames(error ? 'font-extrabold' : 'font-medium')}
-      >
-        {label}
-      </span>{' '}
+      <span className={error ? 'font-extrabold' : 'font-medium'}>{label}</span>{' '}
       {error}
       {extraLabel}
     </label>

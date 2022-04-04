@@ -20,9 +20,6 @@ import { useAuth } from 'context/user';
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
-// utils
-import { mergeClassNames } from 'utils/styles';
-
 interface Props {
   children: React.ReactElement;
 }
@@ -113,10 +110,11 @@ const AppLayout = ({ children }: Props) => {
           <>
             <main className="h-full flex">
               <div
-                className={mergeClassNames(
-                  mobileMenuOpen ? 'left-0' : '-left-full',
-                  'flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                )}
+                className={
+                  mobileMenuOpen
+                    ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                    : 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                }
               >
                 <div className="flex-1 flex min-h-0 lg:h-auto h-full">
                   <div className="absolute top-0 -right-10 bg-sapien-red-700/50 lg:hidden">

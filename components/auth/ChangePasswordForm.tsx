@@ -6,12 +6,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 // api
 import { changePassword } from 'api/authentication';
 
+// components
+import { PasswordInput, TextInputLabel } from 'components/common';
+
 // hooks
 import { useToast } from 'context/toast';
-
-// utils
-import { mergeClassNames } from 'utils/styles';
-import { PasswordInput, TextInputLabel } from 'components/common';
 
 interface ChangePasswordFormValues {
   password: string;
@@ -101,10 +100,11 @@ const ChangePasswordForm = ({ token }: Props) => {
         <div>
           <button
             type="submit"
-            className={mergeClassNames(
-              isSubmitting ? 'cursor-not-allowed' : '',
-              'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
-            )}
+            className={
+              isSubmitting
+                ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+                : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+            }
             disabled={isSubmitting}
           >
             {isSubmitting && (
