@@ -1,5 +1,6 @@
 // components
-import { Header, DefaultCover } from 'components/common';
+import { Header } from 'components/common';
+import DefaultCover from './DefaultCover';
 
 // types
 import type { Channel } from 'tools/types/channel';

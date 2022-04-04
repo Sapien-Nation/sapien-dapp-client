@@ -1,5 +1,6 @@
 // components
-import { Header, DefaultCover } from 'components/common';
+import { Header } from 'components/common';
+import DefaultCover from './DefaultCover';
 
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
@@ -9,7 +10,6 @@ interface Props {
 }
 
 const MainChannelHeader = ({ tribe }: Props) => {
-  console.log('tribe', tribe);
   return (
     <div className="bg-sapien-neutral-600 p-3 pb-6 rounded-xl mb-4">
       {tribe.cover ? (

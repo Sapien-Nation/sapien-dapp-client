@@ -2,7 +2,6 @@ import useSWR from 'swr';
 
 // components
 import { ErrorView } from './views';
-import Spinner from './Spinner';
 
 // types
 import type { SWRConfiguration, Key } from 'swr';
@@ -24,7 +23,7 @@ const Query = ({
   api,
   children,
   empty,
-  loader = <Spinner />,
+  loader = null,
   showValidating = false,
   options,
 }: Props) => {

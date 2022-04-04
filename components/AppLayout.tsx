@@ -42,7 +42,7 @@ const AppLayout = ({ children }: Props) => {
   }
 
   // Invite View
-  if (pathname.startsWith('/invite')) return children;
+  if (pathname.startsWith('/join')) return children;
 
   if (me === null) {
     return (

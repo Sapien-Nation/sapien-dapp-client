@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
 
 // api
 import { createContent } from 'api/content';
@@ -8,6 +9,8 @@ import { ContentItemChannel } from 'components/content';
 import { Head, InfiniteScroll, Query } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
+import ChannelHeader from './ChannelHeader';
+import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 
 // context
 import { useToast } from 'context/toast';
@@ -18,17 +21,24 @@ import { useTribeChannels } from 'hooks/tribe';
 // types
 import type { Content } from 'tools/types/content';
 import type { Channel as ChannelType } from 'tools/types/channel';
-import ChannelHeader from './ChannelHeader';
 
 const Channel = () => {
   const { push, query } = useRouter();
   const { tribeID, viewID } = query;
 
+  const belowEditorRef = useRef(null);
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
   );
 
   const toast = useToast();
+
+  useEffect(() => {
+    // Start chat at the bottom
+    if (belowEditorRef.current) {
+      belowEditorRef.current.scrollIntoView();
+    }
+  }, []);
 
   const handleSubmit = async (text) => {
     try {
@@ -51,32 +61,43 @@ const Channel = () => {
     <>
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
-      <Query api={`/api/v3/channel/${viewID}`}>
+      <Query
+        api={`/api/v3/channel/${viewID}`}
+        loader={<ChannelHeaderPlaceholder />}
+        options={{
+          onSuccess: () => {
+            belowEditorRef.current.scrollIntoView();
+          },
+        }}
+      >
         {(channel: ChannelType) => <ChannelHeader channel={channel} />}
       </Query>
       <div>
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
       </div>
-      <InfiniteScroll apiUrl={`/api/v3/channel/${channel.id}/feed`}>
-        {(contentList: Array<Content>) => {
-          if (contentList.length === 0) return <EmptyFeed />;
-          return (
-            <ul className="py-4">
-              {contentList.map((content) => (
-                <li
-                  key={content.id}
-                  className="my-2 border-[1px] border-gray-800 rounded-md"
-                >
-                  <ContentItemChannel
-                    content={content}
-                    tribeID={tribeID as string}
-                  />
-                </li>
-              ))}
-            </ul>
-          );
-        }}
-      </InfiniteScroll>
+      <div ref={belowEditorRef} />
+      <div className="min-h-[400px]">
+        <InfiniteScroll apiUrl={`/api/v3/channel/${channel.id}/feed`}>
+          {(contentList: Array<Content>) => {
+            if (contentList.length === 0) return <EmptyFeed />;
+            return (
+              <ul className="py-4">
+                {contentList.map((content) => (
+                  <li
+                    key={content.id}
+                    className="my-2 border-[1px] border-gray-800 rounded-md"
+                  >
+                    <ContentItemChannel
+                      content={content}
+                      tribeID={tribeID as string}
+                    />
+                  </li>
+                ))}
+              </ul>
+            );
+          }}
+        </InfiniteScroll>
+      </div>
     </>
   );
 };
