@@ -2,13 +2,12 @@ import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 
 interface Props {
-  children?: React.ReactElement | null;
   title: string;
   image?: string;
   description?: string;
 }
 
-const Head = ({ children = null, title, image, description }: Props) => {
+const Head = ({ title, image, description }: Props) => {
   const { pathname } = useRouter();
   return (
     <NextSeo
