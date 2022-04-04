@@ -5,13 +5,7 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import {
-  DefaultCover,
-  Head,
-  Header,
-  InfiniteScroll,
-  Query,
-} from 'components/common';
+import { Head, InfiniteScroll, Query } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
 
@@ -24,6 +18,7 @@ import { useTribeChannels } from 'hooks/tribe';
 // types
 import type { Content } from 'tools/types/content';
 import type { Channel as ChannelType } from 'tools/types/channel';
+import ChannelHeader from './ChannelHeader';
 
 const Channel = () => {
   const { push, query } = useRouter();
@@ -57,13 +52,7 @@ const Channel = () => {
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query api={`/api/v3/channel/${viewID}`}>
-        {(channel: ChannelType) =>
-          channel.cover ? (
-            <Header alt={channel.name} src={channel.cover} />
-          ) : (
-            <DefaultCover name={channel.name} />
-          )
-        }
+        {(channel: ChannelType) => <ChannelHeader channel={channel} />}
       </Query>
       <div>
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />

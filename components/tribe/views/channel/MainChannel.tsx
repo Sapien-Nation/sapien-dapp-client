@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 // components
-import { DefaultCover, Head, Header, InfiniteScroll, Query } from 'components/common';
+import { Head, InfiniteScroll, Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
 
 // hooks
@@ -10,6 +10,7 @@ import { useTribe } from 'hooks/tribe';
 // types
 import type { Content as ContentType } from 'tools/types/content';
 import type { MainFeedTribe } from 'tools/types/tribe';
+import MainChannelHeader from './MainChannelHeader';
 
 const Empty = () => {
   return (
@@ -37,13 +38,7 @@ const MainChannel = () => {
       <Head title={tribe.name} />
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <Query api={`/api/v3/tribe/${tribeID}`}>
-        {(tribe: MainFeedTribe) => 
-          tribe.cover ? (
-            <Header alt={tribe.name} src={tribe.cover} />
-          ) : (
-            <DefaultCover name={tribe.name} />
-          )
-        }
+        {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
       </Query>
       <InfiniteScroll
         apiUrl={`/api/v3/tribe/${tribeID}/feed`}
