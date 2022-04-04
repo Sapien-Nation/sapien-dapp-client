@@ -39,8 +39,8 @@ const Message = ({
           <p
             className={
               isAContinuosMessage
-                ? 'pl-[52px] text-sm text-gray-500'
-                : 'text-sm text-gray-500'
+                ? 'text-sm text-gray-500'
+                : 'pl-[52px] text-sm text-gray-500'
             }
           >
             {message}

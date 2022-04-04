@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 // api
@@ -8,6 +7,7 @@ import { createContent } from 'api/content';
 import { ContentItemChannel } from 'components/content';
 import { Head, InfiniteScroll } from 'components/common';
 import { ChannelEditor } from 'slatejs';
+import EmptyFeed from './EmptyFeed';
 
 // context
 import { useToast } from 'context/toast';
@@ -16,18 +16,10 @@ import { useToast } from 'context/toast';
 import { useTribeChannels } from 'hooks/tribe';
 
 // types
-import type { Content as ContentType } from 'tools/types/content';
-
-enum Transition {
-  Idle,
-  Submitting,
-  Success,
-}
+import type { Content } from 'tools/types/content';
 
 const Channel = () => {
-  const [transition, setTransition] = useState<Transition>(Transition.Idle);
-
-  const { query } = useRouter();
+  const { push, query } = useRouter();
   const { tribeID, viewID } = query;
 
   const channel = useTribeChannels(tribeID as string).find(
@@ -36,22 +28,21 @@ const Channel = () => {
 
   const toast = useToast();
 
-  const handleSubmit = async () => {
-    setTransition(Transition.Submitting);
+  const handleSubmit = async (text) => {
     try {
       const body = {
-        data: 'Content',
+        data: text,
         groupId: channel.id,
       };
 
-      await createContent(body);
-      setTransition(Transition.Success);
+      const response: Content = await createContent(body);
+
+      push(`/tribes/${tribeID}/content?id=${response.id}`);
     } catch (error) {
       toast({
         message: error || 'Error while creating the content, please try again',
       });
     }
-    setTransition(Transition.Idle);
   };
 
   return (
@@ -61,25 +52,25 @@ const Channel = () => {
       <div>
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
       </div>
-      <InfiniteScroll
-        apiUrl={`/api/v3/channel/${channel.id}/feed`}
-        hardReload={transition === Transition.Success}
-      >
-        {(contentList: Array<ContentType>) => (
-          <ul className="py-4">
-            {contentList.map((content) => (
-              <li
-                key={content.id}
-                className="my-2 border-[1px] border-gray-800 rounded-md"
-              >
-                <ContentItemChannel
-                  content={content}
-                  tribeID={tribeID as string}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+      <InfiniteScroll apiUrl={`/api/v3/channel/${channel.id}/feed`}>
+        {(contentList: Array<Content>) => {
+          if (contentList.length === 0) return <EmptyFeed />;
+          return (
+            <ul className="py-4">
+              {contentList.map((content) => (
+                <li
+                  key={content.id}
+                  className="my-2 border-[1px] border-gray-800 rounded-md"
+                >
+                  <ContentItemChannel
+                    content={content}
+                    tribeID={tribeID as string}
+                  />
+                </li>
+              ))}
+            </ul>
+          );
+        }}
       </InfiniteScroll>
     </>
   );

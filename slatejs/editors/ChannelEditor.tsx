@@ -1,7 +1,7 @@
 // @refresh reset
 import _pipe from 'lodash/fp/pipe';
 import { Popover, Transition } from '@headlessui/react';
-import { EmojiHappyIcon } from '@heroicons/react/outline';
+import { EmojiHappyIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
 import { Picker } from 'emoji-mart';
 import { Fragment, useMemo, useState } from 'react';
 import { createEditor } from 'slate';
@@ -39,6 +39,11 @@ const ChannelEditor = ({ name, onSubmit }: Props) => {
         <form
           id="channel-editor"
           className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2 flex flex-row"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const text = serialize(value);
+            onSubmit(text);
+          }}
         >
           <Slate
             editor={editor}
@@ -46,22 +51,6 @@ const ChannelEditor = ({ name, onSubmit }: Props) => {
             onChange={(val: any) => setValue(val)}
           >
             <Editable
-              onKeyPress={(event) => {
-                if (event.key === 'Enter' && !event.shiftKey) {
-                  event.preventDefault();
-                  event.stopPropagation();
-
-                  const text = serialize(value);
-                  onSubmit(text);
-
-                  // cleanup
-                  const point = { path: [0, 0], offset: 0 };
-                  editor.selection = { anchor: point, focus: point };
-                  editor.history = { redos: [], undos: [] };
-
-                  setValue(defaultValue);
-                }
-              }}
               placeholder={`Leave a message on ${name}`}
               className="w-full px-4 py-2"
             />
@@ -106,6 +95,14 @@ const ChannelEditor = ({ name, onSubmit }: Props) => {
                 </>
               )}
             </Popover>
+
+            {/* Submit Button */}
+            <button
+              className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
+              type="submit"
+            >
+              <PaperAirplaneIcon className="h-6 w-6 text-indigo-500 rotate-180" />
+            </button>
           </div>
         </form>
       </div>

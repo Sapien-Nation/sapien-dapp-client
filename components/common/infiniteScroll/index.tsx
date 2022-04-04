@@ -1,3 +1,4 @@
+import _first from 'lodash/first';
 import { useRef, useEffect } from 'react';
 import useSWRInfinite from 'swr/infinite';
 
@@ -19,13 +20,8 @@ interface Props {
   apiUrl: string;
   children: any;
   emptyComponent?: React.ReactNode | null;
-  hardReload?: boolean;
   loadingComponent?: React.ReactNode | null;
-  showRefresh?: boolean;
-  refreshLabel?: string;
-  refreshComponent?: React.ReactNode | null;
   reachingEndComponent?: React.ReactNode | null;
-  topPlaceholder?: React.ReactNode | null;
   pageSize?: number;
 }
 
@@ -46,31 +42,17 @@ const Empty = () => {
 const InfiniteScroll = ({
   apiUrl,
   children,
-  emptyComponent = <Empty />,
-  hardReload = false,
-  showRefresh = false,
-  refreshLabel = 'New Content',
-  refreshComponent = null,
   loadingComponent = null,
   reachingEndComponent = null,
-  topPlaceholder = null,
   pageSize = 10,
 }: Props) => {
   const ref = useRef();
   const isVisible = useOnScreen(ref);
 
-  const { data, error, mutate, size, setSize, isValidating } = useSWRInfinite(
+  const { data, error, size, setSize, isValidating } = useSWRInfinite(
     (...args) => getKey(...args, apiUrl),
     fetcher
   );
-
-  useEffect(() => {
-    if (hardReload) {
-      mutate();
-    }
-  }, [hardReload, mutate]);
-
-  const isEmpty = data?.[0]?.data.length === 0;
 
   const isLoadingInitialData = data === undefined && error === undefined;
   const isLoadingMore =
@@ -86,29 +68,11 @@ const InfiniteScroll = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible, isRefreshing]);
 
-  const feedData = data ? [].concat(...data[0].data) : [];
   return (
     <div className="overflow-auto w-full flex-1">
-      {/* Above the list */}
-      {topPlaceholder}
-      {isRefreshing && refreshComponent}
-
-      {/* Refresh (Websockets) */}
-      {showRefresh && (
-        <button disabled={isRefreshing} onClick={() => mutate()}>
-          {refreshLabel}
-        </button>
-      )}
-
       {/* List */}
       {isLoadingInitialData ? null : (
-        <>
-          {feedData.length === 0 ? (
-            <>{emptyComponent}</>
-          ) : (
-            <>{children(feedData)}</>
-          )}
-        </>
+        <>{children(data ? [].concat(...data[0].data) : [])}</>
       )}
 
       {/* Ref Target */}
