@@ -3,7 +3,7 @@ import axios from 'api';
 import MockAdapter from 'axios-mock-adapter';
 
 // api
-import { createTribe, uploadImage } from 'api/tribe';
+import { createTribe, uploadImage, joinTribe } from 'api/tribe';
 
 // mocks
 import { mockProfileTribe } from 'tools/mocks/tribe';
@@ -48,4 +48,17 @@ test('uploadImage', async () => {
   // on success
   mock.onPost(apiURL).reply(200, tribe);
   await expect(uploadImage(body)).resolves.toEqual(tribe);
+});
+
+test('joinTribe', async () => {
+  const tribeID = '1000';
+  const apiURL = `/api/v3/tribe/${tribeID}/join`;
+  const body = {};
+  // on error
+  mock.onPost(apiURL).reply(400, error);
+  await expect(joinTribe(tribeID)).rejects.toEqual(error.message);
+
+  // on success
+  mock.onPost(apiURL).reply(200, body);
+  await expect(joinTribe(tribeID)).resolves.toEqual(body);
 });

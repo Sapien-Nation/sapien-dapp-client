@@ -18,7 +18,7 @@ import { useTribeChannels } from 'hooks/tribe';
 
 // types
 import type { Content } from 'tools/types/content';
-import type { Channel } from 'tools/types/channel';
+import type { Channel as ChannelType } from 'tools/types/channel';
 
 const Channel = () => {
   const { push, query } = useRouter();
@@ -52,7 +52,7 @@ const Channel = () => {
       <Head title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query api={`/api/v3/channel/${viewID}`}>
-        {(channel: Channel) => <ChannelHeader channel={channel} />}
+        {(channel: ChannelType) => <ChannelHeader channel={channel} />}
       </Query>
       <div>
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />

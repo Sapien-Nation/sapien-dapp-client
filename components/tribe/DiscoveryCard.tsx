@@ -1,3 +1,11 @@
+import { useRouter } from 'next/router';
+
+// api
+// import { joinTribe } from 'api/tribe';
+
+// hooks
+import { useToast } from 'context/toast';
+
 // types
 import type { DiscoveryTribe } from 'tools/types/tribe';
 
@@ -6,11 +14,32 @@ interface Props {
 }
 
 const DiscoveryCard = ({ tribe }: Props) => {
+  const toast = useToast();
+  const { push } = useRouter();
+
+  const handleJoinTribe = async () => {
+    try {
+      // await joinTribe(tribe.id);
+
+      // TODO mutate
+      push(`/tribes/${tribe.id}/home`);
+    } catch (error) {
+      toast({
+        message: error,
+      });
+    }
+  };
+
   return (
     <li
       aria-label={tribe.name}
-      className="rounded-xl flex-1 p-5 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col"
+      className="relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col"
     >
+      <button
+        onClick={handleJoinTribe}
+        aria-label="Join"
+        className="absolute w-full h-full"
+      />
       <div className="flex-1">
         <div className="shadow-md hover:shadow-3xl rounded-lg relative">
           {tribe.cover ? (
@@ -24,32 +53,25 @@ const DiscoveryCard = ({ tribe }: Props) => {
           )}
         </div>
         <div className="relative">
-          <div className="px-3 py-3">
-            {tribe.avatar ? (
-              <img
-                className="w-20 h-20 ml-4 rounded-xl flex-shrink-0"
-                src={tribe.avatar}
-                alt=""
-              />
-            ) : (
-              <div className="w-20 h-20 ml-4 rounded-xl flex-shrink-0 bg-sapien-40 shadow shadow-sapien-neutral-600" />
-            )}
-          </div>
+          {tribe.avatar ? (
+            <img
+              className="w-20 h-20 ml-4 rounded-xl flex-shrink-0"
+              src={tribe.avatar}
+              alt=""
+            />
+          ) : (
+            <div className="w-20 h-20 ml-4 rounded-xl flex-shrink-0 bg-sapien-40 shadow shadow-sapien-neutral-600" />
+          )}
         </div>
-        <div className="p-3">
+        <div className="px-3 mt-2">
           <h1 className="text-lg font-bold">{tribe.name}</h1>
-          <p className="text-gray-400 overflow-hidden h-[70px]">
+          <p className="text-gray-400 overflow-hidden h-[150px]">
             {tribe.description || '[No Description]'}
           </p>
+          <span className="text-xs">
+            {tribe.membersCount} {tribe.membersCount > 1 ? 'members' : 'member'}
+          </span>
         </div>
-      </div>
-      <div className="flex justify-between items-center">
-        <span className="text-xs">
-          {tribe.membersCount} {tribe.membersCount > 1 ? 'members' : 'member'}
-        </span>
-        <button className="w-20 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary-200 hover:bg-primary-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-          Join
-        </button>
       </div>
     </li>
   );

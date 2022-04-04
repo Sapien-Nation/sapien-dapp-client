@@ -1,5 +1,5 @@
 // utils
-import { cache, render, screen, within } from 'utils/testUtils';
+import { cache, render, screen, user, within } from 'utils/testUtils';
 
 // components
 import DiscoveryPage from 'pages/discovery';
@@ -13,17 +13,17 @@ const tribes = [
   mockDiscoveryTribe({ id: '3000', description: 'foo bar lol' }),
   mockDiscoveryTribe({ id: '4000', description: 'foo bar lol lol' }),
 ];
-
+const push = jest.fn();
 beforeEach(() => {
   cache.set('/api/v3/tribe/discovery', tribes);
 });
 
 test('discovery page', () => {
-  render(<DiscoveryPage />);
+  render(<DiscoveryPage />, { route: { push } });
 
   const items = screen.getAllByRole('listitem');
 
-  tribes.forEach((item, index) => {
+  tribes.forEach(async (item, index) => {
     const listItem = items[index];
     expect(
       screen.getByRole('heading', { name: item.name })
@@ -45,8 +45,8 @@ test('discovery page', () => {
       expect(within(listItem).getByText('0 member')).toBeInTheDocument();
     }
 
-    expect(
-      within(listItem).getByRole('button', { name: 'Join' })
-    ).toBeInTheDocument();
+    await user.click(within(listItem).getByRole('button', { name: 'Join' }));
+
+    expect(push).toHaveBeenCalledWith(`/tribes/${item.id}/home`);
   });
 });
