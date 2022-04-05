@@ -41,7 +41,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
         <div className="flex justify-between w-full">
           <div className="flex flex-col justify-center ml-12">
             <h1 className="text-xl">{tribe.name}</h1>
-            <h2 className="text-gray-500">3000 members</h2>
+            <h2 className="text-gray-500">{tribe.membersCount} members</h2>
           </div>
           <div className="flex items-center mr-5">
             <button

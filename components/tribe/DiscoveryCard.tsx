@@ -9,17 +9,21 @@ import { useToast } from 'context/toast';
 
 // types
 import type { DiscoveryTribe, ProfileTribe } from 'tools/types/tribe';
+import { useState } from 'react';
 
 interface Props {
   tribe: DiscoveryTribe;
 }
 
 const DiscoveryCard = ({ tribe }: Props) => {
+  const [isFetching, setIsFetching] = useState(false);
+
   const toast = useToast();
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
 
   const handleJoinTribe = async () => {
+    setIsFetching(true);
     try {
       const response = await joinTribe(tribe.id);
 
@@ -39,12 +43,18 @@ const DiscoveryCard = ({ tribe }: Props) => {
         message: error,
       });
     }
+
+    setIsFetching(false);
   };
 
   return (
     <li
       aria-label={tribe.name}
-      className="relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col"
+      className={
+        isFetching
+          ? 'animate-pulse relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
+          : 'relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
+      }
     >
       <button
         onClick={handleJoinTribe}

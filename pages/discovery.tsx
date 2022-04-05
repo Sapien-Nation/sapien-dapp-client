@@ -1,6 +1,6 @@
 // components
 import { SEO, Query } from 'components/common';
-import { DiscoveryCard } from 'components/tribe';
+import { DiscoveryCard, DiscoveryPlaceholder } from 'components/tribe';
 
 // types
 import type { NextPage } from 'next';
@@ -11,7 +11,7 @@ const DiscoveryPage: NextPage = () => {
     <>
       <SEO title="Discover Tribes" />
       <h1 className="sr-only">Discovery Tribes Page</h1>
-      <Query api="/api/v3/tribe/discovery" loader={null}>
+      <Query api="/api/v3/tribe/discovery" loader={<DiscoveryPlaceholder />}>
         {(tribes: Array<DiscoveryTribe>) => (
           <ul
             aria-label="Tribes list"
