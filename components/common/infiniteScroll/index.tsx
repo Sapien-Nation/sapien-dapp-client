@@ -25,20 +25,6 @@ interface Props {
   pageSize?: number;
 }
 
-const Empty = () => {
-  return (
-    <div className="flex justify-center h-full items-center flex-col">
-      <img
-        src="https://assets.website-files.com/5e51c674258ffe10d286d30a/5e532a2aeba259dc7140a0e2_peep-1.svg"
-        alt="Free open source Peep visit https://www.openpeeps.com/"
-      />
-      <p className="mt-6 text-sm text-white font-semibold">
-        This is the beginning of a beautiful history at Sapien{' '}
-      </p>
-    </div>
-  );
-};
-
 const InfiniteScroll = ({
   apiUrl,
   children,
@@ -62,24 +48,30 @@ const InfiniteScroll = ({
   const isRefreshing = isValidating && data && data.length === size;
 
   useEffect(() => {
-    if (isVisible && !isReachingEnd && !isRefreshing) {
+    if (isVisible) {
+      if (
+        isLoadingInitialData ||
+        isRefreshing ||
+        isReachingEnd ||
+        isLoadingMore
+      )
+        return;
       setSize(size + 1);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isVisible, isRefreshing]);
+  }, [isVisible, isRefreshing, isReachingEnd, isLoadingMore]);
 
   return (
-    <div className="overflow-auto w-full flex-1">
+    <div className="overflow-auto w-full h-full flex-1">
       {/* List */}
       {isLoadingInitialData ? null : (
         <>{children(data ? [].concat(...data[0].data) : [])}</>
       )}
 
+      {isLoadingMore && loadingComponent}
+      {isReachingEnd && reachingEndComponent}
+
       {/* Ref Target */}
-      <div ref={ref}>
-        {isLoadingMore && loadingComponent}
-        {isReachingEnd && reachingEndComponent}
-      </div>
+      <div ref={ref} />
     </div>
   );
 };

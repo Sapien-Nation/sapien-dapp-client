@@ -28,6 +28,7 @@ const MainChannel = () => {
       belowEditorRef.current.scrollIntoView();
     }
   }, []);
+
   return (
     <>
       <SEO title={tribe.name} />
@@ -43,17 +44,20 @@ const MainChannel = () => {
           apiUrl={`/api/v3/tribe/${tribeID}/feed`}
           emptyComponent={<EmptyMainFeed />}
         >
-          {(contentList: Array<ContentType>) => (
-            <>
-              {contentList.map((content) => (
-                <ContentItemMainChannel
-                  key={content.id}
-                  content={content}
-                  tribeID={tribeID as string}
-                />
-              ))}
-            </>
-          )}
+          {(contentList: Array<ContentType>) => {
+            if (contentList.length === 0) return <EmptyMainFeed />;
+            return (
+              <>
+                {contentList.map((content) => (
+                  <ContentItemMainChannel
+                    key={content.id}
+                    content={content}
+                    tribeID={tribeID as string}
+                  />
+                ))}
+              </>
+            );
+          }}
         </InfiniteScroll>
       </div>
     </>
