@@ -20,7 +20,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
           <img
             alt={tribe.name}
             src={tribe.cover}
-            className="object-fill w-full h-full"
+            className="object-fill w-full h-full rounded-lg"
           />
         </div>
       ) : (
@@ -55,12 +55,6 @@ const MainChannelHeader = ({ tribe }: Props) => {
               className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
             >
               <DocumentDuplicateIcon className="w-6" />
-            </button>
-            <button
-              type="button"
-              className="inline-flex justify-center rounded-md border-0 px-4 py-2 text-base font-medium bg-primary-200"
-            >
-              Follow
             </button>
           </div>
         </div>
