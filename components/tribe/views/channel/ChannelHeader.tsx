@@ -34,7 +34,7 @@ const ChannelHeader = ({ channel }: Props) => {
           <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600" />
         )}
         <div className="flex justify-between w-full">
-          <div className="flex flex-col justify-center ml-5">
+          <div className="flex flex-col justify-center ml-12">
             <h1 className="text-xl">{channel.name}</h1>
             <h2 className="text-gray-500">3000 members</h2>
           </div>
