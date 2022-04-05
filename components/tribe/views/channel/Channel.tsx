@@ -6,7 +6,7 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { SEO, InfiniteScroll, Query } from 'components/common';
+import { SEO, Query } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
 import ChannelHeader from './ChannelHeader';
@@ -17,6 +17,8 @@ import { useToast } from 'context/toast';
 
 // hooks
 import { useTribeChannels } from 'hooks/tribe';
+import useGetInfinitePages from 'hooks/useGetInfinitePages';
+import useOnScreen from 'hooks/useOnScreen';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -26,10 +28,17 @@ const Channel = () => {
   const { push, query } = useRouter();
   const { tribeID, viewID } = query;
 
+  const endDivRef = useRef(null);
   const belowEditorRef = useRef(null);
+
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
   );
+  const shouldFetchMoreItems = useOnScreen(endDivRef);
+  const { data, fetchMore, isLoadingInitialData } = useGetInfinitePages<{
+    data: Array<Content>;
+    nextCursor: string | null;
+  }>(`/api/v3/channel/${channel.id}/feed`);
 
   const toast = useToast();
 
@@ -39,6 +48,12 @@ const Channel = () => {
       belowEditorRef.current.scrollIntoView();
     }
   }, []);
+
+  useEffect(() => {
+    if (shouldFetchMoreItems) {
+      fetchMore();
+    }
+  }, [fetchMore, shouldFetchMoreItems]);
 
   const handleSubmit = async (text) => {
     try {
@@ -71,27 +86,23 @@ const Channel = () => {
         <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
       </div>
       <div ref={belowEditorRef} />
+
       <div className="min-h-[400px]">
-        <InfiniteScroll apiUrl={`/api/v3/channel/${channel.id}/feed`}>
-          {(contentList: Array<Content>) => {
-            if (contentList.length === 0) return <EmptyFeed />;
-            return (
-              <ul className="py-4">
-                {contentList.map((content) => (
-                  <li
-                    key={content.id}
-                    className="my-2 border-[1px] border-gray-800 rounded-md"
-                  >
-                    <ContentItemChannel
-                      content={content}
-                      tribeID={tribeID as string}
-                    />
-                  </li>
-                ))}
-              </ul>
-            );
-          }}
-        </InfiniteScroll>
+        {isLoadingInitialData === false && data.length === 0 ? (
+          <EmptyFeed />
+        ) : null}
+
+        <ul>
+          {data.map((content) => (
+            <li key={content.id}>
+              <ContentItemChannel
+                content={content}
+                tribeID={tribeID as string}
+              />
+            </li>
+          ))}
+          <div ref={endDivRef} />
+        </ul>
       </div>
     </>
   );

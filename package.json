@@ -58,7 +58,7 @@
     "slate": "^0.76.1",
     "slate-history": "^0.66.0",
     "slate-react": "^0.76.1",
-    "swr": "^1.0.1",
+    "swr": "latest",
     "tailwindcss": "^3.0.23",
     "timeago.js": "^4.0.2",
     "uuid": "^8.3.2",
