@@ -64,11 +64,6 @@ const Channel = () => {
       <Query
         api={`/api/v3/channel/${viewID}`}
         loader={<ChannelHeaderPlaceholder />}
-        options={{
-          onSuccess: () => {
-            belowEditorRef.current.scrollIntoView();
-          },
-        }}
       >
         {(channel: ChannelType) => <ChannelHeader channel={channel} />}
       </Query>

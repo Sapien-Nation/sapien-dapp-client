@@ -35,11 +35,6 @@ const MainChannel = () => {
       <Query
         api={`/api/v3/tribe/${tribeID}`}
         loader={<ChannelHeaderPlaceholder />}
-        options={{
-          onSuccess: () => {
-            belowEditorRef.current.scrollIntoView();
-          },
-        }}
       >
         {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
       </Query>

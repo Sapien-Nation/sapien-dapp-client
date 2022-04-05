@@ -20,10 +20,6 @@ const ContentComponent = ({
       <img
         src={avatar}
         alt={userName}
-        onError={(event) => {
-          (event.target as HTMLImageElement).src =
-            'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
-        }}
         className="w-10 h-10 bg-gray-100 rounded-full"
       />
     </div>

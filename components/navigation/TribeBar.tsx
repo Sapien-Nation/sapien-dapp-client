@@ -76,10 +76,6 @@ const TribeBar = ({ tribes }: Props) => {
                           className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
                           alt={''}
                           src="https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240"
-                          onError={(event) => {
-                            (event.target as HTMLImageElement).src =
-                              'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
-                          }}
                         />
                         <span className="sr-only">Go to profile page</span>
                       </a>

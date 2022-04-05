@@ -47,10 +47,6 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
               className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
               alt={''}
               src={tribe.avatar}
-              onError={(event) => {
-                (event.target as HTMLImageElement).src =
-                  'https://dutuyaq1w3dqh.cloudfront.net/thumbnails/tribes/avatar/sapien_logo-40x40.png';
-              }}
             />
           ) : (
             <div className="h-12 w-12 p-1 rounded-xl font-extrabold text-black group-hover:text-gray-500 flex items-center justify-center">
