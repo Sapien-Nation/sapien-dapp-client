@@ -1,6 +1,10 @@
-import { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { DotsVerticalIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline';
+import {
+  DotsVerticalIcon,
+  PencilAltIcon,
+  TrashIcon,
+} from '@heroicons/react/outline';
+import { Fragment } from 'react';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
@@ -25,7 +29,6 @@ const Message = ({
   isAContinuosMessage,
   message: { avatarUrl, createdAt, displayName, message },
 }: Props) => {
-  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group">
       <div className="flex space-x-3">
@@ -52,9 +55,12 @@ const Message = ({
           </p>
         </div>
       </div>
-      <Menu as="div" className="relative hidden group-hover:block -right-4 w-12">
+      <Menu
+        as="div"
+        className="relative hidden group-hover:block -right-4 w-12"
+      >
         <Menu.Button className="inline-flex absolute justify-center w-full text-sm font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-          <DotsVerticalIcon className='w-5 text-gray-400'/>
+          <DotsVerticalIcon className="w-5 text-gray-400" />
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -70,11 +76,13 @@ const Message = ({
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`${
-                      active ? 'bg-sapien-80 text-white' : 'text-gray-400'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    className={
+                      active
+                        ? 'bg-sapien-80 text-white group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                        : 'text-gray-400 group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                    }
                   >
-                    <PencilAltIcon className='w-5 mr-2' />
+                    <PencilAltIcon className="w-5 mr-2" />
                     Edit
                   </button>
                 )}
@@ -84,11 +92,13 @@ const Message = ({
               <Menu.Item>
                 {({ active }) => (
                   <button
-                    className={`${
-                      active ? 'bg-sapien-80 text-white' : 'text-gray-400'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    className={
+                      active
+                        ? 'bg-sapien-80 text-white group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                        : 'text-gray-400 group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                    }
                   >
-                    <TrashIcon className='w-5 mr-2' />
+                    <TrashIcon className="w-5 mr-2" />
                     Delete
                   </button>
                 )}

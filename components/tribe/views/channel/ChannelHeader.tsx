@@ -1,5 +1,4 @@
 // components
-import { Header } from 'components/common';
 import DefaultCover from './DefaultCover';
 
 // types
@@ -13,7 +12,14 @@ const ChannelHeader = ({ channel }: Props) => {
   return (
     <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
       {channel.cover ? (
-        <Header alt={channel.name} src={channel.cover} />
+        <div className="shadow-md rounded-lg relative w-full h-56">
+          {/* @ts-ignore */}
+          <img
+            alt={channel.name}
+            src={channel.cover}
+            className="object-fill w-full h-full"
+          />
+        </div>
       ) : (
         <DefaultCover />
       )}

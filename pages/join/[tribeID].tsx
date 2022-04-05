@@ -3,8 +3,12 @@ import { useState } from 'react';
 
 // api
 import { joinTribe } from 'api/tribe';
+
+// context
 import { useAuth } from 'context/user';
-import { Head, Query, Redirect } from 'components/common';
+
+// components
+import { SEO, Query, Redirect } from 'components/common';
 
 // types
 import type { TribeInvite } from 'tools/types/tribe';
@@ -71,7 +75,7 @@ const JoinProxy = () => {
   if (me === null) {
     return (
       <>
-        <Head title="" />
+        <SEO title="" />
         <Redirect path="/login" />
       </>
     );
@@ -81,7 +85,7 @@ const JoinProxy = () => {
 
   return (
     <>
-      <Head title="Accept invite" />
+      <SEO title="Accept invite" />
       <Query api={`/api/v3/tribe/${query.tribeID as string}/invite`}>
         {(tribe: TribeInvite) => <Join tribe={tribe} />}
       </Query>
