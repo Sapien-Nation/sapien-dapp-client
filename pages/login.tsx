@@ -1,6 +1,6 @@
 // components
 import { Layout, LoginForm } from 'components/auth';
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // types
 import { NextPage } from 'next';
@@ -8,7 +8,7 @@ import { NextPage } from 'next';
 const LoginPage: NextPage = () => {
   return (
     <>
-      <Head title="Access" />
+      <SEO title="Access" />
       <Layout title="Log in">
         <LoginForm />
       </Layout>

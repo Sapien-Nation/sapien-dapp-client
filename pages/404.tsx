@@ -2,11 +2,8 @@ import Link from 'next/link';
 import { ChevronRightIcon } from '@heroicons/react/solid';
 import { RssIcon, GlobeAltIcon } from '@heroicons/react/outline';
 
-// assets
-import { FullLogo } from 'assets';
-
 // components
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // types
 import { NextPage } from 'next';
@@ -29,7 +26,7 @@ const links = [
 const ErrorPage: NextPage = () => {
   return (
     <>
-      <Head title="404" />
+      <SEO title="404" />
       <div className="text-center h-full w-full flex justify-center">
         <div className="flex flex-col items-center">
           <div className="flex-shrink-0 pt-16 mt-6">
