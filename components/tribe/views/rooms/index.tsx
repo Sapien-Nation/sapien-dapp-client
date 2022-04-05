@@ -6,6 +6,7 @@ import { DotsHorizontalIcon } from '@heroicons/react/outline';
 // components
 import { SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
+import Details from './Details';
 import EmptyRoom from './EmptyRoom';
 import Message from './Message';
 
@@ -20,10 +21,11 @@ import { useEffect, useRef, useState } from 'react';
 import messages from './mocks';
 
 const Room = () => {
+  const [showDetails, setShowDetails] = useState(false);
+
   const { query } = useRouter();
   const { tribeID, viewID } = query;
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
-  const [showAttachments, setAttachments] = useState(false);
 
   const bottomFeedRef = useRef(null);
   const feedMessages = _groupBy(messages, ({ createdAt }) =>
@@ -42,11 +44,14 @@ const Room = () => {
   return (
     <div className="h-full flex flex-row">
       <SEO title={room.name} />
-      <div className='flex flex-col h-full flex-1 overflow-hidden'>
-        <div className='text-gray-200 pb-5 px-5 border-b-[1px] border-gray-700 relative text-sm z-50 flex justify-end'>
-          <button className='flex' onClick={()=> setAttachments(!showAttachments)}>
-            <DotsHorizontalIcon className='w-5 ml-2' />
-            <span className='sr-only'>Room conversation options</span>
+      <div className="flex flex-col h-full flex-1 overflow-hidden">
+        <div className="text-gray-200 pb-5 px-5 border-b-[1px] border-gray-700 relative text-sm z-50 flex justify-end">
+          <button
+            aria-label="Toggle Details"
+            className="flex"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            <DotsHorizontalIcon className="w-5 ml-2" />
           </button>
         </div>
         <div className="flex-1 overflow-auto py-5 mb-2">
@@ -89,18 +94,9 @@ const Room = () => {
           <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
         </div>
       </div>
-      {
-        showAttachments && (
-          <aside className='w-72 h-full overflow-auto'>
-            <div className='text-gray-200 pb-5 border-b-[1px] border-l-[1px] border-gray-700 relative text-sm z-50 text-center'>
-              Input Box here
-            </div>
-            <div className='p-5'>
-              File 1
-            </div>
-          </aside>
-        )
-      }
+
+      {/* Room Details */}
+      {showDetails && <Details messages={feedMessages} />}
     </div>
   );
 };
