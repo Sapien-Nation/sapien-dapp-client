@@ -9,6 +9,12 @@ import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
 
+// constants
+import { ToastType } from 'constants/toast';
+
+// hooks
+import { useToast } from 'context/toast';
+
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
@@ -32,6 +38,8 @@ const TribeBar = ({ tribes }: Props) => {
   const profileRef = useRef(null);
   const createTribeRef = useRef(null);
 
+  const toast = useToast();
+
   const isOnProfilePage = pathname.includes('/profile');
 
   useEffect(() => {
@@ -43,6 +51,13 @@ const TribeBar = ({ tribes }: Props) => {
       );
     };
   }, []);
+
+  const copyToClipboard = () => {
+    toast({
+      message: 'Copied to clipboard',
+      type: ToastType.Success,
+    });
+  };
 
   return (
     <>
@@ -96,7 +111,7 @@ const TribeBar = ({ tribes }: Props) => {
                 {rightClickedTribe && (
                   <div className="absolute h-20 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-6 ring-black ring-opacity-5 focus:outline-none text-gray-400">
                     <div className="h-full w-full relative justify-around flex flex-col">
-                      <div onClick={() => {}} className="text-sm cursor-pointer hover:text-white">Invite People</div>
+                      <div onClick={copyToClipboard} className="text-sm cursor-pointer hover:text-white">Invite People</div>
                       <div onClick={() => {}} className="text-sm cursor-pointer hover:text-white">Leave Tribe</div>
                     </div>
                   </div>

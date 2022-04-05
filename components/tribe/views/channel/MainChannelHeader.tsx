@@ -3,6 +3,12 @@ import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 // components
 import DefaultCover from './DefaultCover';
 
+// constants
+import { ToastType } from 'constants/toast';
+
+// hooks
+import { useToast } from 'context/toast';
+
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
 
@@ -11,7 +17,13 @@ interface Props {
 }
 
 const MainChannelHeader = ({ tribe }: Props) => {
-  console.log('tribe', tribe);
+  const toast = useToast();
+  const copyToClipboard = () => {
+    toast({
+      message: 'Copied to clipboard',
+      type: ToastType.Success,
+    });
+  };
   return (
     <div className="bg-sapien-neutral-600 p-3 pb-6 rounded-xl mb-4">
       {tribe.cover ? (
@@ -45,12 +57,14 @@ const MainChannelHeader = ({ tribe }: Props) => {
           </div>
           <div className="flex items-center mr-5">
             <button
+              onClick={copyToClipboard}
               type="button"
               className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none"
             >
               Invite
             </button>
             <button
+              onClick={copyToClipboard}
               type="button"
               className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
             >
