@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
 // components
-import { Head, InfiniteScroll, Query } from 'components/common';
+import { SEO, InfiniteScroll, Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
@@ -30,7 +30,7 @@ const MainChannel = () => {
   }, []);
   return (
     <>
-      <Head title={tribe.name} />
+      <SEO title={tribe.name} />
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <Query
         api={`/api/v3/tribe/${tribeID}`}

@@ -1,5 +1,4 @@
 // components
-import { Header } from 'components/common';
 import DefaultCover from './DefaultCover';
 
 // types
@@ -13,7 +12,14 @@ const MainChannelHeader = ({ tribe }: Props) => {
   return (
     <div className="bg-sapien-neutral-600 p-3 pb-6 rounded-xl mb-4">
       {tribe.cover ? (
-        <Header alt={tribe.name} src={tribe.cover} />
+        <div className="shadow-md rounded-lg relative w-full h-56">
+          {/* @ts-ignore */}
+          <img
+            alt={tribe.name}
+            src={tribe.cover}
+            className="object-fill w-full h-full"
+          />
+        </div>
       ) : (
         <DefaultCover />
       )}

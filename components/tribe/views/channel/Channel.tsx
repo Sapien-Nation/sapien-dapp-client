@@ -6,7 +6,7 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Head, InfiniteScroll, Query } from 'components/common';
+import { SEO, InfiniteScroll, Query } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
 import ChannelHeader from './ChannelHeader';
@@ -59,7 +59,7 @@ const Channel = () => {
 
   return (
     <>
-      <Head title={channel.name} />
+      <SEO title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query
         api={`/api/v3/channel/${viewID}`}

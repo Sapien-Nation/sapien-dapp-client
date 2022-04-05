@@ -1,13 +1,13 @@
 // components
 import { Layout, ForgotPasswordForm } from 'components/auth';
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // types
 import { NextPage } from 'next';
 
 const ForgotPage: NextPage = () => (
   <>
-    <Head title="Recover Access" />
+    <SEO title="Recover Access" />
     <Layout title="Reset your password">
       <>
         <p className="text-sm mb-6">

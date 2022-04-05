@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { View } from 'constants/tribe';
 
 // components
-import { Head, ErrorView, NotFound } from 'components/common';
+import { SEO, ErrorView, NotFound } from 'components/common';
 import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
 
 // hooks
@@ -53,7 +53,7 @@ const TribePageProxy: NextPage = () => {
 
   return (
     <>
-      <Head title="Sapien" />
+      <SEO title="Sapien" />
       <TribePage tribeID={tribeID as string} viewID={viewID as string} />
     </>
   );

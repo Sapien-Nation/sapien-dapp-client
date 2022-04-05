@@ -3,7 +3,7 @@ import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
 
 // components
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import EmptyRoom from './EmptyRoom';
 import Message from './Message';
@@ -39,7 +39,7 @@ const Room = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <Head title={room.name} />
+      <SEO title={room.name} />
       <div className="flex-1 overflow-auto py-5 mb-2">
         <h1 className="sr-only">Room View for {room.name}</h1>
         {_isEmpty(feedMessages) ? (

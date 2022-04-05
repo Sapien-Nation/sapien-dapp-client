@@ -1,5 +1,5 @@
 // components
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -12,7 +12,7 @@ const ProfilePage: NextPage = () => {
 
   return (
     <>
-      <Head title="Sapien" />
+      <SEO title="Sapien" />
       <div className="max-w-2xl mx-auto border-b-[1px] border-gray-800 pb-4">
         <div className="flex items-start gap-4">
           <div className="w-32 object-cover">
