@@ -53,7 +53,9 @@ const Join = ({ tribe }: Props) => {
                 alt="sapien"
               />
             </div>
-            <h1 className="text-xl my-4">Whoops, it seems there was an error</h1>
+            <h1 className="text-xl my-4">
+              Whoops, it seems there was an error
+            </h1>
             <Link href="/">
               <a className="inline-flex w-full justify-center rounded-md border-0 px-4 py-2 text-base font-medium bg-primary-200">
                 Back Home
@@ -84,7 +86,7 @@ const Join = ({ tribe }: Props) => {
               className="inline-flex w-full mt-6 justify-center rounded-md border-0 px-4 py-2 text-base font-medium bg-primary-200"
               onClick={handleJoin}
             >
-              Join Invite
+              Accept Invite
             </button>
           </div>
         );

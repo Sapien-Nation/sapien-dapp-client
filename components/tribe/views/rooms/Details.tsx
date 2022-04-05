@@ -24,13 +24,13 @@ const Details = ({ messages }: Props) => {
       );
     return allMessages;
   }, [messages]);
-  console.log(members);
+
   return (
     <aside className="w-72 h-full overflow-auto">
       <div className="text-gray-200 pb-5 border-b-[1px] border-l-[1px] border-gray-700 relative text-sm z-50 text-center"></div>
       <div className="p-5">
         <h1 className="text-md mb-2 w-full text-sapien-neutral-400 font-bold">
-          Members ({members.length + 1})
+          Members ({members.length})
         </h1>
         <ul>
           {members.map(({ authorID, displayName, avatarUrl }) => {
