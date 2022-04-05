@@ -13,6 +13,10 @@ import { SEO, Query, Redirect } from 'components/common';
 // types
 import type { TribeInvite } from 'tools/types/tribe';
 
+// mocks
+// TODO remove
+import { mockTribeInvite } from 'tools/mocks/tribe';
+
 enum View {
   Error,
   Join,
@@ -86,7 +90,13 @@ const JoinProxy = () => {
   return (
     <>
       <SEO title="Accept invite" />
-      <Query api={`/api/v3/tribe/${query.tribeID as string}/invite`}>
+      <Query
+        api={`/api/v3/tribe/${query.tribeID as string}/invite`}
+        options={{
+          fetcher: () =>
+            mockTribeInvite({ membersCount: 1000, ownerName: 'ethaanpump' }),
+        }}
+      >
         {(tribe: TribeInvite) => <Join tribe={tribe} />}
       </Query>
     </>
