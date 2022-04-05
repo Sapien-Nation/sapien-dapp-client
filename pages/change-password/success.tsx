@@ -2,14 +2,14 @@ import Link from 'next/link';
 
 // components
 import { Layout } from 'components/auth';
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // types
 import { NextPage } from 'next';
 
 const ChangePasswordSuccessPage: NextPage = () => (
   <>
-    <Head title="Password Changed" />
+    <SEO title="Password Changed" />
     <Layout title="Password Changed!">
       <>
         <p className="text-purple-500 text-center">

@@ -1,10 +1,10 @@
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
-import { ChevronRightIcon } from '@heroicons/react/outline';
+import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // components
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import EmptyRoom from './EmptyRoom';
 import Message from './Message';
@@ -41,11 +41,12 @@ const Room = () => {
 
   return (
     <div className="h-full flex flex-row">
-      <Head title={room.name} />
+      <SEO title={room.name} />
       <div className='flex flex-col h-full flex-1 overflow-hidden'>
         <div className='text-gray-200 pb-5 px-5 border-b-[1px] border-gray-700 relative text-sm z-50 flex justify-end'>
           <button className='flex' onClick={()=> setAttachments(!showAttachments)}>
-            Search on the room <ChevronRightIcon className='w-5 ml-2' />
+            <DotsHorizontalIcon className='w-5 ml-2' />
+            <span className='sr-only'>Room conversation options</span>
           </button>
         </div>
         <div className="flex-1 overflow-auto py-5 mb-2">

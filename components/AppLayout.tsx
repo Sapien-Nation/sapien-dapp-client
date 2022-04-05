@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes';
 import { XIcon } from '@heroicons/react/outline';
 
 // components
-import { Head, Redirect, Query } from 'components/common';
+import { SEO, Redirect, Query } from 'components/common';
 import {
   Navbar,
   MobileNavbar,
@@ -47,7 +47,7 @@ const AppLayout = ({ children }: Props) => {
   if (me === null) {
     return (
       <>
-        <Head title="" />
+        <SEO title="" />
         <Redirect path="/login" />
       </>
     );

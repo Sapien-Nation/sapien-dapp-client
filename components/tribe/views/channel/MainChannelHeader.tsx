@@ -1,3 +1,5 @@
+import { DocumentDuplicateIcon } from '@heroicons/react/outline';
+
 // components
 import DefaultCover from './DefaultCover';
 
@@ -9,6 +11,7 @@ interface Props {
 }
 
 const MainChannelHeader = ({ tribe }: Props) => {
+  console.log('tribe', tribe);
   return (
     <div className="bg-sapien-neutral-600 p-3 pb-6 rounded-xl mb-4">
       {tribe.cover ? (
@@ -36,11 +39,23 @@ const MainChannelHeader = ({ tribe }: Props) => {
           )}
         </div>
         <div className="flex justify-between w-full">
-          <div className="flex flex-col justify-center ml-5">
+          <div className="flex flex-col justify-center ml-12">
             <h1 className="text-xl">{tribe.name}</h1>
             <h2 className="text-gray-500">3000 members</h2>
           </div>
           <div className="flex items-center mr-5">
+            <button
+              type="button"
+              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none"
+            >
+              Invite
+            </button>
+            <button
+              type="button"
+              className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
+            >
+              <DocumentDuplicateIcon className="w-6" />
+            </button>
             <button
               type="button"
               className="inline-flex justify-center rounded-md border-0 px-4 py-2 text-base font-medium bg-primary-200"

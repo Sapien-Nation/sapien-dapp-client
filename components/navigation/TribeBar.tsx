@@ -94,9 +94,10 @@ const TribeBar = ({ tribes }: Props) => {
 
                 {/* TODO make this follow a ref to be next to the clicked tribe */}
                 {rightClickedTribe && (
-                  <div className="absolute h-44 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-4 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="h-full w-full relative">
-                      <div className="w-64">{rightClickedTribe.name}</div>
+                  <div className="absolute h-20 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-6 ring-black ring-opacity-5 focus:outline-none text-gray-400">
+                    <div className="h-full w-full relative justify-around flex flex-col">
+                      <div onClick={() => {}} className="text-sm cursor-pointer hover:text-white">Invite People</div>
+                      <div onClick={() => {}} className="text-sm cursor-pointer hover:text-white">Leave Tribe</div>
                     </div>
                   </div>
                 )}

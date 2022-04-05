@@ -2,14 +2,14 @@ import Link from 'next/link';
 
 // components
 import { Layout } from 'components/auth';
-import { Head } from 'components/common';
+import { SEO } from 'components/common';
 
 // types
 import { NextPage } from 'next';
 
 const ForgotSuccessPage: NextPage = () => (
   <>
-    <Head title="Check Email" />
+    <SEO title="Check Email" />
     <Layout title="Check Your Inbox">
       <>
         <p className="text-sm mb-6">
