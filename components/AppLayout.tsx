@@ -116,7 +116,7 @@ const AppLayout = ({ children }: Props) => {
                 className={
                   mobileMenuOpen
                     ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                    : 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                    : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
                 }
               >
                 <div className="flex-1 flex min-h-0 lg:h-auto h-full">
