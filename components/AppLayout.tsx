@@ -144,7 +144,7 @@ const AppLayout = ({ children }: Props) => {
                 <div className="hidden lg:block">
                   <Navbar />
                 </div>
-                <div className="flex-1 flex overflow-hidden bg-sapien-neutral-800 lg:rounded-t-3xl p-8">
+                <div className="flex-1 flex overflow-hidden bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
                   <section
                     aria-labelledby="primary-heading"
                     className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"

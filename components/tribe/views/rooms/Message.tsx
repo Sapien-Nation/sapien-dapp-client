@@ -72,7 +72,7 @@ const Message = ({
                   <button
                     className={`${
                       active ? 'bg-sapien-80 text-white' : 'text-gray-400'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    } group flex rounded items-center w-full px-2 py-2 text-sm`}
                   >
                     <PencilAltIcon className='w-5 mr-2' />
                     Edit
@@ -86,7 +86,7 @@ const Message = ({
                   <button
                     className={`${
                       active ? 'bg-sapien-80 text-white' : 'text-gray-400'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    } group flex rounded items-center w-full px-2 py-2 text-sm`}
                   >
                     <TrashIcon className='w-5 mr-2' />
                     Delete
