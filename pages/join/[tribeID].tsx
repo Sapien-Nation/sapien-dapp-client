@@ -128,13 +128,7 @@ const JoinProxy = () => {
   return (
     <>
       <SEO title="Accept invite" />
-      <Query
-        api={`/api/v3/tribe/${query.tribeID as string}/invite`}
-        options={{
-          fetcher: () =>
-            mockTribeInvite({ membersCount: 1000, ownerName: 'ethaanpump' }),
-        }}
-      >
+      <Query api={`/api/v3/tribe/${query.tribeID as string}/invite`}>
         {(tribe: TribeInvite) => <Join tribe={tribe} />}
       </Query>
     </>
