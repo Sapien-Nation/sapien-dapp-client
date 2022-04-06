@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // components
-import { Container, SEO } from 'components/common';
+import { SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import Details from './Details';
 import EmptyRoom from './EmptyRoom';
@@ -42,7 +42,7 @@ const Room = () => {
   const handleMessageSubmit = () => {};
 
   return (
-    <Container className="h-full flex flex-row p-0 lg:rounded-t-none">
+    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-t-none">
       <>
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
@@ -90,7 +90,7 @@ const Room = () => {
               </ul>
             )}
           </div>
-          <div className='px-5'>
+          <div className="px-5">
             {/* @ts-ignore */}
             <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
           </div>
@@ -99,7 +99,7 @@ const Room = () => {
         {/* Room Details */}
         {showDetails && <Details messages={feedMessages} />}
       </>
-    </Container>
+    </div>
   );
 };
 

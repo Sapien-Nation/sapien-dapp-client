@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 // components
-import { Container, NotFound, Query } from 'components/common';
+import { NotFound, Query } from 'components/common';
 import { ContentDetail } from 'components/content';
 
 // types
@@ -17,7 +17,11 @@ const ContentView = () => {
 
   return (
     <Query api={`/api/v3/post/${id}`} loader={null}>
-      {(content: Content) => <Container><ContentDetail content={content} /></Container>}
+      {(content: Content) => (
+        <div className="bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
+          <ContentDetail content={content} />
+        </div>
+      )}
     </Query>
   );
 };

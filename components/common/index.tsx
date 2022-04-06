@@ -2,7 +2,6 @@ export * from './Toast';
 export * from './views';
 export * from './fields';
 
-export { default as Container } from './Container';
 export { default as Dialog } from './Dialog';
 export { default as Dropdown } from './Dropdown';
 export { default as SEO } from './SEO';

@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
 // components
-import { Container, SEO, Query } from 'components/common';
+import { SEO, Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
@@ -45,7 +45,7 @@ const MainChannel = () => {
   }, [fetchMore, shouldFetchMoreItems]);
 
   return (
-    <Container>
+    <div className="bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
       <SEO title={tribe.name} />
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <Query
@@ -71,7 +71,7 @@ const MainChannel = () => {
           <div ref={endDivRef} />
         </ul>
       </div>
-    </Container>
+    </div>
   );
 };
 
