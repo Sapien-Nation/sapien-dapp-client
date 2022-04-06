@@ -1,23 +1,23 @@
-import axios from 'axios';
 import { Biconomy } from '@biconomy/mexa';
+import Common, { CustomChain } from '@ethereumjs/common';
+import { Transaction as Tx } from '@ethereumjs/tx';
+import axios from 'axios';
 import Web3 from 'web3';
 import { AbiItem, isAddress } from 'web3-utils';
 import { BN } from 'ethereumjs-util';
 import sigUtil from 'eth-sig-util';
-import Common, { CustomChain } from '@ethereumjs/common';
-import { Transaction as Tx } from '@ethereumjs/tx';
 
 // api
-import { purchaseBadge, sendSPN, sendBadge } from '../api';
+import { purchaseBadge, sendSPN, sendBadge } from '.';
+
+// contracts
+import BADGE_STORE_ABI from '../contracts/BadgeStore.json';
+import PASSPORT_ABI from '../contracts/Passport.json';
+import PLATFORM_SPN_ABI from '../contracts/SapienPlatformSPN.json';
 
 // constants
-import { walletIsMainnet } from '../constants';
-
-import BADGE_STORE_ABI from '../contracts/BadgeStore.json';
-import PLATFORM_SPN_ABI from '../contracts/SapienPlatformSPN.json';
-import PASSPORT_ABI from '../contracts/Passport.json';
-
 import getConfig from './config';
+import { walletIsMainnet } from '../constants';
 
 const domainType = [
   { name: 'name', type: 'string' },
@@ -31,13 +31,7 @@ const metaTransactionType = [
   { name: 'functionSignature', type: 'bytes' },
 ];
 
-export interface PassportMetadata {
-  name: string;
-  description: string;
-  image: string;
-}
-
-const Wallet = async (publicAddress: string, privateKey: string) => {
+const Web3API = async (publicAddress: string, privateKey: string) => {
   const config = getConfig();
 
   const biconomy = new Biconomy(
@@ -140,6 +134,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
     };
 
     //await isBiconomyReady();
+
     const signature = sigUtil.signTypedData_v4(Buffer.from(privateKey, 'hex'), {
       // @ts-ignore
       data: dataToSign,
@@ -183,7 +178,7 @@ const Wallet = async (publicAddress: string, privateKey: string) => {
 
   return {
     getPassportData: async () => {
-      const passports: PassportMetadata[] = [];
+      const passports: Array<any> = [];
 
       const passportBalance = await contracts.passportContract.methods
         .balanceOf(publicAddress)
@@ -375,4 +370,4 @@ const getSignatureParameters = (web3, signature) => {
   };
 };
 
-export default Wallet;
+export default Web3API;

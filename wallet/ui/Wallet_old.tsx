@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Popover, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import {
@@ -18,6 +19,9 @@ import Store from './Store';
 import NoSpn from './NoSpn';
 import TxHistory from './TxHistory';
 import FilterScreen from './FilterScreen';
+
+// utils
+import { mergeClassNames } from 'utils/styles';
 
 enum WalletTabs {
   NFT,
@@ -46,28 +50,27 @@ const Wallet = () => {
     return (
       <div className="flex p-2">
         <button
-          className={
-            tab === WalletTabs.NFT
-              ? 'text-black text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none'
-              : 'text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none'
-          }
+          className={mergeClassNames(
+            tab === WalletTabs.NFT ? 'text-black' : '',
+            'text(gray-400 sm) gap-1.5 font-bold flex items-center p-3 focus:outline-none'
+          )}
           onClick={() => setTab(WalletTabs.NFT)}
         >
           <StarIcon
-            className={
-              tab === WalletTabs.NFT
-                ? 'h-5 w-5 p-0.5 rounded-full border-2 text-indigo-600 border-indigo-600'
-                : 'h-5 w-5 p-0.5 rounded-full border-2 border-gray-400'
-            }
+            className={mergeClassNames(
+              tab === WalletTabs.NFT ? 'text-indigo-600 border-indigo-600' : '',
+              'h-5 w-5 p-0.5 rounded-full border-2 border-gray-400'
+            )}
           />
           My NFTs
         </button>
         <button
-          className={
-            tab === WalletTabs.Spn
-              ? 'grayscale-0 text(gray-400 sm) text-black group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter'
-              : 'text(gray-400 sm) group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale'
-          }
+          className={mergeClassNames(
+            'text(gray-400 sm)',
+            tab === WalletTabs.Spn ? 'text-black' : '',
+            tab === WalletTabs.Spn ? 'grayscale-0' : '',
+            'group gap-1.5 font-bold flex items-center p-3 focus:outline-none filter grayscale'
+          )}
           onClick={() => setTab(WalletTabs.Spn)}
         >
           <svg
@@ -114,17 +117,16 @@ const Wallet = () => {
           Spn
         </button>
         <button
-          className={
-            tab === WalletTabs.Store
-              ? 'text-black text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none'
-              : 'text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none'
-          }
+          className={mergeClassNames(
+            tab === WalletTabs.Store ? 'text-black' : '',
+            'text(gray-400 sm) gap-1.5 p-3 font-bold flex items-center focus:outline-none'
+          )}
           onClick={() => setTab(WalletTabs.Store)}
         >
           <ShoppingCartIcon
-            className={
-              tab === WalletTabs.Store ? 'text-indigo-600 h-6 w-6 ' : 'h-6 w-6 '
-            }
+            className={mergeClassNames`h-6 w-6 ${
+              tab === WalletTabs.Store && 'text-indigo-600'
+            } `}
           />
           Store
         </button>

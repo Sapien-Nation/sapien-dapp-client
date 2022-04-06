@@ -11,6 +11,8 @@ export enum Envs {
 const nodeEnv = process.env.NEXT_PUBLIC_ENV;
 export const env = nodeEnv;
 export const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL;
+export const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
+export const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
 
 /*
  ***
@@ -21,14 +23,17 @@ export const localInstance = axios.create();
 
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
+  withCredentials: true,
 });
 
 export const authInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
+  withCredentials: true,
 });
 
 export const notificationInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
+  withCredentials: true,
 });
 
 /*

@@ -1,8 +1,12 @@
 import Link from 'next/link';
 import { Menu } from '@headlessui/react';
+import { LibraryIcon } from '@heroicons/react/outline';
 
 // context
 import { useAuth } from 'context/user';
+
+// ui
+import Wallet from 'wallet/ui';
 
 const Navbar = () => {
   const { me } = useAuth();
@@ -11,7 +15,29 @@ const Navbar = () => {
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex">
-          <Menu as="div" className="relative inline-block text-left">
+          {/* Profile dropdown */}
+          <Menu as="div" className="">
+            <Menu.Button
+              type="button"
+              className="group w-full h-full flex text-sm text-left font-medium  focus:outline-none"
+            >
+              <span className="flex w-full h-full items-center">
+                <span className="flex min-w-0 items-center w-full justify-between">
+                  <div className="px-5 py-3 ">
+                    <span className="sr-only">View wallet</span>
+                    <LibraryIcon className="h-6 w-6" aria-hidden="true" />
+                  </div>
+                </span>
+              </span>
+            </Menu.Button>
+
+            <Menu.Items className="absolute right-0 w-72 h-108 mt-4 z-10 origin-top-right focus:outline-none">
+              <Menu.Item>
+                <Wallet />
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
+          <Menu as="div" className="">
             <div>
               <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                 <div className="h-full">

@@ -1,10 +1,14 @@
 import torusWebSdk from '@toruslabs/torus-direct-web-sdk';
 
-// api
-import { env, Envs } from 'api';
-
 // constants
-import { walletIsMainnet } from './constants';
+import {
+  walletVerifier,
+  walletSubVerifier,
+  walletIsMainnet,
+} from './constants';
+
+// types
+import type TorusWebSdk from '@toruslabs/torus-direct-web-sdk/dist/types/login';
 
 enum Network {
   Mainnet = 'mainnet',
@@ -12,16 +16,40 @@ enum Network {
 }
 
 const getNetwork = () => {
-  switch (env) {
-    case Envs.Sandbox:
-    case Envs.Local:
-      return Network.Testnet;
-      break;
-    default:
-      return walletIsMainnet === 'true' ? Network.Mainnet : Network.Testnet;
-  }
+  return walletIsMainnet === 'true' ? Network.Mainnet : Network.Testnet;
 };
 
+export const getTorusKeys = (
+  torus: TorusWebSdk,
+  torusToken: string,
+  userId: string,
+  subVerifier = walletSubVerifier,
+  verifier = walletVerifier
+) => {
+  return torus.getAggregateTorusKey(verifier, userId, [
+    { verifier: subVerifier, idToken: torusToken },
+  ]);
+};
+
+export const getWalletKeys = async (
+  torusToken: string,
+  userId: string,
+  verifier = walletVerifier,
+  subVerifier = walletSubVerifier
+) => {
+  try {
+    const torus = await initTorus(
+      `${window.location.origin}/api/serviceworker`,
+      false
+    );
+
+    return torus.getAggregateTorusKey(verifier, userId, [
+      { verifier: subVerifier, idToken: torusToken },
+    ]);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
 const initTorus = async (baseUrl: string, enableLogging = false) => {
   try {
     const torus = new torusWebSdk({
