@@ -3,6 +3,7 @@ import { GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
 
 // components
 import TribeBarItem from './TribeBarItem';
@@ -31,6 +32,7 @@ const TribeBar = ({ tribes }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [rightClickedTribe, setRightClickedTribe] =
     useState<ProfileTribe | null>(null);
+  const [state, copyToClipboard] = useCopyToClipboard();
 
   const { pathname } = useRouter();
 
@@ -52,7 +54,8 @@ const TribeBar = ({ tribes }: Props) => {
     };
   }, []);
 
-  const copyToClipboard = () => {
+  const handleCopyToClipboard = () => {
+    copyToClipboard(`${window?.location.origin}/join/${rightClickedTribe.id}`);
     toast({
       message: 'Copied to clipboard',
       type: ToastType.Success,
@@ -111,8 +114,12 @@ const TribeBar = ({ tribes }: Props) => {
                 {rightClickedTribe && (
                   <div className="absolute h-20 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-6 ring-black ring-opacity-5 focus:outline-none text-gray-400">
                     <div className="h-full w-full relative justify-around flex flex-col">
-                      <div onClick={copyToClipboard} className="text-sm cursor-pointer hover:text-white">Invite People</div>
-                      <div onClick={() => {}} className="text-sm cursor-pointer hover:text-white">Leave Tribe</div>
+                      <div
+                        onClick={handleCopyToClipboard}
+                        className="text-sm cursor-pointer hover:text-white text-purple-200"
+                      >
+                        Invite People
+                      </div>
                     </div>
                   </div>
                 )}

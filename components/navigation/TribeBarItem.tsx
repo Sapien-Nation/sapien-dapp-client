@@ -31,13 +31,17 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
           onClick={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              onRightClick(tribe);
+              if (tribe.isMain === false) {
+                onRightClick(tribe);
+              }
             }
           }}
           onContextMenu={(event) => {
             if (event.type === 'contextmenu') {
               event.preventDefault();
-              onRightClick(tribe);
+              if (tribe.isMain === false) {
+                onRightClick(tribe);
+              }
             }
           }}
           ref={tooltipRef.current?.setTriggerRef}
