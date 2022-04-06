@@ -2,6 +2,7 @@ import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
+import { useCopyToClipboard } from 'react-use';
 
 // components
 import { Tooltip } from 'components/common';
@@ -9,15 +10,32 @@ import { Tooltip } from 'components/common';
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
+// constants
+import { ToastType } from 'constants/toast';
+
+// hooks
+import { useToast } from 'context/toast';
+
 interface Props {
-  isContextMenuOpen: boolean;
+  isContextMenuOpen: any;
   tribe: ProfileTribe;
   onRightClick: (tribe: ProfileTribe) => void;
 }
 
 function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
+
+  const [_, copyToClipboard] = useCopyToClipboard();
+  const handleCopyToClipboard = () => {
+    copyToClipboard(`${window?.location.origin}/join/${isContextMenuOpen.id}`);
+    toast({
+      message: 'Copied to clipboard',
+      type: ToastType.Success,
+    });
+  };
   const { query } = useRouter();
   const { tribeID } = query;
+
+  const toast = useToast();
 
   const tooltipRef = useRef(null);
 
@@ -32,7 +50,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
-                onRightClick(tribe);
+                onRightClick(tribe.id);
               }
             }
           }}
@@ -40,7 +58,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
-                onRightClick(tribe);
+                onRightClick(tribe.id);
               }
             }
           }}
@@ -60,6 +78,19 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
           <span className="sr-only">Go to {tribe.name}</span>
         </a>
       </Link>
+
+      {isContextMenuOpen && isContextMenuOpen === tribe.id && (
+        <div className="absolute h-20 w-40 bottom-1 z-10 top-0 left-14 bg-black rounded-md shadow-lg py-1 px-4 ring-black ring-opacity-5 focus:outline-none text-gray-400">
+          <div className="h-full w-full relative justify-around flex flex-col">
+            <div
+              onClick={handleCopyToClipboard}
+              className="text-sm cursor-pointer hover:text-white text-purple-200"
+            >
+              Invite People
+            </div>
+          </div>
+        </div>
+      )}
 
       <Tooltip
         ref={tooltipRef}

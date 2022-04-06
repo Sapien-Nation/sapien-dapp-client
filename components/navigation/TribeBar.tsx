@@ -3,18 +3,12 @@ import { GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { useCopyToClipboard } from 'react-use';
 
 // components
 import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
 
-// constants
-import { ToastType } from 'constants/toast';
-
-// hooks
-import { useToast } from 'context/toast';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -32,7 +26,6 @@ const TribeBar = ({ tribes }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [rightClickedTribe, setRightClickedTribe] =
     useState<ProfileTribe | null>(null);
-  const [_, copyToClipboard] = useCopyToClipboard();
 
   const { pathname } = useRouter();
 
@@ -40,7 +33,6 @@ const TribeBar = ({ tribes }: Props) => {
   const profileRef = useRef(null);
   const createTribeRef = useRef(null);
 
-  const toast = useToast();
 
   const isOnProfilePage = pathname.includes('/profile');
 
@@ -54,20 +46,12 @@ const TribeBar = ({ tribes }: Props) => {
     };
   }, []);
 
-  const handleCopyToClipboard = () => {
-    copyToClipboard(`${window?.location.origin}/join/${rightClickedTribe.id}`);
-    toast({
-      message: 'Copied to clipboard',
-      type: ToastType.Success,
-    });
-  };
-
   return (
     <>
       {/* Static sidebar for desktop */}
       <div className="flex flex-shrink-0">
         <div className="flex flex-col w-20">
-          <div className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-800 overflow-auto">
+          <div className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-800">
             <div className="flex-1">
               <nav
                 aria-label="Sidebar"
@@ -106,12 +90,12 @@ const TribeBar = ({ tribes }: Props) => {
                     key={tribe.id}
                     tribe={tribe}
                     onRightClick={setRightClickedTribe}
-                    isContextMenuOpen={Boolean(rightClickedTribe)}
+                    isContextMenuOpen={rightClickedTribe}
                   />
                 ))}
 
                 {/* TODO make this follow a ref to be next to the clicked tribe */}
-                {rightClickedTribe && (
+                {/*rightClickedTribe && (
                   <div className="absolute h-20 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-6 ring-black ring-opacity-5 focus:outline-none text-gray-400">
                     <div className="h-full w-full relative justify-around flex flex-col">
                       <div
@@ -122,7 +106,7 @@ const TribeBar = ({ tribes }: Props) => {
                       </div>
                     </div>
                   </div>
-                )}
+                )*/}
                 <Link href="/discovery">
                   <a
                     className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
