@@ -112,13 +112,13 @@ const Join = ({ tribe }: Props) => {
 
 const JoinProxy = () => {
   const { me } = useAuth();
-  const { query } = useRouter();
+  const { asPath, query } = useRouter();
 
   if (me === null) {
     return (
       <>
         <SEO title="" />
-        <Redirect path="/login" />
+        <Redirect path={`/login?redirect=${asPath}`} />
       </>
     );
   }

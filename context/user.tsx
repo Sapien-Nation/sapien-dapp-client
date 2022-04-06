@@ -49,18 +49,27 @@ const AuthenticationProvider = ({ children }: Props) => {
     push('/');
   };
 
-  const setSession = async ({
-    token,
-    torus,
-    refresh,
-  }: {
-    token: string;
-    torus: string;
-    refresh: string;
-  }) => {
+  const setSession = async (
+    {
+      token,
+      torus,
+      refresh,
+    }: {
+      token: string;
+      torus: string;
+      refresh: string;
+    },
+    redirect: string | null
+  ) => {
     setTokens({ token, torus, refresh });
     await authMutate();
-    push('/');
+
+    // TODO we need to make sure it redirect correctly
+    if (redirect) {
+      push(redirect);
+    } else {
+      push('/');
+    }
   };
 
   return (

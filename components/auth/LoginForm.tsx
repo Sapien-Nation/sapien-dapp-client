@@ -41,7 +41,7 @@ const LoginForm = () => {
       setSession(response, (query.redirect as string) || null);
     } catch (error) {
       toast({
-        message: error || 'Invalid Credentials',
+        message: error,
       });
     }
   };

@@ -26,7 +26,6 @@ interface Props {
 
 const AppLayout = ({ children }: Props) => {
   const { me } = useAuth();
-  const { theme } = useTheme();
   const { pathname } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -44,30 +43,23 @@ const AppLayout = ({ children }: Props) => {
   // Invite View
   if (pathname.startsWith('/join')) return children;
 
+  if (me === undefined)
+    return (
+      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
+        <div className="mx-auto w-full max-w-sm lg:w-96">
+          <div>
+            <div className="flex flex-col justify-center items-center"></div>
+          </div>
+        </div>
+      </div>
+    );
+
   if (me === null) {
     return (
       <>
         <SEO title="" />
         <Redirect path="/login" />
       </>
-    );
-  }
-
-  if (me === undefined) {
-    return (
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full bg-sapien-neutral-600">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
-            <div className="flex justify-center items-center">
-              <img
-                className="pr-1 w-16 "
-                src="/images/logooutlined.svg"
-                alt="sapien"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     );
   }
 
@@ -97,12 +89,16 @@ const AppLayout = ({ children }: Props) => {
           <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
             <div className="mx-auto w-full max-w-sm lg:w-96">
               <div>
-                <div className="flex justify-center items-center">
+                <div className="flex flex-col justify-center items-center">
                   <img
-                    className="pr-1 w-16 "
+                    className="pr-1 w-16 animate-bounce"
                     src="/images/logooutlined.svg"
                     alt="sapien"
                   />
+                  <span className="text-white text-sm text-center">
+                    Do you know that there was a time where a huge gorila look
+                    into the eyes to the Wall street bull?{' '}
+                  </span>
                 </div>
               </div>
             </div>

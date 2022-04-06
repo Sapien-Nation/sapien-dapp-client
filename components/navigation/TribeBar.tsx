@@ -32,7 +32,7 @@ const TribeBar = ({ tribes }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [rightClickedTribe, setRightClickedTribe] =
     useState<ProfileTribe | null>(null);
-  const [state, copyToClipboard] = useCopyToClipboard();
+  const [_, copyToClipboard] = useCopyToClipboard();
 
   const { pathname } = useRouter();
 
