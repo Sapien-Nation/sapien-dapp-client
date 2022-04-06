@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 // components
-import { NotFound, Query } from 'components/common';
+import { Container, NotFound, Query } from 'components/common';
 import { ContentDetail } from 'components/content';
 
 // types
@@ -17,7 +17,7 @@ const ContentView = () => {
 
   return (
     <Query api={`/api/v3/post/${id}`} loader={null}>
-      {(content: Content) => <ContentDetail content={content} />}
+      {(content: Content) => <Container><ContentDetail content={content} /></Container>}
     </Query>
   );
 };

@@ -6,7 +6,7 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { SEO, Query } from 'components/common';
+import { Container, SEO, Query } from 'components/common';
 import { ChannelEditor } from 'slatejs';
 import EmptyFeed from './EmptyFeed';
 import ChannelHeader from './ChannelHeader';
@@ -73,7 +73,7 @@ const Channel = () => {
   };
 
   return (
-    <>
+    <Container>
       <SEO title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query
@@ -104,7 +104,7 @@ const Channel = () => {
           <div ref={endDivRef} />
         </ul>
       </div>
-    </>
+    </Container>
   );
 };
 

@@ -26,13 +26,14 @@ const Details = ({ messages }: Props) => {
   }, [messages]);
 
   return (
-    <aside className="w-72 h-full overflow-auto">
-      <div className="text-gray-200 pb-5 border-b-[1px] border-l-[1px] border-gray-700 relative text-sm z-50 text-center"></div>
-      <div className="p-5">
-        <h1 className="text-md mb-2 w-full text-sapien-neutral-400 font-bold">
-          Members ({members.length})
-        </h1>
-        <ul>
+    <aside className="w-72 h-full overflow-auto border-l-[1px] border-gray-700">
+      <div className="">
+        <div className='border-b-[1px] border-gray-700 h-10 px-5 mb-5 w-full flex items-center'>
+          <h3 className="text-md  text-sapien-neutral-400 font-bold ">
+            Members ({members.length})
+          </h3>
+        </div>
+        <ul className='px-5'>
           {members.map(({ authorID, displayName, avatarUrl }) => {
             return (
               <li key={authorID} className="flex gap-2 items-center mb-4">
