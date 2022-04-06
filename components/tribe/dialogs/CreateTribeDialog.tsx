@@ -319,7 +319,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                       <label className="block text-sm font-medium mt-4 mb-2">
                         Cover photo
                       </label>
-                      <div className="mt-1 relative min-h-[8.75rem] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                      <div className="mt-1 relative min-h-8-75 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                         {Boolean(cover) ? (
                           <span className="relative">
                             <button
