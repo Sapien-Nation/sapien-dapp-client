@@ -69,7 +69,7 @@ const Toast = ({ type, message, id }: Props) => {
         );
       case ToastType.Success:
         return (
-          <div className="rounded-md bg-green-50 p-4 m-3 animate-fade-in-down">
+          <div className="rounded-md bg-green-50 p-5 m-3 animate-fade-in-down">
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg
