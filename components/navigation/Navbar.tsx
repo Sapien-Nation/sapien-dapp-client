@@ -16,7 +16,15 @@ const Navbar = () => {
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex">
           {/* Profile dropdown */}
-          <Menu as="div" className="">
+          <Menu as="div">
+            <div>
+              <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
+                <div className="h-full">
+                  <Wallet />
+                </div>
+              </Menu.Items>
+            </div>
+
             <Menu.Button
               type="button"
               className="group w-full h-full flex text-sm text-left font-medium  focus:outline-none"
@@ -30,14 +38,8 @@ const Navbar = () => {
                 </span>
               </span>
             </Menu.Button>
-
-            <Menu.Items className="absolute right-0 w-72 h-108 mt-4 z-10 origin-top-right focus:outline-none">
-              <Menu.Item>
-                <Wallet />
-              </Menu.Item>
-            </Menu.Items>
           </Menu>
-          <Menu as="div" className="">
+          <Menu as="div">
             <div>
               <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                 <div className="h-full">

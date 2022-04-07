@@ -140,6 +140,7 @@ const WalletProxy = () => {
 
   useEffect(() => {
     const initWeb3API = async () => {
+      setState(State.Loading);
       try {
         await connectWeb3API(tokens.torus, me.v2Id || me.id, false);
         setState(State.Success);
@@ -166,26 +167,14 @@ const WalletProxy = () => {
       case State.Loading:
         return (
           <div className="flex w-full h-96 absolute">
-            <div className="flex animate-pulse w-full px-5 py-1">
-              <div className="w-12 bg-gray-300 h-12 rounded-full "></div>
-              <div className="flex flex-col space-y-3">
-                <div className="w-36 bg-gray-300 h-6 rounded-md "></div>
-                <div className="w-24 bg-gray-300 h-6 rounded-md "></div>
-              </div>
-            </div>
+            <h1>LOADING....</h1>
           </div>
         );
       // meanful Error state view with support contact
       case State.Error:
         return (
           <div className="flex w-full h-96 absolute">
-            <div className="flex animate-pulse w-full px-5 py-1">
-              <div className="w-12 bg-gray-300 h-12 rounded-full "></div>
-              <div className="flex flex-col space-y-3">
-                <div className="w-36 bg-gray-300 h-6 rounded-md "></div>
-                <div className="w-24 bg-gray-300 h-6 rounded-md "></div>
-              </div>
-            </div>
+            <h1>ERROR....</h1>
           </div>
         );
       case State.Success:
@@ -194,7 +183,7 @@ const WalletProxy = () => {
   };
 
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg">
+    <div className="bg-white overflow-hidden shadow rounded-lg text-white">
       {renderView()}
     </div>
   );
