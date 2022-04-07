@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useTheme } from 'next-themes';
+import { useState } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 
 // components
@@ -20,9 +19,6 @@ import { useAuth } from 'context/user';
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
-// wallet
-// import { initWeb3API, useWallet } from 'wallet';
-
 interface Props {
   children: React.ReactElement;
 }
@@ -31,12 +27,6 @@ const AppLayout = ({ children }: Props) => {
   const { me } = useAuth();
   const { pathname } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // const walletContext = useWallet();
-
-  // useEffect(() => {
-  //   initWeb3API(me, walletContext);
-  // }, [me, walletContext]);
 
   // Auth Pages
   if (

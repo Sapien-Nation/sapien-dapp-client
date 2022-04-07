@@ -1,12 +1,13 @@
-import Link from 'next/link';
 import { Menu } from '@headlessui/react';
 import { LibraryIcon } from '@heroicons/react/outline';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';
 
 // ui
-import Wallet from 'wallet/components';
+const Wallet = dynamic(() => import('wallet/components'));
 
 const Navbar = () => {
   const { me } = useAuth();
