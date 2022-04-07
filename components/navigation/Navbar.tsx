@@ -6,7 +6,7 @@ import { LibraryIcon } from '@heroicons/react/outline';
 import { useAuth } from 'context/user';
 
 // ui
-import Wallet from 'wallet/ui';
+import Wallet from 'wallet/components';
 
 const Navbar = () => {
   const { me } = useAuth();

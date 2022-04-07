@@ -12,9 +12,6 @@ import { connectWeb3API } from 'wallet/api';
 // context
 import { useAuth } from 'context/user';
 
-// hooks
-import { useToast } from 'context/toast';
-
 // views
 import { Deposit } from './views';
 import { refresh } from 'api/authentication';
@@ -125,12 +122,16 @@ const Wallet = () => {
   );
 };
 
+enum State {
+  Loading,
+  Error,
+  Success,
+}
+
 const WalletProxy = () => {
-  const [isFetching, setIsFetching] = useState(true);
+  const [state, setState] = useState(State.Loading);
 
-  const toast = useToast();
   const { me } = useAuth();
-
   const [tokens] = useLocalStorage<null | {
     token: string;
     torus: string;
@@ -139,41 +140,62 @@ const WalletProxy = () => {
 
   useEffect(() => {
     const initWeb3API = async () => {
-      setIsFetching(true);
       try {
         await connectWeb3API(tokens.torus, me.v2Id || me.id, false);
+        setState(State.Success);
       } catch (error) {
         Sentry.captureException('initWeb3API error', error);
         try {
           const data = await refresh(tokens.refresh, 'torus');
           await connectWeb3API(data.token, me.v2Id || me.id, false);
+          setState(State.Success);
         } catch (err) {
           Sentry.captureException('[refresh] initWeb3API error', err);
-          toast({ message: 'There was an error with our wallet provider' });
+          setState(State.Error);
         }
       }
-      setIsFetching(false);
     };
 
     initWeb3API();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div className="bg-white overflow-hidden shadow rounded-lg">
-      {isFetching ? (
-        <div className="flex w-full h-96 absolute">
-          <div className="flex animate-pulse w-full px-5 py-1">
-            <div className="w-12 bg-gray-300 h-12 rounded-full "></div>
-            <div className="flex flex-col space-y-3">
-              <div className="w-36 bg-gray-300 h-6 rounded-md "></div>
-              <div className="w-24 bg-gray-300 h-6 rounded-md "></div>
+  const renderView = () => {
+    switch (state) {
+      // TODO nice loading animation for the wallet loading
+      case State.Loading:
+        return (
+          <div className="flex w-full h-96 absolute">
+            <div className="flex animate-pulse w-full px-5 py-1">
+              <div className="w-12 bg-gray-300 h-12 rounded-full "></div>
+              <div className="flex flex-col space-y-3">
+                <div className="w-36 bg-gray-300 h-6 rounded-md "></div>
+                <div className="w-24 bg-gray-300 h-6 rounded-md "></div>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <Wallet />
-      )}
+        );
+      // meanful Error state view with support contact
+      case State.Error:
+        return (
+          <div className="flex w-full h-96 absolute">
+            <div className="flex animate-pulse w-full px-5 py-1">
+              <div className="w-12 bg-gray-300 h-12 rounded-full "></div>
+              <div className="flex flex-col space-y-3">
+                <div className="w-36 bg-gray-300 h-6 rounded-md "></div>
+                <div className="w-24 bg-gray-300 h-6 rounded-md "></div>
+              </div>
+            </div>
+          </div>
+        );
+      case State.Success:
+        return <Wallet />;
+    }
+  };
+
+  return (
+    <div className="bg-white overflow-hidden shadow rounded-lg">
+      {renderView()}
     </div>
   );
 };
