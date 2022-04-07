@@ -45,7 +45,7 @@ const Channel = () => {
   useEffect(() => {
     // Start chat at the bottom
     if (belowEditorRef.current) {
-      belowEditorRef.current.scrollIntoView();
+      belowEditorRef.current.scrollIntoView({ block: 'nearest', inline: 'start' });
     }
   }, []);
 
@@ -73,7 +73,7 @@ const Channel = () => {
   };
 
   return (
-    <div className="bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
+    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
       <SEO title={channel.name} />
       <h1 className="sr-only">{channel.name}</h1>
       <Query
@@ -87,7 +87,7 @@ const Channel = () => {
       </div>
       <div ref={belowEditorRef} />
 
-      <div className="min-h-400 mt-4">
+      <div className="mt-4">
         {isLoadingInitialData === false && data.length === 0 ? (
           <EmptyFeed />
         ) : null}

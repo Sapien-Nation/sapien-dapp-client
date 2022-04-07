@@ -108,7 +108,7 @@ const AppLayout = ({ children }: Props) => {
         {(tribes: Array<ProfileTribe>) => (
           <>
             <main className="h-full flex">
-              <div
+              <nav
                 className={
                   mobileMenuOpen
                     ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
@@ -132,8 +132,8 @@ const AppLayout = ({ children }: Props) => {
                   <TribeBar tribes={tribes} mobileMenuOpen={mobileMenuOpen} />
                   {isHomePage === false && <>{renderNavigation()}</>}
                 </div>
-              </div>
-              <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+              </nav>
+              <div className="flex-1 min-w-0 flex flex-col">
                 <div className="lg:hidden">
                   <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
                 </div>

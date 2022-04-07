@@ -45,7 +45,7 @@ const MainChannel = () => {
   }, [fetchMore, shouldFetchMoreItems]);
 
   return (
-    <div className="bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
+    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
       <SEO title={tribe.name} />
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <Query

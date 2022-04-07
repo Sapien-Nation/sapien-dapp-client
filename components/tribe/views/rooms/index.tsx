@@ -35,14 +35,14 @@ const Room = () => {
   useEffect(() => {
     // Start chat at the bottom
     if (bottomFeedRef.current) {
-      bottomFeedRef.current.scrollIntoView();
+      bottomFeedRef.current.scrollIntoView({ block: 'nearest', inline: 'start' });
     }
   }, []);
 
   const handleMessageSubmit = () => {};
 
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-t-none">
+    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">

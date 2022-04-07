@@ -18,7 +18,7 @@ const ContentView = () => {
   return (
     <Query api={`/api/v3/post/${id}`} loader={null}>
       {(content: Content) => (
-        <div className="bg-sapien-neutral-800 lg:rounded-t-3xl p-5">
+        <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
           <ContentDetail content={content} />
         </div>
       )}

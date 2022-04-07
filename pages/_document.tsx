@@ -13,7 +13,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#6200eaf" />
           <link href="/static/favicon.ico" rel="icon" type="image/png" />
         </Head>
-        <body className="h-full relative">
+        <body className="h-full relative overflow-hidden">
           <Main />
           <NextScript />
         </body>
