@@ -1,6 +1,6 @@
 import { Popover, Transition } from '@headlessui/react';
-import { XIcon, DotsVerticalIcon, LogoutIcon } from '@heroicons/react/solid';
-import { SwitchVerticalIcon } from '@heroicons/react/outline';
+import { XIcon, DotsVerticalIcon, LogoutIcon, XCircleIcon } from '@heroicons/react/solid';
+import { SwitchVerticalIcon, RefreshIcon } from '@heroicons/react/outline';
 import * as Sentry from '@sentry/nextjs';
 import Link from 'next/link';
 import { Fragment, useEffect, useState } from 'react';
@@ -166,15 +166,17 @@ const WalletProxy = () => {
       // TODO nice loading animation for the wallet loading
       case State.Loading:
         return (
-          <div className="flex w-full h-96 absolute">
-            <h1>LOADING....</h1>
+          <div className="w-full p-3 justify-center flex items-center right-8 rounded-xl absolute bg-sapien-neutral-600">
+            <RefreshIcon className="animate-spin w-5 mr-3" />
+            <h1 className="text-center">Loading</h1>
           </div>
         );
       // meanful Error state view with support contact
       case State.Error:
         return (
-          <div className="flex w-full h-96 absolute">
-            <h1>ERROR....</h1>
+          <div className="w-full p-3 justify-center flex items-center right-8 rounded-xl absolute bg-sapien-neutral-600">
+            <XCircleIcon className="text-red-500 w-5 mr-3" />
+            <h1 className="text-sm">Whoops seems like there was an error....</h1>
           </div>
         );
       case State.Success:
