@@ -79,7 +79,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
         </a>
       </Link>
 
-      {isContextMenuOpen && isContextMenuOpen === tribe.id && (
+      {isContextMenuOpen?.id === tribe.id && (
         <div className="absolute h-20 w-40 bottom-1 z-10 top-0 left-14 bg-black rounded-md shadow-lg py-1 px-4 ring-black ring-opacity-5 focus:outline-none text-gray-400">
           <div className="h-full w-full relative justify-around flex flex-col">
             <div
@@ -95,7 +95,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
       <Tooltip
         ref={tooltipRef}
         text={tribe.name}
-        forceHidden={isContextMenuOpen}
+        forceHidden={Boolean(isContextMenuOpen)}
       />
     </div>
   );

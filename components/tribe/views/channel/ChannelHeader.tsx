@@ -56,7 +56,7 @@ const ChannelHeader = ({ channel }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600" />
+            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-gradient-to-r from-purple-200 via-purple-100 to-purple-700 shadow shadow-sapien-neutral-600" />
           )}
         </div>
         <div className="flex justify-between w-full">

@@ -54,7 +54,7 @@ const MainChannel = () => {
       >
         {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
       </Query>
-      <div className="min-h-400">
+      <div className="mt-4 min-h-400">
         {isLoadingInitialData === false && data.length === 0 ? (
           <EmptyMainFeed />
         ) : null}

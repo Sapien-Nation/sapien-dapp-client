@@ -87,7 +87,7 @@ const Channel = () => {
       </div>
       <div ref={belowEditorRef} />
 
-      <div className="min-h-400">
+      <div className="min-h-400 mt-4">
         {isLoadingInitialData === false && data.length === 0 ? (
           <EmptyFeed />
         ) : null}
