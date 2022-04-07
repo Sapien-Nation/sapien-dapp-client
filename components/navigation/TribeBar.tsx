@@ -9,7 +9,6 @@ import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
 
-
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
@@ -32,7 +31,6 @@ const TribeBar = ({ tribes }: Props) => {
   const tooltipRef = useRef(null);
   const profileRef = useRef(null);
   const createTribeRef = useRef(null);
-
 
   const isOnProfilePage = pathname.includes('/profile');
 
@@ -94,19 +92,6 @@ const TribeBar = ({ tribes }: Props) => {
                   />
                 ))}
 
-                {/* TODO make this follow a ref to be next to the clicked tribe */}
-                {/*rightClickedTribe && (
-                  <div className="absolute h-20 w-auto bottom-1 z-10 top-8 left-14 bg-black rounded-md shadow-lg py-2 px-6 ring-black ring-opacity-5 focus:outline-none text-gray-400">
-                    <div className="h-full w-full relative justify-around flex flex-col">
-                      <div
-                        onClick={handleCopyToClipboard}
-                        className="text-sm cursor-pointer hover:text-white text-purple-200"
-                      >
-                        Invite People
-                      </div>
-                    </div>
-                  </div>
-                )*/}
                 <Link href="/discovery">
                   <a
                     className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${

@@ -23,17 +23,17 @@ interface Props {
 }
 
 function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
+  const { query } = useRouter();
+  const { tribeID } = query;
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyToClipboard = () => {
-    copyToClipboard(`${window?.location.origin}/join/${isContextMenuOpen.id}`);
+    copyToClipboard(`${window?.location.origin}/join/${tribe.id}`);
     toast({
       message: 'Copied to clipboard',
       type: ToastType.Success,
     });
   };
-  const { query } = useRouter();
-  const { tribeID } = query;
 
   const toast = useToast();
 
@@ -50,7 +50,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
-                onRightClick(tribe.id);
+                onRightClick(tribe);
               }
             }
           }}
@@ -58,7 +58,7 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
-                onRightClick(tribe.id);
+                onRightClick(tribe);
               }
             }
           }}
