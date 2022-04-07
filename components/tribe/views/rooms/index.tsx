@@ -46,7 +46,7 @@ const Room = () => {
       <>
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
-          <div className="text-gray-200 h-10 px-5 border-b-[1px] border-gray-700 relative text-sm z-50 flex justify-end items-center">
+          <div className="text-gray-200 h-10 px-5 border-b-[1px] border-gray-700 relative text-sm flex justify-end items-center">
             <button
               aria-label="Toggle Details"
               className="flex"

@@ -1,7 +1,7 @@
 import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
 
 // components
@@ -24,6 +24,7 @@ interface Props {
 
 function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
   const { query } = useRouter();
+  const [contextMenuPosition, setContextMenuPosition] = useState(null);
   const { tribeID } = query;
 
   const [_, copyToClipboard] = useCopyToClipboard();
@@ -50,6 +51,10 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
+                setContextMenuPosition({
+                  left: event.clientX,
+                  top: event.clientY
+                });
                 onRightClick(tribe);
               }
             }
@@ -58,6 +63,10 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
             if (event.type === 'contextmenu') {
               event.preventDefault();
               if (tribe.isMain === false) {
+                setContextMenuPosition({
+                  left: event.clientX,
+                  top: event.clientY
+                })
                 onRightClick(tribe);
               }
             }
@@ -80,14 +89,12 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
       </Link>
 
       {isContextMenuOpen?.id === tribe.id && (
-        <div className="absolute h-20 w-40 bottom-1 z-10 top-0 left-14 bg-black rounded-md shadow-lg py-1 px-4 ring-black ring-opacity-5 focus:outline-none text-gray-400">
-          <div className="h-full w-full relative justify-around flex flex-col">
-            <div
-              onClick={handleCopyToClipboard}
-              className="text-sm cursor-pointer hover:text-white text-purple-200"
-            >
-              Invite People
-            </div>
+        <div style={{left: contextMenuPosition.left, top: contextMenuPosition.top}} className="fixed max-h-max w-40 bottom-1 z-50 bg-black p-2 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400">
+          <div
+            onClick={handleCopyToClipboard}
+            className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-gray-200 p-2 rounded"
+          >
+            Invite People
           </div>
         </div>
       )}
