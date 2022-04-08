@@ -2,7 +2,7 @@ const Deposit = () => {
   return (
     <div className="flex flex-col justify-between items-center w-full h-96">
       <div className="flex flex-col justify-center items-center p-8">
-        <div className="mt-8 text-center">
+        <div className="pb-6  text-center">
           <h5 className="text-gray-400">
             To deposit tokens, install Metamask and complete the transaction.
           </h5>

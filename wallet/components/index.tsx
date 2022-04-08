@@ -1,5 +1,5 @@
 import { Popover, Transition } from '@headlessui/react';
-import { XIcon, DotsVerticalIcon, LogoutIcon, XCircleIcon } from '@heroicons/react/solid';
+import { XIcon, DotsVerticalIcon, LogoutIcon, ExclamationIcon } from '@heroicons/react/solid';
 import { SwitchVerticalIcon, RefreshIcon } from '@heroicons/react/outline';
 import * as Sentry from '@sentry/nextjs';
 import Link from 'next/link';
@@ -60,7 +60,7 @@ const Wallet = () => {
                   leaveFrom="opacity-100 translate-y-0"
                   leaveTo="opacity-0 translate-y-1"
                 >
-                  <Popover.Panel className="absolute z-10 w-56 max-w-sm px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
+                  <Popover.Panel className="absolute z-10 w-56 max-w-sm mt-3 transform -translate-x-1/2 right-5 sm:px-0 lg:max-w-3xl">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="relative bg-white p-1">
                         <button
@@ -166,7 +166,7 @@ const WalletProxy = () => {
       // TODO nice loading animation for the wallet loading
       case State.Loading:
         return (
-          <div className="w-full p-3 justify-center flex items-center right-8 rounded-xl absolute bg-sapien-neutral-600">
+          <div className="w-full p-4 flex justify-center items-center right-8 rounded-xl absolute bg-sapien-neutral-600">
             <RefreshIcon className="animate-spin w-5 mr-3" />
             <h1 className="text-center">Loading</h1>
           </div>
@@ -175,7 +175,7 @@ const WalletProxy = () => {
       case State.Error:
         return (
           <div className="w-full p-3 justify-center flex items-center right-8 rounded-xl absolute bg-sapien-neutral-600">
-            <XCircleIcon className="text-red-500 w-5 mr-3" />
+            <ExclamationIcon className="text-red-500 w-6 mr-3" />
             <h1 className="text-sm">Whoops seems like there was an error....</h1>
           </div>
         );
