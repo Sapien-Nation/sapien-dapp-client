@@ -44,10 +44,20 @@ module.exports = {
         'sapien-neutral-800': '#171219',
         'sapien-red-700': '#FF4279',
       },
+      height: {
+        '150': '150px',
+        '320': '320px',
+      },
       minHeight: {
         '250': '250px',
         '400': '400px',
         '8-75': '8.75rem'
+      },
+      padding: {
+        '52': '52px',
+      },
+      width: {
+        '500': '500px',
       }
     },
   },

@@ -73,7 +73,7 @@ const ChannelEditor = ({ name, onSubmit }: Props) => {
                     leaveFrom="opacity-100 translate-y-0"
                     leaveTo="opacity-0 translate-y-1"
                   >
-                    <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-[500px] sm:px-0">
+                    <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-500 sm:px-0">
                       <Picker
                         onSelect={(event) => insertEmoji(editor, event)}
                         perLine={6}

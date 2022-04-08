@@ -13,7 +13,7 @@ const ProfilePage: NextPage = () => {
   return (
     <>
       <SEO title="Sapien" />
-      <div className="max-w-2xl mx-auto border-b-[1px] border-gray-800 pb-4">
+      <div className="max-w-2xl mx-auto border-b border-gray-800 pb-4">
         <div className="flex items-start gap-4">
           <div className="w-32 object-cover">
             <img

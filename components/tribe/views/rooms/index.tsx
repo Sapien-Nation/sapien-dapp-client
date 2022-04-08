@@ -46,7 +46,7 @@ const Room = () => {
       <>
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
-          <div className="text-gray-200 h-10 px-5 border-b-[1px] border-gray-700 relative text-sm flex justify-end items-center">
+          <div className="text-gray-200 h-10 px-5 border-b border-gray-700 relative text-sm flex justify-end items-center">
             <button
               aria-label="Toggle Details"
               className="flex"
@@ -66,7 +66,7 @@ const Room = () => {
                   return (
                     <li key={timestamp}>
                       <time
-                        className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-[1px] before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-[1px] after:block after:bg-gray-800 after:-right-8"
+                        className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
                         dateTime={timestamp}
                       >
                         {timestamp}

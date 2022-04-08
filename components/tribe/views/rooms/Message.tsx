@@ -48,7 +48,7 @@ const Message = ({
             className={
               isAContinuosMessage
                 ? 'text-sm text-gray-500'
-                : 'pl-[52px] text-sm text-gray-500'
+                : 'pl-52 text-sm text-gray-500'
             }
           >
             {message}

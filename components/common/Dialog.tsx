@@ -117,7 +117,7 @@ const Dialog = ({
                 </div>
                 <div>{children}</div>
               </div>
-              <div className="py-3 px-4 sm:px-8 mt-4 sm:flex sm:flex-row-reverse border-t-[1px] border-gray-800 shadow-inner shadow-sapien-neutral-600">
+              <div className="py-3 px-4 sm:px-8 mt-4 sm:flex sm:flex-row-reverse border-t border-gray-800 shadow-inner shadow-sapien-neutral-600">
                 {actions}
               </div>
             </div>

@@ -26,9 +26,9 @@ const Details = ({ messages }: Props) => {
   }, [messages]);
 
   return (
-    <aside className="w-72 h-full overflow-auto border-l-[1px] border-gray-700">
+    <aside className="w-72 h-full overflow-auto border-l border-gray-700">
       <div className="">
-        <div className='border-b-[1px] border-gray-700 h-10 px-5 mb-5 w-full flex items-center'>
+        <div className='border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center'>
           <h3 className="text-md  text-sapien-neutral-400 font-bold ">
             Members ({members.length})
           </h3>

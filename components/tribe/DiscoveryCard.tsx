@@ -52,8 +52,8 @@ const DiscoveryCard = ({ tribe }: Props) => {
       aria-label={tribe.name}
       className={
         isFetching
-          ? 'animate-pulse relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
-          : 'relative rounded-xl flex-1 h-[320px] bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
+          ? 'animate-pulse relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
+          : 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
       }
     >
       <button
@@ -86,7 +86,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
         </div>
         <div className="px-3 mt-2">
           <h1 className="text-lg font-bold">{tribe.name}</h1>
-          <p className="text-gray-400 overflow-hidden h-[150px]">
+          <p className="text-gray-400 overflow-hidden h-150">
             {tribe.description || '[No Description]'}
           </p>
           <span className="text-xs">
