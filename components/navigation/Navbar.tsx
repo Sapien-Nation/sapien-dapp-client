@@ -7,7 +7,8 @@ import Link from 'next/link';
 import { useAuth } from 'context/user';
 
 // ui
-const Wallet = dynamic(() => import('wallet/components'));
+// @ts-ignore
+const Wallet = dynamic(() => import('wallet/Wallet'));
 
 const Navbar = () => {
   const { me } = useAuth();
@@ -21,7 +22,12 @@ const Navbar = () => {
             {({ open }) => (
               <>
                 <div>
-                  <Menu.Items static className={`${open? 'block' : 'hidden'} absolute right-0 w-96 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}>
+                  <Menu.Items
+                    static
+                    className={`${
+                      open ? 'block' : 'hidden'
+                    } absolute right-0 w-96 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                  >
                     <Wallet />
                   </Menu.Items>
                 </div>

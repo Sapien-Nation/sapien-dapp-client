@@ -16,6 +16,7 @@ import { AuthenticationProvider } from 'context/user';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { ToastProvider } from 'context/toast';
 import { ToastContainer } from 'components/common';
+import { Web3Librariers, Web3Provider } from 'wallet/providers';
 
 export const cache = new Map();
 
@@ -90,12 +91,14 @@ const AllTheProviders = ({
       }}
     >
       <RouterContext.Provider value={mockRouter(route)}>
-        <AuthenticationProvider>
-          <ToastProvider>
-            {children}
-            <ToastContainer />
-          </ToastProvider>
-        </AuthenticationProvider>
+        <ToastProvider>
+          <AuthenticationProvider>
+            <Web3Librariers>
+              <Web3Provider>{children}</Web3Provider>
+            </Web3Librariers>
+          </AuthenticationProvider>
+          <ToastContainer />
+        </ToastProvider>
       </RouterContext.Provider>
     </SWRConfig>
   );

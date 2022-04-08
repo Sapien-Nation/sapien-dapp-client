@@ -23,6 +23,7 @@ jest.mock('api/authentication');
 const push = jest.fn();
 const router = mockRouter({
   push,
+  pathname: '/logout',
 });
 
 (logout as jest.Mock).mockReturnValue({});
@@ -58,14 +59,11 @@ describe('', () => {
   });
 
   test('on success', async () => {
-    const loggedInUser = setUser();
     renderPage();
 
     await waitFor(() => {
       expect(screen.queryByText(error.message)).not.toBeInTheDocument();
     });
-
-    expect(Sentry.captureException).not.toHaveBeenCalled();
 
     expect(push).toHaveBeenCalledWith('/');
   });

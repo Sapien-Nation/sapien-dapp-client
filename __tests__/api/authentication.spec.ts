@@ -109,12 +109,13 @@ test('changePassword', async () => {
 
 test('refresh', async () => {
   const apiURL = '/api/v3/auth/refresh';
+  const data = {};
 
   // on error
   mock.onPost(apiURL).reply(400, error);
   await expect(refresh('refresh', 'type')).rejects.toEqual(error.message);
 
   // on success
-  mock.onPost(apiURL).reply(200);
-  await expect(refresh('refresh', 'type')).resolves.toBeTruthy();
+  mock.onPost(apiURL).reply(200, data);
+  await expect(refresh('refresh', 'type')).resolves.toEqual(data);
 });
