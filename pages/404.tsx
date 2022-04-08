@@ -59,34 +59,37 @@ const ErrorPage: NextPage = () => {
                 {links.map((link, linkIdx) => (
                   <li
                     key={linkIdx}
-                    className="relative py-6 flex items-start space-x-4"
                   >
-                    <div className="flex-shrink-0">
-                      <span className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-50">
-                        <link.icon
-                          className="h-6 w-6 text-indigo-700"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1 text-left">
-                      <h3 className="text-base font-medium text-white">
-                        <span className="rounded-sm focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                          <Link href={link.path} passHref>
-                            <a className="block"># {link.title}</a>
-                          </Link>
+                    <Link href={link.path} passHref>
+                      <a className="relative py-6 flex items-start space-x-4">
+                        <div className="flex-shrink-0">
+                        <span className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-50">
+                          <link.icon
+                            className="h-6 w-6 text-indigo-700"
+                            aria-hidden="true"
+                          />
                         </span>
-                      </h3>
-                      <p className="text-base text-gray-500">
-                        {link.description}
-                      </p>
-                    </div>
-                    <div className="flex-shrink-0 self-center">
-                      <ChevronRightIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </div>
+                        </div>
+                        <div className="min-w-0 flex-1 text-left">
+                          <h3 className="text-base font-medium text-white">
+                            <span className="rounded-sm focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                              <Link href={link.path} passHref>
+                                <a className="block"># {link.title}</a>
+                              </Link>
+                            </span>
+                          </h3>
+                          <p className="text-base text-gray-500">
+                            {link.description}
+                          </p>
+                        </div>
+                        <div className="flex-shrink-0 self-center">
+                          <ChevronRightIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </div>
+                      </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

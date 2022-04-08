@@ -3,7 +3,7 @@ interface Props {
 }
 
 const NotFound = ({ message }: Props) => (
-  <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden  h-full w-full">
+  <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
     <div className="absolute inset-0">
       <img
         className="h-full w-full object-cover"
