@@ -7,7 +7,7 @@ import { createContent } from 'api/content';
 // components
 import { ContentItemChannel } from 'components/content';
 import { SEO, Query } from 'components/common';
-import { ChannelEditor } from 'slatejs';
+import ChannelEditor from 'tinymc';
 import EmptyFeed from './EmptyFeed';
 import ChannelHeader from './ChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
@@ -45,7 +45,10 @@ const Channel = () => {
   useEffect(() => {
     // Start chat at the bottom
     if (belowEditorRef.current) {
-      belowEditorRef.current.scrollIntoView({ block: 'nearest', inline: 'start' });
+      belowEditorRef.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
     }
   }, []);
 
