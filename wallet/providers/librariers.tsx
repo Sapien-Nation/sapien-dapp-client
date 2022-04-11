@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { Biconomy } from '@biconomy/mexa';
-import torusWebSdk from '@toruslabs/torus-direct-web-sdk';
+import DirectWebSdk from '@toruslabs/customauth';
 import * as Sentry from '@sentry/nextjs';
 import { createContext, useMemo, useContext, useState, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
@@ -17,7 +18,7 @@ import { default as PlatformContract } from '../contracts/Platform.json';
 import { useAuth } from 'context/user';
 
 // types
-import type { TorusKey } from '@toruslabs/torus-direct-web-sdk';
+import type { TorusKey } from '@toruslabs/customauth';
 import type { AbiItem } from 'web3-utils';
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -83,7 +84,7 @@ const Web3Librariers = ({ children }: Props) => {
     const initializeTorusSDK = async () => {
       setIsLoadingTorus(true);
 
-      const torusSDK = new torusWebSdk({
+      const torusSDK = new DirectWebSdk({
         baseUrl: `${window.location.origin}/api/serviceworker`,
         enableLogging: Boolean(_DEBUG),
         network: walletIsMainnet === 'true' ? 'mainnet' : 'testnet',

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Common, { CustomChain } from '@ethereumjs/common';
 import { Transaction as Tx } from '@ethereumjs/tx';
 import * as Sentry from '@sentry/nextjs';
