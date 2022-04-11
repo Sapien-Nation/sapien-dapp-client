@@ -26,7 +26,19 @@ interface MexaError {
   message: string;
 }
 
+interface Config {
+  MAINNET_NETWORK_ID: number;
+  POLY_NETWORK_ID: number;
+  RPC_PROVIDER: string;
+  SPN_TOKEN_ADDRESS: string;
+  BADGE_STORE_ADDRESS: string;
+  PASSPORT_ADDRESS: string;
+  BICONOMY_API_KEY: string;
+  EXPLORER_BASE_URL: string;
+}
+
 export interface Librariers {
+  config: Config;
   contracts: Record<string, any>;
   isLoadingMexa: boolean;
   isLoadingTorus: boolean;
@@ -39,17 +51,6 @@ export interface Librariers {
 export const Web3LibrariersContext = createContext<Librariers>(null);
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-interface Config {
-  MAINNET_NETWORK_ID: number;
-  POLY_NETWORK_ID: number;
-  RPC_PROVIDER: string;
-  SPN_TOKEN_ADDRESS: string;
-  BADGE_STORE_ADDRESS: string;
-  PASSPORT_ADDRESS: string;
-  BICONOMY_API_KEY: string;
-  EXPLORER_BASE_URL: string;
-}
-
 interface Props {
   children: React.ReactNode;
 }
@@ -222,6 +223,7 @@ const Web3Librariers = ({ children }: Props) => {
   return (
     <Web3LibrariersContext.Provider
       value={{
+        config,
         contracts,
         torusKey,
         mexaError,
