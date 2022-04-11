@@ -1,8 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
-import { GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
+import {
+  GlobeAltIcon,
+  CreditCardIcon,
+  PlusIcon,
+} from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import { Menu } from '@headlessui/react';
+import dynamic from 'next/dynamic';
 
 // components
 import TribeBarItem from './TribeBarItem';
@@ -11,6 +17,10 @@ import { CreateTribeDialog } from 'components/tribe/dialogs';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+
+// ui
+// @ts-ignore
+const Wallet = dynamic(() => import('wallet/Wallet'));
 
 interface Props {
   tribes: Array<ProfileTribe>;
@@ -49,7 +59,7 @@ const TribeBar = ({ tribes }: Props) => {
       {/* Static sidebar for desktop */}
       <div
         aria-label="Sidebar"
-        className="py-6 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20 overflow-auto"
+        className="py-6 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
       >
         {isOnProfilePage && (
           <>
@@ -76,17 +86,22 @@ const TribeBar = ({ tribes }: Props) => {
                 <span className="sr-only">Go to profile page</span>
               </a>
             </Link>
-            <Tooltip ref={createTribeRef} text="Profile" />
+            <Tooltip ref={profileRef} text="Profile" />
           </>
         )}
-        {tribes.map((tribe: ProfileTribe) => (
-          <TribeBarItem
-            key={tribe.id}
-            tribe={tribe}
-            onRightClick={setRightClickedTribe}
-            isContextMenuOpen={rightClickedTribe}
-          />
-        ))}
+
+        <div className="overflow-auto space-y-3">
+          {tribes.map((tribe: ProfileTribe) => (
+            <TribeBarItem
+              key={tribe.id}
+              tribe={tribe}
+              onRightClick={setRightClickedTribe}
+              isContextMenuOpen={rightClickedTribe}
+            />
+          ))}
+        </div>
+
+        <div className="border-t-[1px] border-gray-800 block w-full" />
 
         <Link href="/discovery">
           <a
@@ -109,11 +124,33 @@ const TribeBar = ({ tribes }: Props) => {
           ref={createTribeRef.current?.setTriggerRef}
         >
           <PlusIcon className="h-6 w-6" />
-          <span className="sr-only">
-            Click here to create a new Tribe
-          </span>
+          <span className="sr-only">Click here to create a new Tribe</span>
         </button>
         <Tooltip ref={createTribeRef} text="Create a new Tribe" />
+
+        <Menu as="div" className="relative">
+          {({ open }) => (
+            <>
+              <Menu.Items
+                static
+                className={`${
+                  open ? 'block' : 'hidden'
+                } absolute left-16 top-0 w-96 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+              >
+                <Wallet />
+              </Menu.Items>
+              <Menu.Button
+                type="button"
+                className="group w-full h-full flex text-sm text-left rounded-xl  focus:outline-none font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+              >
+                <div className="p-3">
+                  <span className="sr-only">View wallet</span>
+                  <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
+                </div>
+              </Menu.Button>
+            </>
+          )}
+        </Menu>
       </div>
 
       {/* Modals */}

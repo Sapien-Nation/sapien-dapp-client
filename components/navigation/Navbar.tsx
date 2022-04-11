@@ -19,40 +19,10 @@ const Navbar = () => {
         <div className="flex-shrink-0 hidden lg:flex relative">
           {/* Profile dropdown */}
           <Menu as="div">
-            {({ open }) => (
-              <>
-                <div>
-                  <Menu.Items
-                    static
-                    className={`${
-                      open ? 'block' : 'hidden'
-                    } absolute right-0 w-96 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-                  >
-                    <Wallet />
-                  </Menu.Items>
-                </div>
-
-                <Menu.Button
-                  type="button"
-                  className="group w-full h-full flex text-sm text-left font-medium  focus:outline-none"
-                >
-                  <span className="flex w-full h-full items-center">
-                    <span className="flex min-w-0 items-center w-full justify-between">
-                      <div className="px-5 py-3 ">
-                        <span className="sr-only">View wallet</span>
-                        <LibraryIcon className="h-6 w-6" aria-hidden="true" />
-                      </div>
-                    </span>
-                  </span>
-                </Menu.Button>
-              </>
-            )}
-          </Menu>
-          <Menu as="div">
             <div>
               <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                 <div className="h-full">
-                  <div className="flex items-center w-64">
+                  <div className="flex items-center">
                     <div className="px-3 py-3">
                       <img
                         className="w-10 h-10 rounded-full flex-shrink-0"

@@ -62,13 +62,13 @@ const TribeNavigation = () => {
                   <li
                     className={
                       id === viewID
-                        ? 'font-semibold text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
-                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                        ? 'text-sm bg-sapien-neutral-800 rounded-md'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
                     }
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="block px-2 py-2">{name}</a>
+                      <a className="block px-2 py-1 my-1">{name}</a>
                     </Link>
                   </li>
                 );
@@ -92,13 +92,13 @@ const TribeNavigation = () => {
                   <li
                     className={
                       id === viewID
-                        ? 'font-semibold text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
-                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md hover:font-semibold'
+                        ? 'text-sm bg-sapien-neutral-800 rounded-md'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
                     }
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="block px-2 py-2"># {name}</a>
+                      <a className="block px-2 py-1 my-1"># {name}</a>
                     </Link>
                   </li>
                 );
