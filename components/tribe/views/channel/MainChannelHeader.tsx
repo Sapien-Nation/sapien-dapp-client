@@ -46,24 +46,24 @@ const MainChannelHeader = ({ tribe }: Props) => {
       ) : (
         <DefaultCover />
       )}
-      <div className="flex">
+      <div className="flex flex-col md:flex-row">
         <div className="relative">
           {tribe.avatar ? (
             <img
-              className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0"
+              className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0"
               src={tribe.avatar}
               alt=""
             />
           ) : (
-            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-gradient-to-b from-purple-700 via-purple-300 to-purple-500  shadow shadow-sapien-neutral-600" />
+            <div className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 bg-gradient-to-b from-purple-700 via-purple-300 to-purple-500  shadow shadow-sapien-neutral-600" />
           )}
         </div>
-        <div className="flex justify-between w-full">
-          <div className="flex flex-col justify-center ml-12">
-            <h1 className="text-xl">{tribe.name}</h1>
-            <h2 className="text-gray-500">{tribe.membersCount} members</h2>
+        <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
+          <div className="flex flex-col justify-center sm:ml-12">
+            <h1 className="text-xl text-center sm:text-left">{tribe.name}</h1>
+            <h2 className="text-gray-500 mb-4 sm:mb-0">{tribe.membersCount} members</h2>
           </div>
-          <div className="flex items-center mr-5">
+          <div className="flex items-center sm:mr-5">
             <button
               onClick={handleCopyToClipboard}
               type="button"
