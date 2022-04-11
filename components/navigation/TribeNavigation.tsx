@@ -57,18 +57,30 @@ const TribeNavigation = () => {
               Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
             <ul className="px-2 py-2 cursor-pointer">
-              {channels.map(({ id, name }) => {
+              {channels.map(({ avatar, id, membersCount, name }) => {
                 return (
                   <li
-                    className={
+                    className={`${
                       id === viewID
-                        ? 'text-sm bg-sapien-neutral-800 rounded-md'
+                        ? 'text-sm bg-primary-200 rounded-md'
                         : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                    }
+                    } p-2`}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="block px-2 py-1 my-1">{name}</a>
+                      <a className="flex items-center">
+                        <img
+                          alt="channel-image"
+                          className="object-cover h-10 w-10 rounded-md"
+                          src={avatar || "https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg"}
+                        />
+                        <div className="ml-2">
+                          <p className="block">{name}</p>
+                          <p className={`${id === viewID ? '' : 'text-sapien-neutral-200'} font-extralight text-xs`}>
+                            {membersCount} members
+                          </p>
+                        </div>
+                      </a>
                     </Link>
                   </li>
                 );

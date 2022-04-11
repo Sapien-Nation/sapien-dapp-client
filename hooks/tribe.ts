@@ -33,8 +33,10 @@ export const useTribeChannels = (tribeID: string) => {
     .find(({ id }) => id === tribeID);
 
   return tribe
-    ? tribe.channels.map(({ name, id }) => ({
+    ? tribe.channels.map(({ avatar, membersCount, name, id }) => ({
+        avatar,
         type: View.Channel,
+        membersCount,
         name,
         id,
       }))
