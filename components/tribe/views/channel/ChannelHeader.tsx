@@ -16,9 +16,10 @@ import type { Channel } from 'tools/types/channel';
 
 interface Props {
   channel: Channel;
+  handleWriteAnArticle: () => void;
 }
 
-const ChannelHeader = ({ channel }: Props) => {
+const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
   const toast = useToast();
   const { query } = useRouter();
   const [_, copyToClipboard] = useCopyToClipboard();
@@ -78,6 +79,13 @@ const ChannelHeader = ({ channel }: Props) => {
               className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
             >
               <DocumentDuplicateIcon className="w-6" />
+            </button>
+            <button
+              onClick={handleWriteAnArticle}
+              type="button"
+              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none"
+            >
+              Write an Article
             </button>
           </div>
         </div>

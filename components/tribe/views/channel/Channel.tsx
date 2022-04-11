@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // api
 import { createContent } from 'api/content';
@@ -25,6 +25,8 @@ import type { Content } from 'tools/types/content';
 import type { Channel as ChannelType } from 'tools/types/channel';
 
 const Channel = () => {
+  const [showEditor, setShowEditor] = useState(false);
+
   const { push, query } = useRouter();
   const { tribeID, viewID } = query;
 
@@ -76,38 +78,45 @@ const Channel = () => {
   };
 
   return (
-    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-      <SEO title={channel.name} />
-      <h1 className="sr-only">{channel.name}</h1>
-      <Query
-        api={`/api/v3/channel/${viewID}`}
-        loader={<ChannelHeaderPlaceholder />}
-      >
-        {(channel: ChannelType) => <ChannelHeader channel={channel} />}
-      </Query>
-      <div>
-        <ChannelEditor onSubmit={handleSubmit} name={channel.name} />
-      </div>
-      <div ref={belowEditorRef} />
+    <>
+      <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+        <SEO title={channel.name} />
+        <h1 className="sr-only">{channel.name}</h1>
+        <Query
+          api={`/api/v3/channel/${viewID}`}
+          loader={<ChannelHeaderPlaceholder />}
+        >
+          {(channel: ChannelType) => (
+            <ChannelHeader
+              channel={channel}
+              handleWriteAnArticle={() => setShowEditor(true)}
+            />
+          )}
+        </Query>
+        <div ref={belowEditorRef} />
 
-      <div className="mt-4">
-        {isLoadingInitialData === false && data.length === 0 ? (
-          <EmptyFeed />
-        ) : null}
+        <div className="mt-4">
+          {isLoadingInitialData === false && data.length === 0 ? (
+            <EmptyFeed />
+          ) : null}
 
-        <ul>
-          {data.map((content) => (
-            <li key={content.id}>
-              <ContentItemChannel
-                content={content}
-                tribeID={tribeID as string}
-              />
-            </li>
-          ))}
-          <div ref={endDivRef} />
-        </ul>
+          <ul>
+            {data.map((content) => (
+              <li key={content.id}>
+                <ContentItemChannel
+                  content={content}
+                  tribeID={tribeID as string}
+                />
+              </li>
+            ))}
+            <div ref={endDivRef} />
+          </ul>
+        </div>
       </div>
-    </div>
+
+      {/* Editor */}
+      {showEditor && <ChannelEditor />}
+    </>
   );
 };
 
