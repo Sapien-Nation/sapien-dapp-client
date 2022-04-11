@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import { LibraryIcon } from '@heroicons/react/outline';
+import { CreditCardIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
@@ -18,6 +18,34 @@ const Navbar = () => {
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
           {/* Profile dropdown */}
+          <Menu as="div">
+            {({ open }) => (
+              <>
+                <div>
+                  <Menu.Items
+                    static
+                    className={`${
+                      open ? 'block' : 'hidden'
+                    } absolute right-0 w-96 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+                  >
+                    <Wallet />
+                  </Menu.Items>
+                </div>
+
+                <Menu.Button
+                  type="button"
+                  className={`${
+                    open ? 'bg-gray-800' : ''
+                  } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                >
+                  <>
+                    <span className="sr-only">View wallet</span>
+                    <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </Menu.Button>
+              </>
+            )}
+          </Menu>
           <Menu as="div">
             <div>
               <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
