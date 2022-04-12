@@ -27,10 +27,11 @@ const Home = ({ onDeposit }: Props) => {
   return (
     <>
       <button
-        className="border-2 rounded-full h-12 w-12 mx-auto text-white"
+        className="rounded-full text-sapien-neutral-200 flex items-center"
         onClick={onDeposit}
       >
-        <PlusIcon className="w-6 mx-auto" />
+        <PlusIcon className="w-5 mx-auto" />
+        <span className="ml text-sm">Add</span>
       </button>
       <div className="mt-3 flex justify-center">
         <div>

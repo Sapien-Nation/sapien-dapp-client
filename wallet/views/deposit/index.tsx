@@ -81,7 +81,7 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-black font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -137,12 +137,12 @@ const Deposit = ({ handleBack }: Props) => {
                 You will be redirected to Metamask to complete the transaction
               </p>
             ) : (
-              <p className="text-sm">
+              <p className="text-sm text-white">
                 To deposit SPN tokens to the platform, install Metamask and
                 complete the transaction
               </p>
             )}
-            <p className="text-sm">
+            <p className="text-sm text-white">
               The SPN Tokens will be deposited to your Sapien wallet
               automatically
             </p>
