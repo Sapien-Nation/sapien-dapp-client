@@ -118,7 +118,11 @@ const AppLayout = ({ children }: Props) => {
                 }
               >
                 <div className="flex-1 flex min-h-0 lg:h-auto h-full">
-                  <div className="absolute top-0 -right-10 bg-sapien-red-700/50 lg:hidden">
+                  <div
+                    className={`${
+                      mobileMenuOpen ? '-right-10' : 'right-0'
+                    } absolute top-0 bg-sapien-red-700/50 lg:hidden`}
+                  >
                     <button
                       type="button"
                       className="flex items-center justify-center h-10 w-10 focus:outline-none"
@@ -145,7 +149,7 @@ const AppLayout = ({ children }: Props) => {
                 <div className="flex-1 flex overflow-hidden">
                   <section
                     aria-labelledby="primary-heading"
-                    className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last"
+                    className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative"
                   >
                     {children}
                   </section>
