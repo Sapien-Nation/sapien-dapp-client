@@ -11,6 +11,63 @@
 }
 
 input {
-  background-color: #3B3B3B !important;
+  background-color: #3b3b3b !important;
 }
+
+ol.even {
+  position: relative;
+  left: 5.45455rem;
+}
+
+ol.odd {
+  position: relative;
+  margin-bottom: -4.5%;
+}
+
+.hex {
+  width: 2rem;
+  height: 3.5rem;
+  background: #1e2530;
+  transform: rotate(-90deg);
+  display: inline-block;
+  list-style-type: none;
+  margin-right: 1.7rem;
+  transition: all 150ms ease-in-out;
+  z-index: 2;
+}
+
+.hex:before, .hex:after {
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  border-radius: inherit;
+  background: inherit;
+  content: '';
+  z-index: -1;
+}
+
+.hex:before {
+  transform: rotate(60deg);
+}
+
+.hex:after {
+  transform: rotate(-60deg);
+}
+
+.hex:hover {
+  background: #A185F2;
+  cursor: pointer;
+}
+
+.hex .hex-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%) rotate(90deg);
+
+  color: white;
+}
+
+
 /* purgecss end ignore */
