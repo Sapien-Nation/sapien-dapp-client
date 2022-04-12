@@ -21,7 +21,7 @@ const Wallet = () => {
   };
 
   return (
-    <div className="bg-white overflow-hidden shadow rounded-lg w-full h-full text-black py-6 px-4">
+    <div className="bg-sapien-neutral-800 overflow-hidden shadow rounded-lg w-full h-full text-black py-6 px-4">
       {renderView()}
     </div>
   );
