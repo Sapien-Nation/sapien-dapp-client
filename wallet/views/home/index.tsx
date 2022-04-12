@@ -26,31 +26,33 @@ const Home = ({ onDeposit }: Props) => {
 
   return (
     <>
-      <div className="mt-3">
-        <button
-          className="border-2 rounded-full h-12 w-12 mx-auto"
-          onClick={onDeposit}
-        >
-          <PlusIcon className="w-6 mx-auto" />
-        </button>
-        <ol className="even">
-          {tokens.splice(0, half).map((token) => {
-            return (
-              <li className="hex" key={token.id}>
-                <div className="hex-content">{token?.image}</div>
-              </li>
-            );
-          })}
-        </ol>
-        <ol className="odd">
-          {tokens.splice(-half).map((token) => {
-            return (
-              <li className="hex" key={token.id}>
-                <div className="hex-content">{token?.image}</div>
-              </li>
-            );
-          })}
-        </ol>
+      <button
+        className="border-2 rounded-full h-12 w-12 mx-auto text-white"
+        onClick={onDeposit}
+      >
+        <PlusIcon className="w-6 mx-auto" />
+      </button>
+      <div className="mt-3 flex justify-center">
+        <div>
+          <ol className="even">
+            {tokens.splice(0, half).map((token) => {
+              return (
+                <li className="hex" key={token.id}>
+                  <div className="hex-content">{token?.image}</div>
+                </li>
+              );
+            })}
+          </ol>
+          <ol className="odd">
+            {tokens.splice(-half).map((token) => {
+              return (
+                <li className="hex" key={token.id}>
+                  <div className="hex-content">{token?.image}</div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </div>
     </>
   );
