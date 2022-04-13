@@ -33,8 +33,8 @@ const Channel = () => {
   const { tribeID, viewID } = query;
 
   const endDivRef = useRef(null);
-  const belowEditorRef = useRef(null);
   const editorRef = useRef(null);
+  const belowEditorRef = useRef(null);
 
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
@@ -67,7 +67,7 @@ const Channel = () => {
     };
   }, [fetchMore, shouldFetchMoreItems]);
 
-  const handleSubmit = async (text) => {
+  const handleSubmit = async () => {
     try {
       setPublishing(true);
       if (editorRef.current) {
@@ -75,6 +75,7 @@ const Channel = () => {
         editorRef.current.setDirty(false);
 
         const body = {
+          mimeType: 'text/html',
           data: content,
           groupId: channel.id,
         };

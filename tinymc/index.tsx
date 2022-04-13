@@ -2,14 +2,14 @@ import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
 interface Props {
-  editorRef: HTMLElement;
+  editorRef: any;
 }
 
-const EditorComponent = ({ editorRef }) => {
+const EditorComponent = ({ editorRef }: Props) => {
   const apiKey = process.env.NEXT_PUBLIC_TINYMC_API_KEY;
   return (
     <Editor
-      onInit={(evt, editor) => (editorRef.current = editor)}
+      onInit={(_, editor) => (editorRef.current = editor)}
       apiKey={apiKey}
       init={{
         height: '100%',
@@ -18,6 +18,7 @@ const EditorComponent = ({ editorRef }) => {
         branding: false,
         statusbar: false,
       }}
+      plugins={['media', 'mediaembed']}
     />
   );
 };
