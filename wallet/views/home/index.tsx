@@ -21,19 +21,16 @@ const Home = ({ onDeposit }: Props) => {
     { id: 6, image: <XIcon className="w-6" /> },
     { id: 7, image: <CollectionIcon className="w-6" /> },
     { id: 8, image: <ChartPieIcon className="w-6" /> },
-    { id: 9, image: <CollectionIcon className="w-6" /> },
-    { id: 10, image: <XIcon className="w-6" /> },
-    { id: 11, image: <CollectionIcon className="w-6" /> },
-    { id: 12, image: <ChartPieIcon className="w-6" /> },
-    { id: 13, image: <CollectionIcon className="w-6" /> },
-    { id: 14, image: <XIcon className="w-6" /> },
-    { id: 15, image: <CollectionIcon className="w-6" /> },
-    { id: 16, image: <ChartPieIcon className="w-6" /> },
+    // { id: 9, image: <CollectionIcon className="w-6" /> },
+    // { id: 10, image: <XIcon className="w-6" /> },
+    // { id: 11, image: <CollectionIcon className="w-6" /> },
+    // { id: 12, image: <ChartPieIcon className="w-6" /> },
+    // { id: 13, image: <CollectionIcon className="w-6" /> },
+    // { id: 14, image: <XIcon className="w-6" /> },
+    // { id: 15, image: <CollectionIcon className="w-6" /> },
+    // { id: 16, image: <ChartPieIcon className="w-6" /> },
   ];
 
-  const half = Math.ceil(tokens.length / 2);
-
-  const tokensChunk = _chunk(tokens, 4);
   return (
     <>
       <button
