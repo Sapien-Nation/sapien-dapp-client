@@ -22,12 +22,7 @@ const Navbar = () => {
             {({ open }) => (
               <>
                 <div>
-                  <Menu.Items
-                    static
-                    className={`${
-                      open ? 'block' : 'hidden'
-                    } absolute right-0 w-72 h-80 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
-                  >
+                  <Menu.Items className="block absolute right-0 w-72 h-80 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <Wallet />
                   </Menu.Items>
                 </div>
