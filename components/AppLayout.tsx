@@ -16,8 +16,12 @@ import {
 // context
 import { useAuth } from 'context/user';
 
+// providers
+import { TorusProvider } from 'wallet/providers';
+
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import { Web3Provider } from 'wallet/providers/Web3';
 
 interface Props {
   children: React.ReactElement;
@@ -140,12 +144,16 @@ const AppLayout = ({ children }: Props) => {
                 </div>
               </nav>
               <div className="flex-1 min-w-0 flex flex-col">
-                <div className="lg:hidden">
-                  <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
-                </div>
-                <div className="hidden lg:block">
-                  <Navbar />
-                </div>
+                <TorusProvider>
+                  <Web3Provider>
+                    <div className="lg:hidden">
+                      <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
+                    </div>
+                    <div className="hidden lg:block">
+                      <Navbar />
+                    </div>
+                  </Web3Provider>
+                </TorusProvider>
                 <div className="flex-1 flex overflow-hidden">
                   <section
                     aria-labelledby="primary-heading"

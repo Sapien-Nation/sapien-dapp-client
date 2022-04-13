@@ -1,2 +1,2 @@
-export * from './librariers';
-export * from './web3';
+export * from './Torus';
+export * from './Web3';

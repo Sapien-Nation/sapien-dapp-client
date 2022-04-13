@@ -1,246 +1,184 @@
-// @ts-nocheck
-import Common, { CustomChain } from '@ethereumjs/common';
-import { Transaction as Tx } from '@ethereumjs/tx';
+import { Biconomy } from '@biconomy/mexa';
 import * as Sentry from '@sentry/nextjs';
-import { BN } from 'ethereumjs-util';
-import sigUtil from 'eth-sig-util';
-import { createContext, useContext } from 'react';
-import { isAddress } from 'web3-utils';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import Web3Library from 'web3';
 
-// api
-import axios from 'api';
-import { sendSPN } from '../api';
+// contracts
+import { default as BadgeContract } from '../contracts/Badge.json';
+import { default as PassportContract } from '../contracts/Passport.json';
+import { default as PlatformContract } from '../contracts/Platform.json';
 
-// context
-import { useWeb3Librariers } from './librariers';
+// hooks
+import { useTorus } from './Torus';
 
 // types
-import type { MetaTxParams } from '../types';
+import type { AbiItem } from 'web3-utils';
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-export interface Web3 {
-  getBalance: () => Promise<string>;
-  getSignatureParameters: (
-    signature: string
-  ) => Promise<never> | { r: string; s: string; v: number };
-  transferSPN: ({
-    amount,
-    contentId,
-    fromUserId,
-    toAddress,
-    toUserId,
-  }: {
-    amount: number;
-    contentId: string;
-    fromUserId: string;
-    toAddress: string;
-    toUserId: string;
-  }) => Promise<any>;
-  prepareMetaTransaction: ({
-    functionSignature,
-    contract,
-    contractAddress,
-    domainData,
-  }: MetaTxParams) => Promise<string>;
+interface Web3 {
+  isWeb3Ready: boolean;
+  walletAPI: { handleGetTorusBalance: () => Promise<number> } | null;
+  torusError: Error | any;
+  isTorusReady: boolean;
+  web3Error: Error | null;
 }
 
-export const Web3Context = createContext<Web3>(null);
+const Web3Context = createContext<Web3>({
+  isWeb3Ready: false,
+  walletAPI: null,
+  torusError: null,
+  isTorusReady: false,
+  web3Error: null,
+});
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-interface Props {
+interface WalletConfig {
+  MAINNET_NETWORK_ID: number;
+  POLY_NETWORK_ID: number;
+  RPC_PROVIDER: string;
+  SPN_TOKEN_ADDRESS: string;
+  BADGE_STORE_ADDRESS: string;
+  PASSPORT_ADDRESS: string;
+  BICONOMY_API_KEY: string;
+  EXPLORER_BASE_URL: string;
+}
+
+interface Web3ProviderProps {
   children: React.ReactNode;
 }
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const domainType = [
-  { name: 'name', type: 'string' },
-  { name: 'version', type: 'string' },
-  { name: 'verifyingContract', type: 'address' },
-  { name: 'salt', type: 'bytes32' },
-];
-const metaTransactionType = [
-  { name: 'nonce', type: 'uint256' },
-  { name: 'from', type: 'address' },
-  { name: 'functionSignature', type: 'bytes' },
-];
-//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+const debugWeb3 = false;
+const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
+const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 
-const Web3Provider = ({ children }: Props) => {
-  const { contracts, config, torusKey, web3 } = useWeb3Librariers();
-  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
-  //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+const Web3Provider = ({ children }: Web3ProviderProps) => {
+  const [error, setError] = useState<Error | null>(null);
+  const [contracts, setContracts] = useState<null | Record<string, any>>(null);
+
+  const WalletAPIRef = useRef(null);
+  const { error: torusError, torusKeys, isReady: isTorusReady } = useTorus();
+
+  const config: WalletConfig = (() => {
+    if (walletIsMainnet === 'true') {
+      return {
+        MAINNET_NETWORK_ID: 1,
+        POLY_NETWORK_ID: 137,
+        RPC_PROVIDER: 'https://polygon-rpc.com/',
+        SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
+        BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
+        PASSPORT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3', // TODO set when deployed
+        BICONOMY_API_KEY: walletBiconomyApiKey,
+        EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
+      };
+    }
+
+    return {
+      MAINNET_NETWORK_ID: 5,
+      POLY_NETWORK_ID: 80001,
+      RPC_PROVIDER: 'https://rpc-mumbai.matic.today',
+      SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
+      BADGE_STORE_ADDRESS: '0x59cD3d76cC9EA4f626629337664A3CbD78F48474',
+      PASSPORT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3',
+      BICONOMY_API_KEY: walletBiconomyApiKey,
+      EXPLORER_BASE_URL: 'https://mumbai.polygonscan.com/tx/',
+    };
+  })();
+
+  useEffect(() => {
+    const initWeb3WithBiconomy = async () => {
+      try {
+        const biconomy = new Biconomy(
+          new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
+          {
+            apiKey: config.BICONOMY_API_KEY,
+            debug: debugWeb3,
+          }
+        );
+
+        biconomy.onEvent(biconomy.READY, async () => {
+          if (debugWeb3) {
+            console.log('@Biconomy/mexa ready, initializing Web3API');
+          }
+
+          const Web3Eth = new Web3Library(biconomy);
+          setContracts({
+            passportContract: new Web3Eth.eth.Contract(
+              BadgeContract as Array<AbiItem>,
+              config.PASSPORT_ADDRESS
+            ),
+            badgeStoreContract: new Web3Eth.eth.Contract(
+              PassportContract as Array<AbiItem>,
+              config.BADGE_STORE_ADDRESS
+            ),
+            badgeStoreDomainData: {
+              name: 'Sapien Badge Store',
+              version: 'v3',
+              verifyingContract: config.BADGE_STORE_ADDRESS,
+              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
+                64,
+                '0'
+              )}`,
+            },
+            platformSPNContract: new Web3Eth.eth.Contract(
+              PlatformContract as AbiItem[],
+              config.SPN_TOKEN_ADDRESS
+            ),
+            platformSPNDomainData: {
+              name: 'Sapien Network',
+              version: '1',
+              verifyingContract: config.SPN_TOKEN_ADDRESS,
+              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
+                64,
+                '0'
+              )}`,
+            },
+          });
+
+          WalletAPIRef.current = Web3Eth;
+        });
+
+        biconomy.onEvent(biconomy.ERROR, (error, message) => {
+          if (debugWeb3) {
+            console.error('Error initializing @Biconomy/mexa', error, message);
+          }
+
+          Sentry.captureException(error);
+          setError(error);
+        });
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    if (isTorusReady === true) {
+      if (debugWeb3) {
+        console.log('Torus Initializng Biconomy');
+      }
+      initWeb3WithBiconomy();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTorusReady]);
+
+  // API
+  const handleGetTorusBalance = async () => {
+    try {
+      const { publicAddress } = torusKeys;
+      const balance = await contracts.platformSPNContract.methods
+        .balanceOf(publicAddress)
+        .call();
+
+      return Number(balance);
+    } catch (err) {
+      Sentry.captureException(err);
+    }
+  };
 
   return (
     <Web3Context.Provider
       value={{
-        getBalance: async function () {
-          if (this.isWeb3APIReaddy === true) {
-            try {
-              const { publicAddress } = torusKey;
-              const balance = contracts.platformSPNContract.methods
-                .balanceOf(publicAddress)
-                .call();
-
-              return balance;
-            } catch (err) {
-              Sentry.captureException('[getBalance] Error', err);
-              return Promise.reject('API Not Ready');
-            }
-          } else {
-            return Promise.reject('API Not Ready');
-          }
-        },
-        getSignatureParameters: function (signature) {
-          if (this.isWeb3APIReaddy === true) {
-            if (!web3.utils.isHexStrict(signature)) {
-              return Promise.reject(
-                'Given value "'.concat(
-                  signature,
-                  '" is not a valid hex string.'
-                )
-              );
-            }
-
-            let vNum: number = web3.utils.hexToNumber(
-              '0x'.concat(signature.slice(130, 132))
-            );
-
-            if (![27, 28].includes(vNum)) vNum += 27;
-
-            return {
-              r: signature.slice(0, 66),
-              s: '0x'.concat(signature.slice(66, 130)),
-              v: vNum,
-            };
-          } else {
-            return Promise.reject('API Not Ready');
-          }
-        },
-        transferSPN: async function ({
-          amount,
-          contentId,
-          fromUserId,
-          toAddress,
-          toUserId,
-        }: {
-          amount: number;
-          contentId: string;
-          fromUserId: string;
-          toAddress: string;
-          toUserId: string;
-        }) {
-          if (this.isWeb3APIReaddy === true) {
-            try {
-              if (isAddress(toAddress)) {
-                if (amount > 0) {
-                  const balanceSPN = await this.getBalance();
-                  if (amount < balanceSPN) {
-                    const functionSignature =
-                      contracts.platformSPNContract.methods
-                        .transfer(toAddress, amount)
-                        .encodeABI();
-
-                    const rawTx = await this.prepareMetaTransaction({
-                      functionSignature: functionSignature,
-                      contract: contracts.platformSPNContract,
-                      contractAddress: config.SPN_TOKEN_ADDRESS,
-                      domainData: contracts.platformSPNDomainData,
-                    } as MetaTxParams);
-
-                    const data = await sendSPN({
-                      fromUserId,
-                      toUserId,
-                      spnAmount: amount,
-                      contentId,
-                      rawTx,
-                    });
-
-                    return data;
-                  } else {
-                    return Promise.reject(
-                      'Platform SPN balance is less than required'
-                    );
-                  }
-                } else {
-                  return Promise.reject('SPN amount should be positive');
-                }
-              } else {
-                return Promise.reject('Address should be valid');
-              }
-            } catch (err) {
-              Sentry.captureException('[transferSPN] Error', err);
-              return Promise.reject(err);
-            }
-          } else {
-            return Promise.reject('API Not Ready');
-          }
-        },
-        prepareMetaTransaction: async function ({
-          functionSignature,
-          contract,
-          contractAddress,
-          domainData,
-        }: MetaTxParams) {
-          const { publicAddress, privateKey } = torusKey;
-
-          const nonce = await contract.methods.getNonce(publicAddress).call();
-
-          const message = {
-            nonce: web3.utils.toHex(nonce),
-            from: publicAddress,
-            functionSignature: functionSignature,
-          };
-
-          const dataToSign = {
-            types: {
-              EIP712Domain: domainType,
-              MetaTransaction: metaTransactionType,
-            },
-            domain: domainData,
-            primaryType: 'MetaTransaction',
-            message: message,
-          };
-
-          const signature = sigUtil.signTypedData_v4(
-            Buffer.from(privateKey, 'hex'),
-            {
-              // @ts-ignore
-              data: dataToSign,
-            }
-          );
-          const { r, s, v } = this.getSignatureParameters(signature);
-          const executeMetaTransactionData = contract.methods
-            .executeMetaTransaction(publicAddress, functionSignature, r, s, v)
-            .encodeABI();
-
-          const gasPrice = await axios
-            .get('https://gasstation-mainnet.matic.network')
-            .then((response) => response.data?.fast)
-            .catch(() => 50); // default
-
-          const common = Common.custom(
-            walletIsMainnet
-              ? CustomChain.PolygonMainnet
-              : CustomChain.PolygonMumbai
-          );
-
-          const tx = Tx.fromTxData(
-            {
-              nonce: web3.utils.toHex(nonce),
-              to: contractAddress,
-              gasPrice: web3.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
-              gasLimit: 300000,
-              data: executeMetaTransactionData,
-            },
-            { common }
-          );
-          const signedTx = tx.sign(Buffer.from(privateKey, 'hex'));
-          const serializedTx = signedTx.serialize();
-          const raw = '0x' + serializedTx.toString('hex');
-
-          return raw;
-        },
+        isWeb3Ready: WalletAPIRef.current !== null,
+        web3Error: error,
+        walletAPI: { handleGetTorusBalance },
+        torusError,
+        isTorusReady,
       }}
     >
       {children}
@@ -257,4 +195,4 @@ function useWeb3() {
   return context;
 }
 
-export { useWeb3, Web3Provider };
+export { Web3Provider, useWeb3 };

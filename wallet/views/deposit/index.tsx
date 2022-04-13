@@ -19,6 +19,9 @@ import { hooks as metaMaskHooks, metaMask } from '../../connectors/metaMask';
 import { useToast } from 'context/toast';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
+// web3
+import { useWeb3 } from '../../providers';
+
 const { useAccounts, useError, useChainId, useIsActive, useIsActivating } =
   metaMaskHooks;
 
@@ -33,6 +36,10 @@ interface Props {
 
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
+  const [isFetchingBalance, setIsFetchingBalance] = useState(true);
+
+  const { walletAPI } = useWeb3();
+
   const error = useError();
   const account = useAccounts();
   const chainId = useChainId();
@@ -42,8 +49,21 @@ const Deposit = ({ handleBack }: Props) => {
   const toast = useToast();
   const depositTokensRef = useRef(null);
 
+  let currentBalance = useRef(null);
+
   useEffect(() => {
     metaMask.connectEagerly();
+  }, []);
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const balance = await walletAPI.handleGetTorusBalance();
+
+      currentBalance.current = balance;
+      setIsFetchingBalance(false);
+    };
+
+    fetchBalance();
   }, []);
 
   const handleActivateMetamask = async () => {
@@ -63,6 +83,13 @@ const Deposit = ({ handleBack }: Props) => {
         message: err,
       });
     }
+  };
+
+  const renderBalance = () => {
+    if (isFetchingBalance)
+      return <span className="text-xs">(Loading Balance...)</span>;
+
+    return <span className="text-xs">(${currentBalance.current} SPN)</span>;
   };
 
   const renderView = () => {
@@ -91,7 +118,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                Deposit
+                Deposit {renderBalance()}
               </h5>
               {/* TODO there is no way to really disconnect the wallet */}
               {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
@@ -179,7 +206,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                Deposit
+                Deposit {renderBalance()}
               </h5>
               {/* TODO there is no way to really disconnect the wallet */}
               {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
