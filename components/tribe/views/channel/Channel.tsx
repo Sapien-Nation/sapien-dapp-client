@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowNarrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowNarrowLeftIcon, RefreshIcon } from '@heroicons/react/outline';
 
 // api
 import { createContent } from 'api/content';
@@ -27,12 +27,14 @@ import type { Channel as ChannelType } from 'tools/types/channel';
 
 const Channel = () => {
   const [showEditor, setShowEditor] = useState(false);
+  const [isPublishing, setPublishing] = useState(false);
 
   const { push, query } = useRouter();
   const { tribeID, viewID } = query;
 
   const endDivRef = useRef(null);
   const belowEditorRef = useRef(null);
+  const editorRef = useRef(null);
 
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
@@ -67,17 +69,26 @@ const Channel = () => {
 
   const handleSubmit = async (text) => {
     try {
-      const body = {
-        data: text,
-        groupId: channel.id,
-      };
+      setPublishing(true);
+      if (editorRef.current) {
+        const content = editorRef.current.getContent();
+        editorRef.current.setDirty(false);
 
-      const response: Content = await createContent(body);
+        const body = {
+          data: content,
+          groupId: channel.id,
+        };
 
-      push(`/tribes/${tribeID}/content?id=${response.id}`);
+        const response: Content = await createContent(body);
+
+        setPublishing(false);
+        push(`/tribes/${tribeID}/content?id=${response.id}`);
+      }
     } catch (error) {
+      setPublishing(false);
       toast({
-        message: error || 'Error while creating the content, please try again',
+        message:
+          error.message || 'Error while creating the content, please try again',
       });
     }
   };
@@ -124,7 +135,7 @@ const Channel = () => {
         <>
           <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-white">
             <div>
-              <ChannelEditor />
+              <ChannelEditor editorRef={editorRef} />
             </div>
           </div>
           <button
@@ -133,7 +144,14 @@ const Channel = () => {
           >
             <ArrowNarrowLeftIcon className="text-gray-700 w-5" /> Back
           </button>
-          <button className="absolute bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm">
+          <button
+            className={`${
+              isPublishing ? 'cursor-not-allowed' : 'cursor-pointer'
+            } absolute flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
+            onClick={handleSubmit}
+            disabled={isPublishing}
+          >
+            {isPublishing && <RefreshIcon className="w-5 animate-spin" />}{' '}
             Publish
           </button>
         </>
