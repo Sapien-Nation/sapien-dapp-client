@@ -290,7 +290,7 @@ const Deposit = ({ handleBack }: Props) => {
         );
     }
   };
-  return <div className="h-full space-y-6">{renderView()}</div>;
+  return <div className="h-full space-y-6 w-72">{renderView()}</div>;
 };
 
 export default Deposit;
