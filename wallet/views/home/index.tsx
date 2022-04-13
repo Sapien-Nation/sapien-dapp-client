@@ -1,3 +1,4 @@
+import _chunk from 'lodash/chunk';
 import {
   AcademicCapIcon,
   ChartPieIcon,
@@ -20,39 +21,44 @@ const Home = ({ onDeposit }: Props) => {
     { id: 6, image: <XIcon className="w-6" /> },
     { id: 7, image: <CollectionIcon className="w-6" /> },
     { id: 8, image: <ChartPieIcon className="w-6" /> },
+    { id: 9, image: <CollectionIcon className="w-6" /> },
+    { id: 10, image: <XIcon className="w-6" /> },
+    { id: 11, image: <CollectionIcon className="w-6" /> },
+    { id: 12, image: <ChartPieIcon className="w-6" /> },
+    { id: 13, image: <CollectionIcon className="w-6" /> },
+    { id: 14, image: <XIcon className="w-6" /> },
+    { id: 15, image: <CollectionIcon className="w-6" /> },
+    { id: 16, image: <ChartPieIcon className="w-6" /> },
   ];
 
   const half = Math.ceil(tokens.length / 2);
 
+  const tokensChunk = _chunk(tokens, 4);
   return (
     <>
       <button
-        className="rounded-full text-sapien-neutral-200 flex items-center"
+        className="rounded-full  flex items-center text-white font-extrabold"
         onClick={onDeposit}
       >
         <PlusIcon className="w-5 mx-auto" />
         <span className="ml text-sm">Add</span>
       </button>
       <div className="mt-3 flex justify-center">
-        <div>
-          <ol className="even">
-            {tokens.splice(0, half).map((token) => {
-              return (
+        <div className="mt-4">
+          {_chunk(tokens, 4).map((chunk, index) => (
+            <ol
+              className={
+                index === 0 ? 'even' : index % 2 === 0 ? 'even' : 'odd'
+              }
+              key={index}
+            >
+              {chunk.map((token) => (
                 <li className="hex" key={token.id}>
                   <div className="hex-content">{token?.image}</div>
                 </li>
-              );
-            })}
-          </ol>
-          <ol className="odd">
-            {tokens.splice(-half).map((token) => {
-              return (
-                <li className="hex" key={token.id}>
-                  <div className="hex-content">{token?.image}</div>
-                </li>
-              );
-            })}
-          </ol>
+              ))}
+            </ol>
+          ))}
         </div>
       </div>
     </>

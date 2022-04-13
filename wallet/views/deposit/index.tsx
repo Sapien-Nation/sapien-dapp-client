@@ -65,7 +65,8 @@ const Deposit = ({ handleBack }: Props) => {
       return error.message;
     }
 
-    if (isActive) return `Address: ${account[0]}`;
+    if (isActive)
+      return `Address: ...${account[0].slice(29, account[0].length - 1)}`;
 
     return (
       <>
@@ -133,7 +134,7 @@ const Deposit = ({ handleBack }: Props) => {
               )}
             </div>
             {isActive ? (
-              <p className="text-sm">
+              <p className="text-sm text-white">
                 You will be redirected to Metamask to complete the transaction
               </p>
             ) : (
@@ -156,7 +157,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <Metamask width={25} />
                 Deposit with Metamask
               </button>
-              <span className="text-xs text-green-800 flex justify-center items-center mt-2 text-ellipsis">
+              <span className="text-xs text-green-500 flex justify-center items-center mt-2 text-ellipsis max-w-sm">
                 {renderHelperText()}
               </span>
             </div>
@@ -166,16 +167,16 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-green-500 font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-green-400 font-extrabold tracking-wide flex items-center gap-2">
                 Deposit Succeeded
                 <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
               </h5>
             </div>
-            <p>
+            <p className="text-white">
               <h5>Transaction Details</h5>
               ...
             </p>
-            <p className="text-xs">
+            <p className="text-xs text-white">
               if you have any questions please contact{' '}
               <a
                 href="mailto:passports@sapien.network"

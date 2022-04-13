@@ -17,7 +17,6 @@ input {
 ol.even {
   position: relative;
   left: 1.8rem;
-  top:10px;
 }
 
 ol.odd {
