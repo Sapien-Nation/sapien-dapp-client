@@ -1,5 +1,3 @@
-import Link from 'next/link';
-
 const DiscoveryNavigation = () => {
   return (
     <div className="w-full">

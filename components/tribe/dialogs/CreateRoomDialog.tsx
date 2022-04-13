@@ -16,17 +16,20 @@ import { useToast } from 'context/toast';
 import { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
+  aboutObject: string;
+  aboutObjectId: string;
   onClose: () => void;
-  tribeID: string;
 }
-
 interface FormValues {
   name: string;
 }
 
 const form = 'create-room-form';
-const CreateRoomDialog = ({ onClose, tribeID }: Props) => {
+const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
   const toast = useToast();
+  const {
+    query: { tribeID },
+  } = useRouter();
   const methods = useForm<FormValues>({
     defaultValues: {
       name: '',
@@ -43,7 +46,7 @@ const CreateRoomDialog = ({ onClose, tribeID }: Props) => {
 
   const onSubmit = async ({ name }: FormValues) => {
     try {
-      const response = await createRoom({ name, tribeId: tribeID });
+      const response = await createRoom({ aboutObject, aboutObjectId, name });
 
       mutate(
         '/api/v3/profile/tribes',

@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
 
+// constants
+import { AboutObject } from 'tools/constants/rooms';
+
 // components
 import {
   CreateChannelDialog,
@@ -129,8 +132,9 @@ const TribeNavigation = () => {
         {/* Modals */}
         {dialog === Dialog.CreateRoom && (
           <CreateRoomDialog
+            aboutObject={AboutObject.Party}
+            aboutObjectId={tribeID as string}
             onClose={() => setDialog(null)}
-            tribeID={tribeID as string}
           />
         )}
         {dialog === Dialog.CreateChannel && (
