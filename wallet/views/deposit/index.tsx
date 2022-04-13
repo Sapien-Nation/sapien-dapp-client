@@ -36,6 +36,7 @@ interface Props {
 
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
+  const [userBalance, setUserBalance] = useState(0);
   const [isFetchingBalance, setIsFetchingBalance] = useState(true);
 
   const { walletAPI } = useWeb3();
@@ -49,8 +50,6 @@ const Deposit = ({ handleBack }: Props) => {
   const toast = useToast();
   const depositTokensRef = useRef(null);
 
-  let currentBalance = useRef(null);
-
   useEffect(() => {
     metaMask.connectEagerly();
   }, []);
@@ -59,7 +58,7 @@ const Deposit = ({ handleBack }: Props) => {
     const fetchBalance = async () => {
       const balance = await walletAPI.handleGetTorusBalance();
 
-      currentBalance.current = balance;
+      setUserBalance(balance);
       setIsFetchingBalance(false);
     };
 
@@ -89,7 +88,7 @@ const Deposit = ({ handleBack }: Props) => {
     if (isFetchingBalance)
       return <span className="text-xs">(Loading Balance...)</span>;
 
-    return <span className="text-xs">(${currentBalance.current} SPN)</span>;
+    return <span className="text-xs">(${userBalance} SPN)</span>;
   };
 
   const renderView = () => {

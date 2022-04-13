@@ -1,3 +1,6 @@
+// constants
+import { ContentMimeType } from 'tools/constants/content';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
@@ -13,13 +16,21 @@ const ContentItem = ({
     owner: { avatar, displayName },
     createdAt,
     body,
-    imagePreview,
+    mimeType,
   },
 }: Props) => {
   return (
     <div className="max-w-2xl mx-auto w-full text-gray-300">
       <div className="mt-4">
-        {body}
+        {mimeType === ContentMimeType.Html ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: body,
+            }}
+          ></div>
+        ) : (
+          body
+        )}
         <div className="flex items-center mt-2 gap-2">
           <div className="flex gap-1">
             <img

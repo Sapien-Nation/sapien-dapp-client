@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+// constants
+import { ContentMimeType } from 'tools/constants/content';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
@@ -18,6 +21,7 @@ const ContentItemMainChannel = ({
     createdAt,
     body,
     imagePreview,
+    mimeType,
   },
   tribeID,
 }: Props) => {
@@ -34,7 +38,15 @@ const ContentItemMainChannel = ({
             alt="Sapien Post Image"
           />
           <div className="flex-1 space-y-2">
-            {body}
+            {mimeType === ContentMimeType.Html ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: body,
+                }}
+              ></div>
+            ) : (
+              body
+            )}
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
                 <img
