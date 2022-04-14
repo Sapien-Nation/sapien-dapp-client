@@ -56,7 +56,7 @@ const Deposit = ({ handleBack }: Props) => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const balance = await walletAPI.handleGetTorusBalance();
+      const balance = await walletAPI.getWalletBalance();
 
       setUserBalance(balance);
       setIsFetchingBalance(false);

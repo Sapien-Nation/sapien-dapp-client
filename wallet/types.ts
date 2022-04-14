@@ -6,5 +6,7 @@ export interface MetaTxParams {
 }
 
 export interface Token {
-  id: string;
+  name: string;
+  description: string;
+  image: string;
 }
