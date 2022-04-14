@@ -31,7 +31,7 @@ const Navbar = () => {
               {({ open }) => (
                 <>
                   <div>
-                    <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-80 top-full z-10 origin-top-right opacity-90 border border-gray-800 bg-sapien-neutral-400 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-80 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-800 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Wallet />
                     </Menu.Items>
                   </div>
