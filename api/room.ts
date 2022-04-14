@@ -5,6 +5,7 @@ export interface CreateRoomBody {
   aboutObject: string;
   aboutObjectId: string;
   name: string;
+  tribeId: string;
 }
 
 export const createRoom = (body: CreateRoomBody) =>

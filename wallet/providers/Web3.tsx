@@ -13,22 +13,19 @@ import { useTorus } from './Torus';
 
 // types
 import type { AbiItem } from 'web3-utils';
+import type { Token } from '../types';
 
+//----------------------------------------------------------------------------------------------------------------------------------------------------
 interface Web3 {
   isWeb3Ready: boolean;
-  walletAPI: { handleGetTorusBalance: () => Promise<number> } | null;
+  walletAPI: {
+    handleGetTorusBalance: () => Promise<number>;
+    handleGetTokens: () => Promise<Array<Token>>;
+  } | null;
   torusError: Error | any;
   isTorusReady: boolean;
   web3Error: Error | null;
 }
-
-const Web3Context = createContext<Web3>({
-  isWeb3Ready: false,
-  walletAPI: null,
-  torusError: null,
-  isTorusReady: false,
-  web3Error: null,
-});
 
 interface WalletConfig {
   MAINNET_NETWORK_ID: number;
@@ -44,6 +41,15 @@ interface WalletConfig {
 interface Web3ProviderProps {
   children: React.ReactNode;
 }
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------
+const Web3Context = createContext<Web3>({
+  isWeb3Ready: false,
+  walletAPI: null,
+  torusError: null,
+  isTorusReady: false,
+  web3Error: null,
+});
 
 const debugWeb3 = false;
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
@@ -171,12 +177,22 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  const handleGetTokens = async (): Promise<Array<Token>> => {
+    try {
+      // TODO get tokens here
+
+      return [];
+    } catch (err) {
+      Sentry.captureException(err);
+    }
+  };
+
   return (
     <Web3Context.Provider
       value={{
         isWeb3Ready: WalletAPIRef.current !== null,
         web3Error: error,
-        walletAPI: { handleGetTorusBalance },
+        walletAPI: { handleGetTokens, handleGetTorusBalance },
         torusError,
         isTorusReady,
       }}
