@@ -40,7 +40,7 @@ const Home = ({ onDeposit }: Props) => {
         {tokens.map((token) => (
           <li
             className="bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
-            key={token.id}
+            key={token.name}
           >
             {/* <img
               className="rounded-full px-1 py-1 w-14 h-14"

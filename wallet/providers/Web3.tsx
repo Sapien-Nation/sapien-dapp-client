@@ -179,8 +179,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           .tokenOfOwnerByIndex(isAddress, i)
           .call();
         try {
-          const passportData = await getTokenData(`${baseURI}${tokenID}`);
-          tokens.push(passportData?.data);
+          const { data } = await getTokenData(`${baseURI}${tokenID}`);
+          tokens.push(data);
         } catch (err: any) {
           Sentry.captureException(
             `Axios error - ${err?.response?.status} - ${err?.response?.statusText}`
