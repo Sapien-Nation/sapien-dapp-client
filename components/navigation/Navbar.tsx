@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';
+import { ProfileDialog } from 'components/tribe/dialogs';
 
 // ui
 // @ts-ignore
@@ -19,6 +20,7 @@ const Navbar = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const { me } = useAuth();
+  console.log('me', me);
 
   return (
     <>
@@ -129,7 +131,9 @@ const Navbar = () => {
 
       {/* Dialogs */}
 
-      {dialog === Dialog.Profile && <h1>TODO add profile Dialog</h1>}
+      {dialog === Dialog.Profile && (
+        <ProfileDialog profileID="1" onClose={() => setDialog(null)} />
+      )}
     </>
   );
 };
