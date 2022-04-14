@@ -2,9 +2,6 @@ import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { useCopyToClipboard } from 'react-use';
 import { useRouter } from 'next/router';
 
-// components
-import DefaultCover from './DefaultCover';
-
 // constants
 import { ToastType } from 'constants/toast';
 
@@ -44,7 +41,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
           />
         </div>
       ) : (
-        <DefaultCover />
+        <div className="bg-gradient-to-r bg-sapien-neutral-200 min-h-250 shadow-md rounded-lg relative flex justify-center items-center" />
       )}
       <div className="flex flex-col md:flex-row">
         <div className="relative">
@@ -55,13 +52,17 @@ const MainChannelHeader = ({ tribe }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 bg-gradient-to-b from-purple-700 via-purple-300 to-purple-500  shadow shadow-sapien-neutral-600" />
+            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
+              {tribe.name[0].toUpperCase()}
+            </div>
           )}
         </div>
         <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
           <div className="flex flex-col justify-center sm:ml-12">
             <h1 className="text-xl text-center sm:text-left">{tribe.name}</h1>
-            <h2 className="text-gray-500 mb-4 sm:mb-0">{tribe.membersCount} members</h2>
+            <h2 className="text-gray-500 mb-4 sm:mb-0">
+              {tribe.membersCount} members
+            </h2>
           </div>
           <div className="flex items-center sm:mr-5">
             <button

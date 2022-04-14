@@ -2,9 +2,6 @@ import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
 
-// components
-import DefaultCover from './DefaultCover';
-
 // constants
 import { ToastType } from 'constants/toast';
 
@@ -38,7 +35,6 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
     <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
       {channel.cover ? (
         <div className="shadow-md rounded-lg relative w-full h-56">
-          {/* @ts-ignore */}
           <img
             alt={channel.name}
             src={channel.cover}
@@ -46,7 +42,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
           />
         </div>
       ) : (
-        <DefaultCover />
+        <div className="bg-gradient-to-r bg-sapien-neutral-200 min-h-250 shadow-md rounded-lg relative flex justify-center items-center" />
       )}
       <div className="flex flex-col md:flex-row">
         <div className="relative">
@@ -57,7 +53,9 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 bg-gradient-to-r from-purple-200 via-purple-100 to-purple-700 shadow shadow-sapien-neutral-600" />
+            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
+              {channel.name[0].toUpperCase()}
+            </div>
           )}
         </div>
         <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">

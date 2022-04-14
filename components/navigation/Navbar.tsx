@@ -55,11 +55,17 @@ const Navbar = () => {
                   <div className="h-full">
                     <div className="flex items-center">
                       <div className="px-3 py-3">
-                        <img
-                          className="w-10 h-10 rounded-full flex-shrink-0"
-                          src="https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240"
-                          alt=""
-                        />
+                        {me.avatar ? (
+                          <img
+                            className="w-10 h-10 rounded-full flex-shrink-0"
+                            src={me.avatar}
+                            alt=""
+                          />
+                        ) : (
+                          <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                            {me.displayName[0].toUpperCase()}
+                          </div>
+                        )}
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="text-xs truncate w-30">
@@ -99,14 +105,17 @@ const Navbar = () => {
                   <span className="flex w-full items-center">
                     <span className="flex min-w-0 items-center w-full justify-between">
                       <div className=" px-5 py-3 ">
-                        <img
-                          className="w-10 h-10 rounded-full flex-shrink-0"
-                          src={
-                            me.avatar ||
-                            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
-                          }
-                          alt=""
-                        />
+                        {me.avatar ? (
+                          <img
+                            className="w-10 h-10 rounded-full flex-shrink-0"
+                            src={me.avatar}
+                            alt=""
+                          />
+                        ) : (
+                          <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                            {me.displayName[0].toUpperCase()}
+                          </div>
+                        )}
                       </div>
                     </span>
                   </span>

@@ -14,9 +14,19 @@ interface Props {
   tribeID: string;
 }
 
-const ContentItem = ({ content, tribeID }: Props) => {
+const ContentItem = ({
+  content: {
+    id,
+    owner: { avatar, displayName },
+    createdAt,
+    body,
+    imagePreview,
+    mimeType,
+  },
+  tribeID,
+}: Props) => {
   return (
-    <Link href={`/tribes/${tribeID}/content?id=${content.id}`} passHref>
+    <Link href={`/tribes/${tribeID}/content?id=${id}`} passHref>
       <a
         className={
           false
@@ -25,38 +35,42 @@ const ContentItem = ({ content, tribeID }: Props) => {
         }
       >
         <div className="flex space-x-3">
-          <img
-            className="w-32 h-24 object-cover rounded-md"
-            src={
-              'https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg'
-            }
-            alt="Sapien Post Image"
-          />
+          {imagePreview && (
+            <img
+              className="w-32 h-24 object-cover rounded-md"
+              src={imagePreview}
+              alt="Sapien Post Image"
+            />
+          )}
           <div className="flex-1 space-y-2">
-            {content.mimeType === ContentMimeType.Html ? (
+            {mimeType === ContentMimeType.Html ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: content.body,
+                  __html: body,
                 }}
               ></div>
             ) : (
-              content.body
+              body
             )}
             <div className="flex items-center gap-2">
               <div className="flex gap-1">
-                <img
-                  className="w-5 h-5 object-cover rounded-full"
-                  src={
-                    'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
-                  }
-                  alt="Sapien Post Image"
-                />
+                {avatar ? (
+                  <img
+                    className="w-5 h-5 object-cover rounded-full"
+                    src={avatar}
+                    alt="Sapien Post Image"
+                  />
+                ) : (
+                  <div className="w-5 h-5 bg-sapien-neutral-200 rounded-full flex items-center justify-center font-extrabold text-sm">
+                    {displayName[0].toUpperCase()}
+                  </div>
+                )}
                 <h3 className="text-sm font-medium text-gray-400">
-                  {content.owner.displayName}
+                  {displayName}
                 </h3>
               </div>
               <p className="text-xs text-gray-500">
-                {formatDateRelative(content.createdAt)}
+                {formatDateRelative(createdAt)}
               </p>
             </div>
           </div>

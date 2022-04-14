@@ -41,10 +41,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                   <div className="px-3 py-3">
                     <img
                       className="w-10 h-10 rounded-full flex-shrink-0"
-                      src={
-                        me.avatar ||
-                        'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
-                      }
+                      src={me.avatar}
                       alt=""
                     />
                   </div>
@@ -91,7 +88,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                 <div className=" px-5 py-3 ">
                   <img
                     className="w-10 h-10 rounded-full flex-shrink-0"
-                    src="https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240"
+                    src={me.avatar}
                     alt=""
                   />
                 </div>

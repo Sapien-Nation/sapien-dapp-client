@@ -72,14 +72,17 @@ const TribeNavigation = () => {
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
                       <a className="flex items-center p-2 my-1">
-                        <img
-                          alt="channel-image"
-                          className="object-cover h-10 w-10 rounded-md"
-                          src={
-                            avatar ||
-                            'https://d1bdmh0gdusw0k.cloudfront.net/images/misc/asset2.jpeg'
-                          }
-                        />
+                        {avatar ? (
+                          <img
+                            alt="channel-image"
+                            className="object-cover h-10 w-10 rounded-md"
+                            src={avatar}
+                          />
+                        ) : (
+                          <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">
+                            {name[0].toUpperCase()}
+                          </div>
+                        )}
                         <div className="ml-2">
                           <p className="block">{name}</p>
                           <p

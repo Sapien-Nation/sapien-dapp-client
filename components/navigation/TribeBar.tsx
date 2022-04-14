@@ -9,6 +9,9 @@ import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
 import { CreateTribeDialog } from 'components/tribe/dialogs';
 
+// context
+import { useAuth } from 'context/user';
+
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
 
@@ -26,6 +29,7 @@ const TribeBar = ({ tribes }: Props) => {
   const [rightClickedTribe, setRightClickedTribe] =
     useState<ProfileTribe | null>(null);
 
+  const { me } = useAuth();
   const { pathname } = useRouter();
 
   const tooltipRef = useRef(null);
@@ -71,7 +75,7 @@ const TribeBar = ({ tribes }: Props) => {
                 <img
                   className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
                   alt={''}
-                  src="https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240"
+                  src={me.avatar}
                 />
                 <span className="sr-only">Go to profile page</span>
               </a>

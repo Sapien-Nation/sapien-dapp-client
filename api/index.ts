@@ -31,11 +31,6 @@ export const authInstance = axios.create({
   withCredentials: true,
 });
 
-export const notificationInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_NOTIFICATION_URL,
-  withCredentials: true,
-});
-
 /*
  ***
  ***  Interceptors
@@ -51,15 +46,6 @@ instance.interceptors.request.use((config) => {
 }, undefined);
 
 authInstance.interceptors.request.use((config) => {
-  const tokens = window.localStorage.getItem('tokens');
-  if (tokens) {
-    const { token } = JSON.parse(tokens);
-    config.headers['Authorization'] = `Bearer ${token}`;
-  }
-  return config;
-}, undefined);
-
-notificationInstance.interceptors.request.use((config) => {
   const tokens = window.localStorage.getItem('tokens');
   if (tokens) {
     const { token } = JSON.parse(tokens);
