@@ -6,7 +6,6 @@ import { createTribe, uploadImage as uploadImageTribe } from 'api/tribe';
 // utils
 import {
   createFile,
-  mockUser,
   render,
   screen,
   setAllTribes,
@@ -25,6 +24,7 @@ import {
   mockProfileTribeChannel,
   mockProfileTribeRoom,
 } from 'tools/mocks/tribe';
+import { mockUser } from 'tools/mocks/user';
 
 jest.mock('api/channel');
 jest.mock('api/room');

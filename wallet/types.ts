@@ -4,3 +4,7 @@ export interface MetaTxParams {
   contractAddress: string;
   domainData: any;
 }
+
+export interface Token {
+  id: string;
+}

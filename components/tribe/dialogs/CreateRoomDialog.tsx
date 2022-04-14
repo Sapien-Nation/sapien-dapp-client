@@ -46,7 +46,12 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 
   const onSubmit = async ({ name }: FormValues) => {
     try {
-      const response = await createRoom({ aboutObject, aboutObjectId, name });
+      const response = await createRoom({
+        aboutObject,
+        aboutObjectId,
+        name,
+        tribeId: tribeID as string,
+      });
 
       mutate(
         '/api/v3/profile/tribes',

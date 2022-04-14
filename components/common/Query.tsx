@@ -27,7 +27,7 @@ const Query = ({
   showValidating = false,
   options,
 }: Props) => {
-  const { data, error, isValidating } = useSWR(api, options);
+  const { data, error, isValidating, mutate } = useSWR(api, options);
 
   if (api !== null) {
     if ((!data && !error) || (showValidating && isValidating)) {
@@ -38,7 +38,7 @@ const Query = ({
     }
   }
   if (error) {
-    return <ErrorView />;
+    return <ErrorView message={error} code={500} onRetry={() => mutate()} />;
   }
 
   return children ? (children as Function)(data) : null;

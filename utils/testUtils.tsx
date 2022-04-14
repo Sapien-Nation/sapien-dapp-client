@@ -4,41 +4,21 @@ import { render, RenderOptions } from '@testing-library/preact';
 import userEvent from '@testing-library/user-event';
 import { Cache, SWRConfig, SWRConfiguration } from 'swr';
 
-// constants
-import { Types as UserTypes, Status as UserStatus } from 'tools/types/user';
-
 // types
 import type { NextRouter } from 'next/router';
-import type { User } from 'tools/types/user';
 
 // providers
 import { AuthenticationProvider } from 'context/user';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { ToastProvider } from 'context/toast';
 import { ToastContainer } from 'components/common';
-import { Web3Provider } from 'wallet/providers';
+
+// mocks
+import { mockUser } from 'tools/mocks/user';
 
 export const cache = new Map();
 
-// Mocks
-export const mockUser = ({
-  id = '1000',
-  ...rest
-}: Partial<User> = {}): User => ({
-  avatar: '',
-  id,
-  type: UserTypes.User,
-  username: 'jhon',
-  status: UserStatus.A,
-  firstName: 'doe',
-  lastName: 'doe',
-  displayName: 'Jhon Doe',
-  email: 'jhon@test.com',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  ...rest,
-});
-
+// mocks
 export const mockRouter = (props: Partial<NextRouter> = {}): NextRouter => ({
   asPath: '/',
   basePath: '/',
