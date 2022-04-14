@@ -381,7 +381,7 @@ describe('LoggedIn', () => {
       expect(
         (
           screen.getByRole('link', {
-            name,
+            name: new RegExp(name, 'i'),
           }) as HTMLLinkElement
         ).href
       ).toBe(`http://localhost/tribes/${tribeID}/${id}`);
@@ -558,7 +558,7 @@ describe('LoggedIn', () => {
     expect(
       (
         screen.getByRole('link', {
-          name: newChannel.name,
+          name: new RegExp(newChannel.name, 'i'),
         }) as HTMLLinkElement
       ).href
     ).toBe(`http://localhost/tribes/${tribeID}/${newChannel.id}`);
@@ -597,7 +597,8 @@ describe('LoggedIn', () => {
     expect(await screen.findByText(error.message)).toBeInTheDocument();
     expect(createRoom).toHaveBeenCalledWith({
       name: roomName,
-      tribeId: tribeID,
+      aboutObject: 'PARTY',
+      aboutObjectId: '1000',
     });
 
     // on success
@@ -608,7 +609,8 @@ describe('LoggedIn', () => {
     ).toBeInTheDocument();
     expect(createRoom).toHaveBeenCalledWith({
       name: roomName,
-      tribeId: tribeID,
+      aboutObject: 'PARTY',
+      aboutObjectId: '1000',
     });
 
     expect(push).toHaveBeenCalledWith(`/tribes/${tribeID}/${newRoom.id}`);

@@ -114,7 +114,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
   const [torusKeys, setTorusKeys] = useState<TorusKey | null>(null);
 
   const { me } = useAuth();
-  const [{ torus, refresh }] = useLocalStorage<null | {
+  const [tokens] = useLocalStorage<null | {
     torus: string;
     refresh: string;
   }>('tokens', null);
@@ -124,7 +124,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
       try {
         const keys = await initializeTorusKeys(
           { skipSw: true },
-          { user: me, tokens: { torus, refresh } }
+          { user: me, tokens: { torus: tokens.torus, refresh: tokens.refresh } }
         );
         setTorusKeys(keys);
       } catch (err) {
@@ -148,7 +148,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
     });
     try {
       const { token: refreshedTorusToken } = await refreshTokenAPI(
-        refresh,
+        tokens.refresh,
         'torus'
       );
 
