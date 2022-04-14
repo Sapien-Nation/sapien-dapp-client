@@ -17,7 +17,7 @@ const ErrorView = ({
   useEffect(() => {
     const error = new Error(message);
     Sentry.captureException(error);
-  }, [message]);
+  }, []);
 
   return (
     <div className="items-left min-h-full min-w-full sm:p-24">
