@@ -61,11 +61,11 @@ const Channel = () => {
     if (shouldFetchMoreItems) {
       fetchMore();
     }
-
-    return () => {
-      setShowEditor(false);
-    };
   }, [fetchMore, shouldFetchMoreItems]);
+
+  useEffect(() => {
+    setShowEditor(false);
+  }, [viewID]);
 
   const handleSubmit = async () => {
     try {
@@ -73,7 +73,7 @@ const Channel = () => {
       if (editorRef.current) {
         const content = editorRef.current.getContent();
         editorRef.current.setDirty(false);
-
+        console.log(content);
         const body = {
           mimeType: 'text/html',
           data: content,
