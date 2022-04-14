@@ -1,42 +1,79 @@
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
+import { useEffect, useRef } from 'react';
+
+// api
+import { sendMessage } from 'api/room';
+
+// context
+import { useToast } from 'context/toast';
 
 // components
 import { Query, SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import Details from './Details';
 import Message from './Message';
+import NotAMemberView from './NotAMemberView';
 
 // helpers
 import { formatDate } from 'utils/date';
 
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
-import { useEffect, useRef } from 'react';
+import useGetInfinitePages from 'hooks/useGetInfinitePages';
+import useOnScreen from 'hooks/useOnScreen';
+
+// types
+import type { RoomMessage } from 'tools/types/room';
 
 const Room = () => {
   const { query } = useRouter();
+  const toast = useToast();
+
   const { tribeID, viewID } = query;
+
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
 
-  const bottomFeedRef = useRef(null);
-  const messages = {};
-  // const feedMessages = _groupBy(messages, ({ createdAt }) =>
-  //   formatDate(createdAt)
-  // );
+  const topOfRoomRef = useRef(null);
+  const scrollToRef = useRef(null);
+
+  const roomID = query.viewID as string;
+  const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
+  const { data, fetchMore, isLoadingInitialData, isFetchingMore, mutate } =
+    useGetInfinitePages<{
+      data: Array<RoomMessage>;
+      nextCursor: string | null;
+    }>(`/api/v3/room/${roomID}/messages`);
+
+  const messages = _groupBy(data.reverse(), ({ createdAt }) =>
+    formatDate(createdAt)
+  );
 
   useEffect(() => {
     // Start chat at the bottom
-    if (bottomFeedRef.current) {
-      bottomFeedRef.current.scrollIntoView({
+    if (scrollToRef.current) {
+      scrollToRef.current.scrollIntoView({
         block: 'nearest',
         inline: 'start',
       });
     }
   }, []);
 
-  const handleMessageSubmit = () => {};
+  useEffect(() => {
+    if (shouldFetchMoreItems && isFetchingMore === false) {
+      fetchMore();
+    }
+  }, [fetchMore, isFetchingMore, shouldFetchMoreItems]);
+
+  const handleMessageSubmit = async (content) => {
+    try {
+      await sendMessage(roomID, { content });
+      mutate();
+    } catch (err) {
+      toast({ message: err });
+    }
+  };
 
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
@@ -49,6 +86,9 @@ const Room = () => {
               role="list"
               className="absolute bottom-0 w-full flex flex-col mb-5"
             >
+              {isLoadingInitialData === false && data.length > 0 && (
+                <li ref={topOfRoomRef} />
+              )}
               <li>
                 <time
                   className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
@@ -59,13 +99,20 @@ const Room = () => {
                 <Message
                   isAContinuosMessage
                   message={{
-                    authorID: '9999_9999',
+                    sender: {
+                      id: '9999_9999',
+                      avatar:
+                        'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png',
+                      displayName: 'Harambe at Sapien',
+                      username: 'Harambe at Sapien',
+                    },
                     id: '999_0000',
-                    avatarUrl:
-                      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png',
+                    type: '',
+                    status: '',
+                    // @ts-ignore
+                    room: {},
                     createdAt: new Date().toISOString(),
-                    displayName: 'Sapien BOT',
-                    message: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
+                    content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
                   }}
                 />
               </li>
@@ -85,8 +132,8 @@ const Room = () => {
                           key={message.id}
                           message={message}
                           isAContinuosMessage={
-                            timestampMessages[index - 1]?.authorID !==
-                            message.authorID
+                            timestampMessages[index - 1]?.sender.id !==
+                            message.sender.id
                           }
                         />
                       );
@@ -94,7 +141,7 @@ const Room = () => {
                   </li>
                 );
               })}
-              <li ref={bottomFeedRef} />
+              <li ref={scrollToRef} />
             </ul>
           </div>
           <div className="px-5">
@@ -115,12 +162,11 @@ const RoomProxy = () => {
 
   if (_isEmpty(query)) return null;
 
-  const apiKey = `/api/v3/room/${query.viewID}/messages`;
-
   return (
-    <Query api={apiKey}>
-      {() => {
-        console.log(apiKey);
+    <Query api={`/api/v3/room/${query.viewID}`} ignoreError>
+      {(data) => {
+        if (data?.message === 'User is not a memeber of the room')
+          return <NotAMemberView />;
         return <Room />;
       }}
     </Query>

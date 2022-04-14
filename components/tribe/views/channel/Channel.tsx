@@ -73,7 +73,7 @@ const Channel = () => {
       if (editorRef.current) {
         const content = editorRef.current.getContent();
         editorRef.current.setDirty(false);
-        console.log(content);
+
         const body = {
           mimeType: 'text/html',
           data: content,

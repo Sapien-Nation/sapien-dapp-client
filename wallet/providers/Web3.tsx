@@ -124,7 +124,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             },
           });
 
-          console.log('Hello');
           WalletAPIRef.current = Web3Eth;
         });
 

@@ -15,15 +15,19 @@ import { defaultValue } from '../constants';
 // utils
 import { insertEmoji, serialize } from '../utils';
 
+// types
+import type { EditableProps } from 'slate-react/dist/components/editable';
+
 const createEditorWithPlugins = _pipe(withReact, withHistory);
 
 interface Props {
   name: string;
   onSubmit: (text: string) => void;
+  slateProps?: EditableProps;
 }
 
 const editorID = 'slatejs-editor';
-const RoomEditor = ({ name, onSubmit }: Props) => {
+const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
   const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
 
@@ -98,6 +102,7 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
                 }}
                 placeholder={`Leave a message on ${name}`}
                 className="w-full py-2 break-all"
+                {...slateProps}
               />
             </Slate>
 
@@ -128,7 +133,10 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
               <Popover className="relative">
                 {() => (
                   <>
-                    <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
+                    <Popover.Button
+                      disabled={slateProps?.readOnly}
+                      className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500"
+                    >
                       <EmojiHappyIcon className="h-6 w-6" />
                     </Popover.Button>
                     <Transition

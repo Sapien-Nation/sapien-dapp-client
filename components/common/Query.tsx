@@ -10,6 +10,7 @@ interface Props {
   api: Key;
   children?: Function | null;
   empty?: React.ReactNode;
+  ignoreError?: boolean;
   loader?: React.ReactNode;
   showValidating?: boolean;
   options?: SWRConfiguration;
@@ -23,6 +24,7 @@ const Query = ({
   api,
   children,
   empty,
+  ignoreError = false,
   loader = null,
   showValidating = false,
   options,
@@ -37,7 +39,12 @@ const Query = ({
       return empty;
     }
   }
+
   if (error) {
+    if (ignoreError) {
+      return (children as Function)({ message: error });
+    }
+
     return <ErrorView message={error} code={500} onRetry={() => mutate()} />;
   }
 

@@ -11,29 +11,26 @@ import { formatDateRelative } from 'utils/date';
 
 // types
 import type { ISOString } from 'tools/types/common';
+import type { RoomMessage } from 'tools/types/room';
 
-interface Message {
-  authorID: string;
-  id: string;
-  avatarUrl: string;
-  createdAt: ISOString;
-  displayName: string;
-  message: string;
-}
 interface Props {
   isAContinuosMessage: boolean;
-  message: Message;
+  message: RoomMessage;
 }
 
 const Message = ({
   isAContinuosMessage,
-  message: { avatarUrl, createdAt, displayName, message },
+  message: {
+    sender: { avatar, displayName },
+    createdAt,
+    content,
+  },
 }: Props) => {
   return (
     <div className="py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group">
       <div className="flex space-x-3">
         {isAContinuosMessage && (
-          <img className="h-10 w-10 rounded-full" src={avatarUrl} alt="" />
+          <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
         )}
         <div className="flex-1 space-y-1">
           {isAContinuosMessage && (
@@ -51,7 +48,7 @@ const Message = ({
                 : 'pl-52 text-sm text-gray-500'
             }
           >
-            {message}
+            {content}
           </p>
         </div>
       </div>

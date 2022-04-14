@@ -23,7 +23,6 @@ const ForgotPasswordForm = () => {
     register,
     handleSubmit,
   } = useForm<ForgotPasswordFormValues>();
-  const { theme } = useTheme();
 
   const onSubmit = async ({ email }: ForgotPasswordFormValues) => {
     try {
