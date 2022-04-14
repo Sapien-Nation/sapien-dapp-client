@@ -1,4 +1,4 @@
-import { XIcon, CameraIcon, CloudUploadIcon } from '@heroicons/react/outline';
+import { XIcon, CameraIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useState, useRef } from 'react';
@@ -240,7 +240,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                           error={errors.name?.message}
                         />
                         <TextInput
-                          className="block w-full bg-gray-800 pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
                           name="name"
                           placeholder="The Sapien Tribe"
                           maxLength={50}

@@ -10,7 +10,7 @@
   height: 100%;
 }
 
-input {
+input, textarea {
   background-color: #3b3b3b !important;
 }
 /* purgecss end ignore */

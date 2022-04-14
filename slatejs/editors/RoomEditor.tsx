@@ -47,7 +47,7 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
           className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2"
         >
           {attachments.length > 0 ? (
-            <ul className='py-3 flex flex-wrap gap-3'>
+            <ul className="py-3 flex flex-wrap gap-3">
               {attachments.map((attachment, index) => (
                 <li key={index} id={editorID} className="relative mr-3">
                   <img
@@ -65,15 +65,15 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
                       );
                     }}
                   >
-                    <TrashIcon className='w-5 text-sapien-red-700' />
-                    <span className='sr-only'>Remove attachment</span>
+                    <TrashIcon className="w-5 text-sapien-red-700" />
+                    <span className="sr-only">Remove attachment</span>
                   </button>
                 </li>
               ))}
             </ul>
           ) : null}
 
-          <div className='flex flex-row'>
+          <div className="flex flex-row">
             <Slate
               editor={editor}
               value={value}
@@ -103,7 +103,7 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
 
             <div className="flex justify-end items-end gap-1">
               {/* File Upload */}
-              <button
+              {/* <button
                 className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-lime-600 focus:text-green-700"
                 onClick={(event) => {
                   event.preventDefault();
@@ -122,7 +122,7 @@ const RoomEditor = ({ name, onSubmit }: Props) => {
                   }
                 }}
                 type="file"
-              />
+              /> */}
 
               {/* Emoji */}
               <Popover className="relative">
