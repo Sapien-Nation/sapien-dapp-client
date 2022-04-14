@@ -31,8 +31,8 @@ const Wallet = () => {
             </div>
             <p className="text-sm text-white flex items-center justify-center mt-14 animate-pulse">
               {isTorusReady === false
-                ? 'We are loading your Torus Wallet'
-                : 'Loading Web/ETH libraries'}{' '}
+                ? 'Loading Sapien Wallet'
+                : 'Almost There'}{' '}
               {' ...'}
             </p>
           </div>
