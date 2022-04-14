@@ -16,12 +16,16 @@ import { ErrorView } from 'components/common';
 // hooks
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
 
+interface Props {
+  handleMobileMenu: () => void;
+}
+
 enum Dialog {
   CreateChannel,
   CreateRoom,
 }
 
-const TribeNavigation = () => {
+const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
@@ -47,6 +51,7 @@ const TribeNavigation = () => {
                     ? 'font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
                     : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
                 }
+                onClick={handleMobileMenu}
               >
                 <UserGroupIcon className="h-5 w-5 mr-4" />
                 {name}
@@ -55,7 +60,10 @@ const TribeNavigation = () => {
             <button
               aria-label="Create Channel"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => setDialog(Dialog.CreateChannel)}
+              onClick={() => {
+                setDialog(Dialog.CreateChannel);
+                handleMobileMenu();
+              }}
             >
               Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
@@ -71,7 +79,10 @@ const TribeNavigation = () => {
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="flex items-center p-2 my-1">
+                      <a
+                        className="flex items-center p-2 my-1"
+                        onClick={handleMobileMenu}
+                      >
                         {avatar ? (
                           <img
                             alt="channel-image"
@@ -107,7 +118,10 @@ const TribeNavigation = () => {
             <button
               aria-label="Create Room"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => setDialog(Dialog.CreateRoom)}
+              onClick={() => {
+                setDialog(Dialog.CreateRoom);
+                handleMobileMenu();
+              }}
             >
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
@@ -123,7 +137,12 @@ const TribeNavigation = () => {
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a className="block px-2 py-1 my-1"># {name}</a>
+                      <a
+                        className="block px-2 py-1 my-1"
+                        onClick={handleMobileMenu}
+                      >
+                        # {name}
+                      </a>
                     </Link>
                   </li>
                 );

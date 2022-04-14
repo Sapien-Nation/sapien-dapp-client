@@ -20,9 +20,15 @@ interface Props {
   isContextMenuOpen: any;
   tribe: ProfileTribe;
   onRightClick: (tribe: ProfileTribe) => void;
+  handleMobileMenu: () => void;
 }
 
-function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
+function TribeBarItem({
+  isContextMenuOpen,
+  tribe,
+  onRightClick,
+  handleMobileMenu,
+}: Props) {
   const { query } = useRouter();
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
   const { tribeID } = query;
@@ -53,11 +59,12 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
               if (tribe.isMain === false) {
                 setContextMenuPosition({
                   left: event.clientX,
-                  top: event.clientY
+                  top: event.clientY,
                 });
                 onRightClick(tribe);
               }
             }
+            handleMobileMenu();
           }}
           onContextMenu={(event) => {
             if (event.type === 'contextmenu') {
@@ -65,8 +72,8 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
               if (tribe.isMain === false) {
                 setContextMenuPosition({
                   left: event.clientX,
-                  top: event.clientY
-                })
+                  top: event.clientY,
+                });
                 onRightClick(tribe);
               }
             }
@@ -89,7 +96,13 @@ function TribeBarItem({ isContextMenuOpen, tribe, onRightClick }: Props) {
       </Link>
 
       {isContextMenuOpen?.id === tribe.id && (
-        <div style={{left: contextMenuPosition.left, top: contextMenuPosition.top}} className="fixed max-h-max w-40 bottom-1 z-50 bg-black p-2 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400">
+        <div
+          style={{
+            left: contextMenuPosition.left,
+            top: contextMenuPosition.top,
+          }}
+          className="fixed max-h-max w-40 bottom-1 z-50 bg-black p-2 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400"
+        >
           <div
             onClick={handleCopyToClipboard}
             className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-gray-200 p-2 rounded"

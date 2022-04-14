@@ -25,7 +25,7 @@ const Navbar = () => {
       <div className="shadow">
         <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
           <div className="flex-shrink-0 hidden lg:flex relative">
-            {/* Profile dropdown */}
+            {/* Wallet dropdown */}
             <Menu as="div">
               {({ open }) => (
                 <>
@@ -49,6 +49,7 @@ const Navbar = () => {
                 </>
               )}
             </Menu>
+            {/* Profile dropdown */}
             <Menu as="div">
               <div>
                 <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">

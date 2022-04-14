@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 
 // components
@@ -31,6 +31,10 @@ const AppLayout = ({ children }: Props) => {
   const { me } = useAuth();
   const { pathname } = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleMobileMenu = useCallback(() => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  }, [mobileMenuOpen]);
 
   // Auth Pages
   if (
@@ -76,7 +80,7 @@ const AppLayout = ({ children }: Props) => {
 
     if (pathname.includes('/discovery')) children = <DiscoveryNavigation />;
     else if (pathname.includes('/profile')) children = <ProfileNavigation />;
-    else children = <TribeNavigation />;
+    else children = <TribeNavigation handleMobileMenu={handleMobileMenu} />;
 
     return (
       <div className="block flex-shrink-0 bg-sapien-neutral-600">
@@ -139,7 +143,11 @@ const AppLayout = ({ children }: Props) => {
                       />
                     </button>
                   </div>
-                  <TribeBar tribes={tribes} mobileMenuOpen={mobileMenuOpen} />
+                  <TribeBar
+                    tribes={tribes}
+                    mobileMenuOpen={mobileMenuOpen}
+                    handleMobileMenu={handleMobileMenu}
+                  />
                   {isHomePage === false && <>{renderNavigation()}</>}
                 </div>
               </nav>

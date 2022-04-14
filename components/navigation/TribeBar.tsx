@@ -18,13 +18,14 @@ import type { ProfileTribe } from 'tools/types/tribe';
 interface Props {
   tribes: Array<ProfileTribe>;
   mobileMenuOpen: boolean;
+  handleMobileMenu: () => void;
 }
 
 enum Dialog {
   CreateTribe,
 }
 
-const TribeBar = ({ tribes }: Props) => {
+const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [rightClickedTribe, setRightClickedTribe] =
     useState<ProfileTribe | null>(null);
@@ -91,6 +92,7 @@ const TribeBar = ({ tribes }: Props) => {
               tribe={tribe}
               onRightClick={setRightClickedTribe}
               isContextMenuOpen={rightClickedTribe}
+              handleMobileMenu={handleMobileMenu}
             />
           ))}
         </div>
@@ -105,6 +107,7 @@ const TribeBar = ({ tribes }: Props) => {
                 : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
             }`}
             ref={tooltipRef.current?.setTriggerRef}
+            onClick={handleMobileMenu}
           >
             <GlobeAltIcon className="h-6 w-6" />
             <span className="sr-only">Go to Explore</span>
@@ -112,7 +115,10 @@ const TribeBar = ({ tribes }: Props) => {
         </Link>
         <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" />
         <button
-          onClick={() => setDialog(Dialog.CreateTribe)}
+          onClick={() => {
+            setDialog(Dialog.CreateTribe);
+            handleMobileMenu();
+          }}
           type="button"
           className="group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
           ref={createTribeRef.current?.setTriggerRef}
