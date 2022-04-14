@@ -17,11 +17,10 @@ import {
 import { useAuth } from 'context/user';
 
 // providers
-import { TorusProvider } from 'wallet/providers';
+import { TorusProvider, Web3Provider } from 'wallet/providers';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { Web3Provider } from 'wallet/providers/Web3';
 
 interface Props {
   children: React.ReactElement;
