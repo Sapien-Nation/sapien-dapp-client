@@ -2,14 +2,17 @@ import { Biconomy } from '@biconomy/mexa';
 import * as Sentry from '@sentry/nextjs';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Web3Library from 'web3';
+import { isAddress } from 'web3-utils';
+
+// api
+import { getTokenData } from 'wallet/api';
 
 // contracts
-import { default as BadgeContract } from '../contracts/Badge.json';
-import { default as PassportContract } from '../contracts/Passport.json';
 import { default as PlatformContract } from '../contracts/Platform.json';
+import { default as PassportContract } from '../contracts/Passport.json';
 
 // hooks
-import { useTorus } from './Torus';
+import { useAuth } from 'context/user';
 
 // types
 import type { AbiItem } from 'web3-utils';
@@ -19,11 +22,9 @@ import type { Token } from '../types';
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
-    handleGetTorusBalance: () => Promise<number>;
-    handleGetTokens: () => Promise<Array<Token>>;
+    getWalletBalance: () => Promise<number>;
+    getWalletTokens: () => Promise<Array<Token>>;
   } | null;
-  torusError: Error | any;
-  isTorusReady: boolean;
   web3Error: Error | null;
 }
 
@@ -46,8 +47,6 @@ interface Web3ProviderProps {
 const Web3Context = createContext<Web3>({
   isWeb3Ready: false,
   walletAPI: null,
-  torusError: null,
-  isTorusReady: false,
   web3Error: null,
 });
 
@@ -59,8 +58,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const [error, setError] = useState<Error | null>(null);
   const [contracts, setContracts] = useState<null | Record<string, any>>(null);
 
+  const { me } = useAuth();
   const WalletAPIRef = useRef(null);
-  const { error: torusError, torusKeys, isReady: isTorusReady } = useTorus();
 
   const config: WalletConfig = (() => {
     if (walletIsMainnet === 'true') {
@@ -107,22 +106,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           const Web3Eth = new Web3Library(biconomy);
           setContracts({
             passportContract: new Web3Eth.eth.Contract(
-              BadgeContract as Array<AbiItem>,
+              PassportContract as Array<AbiItem>,
               config.PASSPORT_ADDRESS
             ),
-            badgeStoreContract: new Web3Eth.eth.Contract(
-              PassportContract as Array<AbiItem>,
-              config.BADGE_STORE_ADDRESS
-            ),
-            badgeStoreDomainData: {
-              name: 'Sapien Badge Store',
-              version: 'v3',
-              verifyingContract: config.BADGE_STORE_ADDRESS,
-              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
-                64,
-                '0'
-              )}`,
-            },
             platformSPNContract: new Web3Eth.eth.Contract(
               PlatformContract as AbiItem[],
               config.SPN_TOKEN_ADDRESS
@@ -138,6 +124,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             },
           });
 
+          console.log('Hello');
           WalletAPIRef.current = Web3Eth;
         });
 
@@ -154,21 +141,18 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       }
     };
 
-    if (isTorusReady === true) {
-      if (debugWeb3) {
-        console.log('Torus Initializng Biconomy');
-      }
-      initWeb3WithBiconomy();
+    if (debugWeb3) {
+      console.log('Initializng Biconomy');
     }
+    initWeb3WithBiconomy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isTorusReady]);
+  }, []);
 
   // API
-  const handleGetTorusBalance = async () => {
+  const getWalletBalance = async () => {
     try {
-      const { publicAddress } = torusKeys;
       const balance = await contracts.platformSPNContract.methods
-        .balanceOf(publicAddress)
+        .balanceOf(me.walletAddress)
         .call();
 
       return Number(balance);
@@ -177,11 +161,34 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const handleGetTokens = async (): Promise<Array<Token>> => {
+  const getWalletTokens = async (): Promise<Array<Token>> => {
     try {
-      // TODO get tokens here
+      const balance = await getWalletBalance();
 
-      return [];
+      if (balance === 0) {
+        return [];
+      }
+
+      const baseURI = await contracts.passportContract.methods
+        .baseTokenURI()
+        .call();
+
+      const tokens = [];
+      for (let i = 0; i < balance; i += 1) {
+        const tokenID = await contracts.passportContract.methods
+          .tokenOfOwnerByIndex(isAddress, i)
+          .call();
+        try {
+          const passportData = await getTokenData(`${baseURI}${tokenID}`);
+          tokens.push(passportData?.data);
+        } catch (err: any) {
+          Sentry.captureException(
+            `Axios error - ${err?.response?.status} - ${err?.response?.statusText}`
+          );
+        }
+      }
+
+      return tokens;
     } catch (err) {
       Sentry.captureException(err);
     }
@@ -192,9 +199,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       value={{
         isWeb3Ready: WalletAPIRef.current !== null,
         web3Error: error,
-        walletAPI: { handleGetTokens, handleGetTorusBalance },
-        torusError,
-        isTorusReady,
+        walletAPI: { getWalletTokens, getWalletBalance },
       }}
     >
       {children}
