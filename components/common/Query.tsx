@@ -38,9 +38,7 @@ const Query = ({
     }
   }
   if (error) {
-    return (
-      <ErrorView message={error.message} code={500} onRetry={() => mutate()} />
-    );
+    return <ErrorView message={error} code={500} onRetry={() => mutate()} />;
   }
 
   return children ? (children as Function)(data) : null;
