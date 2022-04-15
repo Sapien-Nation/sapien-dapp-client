@@ -1,7 +1,8 @@
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // api
 import { sendMessage } from 'api/room';
@@ -30,6 +31,7 @@ import type { RoomMessage } from 'tools/types/room';
 const Room = () => {
   const { query } = useRouter();
   const toast = useToast();
+  const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const { tribeID, viewID } = query;
 
@@ -75,16 +77,29 @@ const Room = () => {
     }
   };
 
+  const hanleMobileSidebar = useCallback(() => {
+    setShowMobileDetails(false);
+  }, []);
+
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
+          <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
+            <button
+              aria-label="Toggle Details"
+              className="flex"
+              onClick={() => setShowMobileDetails(!showMobileDetails)}
+            >
+              <DotsHorizontalIcon className="w-5 ml-2" />
+            </button>
+          </div>
           <div className="relative flex-1 overflow-auto p-5 mb-2">
             <h1 className="sr-only">Room View for {room.name}</h1>
             <ul
               role="list"
-              className="absolute bottom-0 w-full flex flex-col mb-5"
+              className="absolute bottom-0 left-0 right-0 p-5 flex flex-col mb-5"
             >
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} />
@@ -151,7 +166,13 @@ const Room = () => {
         </div>
 
         {/* Room Details */}
-        <Details />
+        <div
+          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 ${
+            showMobileDetails ? 'right-0' : '-right-full'
+          }`}
+        >
+          <Details handleSidebar={hanleMobileSidebar} />
+        </div>
       </>
     </div>
   );

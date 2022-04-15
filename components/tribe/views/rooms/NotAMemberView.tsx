@@ -45,7 +45,7 @@ const NotAMemberView = () => {
             <h1 className="sr-only">You cant see this room</h1>
             <ul
               role="list"
-              className="absolute bottom-0 w-full flex flex-col mb-5"
+              className="absolute bottom-0 left-0 right-0 p-5 w-full flex flex-col mb-5"
             >
               <li>
                 <time

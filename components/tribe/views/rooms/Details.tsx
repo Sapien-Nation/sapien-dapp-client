@@ -1,15 +1,26 @@
 import { useRouter } from 'next/router';
+import { XIcon } from '@heroicons/react/outline';
 
 // hooks
 import { useRoomDetails } from 'hooks/room';
 
-const Details = () => {
+const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
 
   const { members } = useRoomDetails(query.viewID as string);
 
   return (
     <aside className="w-72 h-full overflow-auto border-l border-gray-700">
+      <div className="absolute -left-10 top-0 bg-sapien-red-700/50 lg:hidden">
+        <button
+          type="button"
+          className="flex items-center justify-center h-10 w-10 focus:outline-none"
+          onClick={handleSidebar}
+        >
+          <span className="sr-only">Close sidebar</span>
+          <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+        </button>
+      </div>
       <>
         <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
           <h3 className="text-md  text-sapien-neutral-400 font-bold ">
@@ -17,7 +28,7 @@ const Details = () => {
           </h3>
         </div>
         <ul className="px-5">
-          {members.map(({ avatar, displayName, id }) => {
+          {members.map(({ avatar, displayName, id }, index) => {
             return (
               <li key={id} className="flex gap-2 items-center mb-4">
                 {avatar ? (
@@ -31,7 +42,12 @@ const Details = () => {
                     {displayName[0].toUpperCase()}
                   </div>
                 )}
-                <span>{displayName}</span>
+                <span>
+                  {displayName}{' '}
+                  <span className="text-xs">
+                    {index === 0 ? '(Admin)' : ''}
+                  </span>
+                </span>
               </li>
             );
           })}

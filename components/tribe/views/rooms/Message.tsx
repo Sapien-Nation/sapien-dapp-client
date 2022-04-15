@@ -75,8 +75,8 @@ const Message = ({
                   <button
                     className={
                       active
-                        ? 'bg-sapien-80 text-white group flex rounded-md items-center w-full px-2 py-2 text-sm'
-                        : 'text-gray-400 group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                        ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
+                        : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
                     }
                   >
                     <PencilAltIcon className="w-5 mr-2" />
@@ -91,8 +91,8 @@ const Message = ({
                   <button
                     className={
                       active
-                        ? 'bg-sapien-80 text-white group flex rounded-md items-center w-full px-2 py-2 text-sm'
-                        : 'text-gray-400 group flex rounded-md items-center w-full px-2 py-2 text-sm'
+                        ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
+                        : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
                     }
                   >
                     <TrashIcon className="w-5 mr-2" />
