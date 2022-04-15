@@ -1,13 +1,17 @@
+import { DotsHorizontalIcon } from '@heroicons/react/outline';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
+import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
+import { unstable_serialize } from 'swr/infinite';
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // api
 import { sendMessage } from 'api/room';
 
 // context
+import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // components
@@ -23,7 +27,7 @@ import { formatDate } from 'utils/date';
 
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
-import useGetInfinitePages from 'hooks/useGetInfinitePages';
+import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 import useOnScreen from 'hooks/useOnScreen';
 import { useRoomDetails } from 'hooks/room';
 
@@ -31,25 +35,29 @@ import { useRoomDetails } from 'hooks/room';
 import type { RoomMessage } from 'tools/types/room';
 
 const Room = () => {
-  const { query } = useRouter();
-  const toast = useToast();
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
-  const { tribeID, viewID } = query;
-
-  const roomID = query.viewID as string;
-  const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
-  const roomDetails = useRoomDetails(roomID);
-
-  const topOfRoomRef = useRef(null);
+  const toast = useToast();
+  const { me } = useAuth();
+  const { query } = useRouter();
   const scrollToRef = useRef(null);
+  const topOfRoomRef = useRef(null);
 
+  const { tribeID } = query;
+  const roomID = query.viewID as string;
+
+  const room = useTribeRooms(tribeID as string).find(({ id }) => id === roomID);
+  const { mutate } = useSWRConfig();
+  const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
-  const { data, fetchMore, isLoadingInitialData, isFetchingMore, mutate } =
+
+  const apiKey = `/api/v3/room/${roomID}/messages`;
+
+  const { data, fetchMore, isLoadingInitialData, isFetchingMore } =
     useGetInfinitePages<{
       data: Array<RoomMessage>;
       nextCursor: string | null;
-    }>(`/api/v3/room/${roomID}/messages`);
+    }>(apiKey);
 
   const messages = useMemo(() => {
     return _groupBy(data.reverse(), ({ createdAt }) => formatDate(createdAt));
@@ -71,11 +79,49 @@ const Room = () => {
     }
   }, [fetchMore, isFetchingMore, shouldFetchMoreItems]);
 
+  const handleOptimisticUpdate = async (message: RoomMessage) => {
+    await mutate(
+      unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey)),
+      (cachedData) => {
+        return cachedData.map(({ data, nextCursor }, index) => {
+          if (index === cachedData.length - 1) {
+            return {
+              data: [message, ...data],
+              nextCursor,
+            };
+          }
+
+          return { data, nextCursor };
+        });
+      },
+      false
+    );
+  };
+
   const handleMessageSubmit = async (content) => {
+    if (content === '') return;
+
     try {
-      if (content === '') return;
+      handleOptimisticUpdate({
+        content,
+        createdAt: new Date().toISOString(),
+        id: nanoid(),
+        sender: {
+          avatar: me.avatar,
+          displayName: me.displayName,
+          id: me.id,
+          username: me.username,
+        },
+        type: '',
+        status: 'A',
+        isOptimistic: true,
+      });
+
       await sendMessage(roomID, { content });
-      mutate();
+
+      await mutate(
+        unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey))
+      );
     } catch (err) {
       toast({ message: err });
     }

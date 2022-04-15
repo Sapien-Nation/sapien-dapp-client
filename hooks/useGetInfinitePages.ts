@@ -9,6 +9,20 @@ import { fetcher as axiosFetcher } from 'api';
 // types
 import type { SWRInfiniteConfiguration } from 'swr/infinite';
 
+export const getKeyFunction = (isFetching, dataPath, apiKey) => {
+  return (index, previousPage) => {
+    const previousPageData = _get(previousPage, dataPath);
+    // we've reached the last page, no more fetching
+    if (previousPageData?.length === 0) return null;
+
+    if (isFetching.current && index) return null;
+
+    if (index === 0) return apiKey;
+
+    return `${apiKey}?nextCursor=${previousPageData.nextCursor}`;
+  };
+};
+
 const useGetInfinitePages = <Page extends object>(
   apiKey: string,
   options: SWRInfiniteConfiguration = {}
@@ -18,17 +32,7 @@ const useGetInfinitePages = <Page extends object>(
 
   const { data, error, isValidating, mutate, size, setSize } =
     useSWRInfinite<Page>(
-      (index, previousPage) => {
-        const previousPageData = _get(previousPage, dataPath);
-        // we've reached the last page, no more fetching
-        if (previousPageData?.length === 0) return null;
-
-        if (isFetching.current && index) return null;
-
-        if (index === 0) return apiKey;
-
-        return `${apiKey}?nextCursor=${previousPageData.nextCursor}`;
-      },
+      getKeyFunction(isFetching, dataPath, apiKey),
       async (key: any) => {
         let val: Page;
         try {

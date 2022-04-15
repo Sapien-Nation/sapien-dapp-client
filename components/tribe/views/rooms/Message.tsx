@@ -23,6 +23,7 @@ const Message = ({
     sender: { avatar, displayName },
     createdAt,
     content,
+    isOptimistic,
   },
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
@@ -40,6 +41,33 @@ const Message = ({
     };
   }, []);
 
+  const renderBody = () => {
+    if (isOptimistic) {
+      return (
+        <p
+          className={
+            isAContinuosMessage
+              ? 'text-sm text-white/30'
+              : 'pl-52 text-sm text-white/30'
+          }
+        >
+          {content}
+        </p>
+      );
+    }
+
+    return (
+      <p
+        className={
+          isAContinuosMessage
+            ? 'text-sm text-white/80'
+            : 'pl-52 text-sm text-white/80'
+        }
+      >
+        {content}
+      </p>
+    );
+  };
   return (
     <div
       ref={messageRef}
@@ -68,15 +96,7 @@ const Message = ({
               </p>
             </div>
           )}
-          <p
-            className={
-              isAContinuosMessage
-                ? 'text-sm text-white/80 '
-                : 'pl-52 text-sm text-white/80'
-            }
-          >
-            {content}
-          </p>
+          {renderBody()}
         </div>
       </div>
       <Menu
