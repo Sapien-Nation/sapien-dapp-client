@@ -10,7 +10,6 @@ import { Fragment } from 'react';
 import { formatDateRelative } from 'utils/date';
 
 // types
-import type { ISOString } from 'tools/types/common';
 import type { RoomMessage } from 'tools/types/room';
 
 interface Props {

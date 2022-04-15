@@ -1,7 +1,7 @@
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // api
@@ -50,9 +50,9 @@ const Room = () => {
       nextCursor: string | null;
     }>(`/api/v3/room/${roomID}/messages`);
 
-  const messages = _groupBy(data.reverse(), ({ createdAt }) =>
-    formatDate(createdAt)
-  );
+  const messages = useMemo(() => {
+    return _groupBy(data.reverse(), ({ createdAt }) => formatDate(createdAt));
+  }, [data]);
 
   useEffect(() => {
     // Start chat at the bottom
