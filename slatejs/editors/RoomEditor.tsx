@@ -10,7 +10,7 @@ import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 
 // constants
-import { defaultValue } from '../constants';
+import { defaultValue, ElementType } from '../constants';
 
 // utils
 import { insertEmoji, serialize } from '../utils';
@@ -29,7 +29,7 @@ interface Props {
 const editorID = 'slatejs-editor';
 const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
-  const editor = useMemo(() => createEditorWithPlugins(createEditor()), []);
+  const [editor] = useState(() => createEditorWithPlugins(createEditor()));
 
   const [attachments, setAttachments] = useState<Array<File>>([]);
 
@@ -96,7 +96,14 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                     const point = { path: [0, 0], offset: 0 };
                     editor.selection = { anchor: point, focus: point };
                     editor.history = { redos: [], undos: [] };
-
+                    editor.children = [
+                      {
+                        children: [{ text: '' }],
+                        // @ts-ignore
+                        type: ElementType.Paragraph,
+                        key: null,
+                      },
+                    ];
                     setValue(defaultValue);
                   }
                 }}
