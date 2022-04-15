@@ -38,6 +38,61 @@ import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 // types
 import type { RoomMessage } from 'tools/types/room';
 
+interface Props {
+  messages: Array<RoomMessage>;
+  scrollRef: any;
+}
+
+const MessagesFeed = ({ scrollRef, messages }: Props) => {
+  const messagesData = useMemo(() => {
+    return _groupBy(messages.reverse(), ({ createdAt }) =>
+      formatDate(createdAt)
+    );
+  }, [messages]);
+
+  useEffect(() => {
+    // Start chat at the bottom
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  }, []);
+
+  return (
+    <>
+      {Object.keys(messagesData).map((timestamp) => {
+        const timestampMessages = messagesData[timestamp];
+        return (
+          <>
+            <li key={timestamp}>
+              <time
+                className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                dateTime={timestamp}
+              >
+                {timestamp}
+              </time>
+            </li>
+            {timestampMessages.map((message, index) => {
+              return (
+                <Message
+                  key={message.id}
+                  message={message}
+                  isAContinuosMessage={
+                    timestampMessages[index - 1]?.sender.id !==
+                    message.sender.id
+                  }
+                />
+              );
+            })}
+          </>
+        );
+      })}
+    </>
+  );
+};
+
 const Room = () => {
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
@@ -65,20 +120,6 @@ const Room = () => {
       data: Array<RoomMessage>;
       nextCursor: string | null;
     }>(apiKey);
-
-  const messages = useMemo(() => {
-    return _groupBy(data.reverse(), ({ createdAt }) => formatDate(createdAt));
-  }, [data]);
-
-  useEffect(() => {
-    // Start chat at the bottom
-    if (scrollToRef.current) {
-      scrollToRef.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (
@@ -188,33 +229,9 @@ const Room = () => {
                   />
                 </li>
               )}
-              {Object.keys(messages).map((timestamp) => {
-                const timestampMessages = messages[timestamp];
-                return (
-                  <>
-                    <li key={timestamp}>
-                      <time
-                        className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                        dateTime={timestamp}
-                      >
-                        {timestamp}
-                      </time>
-                    </li>
-                    {timestampMessages.map((message, index) => {
-                      return (
-                        <Message
-                          key={message.id}
-                          message={message}
-                          isAContinuosMessage={
-                            timestampMessages[index - 1]?.sender.id !==
-                            message.sender.id
-                          }
-                        />
-                      );
-                    })}
-                  </>
-                );
-              })}
+              {isLoadingInitialData === false && (
+                <MessagesFeed messages={data} scrollRef={scrollToRef} />
+              )}
               <li ref={scrollToRef} />
             </ul>
           </div>
