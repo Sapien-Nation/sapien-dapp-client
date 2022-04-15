@@ -30,7 +30,15 @@ const Message = ({
     <div className="py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group">
       <div className="flex space-x-3">
         {isAContinuosMessage && (
-          <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
+          <>
+            {avatar ? (
+              <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
+            ) : (
+              <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                {displayName[0].toUpperCase()}
+              </div>
+            )}
+          </>
         )}
         <div className="flex-1 space-y-1">
           {isAContinuosMessage && (
