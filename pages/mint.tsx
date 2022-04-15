@@ -16,7 +16,52 @@ import { useToast } from 'context/toast';
 import type { NextPage } from 'next';
 import { ProfileTribe } from 'tools/types/tribe';
 
-const PassportNotReadyForMint = () => {
+const FeedbackView = ({ code }: { code: number }) => {
+  const getRedirectURL = () => {
+    if (typeof window === 'undefined')
+      return 'https://www.sapien.network/passport/purchase';
+
+    const { host } = window.location;
+
+    if (host === 'front-sandbox.sapien.network')
+      return 'https://passport-sandbox.sapien.network/passport/purchase';
+    else if (host === 'localhost:3000')
+      return `http://localhost:3000/passport/purchase`;
+    else if (host === 'https://front-qat.sapien.network/')
+      return 'https://passport-qat.sapien.network/passport/purchase';
+
+    return 'https://www.sapien.network/passport/purchase';
+  };
+
+  const renderText = () => {
+    switch (code) {
+      case 101:
+        return (
+          <p className="mt-6 text-xl text-white font-semibold">
+            To mint a passport, you need first to{' '}
+            <a
+              href={getRedirectURL()}
+              className="text-base font-medium bg-primary-200"
+            >
+              Buy a passport
+            </a>
+          </p>
+        );
+      case 102:
+        return (
+          <p className="mt-6 text-xl text-white font-semibold">
+            Please finish the avatar select flow and then come back to min{' '}
+            <a
+              href={getRedirectURL()}
+              className="text-base font-medium bg-primary-200"
+            >
+              Click here to continue
+            </a>
+          </p>
+        );
+    }
+  };
+
   return (
     <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
       <div className="absolute inset-0">
@@ -27,11 +72,8 @@ const PassportNotReadyForMint = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
       </div>
-      <div className="px-4 py-4 bottom-0 absolute w-full text-center">
-        <p className="mt-6 text-xl text-white font-semibold">
-          Your Passport is still not ready, please be aware of your email and we
-          will let you know when its ready
-        </p>
+      <div className="px-4 py-4 flex absolute justify-center items-center w-full text-center h-full">
+        {renderText()}
       </div>
     </div>
   );
@@ -47,7 +89,7 @@ const Mint = () => {
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
-      await mintPassport();
+      // await mintPassport();
 
       push(`/tribes/${id}/home#minted`);
     } catch (err) {
@@ -96,11 +138,11 @@ const Mint = () => {
 };
 
 interface MintStatus {
-  statusCode: number | null;
+  code: number | null;
 }
 
 const MintPage: NextPage = () => {
-  const { asPath, ...rest } = useRouter();
+  const { asPath } = useRouter();
   const { me, isLoggingIn } = useAuth();
 
   if (isLoggingIn) return null;
@@ -113,40 +155,22 @@ const MintPage: NextPage = () => {
       </>
     );
 
-  const handleRedirectToPurchase = () => {
-    const getURL = () => {
-      if (typeof window === 'undefined')
-        return 'https://www.sapien.network/passport/purchase';
+  const renderView = (code) => {
+    if (code === null) return <Redirect path="/" />;
 
-      const { host } = window.location;
+    if (code === 100) return <Mint />;
 
-      if (host === 'front-sandbox.sapien.network')
-        return 'https://passport-sandbox.sapien.network/passport/purchase';
-      else if (host === 'https://front-qat.sapien.network/')
-        return 'https://passport-qat.sapien.network/passport/purchase';
+    if (code === 101) return <FeedbackView code={101} />;
 
-      return 'https://www.sapien.network/passport/purchase';
-    };
-
-    return window.location.replace(getURL());
-  };
-
-  const renderView = (statusCode) => {
-    if (statusCode === null) <Redirect path={`/`} />;
-
-    if (statusCode === 100) return <Mint />;
-
-    if (statusCode === 101) return handleRedirectToPurchase();
-
-    if (statusCode === 102) return <PassportNotReadyForMint />;
+    if (code === 102) return <FeedbackView code={102} />;
   };
 
   return (
     <Query
       api="/api/v3/passport/mint"
-      options={{ fetcher: () => ({ statusCode: 100 }) }}
+      options={{ fetcher: () => ({ code: 100 }) }}
     >
-      {({ statusCode }: MintStatus) => renderView(statusCode)}
+      {({ code }: MintStatus) => renderView(code)}
     </Query>
   );
 };
