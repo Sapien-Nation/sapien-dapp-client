@@ -119,11 +119,17 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
               <span className="flex w-full items-center">
                 <span className="flex min-w-0 items-center w-full justify-between">
                   <div className=" px-5 py-3 ">
-                    <img
-                      className="w-10 h-10 rounded-full flex-shrink-0"
-                      src={me.avatar}
-                      alt=""
-                    />
+                    {me.avatar ? (
+                      <img
+                        className="w-10 h-10 rounded-full flex-shrink-0"
+                        src={me.avatar}
+                        alt=""
+                      />
+                    ) : (
+                      <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                        {me.displayName[0].toUpperCase()}
+                      </div>
+                    )}
                   </div>
                 </span>
               </span>

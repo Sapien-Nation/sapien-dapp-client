@@ -113,11 +113,6 @@ const Mint = () => {
             <h1 className="text-3xl sm:text-5xl font-extrabold mb-4">
               Join the Sapien Nation
             </h1>
-            {/*<img
-              src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png"
-              alt="sapien protocol"
-              className="rounded-md relative object-cover"
-            />*/}
             <div
               className="relative rounded-lg h-[350px] w-[624px] md:h-[550px] md:w-[1024px] bg-cover"
               style={{ backgroundImage: `url('${imageUrl}')` }}
