@@ -14,6 +14,9 @@ import { sendMessage } from 'api/room';
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
+// constants
+import { MessageType } from 'tools/constants/rooms';
+
 // components
 import { Query, SEO } from 'components/common';
 import { RoomEditor } from 'slatejs';
@@ -26,10 +29,11 @@ import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 import { formatDate } from 'utils/date';
 
 // hooks
-import { useTribeRooms } from 'hooks/tribe';
-import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 import useOnScreen from 'hooks/useOnScreen';
+import { useTribeRooms } from 'hooks/tribe';
 import { useRoomDetails } from 'hooks/room';
+import { useSocketEvent } from 'hooks/socket';
+import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
@@ -51,8 +55,11 @@ const Room = () => {
   const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  const apiKey = `/api/v3/room/${roomID}/messages`;
+  useSocketEvent('message', (message) => {
+    handleAddMessage(message);
+  });
 
+  const apiKey = `/api/v3/room/${roomID}/messages`;
   const { data, fetchMore, isLoadingInitialData, isFetchingMore } =
     useGetInfinitePages<{
       data: Array<RoomMessage>;
@@ -79,7 +86,7 @@ const Room = () => {
     }
   }, [fetchMore, isFetchingMore, shouldFetchMoreItems]);
 
-  const handleOptimisticUpdate = async (message: RoomMessage) => {
+  const handleAddMessage = async (message: RoomMessage) => {
     await mutate(
       unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey)),
       (cachedData) => {
@@ -102,7 +109,7 @@ const Room = () => {
     if (content === '') return;
 
     try {
-      handleOptimisticUpdate({
+      handleAddMessage({
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -112,9 +119,8 @@ const Room = () => {
           id: me.id,
           username: me.username,
         },
-        type: '',
+        type: MessageType.Optimistic,
         status: 'A',
-        isOptimistic: true,
       });
 
       await sendMessage(roomID, { content });

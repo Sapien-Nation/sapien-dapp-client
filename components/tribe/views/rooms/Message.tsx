@@ -6,6 +6,9 @@ import {
 } from '@heroicons/react/outline';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
+// constants
+import { MessageType } from 'tools/constants/rooms';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
@@ -23,7 +26,7 @@ const Message = ({
     sender: { avatar, displayName },
     createdAt,
     content,
-    isOptimistic,
+    type,
   },
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
@@ -42,7 +45,10 @@ const Message = ({
   }, []);
 
   const renderBody = () => {
-    if (isOptimistic) {
+    if (type === MessageType.OptimisticWithAttachment)
+      return <span>TODO handle UI for Optimistic Attachments</span>;
+
+    if (type === MessageType.Optimistic) {
       return (
         <p
           className={
