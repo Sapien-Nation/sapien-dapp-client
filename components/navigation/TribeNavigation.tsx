@@ -35,7 +35,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const channels = useTribeChannels(tribeID as string);
 
   if (!tribe || !rooms) {
-    return <ErrorView message="There was a problem loading room list!" />;
+    return;
   }
 
   const { name } = tribe;

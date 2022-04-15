@@ -46,6 +46,9 @@ const AppLayout = ({ children }: Props) => {
     return children;
   }
 
+  // Mint View
+  if (pathname.startsWith('/mint')) return children;
+
   // Logout View
   if (pathname.startsWith('/logout')) return children;
 

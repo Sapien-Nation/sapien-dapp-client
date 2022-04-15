@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // components
 import { SEO, Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
+import { ProfileDialog } from 'components/profile';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 import EmptyMainFeed from './EmptyMainFeed';
@@ -17,8 +18,14 @@ import useOnScreen from 'hooks/useOnScreen';
 import type { Content as ContentType } from 'tools/types/content';
 import type { MainFeedTribe } from 'tools/types/tribe';
 
+enum Dialog {
+  Profile,
+}
+
 const MainChannel = () => {
-  const { query } = useRouter();
+  const [dialog, setDialog] = useState<Dialog | null>(null);
+
+  const { asPath, push, query } = useRouter();
   const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
@@ -31,10 +38,21 @@ const MainChannel = () => {
     nextCursor: string | null;
   }>(`/api/v3/tribe/${tribeID}/feed`);
 
+  const checkIfCommingFromMintedPage = () => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return window.location.hash === '#minted';
+  };
+
   useEffect(() => {
-    // Start chat at the bottom
     if (belowEditorRef.current) {
       belowEditorRef.current.scrollIntoView();
+    }
+
+    if (checkIfCommingFromMintedPage()) {
+      setDialog(Dialog.Profile);
     }
   }, []);
 
@@ -45,33 +63,48 @@ const MainChannel = () => {
   }, [fetchMore, shouldFetchMoreItems]);
 
   return (
-    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-      <SEO title={tribe.name} />
-      <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
-      <Query
-        api={`/api/v3/tribe/${tribeID}`}
-        loader={<ChannelHeaderPlaceholder />}
-      >
-        {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
-      </Query>
-      <div className="mt-4 min-h-400">
-        {isLoadingInitialData === false && data.length === 0 ? (
-          <EmptyMainFeed />
-        ) : null}
+    <>
+      <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+        <SEO title={tribe.name} />
+        <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
+        <Query
+          api={`/api/v3/tribe/${tribeID}`}
+          loader={<ChannelHeaderPlaceholder />}
+        >
+          {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
+        </Query>
+        <div className="mt-4 min-h-400">
+          {isLoadingInitialData === false && data.length === 0 ? (
+            <EmptyMainFeed />
+          ) : null}
 
-        <ul>
-          {data.map((content) => (
-            <li key={content.id}>
-              <ContentItemMainChannel
-                content={content}
-                tribeID={tribeID as string}
-              />
-            </li>
-          ))}
-          <div ref={endDivRef} />
-        </ul>
+          <ul>
+            {data.map((content) => (
+              <li key={content.id}>
+                <ContentItemMainChannel
+                  content={content}
+                  tribeID={tribeID as string}
+                />
+              </li>
+            ))}
+            <div ref={endDivRef} />
+          </ul>
+        </div>
       </div>
-    </div>
+
+      {/* Dialogs */}
+      {dialog === Dialog.Profile && (
+        <ProfileDialog
+          onClose={() => {
+            setDialog(null);
+
+            if (checkIfCommingFromMintedPage()) {
+              push(asPath.replace('#minted', ''));
+            }
+          }}
+        />
+      )}
+    </>
   );
 };
 

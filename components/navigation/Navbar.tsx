@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';
+
+// components
 import { ProfileDialog } from 'components/profile';
 
 // ui
@@ -129,7 +131,6 @@ const Navbar = () => {
       </div>
 
       {/* Dialogs */}
-
       {dialog === Dialog.Profile && (
         <ProfileDialog onClose={() => setDialog(null)} />
       )}
