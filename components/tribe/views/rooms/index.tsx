@@ -15,8 +15,7 @@ import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // constants
-import { MessageType } from 'tools/constants/rooms';
-import { NotificationType } from 'tools/types/notifications';
+import { MessageType, WSEvents } from 'tools/constants/rooms';
 
 // components
 import { Query, SEO } from 'components/common';
@@ -56,7 +55,7 @@ const Room = () => {
   const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  useSocketEvent(NotificationType.RoomNewMessage, (message) => {
+  useSocketEvent(WSEvents.NewMessage, (message) => {
     handleAddMessage(message);
   });
 
