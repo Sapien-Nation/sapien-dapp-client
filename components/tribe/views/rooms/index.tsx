@@ -109,30 +109,32 @@ const Room = () => {
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} />
               )}
-              <li>
-                <time
-                  className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                  dateTime={new Date().toISOString()}
-                >
-                  {formatDate(new Date().toISOString())}
-                </time>
-                <Message
-                  isAContinuosMessage
-                  message={{
-                    sender: {
-                      id: '9999_9999',
-                      avatar:
-                        'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png',
-                      displayName: 'Harambe at Sapien',
-                      username: 'Harambe at Sapien',
-                    },
-                    id: '999_0000',
-                    type: 'message',
-                    createdAt: roomDetails.createdAt,
-                    content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
-                  }}
-                />
-              </li>
+              {isLoadingInitialData === false && (
+                <li>
+                  <time
+                    className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                    dateTime={new Date().toISOString()}
+                  >
+                    {formatDate(new Date().toISOString())}
+                  </time>
+                  <Message
+                    isAContinuosMessage
+                    message={{
+                      sender: {
+                        id: '9999_9999',
+                        avatar:
+                          'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png',
+                        displayName: 'Harambe at Sapien',
+                        username: 'Harambe at Sapien',
+                      },
+                      id: '999_0000',
+                      type: 'message',
+                      createdAt: roomDetails.createdAt,
+                      content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
+                    }}
+                  />
+                </li>
+              )}
               {Object.keys(messages).map((timestamp) => {
                 const timestampMessages = messages[timestamp];
                 return (
