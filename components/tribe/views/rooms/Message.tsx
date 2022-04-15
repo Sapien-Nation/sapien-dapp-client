@@ -75,7 +75,7 @@ const Message = ({
     );
   };
   return (
-    <div
+    <li
       ref={messageRef}
       className={`py-2 ${
         messageFocused ? 'bg-gray-800' : ''
@@ -169,7 +169,7 @@ const Message = ({
           </Menu.Items>
         </Transition>
       </Menu> */}
-    </div>
+    </li>
   );
 };
 

@@ -81,10 +81,14 @@ const Room = () => {
   }, []);
 
   useEffect(() => {
-    if (shouldFetchMoreItems && isFetchingMore === false) {
+    if (
+      shouldFetchMoreItems &&
+      isFetchingMore === false &&
+      isLoadingInitialData === false
+    ) {
       fetchMore();
     }
-  }, [fetchMore, isFetchingMore, shouldFetchMoreItems]);
+  }, [fetchMore, isFetchingMore, shouldFetchMoreItems, isLoadingInitialData]);
 
   const handleAddMessage = async (message: RoomMessage) => {
     await mutate(
@@ -159,7 +163,7 @@ const Room = () => {
             >
               {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
-                <li ref={topOfRoomRef} />
+                <li ref={topOfRoomRef} id="top_target" />
               )}
               {isLoadingInitialData === false && (
                 <li>
@@ -190,13 +194,15 @@ const Room = () => {
               {Object.keys(messages).map((timestamp) => {
                 const timestampMessages = messages[timestamp];
                 return (
-                  <li key={timestamp}>
-                    <time
-                      className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                      dateTime={timestamp}
-                    >
-                      {timestamp}
-                    </time>
+                  <>
+                    <li key={timestamp}>
+                      <time
+                        className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                        dateTime={timestamp}
+                      >
+                        {timestamp}
+                      </time>
+                    </li>
                     {timestampMessages.map((message, index) => {
                       return (
                         <Message
@@ -209,7 +215,7 @@ const Room = () => {
                         />
                       );
                     })}
-                  </li>
+                  </>
                 );
               })}
               <li ref={scrollToRef} />
