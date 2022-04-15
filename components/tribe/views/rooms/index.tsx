@@ -1,14 +1,21 @@
+import { DotsHorizontalIcon } from '@heroicons/react/outline';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
+import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
+import { unstable_serialize } from 'swr/infinite';
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
 
 // api
 import { sendMessage } from 'api/room';
 
 // context
+import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
+
+// constants
+import { MessageType } from 'tools/constants/rooms';
 
 // components
 import { Query, SEO } from 'components/common';
@@ -22,34 +29,42 @@ import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 import { formatDate } from 'utils/date';
 
 // hooks
-import { useTribeRooms } from 'hooks/tribe';
-import useGetInfinitePages from 'hooks/useGetInfinitePages';
 import useOnScreen from 'hooks/useOnScreen';
+import { useTribeRooms } from 'hooks/tribe';
 import { useRoomDetails } from 'hooks/room';
+import { useSocketEvent } from 'hooks/socket';
+import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
 
 const Room = () => {
-  const { query } = useRouter();
-  const toast = useToast();
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
-  const { tribeID, viewID } = query;
-
-  const roomID = query.viewID as string;
-  const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
-  const roomDetails = useRoomDetails(roomID);
-
-  const topOfRoomRef = useRef(null);
+  const toast = useToast();
+  const { me } = useAuth();
+  const { query } = useRouter();
   const scrollToRef = useRef(null);
+  const topOfRoomRef = useRef(null);
 
+  const { tribeID } = query;
+  const roomID = query.viewID as string;
+
+  const room = useTribeRooms(tribeID as string).find(({ id }) => id === roomID);
+  const { mutate } = useSWRConfig();
+  const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
-  const { data, fetchMore, isLoadingInitialData, isFetchingMore, mutate } =
+
+  useSocketEvent('message', (message) => {
+    handleAddMessage(message);
+  });
+
+  const apiKey = `/api/v3/room/${roomID}/messages`;
+  const { data, fetchMore, isLoadingInitialData, isFetchingMore } =
     useGetInfinitePages<{
       data: Array<RoomMessage>;
       nextCursor: string | null;
-    }>(`/api/v3/room/${roomID}/messages`);
+    }>(apiKey);
 
   const messages = useMemo(() => {
     return _groupBy(data.reverse(), ({ createdAt }) => formatDate(createdAt));
@@ -66,16 +81,57 @@ const Room = () => {
   }, []);
 
   useEffect(() => {
-    if (shouldFetchMoreItems && isFetchingMore === false) {
+    if (
+      shouldFetchMoreItems &&
+      isFetchingMore === false &&
+      isLoadingInitialData === false
+    ) {
       fetchMore();
     }
-  }, [fetchMore, isFetchingMore, shouldFetchMoreItems]);
+  }, [fetchMore, isFetchingMore, shouldFetchMoreItems, isLoadingInitialData]);
+
+  const handleAddMessage = async (message: RoomMessage) => {
+    await mutate(
+      unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey)),
+      (cachedData) => {
+        return cachedData.map(({ data, nextCursor }, index) => {
+          if (index === cachedData.length - 1) {
+            return {
+              data: [message, ...data],
+              nextCursor,
+            };
+          }
+
+          return { data, nextCursor };
+        });
+      },
+      false
+    );
+  };
 
   const handleMessageSubmit = async (content) => {
+    if (content === '') return;
+
     try {
-      if (content === '') return;
+      handleAddMessage({
+        content,
+        createdAt: new Date().toISOString(),
+        id: nanoid(),
+        sender: {
+          avatar: me.avatar,
+          displayName: me.displayName,
+          id: me.id,
+          username: me.username,
+        },
+        type: MessageType.Optimistic,
+        status: 'A',
+      });
+
       await sendMessage(roomID, { content });
-      mutate();
+
+      await mutate(
+        unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey))
+      );
     } catch (err) {
       toast({ message: err });
     }
@@ -104,7 +160,7 @@ const Room = () => {
             <ul role="list" className="px-5 mb-4 flex flex-col">
               {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
-                <li ref={topOfRoomRef} />
+                <li ref={topOfRoomRef} id="top_target" />
               )}
               {isLoadingInitialData === false && (
                 <li>
@@ -125,7 +181,7 @@ const Room = () => {
                         username: 'Harambe at Sapien',
                       },
                       id: '999_0000',
-                      type: 'message',
+                      type: MessageType.Text,
                       createdAt: roomDetails.createdAt,
                       content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
                     }}
@@ -135,13 +191,15 @@ const Room = () => {
               {Object.keys(messages).map((timestamp) => {
                 const timestampMessages = messages[timestamp];
                 return (
-                  <li key={timestamp}>
-                    <time
-                      className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                      dateTime={timestamp}
-                    >
-                      {timestamp}
-                    </time>
+                  <>
+                    <li key={timestamp}>
+                      <time
+                        className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                        dateTime={timestamp}
+                      >
+                        {timestamp}
+                      </time>
+                    </li>
                     {timestampMessages.map((message, index) => {
                       return (
                         <Message
@@ -154,7 +212,7 @@ const Room = () => {
                         />
                       );
                     })}
-                  </li>
+                  </>
                 );
               })}
               <li ref={scrollToRef} />

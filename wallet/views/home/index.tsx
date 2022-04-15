@@ -41,13 +41,7 @@ const Home = ({ onDeposit }: Props) => {
           <li
             className="bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
             key={token.name}
-          >
-            {/* <img
-              className="rounded-full px-1 py-1 w-14 h-14"
-              src={token?.image}
-              alt={`image-${token.id}`}
-            /> */}
-          </li>
+          ></li>
         ))}
       </ol>
     </>

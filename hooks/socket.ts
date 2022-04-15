@@ -29,7 +29,7 @@ export const useSocketEvent = (
 };
 
 export const useSocketEmit = (
-  event: string,
+  event: string | { type: string; data: any },
   callback: (...args: any) => void
 ) => {
   const { socket } = useSocket();

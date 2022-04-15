@@ -6,6 +6,9 @@ import {
 } from '@heroicons/react/outline';
 import { Fragment, useEffect, useState, useRef } from 'react';
 
+// constants
+import { MessageType } from 'tools/constants/rooms';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
@@ -23,6 +26,7 @@ const Message = ({
     sender: { avatar, displayName },
     createdAt,
     content,
+    type,
   },
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
@@ -40,8 +44,38 @@ const Message = ({
     };
   }, []);
 
+  const renderBody = () => {
+    if (type === MessageType.OptimisticWithAttachment)
+      return <span>TODO handle UI for Optimistic Attachments</span>;
+
+    if (type === MessageType.Optimistic) {
+      return (
+        <p
+          className={
+            isAContinuosMessage
+              ? 'text-sm text-white/30'
+              : 'pl-52 text-sm text-white/30'
+          }
+        >
+          {content}
+        </p>
+      );
+    }
+
+    return (
+      <p
+        className={
+          isAContinuosMessage
+            ? 'text-sm text-white/80'
+            : 'pl-52 text-sm text-white/80'
+        }
+      >
+        {content}
+      </p>
+    );
+  };
   return (
-    <div
+    <li
       ref={messageRef}
       className={`py-2 ${
         messageFocused ? 'bg-gray-800' : ''
@@ -68,18 +102,10 @@ const Message = ({
               </p>
             </div>
           )}
-          <p
-            className={
-              isAContinuosMessage
-                ? 'text-sm text-white/80 '
-                : 'pl-52 text-sm text-white/80'
-            }
-          >
-            {content}
-          </p>
+          {renderBody()}
         </div>
       </div>
-      <Menu
+      {/* <Menu
         as="div"
         className={`${
           messageFocused ? 'block' : 'hidden'
@@ -142,8 +168,8 @@ const Message = ({
             </div>
           </Menu.Items>
         </Transition>
-      </Menu>
-    </div>
+      </Menu> */}
+    </li>
   );
 };
 
