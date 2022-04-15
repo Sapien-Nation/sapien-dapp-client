@@ -16,6 +16,7 @@ import { RoomEditor } from 'slatejs';
 import Details from './Details';
 import Message from './Message';
 import NotAMemberView from './NotAMemberView';
+import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 
 // helpers
 import { formatDate } from 'utils/date';
@@ -103,6 +104,7 @@ const Room = () => {
               role="list"
               className="absolute bottom-0 left-0 right-0 p-5 flex flex-col mb-5"
             >
+              {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} />
               )}
