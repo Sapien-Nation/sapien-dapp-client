@@ -24,6 +24,7 @@ import { formatDate } from 'utils/date';
 import { useTribeRooms } from 'hooks/tribe';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
 import useOnScreen from 'hooks/useOnScreen';
+import { useRoomDetails } from 'hooks/room';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
@@ -35,12 +36,13 @@ const Room = () => {
 
   const { tribeID, viewID } = query;
 
+  const roomID = query.viewID as string;
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === viewID);
+  const roomDetails = useRoomDetails(roomID);
 
   const topOfRoomRef = useRef(null);
   const scrollToRef = useRef(null);
 
-  const roomID = query.viewID as string;
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
   const { data, fetchMore, isLoadingInitialData, isFetchingMore, mutate } =
     useGetInfinitePages<{
@@ -122,11 +124,8 @@ const Room = () => {
                       username: 'Harambe at Sapien',
                     },
                     id: '999_0000',
-                    type: '',
-                    status: '',
-                    // @ts-ignore
-                    room: {},
-                    createdAt: new Date().toISOString(),
+                    type: 'message',
+                    createdAt: roomDetails.createdAt,
                     content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
                   }}
                 />
