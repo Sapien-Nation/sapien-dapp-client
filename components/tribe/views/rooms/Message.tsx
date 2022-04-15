@@ -42,8 +42,8 @@ const Message = ({
         <div className="flex-1 space-y-1">
           {isAContinuosMessage && (
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-medium">{displayName}</h3>
-              <p className="text-xs text-gray-500">
+              <h3 className="text-sm font-extrabold">{displayName}</h3>
+              <p className="text-xs text-white">
                 {formatDateRelative(createdAt)}
               </p>
             </div>
@@ -51,8 +51,8 @@ const Message = ({
           <p
             className={
               isAContinuosMessage
-                ? 'text-sm text-gray-500'
-                : 'pl-52 text-sm text-gray-500'
+                ? 'text-sm text-white/80 '
+                : 'pl-52 text-sm text-white/80'
             }
           >
             {content}
