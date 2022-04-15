@@ -101,10 +101,7 @@ const Room = () => {
           </div>
           <div className="relative flex-1 overflow-auto">
             <h1 className="sr-only">Room View for {room.name}</h1>
-            <ul
-              role="list"
-              className="absolute bottom-0 left-0 right-0 px-5 mb-4 flex flex-col"
-            >
+            <ul role="list" className="px-5 mb-4 flex flex-col">
               {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} />

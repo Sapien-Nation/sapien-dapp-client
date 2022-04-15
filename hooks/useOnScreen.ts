@@ -15,7 +15,7 @@ export default function useOnScreen(ref) {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [ref]);
 
   return isIntersecting;
 }

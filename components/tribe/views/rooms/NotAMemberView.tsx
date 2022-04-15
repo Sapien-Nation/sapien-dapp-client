@@ -43,10 +43,7 @@ const NotAMemberView = () => {
         <div className="flex flex-col h-full flex-1 overflow-hidden">
           <div className="relative flex-1 overflow-auto p-5 mb-2">
             <h1 className="sr-only">You cant see this room</h1>
-            <ul
-              role="list"
-              className="absolute bottom-0 left-0 right-0 p-5 w-full flex flex-col mb-5"
-            >
+            <ul role="list" className="p-5 w-full flex flex-col mb-5">
               <li>
                 <time
                   className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
