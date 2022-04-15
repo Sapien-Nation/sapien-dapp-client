@@ -4,7 +4,7 @@ import {
   PencilAltIcon,
   TrashIcon,
 } from '@heroicons/react/outline';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
@@ -25,8 +25,28 @@ const Message = ({
     content,
   },
 }: Props) => {
+  const [messageFocused, setMessageFocused] = useState(false);
+  const messageRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (messageRef.current && !messageRef.current.contains(event.target)) {
+        setMessageFocused(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
+  }, []);
+
   return (
-    <div className="py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group">
+    <div
+      ref={messageRef}
+      className={`py-2 ${
+        messageFocused ? 'bg-gray-800' : ''
+      } hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
+    >
       <div className="flex space-x-3">
         {isAContinuosMessage && (
           <>
@@ -61,10 +81,20 @@ const Message = ({
       </div>
       <Menu
         as="div"
-        className="relative hidden group-hover:block -right-4 w-12"
+        className={`${
+          messageFocused ? 'block' : 'hidden'
+        } relative leading-[0] group-hover:block -right-4 w-12`}
+        onKeyDown={() => {
+          console.log('@@@@');
+        }}
       >
-        <Menu.Button className="inline-flex absolute justify-center w-full text-sm font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-          <DotsVerticalIcon className="w-5 text-gray-400" />
+        <Menu.Button className="inline-flex justify-center w-full text-sm font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+          <DotsVerticalIcon
+            onClick={() => {
+              setMessageFocused(true);
+            }}
+            className="w-5 text-gray-400"
+          />
         </Menu.Button>
         <Transition
           as={Fragment}
@@ -78,18 +108,20 @@ const Message = ({
           <Menu.Items className="absolute z-10 right-0 w-56 -top-3 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
             <div className="px-1 py-1">
               <Menu.Item>
-                {({ active }) => (
-                  <button
-                    className={
-                      active
-                        ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
-                        : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
-                    }
-                  >
-                    <PencilAltIcon className="w-5 mr-2" />
-                    Edit
-                  </button>
-                )}
+                {({ active }) => {
+                  return (
+                    <button
+                      className={
+                        active
+                          ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
+                          : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
+                      }
+                    >
+                      <PencilAltIcon className="w-5 mr-2" />
+                      Edit
+                    </button>
+                  );
+                }}
               </Menu.Item>
             </div>
             <div className="px-1 py-1">
