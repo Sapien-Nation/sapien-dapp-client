@@ -73,6 +73,7 @@ const Room = () => {
 
   const handleMessageSubmit = async (content) => {
     try {
+      if (content === '') return;
       await sendMessage(roomID, { content });
       mutate();
     } catch (err) {
@@ -185,7 +186,7 @@ const RoomProxy = () => {
   if (_isEmpty(query)) return null;
 
   return (
-    <Query api={`/api/v3/room/${query.viewID}`} ignoreError>
+    <Query api={`/api/v3/room/${query.viewID}`} ignoreError loader={null}>
       {(data) => {
         if (data?.message === 'User is not a memeber of the room')
           return <NotAMemberView />;
