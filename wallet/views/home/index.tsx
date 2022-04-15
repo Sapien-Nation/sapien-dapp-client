@@ -24,7 +24,7 @@ const Home = ({ onDeposit }: Props) => {
     };
 
     handleGetTokens();
-  }, []);
+  }, [walletAPI]);
   return (
     <>
       <ol
@@ -32,7 +32,7 @@ const Home = ({ onDeposit }: Props) => {
         style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}
       >
         <li
-          className="w-14 h-14 cursor-pointer rounded-full flex items-center justify-center bg-sapien-neutral-600 hover:bg-gray-700"
+          className="w-14 h-14 cursor-pointer rounded-full flex items-center justify-center bg-sapien-80 hover:bg-gray-700"
           onClick={onDeposit}
         >
           <PlusIcon className="w-5 mx-auto text-white" />
