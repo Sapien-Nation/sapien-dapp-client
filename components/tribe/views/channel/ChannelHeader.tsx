@@ -61,7 +61,9 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
         <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
           <div className="flex flex-col justify-center sm:ml-12">
             <h1 className="text-xl text-center sm:text-left">{channel.name}</h1>
-            <h2 className="text-gray-500 mb-4 sm:mb-0">3000 members</h2>
+            <h2 className="text-gray-500 mb-4 sm:mb-0">
+              {channel.membersCount} members
+            </h2>
           </div>
           <div className="flex items-center sm:mr-5">
             <button
