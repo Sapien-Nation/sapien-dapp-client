@@ -17,6 +17,7 @@ const ErrorView = ({
   useEffect(() => {
     const error = new Error(message);
     Sentry.captureException(error);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
