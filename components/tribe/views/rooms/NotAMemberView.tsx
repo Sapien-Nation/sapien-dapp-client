@@ -41,7 +41,7 @@ const NotAMemberView = () => {
       <>
         <SEO title="Join the Room" />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
-          <div className="relative flex-1 overflow-auto p-5 mb-2">
+          <div className="relative flex-1 overflow-auto">
             <h1 className="sr-only">You cant see this room</h1>
             <ul role="list" className="p-5 w-full flex flex-col mb-5">
               <li>

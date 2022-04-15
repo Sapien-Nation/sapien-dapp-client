@@ -16,6 +16,7 @@ import { useToast } from 'context/toast';
 
 // constants
 import { MessageType } from 'tools/constants/rooms';
+import { NotificationType } from 'tools/types/notifications';
 
 // components
 import { Query, SEO } from 'components/common';
@@ -55,7 +56,7 @@ const Room = () => {
   const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  useSocketEvent('message', (message) => {
+  useSocketEvent(NotificationType.RoomNewMessage, (message) => {
     handleAddMessage(message);
   });
 
@@ -157,7 +158,7 @@ const Room = () => {
           </div>
           <div className="relative flex-1 overflow-auto">
             <h1 className="sr-only">Room View for {room.name}</h1>
-            <ul role="list" className="px-5 mb-4 flex flex-col">
+            <ul role="list" className="p-5 mb-4 flex flex-col">
               {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} id="top_target" />

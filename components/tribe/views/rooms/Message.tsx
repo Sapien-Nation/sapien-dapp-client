@@ -66,10 +66,18 @@ const Message = ({
       <p
         className={
           isAContinuosMessage
-            ? 'text-sm text-white/80'
-            : 'pl-52 text-sm text-white/80'
+            ? 'text-sm text-white/80 group'
+            : 'pl-52 text-sm text-white/80 group'
         }
       >
+        <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
+          {!isAContinuosMessage
+            ? new Date(createdAt).toLocaleString('en-US', {
+                hour: 'numeric',
+                hour12: true,
+              })
+            : ''}
+        </span>{' '}
         {content}
       </p>
     );
@@ -110,9 +118,6 @@ const Message = ({
         className={`${
           messageFocused ? 'block' : 'hidden'
         } relative leading-[0] group-hover:block -right-4 w-12`}
-        onKeyDown={() => {
-          console.log('@@@@');
-        }}
       >
         <Menu.Button className="inline-flex justify-center w-full text-sm font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
           <DotsVerticalIcon
