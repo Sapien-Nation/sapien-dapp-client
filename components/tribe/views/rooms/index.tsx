@@ -180,7 +180,7 @@ const Room = () => {
                         username: 'Harambe at Sapien',
                       },
                       id: '999_0000',
-                      type: 'message',
+                      type: MessageType.Text,
                       createdAt: roomDetails.createdAt,
                       content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
                     }}

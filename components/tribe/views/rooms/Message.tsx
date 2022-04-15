@@ -105,7 +105,7 @@ const Message = ({
           {renderBody()}
         </div>
       </div>
-      <Menu
+      {/* <Menu
         as="div"
         className={`${
           messageFocused ? 'block' : 'hidden'
@@ -168,7 +168,7 @@ const Message = ({
             </div>
           </Menu.Items>
         </Transition>
-      </Menu>
+      </Menu> */}
     </div>
   );
 };
