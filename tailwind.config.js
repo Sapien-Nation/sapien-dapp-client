@@ -4,6 +4,12 @@ module.exports = {
   purge: false,
   theme: {
     extend: {
+      animation: {
+        'ping-slow': 'ping 2s linear infinite',
+      },
+      backgroundImage: {
+        'mint': "url('https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png')",
+      },
       gridTemplateColumns: {
         'discovery-grid': 'repeat(auto-fill,minmax(248px,1fr))',
       },

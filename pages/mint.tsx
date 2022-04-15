@@ -86,6 +86,9 @@ const Mint = () => {
 
   const toast = useToast();
 
+  const imageUrl =
+    'https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png';
+
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
@@ -102,26 +105,30 @@ const Mint = () => {
     <Query api="/api/v3/profile/tribes">
       {(tribes: Array<ProfileTribe>) => {
         return (
-          <div className="bg-black min-h-full w-full flex flex-col justify-center items-center">
+          <div className="bg-black min-h-full w-full flex flex-col justify-center items-center relative">
             <span className="flex">
-              <span className="animate-ping absolute left-0 inline-flex h-full w-full rounded-full bg-sapien-80 opacity-75"></span>
+              <span className="animate-ping-slow absolute left-0 inline-flex h-full w-full rounded-full bg-sapien-80 opacity-75"></span>
               <span className="relative inline-flex rounded-fullbg-sapien-80"></span>
             </span>
-            <h1 className="text-5xl font-extrabold mb-4">
+            <h1 className="text-3xl sm:text-5xl font-extrabold mb-4">
               Join the Sapien Nation
             </h1>
-            <img
+            {/*<img
               src="https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png"
               alt="sapien protocol"
-              className="rounded-md relative"
+              className="rounded-md relative object-cover"
+            />*/}
+            <div
+              className="relative rounded-lg h-[350px] w-[624px] md:h-[550px] md:w-[1024px] bg-cover"
+              style={{ backgroundImage: `url('${imageUrl}')` }}
             />
             <button
               type="button"
               onClick={() => handleMint(tribes[0])}
               className={
                 isFetching
-                  ? 'absolute bottom-[320px] cursor-not-allowed flex h-14 items-center w-56 justify-center py-2 px-4 border rounded-md shadow-sm text-sm font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
-                  : 'absolute bottom-[320px] flex justify-center h-14 items-center w-56 py-2 px-4 border rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                  ? 'absolute bottom-20 md:bottom-40 cursor-not-allowed flex h-12 items-center w-48 justify-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                  : 'absolute bottom-20 md:bottom-40 flex justify-center h-12 items-center w-48 py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
               }
               disabled={isFetching}
             >
