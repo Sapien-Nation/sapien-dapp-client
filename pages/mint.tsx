@@ -166,10 +166,7 @@ const MintPage: NextPage = () => {
   };
 
   return (
-    <Query
-      api="/api/v3/passport/mint"
-      options={{ fetcher: () => ({ code: 100 }) }}
-    >
+    <Query api="/api/v3/passport/mint-checker">
       {({ code }: MintStatus) => renderView(code)}
     </Query>
   );

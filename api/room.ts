@@ -23,3 +23,9 @@ export const sendMessage = (roomID: string, body: CreateRoomMessage) =>
     .post(`/api/v3/room/${roomID}/message`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const joinRoom = (roomID: string) =>
+  axios
+    .post(`/api/v3/room/${roomID}/join`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));

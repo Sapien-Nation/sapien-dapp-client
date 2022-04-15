@@ -1,5 +1,10 @@
 import { RefreshIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
+
+// api
+import { joinRoom } from 'api/room';
 
 // hooks
 import { useToast } from 'context/toast';
@@ -15,13 +20,20 @@ const NotAMemberView = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
+  const { query } = useRouter();
+  const { mutate } = useSWRConfig();
 
+  const roomID = query.viewID as string;
   const handleJoinRoom = async () => {
+    setIsFetching(true);
     try {
-      //
+      await joinRoom(roomID);
+
+      mutate(`/api/v3/room/${roomID}`);
     } catch (err) {
       toast({ message: err });
     }
+    setIsFetching(false);
   };
 
   return (
