@@ -114,28 +114,6 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             </Slate>
 
             <div className="flex justify-end items-end gap-1">
-              {/* File Upload */}
-              {/* <button
-                className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-lime-600 focus:text-green-700"
-                onClick={(event) => {
-                  event.preventDefault();
-                  fileRef.current.click();
-                }}
-              >
-                <PhotographIcon className="h-6 w-6" />
-              </button>
-              <input
-                ref={fileRef}
-                accept="image/*"
-                className="sr-only"
-                onChange={(event) => {
-                  if (event.target.files && event.target.files.length > 0) {
-                    setAttachments([...attachments, event.target.files[0]]);
-                  }
-                }}
-                type="file"
-              /> */}
-
               {/* Emoji */}
               <Popover className="relative">
                 {() => (

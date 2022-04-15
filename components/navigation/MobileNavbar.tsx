@@ -8,6 +8,9 @@ import dynamic from 'next/dynamic';
 // context
 import { useAuth } from 'context/user';
 
+// components
+import { Avatar } from 'components/common';
+
 // ui
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
@@ -126,9 +129,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                         alt=""
                       />
                     ) : (
-                      <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-                        {me.displayName[0].toUpperCase()}
-                      </div>
+                      <Avatar />
                     )}
                   </div>
                 </span>
