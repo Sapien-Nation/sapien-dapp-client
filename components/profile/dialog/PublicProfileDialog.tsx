@@ -1,3 +1,6 @@
+// api
+import { authFetcher as fetcher } from 'api';
+
 // components
 import { Dialog, Query } from 'components/common';
 
@@ -12,7 +15,7 @@ interface Props {
 const PublicProfileDialog = ({ profileID, onClose }: Props) => {
   return (
     <Dialog show isFetching={false} onClose={onClose}>
-      <Query api={`/api/v3/user/${profileID}`}>
+      <Query api={`/api/v3/user/${profileID}`} options={{ fetcher }}>
         {(profile: PublicProfile) => (
           <div className="bg-sapien-neutral-600 rounded-xl mb-4">
             <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />

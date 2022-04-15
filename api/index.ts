@@ -64,9 +64,9 @@ export const fetcher = (url: string) => {
     .catch(({ response }) => Promise.reject(response.data.message));
 };
 
-export const authFetcher = () =>
+export const authFetcher = (url = '/api/v3/user/me') =>
   authInstance
-    .get('/api/v3/user/me')
+    .get(url)
     .then(({ data }) => data)
     .catch((response) => Promise.reject(response.data.message));
 
