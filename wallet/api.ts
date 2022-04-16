@@ -12,3 +12,9 @@ export const getTokenData = (url: string) =>
     .get(url)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const getGasPrise = () =>
+  authInstance
+    .get('https://gasstation-mainnet.matic.network')
+    .then((response) => response.data)
+    .catch(({ response }) => Promise.reject(response.data.message));

@@ -2,7 +2,6 @@ import { RefreshIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useTheme } from 'next-themes';
 
 // api
 import { forgot } from 'api/authentication';

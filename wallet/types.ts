@@ -10,3 +10,11 @@ export interface Token {
   description: string;
   image: string;
 }
+
+export interface TXDetails {
+  id: string;
+}
+
+export interface WTXDetails {
+  id: string;
+}

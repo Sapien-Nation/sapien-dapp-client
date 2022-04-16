@@ -4,9 +4,10 @@ import {
   DotsVerticalIcon,
   LogoutIcon,
   InformationCircleIcon,
+  XCircleIcon,
 } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
 // assets
 import { Metamask } from '../../assets';
@@ -19,6 +20,9 @@ import { hooks as metaMaskHooks, metaMask } from '../../connectors/metaMask';
 import { useToast } from 'context/toast';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
+// types
+import type { TXDetails } from '../../types';
+
 // web3
 import { useWeb3 } from '../../providers';
 
@@ -30,6 +34,7 @@ enum View {
   Home,
   Success,
 }
+
 interface Props {
   handleBack: () => void;
 }
@@ -37,6 +42,10 @@ interface Props {
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
   const [userBalance, setUserBalance] = useState(0);
+  const [depositTXDetails, setDepositTXDetails] = useState<TXDetails | null>(
+    null
+  );
+  const [showPolygonError, setShowPolygonError] = useState(false);
   const [isFetchingBalance, setIsFetchingBalance] = useState(true);
 
   const { walletAPI } = useWeb3();
@@ -50,20 +59,25 @@ const Deposit = ({ handleBack }: Props) => {
   const toast = useToast();
   const depositTokensRef = useRef(null);
 
+  const fetchBalance = useCallback(async () => {
+    setIsFetchingBalance(true);
+    try {
+      const balance = await walletAPI.getWalletBalance();
+
+      setUserBalance(balance);
+    } catch (err) {
+      //
+    }
+    setIsFetchingBalance(false);
+  }, [walletAPI]);
+
   useEffect(() => {
     metaMask.connectEagerly();
   }, []);
 
   useEffect(() => {
-    const fetchBalance = async () => {
-      const balance = await walletAPI.getWalletBalance();
-
-      setUserBalance(balance);
-      setIsFetchingBalance(false);
-    };
-
     fetchBalance();
-  }, []);
+  }, [fetchBalance]);
 
   const handleActivateMetamask = async () => {
     await metaMask.activate(chainId);
@@ -75,7 +89,14 @@ const Deposit = ({ handleBack }: Props) => {
 
   const handleDeposit = async () => {
     try {
-      setView(View.Success);
+      const isOnPolygonNetwork = chainId === 80001;
+      if (isOnPolygonNetwork) {
+        const details = await walletAPI.handleDeposit(account[0]);
+        setDepositTXDetails(details);
+        setView(View.Success);
+      } else {
+        setShowPolygonError(true);
+      }
     } catch (err) {
       Sentry.captureException(err);
       toast({
@@ -92,6 +113,36 @@ const Deposit = ({ handleBack }: Props) => {
   };
 
   const renderView = () => {
+    if (showPolygonError) {
+      return (
+        <>
+          <div className="flex justify-between items-center">
+            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2 text-center">
+              Network Issue.
+              <XCircleIcon className="w-5" />
+            </h5>
+          </div>
+          <p className="text-sm text-white">
+            To continue with the deposit of your passport, please connect to the
+            Polygon Network.
+          </p>
+
+          <div className="text-center grid gap-6">
+            <button
+              type="button"
+              onClick={() => {
+                setShowPolygonError(false);
+              }}
+              disabled={isActivating}
+              className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            >
+              Deposit Passport
+            </button>
+          </div>
+        </>
+      );
+    }
+
     switch (view) {
       case View.DepositPassport: {
         const renderHelperText = () => {
@@ -188,7 +239,7 @@ const Deposit = ({ handleBack }: Props) => {
                 className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 <Metamask width={25} />
-                Deposit With Metamask
+                {isActive ? 'Deposit With Metamask' : 'Connect Metamask'}
               </button>
               <span className="text-xs text-green-500 flex justify-center items-center">
                 {renderHelperText()}
@@ -289,8 +340,13 @@ const Deposit = ({ handleBack }: Props) => {
             </div>
             <p className="text-white">
               <h5>Transaction Details</h5>
-              ...
             </p>
+            <div className="flex ">
+              <p className="flex gap-2">
+                <span className="font-extrabold">Transaction ID:</span>
+                <span>{depositTXDetails.id}</span>
+              </p>
+            </div>
             <p className="text-xs text-white">
               if you have any questions please contact{' '}
               <a
@@ -316,7 +372,12 @@ const Deposit = ({ handleBack }: Props) => {
         );
     }
   };
-  return <div className="h-full space-y-6 w-72">{renderView()}</div>;
+
+  return (
+    <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+      <div className="h-full space-y-6 w-72">{renderView()}</div>
+    </div>
+  );
 };
 
 export default Deposit;

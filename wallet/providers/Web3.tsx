@@ -1,11 +1,15 @@
 import { Biconomy } from '@biconomy/mexa';
+import Common, { CustomChain } from '@ethereumjs/common';
+import { Transaction as Tx } from '@ethereumjs/tx';
 import * as Sentry from '@sentry/nextjs';
+import { BN } from 'ethereumjs-util';
+import sigUtil from 'eth-sig-util';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import Web3Library from 'web3';
 import { isAddress } from 'web3-utils';
 
 // api
-import { getTokenData } from 'wallet/api';
+import { connectWallet, getGasPrise, getTokenData } from 'wallet/api';
 
 // contracts
 import { default as PlatformContract } from '../contracts/Platform.json';
@@ -16,12 +20,14 @@ import { useAuth } from 'context/user';
 
 // types
 import type { AbiItem } from 'web3-utils';
-import type { Token } from '../types';
+import type { MetaTxParams, Token, TXDetails, WTXDetails } from '../types';
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
+    handleWithdraw: (toAddress: string) => Promise<WTXDetails>;
+    handleDeposit: (metamaskAddress: string) => Promise<TXDetails>;
     getWalletBalance: () => Promise<number>;
     getWalletTokens: () => Promise<Array<Token>>;
   } | null;
@@ -49,6 +55,18 @@ const Web3Context = createContext<Web3>({
   walletAPI: null,
   web3Error: null,
 });
+
+const domainType = [
+  { name: 'name', type: 'string' },
+  { name: 'version', type: 'string' },
+  { name: 'verifyingContract', type: 'address' },
+  { name: 'salt', type: 'bytes32' },
+];
+const metaTransactionType = [
+  { name: 'nonce', type: 'uint256' },
+  { name: 'from', type: 'address' },
+  { name: 'functionSignature', type: 'bytes' },
+];
 
 const debugWeb3 = false;
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
@@ -147,7 +165,90 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //----------------------------------------------------------------------------------------------------------------------------
   // API
+  const getSignatureParameters = (signature) => {
+    if (!WalletAPIRef.current.utils.isHexStrict(signature)) {
+      throw new Error(
+        'Given value "'.concat(signature, '" is not a valid hex string.')
+      );
+    }
+
+    const r = signature.slice(0, 66);
+    const s = '0x'.concat(signature.slice(66, 130));
+    const v = '0x'.concat(signature.slice(130, 132));
+
+    let vNum: number = WalletAPIRef.current.utils.hexToNumber(v);
+    if (![27, 28].includes(vNum)) vNum += 27;
+
+    return {
+      r: r,
+      s: s,
+      v: vNum,
+    };
+  };
+
+  const prepareMetaTransaction = async ({
+    functionSignature,
+    contract,
+    contractAddress,
+    domainData,
+  }: MetaTxParams) => {
+    const nonce = await contract.methods.getNonce(me.walletAddress).call();
+
+    const message = {
+      nonce: WalletAPIRef.current.utils.toHex(nonce),
+      from: me.walletAddress,
+      functionSignature: functionSignature,
+    };
+
+    const dataToSign = {
+      types: {
+        EIP712Domain: domainType,
+        MetaTransaction: metaTransactionType,
+      },
+      domain: domainData,
+      primaryType: 'MetaTransaction',
+      message: message,
+    };
+
+    // Get torus private key
+    const data = await connectWallet();
+
+    const signature = sigUtil.signTypedData_v4(Buffer.from(data, 'hex'), {
+      // @ts-ignore
+      data: dataToSign,
+    });
+    const { r, s, v } = getSignatureParameters(signature); // same helper used in SDK frontend code
+    const executeMetaTransactionData = contract.methods
+      .executeMetaTransaction(me.walletAddress, functionSignature, r, s, v)
+      .encodeABI();
+
+    const gasPriceData = await getGasPrise();
+
+    // Build the transaction
+    const txObject = {
+      nonce: WalletAPIRef.current.utils.toHex(nonce),
+      to: contractAddress,
+      gasPrice: WalletAPIRef.current.utils
+        .toWei(new BN(gasPriceData.fast), 'gwei')
+        .toNumber(),
+      gasLimit: 300000,
+      data: executeMetaTransactionData,
+    };
+
+    const common = Common.custom(
+      walletIsMainnet ? CustomChain.PolygonMainnet : CustomChain.PolygonMumbai
+    );
+
+    const tx = Tx.fromTxData(txObject, { common });
+    const signedTx = tx.sign(Buffer.from(data, 'hex'));
+    const serializedTx = signedTx.serialize();
+    const raw = '0x' + serializedTx.toString('hex');
+
+    return raw;
+  };
+
   const getWalletBalance = async () => {
     try {
       const balance = await contracts.platformSPNContract.methods
@@ -193,12 +294,45 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  const handleWithdraw = async (toAddress: string): Promise<WTXDetails> => {
+    try {
+      return { id: '1000' };
+    } catch (err) {
+      Sentry.captureException(err);
+    }
+  };
+
+  const handleDeposit = async (metamaskAddress: string): Promise<TXDetails> => {
+    try {
+      // const functionSignature = contracts.passportContract.methods
+      //   .transfer(metamaskAddress)
+      //   .encodeABI();
+
+      // const rawTx: MetaTxParams = await prepareMetaTransaction({
+      //   functionSignature: functionSignature,
+      //   contract: contracts.platformSPNContract,
+      //   contractAddress: config.SPN_TOKEN_ADDRESS,
+      //   domainData: contracts.platformSPNDomainData,
+      // });
+
+      // TODO API Call??
+      return { id: '1000' };
+    } catch (err) {
+      Sentry.captureException(err);
+    }
+  };
+
   return (
     <Web3Context.Provider
       value={{
         isWeb3Ready: WalletAPIRef.current !== null,
         web3Error: error,
-        walletAPI: { getWalletTokens, getWalletBalance },
+        walletAPI: {
+          handleWithdraw,
+          handleDeposit,
+          getWalletTokens,
+          getWalletBalance,
+        },
       }}
     >
       {children}
