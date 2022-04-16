@@ -84,6 +84,7 @@ const Message = ({
   };
   return (
     <li
+      data-testid="room-message"
       ref={messageRef}
       className={`py-2 ${
         messageFocused ? 'bg-gray-800' : ''
@@ -93,9 +94,17 @@ const Message = ({
         {isAContinuosMessage && (
           <>
             {avatar ? (
-              <img className="h-10 w-10 rounded-full" src={avatar} alt="" />
+              <img
+                className="h-10 w-10 rounded-full"
+                src={avatar}
+                alt=""
+                data-testid="message-avatar"
+              />
             ) : (
-              <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+              <div
+                className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
+                data-testid="message-avatar"
+              >
                 {displayName[0].toUpperCase()}
               </div>
             )}
@@ -105,9 +114,12 @@ const Message = ({
           {isAContinuosMessage && (
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-extrabold">{displayName}</h3>
-              <p className="text-xs text-white">
+              <time
+                data-testid="message-timestamp"
+                className="text-xs text-white"
+              >
                 {formatDateRelative(createdAt)}
-              </p>
+              </time>
             </div>
           )}
           {renderBody()}

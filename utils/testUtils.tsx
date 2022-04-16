@@ -12,6 +12,7 @@ import { AuthenticationProvider } from 'context/user';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { ToastProvider } from 'context/toast';
 import { ToastContainer } from 'components/common';
+import SocketProvider, { SocketContext } from 'context/socket';
 
 // mocks
 import { mockUser } from 'tools/mocks/user';
@@ -44,6 +45,7 @@ export const mockRouter = (props: Partial<NextRouter> = {}): NextRouter => ({
 });
 
 export interface ProviderOptions extends RenderOptions {
+  socket?: { send: () => void; onmessage: () => void };
   route?: Partial<NextRouter>;
   swrConfig?: SWRConfiguration;
 }
@@ -53,7 +55,13 @@ interface AllTheProvidersProps extends ProviderOptions {
   swrCache?: Cache<any>;
 }
 
+const mockedSocket = {
+  send: jest.fn(),
+  onmessage: jest.fn(),
+};
+
 const AllTheProviders = ({
+  socket = mockedSocket,
   children,
   route = {},
   swrConfig = {},
@@ -72,7 +80,11 @@ const AllTheProviders = ({
     >
       <RouterContext.Provider value={mockRouter(route)}>
         <ToastProvider>
-          <AuthenticationProvider>{children}</AuthenticationProvider>
+          <AuthenticationProvider>
+            <SocketContext.Provider value={{ socket }}>
+              {children}
+            </SocketContext.Provider>
+          </AuthenticationProvider>
           <ToastContainer />
         </ToastProvider>
       </RouterContext.Provider>
@@ -84,13 +96,18 @@ const renderWithProviders = (
   ui: React.ReactElement,
   options: ProviderOptions = {}
 ) => {
-  const { route, swrConfig, ...rest } = options;
+  const { route, swrConfig, socket, ...rest } = options;
   const swrCache = new Map(cache);
 
   const rtl = render(ui, {
     // eslint-disable-next-line react/display-name
     wrapper: ({ children }) => (
-      <AllTheProviders route={route} swrCache={swrCache} swrConfig={swrConfig}>
+      <AllTheProviders
+        route={route}
+        swrCache={swrCache}
+        swrConfig={swrConfig}
+        socket={socket}
+      >
         {children}
       </AllTheProviders>
     ),

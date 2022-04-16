@@ -26,7 +26,7 @@ import NotAMemberView from './NotAMemberView';
 import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 
 // helpers
-import { formatDate } from 'utils/date';
+import { formatDate, formatDateRelative } from 'utils/date';
 
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
@@ -70,6 +70,7 @@ const MessagesFeed = ({ scrollRef, messages }: Props) => {
               <time
                 className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
                 dateTime={timestamp}
+                data-testid="timestamp-divider"
               >
                 {timestamp}
               </time>
@@ -156,7 +157,7 @@ const Room = () => {
     try {
       handleAddMessage({
         content,
-        createdAt: new Date().toISOString(),
+        createdAt: date,
         id: nanoid(),
         sender: {
           avatar: me.avatar,
@@ -182,6 +183,7 @@ const Room = () => {
     setShowMobileDetails(false);
   }, []);
 
+  const date = new Date().toISOString();
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -207,26 +209,46 @@ const Room = () => {
                 <li>
                   <time
                     className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                    dateTime={new Date().toISOString()}
+                    dateTime={date}
+                    data-testid="timestamp-divider-harambe"
                   >
-                    {formatDate(new Date().toISOString())}
+                    {formatDate(date)}
                   </time>
-                  <Message
-                    isAContinuosMessage
-                    message={{
-                      sender: {
-                        id: '9999_9999',
-                        avatar:
-                          'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png',
-                        displayName: 'Harambe at Sapien',
-                        username: 'Harambe at Sapien',
-                      },
-                      id: '999_0000',
-                      type: MessageType.Text,
-                      createdAt: roomDetails.createdAt,
-                      content: `This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`,
-                    }}
-                  />
+
+                  <div
+                    className={`py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
+                  >
+                    <div className="flex space-x-3">
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
+                        alt=""
+                        data-testid="message-avatar"
+                      />
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-extrabold">
+                            Harambe at Sapien
+                          </h3>
+                          <time
+                            data-testid="message-timestamp"
+                            className="text-xs text-white"
+                          >
+                            {formatDateRelative(new Date().toISOString())}
+                          </time>
+                        </div>
+                        <p className="text-sm text-white/80 group">
+                          <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
+                            {new Date().toLocaleString('en-US', {
+                              hour: 'numeric',
+                              hour12: true,
+                            })}
+                          </span>{' '}
+                          {`This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </li>
               )}
               {isLoadingInitialData === false && (

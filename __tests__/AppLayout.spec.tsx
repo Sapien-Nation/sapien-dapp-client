@@ -599,6 +599,7 @@ describe('LoggedIn', () => {
       name: roomName,
       aboutObject: 'PARTY',
       aboutObjectId: '1000',
+      tribeId: tribeID,
     });
 
     // on success
@@ -611,6 +612,7 @@ describe('LoggedIn', () => {
       name: roomName,
       aboutObject: 'PARTY',
       aboutObjectId: '1000',
+      tribeId: tribeID,
     });
 
     expect(push).toHaveBeenCalledWith(`/tribes/${tribeID}/${newRoom.id}`);

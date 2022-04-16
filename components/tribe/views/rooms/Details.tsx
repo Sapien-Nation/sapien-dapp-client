@@ -47,6 +47,7 @@ const Details = ({ handleSidebar }) => {
             {members.map(({ avatar, displayName, id }, index) => {
               return (
                 <li
+                  data-testid="room-detail-member"
                   key={id}
                   className="flex gap-2 items-center mb-4"
                   onClick={() => {

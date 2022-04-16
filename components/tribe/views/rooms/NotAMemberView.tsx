@@ -36,6 +36,7 @@ const NotAMemberView = () => {
     setIsFetching(false);
   };
 
+  const date = new Date().toISOString();
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -47,25 +48,30 @@ const NotAMemberView = () => {
               <li>
                 <time
                   className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                  dateTime={new Date().toISOString()}
+                  dateTime={date}
+                  data-testid="join-room-time-header"
                 >
-                  {formatDate(new Date().toISOString())}
+                  {formatDate(date)}
                 </time>
                 <div className="py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group">
                   <div className="flex space-x-3 w-full">
                     <img
                       className="h-10 w-10 rounded-full"
                       src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
-                      alt=""
+                      alt="monkey with glasses"
                     />
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center gap-2">
                         <h3 className="text-sm font-medium">
                           Harambe at Sapien
                         </h3>
-                        <p className="text-xs text-gray-500">
-                          {formatDateRelative(new Date().toISOString())}
-                        </p>
+                        <time
+                          dateTime={date}
+                          className="text-xs text-gray-500"
+                          data-testid="join-room-harambe-message-timestamp"
+                        >
+                          {formatDateRelative(date)}
+                        </time>
                       </div>
                       <p className="text-sm text-gray-500 flex gap-4 items-center">
                         Hey, seems like you are not a member of this channel
