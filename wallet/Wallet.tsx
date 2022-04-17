@@ -23,7 +23,12 @@ const Wallet = () => {
   const [token, setToken] = useState<Token | null>(null);
 
   const { isWeb3Ready, web3Error } = useWeb3();
-  const { isReady: isTorusReady, error: torusError, retryConnect } = useTorus();
+  const {
+    isReady: isTorusReady,
+    error: torusError,
+    retryConnect: retryTorusConnect,
+    isReconnecting,
+  } = useTorus();
 
   const renderView = () => {
     if (torusError) {
@@ -56,10 +61,13 @@ const Wallet = () => {
               </p>
               <button
                 type="button"
-                onClick={retryConnect}
+                onClick={retryTorusConnect}
                 className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
-                Connect
+                {isReconnecting === true && (
+                  <RefreshIcon className="w-5 animate-spin" />
+                )}
+                {isReconnecting ? 'Reconnecting' : 'Reconnect'}
               </button>
             </div>
           </div>

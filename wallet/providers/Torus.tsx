@@ -22,6 +22,7 @@ const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
 
 interface Torus {
   error: Error | null;
+  isReconnecting: boolean;
   isReady: boolean;
   torusKeys: TorusKey | null;
   retryConnect: () => Promise<void>;
@@ -31,6 +32,7 @@ interface Torus {
 const TorusContext = createContext<Torus>({
   error: null,
   isReady: false,
+  isReconnecting: false,
   torusKeys: null,
   retryConnect: async () => {},
   torusSDK: null,
@@ -44,6 +46,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
   const [error, setError] = useState<Error | null>(null);
   const [torusSDK, setTorusSDK] = useState<DirectWebSdk | null>(null);
   const [torusKeys, setTorusKeys] = useState<TorusKey | null>(null);
+  const [isReconnecting, setIsReconnecting] = useState(false);
 
   const { me } = useAuth();
   const [tokens] = useLocalStorage<null | {
@@ -143,36 +146,16 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
   }, []);
 
   const handleRetry = async () => {
-    const TorusDirectSDK = new DirectWebSdk({
-      baseUrl:
-        typeof window === 'undefined'
-          ? '/api/serviceworker'
-          : `${window.location.origin}/api/serviceworker`,
-      enableLogging: Boolean(debugTorus),
-      network: walletIsMainnet ? 'mainnet' : 'testnet',
-    });
     try {
-      const { token: refreshedTorusToken } = await refreshTokenAPI(
-        tokens.refresh,
-        'torus'
+      setIsReconnecting(true);
+      const keys = await initializeTorusKeys(
+        { skipSw: true },
+        { user: me, tokens: { torus: tokens.torus, refresh: tokens.refresh } }
       );
-
-      const torusKeys = await TorusDirectSDK.getAggregateTorusKey(
-        walletVerifier,
-        me.id,
-        [
-          {
-            verifier: walletSubVerifier,
-            idToken: refreshedTorusToken,
-          },
-        ]
-      );
-
-      setTorusSDK(TorusDirectSDK);
-      setTorusKeys(torusKeys);
+      setIsReconnecting(false);
+      setTorusKeys(keys);
     } catch (err) {
-      Sentry.captureException(err);
-      return Promise.reject(err);
+      setError(err);
     }
   };
 
@@ -184,6 +167,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
         error,
         retryConnect: handleRetry,
         torusSDK,
+        isReconnecting,
       }}
     >
       {children}
