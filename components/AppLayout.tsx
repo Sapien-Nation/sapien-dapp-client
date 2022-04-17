@@ -18,6 +18,7 @@ import { useAuth } from 'context/user';
 
 // providers
 import { Web3Provider } from 'wallet/providers';
+import { TorusProvider } from 'wallet/providers/Torus';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -154,14 +155,16 @@ const AppLayout = ({ children }: Props) => {
                 </div>
               </nav>
               <div className="flex-1 min-w-0 flex flex-col">
-                <Web3Provider>
-                  <div className="lg:hidden">
-                    <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
-                  </div>
-                  <div className="hidden lg:block">
-                    <Navbar />
-                  </div>
-                </Web3Provider>
+                <TorusProvider>
+                  <Web3Provider>
+                    <div className="lg:hidden">
+                      <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
+                    </div>
+                    <div className="hidden lg:block">
+                      <Navbar />
+                    </div>
+                  </Web3Provider>
+                </TorusProvider>
                 <div className="flex-1 flex overflow-hidden">
                   <section
                     aria-labelledby="primary-heading"

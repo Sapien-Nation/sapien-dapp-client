@@ -17,6 +17,7 @@ import { default as PassportContract } from '../contracts/Passport.json';
 
 // hooks
 import { useAuth } from 'context/user';
+import { useTorus } from './Torus';
 
 // types
 import type { AbiItem } from 'web3-utils';
@@ -68,7 +69,7 @@ const metaTransactionType = [
   { name: 'functionSignature', type: 'bytes' },
 ];
 
-const debugWeb3 = false;
+const debugWeb3 = true;
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
 const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 
@@ -77,6 +78,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const [contracts, setContracts] = useState<null | Record<string, any>>(null);
 
   const { me } = useAuth();
+  const { isReady, torusKeys } = useTorus();
+
   const WalletAPIRef = useRef(null);
 
   const config: WalletConfig = (() => {
@@ -96,7 +99,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     return {
       MAINNET_NETWORK_ID: 5,
       POLY_NETWORK_ID: 80001,
-      RPC_PROVIDER: 'https://rpc-mumbai.matic.today',
+      RPC_PROVIDER: 'https://rpc-mumbai.matic.today/',
       SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
       BADGE_STORE_ADDRESS: '0x59cD3d76cC9EA4f626629337664A3CbD78F48474',
       PASSPORT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3',
@@ -158,12 +161,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       }
     };
 
-    if (debugWeb3) {
-      console.log('Initializng Biconomy');
+    if (isReady === true) {
+      initWeb3WithBiconomy();
     }
-    initWeb3WithBiconomy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [torusKeys]);
 
   //----------------------------------------------------------------------------------------------------------------------------
   // API
