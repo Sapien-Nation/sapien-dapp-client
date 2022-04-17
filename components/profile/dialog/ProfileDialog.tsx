@@ -42,7 +42,7 @@ const ProfileDialog = ({ onClose }: Props) => {
   };
 
   const renderView = () => {
-    if (me.passport) {
+    if (me.passport === null) {
       return (
         <div className="rounded-xl mb-4 bg-gray-900">
           <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />

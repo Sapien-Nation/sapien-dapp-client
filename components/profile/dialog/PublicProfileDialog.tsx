@@ -16,7 +16,7 @@ interface Props {
 
 const PublicProfileDialog = ({ profileID, onClose }: Props) => {
   const renderView = (profile: PublicProfile) => {
-    if (!profile.passport) {
+    if (profile.passport === null) {
       return (
         <div className="bg-sapien-neutral-600 rounded-xl mb-4">
           <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
