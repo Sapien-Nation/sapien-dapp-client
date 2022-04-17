@@ -58,7 +58,7 @@ const MessagesFeed = ({ scrollRef, messages }: Props) => {
         inline: 'start',
       });
     }
-  }, []);
+  }, [scrollRef]);
 
   return (
     <>

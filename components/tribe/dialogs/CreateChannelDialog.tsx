@@ -232,7 +232,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                           error={errors.name?.message}
                         />
                         <TextInput
-                          className="block w-full pr-10 pl-3 pt-3 pb-3 border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
                           name="name"
                           aria-label="name"
                           placeholder="Channel Name"

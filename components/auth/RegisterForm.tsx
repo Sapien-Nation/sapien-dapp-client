@@ -108,7 +108,6 @@ const RegisterForm = () => {
               name="email"
               maxLength={100}
               placeholder="email@example.com"
-              className="appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 bg-gray-800 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
               rules={{
                 validate: {
                   required: (value) => value.length > 0 || 'is required',
@@ -141,7 +140,6 @@ const RegisterForm = () => {
                   !/[-|\.|_]+|[-|\.|_]{2,2}/.test(value) || 'is invalid',
               }}
               replaceWhiteSpace
-              className="appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
             />
           </div>
         </div>
