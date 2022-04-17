@@ -20,82 +20,12 @@ const walletIsMainnet = Boolean(
 const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
 const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
 
-const initializeTorusKeys = async (
-  initOptions: {
-    skipSw?: boolean;
-    skipInit?: boolean;
-    skipPrefetch?: boolean;
-  },
-  {
-    user,
-    tokens,
-  }: {
-    user: User;
-    tokens: {
-      torus: string;
-      refresh: string;
-    };
-  }
-) => {
-  const TorusDirectSDK = new DirectWebSdk({
-    baseUrl:
-      typeof window === 'undefined'
-        ? '/api/serviceworker'
-        : `${window.location.origin}/api/serviceworker`,
-    enableLogging: Boolean(debugTorus),
-    network: walletIsMainnet ? 'mainnet' : 'testnet',
-  });
-  try {
-    await TorusDirectSDK.init(initOptions);
-
-    const torusKeys = await TorusDirectSDK.getAggregateTorusKey(
-      walletVerifier,
-      user.id,
-      [
-        {
-          verifier: walletSubVerifier,
-          idToken: tokens.torus,
-        },
-      ]
-    );
-
-    return torusKeys;
-  } catch (err) {
-    if (err.message === 'Duplicate token found') {
-      try {
-        const { token: refreshedTorusToken } = await refreshTokenAPI(
-          tokens.refresh,
-          'torus'
-        );
-
-        const torusKeys = await TorusDirectSDK.getAggregateTorusKey(
-          walletVerifier,
-          user.id,
-          [
-            {
-              verifier: walletSubVerifier,
-              idToken: refreshedTorusToken,
-            },
-          ]
-        );
-
-        return torusKeys;
-      } catch (err) {
-        Sentry.captureException(err);
-        return Promise.reject(err);
-      }
-    } else {
-      Sentry.captureException(err);
-      return Promise.reject(err);
-    }
-  }
-};
-
 interface Torus {
   error: Error | null;
   isReady: boolean;
   torusKeys: TorusKey | null;
   retryConnect: () => Promise<void>;
+  torusSDK: DirectWebSdk | null;
 }
 
 const TorusContext = createContext<Torus>({
@@ -103,6 +33,7 @@ const TorusContext = createContext<Torus>({
   isReady: false,
   torusKeys: null,
   retryConnect: async () => {},
+  torusSDK: null,
 });
 
 interface TorusProviderProps {
@@ -111,6 +42,7 @@ interface TorusProviderProps {
 
 const TorusProvider = ({ children }: TorusProviderProps) => {
   const [error, setError] = useState<Error | null>(null);
+  const [torusSDK, setTorusSDK] = useState<DirectWebSdk | null>(null);
   const [torusKeys, setTorusKeys] = useState<TorusKey | null>(null);
 
   const { me } = useAuth();
@@ -118,6 +50,79 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
     torus: string;
     refresh: string;
   }>('tokens', null);
+
+  const initializeTorusKeys = async (
+    initOptions: {
+      skipSw?: boolean;
+      skipInit?: boolean;
+      skipPrefetch?: boolean;
+    },
+    {
+      user,
+      tokens,
+    }: {
+      user: User;
+      tokens: {
+        torus: string;
+        refresh: string;
+      };
+    }
+  ) => {
+    const TorusDirectSDK = new DirectWebSdk({
+      baseUrl:
+        typeof window === 'undefined'
+          ? '/api/serviceworker'
+          : `${window.location.origin}/api/serviceworker`,
+      enableLogging: Boolean(debugTorus),
+      network: walletIsMainnet ? 'mainnet' : 'testnet',
+    });
+    try {
+      await TorusDirectSDK.init(initOptions);
+
+      const torusKeys = await TorusDirectSDK.getAggregateTorusKey(
+        walletVerifier,
+        user.id,
+        [
+          {
+            verifier: walletSubVerifier,
+            idToken: tokens.torus,
+          },
+        ]
+      );
+
+      setTorusSDK(TorusDirectSDK);
+      return torusKeys;
+    } catch (err) {
+      if (err.message === 'Duplicate token found') {
+        try {
+          const { token: refreshedTorusToken } = await refreshTokenAPI(
+            tokens.refresh,
+            'torus'
+          );
+
+          const torusKeys = await TorusDirectSDK.getAggregateTorusKey(
+            walletVerifier,
+            user.id,
+            [
+              {
+                verifier: walletSubVerifier,
+                idToken: refreshedTorusToken,
+              },
+            ]
+          );
+
+          setTorusSDK(TorusDirectSDK);
+          return torusKeys;
+        } catch (err) {
+          Sentry.captureException(err);
+          return Promise.reject(err);
+        }
+      } else {
+        Sentry.captureException(err);
+        return Promise.reject(err);
+      }
+    }
+  };
 
   useEffect(() => {
     const initKeys = async () => {
@@ -163,6 +168,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
         ]
       );
 
+      setTorusSDK(TorusDirectSDK);
       setTorusKeys(torusKeys);
     } catch (err) {
       Sentry.captureException(err);
@@ -177,6 +183,7 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
         torusKeys,
         error,
         retryConnect: handleRetry,
+        torusSDK,
       }}
     >
       {children}

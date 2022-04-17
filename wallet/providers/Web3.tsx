@@ -78,7 +78,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const [contracts, setContracts] = useState<null | Record<string, any>>(null);
 
   const { me } = useAuth();
-  const { isReady, torusKeys } = useTorus();
+  const { isReady, torusKeys, torusSDK } = useTorus();
 
   const WalletAPIRef = useRef(null);
 

@@ -50,7 +50,6 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
           setClipboardWalletText('');
         }
       } catch (err) {
-        console.log(err);
         //
       }
     };
