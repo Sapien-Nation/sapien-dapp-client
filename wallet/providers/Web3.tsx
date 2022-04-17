@@ -69,19 +69,14 @@ const metaTransactionType = [
   { name: 'functionSignature', type: 'bytes' },
 ];
 
-const debugWeb3 = true;
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
 const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
-  const [error, setError] = useState<Error | null>(null);
-  const [contracts, setContracts] = useState<null | Record<string, any>>(null);
+  const [error, setError] = useState<null | Error>(null);
 
   const { me } = useAuth();
-  const { isReady, torusKeys, torusSDK } = useTorus();
-
-  const WalletAPIRef = useRef(null);
-
+  //----------------------------------------------------------------------------------------------------------------------------
   const config: WalletConfig = (() => {
     if (walletIsMainnet === 'true') {
       return {
@@ -108,86 +103,45 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     };
   })();
 
-  useEffect(() => {
-    const initWeb3WithBiconomy = async () => {
-      try {
-        const biconomy = new Biconomy(
-          new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
-          {
-            apiKey: config.BICONOMY_API_KEY,
-            debug: debugWeb3,
-          }
-        );
-
-        biconomy.onEvent(biconomy.READY, async () => {
-          if (debugWeb3) {
-            console.log('@Biconomy/mexa ready, initializing Web3API');
-          }
-
-          const Web3Eth = new Web3Library(biconomy);
-          setContracts({
-            passportContract: new Web3Eth.eth.Contract(
-              PassportContract as Array<AbiItem>,
-              config.PASSPORT_ADDRESS
-            ),
-            platformSPNContract: new Web3Eth.eth.Contract(
-              PlatformContract as AbiItem[],
-              config.SPN_TOKEN_ADDRESS
-            ),
-            platformSPNDomainData: {
-              name: 'Sapien Network',
-              version: '1',
-              verifyingContract: config.SPN_TOKEN_ADDRESS,
-              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
-                64,
-                '0'
-              )}`,
-            },
-          });
-
-          WalletAPIRef.current = Web3Eth;
-        });
-
-        biconomy.onEvent(biconomy.ERROR, (error, message) => {
-          if (debugWeb3) {
-            console.error('Error initializing @Biconomy/mexa', error, message);
-          }
-
-          Sentry.captureException(error);
-          setError(error);
-        });
-      } catch (err) {
-        setError(err);
-      }
-    };
-
-    if (isReady === true) {
-      initWeb3WithBiconomy();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [torusKeys]);
-
+  const Web3API = new Web3Library(config.RPC_PROVIDER);
+  const contracts = {
+    passportContract: new Web3API.eth.Contract(
+      PassportContract as Array<AbiItem>,
+      config.PASSPORT_ADDRESS
+    ),
+    platformSPNContract: new Web3API.eth.Contract(
+      PlatformContract as AbiItem[],
+      config.SPN_TOKEN_ADDRESS
+    ),
+    platformSPNDomainData: {
+      name: 'Sapien Network',
+      version: '1',
+      verifyingContract: config.SPN_TOKEN_ADDRESS,
+      salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(64, '0')}`,
+    },
+  };
   //----------------------------------------------------------------------------------------------------------------------------
   // API
   const getSignatureParameters = (signature) => {
-    if (!WalletAPIRef.current.utils.isHexStrict(signature)) {
-      throw new Error(
-        'Given value "'.concat(signature, '" is not a valid hex string.')
-      );
+    if (Web3API.utils.isHexStrict(signature)) {
+      setError({
+        message: `Given value ${signature} is not a valid hex string`,
+        name: 'SignaturaParameterError',
+      });
+    } else {
+      const r = signature.slice(0, 66);
+      const s = '0x'.concat(signature.slice(66, 130));
+      const v = '0x'.concat(signature.slice(130, 132));
+
+      let vNum: number = Web3API.utils.hexToNumber(v);
+      if (![27, 28].includes(vNum)) vNum += 27;
+
+      return {
+        r: r,
+        s: s,
+        v: vNum,
+      };
     }
-
-    const r = signature.slice(0, 66);
-    const s = '0x'.concat(signature.slice(66, 130));
-    const v = '0x'.concat(signature.slice(130, 132));
-
-    let vNum: number = WalletAPIRef.current.utils.hexToNumber(v);
-    if (![27, 28].includes(vNum)) vNum += 27;
-
-    return {
-      r: r,
-      s: s,
-      v: vNum,
-    };
   };
 
   const prepareMetaTransaction = async ({
@@ -199,7 +153,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     const nonce = await contract.methods.getNonce(me.walletAddress).call();
 
     const message = {
-      nonce: WalletAPIRef.current.utils.toHex(nonce),
+      nonce: Web3API.utils.toHex(nonce),
       from: me.walletAddress,
       functionSignature: functionSignature,
     };
@@ -230,9 +184,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
     // Build the transaction
     const txObject = {
-      nonce: WalletAPIRef.current.utils.toHex(nonce),
+      nonce: Web3API.utils.toHex(nonce),
       to: contractAddress,
-      gasPrice: WalletAPIRef.current.utils
+      gasPrice: Web3API.utils
         .toWei(new BN(gasPriceData.fast), 'gwei')
         .toNumber(),
       gasLimit: 300000,
@@ -260,6 +214,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return Number(balance);
     } catch (err) {
       Sentry.captureException(err);
+      setError(err);
     }
   };
 
@@ -293,6 +248,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return tokens;
     } catch (err) {
       Sentry.captureException(err);
+      setError(err);
     }
   };
 
@@ -301,6 +257,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
+      setError(err);
     }
   };
 
@@ -321,13 +278,14 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
+      setError(err);
     }
   };
 
   return (
     <Web3Context.Provider
       value={{
-        isWeb3Ready: WalletAPIRef.current !== null,
+        isWeb3Ready: true,
         web3Error: error,
         walletAPI: {
           handleWithdraw,
