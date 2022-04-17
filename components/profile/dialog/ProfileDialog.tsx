@@ -86,7 +86,7 @@ const ProfileDialog = ({ onClose }: Props) => {
     return (
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} id={form}>
-          <div className="flex gap-5 flex-wrap">
+          <div className="flex gap-5 flex-wrap sm:flex-nowrap">
             <div className="text-center">
               <div className="bg-sapien-60 block h-28 w-32 hexagon rotate-90 p-[1px]">
                 <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
@@ -99,7 +99,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                 </span>
               </span>
             </div>
-            <div>
+            <div className="w-full">
               <ul className="flex justify-between text-xs text-center">
                 <li>
                   <span className="block text-gray-400 mb-1">Passport #</span>
@@ -126,7 +126,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                     clipPath:
                       'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                   }}
-                  className="mt-3 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                  className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
                 >
                   <TextInput
                     aria-label="name"
@@ -146,7 +146,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                     clipPath:
                       'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                   }}
-                  className="mt-3 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                  className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
                 >
                   <TextInput
                     aria-label="username"

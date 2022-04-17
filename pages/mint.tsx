@@ -16,23 +16,8 @@ import { useToast } from 'context/toast';
 import type { NextPage } from 'next';
 import { ProfileTribe } from 'tools/types/tribe';
 
+const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const FeedbackView = ({ code }: { code: number }) => {
-  const getRedirectURL = () => {
-    if (typeof window === 'undefined')
-      return 'https://www.sapien.network/passport/purchase';
-
-    const { host } = window.location;
-
-    if (host === 'front-sandbox.sapien.network')
-      return 'https://passport-sandbox.sapien.network/passport/purchase';
-    else if (host === 'localhost:3000')
-      return `http://localhost:3000/passport/purchase`;
-    else if (host === 'https://front-qat.sapien.network/')
-      return 'https://passport-qat.sapien.network/passport/purchase';
-
-    return 'https://www.sapien.network/passport/purchase';
-  };
-
   const renderText = () => {
     switch (code) {
       case 101:
@@ -40,7 +25,7 @@ const FeedbackView = ({ code }: { code: number }) => {
           <p className="mt-6 text-xl text-white font-semibold">
             To mint a passport, you need first to{' '}
             <a
-              href={getRedirectURL()}
+              href={`${distributionURL}/passport/purchase`}
               className="text-base font-medium bg-primary-200"
             >
               Buy a passport
@@ -52,7 +37,7 @@ const FeedbackView = ({ code }: { code: number }) => {
           <p className="mt-6 text-xl text-white font-semibold">
             Please finish the avatar select flow and then come back to min{' '}
             <a
-              href={getRedirectURL()}
+              href={`${distributionURL}/passport/purchase`}
               className="text-base font-medium bg-primary-200"
             >
               Click here to continue
@@ -80,19 +65,15 @@ const FeedbackView = ({ code }: { code: number }) => {
 };
 
 const Mint = () => {
-  const { push } = useRouter();
-
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
-
-  const imageUrl =
-    'https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png';
+  const { push } = useRouter();
 
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
-      // await mintPassport();
+      await mintPassport();
 
       push(`/tribes/${id}/home#minted`);
     } catch (err) {
@@ -115,7 +96,9 @@ const Mint = () => {
             </h1>
             <div
               className="relative rounded-lg h-[350px] w-[624px] md:h-[550px] md:w-[1024px] bg-cover"
-              style={{ backgroundImage: `url('${imageUrl}')` }}
+              style={{
+                backgroundImage: `url('https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png')`,
+              }}
             />
             <button
               type="button"

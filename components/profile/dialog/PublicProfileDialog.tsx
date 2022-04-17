@@ -38,7 +38,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
 
     return (
       <dl>
-        <div className="flex gap-5 flex-wrap">
+        <div className="flex gap-5 flex-wrap sm:flex-nowrap">
           <div className="text-center">
             <div className="bg-sapien-60 block h-28 w-32 hexagon rotate-90 p-[1px]">
               <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
