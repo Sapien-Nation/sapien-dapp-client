@@ -9,6 +9,8 @@ jest.setTimeout(180000);
 // globals
 const navigator = { language: 'test-env', userAgent: 'user-agent-test' };
 
+process.env = { NEXT_PUBLIC_DISTRIBUTION_URL: 'HOST' }; // Make a copy
+
 Object.defineProperty(window, 'navigator', {
   value: navigator,
   writable: true,

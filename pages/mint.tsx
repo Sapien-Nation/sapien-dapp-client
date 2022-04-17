@@ -65,11 +65,10 @@ const FeedbackView = ({ code }: { code: number }) => {
 };
 
 const Mint = () => {
-  const { push } = useRouter();
-
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
+  const { push } = useRouter();
 
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
