@@ -82,7 +82,6 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
     );
   }
 
-  const showDepositIcon = isFetching === false && true;
   return (
     <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
       <ol
@@ -94,7 +93,7 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
             <RefreshIcon className="w-5 mx-auto text-white animate-spin" />
           </li>
         )}
-        {showDepositIcon && (
+        {isFetching === false && (
           <li
             className="w-14 h-14 cursor-pointer rounded-full flex items-center justify-center bg-sapien-80 hover:bg-gray-700"
             onClick={onDeposit}
