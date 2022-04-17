@@ -16,21 +16,24 @@ interface Props {
 
 const PublicProfileDialog = ({ profileID, onClose }: Props) => {
   const renderView = (profile: PublicProfile) => {
-    if (profile.passport === null) {
+    console.log(profile.passport);
+    if (profile.passport === null || profile.passport === undefined) {
       return (
         <div className="bg-sapien-neutral-600 rounded-xl mb-4">
           <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
           <div className="flex flex-col md:flex-row py-4">
-            <div className="relative ml-4 flex flex-col items-center">
+            <div className="relative md:ml-4 ml-0 flex flex-col items-center">
               <div className="w-20 h-20 -mt-16 rounded-full flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
                 user
               </div>
               <h1 className="text-md mt-2">{profile.displayName}</h1>
             </div>
           </div>
-          <h2 className="text-sm mb-2">User info</h2>
-          <div className="border-t border-gray-800 pt-4">
-            <p className="text-xs text-gray-400">{profile.bio}</p>
+          <div className="p-4">
+            <h2 className="text-sm mb-2">User info</h2>
+            <div className="border-t border-gray-800 pt-4">
+              <p className="text-xs text-gray-400">{profile.bio}</p>
+            </div>
           </div>
         </div>
       );
@@ -39,19 +42,19 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
     return (
       <dl>
         <div className="flex gap-5 flex-wrap sm:flex-nowrap">
-          <div className="text-center">
-            <div className="bg-sapien-60 block h-28 w-32 hexagon rotate-90 p-[1px]">
+          <div className="text-center flex flex-col justify-between">
+            <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
               <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
-                <CameraIcon className="w-5 -rotate-90" />
+                <CameraIcon className="w-5 -rotate-90 text-sapien-60" />
               </div>
             </div>
             <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
-              <span className="hexagon-2 bg-gray-700 block text-gray-400">
+              <span className="hexagon-2 bg-gray-700 block text-gray-400 p-1">
                 {profile.displayName}
               </span>
             </span>
           </div>
-          <div className="flex-1">
+          <div className="w-full flex flex-col justify-between">
             <div className="flex justify-between text-xs text-center">
               <div>
                 <dt className="block text-gray-400 mb-1">Passport #</dt>

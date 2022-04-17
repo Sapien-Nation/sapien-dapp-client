@@ -46,7 +46,7 @@ const ProfileDialog = ({ onClose }: Props) => {
       return (
         <div className="rounded-xl mb-4 bg-gray-900">
           <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
-          <div className="flex flex-col md:flex-row py-4">
+          <div className="flex flex-col md:flex-row py-4 bg-sapien-neutral-600 rounded-b-xl mb-4">
             <div className="relative ml-4 flex flex-col items-center">
               <div className="w-20 h-20 -mt-16 rounded-full flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
                 user
@@ -87,14 +87,14 @@ const ProfileDialog = ({ onClose }: Props) => {
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} id={form}>
           <div className="flex gap-5 flex-wrap sm:flex-nowrap">
-            <div className="text-center">
-              <div className="bg-sapien-60 block h-28 w-32 hexagon rotate-90 p-[1px]">
+            <div className="text-center pt-4 flex flex-col justify-between">
+              <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
                 <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
-                  <CameraIcon className="w-5 -rotate-90" />
+                  <CameraIcon className="w-5 -rotate-90 text-sapien-60" />
                 </div>
               </div>
               <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
-                <span className="hexagon-2 bg-gray-700 block text-gray-400">
+                <span className="hexagon-2 bg-gray-700 block text-gray-400 p-1">
                   {me.displayName}
                 </span>
               </span>
@@ -120,7 +120,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                   </span>
                 </li>
               </ul>
-              <div className="mt-8 flex justify-between gap-5">
+              <div className="mt-5 flex justify-between gap-5">
                 <div
                   style={{
                     clipPath:
