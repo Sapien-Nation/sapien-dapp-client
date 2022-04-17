@@ -17,7 +17,7 @@ const Textarea = ({
   return (
     <textarea
       rows={5}
-      className="shadow-sm r-10 pl-3 pt-3 pb-3 mt-1 block w-full sm:text-sm border-0 rounded-md resize-none"
+      className={`shadow-sm r-10 pl-3 pt-3 pb-3 block w-full sm:text-sm border-0 rounded-md resize-none ${className}`}
       {...register(name, {
         ...rules,
         onChange: (event) => {

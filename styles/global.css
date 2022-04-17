@@ -10,6 +10,13 @@
   height: 100%;
 }
 
+.hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+.hexagon-2 {
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+}
+
 input, textarea {
   background-color: #3b3b3b !important;
 }

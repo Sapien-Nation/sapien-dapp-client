@@ -10,7 +10,7 @@ export const imageHandler = async (blobInfo, progress) => {
   formData.append('file', blobInfo.blob());
 
   const fileData: Media = await uploadContentMedia(formData);
-  return Promise.resolve('');
+  return Promise.resolve(fileData.url);
 };
 
 export const filePicker = (cb, value, meta) => {
