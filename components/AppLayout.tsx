@@ -12,7 +12,6 @@ import {
   TribeNavigation,
   ProfileNavigation,
 } from 'components/navigation';
-
 // context
 import { useAuth } from 'context/user';
 

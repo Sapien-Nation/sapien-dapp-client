@@ -1,5 +1,1 @@
-const PassportAnimation = () => {
-  return <></>;
-};
-
-export default PassportAnimation;
+export { default as LottiePlayer } from './LottiePlayer';

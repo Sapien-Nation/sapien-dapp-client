@@ -1,10 +1,12 @@
 import { CameraIcon } from '@heroicons/react/outline';
+import { useState, useEffect } from 'react';
 
 // api
 import { authFetcher as fetcher } from 'api';
 
 // components
 import { Dialog, Query } from 'components/common';
+import { LottiePlayer } from 'lottie';
 
 // types
 import { PublicProfile } from 'tools/types/user';
@@ -15,6 +17,18 @@ interface Props {
 }
 
 const PublicProfileDialog = ({ profileID, onClose }: Props) => {
+  const [showAnimation, setShowAnimation] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    if (showAnimation) {
+      setTimeout(() => {
+        setShowAnimation(false);
+        setShowDialog(true);
+      }, 4000);
+    }
+  }, [showAnimation]);
+
   const renderView = (profile: PublicProfile) => {
     console.log(profile.passport);
     if (profile.passport === null || profile.passport === undefined) {
@@ -126,11 +140,34 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
   };
 
   return (
-    <Dialog show isFetching={false} onClose={onClose}>
-      <Query api={`/api/v3/user/${profileID}`} options={{ fetcher }}>
-        {(profile: PublicProfile) => <>{renderView(profile)}</>}
-      </Query>
-    </Dialog>
+    <>
+      {showAnimation && (
+        <div className="fixed z-10 inset-0 bg-opacity-75">
+          <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <LottiePlayer />
+          </div>
+        </div>
+      )}
+      {showDialog && (
+        <Dialog show isFetching={false} onClose={onClose}>
+          <Query
+            api={`/api/v3/user/${profileID}`}
+            options={{ fetcher }}
+            loader={
+              <div className="min-h-250 flex justiy-center items-center">
+                <img
+                  className="mx-auto h-24 w-auto animate-bounce"
+                  src="/images/logooutlined.svg"
+                  alt="sapien"
+                />
+              </div>
+            }
+          >
+            {(profile: PublicProfile) => <>{renderView(profile)}</>}
+          </Query>
+        </Dialog>
+      )}
+    </>
   );
 };
 

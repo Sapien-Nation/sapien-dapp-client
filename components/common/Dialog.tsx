@@ -4,6 +4,7 @@ import { XIcon } from '@heroicons/react/outline';
 
 interface Props {
   actions?: React.ReactElement;
+  bgOpacity?: string;
   cancelLabel?: string;
   confirmLabel?: string;
   children?: React.ReactElement | null;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const Dialog = ({
+  bgOpacity = 'bg-opacity-75',
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
   isFetching = false,
@@ -62,7 +64,12 @@ const Dialog = ({
 }: Props) => {
   const showActionsSection = showCancel === true || showConfirm === true;
   return (
-    <Transition.Root show={show} as={Fragment}>
+    <Transition.Root
+      enter="transition duration-100 ease-out"
+      appear
+      show={show}
+      as={Fragment}
+    >
       <HeadlessDialog
         as="div"
         className="fixed z-10 inset-0 overflow-y-auto"
@@ -79,7 +86,9 @@ const Dialog = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <HeadlessDialog.Overlay className="fixed inset-0 bg-gray-700 bg-opacity-75 transition-opacity" />
+            <HeadlessDialog.Overlay
+              className={`fixed inset-0 bg-gray-700 ${bgOpacity} transition-opacity`}
+            />
           </Transition.Child>
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
