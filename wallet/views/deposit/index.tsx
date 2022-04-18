@@ -119,6 +119,7 @@ const Deposit = ({ handleBack }: Props) => {
       const isOnPolygonNetwork = chainId === 137;
       if (isOnPolygonNetwork) {
         const details = await walletAPI.handleDeposit();
+
         setDepositTXDetails(details);
         setView(View.Success);
       } else {
@@ -127,7 +128,7 @@ const Deposit = ({ handleBack }: Props) => {
     } catch (err) {
       Sentry.captureException(err);
       toast({
-        message: err,
+        message: err.message,
       });
     }
   };
@@ -237,7 +238,7 @@ const Deposit = ({ handleBack }: Props) => {
             );
           }
 
-          if (tokensToDeposit.length === 3) {
+          if (tokensToDeposit.length === 0) {
             return (
               <button
                 type="button"

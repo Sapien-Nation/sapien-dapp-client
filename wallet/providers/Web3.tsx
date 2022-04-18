@@ -25,6 +25,11 @@ import type { AbiItem } from 'web3-utils';
 import Web3Library from 'web3';
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
+interface Web3Error {
+  message: string;
+  code: number;
+}
+
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
@@ -34,7 +39,7 @@ interface Web3 {
     getPassportBalance: (address: string) => Promise<number>;
     getWalletTokens: (address: string) => Promise<Array<Passport>>;
   } | null;
-  web3Error: Error | null;
+  web3Error: Web3Error | null;
 }
 
 interface WalletConfig {
@@ -67,7 +72,7 @@ const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 const { useAccounts, useProvider } = metaMaskHooks;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
-  const [error, setError] = useState<null | Error>(null);
+  const [error, setError] = useState<null | Web3Error>(null);
 
   const { me } = useAuth();
 
@@ -144,7 +149,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return Number(balance);
     } catch (err) {
       Sentry.captureException(err);
-      setError(err);
+      return Promise.reject(err);
     }
   };
 
@@ -157,7 +162,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return Number(passportBalance);
     } catch (err) {
       Sentry.captureException(err);
-      setError(err);
+      return Promise.reject(err);
     }
   };
 
@@ -191,7 +196,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return tokens;
     } catch (err) {
       Sentry.captureException(err);
-      setError(err);
+      return Promise.reject(err);
     }
   };
 
@@ -224,11 +229,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           gasLimit: config.GAS_LIMIT,
         }
       );
-
+      console.log(tx);
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
-      setError(err);
+      return Promise.reject(err.message);
     }
   };
 
@@ -236,8 +241,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     try {
       const metamaskAddress = getMetamaskAddress();
       const tokens = await getWalletTokens(metamaskAddress);
-
-      console.log(`TOKEN ID: ${tokens[0].id}`);
 
       const signer = await metamaskProvider.getSigner();
 
@@ -253,12 +256,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         tokens[0].id
       );
 
-      console.log({ tx });
-
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
-      setError(err);
+      return Promise.reject(err);
     }
   };
 
