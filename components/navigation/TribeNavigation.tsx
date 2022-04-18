@@ -57,7 +57,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 {name}
               </a>
             </Link>
-            <button
+            {/* <button
               aria-label="Create Channel"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
               onClick={() => {
@@ -109,7 +109,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                   </li>
                 );
               })}
-            </ul>
+            </ul> */}
           </nav>
         </div>
 
