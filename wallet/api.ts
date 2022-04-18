@@ -1,5 +1,6 @@
 // api
 import { authInstance } from 'api';
+import axios from 'axios';
 
 export const connectWallet = () =>
   authInstance
@@ -13,8 +14,8 @@ export const getTokenData = (url: string) =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getGasPrise = () =>
-  authInstance
-    .get('https://gasstation-mainnet.matic.network')
-    .then((response) => response.data)
-    .catch(({ response }) => Promise.reject(response.data.message));
+export const getGasPrice = (gasStationUrl) =>
+  axios
+    .get(gasStationUrl)
+    .then((response) => response.data?.fast)
+    .catch((_err) => '50'); // default value

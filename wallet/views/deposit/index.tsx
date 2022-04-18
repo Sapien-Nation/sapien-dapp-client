@@ -10,8 +10,6 @@ import {
 import * as Sentry from '@sentry/nextjs';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 
-var util = require('util');
-
 // assets
 import { Metamask } from '../../assets';
 
@@ -20,6 +18,7 @@ import { Tooltip } from 'components/common';
 
 // hooks
 import { hooks as metaMaskHooks, metaMask } from '../../connectors/metaMask';
+import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
@@ -54,6 +53,7 @@ const Deposit = ({ handleBack }: Props) => {
   const [isFetchingMetamaskTokens, setIsFetchingMetamaskTokens] =
     useState(false);
 
+  const { me } = useAuth();
   const { walletAPI } = useWeb3();
 
   const error = useError();
@@ -62,13 +62,15 @@ const Deposit = ({ handleBack }: Props) => {
   const isActive = useIsActive();
   const isActivating = useIsActivating();
 
+  const getMetamaskAddress = () => account[0];
+
   const toast = useToast();
   const depositTokensRef = useRef(null);
 
   const fetchBalance = useCallback(async () => {
     setIsFetchingBalance(true);
     try {
-      const balance = await walletAPI.getWalletBalanceSPN();
+      const balance = await walletAPI.getWalletBalanceSPN(me.walletAddress);
 
       setUserBalance(balance);
     } catch (err) {
@@ -85,7 +87,9 @@ const Deposit = ({ handleBack }: Props) => {
     const handleFetchMetamaskTokens = async () => {
       setIsFetchingMetamaskTokens(true);
       try {
-        const metamaskTokens = await walletAPI.getWalletTokens();
+        const metamaskTokens = await walletAPI.getWalletTokens(
+          getMetamaskAddress()
+        );
         setTokensToDeposit(metamaskTokens);
       } catch (err) {
         //
@@ -112,7 +116,7 @@ const Deposit = ({ handleBack }: Props) => {
 
   const handleDeposit = async () => {
     try {
-      const isOnPolygonNetwork = chainId === 80001;
+      const isOnPolygonNetwork = chainId === 137;
       if (isOnPolygonNetwork) {
         const details = await walletAPI.handleDeposit();
         setDepositTXDetails(details);
@@ -233,7 +237,7 @@ const Deposit = ({ handleBack }: Props) => {
             );
           }
 
-          if (tokensToDeposit.length === 0) {
+          if (tokensToDeposit.length === 3) {
             return (
               <button
                 type="button"

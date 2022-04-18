@@ -1,22 +1,25 @@
+import { Network } from '@ethersproject/networks';
 import * as Sentry from '@sentry/nextjs';
+import { ethers } from 'ethers';
+import { BN } from 'ethereumjs-util';
 import { createContext, useContext, useState } from 'react';
-
-// api
-import { getTokenData } from 'wallet/api';
 
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
+// api
+import { getGasPrice } from '../api';
+
 // hooks
+import { useTorus } from './Torus';
 import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
 import type { Passport, TXDetails, WTXDetails } from '../types';
 import type { AbiItem } from 'web3-utils';
-import { Web3Provider as Web3ProviderType } from '@ethersproject/providers';
 
 // web3
 import Web3Library from 'web3';
@@ -27,9 +30,9 @@ interface Web3 {
   walletAPI: {
     handleWithdraw: (toAddress: string, tokenId: number) => Promise<WTXDetails>;
     handleDeposit: () => Promise<TXDetails>;
-    getWalletBalanceSPN: () => Promise<number>;
-    getPassportBalance: () => Promise<number>;
-    getWalletTokens: () => Promise<Array<Passport>>;
+    getWalletBalanceSPN: (address: string) => Promise<number>;
+    getPassportBalance: (address: string) => Promise<number>;
+    getWalletTokens: (address: string) => Promise<Array<Passport>>;
   } | null;
   web3Error: Error | null;
 }
@@ -67,10 +70,14 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const [error, setError] = useState<null | Error>(null);
 
   const { me } = useAuth();
+
   const account = useAccounts();
-  const metamaskProvider = useProvider();
-  //----------------------------------------------------------------------------------------------------------------------------
   const getMetamaskAddress = () => account[0];
+  const metamaskProvider = useProvider();
+
+  const { torusKeys } = useTorus();
+
+  //----------------------------------------------------------------------------------------------------------------------------
   const config: WalletConfig = (() => {
     if (walletIsMainnet === 'true') {
       return {
@@ -79,11 +86,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         RPC_PROVIDER: 'https://polygon-rpc.com/',
         SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
         BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
-        PASSPORT_CONTRACT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3', // TODO set when deployed
+        PASSPORT_CONTRACT_ADDRESS: '0x8E2aAf7aCdCFD363d65C86856e9CBeF1EcB238a4', // TODO set when deployed
         BICONOMY_API_KEY: walletBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
-        GAS_STATION_URL: 'https://gasstation-mainnet.matic.network/v2',
-        GAS_LIMIT: 30000,
+        GAS_STATION_URL: 'https://gasstation-mainnet.matic.network/',
+        GAS_LIMIT: 300000,
       };
     }
 
@@ -96,10 +103,19 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       PASSPORT_CONTRACT_ADDRESS: '0xF58c8Fbb8fE6F49E536D4df3A684626261d01a87',
       BICONOMY_API_KEY: walletBiconomyApiKey,
       EXPLORER_BASE_URL: 'https://mumbai.polygonscan.com/tx/',
-      GAS_STATION_URL: 'https://gasstation-mumbai.matic.today/v2',
+      GAS_STATION_URL: 'https://gasstation-mumbai.matic.today/',
       GAS_LIMIT: 30000,
     };
   })();
+
+  const polygonNetwork: Network = {
+    name: 'matic',
+    chainId: config.POLY_NETWORK_ID,
+    _defaultProvider: (providers) =>
+      new providers.JsonRpcProvider(config.RPC_PROVIDER),
+  };
+
+  const ethersProvider = ethers.getDefaultProvider(polygonNetwork);
 
   const Web3API = new Web3Library(config.RPC_PROVIDER);
   const contracts = {
@@ -132,10 +148,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getPassportBalance = async () => {
+  const getPassportBalance = async (address) => {
     try {
       const passportBalance = await contracts.passportContract.methods
-        .balanceOf(getMetamaskAddress())
+        .balanceOf(address)
         .call();
 
       return Number(passportBalance);
@@ -145,11 +161,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getWalletTokens = async (): Promise<Array<Passport>> => {
+  const getWalletTokens = async (address): Promise<Array<Passport>> => {
     try {
-      const metamaskAddress = getMetamaskAddress();
-      const balance = await getPassportBalance();
+      const balance = await getPassportBalance(address);
       const tokens = [];
+
       if (balance === 0) {
         return [];
       }
@@ -161,10 +177,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       for (let i = 0; i < balance; i += 1) {
         try {
           const tokenID = await contracts.passportContract.methods
-            .tokenOfOwnerByIndex(metamaskAddress, i)
+            .tokenOfOwnerByIndex(address, i)
             .call();
-          const { data } = await getTokenData(`${baseURI}${tokenID}`);
-          tokens.push(data);
+          // const { data } = await getTokenData(`${baseURI}${tokenID}`);
+          tokens.push({ id: tokenID });
         } catch (err: any) {
           Sentry.captureException(
             `Axios error - ${err?.response?.status} - ${err?.response?.statusText}`
@@ -184,10 +200,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     tokenId: number
   ): Promise<WTXDetails> => {
     try {
-      // TODO Torus Provider
-      // @see wallet/providers/Torus.tsx
-      // if something is missing we should simply do const { provider } = useTorus(); here
-      const signer = await metamaskProvider.getSigner();
+      // TODO call wallet API connect to get torus private key
+      const { privateKey } = torusKeys;
+
+      const signer = new ethers.Wallet(privateKey, ethersProvider);
 
       const contract = await new Contract(
         config.PASSPORT_CONTRACT_ADDRESS,
@@ -195,13 +211,21 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         signer
       );
 
+      const gasPrice = await getGasPrice(config.GAS_STATION_URL);
+
       const tx = await contract.transferFrom(
         me.walletAddress,
         toAddress,
-        tokenId
+        tokenId,
+        {
+          gasPrice: Web3Library.utils
+            .toWei(new BN(gasPrice), 'gwei')
+            .toNumber(),
+          gasLimit: config.GAS_LIMIT,
+        }
       );
 
-      return tx;
+      return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
       setError(err);
@@ -211,7 +235,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const handleDeposit = async (): Promise<TXDetails> => {
     try {
       const metamaskAddress = getMetamaskAddress();
-      const tokens = await getWalletTokens();
+      const tokens = await getWalletTokens(metamaskAddress);
+
+      console.log(`TOKEN ID: ${tokens[0].id}`);
 
       const signer = await metamaskProvider.getSigner();
 
@@ -224,10 +250,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       const tx = await contract.transferFrom(
         metamaskAddress,
         me.walletAddress,
-        tokens[0].id // deposit first token by default
+        tokens[0].id
       );
 
-      //TODO: get txHash
+      console.log({ tx });
+
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);

@@ -1,7 +1,9 @@
-import { Popover } from '@headlessui/react';
 import { PlusIcon, RefreshIcon, XCircleIcon } from '@heroicons/react/outline';
 import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
+
+// context
+import { useAuth } from 'context/user';
 
 // types
 import type { Token } from '../../types';
@@ -19,29 +21,15 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [isFetching, setIsFetching] = useState(true);
 
+  const { me } = useAuth();
   const { walletAPI } = useWeb3();
 
   const handleGetTokens = useCallback(async () => {
     try {
       setIsFetching(true);
-      // const tokens = await walletAPI.getWalletTokens();
-      // setTokens(tokens);
-      setTokens([
-        {
-          id: 1,
-          name: 'Rob Passport',
-          description: '',
-          image:
-            'https://cdn.discordapp.com/avatars/187385335725031424/ed2e737cb7906bbdf658a178ff5908d6.webp?size=80',
-        },
-        {
-          id: 2,
-          name: 'Teja Passport',
-          description: '',
-          image:
-            'https://cdn.discordapp.com/avatars/135814677530804224/b14fcc3efd1e348b4c15ba1c0e011898.webp?size=80',
-        },
-      ]);
+
+      const tokens = await walletAPI.getWalletTokens(me.walletAddress);
+      setTokens(tokens);
       setError(null);
     } catch (err) {
       setError(err);
