@@ -103,8 +103,19 @@ const Room = () => {
   const { mutate } = useSWRConfig();
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  useSocketEvent(WSEvents.NewMessage, (message) => {
-    handleAddMessage(message);
+  useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+    handleAddMessage({
+      content: message.payload,
+      createdAt: message.createdAt,
+      id: message.id,
+      sender: {
+        avatar: message.by.avatar,
+        id: message.by.id,
+        displayName: message.by.displayName,
+        username: message.by.username,
+      },
+      type: MessageType.Text,
+    });
   });
 
   const apiKey = `/api/v3/room/${roomID}/messages`;
@@ -131,26 +142,14 @@ const Room = () => {
     });
   };
 
-  const handleAddMessage = async (message: RoomNewMessage) => {
-    const newMessage = {
-      content: message.payload,
-      createdAt: message.createdAt,
-      id: message.id,
-      partyId: message.by.id,
-      sender: {
-        id: message.by.id,
-        displayName: message.by.displayName,
-        username: message.by.username,
-        status: 'A',
-      },
-    };
+  const handleAddMessage = async (message: RoomMessage) => {
     await mutate(
       unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey)),
       (cachedData) => {
         return cachedData.map(({ data, nextCursor }, index) => {
           if (index === cachedData.length - 1) {
             return {
-              data: [newMessage, ...data],
+              data: [message, ...data],
               nextCursor,
             };
           }
@@ -162,7 +161,7 @@ const Room = () => {
     );
   };
 
-  const handleMessageSubmit = async (content) => {
+  const handleMessageSubmit = async (content: string) => {
     if (content === '') return;
 
     try {
