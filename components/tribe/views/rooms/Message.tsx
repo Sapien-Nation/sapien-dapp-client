@@ -1,10 +1,6 @@
-import { Menu, Transition } from '@headlessui/react';
-import {
-  DotsVerticalIcon,
-  PencilAltIcon,
-  TrashIcon,
-} from '@heroicons/react/outline';
-import { Fragment, useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState, useRef } from 'react';
+import Linkify from 'linkify-react';
 
 // constants
 import { MessageType } from 'tools/constants/rooms';
@@ -20,6 +16,16 @@ interface Props {
   message: RoomMessage;
 }
 
+const isSameOriginURL = (url): URL | null => {
+  if (typeof window === 'undefined') return null;
+
+  const linkURL = new URL(url);
+
+  if (window.location.origin === linkURL.origin) return linkURL;
+
+  return null;
+};
+
 const Message = ({
   isAContinuosMessage,
   message: {
@@ -30,6 +36,8 @@ const Message = ({
   },
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
+
+  const { push } = useRouter();
   const messageRef = useRef(null);
 
   useEffect(() => {
@@ -53,8 +61,8 @@ const Message = ({
         <p
           className={
             isAContinuosMessage
-              ? 'text-sm text-white/30'
-              : 'pl-52 text-sm text-white/30'
+              ? 'text-sm text-white/30 whitespace-pre-line'
+              : 'pl-52 text-sm text-white/30 whitespace-pre-line'
           }
         >
           {content}
@@ -66,8 +74,8 @@ const Message = ({
       <p
         className={
           isAContinuosMessage
-            ? 'text-sm text-white/80 group'
-            : 'pl-52 text-sm text-white/80 group'
+            ? 'text-sm text-white/80 group whitespace-pre-line'
+            : 'pl-52 text-sm text-white/80 whitespace-pre-line'
         }
       >
         <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
@@ -78,7 +86,30 @@ const Message = ({
               })
             : ''}
         </span>{' '}
-        {content}
+        <Linkify
+          tagName="p"
+          options={{
+            attributes: {
+              onClick: (event) => {
+                const url = isSameOriginURL(event.target.href);
+                if (url) {
+                  event.preventDefault();
+                  event.stopPropagation();
+
+                  push(url.pathname);
+                }
+              },
+            },
+            className: { url: 'underline' },
+            target: (url) => {
+              if (isSameOriginURL(url)) return '_parent';
+
+              return '_target';
+            },
+          }}
+        >
+          {content}
+        </Linkify>
       </p>
     );
   };
