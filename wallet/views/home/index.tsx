@@ -24,24 +24,25 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
   const handleGetTokens = useCallback(async () => {
     try {
       setIsFetching(true);
-      const tokens = await walletAPI.getWalletTokens();
-      setError(null);
-
-      // TODO get real tokens from user wallet
+      // const tokens = await walletAPI.getWalletTokens();
+      // setTokens(tokens);
       setTokens([
         {
+          id: 1,
           name: 'Rob Passport',
           description: '',
           image:
             'https://cdn.discordapp.com/avatars/187385335725031424/ed2e737cb7906bbdf658a178ff5908d6.webp?size=80',
         },
         {
+          id: 2,
           name: 'Teja Passport',
           description: '',
           image:
             'https://cdn.discordapp.com/avatars/135814677530804224/b14fcc3efd1e348b4c15ba1c0e011898.webp?size=80',
         },
       ]);
+      setError(null);
     } catch (err) {
       setError(err);
     }

@@ -5,9 +5,12 @@ import {
   LogoutIcon,
   InformationCircleIcon,
   XCircleIcon,
+  RefreshIcon,
 } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+
+var util = require('util');
 
 // assets
 import { Metamask } from '../../assets';
@@ -42,11 +45,14 @@ interface Props {
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
   const [userBalance, setUserBalance] = useState(0);
+  const [showPolygonError, setShowPolygonError] = useState(false);
   const [depositTXDetails, setDepositTXDetails] = useState<TXDetails | null>(
     null
   );
-  const [showPolygonError, setShowPolygonError] = useState(false);
+  const [tokensToDeposit, setTokensToDeposit] = useState([]);
   const [isFetchingBalance, setIsFetchingBalance] = useState(true);
+  const [isFetchingMetamaskTokens, setIsFetchingMetamaskTokens] =
+    useState(false);
 
   const { walletAPI } = useWeb3();
 
@@ -62,7 +68,7 @@ const Deposit = ({ handleBack }: Props) => {
   const fetchBalance = useCallback(async () => {
     setIsFetchingBalance(true);
     try {
-      const balance = await walletAPI.getWalletBalance();
+      const balance = await walletAPI.getWalletBalanceSPN();
 
       setUserBalance(balance);
     } catch (err) {
@@ -74,6 +80,23 @@ const Deposit = ({ handleBack }: Props) => {
   useEffect(() => {
     metaMask.connectEagerly();
   }, []);
+
+  useEffect(() => {
+    const handleFetchMetamaskTokens = async () => {
+      setIsFetchingMetamaskTokens(true);
+      try {
+        const metamaskTokens = await walletAPI.getWalletTokens();
+        setTokensToDeposit(metamaskTokens);
+      } catch (err) {
+        //
+      }
+      setIsFetchingMetamaskTokens(false);
+    };
+
+    if (isActive === true && isFetchingMetamaskTokens === false) {
+      handleFetchMetamaskTokens();
+    }
+  }, [isActive]);
 
   useEffect(() => {
     fetchBalance();
@@ -91,7 +114,7 @@ const Deposit = ({ handleBack }: Props) => {
     try {
       const isOnPolygonNetwork = chainId === 80001;
       if (isOnPolygonNetwork) {
-        const details = await walletAPI.handleDeposit(account[0]);
+        const details = await walletAPI.handleDeposit();
         setDepositTXDetails(details);
         setView(View.Success);
       } else {
@@ -150,14 +173,88 @@ const Deposit = ({ handleBack }: Props) => {
             return error.message;
           }
 
-          if (isActive)
+          if (isActive) {
+            if (isFetchingMetamaskTokens === true) return '';
+            if (tokensToDeposit.length === 0)
+              return (
+                <span className="text-red-400">
+                  No Passports in selected wallet
+                </span>
+              );
             return `Address: ...${account[0].slice(29, account[0].length - 1)}`;
+          }
 
           return (
             <>
               <InformationCircleIcon className="h-5 w-5" aria-hidden="true" />
               You will be requesed to connect your wallet
             </>
+          );
+        };
+
+        const renderDepositButton = () => {
+          if (isActivating === true) {
+            return (
+              <button
+                type="button"
+                disabled
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <Metamask width={25} />
+                Activating Wallet...
+              </button>
+            );
+          }
+
+          if (isActive === false) {
+            return (
+              <button
+                type="button"
+                onClick={handleActivateMetamask}
+                disabled={isActivating}
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <Metamask width={25} />
+                Connect Metamask
+              </button>
+            );
+          }
+
+          if (isFetchingMetamaskTokens === true) {
+            return (
+              <button
+                type="button"
+                disabled
+                className="w-full py-2 cursor-not-allowed px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <RefreshIcon className="w-5 animate-spin" />
+                Fetching Tokens
+              </button>
+            );
+          }
+
+          if (tokensToDeposit.length === 0) {
+            return (
+              <button
+                type="button"
+                disabled
+                className="w-full py-2 cursor-not-allowed px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <Metamask width={25} />
+                Deposit with Metamask
+              </button>
+            );
+          }
+
+          return (
+            <button
+              type="button"
+              onClick={handleDeposit}
+              className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            >
+              <Metamask width={25} />
+              Deposit with Metamask
+            </button>
           );
         };
 
@@ -232,15 +329,7 @@ const Deposit = ({ handleBack }: Props) => {
             </p>
 
             <div className="text-center grid gap-6">
-              <button
-                type="button"
-                onClick={isActive ? handleDeposit : handleActivateMetamask}
-                disabled={isActivating}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                <Metamask width={25} />
-                {isActive ? 'Deposit With Metamask' : 'Connect Metamask'}
-              </button>
+              {renderDepositButton()}
               <span className="text-xs text-green-500 flex justify-center items-center">
                 {renderHelperText()}
               </span>

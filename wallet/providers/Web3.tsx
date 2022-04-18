@@ -1,36 +1,35 @@
-import { Biconomy } from '@biconomy/mexa';
-import Common, { CustomChain } from '@ethereumjs/common';
-import { Transaction as Tx } from '@ethereumjs/tx';
 import * as Sentry from '@sentry/nextjs';
-import { BN } from 'ethereumjs-util';
-import sigUtil from 'eth-sig-util';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import Web3Library from 'web3';
-import { isAddress } from 'web3-utils';
+import { createContext, useContext, useState } from 'react';
 
 // api
-import { connectWallet, getGasPrise, getTokenData } from 'wallet/api';
+import { getTokenData } from 'wallet/api';
 
 // contracts
-import { default as PlatformContract } from '../contracts/Platform.json';
-import { default as PassportContract } from '../contracts/Passport.json';
+import { default as PassportContractAbi } from '../contracts/Passport.json';
+import { default as PlatformContractAbi } from '../contracts/Platform.json';
+import { Contract } from '@ethersproject/contracts';
 
 // hooks
 import { useAuth } from 'context/user';
-import { useTorus } from './Torus';
+import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
+import type { Passport, TXDetails, WTXDetails } from '../types';
 import type { AbiItem } from 'web3-utils';
-import type { MetaTxParams, Token, TXDetails, WTXDetails } from '../types';
+import { Web3Provider as Web3ProviderType } from '@ethersproject/providers';
+
+// web3
+import Web3Library from 'web3';
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
-    handleWithdraw: (toAddress: string) => Promise<WTXDetails>;
-    handleDeposit: (metamaskAddress: string) => Promise<TXDetails>;
-    getWalletBalance: () => Promise<number>;
-    getWalletTokens: () => Promise<Array<Token>>;
+    handleWithdraw: (toAddress: string, tokenId: number) => Promise<WTXDetails>;
+    handleDeposit: () => Promise<TXDetails>;
+    getWalletBalanceSPN: () => Promise<number>;
+    getPassportBalance: () => Promise<number>;
+    getWalletTokens: () => Promise<Array<Passport>>;
   } | null;
   web3Error: Error | null;
 }
@@ -41,9 +40,11 @@ interface WalletConfig {
   RPC_PROVIDER: string;
   SPN_TOKEN_ADDRESS: string;
   BADGE_STORE_ADDRESS: string;
-  PASSPORT_ADDRESS: string;
+  PASSPORT_CONTRACT_ADDRESS: string;
   BICONOMY_API_KEY: string;
   EXPLORER_BASE_URL: string;
+  GAS_STATION_URL: string;
+  GAS_LIMIT: number;
 }
 
 interface Web3ProviderProps {
@@ -57,26 +58,19 @@ const Web3Context = createContext<Web3>({
   web3Error: null,
 });
 
-const domainType = [
-  { name: 'name', type: 'string' },
-  { name: 'version', type: 'string' },
-  { name: 'verifyingContract', type: 'address' },
-  { name: 'salt', type: 'bytes32' },
-];
-const metaTransactionType = [
-  { name: 'nonce', type: 'uint256' },
-  { name: 'from', type: 'address' },
-  { name: 'functionSignature', type: 'bytes' },
-];
-
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
 const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
+
+const { useAccounts, useProvider } = metaMaskHooks;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
   const [error, setError] = useState<null | Error>(null);
 
   const { me } = useAuth();
+  const account = useAccounts();
+  const metamaskProvider = useProvider();
   //----------------------------------------------------------------------------------------------------------------------------
+  const getMetamaskAddress = () => account[0];
   const config: WalletConfig = (() => {
     if (walletIsMainnet === 'true') {
       return {
@@ -85,9 +79,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         RPC_PROVIDER: 'https://polygon-rpc.com/',
         SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
         BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
-        PASSPORT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3', // TODO set when deployed
+        PASSPORT_CONTRACT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3', // TODO set when deployed
         BICONOMY_API_KEY: walletBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
+        GAS_STATION_URL: 'https://gasstation-mainnet.matic.network/v2',
+        GAS_LIMIT: 30000,
       };
     }
 
@@ -97,20 +93,22 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       RPC_PROVIDER: 'https://rpc-mumbai.matic.today/',
       SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
       BADGE_STORE_ADDRESS: '0x59cD3d76cC9EA4f626629337664A3CbD78F48474',
-      PASSPORT_ADDRESS: '0x6B0fB07235C94fC922d8E141133280f5BBeBE3C3',
+      PASSPORT_CONTRACT_ADDRESS: '0xF58c8Fbb8fE6F49E536D4df3A684626261d01a87',
       BICONOMY_API_KEY: walletBiconomyApiKey,
       EXPLORER_BASE_URL: 'https://mumbai.polygonscan.com/tx/',
+      GAS_STATION_URL: 'https://gasstation-mumbai.matic.today/v2',
+      GAS_LIMIT: 30000,
     };
   })();
 
   const Web3API = new Web3Library(config.RPC_PROVIDER);
   const contracts = {
     passportContract: new Web3API.eth.Contract(
-      PassportContract as Array<AbiItem>,
-      config.PASSPORT_ADDRESS
+      PassportContractAbi as Array<AbiItem>,
+      config.PASSPORT_CONTRACT_ADDRESS
     ),
     platformSPNContract: new Web3API.eth.Contract(
-      PlatformContract as AbiItem[],
+      PlatformContractAbi as AbiItem[],
       config.SPN_TOKEN_ADDRESS
     ),
     platformSPNDomainData: {
@@ -120,92 +118,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(64, '0')}`,
     },
   };
-  //----------------------------------------------------------------------------------------------------------------------------
-  // API
-  const getSignatureParameters = (signature) => {
-    if (Web3API.utils.isHexStrict(signature)) {
-      setError({
-        message: `Given value ${signature} is not a valid hex string`,
-        name: 'SignaturaParameterError',
-      });
-    } else {
-      const r = signature.slice(0, 66);
-      const s = '0x'.concat(signature.slice(66, 130));
-      const v = '0x'.concat(signature.slice(130, 132));
 
-      let vNum: number = Web3API.utils.hexToNumber(v);
-      if (![27, 28].includes(vNum)) vNum += 27;
-
-      return {
-        r: r,
-        s: s,
-        v: vNum,
-      };
-    }
-  };
-
-  const prepareMetaTransaction = async ({
-    functionSignature,
-    contract,
-    contractAddress,
-    domainData,
-  }: MetaTxParams) => {
-    const nonce = await contract.methods.getNonce(me.walletAddress).call();
-
-    const message = {
-      nonce: Web3API.utils.toHex(nonce),
-      from: me.walletAddress,
-      functionSignature: functionSignature,
-    };
-
-    const dataToSign = {
-      types: {
-        EIP712Domain: domainType,
-        MetaTransaction: metaTransactionType,
-      },
-      domain: domainData,
-      primaryType: 'MetaTransaction',
-      message: message,
-    };
-
-    // Get torus private key
-    const data = await connectWallet();
-
-    const signature = sigUtil.signTypedData_v4(Buffer.from(data, 'hex'), {
-      // @ts-ignore
-      data: dataToSign,
-    });
-    const { r, s, v } = getSignatureParameters(signature); // same helper used in SDK frontend code
-    const executeMetaTransactionData = contract.methods
-      .executeMetaTransaction(me.walletAddress, functionSignature, r, s, v)
-      .encodeABI();
-
-    const gasPriceData = await getGasPrise();
-
-    // Build the transaction
-    const txObject = {
-      nonce: Web3API.utils.toHex(nonce),
-      to: contractAddress,
-      gasPrice: Web3API.utils
-        .toWei(new BN(gasPriceData.fast), 'gwei')
-        .toNumber(),
-      gasLimit: 300000,
-      data: executeMetaTransactionData,
-    };
-
-    const common = Common.custom(
-      walletIsMainnet ? CustomChain.PolygonMainnet : CustomChain.PolygonMumbai
-    );
-
-    const tx = Tx.fromTxData(txObject, { common });
-    const signedTx = tx.sign(Buffer.from(data, 'hex'));
-    const serializedTx = signedTx.serialize();
-    const raw = '0x' + serializedTx.toString('hex');
-
-    return raw;
-  };
-
-  const getWalletBalance = async () => {
+  const getWalletBalanceSPN = async () => {
     try {
       const balance = await contracts.platformSPNContract.methods
         .balanceOf(me.walletAddress)
@@ -218,10 +132,24 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getWalletTokens = async (): Promise<Array<Token>> => {
+  const getPassportBalance = async () => {
     try {
-      const balance = await getWalletBalance();
+      const passportBalance = await contracts.passportContract.methods
+        .balanceOf(getMetamaskAddress())
+        .call();
 
+      return Number(passportBalance);
+    } catch (err) {
+      Sentry.captureException(err);
+      setError(err);
+    }
+  };
+
+  const getWalletTokens = async (): Promise<Array<Passport>> => {
+    try {
+      const metamaskAddress = getMetamaskAddress();
+      const balance = await getPassportBalance();
+      const tokens = [];
       if (balance === 0) {
         return [];
       }
@@ -230,12 +158,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         .baseTokenURI()
         .call();
 
-      const tokens = [];
       for (let i = 0; i < balance; i += 1) {
-        const tokenID = await contracts.passportContract.methods
-          .tokenOfOwnerByIndex(isAddress, i)
-          .call();
         try {
+          const tokenID = await contracts.passportContract.methods
+            .tokenOfOwnerByIndex(metamaskAddress, i)
+            .call();
           const { data } = await getTokenData(`${baseURI}${tokenID}`);
           tokens.push(data);
         } catch (err: any) {
@@ -252,29 +179,55 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const handleWithdraw = async (toAddress: string): Promise<WTXDetails> => {
+  const handleWithdraw = async (
+    toAddress: string,
+    tokenId: number
+  ): Promise<WTXDetails> => {
     try {
-      return { id: '1000' };
+      // TODO Torus Provider
+      // @see wallet/providers/Torus.tsx
+      // if something is missing we should simply do const { provider } = useTorus(); here
+      const signer = await metamaskProvider.getSigner();
+
+      const contract = await new Contract(
+        config.PASSPORT_CONTRACT_ADDRESS,
+        PassportContractAbi,
+        signer
+      );
+
+      const tx = await contract.transferFrom(
+        me.walletAddress,
+        toAddress,
+        tokenId
+      );
+
+      return tx;
     } catch (err) {
       Sentry.captureException(err);
       setError(err);
     }
   };
 
-  const handleDeposit = async (metamaskAddress: string): Promise<TXDetails> => {
+  const handleDeposit = async (): Promise<TXDetails> => {
     try {
-      // const functionSignature = contracts.passportContract.methods
-      //   .transfer(metamaskAddress)
-      //   .encodeABI();
+      const metamaskAddress = getMetamaskAddress();
+      const tokens = await getWalletTokens();
 
-      // const rawTx: MetaTxParams = await prepareMetaTransaction({
-      //   functionSignature: functionSignature,
-      //   contract: contracts.platformSPNContract,
-      //   contractAddress: config.SPN_TOKEN_ADDRESS,
-      //   domainData: contracts.platformSPNDomainData,
-      // });
+      const signer = await metamaskProvider.getSigner();
 
-      // TODO API Call??
+      const contract = await new Contract(
+        config.PASSPORT_CONTRACT_ADDRESS,
+        PassportContractAbi,
+        signer
+      );
+
+      const tx = await contract.transferFrom(
+        metamaskAddress,
+        me.walletAddress,
+        tokens[0].id // deposit first token by default
+      );
+
+      //TODO: get txHash
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
@@ -290,8 +243,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         walletAPI: {
           handleWithdraw,
           handleDeposit,
+          getWalletBalanceSPN,
           getWalletTokens,
-          getWalletBalance,
+          getPassportBalance,
         },
       }}
     >

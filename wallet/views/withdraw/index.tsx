@@ -69,7 +69,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
 
   const onSubmit = async ({ address }: ForgotPasswordFormValues) => {
     try {
-      const wTXDetails = await walletAPI.handleWithdraw(address);
+      const wTXDetails = await walletAPI.handleWithdraw(address, token.id);
 
       setWithdrawTXDetails(wTXDetails);
       setView(View.Success);
