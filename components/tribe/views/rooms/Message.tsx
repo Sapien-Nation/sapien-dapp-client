@@ -100,7 +100,7 @@ const Message = ({
                 }
               },
             },
-            className: { url: 'underline' },
+            className: { url: 'underline text-blue-500' },
             target: (url) => {
               if (isSameOriginURL(url)) return '_parent';
 
