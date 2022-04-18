@@ -31,7 +31,6 @@ import { formatDate, formatDateRelative } from 'utils/date';
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
 import { useTribeRooms } from 'hooks/tribe';
-import { useRoomDetails } from 'hooks/room';
 import { useSocketEvent } from 'hooks/socket';
 import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 
@@ -40,10 +39,10 @@ import type { RoomMessage } from 'tools/types/room';
 
 interface Props {
   messages: Array<RoomMessage>;
-  scrollRef: any;
+  onRender: () => void;
 }
 
-const MessagesFeed = ({ scrollRef, messages }: Props) => {
+const MessagesFeed = ({ onRender, messages }: Props) => {
   const messagesData = useMemo(() => {
     return _groupBy(messages.reverse(), ({ createdAt }) =>
       formatDate(createdAt)
@@ -51,14 +50,8 @@ const MessagesFeed = ({ scrollRef, messages }: Props) => {
   }, [messages]);
 
   useEffect(() => {
-    // Start chat at the bottom
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-      });
-    }
-  }, [scrollRef]);
+    onRender();
+  }, [onRender]);
 
   return (
     <>
@@ -108,7 +101,6 @@ const Room = () => {
 
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === roomID);
   const { mutate } = useSWRConfig();
-  const roomDetails = useRoomDetails(roomID);
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
   useSocketEvent(WSEvents.NewMessage, (message) => {
@@ -131,6 +123,13 @@ const Room = () => {
       fetchMore();
     }
   }, [fetchMore, isFetchingMore, shouldFetchMoreItems, isLoadingInitialData]);
+
+  const handleScrollToBottom = () => {
+    scrollToRef.current.scrollIntoView({
+      block: 'nearest',
+      inline: 'start',
+    });
+  };
 
   const handleAddMessage = async (message: RoomMessage) => {
     await mutate(
@@ -169,6 +168,7 @@ const Room = () => {
         status: 'A',
       });
 
+      handleScrollToBottom();
       await sendMessage(roomID, { content });
 
       await mutate(
@@ -200,7 +200,7 @@ const Room = () => {
           </div>
           <div className="relative flex-1 overflow-auto">
             <h1 className="sr-only">Room View for {room.name}</h1>
-            <ul role="list" className="p-5 mb-4 flex flex-col">
+            <ul role="list" className="p-5 flex flex-col">
               {isLoadingInitialData === true && <LoadingMessagesSkeleton />}
               {isLoadingInitialData === false && data.length > 0 && (
                 <li ref={topOfRoomRef} id="top_target" />
@@ -252,10 +252,13 @@ const Room = () => {
                 </li>
               )}
               {isLoadingInitialData === false && (
-                <MessagesFeed messages={data} scrollRef={scrollToRef} />
+                <MessagesFeed
+                  messages={data}
+                  onRender={() => handleScrollToBottom()}
+                />
               )}
-              <li ref={scrollToRef} />
             </ul>
+            <div ref={scrollToRef} />
           </div>
           <div className="px-5">
             {/* @ts-ignore */}
