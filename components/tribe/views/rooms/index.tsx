@@ -35,7 +35,7 @@ import { useSocketEvent } from 'hooks/socket';
 import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 
 // types
-import type { RoomMessage } from 'tools/types/room';
+import type { RoomMessage, RoomNewMessage } from 'tools/types/room';
 
 interface Props {
   messages: Array<RoomMessage>;
@@ -131,14 +131,26 @@ const Room = () => {
     });
   };
 
-  const handleAddMessage = async (message: RoomMessage) => {
+  const handleAddMessage = async (message: RoomNewMessage) => {
+    const newMessage = {
+      content: message.payload,
+      createdAt: message.createdAt,
+      id: message.id,
+      partyId: message.by.id,
+      sender: {
+        id: message.by.id,
+        displayName: message.by.displayName,
+        username: message.by.username,
+        status: 'A',
+      },
+    };
     await mutate(
       unstable_serialize(getKeyFunction({ current: false }, 'data', apiKey)),
       (cachedData) => {
         return cachedData.map(({ data, nextCursor }, index) => {
           if (index === cachedData.length - 1) {
             return {
-              data: [message, ...data],
+              data: [newMessage, ...data],
               nextCursor,
             };
           }
