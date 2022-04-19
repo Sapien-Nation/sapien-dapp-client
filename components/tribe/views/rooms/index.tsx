@@ -104,6 +104,8 @@ const Room = () => {
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
   useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+    console.log('Getting Message');
+    console.log(message);
     if (message.extra.roomId === roomID) {
       console.log('WS Data', { message });
       handleAddMessage({

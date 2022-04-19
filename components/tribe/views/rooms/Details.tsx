@@ -51,12 +51,12 @@ const Details = ({ handleSidebar }) => {
                   key={id}
                   className="flex gap-2 items-center mb-4 cursor-pointer"
                   onClick={() => {
-                    if (me.id === id) {
-                      setDialog(Dialog.Profile);
-                    } else {
-                      setSelectedProfile(id);
-                      setDialog(Dialog.PublicProfile);
-                    }
+                    // if (me.id === id) {ss
+                    //   setDialog(Dialog.Profile);
+                    // } else {
+                    //   setSelectedProfile(id);
+                    //   setDialog(Dialog.PublicProfile);
+                    // }
                   }}
                 >
                   {avatar ? (

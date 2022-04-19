@@ -20,8 +20,9 @@ export const useSocketEvent = (
   useEffect(() => {
     if (me && socket) {
       socket.onmessage = (event) => {
-        if (event.type === eventName) {
-          callback(JSON.parse(event.data));
+        const eventData = JSON.parse(event.data);
+        if (eventData.type === eventName) {
+          callback(eventData.data);
         }
       };
     }
