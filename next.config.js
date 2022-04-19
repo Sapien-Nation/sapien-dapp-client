@@ -13,8 +13,9 @@ const moduleExports = {
   },
 };
 
+console.log(process.env);
 const sentryWebpackPluginOptions = {
-  release: process.env.NEXT_PUBLIC_RELEASE_NAME || 'protocol',
+  release: process.env.NEXT_PUBLIC_RELEASE_NAME,
   org: 'sapien-network',
   project: process.env.NEXT_PUBLIC_SENTRY_PROJECT_NAME,
   authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
