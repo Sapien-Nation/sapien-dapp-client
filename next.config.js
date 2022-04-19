@@ -14,11 +14,10 @@ const moduleExports = {
 };
 
 const sentryWebpackPluginOptions = {
-  release: 'POC',
+  release: process.env.NEXT_PUBLIC_RELEASE_NAME,
   org: 'sapien-network',
-  project: 'passport-app',
-  authToken: 'be41075bb199461180003f41cf271034e2da122743594fa8b127adac9e6e467c',
-  silent: true, // Suppresses all logs
+  project: process.env.NEXT_PUBLIC_SENTRY_PROJECT_NAME,
+  authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
 };
 
 module.exports = withPreact(
