@@ -96,18 +96,16 @@ const Room = () => {
   const scrollToRef = useRef(null);
   const topOfRoomRef = useRef(null);
 
+  const { mutate } = useSWRConfig();
+  const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
+
   const { tribeID } = query;
   const roomID = query.viewID as string;
 
   const room = useTribeRooms(tribeID as string).find(({ id }) => id === roomID);
-  const { mutate } = useSWRConfig();
-  const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
   useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
-    console.log('Getting Message');
-    console.log(message);
     if (message.extra.roomId === roomID) {
-      console.log('WS Data', { message });
       handleAddMessage({
         content: message.payload,
         createdAt: message.createdAt,
@@ -124,21 +122,24 @@ const Room = () => {
   });
 
   const apiKey = `/api/v3/room/${roomID}/messages`;
-  const { data, fetchMore, isLoadingInitialData, isFetchingMore } =
+  const { size, hasReachEnd, data, fetchMore, isLoadingInitialData } =
     useGetInfinitePages<{
       data: Array<RoomMessage>;
       nextCursor: string | null;
     }>(apiKey);
 
+  console.log(`shouldFetchMoreItems: ${shouldFetchMoreItems}`);
+  console.log(`hasReachEnd: ${hasReachEnd}`);
+  console.log(`isLoadingInitialData: ${isLoadingInitialData}`);
   useEffect(() => {
     if (
       shouldFetchMoreItems &&
-      isFetchingMore === false &&
+      hasReachEnd === false &&
       isLoadingInitialData === false
     ) {
       fetchMore();
     }
-  }, [fetchMore, isFetchingMore, shouldFetchMoreItems, isLoadingInitialData]);
+  }, [fetchMore, hasReachEnd, isLoadingInitialData, shouldFetchMoreItems]);
 
   const handleScrollToBottom = () => {
     scrollToRef.current.scrollIntoView({
@@ -172,7 +173,7 @@ const Room = () => {
     try {
       handleAddMessage({
         content,
-        createdAt: date,
+        createdAt: new Date().toISOString(),
         id: nanoid(),
         sender: {
           avatar: me.avatar,
@@ -199,7 +200,6 @@ const Room = () => {
     setShowMobileDetails(false);
   }, []);
 
-  const date = new Date().toISOString();
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -225,10 +225,10 @@ const Room = () => {
                 <li>
                   <time
                     className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                    dateTime={date}
+                    dateTime={new Date().toISOString()}
                     data-testid="timestamp-divider-harambe"
                   >
-                    {formatDate(date)}
+                    {formatDate(new Date().toISOString())}
                   </time>
 
                   <div
@@ -270,7 +270,12 @@ const Room = () => {
               {isLoadingInitialData === false && (
                 <MessagesFeed
                   messages={data}
-                  onRender={() => handleScrollToBottom()}
+                  onRender={() => {
+                    // Only scroll when on initial page
+                    if (size === 1) {
+                      handleScrollToBottom();
+                    }
+                  }}
                 />
               )}
             </ul>

@@ -34,12 +34,11 @@ interface Props {
 
 const editorID = 'slatejs-editor';
 const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
-  const { me } = useAuth();
-  console.log('me', me);
   const [value, setValue] = useState<Array<any>>(defaultValue);
   const [editor] = useState(() => createEditorWithPlugins(createEditor()));
-
   const [attachments, setAttachments] = useState<Array<File>>([]);
+
+  const { me } = useAuth();
 
   const handleSubmit = (event) => {
     event.preventDefault();

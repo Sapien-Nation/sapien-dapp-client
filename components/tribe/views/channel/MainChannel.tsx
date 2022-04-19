@@ -33,7 +33,7 @@ const MainChannel = () => {
   const belowEditorRef = useRef(null);
 
   const shouldFetchMoreItems = useOnScreen(endDivRef);
-  const { hasRachEnd, data, fetchMore, isLoadingInitialData, isFetchingMore } =
+  const { hasReachEnd, data, fetchMore, isLoadingInitialData, isFetchingMore } =
     useGetInfinitePages<{
       data: Array<ContentType>;
       nextCursor: string | null;
@@ -60,12 +60,12 @@ const MainChannel = () => {
   useEffect(() => {
     if (
       shouldFetchMoreItems &&
-      hasRachEnd === false &&
+      hasReachEnd === false &&
       isLoadingInitialData === false
     ) {
       fetchMore();
     }
-  }, [fetchMore, hasRachEnd, isLoadingInitialData, shouldFetchMoreItems]);
+  }, [fetchMore, hasReachEnd, isLoadingInitialData, shouldFetchMoreItems]);
 
   return (
     <>
