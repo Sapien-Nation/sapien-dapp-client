@@ -4,10 +4,8 @@
 
 import * as Sentry from '@sentry/nextjs';
 
-const sentryEnabled = true;
-if (sentryEnabled) {
-  Sentry.init({
-    dsn: 'https://9f7b808280284e358fb721b089712449@o415262.ingest.sentry.io/6346908',
-    tracesSampleRate: 1.0,
-  });
-}
+Sentry.init({
+  dsn: 'https://9f7b808280284e358fb721b089712449@o415262.ingest.sentry.io/6346908',
+  enabled: process.env.NEXT_PUBLIC_ENV === 'POC',
+  tracesSampleRate: 1.0,
+});
