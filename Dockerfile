@@ -4,7 +4,6 @@ WORKDIR /app
 COPY . .
 COPY .env .env
 
-ENV NODE_ENV=QAT
 RUN cat .env
 RUN npm install
 RUN npm run build
