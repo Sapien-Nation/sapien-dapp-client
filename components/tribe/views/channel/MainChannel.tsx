@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 // components
 import { SEO, Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
-import { ProfileDialog } from 'components/profile';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 import EmptyMainFeed from './EmptyMainFeed';
+// @ts-ignore
+const ProfileDialog = dynamic<any>(() =>
+  import('components/profile').then((mod) => mod.ProfileDialog)
+);
 
 // hooks
 import { useTribe } from 'hooks/tribe';

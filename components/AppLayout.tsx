@@ -17,7 +17,6 @@ import { useAuth } from 'context/user';
 
 // providers
 import { Web3Provider } from 'wallet/providers';
-import { TorusProvider } from 'wallet/providers/Torus';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';

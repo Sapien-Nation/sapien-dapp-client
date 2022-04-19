@@ -22,7 +22,6 @@ import type { AppProps } from 'next/app';
 
 // styles
 import '../styles/global.css';
-import 'styles/global.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ThemeProvider defaultTheme="dark" attribute="class">
