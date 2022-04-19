@@ -105,7 +105,7 @@ const Dialog = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full md:min-w-570">
               <div className="px-4 sm:p-8 pb-4">
                 <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                   <button

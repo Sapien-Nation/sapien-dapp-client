@@ -49,7 +49,7 @@ const Details = ({ handleSidebar }) => {
                 <li
                   data-testid="room-detail-member"
                   key={id}
-                  className="flex gap-2 items-center mb-4"
+                  className="flex gap-2 items-center mb-4 cursor-pointer"
                   onClick={() => {
                     if (me.id === id) {
                       setDialog(Dialog.Profile);
