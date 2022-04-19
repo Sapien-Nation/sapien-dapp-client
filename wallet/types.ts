@@ -13,9 +13,5 @@ export interface Token {
 }
 
 export interface TXDetails {
-  id: string;
-}
-
-export interface WTXDetails {
-  id: string;
+  hash: string;
 }

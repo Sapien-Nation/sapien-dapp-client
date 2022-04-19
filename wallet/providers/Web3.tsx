@@ -18,7 +18,7 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Passport, TXDetails, WTXDetails } from '../types';
+import type { Passport, TXDetails } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -33,7 +33,7 @@ interface Web3Error {
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
-    handleWithdraw: (toAddress: string, tokenId: number) => Promise<WTXDetails>;
+    handleWithdraw: (toAddress: string, tokenId: number) => Promise<TXDetails>;
     handleDeposit: () => Promise<TXDetails>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
@@ -203,7 +203,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const handleWithdraw = async (
     toAddress: string,
     tokenId: number
-  ): Promise<WTXDetails> => {
+  ): Promise<TXDetails> => {
     try {
       // TODO call wallet API connect to get torus private key
       const { privateKey } = torusKeys;
@@ -230,9 +230,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         }
       );
 
-      console.log('tx value is');
-      console.log(tx);
-      return { id: '1000' };
+      return { hash: tx.hash };
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err.message);
@@ -258,9 +256,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         tokens[0].id
       );
 
-      console.log('tx value is');
-      console.log(tx);
-      return { id: '1000' };
+      return { hash: tx.hash };
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err);
