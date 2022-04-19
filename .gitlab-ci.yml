@@ -48,6 +48,10 @@ build-sandbox:
     - cd eks-manif &&  envsubst <  front-dep-temp.yml > front-dep.yml
     - cat front-dep.yml
     - kubectl apply -f front-dep.yml
+  environment:
+    name: sandbox
+    url: https://front-sandbox.sapien.network
+  
   only:
     <<: *sandbox_triggers
 
@@ -88,6 +92,9 @@ build-qat:
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
     - kubectl apply -f front-dep.yml
+  environment:
+    name: qat
+    url: https://front-qat.sapien.network  
   only:
     <<: *qat_triggers
 
@@ -129,6 +136,9 @@ build-poc:
     - cd eks-manif &&  envsubst <  front-dep-temp-q.yml > front-dep.yml
     - cat front-dep.yml
     - kubectl apply -f front-dep.yml
+  environment:
+    name: poc
+    url: https://front-poc.sapien.network  
   only:
     <<: *poc_triggers
 
