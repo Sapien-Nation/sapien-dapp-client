@@ -25,7 +25,7 @@ const FeedbackView = ({ code }: { code: number }) => {
           <p className="mt-6 text-xl text-white font-semibold">
             To mint a passport, you need first to{' '}
             <a
-              href={`${distributionURL}/passport/purchase`}
+              href={`${distributionURL}passport/purchase`}
               className="text-base font-medium bg-primary-200"
             >
               Buy a passport
@@ -37,7 +37,7 @@ const FeedbackView = ({ code }: { code: number }) => {
           <p className="mt-6 text-xl text-white font-semibold">
             Please finish the avatar select flow and then come back to min{' '}
             <a
-              href={`${distributionURL}/passport/purchase`}
+              href={`${distributionURL}passport/purchase`}
               className="text-base font-medium bg-primary-200"
             >
               Click here to continue
@@ -68,12 +68,13 @@ const Mint = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
+  const { me } = useAuth();
   const { push } = useRouter();
 
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
-      await mintPassport();
+      await mintPassport(me.walletAddress);
 
       push(`/tribes/${id}/home#minted`);
     } catch (err) {

@@ -2,6 +2,7 @@ import { Popover, Transition } from '@headlessui/react';
 import {
   ArrowLeftIcon,
   DotsVerticalIcon,
+  ExternalLinkIcon,
   LogoutIcon,
   InformationCircleIcon,
   XCircleIcon,
@@ -9,8 +10,6 @@ import {
 } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
-
-var util = require('util');
 
 // assets
 import { Metamask } from '../../assets';
@@ -20,11 +19,9 @@ import { Tooltip } from 'components/common';
 
 // hooks
 import { hooks as metaMaskHooks, metaMask } from '../../connectors/metaMask';
+import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 import { CheckCircleIcon } from '@heroicons/react/outline';
-
-// types
-import type { TXDetails } from '../../types';
 
 // web3
 import { useWeb3 } from '../../providers';
@@ -45,15 +42,14 @@ interface Props {
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
   const [userBalance, setUserBalance] = useState(0);
+  const [depositTXHash, setDepositTXHash] = useState('');
   const [showPolygonError, setShowPolygonError] = useState(false);
-  const [depositTXDetails, setDepositTXDetails] = useState<TXDetails | null>(
-    null
-  );
   const [tokensToDeposit, setTokensToDeposit] = useState([]);
   const [isFetchingBalance, setIsFetchingBalance] = useState(true);
   const [isFetchingMetamaskTokens, setIsFetchingMetamaskTokens] =
     useState(false);
 
+  const { me } = useAuth();
   const { walletAPI } = useWeb3();
 
   const error = useError();
@@ -62,13 +58,15 @@ const Deposit = ({ handleBack }: Props) => {
   const isActive = useIsActive();
   const isActivating = useIsActivating();
 
+  const getMetamaskAddress = () => account[0];
+
   const toast = useToast();
   const depositTokensRef = useRef(null);
 
   const fetchBalance = useCallback(async () => {
     setIsFetchingBalance(true);
     try {
-      const balance = await walletAPI.getWalletBalanceSPN();
+      const balance = await walletAPI.getWalletBalanceSPN(me.walletAddress);
 
       setUserBalance(balance);
     } catch (err) {
@@ -85,7 +83,9 @@ const Deposit = ({ handleBack }: Props) => {
     const handleFetchMetamaskTokens = async () => {
       setIsFetchingMetamaskTokens(true);
       try {
-        const metamaskTokens = await walletAPI.getWalletTokens();
+        const metamaskTokens = await walletAPI.getWalletTokens(
+          getMetamaskAddress()
+        );
         setTokensToDeposit(metamaskTokens);
       } catch (err) {
         //
@@ -112,10 +112,11 @@ const Deposit = ({ handleBack }: Props) => {
 
   const handleDeposit = async () => {
     try {
-      const isOnPolygonNetwork = chainId === 80001;
+      const isOnPolygonNetwork = chainId === 137;
       if (isOnPolygonNetwork) {
-        const details = await walletAPI.handleDeposit();
-        setDepositTXDetails(details);
+        const hash = await walletAPI.handleDeposit();
+
+        setDepositTXHash(hash);
         setView(View.Success);
       } else {
         setShowPolygonError(true);
@@ -123,7 +124,7 @@ const Deposit = ({ handleBack }: Props) => {
     } catch (err) {
       Sentry.captureException(err);
       toast({
-        message: err,
+        message: err.message,
       });
     }
   };
@@ -427,34 +428,21 @@ const Deposit = ({ handleBack }: Props) => {
                 <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
               </h5>
             </div>
-            <p className="text-white">
-              <h5>Transaction Details</h5>
-            </p>
-            <div className="flex ">
-              <p className="flex gap-2">
-                <span className="font-extrabold">Transaction ID:</span>
-                <span>{depositTXDetails.id}</span>
-              </p>
-            </div>
-            <p className="text-xs text-white">
-              if you have any questions please contact{' '}
-              <a
-                href="mailto:passports@sapien.network"
-                className="text-blue-500 font-extrabold underline"
-                target="_blank"
-                rel="noreferrer"
-              >
-                passports@sapien.network
-              </a>{' '}
-              with details about the issue
-            </p>
+            <a
+              className="underline  text-sm flex flex-row items-center gap-2"
+              href={`https://polygonscan.com/tx/${depositTXHash}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              See Transaction Details <ExternalLinkIcon className="w-5 h-5" />
+            </a>
             <div className="text-center">
               <button
                 type="button"
                 onClick={handleBack}
                 className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
-                Go Home
+                See my Tokens
               </button>
             </div>
           </>
