@@ -229,6 +229,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           gasLimit: config.GAS_LIMIT,
         }
       );
+
+      console.log('tx value is');
       console.log(tx);
       return { id: '1000' };
     } catch (err) {
@@ -256,6 +258,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         tokens[0].id
       );
 
+      console.log('tx value is');
+      console.log(tx);
       return { id: '1000' };
     } catch (err) {
       Sentry.captureException(err);
