@@ -29,7 +29,7 @@ const isSameOriginURL = (url): URL | null => {
 const Message = ({
   isAContinuosMessage,
   message: {
-    sender: { avatar, displayName },
+    sender: { avatar, displayName, username },
     createdAt,
     content,
     type,
@@ -136,7 +136,7 @@ const Message = ({
                 className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
                 data-testid="message-avatar"
               >
-                {displayName[0].toUpperCase()}
+                {displayName?.[0]?.toUpperCase() || username[0].toUpperCase()}
               </div>
             )}
           </>
@@ -144,7 +144,9 @@ const Message = ({
         <div className="flex-1 space-y-1">
           {isAContinuosMessage && (
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-extrabold">{displayName}</h3>
+              <h3 className="text-sm font-extrabold">
+                {displayName || username}
+              </h3>
               <time
                 data-testid="message-timestamp"
                 className="text-xs text-white"

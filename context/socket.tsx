@@ -3,6 +3,9 @@ import { createContext, useEffect, useState } from 'react';
 // helpers
 import { initSocket } from 'utils/socket';
 
+// context
+import { useAuth } from 'context/user';
+
 interface Context {
   socket: any;
 }
@@ -15,13 +18,16 @@ interface Props {
 
 const SocketProvider = ({ children }: Props) => {
   const [socket, setSocket] = useState(null);
+  const { me } = useAuth();
 
   useEffect(() => {
-    setSocket(initSocket());
-  }, []);
+    if (me) {
+      setSocket(initSocket());
+    }
+  }, [me]);
 
   useEffect(() => {
-    if (socket) {
+    if (socket && me) {
       socket.onopen = () => {
         socket.send(JSON.stringify({ type: 'ping', data: {} }));
       };
@@ -31,7 +37,7 @@ const SocketProvider = ({ children }: Props) => {
 
       return () => socket.close();
     }
-  }, [socket]);
+  }, [socket, me]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

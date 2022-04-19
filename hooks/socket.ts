@@ -2,13 +2,11 @@ import { useContext, useEffect } from 'react';
 
 // context
 import { SocketContext } from 'context/socket';
+import { useAuth } from 'context/user';
 
 export const useSocket = () => {
   const context = useContext(SocketContext);
 
-  if (!context) {
-    throw new Error('useSocket must be used within a SocketProvider');
-  }
   return context;
 };
 
@@ -17,15 +15,18 @@ export const useSocketEvent = (
   callback: (...args: any) => void
 ) => {
   const { socket } = useSocket();
+  const { me } = useAuth();
 
   useEffect(() => {
-    socket.onmessage = (event) => {
-      const eventData = JSON.parse(event.data);
-      if (eventData.type === eventName) {
-        callback(eventData);
-      }
-    };
-  }, [callback, eventName, socket]);
+    if (me && socket) {
+      socket.onmessage = (event) => {
+        const eventData = JSON.parse(event.data);
+        if (eventData.type === eventName) {
+          callback(eventData);
+        }
+      };
+    }
+  }, [callback, eventName, socket, me]);
 };
 
 export const useSocketEmit = (
@@ -33,8 +34,10 @@ export const useSocketEmit = (
   callback: (...args: any) => void
 ) => {
   const { socket } = useSocket();
-
+  const { me } = useAuth();
   useEffect(() => {
-    socket.send(event);
-  }, [callback, event, socket]);
+    if (me && socket) {
+      socket.send(event);
+    }
+  }, [callback, event, socket, me]);
 };
