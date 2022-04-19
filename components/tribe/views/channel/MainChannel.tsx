@@ -33,10 +33,11 @@ const MainChannel = () => {
   const belowEditorRef = useRef(null);
 
   const shouldFetchMoreItems = useOnScreen(endDivRef);
-  const { data, fetchMore, isLoadingInitialData } = useGetInfinitePages<{
-    data: Array<ContentType>;
-    nextCursor: string | null;
-  }>(`/api/v3/tribe/${tribeID}/feed`);
+  const { hasRachEnd, data, fetchMore, isLoadingInitialData, isFetchingMore } =
+    useGetInfinitePages<{
+      data: Array<ContentType>;
+      nextCursor: string | null;
+    }>(`/api/v3/tribe/${tribeID}/feed`);
 
   const checkIfCommingFromMintedPage = () => {
     if (typeof window === 'undefined') {
@@ -57,10 +58,14 @@ const MainChannel = () => {
   }, []);
 
   useEffect(() => {
-    if (shouldFetchMoreItems) {
+    if (
+      shouldFetchMoreItems &&
+      hasRachEnd === false &&
+      isLoadingInitialData === false
+    ) {
       fetchMore();
     }
-  }, [fetchMore, shouldFetchMoreItems]);
+  }, [fetchMore, hasRachEnd, isLoadingInitialData, shouldFetchMoreItems]);
 
   return (
     <>

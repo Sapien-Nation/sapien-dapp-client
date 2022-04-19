@@ -103,9 +103,9 @@ const Room = () => {
   const { mutate } = useSWRConfig();
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  useSocketEvent(
-    WSEvents.NewMessage,
-    ({ data: message }: { data: RoomNewMessage }) => {
+  useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+    if (message.extra.roomId === roomID) {
+      console.log('WS Data', { message });
       handleAddMessage({
         content: message.payload,
         createdAt: message.createdAt,
@@ -119,7 +119,7 @@ const Room = () => {
         type: MessageType.Text,
       });
     }
-  );
+  });
 
   const apiKey = `/api/v3/room/${roomID}/messages`;
   const { data, fetchMore, isLoadingInitialData, isFetchingMore } =

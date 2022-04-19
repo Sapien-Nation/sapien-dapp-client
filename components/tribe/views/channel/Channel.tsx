@@ -40,10 +40,11 @@ const Channel = () => {
     ({ id }) => id === viewID
   );
   const shouldFetchMoreItems = useOnScreen(endDivRef);
-  const { data, fetchMore, isLoadingInitialData } = useGetInfinitePages<{
-    data: Array<Content>;
-    nextCursor: string | null;
-  }>(`/api/v3/channel/${channel.id}/feed`);
+  const { hasRachEnd, data, fetchMore, isLoadingInitialData } =
+    useGetInfinitePages<{
+      data: Array<Content>;
+      nextCursor: string | null;
+    }>(`/api/v3/channel/${channel.id}/feed`);
 
   const toast = useToast();
 
@@ -58,10 +59,14 @@ const Channel = () => {
   }, []);
 
   useEffect(() => {
-    if (shouldFetchMoreItems) {
+    if (
+      shouldFetchMoreItems &&
+      hasRachEnd === false &&
+      isLoadingInitialData === false
+    ) {
       fetchMore();
     }
-  }, [fetchMore, shouldFetchMoreItems]);
+  }, [fetchMore, hasRachEnd, isLoadingInitialData, shouldFetchMoreItems]);
 
   useEffect(() => {
     setShowEditor(false);

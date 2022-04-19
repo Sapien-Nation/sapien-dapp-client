@@ -84,6 +84,8 @@ const useGetInfinitePages = <Page extends object>(
     isValidating,
     mutate,
     fetchMore,
+    // @ts-ignore
+    hasRachEnd: _last(data)?.nextCursor === null,
     isFetchingMore: !!isLoadingMore,
     isRefreshing,
     isEmpty,
