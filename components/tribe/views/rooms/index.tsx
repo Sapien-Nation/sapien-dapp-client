@@ -35,7 +35,7 @@ import { useSocketEvent } from 'hooks/socket';
 import useGetInfinitePages, { getKeyFunction } from 'hooks/useGetInfinitePages';
 
 // types
-import type { RoomMessage, RoomNewMessage } from 'tools/types/room';
+import type { RoomMessage, RoomMessageEvent } from 'tools/types/room';
 
 interface Props {
   messages: Array<RoomMessage>;
@@ -103,7 +103,8 @@ const Room = () => {
   const { mutate } = useSWRConfig();
   const shouldFetchMoreItems = useOnScreen(topOfRoomRef);
 
-  useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+  useSocketEvent(WSEvents.NewMessage, (messageEvent: RoomMessageEvent) => {
+    const message = messageEvent.data;
     handleAddMessage({
       content: message.payload,
       createdAt: message.createdAt,
