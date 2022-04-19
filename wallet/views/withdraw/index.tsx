@@ -13,7 +13,8 @@ import { useToast } from 'context/toast';
 import { useWeb3 } from 'wallet/providers';
 
 // types
-import type { Token, WTXDetails } from '../../types';
+import type { Token } from '../../types';
+import { ExternalLinkIcon } from '@heroicons/react/solid';
 
 interface Props {
   handleBack: () => void;
@@ -33,9 +34,7 @@ interface ForgotPasswordFormValues {
 
 const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
   const [view, setView] = useState(View.Home);
-  const [withdrawTXDetails, setWithdrawTXDetails] = useState<WTXDetails | null>(
-    null
-  );
+  const [withdrawTXHash, setWithdrawTXHash] = useState('');
   const [clipboardWalletText, setClipboardWalletText] = useState('');
 
   const { walletAPI } = useWeb3();
@@ -69,9 +68,9 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
 
   const onSubmit = async ({ address }: ForgotPasswordFormValues) => {
     try {
-      const wTXDetails = await walletAPI.handleWithdraw(address, token.id);
+      const hash = await walletAPI.handleWithdraw(address, token.id);
 
-      setWithdrawTXDetails(wTXDetails);
+      setWithdrawTXHash(hash);
       setView(View.Success);
     } catch (error) {
       toast({
@@ -215,27 +214,14 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
                   <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
                 </h5>
               </div>
-              <p className="text-white">
-                <h5>Withdraw Details</h5>
-              </p>
-              <div className="flex ">
-                <p className="flex gap-2">
-                  <span className="font-extrabold">Withdraw ID:</span>
-                  <span>{withdrawTXDetails.id}</span>
-                </p>
-              </div>
-              <p className="text-xs text-white">
-                if you have any questions please contact{' '}
-                <a
-                  href="mailto:passports@sapien.network"
-                  className="text-blue-500 font-extrabold underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  passports@sapien.network
-                </a>{' '}
-                with details about the issue
-              </p>
+              <a
+                className="underline  text-sm flex flex-row items-center gap-2"
+                href={`https://polygonscan.com/tx/${withdrawTXHash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                See Transaction Details <ExternalLinkIcon className="w-5 h-5" />
+              </a>
               <div className="text-center">
                 <button
                   type="button"

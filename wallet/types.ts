@@ -11,7 +11,3 @@ export interface Token {
   description: string;
   image: string;
 }
-
-export interface TXDetails {
-  hash: string;
-}

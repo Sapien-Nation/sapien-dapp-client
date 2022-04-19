@@ -18,7 +18,7 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Passport, TXDetails } from '../types';
+import type { Passport } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -33,8 +33,8 @@ interface Web3Error {
 interface Web3 {
   isWeb3Ready: boolean;
   walletAPI: {
-    handleWithdraw: (toAddress: string, tokenId: number) => Promise<TXDetails>;
-    handleDeposit: () => Promise<TXDetails>;
+    handleWithdraw: (toAddress: string, tokenId: number) => Promise<string>;
+    handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
     getWalletTokens: (address: string) => Promise<Array<Passport>>;
@@ -203,7 +203,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const handleWithdraw = async (
     toAddress: string,
     tokenId: number
-  ): Promise<TXDetails> => {
+  ): Promise<string> => {
     try {
       // TODO call wallet API connect to get torus private key
       const { privateKey } = torusKeys;
@@ -230,14 +230,14 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         }
       );
 
-      return { hash: tx.hash };
+      return tx.hash;
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err.message);
     }
   };
 
-  const handleDeposit = async (): Promise<TXDetails> => {
+  const handleDeposit = async (): Promise<string> => {
     try {
       const metamaskAddress = getMetamaskAddress();
       const tokens = await getWalletTokens(metamaskAddress);
@@ -256,7 +256,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         tokens[0].id
       );
 
-      return { hash: tx.hash };
+      return tx.hash;
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err);
