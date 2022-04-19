@@ -1,7 +1,11 @@
 // @refresh reset
 import _pipe from 'lodash/fp/pipe';
 import { Popover, Transition } from '@headlessui/react';
-import { EmojiHappyIcon, PhotographIcon } from '@heroicons/react/outline';
+import {
+  EmojiHappyIcon,
+  PhotographIcon,
+  PaperAirplaneIcon,
+} from '@heroicons/react/outline';
 import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useMemo, useRef, useState } from 'react';
@@ -34,6 +38,28 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [attachments, setAttachments] = useState<Array<File>>([]);
 
   const fileRef = useRef(null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const text = serialize(value);
+    onSubmit(text);
+
+    // cleanup
+    const point = { path: [0, 0], offset: 0 };
+    editor.selection = { anchor: point, focus: point };
+    editor.history = { redos: [], undos: [] };
+    editor.children = [
+      {
+        children: [{ text: '' }],
+        // @ts-ignore
+        type: ElementType.Paragraph,
+        key: null,
+      },
+    ];
+    setValue(defaultValue);
+  };
 
   return (
     <>
@@ -86,25 +112,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               <Editable
                 onKeyPress={(event) => {
                   if (event.key === 'Enter' && !event.shiftKey) {
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    const text = serialize(value);
-                    onSubmit(text);
-
-                    // cleanup
-                    const point = { path: [0, 0], offset: 0 };
-                    editor.selection = { anchor: point, focus: point };
-                    editor.history = { redos: [], undos: [] };
-                    editor.children = [
-                      {
-                        children: [{ text: '' }],
-                        // @ts-ignore
-                        type: ElementType.Paragraph,
-                        key: null,
-                      },
-                    ];
-                    setValue(defaultValue);
+                    handleSubmit(event);
                   }
                 }}
                 placeholder={`Leave a message on ${name}`}
@@ -157,6 +165,14 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                   </>
                 )}
               </Popover>
+              <button
+                className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
+                onClick={(event) => {
+                  handleSubmit(event);
+                }}
+              >
+                <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
+              </button>
             </div>
           </div>
         </form>
