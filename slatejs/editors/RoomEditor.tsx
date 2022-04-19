@@ -1,17 +1,19 @@
 // @refresh reset
 import _pipe from 'lodash/fp/pipe';
 import { Popover, Transition } from '@headlessui/react';
-import {
-  EmojiHappyIcon,
-  PhotographIcon,
-  PaperAirplaneIcon,
-} from '@heroicons/react/outline';
+import { EmojiHappyIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
 import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
-import { Fragment, useMemo, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
+
+// components
+import { Avatar } from 'components/common';
+
+// context
+import { useAuth } from 'context/user';
 
 // constants
 import { defaultValue, ElementType } from '../constants';
@@ -32,12 +34,12 @@ interface Props {
 
 const editorID = 'slatejs-editor';
 const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
+  const { me } = useAuth();
+  console.log('me', me);
   const [value, setValue] = useState<Array<any>>(defaultValue);
   const [editor] = useState(() => createEditorWithPlugins(createEditor()));
 
   const [attachments, setAttachments] = useState<Array<File>>([]);
-
-  const fileRef = useRef(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -65,13 +67,17 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     <>
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
-        <img
-          className="self-start inline-block h-10 w-10 rounded-full mr-4"
-          src={
-            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=240'
-          }
-          alt=""
-        />
+        {me.avatar ? (
+          <img
+            className="self-start inline-block h-10 w-10 rounded-full mr-4"
+            src={me.avatar}
+            alt=""
+          />
+        ) : (
+          <div className="self-start inline-block h-10 w-10 rounded-full mr-4">
+            <Avatar />
+          </div>
+        )}
         <form
           id="room-editor"
           className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2"

@@ -23,7 +23,6 @@ import type { AppProps } from 'next/app';
 // styles
 import '../styles/global.css';
 import 'styles/global.css';
-import 'emoji-mart/css/emoji-mart.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <ThemeProvider defaultTheme="dark" attribute="class">

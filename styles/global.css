@@ -1,5 +1,6 @@
 /* purgecss start ignore */
 @import url('./fonts.css');
+@import 'emoji-mart/css/emoji-mart.css';
 @tailwind base;
 @tailwind components;
 /* purgecss end ignore */
