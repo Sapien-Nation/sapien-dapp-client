@@ -162,9 +162,9 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
   return (
     <TorusContext.Provider
       value={{
-        isReady: torusKeys !== null,
-        torusKeys,
-        error,
+        isReady: true,
+        torusKeys: null,
+        error: null,
         retryConnect: handleRetry,
         torusSDK,
         isReconnecting,

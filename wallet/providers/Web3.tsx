@@ -2,7 +2,7 @@ import { Network } from '@ethersproject/networks';
 import * as Sentry from '@sentry/nextjs';
 import { ethers } from 'ethers';
 import { BN } from 'ethereumjs-util';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
@@ -10,10 +10,9 @@ import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice } from '../api';
+import { getGasPrice, connectWallet } from '../api';
 
 // hooks
-import { useTorus } from './Torus';
 import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
@@ -72,15 +71,11 @@ const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 const { useAccounts, useProvider } = metaMaskHooks;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
-  const [error, setError] = useState<null | Web3Error>(null);
-
   const { me } = useAuth();
 
   const account = useAccounts();
   const getMetamaskAddress = () => account[0];
   const metamaskProvider = useProvider();
-
-  const { torusKeys } = useTorus();
 
   //----------------------------------------------------------------------------------------------------------------------------
   const config: WalletConfig = (() => {
@@ -206,9 +201,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   ): Promise<string> => {
     try {
       // TODO call wallet API connect to get torus private key
-      const { privateKey } = torusKeys;
+      const { privKey } = await connectWallet();
 
-      const signer = new ethers.Wallet(privateKey, ethersProvider);
+      const signer = new ethers.Wallet(privKey, ethersProvider);
 
       const contract = await new Contract(
         config.PASSPORT_CONTRACT_ADDRESS,
@@ -267,7 +262,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     <Web3Context.Provider
       value={{
         isWeb3Ready: true,
-        web3Error: error,
+        web3Error: null,
         walletAPI: {
           handleWithdraw,
           handleDeposit,

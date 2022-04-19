@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const connectWallet = () =>
   authInstance
-    .get('/api/v3/wallet/connect')
+    .post('/api/v3/wallet/connect')
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
