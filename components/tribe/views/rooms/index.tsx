@@ -112,7 +112,7 @@ const Feed = ({
     if (content === '') return;
 
     try {
-      handleAddMessage({
+      await handleAddMessage({
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -248,9 +248,9 @@ const Feed = ({
                     })}
                   </>
                 </ul>
-                <div ref={scrollToBottom} className="h-2" />
               </>
             </InfiniteScroll>
+            <div ref={scrollToBottom} className="block" />
           </div>
           <div className="px-5">
             {/* @ts-ignore */}
