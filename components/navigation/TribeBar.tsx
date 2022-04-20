@@ -99,7 +99,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
 
         <div className="border-t-[1px] border-gray-800 block w-full" />
 
-        <Link href="/discovery">
+        {/* <Link href="/discovery">
           <a
             className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
               pathname === '/discovery'
@@ -113,7 +113,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             <span className="sr-only">Go to Explore</span>
           </a>
         </Link>
-        <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" />
+        <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" /> */}
         <button
           onClick={() => {
             setDialog(Dialog.CreateTribe);
