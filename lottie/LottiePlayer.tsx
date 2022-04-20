@@ -14,7 +14,12 @@ const LottiePlayer = ({
   height = '1000px',
 }: Props) => {
   return (
-    <Lottie animationData={lottieJson} play style={{ margin, width, height }} />
+    <Lottie
+      animationData={lottieJson}
+      play
+      loop
+      style={{ margin, width, height }}
+    />
   );
 };
 

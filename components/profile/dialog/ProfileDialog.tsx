@@ -20,17 +20,11 @@ interface Props {
 
 const form = 'updat-profile-form';
 const ProfileDialog = ({ onClose }: Props) => {
-  const [showAnimation, setShowAnimation] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
-    if (showAnimation) {
-      setTimeout(() => {
-        setShowAnimation(false);
-        setShowDialog(true);
-      }, 4000);
-    }
-  }, [showAnimation]);
+    setTimeout(() => setShowDialog(true), 4000);
+  }, []);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -226,13 +220,11 @@ const ProfileDialog = ({ onClose }: Props) => {
 
   return (
     <>
-      {showAnimation && (
-        <div className="fixed z-10 inset-0">
-          <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <LottiePlayer />
-          </div>
+      <div className="fixed z-10 inset-0">
+        <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <LottiePlayer />
         </div>
-      )}
+      </div>
       {showDialog && (
         <Dialog
           form={form}

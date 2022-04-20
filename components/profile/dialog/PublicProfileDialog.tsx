@@ -17,17 +17,11 @@ interface Props {
 }
 
 const PublicProfileDialog = ({ profileID, onClose }: Props) => {
-  const [showAnimation, setShowAnimation] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
-    if (showAnimation) {
-      setTimeout(() => {
-        setShowAnimation(false);
-        setShowDialog(true);
-      }, 4000);
-    }
-  }, [showAnimation]);
+    setTimeout(() => setShowDialog(true), 4000);
+  }, []);
 
   const renderView = (profile: PublicProfile) => {
     console.log(profile.passport);
@@ -141,13 +135,11 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
 
   return (
     <>
-      {showAnimation && (
-        <div className="fixed z-10 inset-0 bg-opacity-75">
-          <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <LottiePlayer />
-          </div>
+      <div className="fixed z-10 inset-0 bg-opacity-75">
+        <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <LottiePlayer />
         </div>
-      )}
+      </div>
       {showDialog && (
         <Dialog show isFetching={false} onClose={onClose}>
           <Query
