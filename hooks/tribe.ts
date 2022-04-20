@@ -19,7 +19,7 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
     id: 'sapien_welcome_message',
     body: `<div style='padding: 0px 15px 20px;max-width: 1200px;margin: 0 auto;'>
             <div>&nbsp;</div>
-            <h1 style='font-size:32px;text-align:center;font-weight:bold;color:#A185F2;line-height:normal;'>Hello fellow Sapiens, welcome to the Sapien Nation!</h1>
+            <h1 style='font-size:32px;text-align:left;font-weight:bold;color:#A185F2;line-height:normal;'>Hello fellow Sapiens, welcome to the Sapien Nation!</h1>
             <p>&nbsp;</p>
             <p><span style="font-size: 14pt;">Today marks the beginning of our journey together, and it’s one that I am honored to be able to share with all of you. If there is one thing that I have learned throughout my time with Sapien it is this — <em>with the right people and shared belief, anything is possible.</em></span></p>
             <p>&nbsp;</p>
