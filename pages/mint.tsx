@@ -74,48 +74,55 @@ const Mint = () => {
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
-      await mintPassport(me.walletAddress);
-
-      push(`/tribes/${id}/home#minted`);
+      // await mintPassport(me.walletAddress);
+      // push(`/tribes/${id}/home#minted`);
     } catch (err) {
       toast({ message: err });
     }
-    setIsFetching(false);
+    // setIsFetching(false);
   };
 
   return (
     <Query api="/api/v3/profile/tribes">
       {(tribes: Array<ProfileTribe>) => {
         return (
-          <div className="bg-black min-h-full w-full flex flex-col justify-center items-center relative">
-            <span className="flex">
-              <span className="animate-ping-slow absolute left-0 inline-flex h-full w-full rounded-full bg-sapien-80 opacity-75"></span>
-              <span className="relative inline-flex rounded-fullbg-sapien-80"></span>
-            </span>
-            <h1 className="text-3xl sm:text-5xl font-extrabold mb-4">
-              Join the Sapien Nation
-            </h1>
-            <div
-              className="relative rounded-lg h-[350px] w-[624px] md:h-[550px] md:w-[1024px] bg-cover"
-              style={{
-                backgroundImage: `url('https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png')`,
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => handleMint(tribes[0])}
-              className={
-                isFetching
-                  ? 'absolute bottom-20 md:bottom-40 cursor-not-allowed flex h-12 items-center w-48 justify-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
-                  : 'absolute bottom-20 md:bottom-40 flex justify-center h-12 items-center w-48 py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
-              }
-              disabled={isFetching}
-            >
-              {isFetching && (
-                <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
-              )}
-              Mint Passport
-            </button>
+          <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+            <div className="absolute inset-0">
+              <img
+                className="h-full w-full object-cover"
+                src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+                alt="People working on laptops"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+            </div>
+            <div className="relative flex justify-center items-center flex-col h-full w-full gap-4">
+              <h4 className="text-3xl sm:text-5xl font-extrabold bg-sapien-80">
+                Join the Sapien Nation
+              </h4>
+              <p>
+                Click on the text below to mint your passport and start the
+                awesome experience of the first Metaverse Newspaper{' '}
+              </p>
+              <button
+                type="button"
+                onClick={() => handleMint(tribes[0])}
+                className={
+                  isFetching
+                    ? 'animate-bounce cursor-not-allowed flex h-12 items-center w-48 justify-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                    : 'flex justify-center h-12 items-center w-48 py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                }
+                disabled={isFetching}
+              >
+                {isFetching ? (
+                  <>
+                    <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+                    Minting...
+                  </>
+                ) : (
+                  <>Mint Passport</>
+                )}
+              </button>
+            </div>
           </div>
         );
       }}
@@ -152,9 +159,12 @@ const MintPage: NextPage = () => {
   };
 
   return (
-    <Query api="/api/v3/passport/mint-checker">
-      {({ code }: MintStatus) => renderView(code)}
-    </Query>
+    <>
+      <SEO title="Minting" />
+      <Query api="/api/v3/passport/mint-checker">
+        {({ code }: MintStatus) => renderView(code)}
+      </Query>
+    </>
   );
 };
 
