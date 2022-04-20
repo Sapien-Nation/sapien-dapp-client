@@ -20,6 +20,7 @@ interface Props {
 }
 
 const DialogPassport = ({
+  bgOpacity = 'bg-opacity-75',
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
   isFetching = false,
@@ -85,7 +86,9 @@ const DialogPassport = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <HeadlessDialog.Overlay className={`fixed inset-0`} />
+            <HeadlessDialog.Overlay
+              className={`fixed inset-0 bg-gray-700 ${bgOpacity} transition-opacity`}
+            />
           </Transition.Child>
           <span
             className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -103,7 +106,7 @@ const DialogPassport = ({
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <div
-              className="p-5 inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-transparent transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full md:min-w-570"
+              className="py-20 inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-transparent transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full md:min-w-570"
               style={{
                 backgroundImage: `url('/images/passport_bg.svg')`,
                 backgroundRepeat: 'no-repeat',

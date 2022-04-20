@@ -59,7 +59,7 @@ const ProfileDialog = ({ onClose }: Props) => {
   };
 
   const renderView = () => {
-    if (false) {
+    if (me.passport === null) {
       return (
         <div className="rounded-xl mb-4 bg-transparent">
           <div className="bg-gradient-to-r bg-transparent h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
@@ -157,6 +157,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                     className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                     name="name"
                     placeholder="Name"
+                    readOnly
                     rules={{
                       validate: {
                         required: (value) => value.length > 0 || 'is required',
@@ -178,6 +179,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                     className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                     name="username"
                     placeholder="Username"
+                    readOnly
                     rules={{
                       validate: {
                         required: (value) => value.length > 0 || 'is required',
@@ -200,6 +202,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                   className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                   name="title"
                   placeholder="Title"
+                  readOnly
                   value={me.title}
                 />
               </div>
@@ -217,6 +220,7 @@ const ProfileDialog = ({ onClose }: Props) => {
               maxLength={1000}
               placeholder="Bio"
               className="!border-[1px] border-sapien-80 !bg-transparent"
+              readOnly
               rules={{
                 validate: {
                   maxLength: (value) => {
@@ -240,7 +244,7 @@ const ProfileDialog = ({ onClose }: Props) => {
   return (
     <>
       {showAnimation && (
-        <div className="fixed z-10 inset-0 flex items-center justify-center">
+        <div className="fixed z-10 inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 transition-opacity">
           <div className="bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <LottiePlayer />
           </div>
@@ -254,8 +258,10 @@ const ProfileDialog = ({ onClose }: Props) => {
           onClose={onClose}
           confirmLabel="Update"
           cancelLabel="Close"
+          showCancel={false}
+          showConfirm={false}
         >
-          <div className="px-5">{renderView()}</div>
+          <div className="px-8">{renderView()}</div>
         </DialogPassport>
       )}
     </>
