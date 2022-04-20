@@ -16,7 +16,7 @@ import { Avatar } from 'components/common';
 const Wallet = dynamic(() => import('wallet/Wallet'));
 // @ts-ignore
 const ProfileDialog = dynamic<any>(() =>
-  import('components/profile').then((mod) => mod.ProfileDialog)
+  import('components/profile').then((mod) => mod.ProfileDialogPassport)
 );
 
 interface Props {
