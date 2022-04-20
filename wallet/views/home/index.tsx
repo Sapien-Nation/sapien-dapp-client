@@ -97,11 +97,19 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
         )}
         {tokens.map((token) => (
           <li
-            className="bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            className={
+              token.id
+                ? 'bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center'
+                : 'bg-gray-700 cursor-not-allowed w-14 h-14 rounded-full flex justify-center'
+            }
             key={token.name}
-            onClick={() => onSelectToken(token)}
+            onClick={() => {
+              if (token.id) {
+                onSelectToken(token);
+              }
+            }}
           >
-            {token.image === null ? (
+            {token.id === null ? (
               <PhotographIcon className="w-6 mx-auto text-white" />
             ) : (
               <img

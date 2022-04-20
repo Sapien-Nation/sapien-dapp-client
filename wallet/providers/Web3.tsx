@@ -183,8 +183,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         } catch (err) {
           Sentry.captureException(err);
           return {
-            id: token,
-            name: 'Failed',
+            id: null,
+            name: `Token ${token} FAILED `,
             image: null,
           };
         }

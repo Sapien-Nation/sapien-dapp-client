@@ -1,5 +1,5 @@
 export interface Passport {
-  id: number;
+  id: number | null;
   name: string;
   description: string;
   image: string | null;
