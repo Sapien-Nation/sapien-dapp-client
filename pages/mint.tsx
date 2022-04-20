@@ -79,7 +79,7 @@ const Mint = () => {
     } catch (err) {
       toast({ message: err });
     }
-    // setIsFetching(false);
+    setIsFetching(false);
   };
 
   return (
