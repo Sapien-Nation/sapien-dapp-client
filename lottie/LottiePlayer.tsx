@@ -11,7 +11,7 @@ interface Props {
 const LottiePlayer = ({
   margin = '0 auto',
   width = '1000px',
-  height = '1000px',
+  height = '600px',
 }: Props) => {
   return (
     <Lottie

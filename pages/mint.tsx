@@ -74,8 +74,8 @@ const Mint = () => {
   const handleMint = async ({ id }: ProfileTribe) => {
     setIsFetching(true);
     try {
-      // await mintPassport(me.walletAddress);
-      // push(`/tribes/${id}/home#minted`);
+      await mintPassport(me.walletAddress);
+      push(`/tribes/${id}/home#minted`);
     } catch (err) {
       toast({ message: err });
     }
