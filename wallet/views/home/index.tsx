@@ -1,4 +1,9 @@
-import { PlusIcon, RefreshIcon, XCircleIcon } from '@heroicons/react/outline';
+import {
+  PlusIcon,
+  RefreshIcon,
+  XCircleIcon,
+  PhotographIcon,
+} from '@heroicons/react/outline';
 import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -96,11 +101,15 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
             key={token.name}
             onClick={() => onSelectToken(token)}
           >
-            <img
-              className="rounded-full px-1 py-1 w-14 h-14"
-              src={token.image}
-              alt={token.description}
-            />
+            {token.image === null ? (
+              <PhotographIcon className="w-6 mx-auto text-white" />
+            ) : (
+              <img
+                className="rounded-full px-1 py-1 w-14 h-14"
+                src={token.image}
+                alt={token.description}
+              />
+            )}
           </li>
         ))}
       </ol>

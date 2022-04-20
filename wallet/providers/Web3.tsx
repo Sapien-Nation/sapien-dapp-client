@@ -1,5 +1,6 @@
 import { Network } from '@ethersproject/networks';
 import * as Sentry from '@sentry/nextjs';
+import _range from 'lodash/range';
 import { ethers } from 'ethers';
 import { BN } from 'ethereumjs-util';
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice, connectWallet, getTokenData } from '../api';
+import { getGasPrice, connectWallet, fetchTokenData } from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -164,41 +165,49 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const getWalletTokens = async (address): Promise<Array<Passport>> => {
     try {
       const balance = await getPassportBalance(address);
-      const tokens = [];
 
       if (balance === 0) {
         return [];
       }
 
-      const baseURI = await contracts.passportContract.methods
-        .baseTokenURI()
-        .call();
-
-      for (let i = 0; i < balance; i += 1) {
+      const getTokenData = async (token) => {
         try {
           const tokenID = await contracts.passportContract.methods
-            .tokenOfOwnerByIndex(address, i)
+            .tokenOfOwnerByIndex(address, token)
             .call();
 
-          const data = await getTokenData(
-            `https://ipfs.io/ipfs/${baseURI}/${tokenID}`
-          );
-          const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
-          tokens.push({ id: tokenID, name: data.name, image: imageUrl });
-        } catch (err: any) {
-          Sentry.captureException(
-            `Axios error - ${err?.response?.status} - ${err?.response?.statusText}`
-          );
-        }
-      }
+          const data = await fetchTokenData(`https://ipfs.io/ipfs/${tokenID}`);
 
-      return tokens;
+          const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
+          return { id: tokenID, name: data.name, image: imageUrl };
+        } catch (err) {
+          Sentry.captureException(err);
+          return {
+            id: token,
+            name: 'Failed',
+            image: null,
+          };
+        }
+      };
+
+      // we do balance + 1 because we need an array like balance = 3 = [1,2,3]
+      const tokensPromises = await Promise.allSettled(
+        _range(1, balance + 1).map(getTokenData)
+      );
+
+      return [
+        ...tokensPromises
+          .filter((result) => result.status === 'fulfilled')
+          .map((result) => (result as any).value),
+        ...tokensPromises
+          .filter((result) => result.status === 'rejected')
+          .map((result) => (result as any).reason),
+      ];
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err);
     }
   };
-
   const handleWithdraw = async (
     toAddress: string,
     tokenId: number

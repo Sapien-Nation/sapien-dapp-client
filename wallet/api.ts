@@ -8,7 +8,7 @@ export const connectWallet = () =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getTokenData = (url: string) =>
+export const fetchTokenData = (url: string) =>
   axios
     .get(url)
     .then((response) => response.data)
