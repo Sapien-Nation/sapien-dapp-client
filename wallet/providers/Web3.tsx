@@ -10,7 +10,7 @@ import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice, connectWallet } from '../api';
+import { getGasPrice, connectWallet, getTokenData } from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -179,8 +179,12 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           const tokenID = await contracts.passportContract.methods
             .tokenOfOwnerByIndex(address, i)
             .call();
-          // const { data } = await getTokenData(`${baseURI}${tokenID}`);
-          tokens.push({ id: tokenID });
+
+          const data = await getTokenData(
+            `https://ipfs.io/ipfs/${baseURI}/${tokenID}`
+          );
+          const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
+          tokens.push({ id: tokenID, name: data.name, image: imageUrl });
         } catch (err: any) {
           Sentry.captureException(
             `Axios error - ${err?.response?.status} - ${err?.response?.statusText}`

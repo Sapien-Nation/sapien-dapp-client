@@ -9,9 +9,9 @@ export const connectWallet = () =>
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const getTokenData = (url: string) =>
-  authInstance
+  axios
     .get(url)
-    .then(({ data }) => data)
+    .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const getGasPrice = (gasStationUrl) =>
