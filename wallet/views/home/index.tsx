@@ -115,7 +115,7 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
               <img
                 className="rounded-full px-1 py-1 w-14 h-14"
                 src={token.image}
-                alt={token.description}
+                alt=""
               />
             )}
           </li>

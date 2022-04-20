@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 // components
 import { SEO, Query } from 'components/common';
+import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 
@@ -13,7 +14,7 @@ const ProfileDialog = dynamic<any>(() =>
 );
 
 // hooks
-import { useTribe } from 'hooks/tribe';
+import { useTribe, useWelcomeMessage } from 'hooks/tribe';
 
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
@@ -29,6 +30,7 @@ const MainChannel = () => {
   const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
+  const welcomeMessage = useWelcomeMessage(tribe);
   const belowEditorRef = useRef(null);
 
   const checkIfCommingFromMintedPage = () => {
@@ -62,12 +64,14 @@ const MainChannel = () => {
         </Query>
         <div className="mt-4 min-h-400">
           <ul>
-            {/* <li key={content.id}>
-              <ContentItemMainChannel
-                content={content}
-                tribeID={tribeID as string}
-              />
-            </li> */}
+            {tribe.name === 'Sapien' ? (
+              <li>
+                <ContentItemMainChannel
+                  content={welcomeMessage}
+                  tribeID={tribeID as string}
+                />
+              </li>
+            ) : null}
           </ul>
         </div>
       </div>

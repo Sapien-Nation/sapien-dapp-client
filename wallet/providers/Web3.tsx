@@ -11,14 +11,14 @@ import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice, connectWallet, fetchTokenData } from '../api';
+import { getGasPrice, connectWallet, getTokenMetadata } from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Passport } from '../types';
+import type { Token } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -37,7 +37,7 @@ interface Web3 {
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
-    getWalletTokens: (address: string) => Promise<Array<Passport>>;
+    getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   web3Error: Web3Error | null;
 }
@@ -162,7 +162,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getWalletTokens = async (address): Promise<Array<Passport>> => {
+  const getWalletTokens = async (address): Promise<Array<Token>> => {
     try {
       const balance = await getPassportBalance(address);
 
@@ -170,33 +170,19 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         return [];
       }
 
-      console.log(`BALANCE: ${balance}`);
-
       const getTokenData = async (token) => {
         try {
-          // const tokenID = await contracts.passportContract.methods
-          //   .tokenOfOwnerByIndex(address, token)
-          //   .call();
-
-          const tokenID = 9;
-
-          const tokenURI = await contracts.passportContract.methods
-            .tokenURI(tokenID)
+          const tokenId = await contracts.passportContract.methods
+            .tokenOfOwnerByIndex(address, token)
             .call();
 
-          const data = await fetchTokenData(
-            `https://ipfs.io/ipfs/${tokenURI.slice(7)}`
-          );
+          const tokenMetadata = await getTokenMetadata(tokenId);
 
-          var util = require('util');
-          console.log(`DATA: ${util.inspect(data)}`);
-          console.log(`IMAGE: ${data.image}`);
-
-          const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
-
-          console.log(`IMAGE_URL: ${imageUrl}`);
-
-          return { id: tokenID, name: data.name, image: imageUrl };
+          return {
+            id: tokenId,
+            name: tokenMetadata.name,
+            image: tokenMetadata.image,
+          };
         } catch (err) {
           Sentry.captureException(err);
           return {
@@ -209,7 +195,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       // we do balance + 1 because we need an array like balance = 3 = [0,1,2]
       const tokensPromises = await Promise.allSettled(
-        _range(0, 1).map(getTokenData)
+        _range(0, balance).map(getTokenData)
       );
 
       return [
