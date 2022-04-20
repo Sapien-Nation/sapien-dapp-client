@@ -13,7 +13,18 @@ interface Props {
 
 const PassportPage = ({ passportID }: Props) => {
   return (
-    <Query api={`/api/v3/passport/${passportID}`}>
+    <Query
+      api={`/api/v3/passport/${passportID}`}
+      options={{
+        fetcher: () => ({
+          avatar:
+            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=80',
+          passportId: 1,
+          issueDate: new Date().toISOString(),
+          issuingAuthority: 'Sapien Nation',
+        }),
+      }}
+    >
       {(passport: Passport) => {
         return <h1>{passport.passportId}</h1>;
       }}
