@@ -6,7 +6,7 @@ import _sortyBy from 'lodash/sortBy';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 import { KeyedMutator, useSWRConfig } from 'swr';
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 // api
@@ -139,12 +139,10 @@ const Feed = ({
     setShowMobileDetails(false);
   }, []);
 
-  const messagesData = useMemo(() => {
-    return _groupBy(
-      _sortyBy(data, (message) => new Date(message.createdAt)),
-      ({ createdAt }) => formatDate(createdAt)
-    );
-  }, [data]);
+  const messagesData = _groupBy(
+    _sortyBy(data, (message) => new Date(message.createdAt)),
+    ({ createdAt }) => formatDate(createdAt)
+  );
 
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
