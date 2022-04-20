@@ -105,8 +105,11 @@ const ProfileDialog = ({ onClose }: Props) => {
             <div className="text-center pt-4 flex flex-col justify-between">
               <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
                 <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
-                  {/* <CameraIcon className="w-5 -rotate-90 text-sapien-60" /> */}
-                  <img src={avatarUrl} className="-rotate-90 h-full" />
+                  <img
+                    src={avatarUrl}
+                    className="-rotate-90 h-full"
+                    alt="Passport Figure generated with Machine Learning"
+                  />
                 </div>
               </div>
               <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
@@ -122,7 +125,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                 <li>
                   <span className="block text-gray-400 mb-1">Passport #</span>
                   <span className="text-gray-300 font-semibold">
-                    {me.passport?.passportNumber ?? '-'}
+                    {me.passport?.passportId ?? '-'}
                   </span>
                 </li>
                 <li>

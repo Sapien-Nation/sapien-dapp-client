@@ -5,6 +5,7 @@ import { Query, SEO } from 'components/common';
 
 // types
 import type { NextPage } from 'next';
+import type { Passport } from 'tools/types/passport';
 
 interface Props {
   passportID: string;
@@ -13,8 +14,8 @@ interface Props {
 const PassportPage = ({ passportID }: Props) => {
   return (
     <Query api={`/api/v3/passport/${passportID}`}>
-      {() => {
-        return <h1>TODO animation</h1>;
+      {(passport: Passport) => {
+        return <h1>{passport.passportId}</h1>;
       }}
     </Query>
   );
