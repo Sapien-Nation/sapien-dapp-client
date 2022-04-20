@@ -4,10 +4,9 @@ import dynamic from 'next/dynamic';
 
 // components
 import { SEO, Query } from 'components/common';
-import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
-import EmptyMainFeed from './EmptyMainFeed';
+
 // @ts-ignore
 const ProfileDialog = dynamic<any>(() =>
   import('components/profile').then((mod) => mod.ProfileDialog)
@@ -15,11 +14,8 @@ const ProfileDialog = dynamic<any>(() =>
 
 // hooks
 import { useTribe } from 'hooks/tribe';
-import useGetInfinitePages from 'hooks/useGetInfinitePages';
-import useOnScreen from 'hooks/useOnScreen';
 
 // types
-import type { Content as ContentType } from 'tools/types/content';
 import type { MainFeedTribe } from 'tools/types/tribe';
 
 enum Dialog {
@@ -33,15 +29,7 @@ const MainChannel = () => {
   const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
-  const endDivRef = useRef(null);
   const belowEditorRef = useRef(null);
-
-  const shouldFetchMoreItems = useOnScreen(endDivRef);
-  const { hasReachEnd, data, fetchMore, isLoadingInitialData, isFetchingMore } =
-    useGetInfinitePages<{
-      data: Array<ContentType>;
-      nextCursor: string | null;
-    }>(`/api/v3/tribe/${tribeID}/feed`);
 
   const checkIfCommingFromMintedPage = () => {
     if (typeof window === 'undefined') {
@@ -61,16 +49,6 @@ const MainChannel = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      shouldFetchMoreItems &&
-      hasReachEnd === false &&
-      isLoadingInitialData === false
-    ) {
-      fetchMore();
-    }
-  }, [fetchMore, hasReachEnd, isLoadingInitialData, shouldFetchMoreItems]);
-
   return (
     <>
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
@@ -83,20 +61,13 @@ const MainChannel = () => {
           {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
         </Query>
         <div className="mt-4 min-h-400">
-          {isLoadingInitialData === false && data.length === 0 ? (
-            <EmptyMainFeed />
-          ) : null}
-
           <ul>
-            {data.map((content) => (
-              <li key={content.id}>
-                <ContentItemMainChannel
-                  content={content}
-                  tribeID={tribeID as string}
-                />
-              </li>
-            ))}
-            <div ref={endDivRef} />
+            {/* <li key={content.id}>
+              <ContentItemMainChannel
+                content={content}
+                tribeID={tribeID as string}
+              />
+            </li> */}
           </ul>
         </div>
       </div>
