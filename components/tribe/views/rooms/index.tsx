@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 import { KeyedMutator, useSWRConfig } from 'swr';
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { useInView } from 'react-intersection-observer';
+import InfiniteScroll from 'react-infinite-scroller';
 
 // api
 import axios from 'api';
@@ -46,6 +46,7 @@ interface Props {
   roomID: string;
   tribeID: string;
   revalidate: KeyedMutator<any>;
+  hasMoreData: boolean;
 }
 
 const Feed = ({
@@ -55,6 +56,7 @@ const Feed = ({
   tribeID,
   onScrollTop,
   revalidate,
+  hasMoreData,
 }: Props) => {
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
@@ -63,15 +65,7 @@ const Feed = ({
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
 
-  const { ref: topRef, inView } = useInView({ threshold: 0.9 });
-
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
-
-  useEffect(() => {
-    if (inView) {
-      onScrollTop();
-    }
-  }, [inView, onScrollTop]);
 
   useEffect(() => {
     handleScrollToBottom();
@@ -118,7 +112,7 @@ const Feed = ({
     if (content === '') return;
 
     try {
-      handleAddMessage({
+      await handleAddMessage({
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -167,85 +161,96 @@ const Feed = ({
             </button>
           </div>
           <div className="relative flex-1 overflow-auto">
-            <h1 className="sr-only">Room View for {room.name}</h1>
-            <ul role="list" className="p-5 flex flex-col mb-2">
-              <li ref={topRef} />
-              <li>
-                <time
-                  className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                  dateTime={new Date().toISOString()}
-                  data-testid="timestamp-divider-harambe"
-                >
-                  {formatDate(new Date().toISOString())}
-                </time>
-
-                <div
-                  className={`py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
-                >
-                  <div className="flex space-x-3">
-                    <img
-                      className="h-10 w-10 rounded-full"
-                      src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
-                      alt=""
-                      data-testid="message-avatar"
-                    />
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-sm font-extrabold">
-                          Harambe at Sapien
-                        </h3>
-                        <time
-                          data-testid="message-timestamp"
-                          className="text-xs text-white"
-                        >
-                          {formatDateRelative(new Date().toISOString())}
-                        </time>
-                      </div>
-                      <p className="text-sm text-white/80 group">
-                        <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
-                          {new Date().toLocaleString('en-US', {
-                            hour: 'numeric',
-                            hour12: true,
-                          })}
-                        </span>{' '}
-                        {`This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </li>
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={onScrollTop}
+              hasMore={hasMoreData}
+              loader={null}
+              useWindow={false}
+              isReverse
+              initialLoad={false}
+              threshold={450}
+            >
               <>
-                {Object.keys(messagesData).map((timestamp) => {
-                  const timestampMessages = messagesData[timestamp];
-                  return (
-                    <>
-                      <li key={timestamp}>
-                        <time
-                          className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                          dateTime={timestamp}
-                          data-testid="timestamp-divider"
-                        >
-                          {timestamp}
-                        </time>
-                      </li>
-                      {timestampMessages.map((message, index) => {
-                        return (
-                          <Message
-                            key={message.id}
-                            message={message}
-                            isAContinuosMessage={
-                              timestampMessages[index - 1]?.sender.id !==
-                              message.sender.id
-                            }
-                          />
-                        );
-                      })}
-                    </>
-                  );
-                })}
+                <h1 className="sr-only">Room View for {room.name}</h1>
+                <ul role="list" className="p-5 flex flex-col mb-2">
+                  <li>
+                    <time
+                      className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                      dateTime={new Date().toISOString()}
+                      data-testid="timestamp-divider-harambe"
+                    >
+                      {formatDate(new Date().toISOString())}
+                    </time>
+                    <div
+                      className={`py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
+                    >
+                      <div className="flex space-x-3">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
+                          alt=""
+                          data-testid="message-avatar"
+                        />
+                        <div className="flex-1 space-y-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-sm font-extrabold">
+                              Harambe at Sapien
+                            </h3>
+                            <time
+                              data-testid="message-timestamp"
+                              className="text-xs text-white"
+                            >
+                              {formatDateRelative(new Date().toISOString())}
+                            </time>
+                          </div>
+                          <p className="text-sm text-white/80 group">
+                            <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
+                              {new Date().toLocaleString('en-US', {
+                                hour: 'numeric',
+                                hour12: true,
+                              })}
+                            </span>{' '}
+                            {`This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <>
+                    {Object.keys(messagesData).map((timestamp) => {
+                      const timestampMessages = messagesData[timestamp];
+                      return (
+                        <>
+                          <li key={timestamp}>
+                            <time
+                              className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                              dateTime={timestamp}
+                              data-testid="timestamp-divider"
+                            >
+                              {timestamp}
+                            </time>
+                          </li>
+                          {timestampMessages.map((message, index) => {
+                            return (
+                              <Message
+                                key={message.id}
+                                message={message}
+                                isAContinuosMessage={
+                                  timestampMessages[index - 1]?.sender.id !==
+                                  message.sender.id
+                                }
+                              />
+                            );
+                          })}
+                        </>
+                      );
+                    })}
+                  </>
+                </ul>
               </>
-            </ul>
-            <div ref={scrollToBottom} className="h-2" />
+            </InfiniteScroll>
+            <div ref={scrollToBottom} className="block" />
           </div>
           <div className="px-5">
             {/* @ts-ignore */}
@@ -268,6 +273,7 @@ const Feed = ({
 
 const Room = () => {
   const { query } = useRouter();
+  const [isLoading, setLoading] = useState(false);
 
   const { tribeID } = query;
   const roomID = query.viewID as string;
@@ -289,7 +295,8 @@ const Room = () => {
   let mutateFetchAPI = apiKey;
   const handleFetchMore = async (cursor: string) => {
     try {
-      mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=10`;
+      setLoading(true);
+      mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=50`;
       const response = await axios(mutateFetchAPI);
       mutate(
         apiKey,
@@ -301,12 +308,13 @@ const Room = () => {
         },
         false
       );
+      setLoading(false);
     } catch (err) {
       Sentry.captureException(err);
+      setLoading(false);
     }
   };
 
-  console.log(swrData);
   return (
     <Feed
       apiKey={mutateFetchAPI}
@@ -314,11 +322,12 @@ const Room = () => {
       tribeID={tribeID as string}
       data={swrData?.data ?? []}
       onScrollTop={() => {
-        if (swrData?.nextCursor !== null) {
+        if (swrData?.nextCursor !== null && !isLoading) {
           handleFetchMore(swrData?.nextCursor);
         }
       }}
       revalidate={revalidate}
+      hasMoreData={swrData?.nextCursor !== null}
     />
   );
 };
