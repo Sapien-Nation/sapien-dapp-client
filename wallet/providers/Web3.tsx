@@ -170,15 +170,23 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         return [];
       }
 
+      console.log(`BALANCE: ${balance}`);
+
       const getTokenData = async (token) => {
         try {
           const tokenID = await contracts.passportContract.methods
             .tokenOfOwnerByIndex(address, token)
             .call();
 
-          const data = await fetchTokenData(`https://ipfs.io/ipfs/${tokenID}`);
+          const tokenURI = await contracts.passportContract.methods
+            .tokenURI(tokenID)
+            .call();
 
+          const data = await fetchTokenData(
+            `https://ipfs.io/ipfs/${tokenURI.slice(7)}`
+          );
           const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
+
           return { id: tokenID, name: data.name, image: imageUrl };
         } catch (err) {
           Sentry.captureException(err);
@@ -192,7 +200,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       // we do balance + 1 because we need an array like balance = 3 = [1,2,3]
       const tokensPromises = await Promise.allSettled(
-        _range(1, balance + 1).map(getTokenData)
+        _range(0, balance).map(getTokenData)
       );
 
       return [
