@@ -8,23 +8,12 @@ import type { NextPage } from 'next';
 import type { Passport } from 'tools/types/passport';
 
 interface Props {
-  tokenID: string;
+  passportID: string;
 }
 
-const PassportPage = ({ tokenID }: Props) => {
+const PassportPage = ({ passportID }: Props) => {
   return (
-    <Query
-      api={`/api/v3/passport/metadata/${tokenID}`}
-      options={{
-        fetcher: () => ({
-          image:
-            'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=80',
-          passportId: 1,
-          issueDate: new Date().toISOString(),
-          issuingAuthority: 'Sapien Nation',
-        }),
-      }}
-    >
+    <Query api={`/api/v3/passports/${passportID}`}>
       {(passport: Passport) => {
         return <h1>{passport.passportId}</h1>;
       }}
@@ -35,12 +24,12 @@ const PassportPage = ({ tokenID }: Props) => {
 const PassportPageProxy: NextPage = () => {
   const { query } = useRouter();
 
-  if (!query.tokenID) return null;
+  if (!query.passportID) return null;
 
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <PassportPage tokenID={query.tokenID as string} />
+      <PassportPage passportID={query.passportID as string} />
     </>
   );
 };

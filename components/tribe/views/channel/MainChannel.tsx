@@ -64,7 +64,7 @@ const MainChannel = () => {
         </Query>
         <div className="mt-4 min-h-400">
           <ul>
-            {tribe.name === 'Sapien' ? (
+            {tribe.name === 'Sapien Nation' ? (
               <li>
                 <ContentItemMainChannel
                   content={welcomeMessage}
