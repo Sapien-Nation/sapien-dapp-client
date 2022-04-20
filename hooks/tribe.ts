@@ -17,23 +17,23 @@ interface CurrentView {
 export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
   return {
     id: 'sapien_welcome_message',
-    body: `<div>
+    body: `<div style='padding: 0px 15px 20px;max-width: 1200px;margin: 0 auto;'>
             <div>&nbsp;</div>
-            <h1>Hello fellow Sapiens, welcome to the Sapien Nation!</h1>
+            <h1 style='font-size:32px;text-align:center;font-weight:bold;color:#A185F2;line-height:normal;'>Hello fellow Sapiens, welcome to the Sapien Nation!</h1>
             <p>&nbsp;</p>
-            <p><span style="font-size: 14pt;">Today marks the beginning of our journey together, and it’s one that I am honored to be able to share with all of you. If there is one thing that I have learned throughout my time with Sapien it is this — with the right people and shared belief, anything is possible.</span></p>
+            <p><span style="font-size: 14pt;">Today marks the beginning of our journey together, and it’s one that I am honored to be able to share with all of you. If there is one thing that I have learned throughout my time with Sapien it is this — <em>with the right people and shared belief, anything is possible.</em></span></p>
             <p>&nbsp;</p>
             <p><span style="font-size: 14pt;">A nation is no more than its people, and as long as we stand together, no challenge is too great for us to face.</span></p>
             <p>&nbsp;</p>
-            <p><span style="font-size: 14pt;">Together we can reclaim our shared reality and purpose so that we may direct our attention and effort to the things that really matter … <br></span></p>
+            <p><span style="font-size: 14pt;">Together we can reclaim our shared reality and purpose so that we may direct our attention and effort to the things that really matter… <br></span></p>
             <p>&nbsp;</p>
-            <p><span style="font-size: 12pt;"><strong>To protecting our shared home, the Earth </strong></span></p>
-            <p><span style="font-size: 12pt;"><strong>To elevating and empowering our Tribes</strong></span></p>
-            <p><span style="font-size: 14pt;"><span style="font-size: 12pt;"><strong>Toward building a future that puts Humans First.</strong></span> <br></span></p>
+            <p><span style="font-size: 14pt;"><strong>To protecting our shared home, the Earth.</strong></span></p>
+            <p><span style="font-size: 14pt;"><strong>To elevating and empowering our Tribes.</strong></span></p>
+            <p><span style="font-size: 14pt;"><strong>Toward building a future that puts Humans First.</strong><br></span></p>
             <p>&nbsp;</p>
-            <p><em><strong><span style="font-size: 14pt;">Rob Giometti</span></strong></em></p>
+            <p><em><strong><span style="font-size: 14pt;color:#A185F2;">Rob Giometti</span></strong></em></p>
             <p><span style="text-decoration: underline;"><span style="font-size: 10pt;"><strong>Founding Member of the Sapien Nation</strong></span></span></p>
-            </div>
+          </div>
     `,
     group: {
       id: tribe.id,
