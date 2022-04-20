@@ -19,7 +19,6 @@ import { useToast } from 'context/toast';
 // hooks
 import { useTribeChannels } from 'hooks/tribe';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
-import useOnScreen from 'hooks/useOnScreen';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -39,12 +38,10 @@ const Channel = () => {
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
   );
-  const shouldFetchMoreItems = useOnScreen(endDivRef);
-  const { hasReachEnd, data, fetchMore, isLoadingInitialData } =
-    useGetInfinitePages<{
-      data: Array<Content>;
-      nextCursor: string | null;
-    }>(`/api/v3/channel/${channel.id}/feed`);
+  const { data } = useGetInfinitePages<{
+    data: Array<Content>;
+    nextCursor: string | null;
+  }>(`/api/v3/channel/${channel.id}/feed`);
 
   const toast = useToast();
 
@@ -57,16 +54,6 @@ const Channel = () => {
       });
     }
   }, []);
-
-  useEffect(() => {
-    if (
-      shouldFetchMoreItems &&
-      hasReachEnd === false &&
-      isLoadingInitialData === false
-    ) {
-      fetchMore();
-    }
-  }, [fetchMore, hasReachEnd, isLoadingInitialData, shouldFetchMoreItems]);
 
   useEffect(() => {
     setShowEditor(false);
@@ -118,10 +105,6 @@ const Channel = () => {
         <div ref={belowEditorRef} />
         {!showEditor && (
           <div className="mt-4">
-            {isLoadingInitialData === false && data.length === 0 ? (
-              <EmptyFeed />
-            ) : null}
-
             <ul>
               {data.map((content) => (
                 <li key={content.id}>
