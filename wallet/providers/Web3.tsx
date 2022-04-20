@@ -174,9 +174,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const getTokenData = async (token) => {
         try {
-          const tokenID = await contracts.passportContract.methods
-            .tokenOfOwnerByIndex(address, token)
-            .call();
+          // const tokenID = await contracts.passportContract.methods
+          //   .tokenOfOwnerByIndex(address, token)
+          //   .call();
+
+          const tokenID = 9;
 
           const tokenURI = await contracts.passportContract.methods
             .tokenURI(tokenID)
@@ -185,7 +187,14 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           const data = await fetchTokenData(
             `https://ipfs.io/ipfs/${tokenURI.slice(7)}`
           );
+
+          var util = require('util');
+          console.log(`DATA: ${util.inspect(data)}`);
+          console.log(`IMAGE: ${data.image}`);
+
           const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
+
+          console.log(`IMAGE_URL: ${imageUrl}`);
 
           return { id: tokenID, name: data.name, image: imageUrl };
         } catch (err) {
@@ -198,9 +207,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         }
       };
 
-      // we do balance + 1 because we need an array like balance = 3 = [1,2,3]
+      // we do balance + 1 because we need an array like balance = 3 = [0,1,2]
       const tokensPromises = await Promise.allSettled(
-        _range(0, balance).map(getTokenData)
+        _range(0, 1).map(getTokenData)
       );
 
       return [
