@@ -50,11 +50,11 @@ const Details = ({ handleSidebar }) => {
                   />
                 ) : (
                   <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-                    {displayName[0].toUpperCase()}
+                    {displayName ? displayName[0].toUpperCase() : 'A'}
                   </div>
                 )}
                 <span>
-                  {displayName}{' '}
+                  {displayName || 'No Name'}{' '}
                   <span className="text-xs">
                     {index === 0 ? '(Admin)' : ''}
                   </span>
