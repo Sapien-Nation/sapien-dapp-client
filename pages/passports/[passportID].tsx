@@ -74,7 +74,7 @@ const PassportPage = ({ passportID }: Props) => {
                           <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
                             <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
                               <img
-                                src={passport.avatar}
+                                src={passport.image}
                                 className="-rotate-90 h-full"
                                 alt="Passport Figure generated with Machine Learning"
                               />
@@ -134,7 +134,7 @@ const PassportPage = ({ passportID }: Props) => {
                                       value.length > 0 || 'is required',
                                   },
                                 }}
-                                value={passport.firstName}
+                                value={passport.displayName}
                               />
                             </div>
                             <div
