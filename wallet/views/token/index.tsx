@@ -26,7 +26,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
         <img
           className="rounded-full px-1 py-1 w-20 h-20 self-center"
           src={token.image}
-          alt={token.description}
+          alt=""
         />
         <div className="text-center grid gap-6">
           <button

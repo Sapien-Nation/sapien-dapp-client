@@ -11,14 +11,19 @@ import { default as PlatformContractAbi } from '../contracts/Platform.json';
 import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice, connectWallet, fetchTokenData } from '../api';
+import {
+  getGasPrice,
+  connectWallet,
+  fetchTokenData,
+  getTokenMetadata,
+} from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Passport } from '../types';
+import type { Token } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -37,7 +42,7 @@ interface Web3 {
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
-    getWalletTokens: (address: string) => Promise<Array<Passport>>;
+    getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   web3Error: Web3Error | null;
 }
@@ -162,7 +167,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getWalletTokens = async (address): Promise<Array<Passport>> => {
+  const getWalletTokens = async (address): Promise<Array<Token>> => {
     try {
       const balance = await getPassportBalance(address);
 
@@ -176,10 +181,12 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             .tokenOfOwnerByIndex(address, token)
             .call();
 
-          const data = await fetchTokenData(`https://ipfs.io/ipfs/${tokenID}`);
-
-          const imageUrl = `https://ipfs.io/ipfs/${data.image.slice(7)}`;
-          return { id: tokenID, name: data.name, image: imageUrl };
+          const tokenMetadata = await getTokenMetadata(token);
+          return {
+            id: tokenID,
+            name: tokenMetadata.name,
+            image: tokenMetadata.image,
+          };
         } catch (err) {
           Sentry.captureException(err);
           return {
