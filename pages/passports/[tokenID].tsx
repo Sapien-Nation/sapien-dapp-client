@@ -8,16 +8,16 @@ import type { NextPage } from 'next';
 import type { Passport } from 'tools/types/passport';
 
 interface Props {
-  passportID: string;
+  tokenID: string;
 }
 
-const PassportPage = ({ passportID }: Props) => {
+const PassportPage = ({ tokenID }: Props) => {
   return (
     <Query
-      api={`/api/v3/passport/${passportID}`}
+      api={`/api/v3/passport/metadata/${tokenID}`}
       options={{
         fetcher: () => ({
-          avatar:
+          image:
             'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=80',
           passportId: 1,
           issueDate: new Date().toISOString(),
@@ -35,12 +35,12 @@ const PassportPage = ({ passportID }: Props) => {
 const PassportPageProxy: NextPage = () => {
   const { query } = useRouter();
 
-  if (!query.id) return null;
+  if (!query.tokenID) return null;
 
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <PassportPage passportID={query.id as string} />
+      <PassportPage tokenID={query.tokenID as string} />
     </>
   );
 };
