@@ -78,6 +78,22 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
 
   return (
     <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+      {tokens.some(({ image }) => image === null) === true && (
+        <p className="text-sm text-white grid gap-4 items-center justify-center mb-6">
+          <span>
+            We found some issues while fetching your tokens, you can re-try to
+            fetch them or wait for 30seconds and re-open the Wallet
+          </span>
+          <button
+            type="button"
+            onClick={handleGetTokens}
+            disabled={isFetching}
+            className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Click here to reload
+          </button>
+        </p>
+      )}
       <ol
         className="grid gap-4 grid-cols-4 w-72 h-72 mx-auto"
         style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}
@@ -100,7 +116,7 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
             className={
               token.id
                 ? 'bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center'
-                : 'bg-gray-700 cursor-not-allowed w-14 h-14 rounded-full flex justify-center'
+                : 'bg-gray-700 w-14 h-14 cursor-not-allowed rounded-full flex justify-center items-center'
             }
             key={token.name}
             onClick={() => {
@@ -109,14 +125,22 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
               }
             }}
           >
-            {token.id === null ? (
-              <PhotographIcon className="w-6 mx-auto text-white" />
+            {isFetching ? (
+              <RefreshIcon className="w-5 mx-auto text-white animate-spin" />
             ) : (
-              <img
-                className="rounded-full px-1 py-1 w-14 h-14"
-                src={token.image}
-                alt=""
-              />
+              <>
+                {token.id === null ? (
+                  <>
+                    <PhotographIcon className="px-1 py-1 w-6" />
+                  </>
+                ) : (
+                  <img
+                    className="rounded-full px-1 py-1 w-14 h-14"
+                    src={token.image}
+                    alt=""
+                  />
+                )}
+              </>
             )}
           </li>
         ))}
