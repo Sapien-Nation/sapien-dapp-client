@@ -134,11 +134,13 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
                     <PhotographIcon className="px-1 py-1 w-6" />
                   </>
                 ) : (
-                  <img
-                    className="rounded-full px-1 py-1 w-14 h-14"
-                    src={token.image}
-                    alt=""
-                  />
+                  <div className="rounded-full w-14 h-14 relative overflow-hidden">
+                    <img
+                      className="mx-auto my-0 h-auto w-full"
+                      src={token.image}
+                      alt=""
+                    />
+                  </div>
                 )}
               </>
             )}
