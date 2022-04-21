@@ -243,8 +243,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         .ownerOf(tokenId)
         .call();
 
-      const sapienWallet = me.walletAddress;
-      if (tokenAddress === sapienWallets) {
+      const { walletAddress } = me;
+      if (tokenAddress === walletAddress) {
         const { privKey } = await connectWallet();
 
         const gasPrice = await getGasPrice();
@@ -252,7 +252,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         const signedTx =
           await WalletAPIRef.current.eth.accounts.signTransaction(
             {
-              from: sapienWallet,
+              from: walletAddress,
               gasPrice: Web3Library.utils
                 .toWei(new BN(gasPrice), 'gwei')
                 .toNumber(),
@@ -260,7 +260,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
               to: config.PASSPORT_CONTRACT_ADDRESS,
               value: '0x0',
               data: contracts.passportContract.methods
-                .safeTransferFrom(sapienWallet, to, tokenId)
+                .safeTransferFrom(walletAddress, to, tokenId)
                 .encodeABI(),
             },
             `0x${privKey}`
