@@ -35,7 +35,7 @@ const ContentItem = ({
         ) : (
           body
         )}
-        <div className="flex items-center mt-2 gap-2">
+        <div className="flex items-center mt-2 gap-2 px-3">
           <div className="flex gap-1 items-center">
             <UserAvatar
               user={

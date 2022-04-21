@@ -31,7 +31,7 @@ const ContentItemMainChannel = ({
 }: Props) => {
   return (
     <Link href={`/tribes/${tribeID}/content?id=${id}`} passHref>
-      <a className="hover:bg-gray-800 rounded-md p-2 block text-gray-300">
+      <a className="hover:bg-gray-800 max-w-2xl mx-auto rounded-md p-2 block text-gray-300 border border-gray-700">
         <div className="flex space-x-3">
           {imagePreview && (
             <img
@@ -50,7 +50,7 @@ const ContentItemMainChannel = ({
             ) : (
               body
             )}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3">
               <div className="flex gap-1 items-center">
                 <UserAvatar
                   user={
