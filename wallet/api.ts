@@ -1,3 +1,5 @@
+import _isObject from 'lodash/isObject';
+
 // api
 import instance, { authInstance } from 'api';
 import axios from 'axios';
@@ -15,7 +17,15 @@ export const connectWallet = () =>
 export const getGasPrice = (fallbackGasPrice = 7500) =>
   axios
     .get(gasStationUrl)
-    .then((response) => response.data?.fast?.maxFee ?? fallbackGasPrice)
+    .then((response) => {
+      if (response?.data?.fast) {
+        if (_isObject(response.data.fast)) {
+          return response.data.fast.maxFee;
+        }
+        return response.data.fast;
+      }
+      return fallbackGasPrice;
+    })
     .catch((_err) => '50'); // default value
 
 export const getTokenMetadata = (tokenId): Promise<Token> =>
