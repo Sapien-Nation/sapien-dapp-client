@@ -14,10 +14,7 @@ import { Avatar } from 'components/common';
 // ui
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-// @ts-ignore
-const ProfileDialog = dynamic<any>(() =>
-  import('components/profile').then((mod) => mod.ProfileDialogPassport)
-);
+import { ProfileDialog } from 'components/profile';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
