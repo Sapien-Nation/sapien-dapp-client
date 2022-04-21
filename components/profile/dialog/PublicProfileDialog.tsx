@@ -6,7 +6,6 @@ import { authFetcher as fetcher } from 'api';
 
 // components
 import { Dialog, Query } from 'components/common';
-import { LottiePlayer } from 'lottie';
 
 // types
 import { PublicProfile } from 'tools/types/user';
@@ -136,7 +135,11 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
     <>
       <div className="fixed z-10 inset-0 bg-opacity-75">
         <div className="flex items-end justify-center min-h-screen bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <LottiePlayer />
+          <img
+            src="https://cdn.discordapp.com/attachments/965626142059016222/966746093771690004/passport_no_background.gif"
+            style={{ width: 1100, height: 660 }}
+            alt=""
+          />
         </div>
       </div>
       {showDialog && (

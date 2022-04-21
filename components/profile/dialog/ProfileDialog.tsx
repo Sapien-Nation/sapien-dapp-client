@@ -11,7 +11,6 @@ import {
   TextareaInput,
   TextInput,
 } from 'components/common';
-import { LottiePlayer } from 'lottie';
 
 // context
 import { useAuth } from 'context/user';
@@ -36,13 +35,18 @@ const ProfileDialog = ({ onClose }: Props) => {
     me.passport ? true : false
   );
   const [showDialog, setShowDialog] = useState(me.passport ? false : true);
+  const [imgSrc, setImgSrc] = useState('');
+
+  useEffect(() => {
+    setImgSrc('/images/passport_edited_medium.gif?' + new Date().getTime());
+  }, []);
 
   useEffect(() => {
     if (showAnimation) {
       setTimeout(() => {
-        //setShowAnimation(false);
+        // setShowAnimation(false);
         setShowDialog(true);
-      }, 7000);
+      }, 6500);
     }
   }, [showAnimation]);
 
@@ -78,6 +82,8 @@ const ProfileDialog = ({ onClose }: Props) => {
           onClose={onClose}
           confirmLabel="Update"
           cancelLabel="Close"
+          showCancel={false}
+          showConfirm={false}
         >
           <div className="rounded-xl mb-4 bg-transparent">
             <div className="bg-gradient-to-r bg-transparent h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
@@ -161,8 +167,8 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Issue Date
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport.issueDate
-                          ? formatDate(me.passport.issueDate, 'LLLL d y')
+                        {me.passport?.issueDate
+                          ? formatDate(me.passport?.issueDate, 'LLLL d y')
                           : '-'}
                       </span>
                     </li>
@@ -282,7 +288,7 @@ const ProfileDialog = ({ onClose }: Props) => {
       {showAnimation && (
         <div className="fixed z-10 inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 transition-opacity">
           <div className="bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <LottiePlayer width={'1100px'} height={'660px'} />
+            <img src={imgSrc} style={{ width: 1100, height: 660 }} alt="" />
           </div>
         </div>
       )}
