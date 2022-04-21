@@ -9,7 +9,7 @@ import { useAuth } from 'context/user';
 
 // components
 import { ProfileDialog } from 'components/profile';
-import { Avatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 
 // ui
 // @ts-ignore
@@ -60,15 +60,7 @@ const Navbar = () => {
                   <div className="h-full">
                     <div className="flex items-center">
                       <div className="px-3 py-3">
-                        {me.avatar ? (
-                          <img
-                            className="w-10 h-10 rounded-full flex-shrink-0"
-                            src={me.avatar}
-                            alt=""
-                          />
-                        ) : (
-                          <Avatar />
-                        )}
+                        <UserAvatar user={me} />
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="text-xs truncate w-30">
@@ -108,15 +100,7 @@ const Navbar = () => {
                   <span className="flex w-full items-center">
                     <span className="flex min-w-0 items-center w-full justify-between">
                       <div className=" px-5 py-3 ">
-                        {me.avatar ? (
-                          <img
-                            className="w-10 h-10 rounded-full flex-shrink-0"
-                            src={me.avatar}
-                            alt=""
-                          />
-                        ) : (
-                          <Avatar />
-                        )}
+                        <UserAvatar user={me} />
                       </div>
                     </span>
                   </span>

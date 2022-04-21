@@ -2,7 +2,7 @@ export * from './Toast';
 export * from './views';
 export * from './fields';
 
-export { default as Avatar } from './Avatar';
+export { default as UserAvatar } from './UserAvatar';
 export { default as Dialog } from './Dialog';
 export { default as DialogPassport } from './DialogPassport';
 export { default as Dropdown } from './Dropdown';

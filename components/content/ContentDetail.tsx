@@ -5,10 +5,11 @@ import { ContentMimeType } from 'tools/constants/content';
 import { formatDateRelative } from 'utils/date';
 
 // components
-import { Avatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
+import type { User } from 'tools/types/user';
 
 interface Props {
   content: ContentType;
@@ -16,7 +17,7 @@ interface Props {
 
 const ContentItem = ({
   content: {
-    owner: { avatar, displayName },
+    owner: { avatar, displayName, userName },
     createdAt,
     body,
     mimeType,
@@ -36,17 +37,15 @@ const ContentItem = ({
         )}
         <div className="flex items-center mt-2 gap-2">
           <div className="flex gap-1 items-center">
-            {avatar ? (
-              <img
-                className="w-5 h-5 object-cover rounded-full"
-                src={avatar}
-                alt="Sapien Post Image"
-              />
-            ) : (
-              <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                {displayName[0].toUpperCase()}
-              </div>
-            )}
+            <UserAvatar
+              user={
+                {
+                  username: userName,
+                  avatar,
+                  displayName,
+                } as User
+              }
+            />
             <h3 className="text-sm font-medium text-gray-400">{displayName}</h3>
           </div>
           <p className="text-xs text-gray-500">

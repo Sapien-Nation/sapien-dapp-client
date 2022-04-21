@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import { useAuth } from 'context/user';
 
 // components
-import { Avatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 
 // ui
 // @ts-ignore
@@ -130,15 +130,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
                     <div className=" px-5 py-3 ">
-                      {me.avatar ? (
-                        <img
-                          className="w-10 h-10 rounded-full flex-shrink-0"
-                          src={me.avatar}
-                          alt=""
-                        />
-                      ) : (
-                        <Avatar />
-                      )}
+                      <UserAvatar user={me} />
                     </div>
                   </span>
                 </span>

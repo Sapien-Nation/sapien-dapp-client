@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 // components
 import {
+  UserAvatar,
   Dialog,
   DialogPassport,
   TextareaInput,
@@ -22,10 +23,7 @@ interface Props {
   onClose: () => void;
 }
 
-const defaultAvatar =
-  'https://cdn.discordapp.com/avatars/557967782516490270/6a43bfb06a8150801b5c3407c8103339.webp?size=80';
 const form = 'updat-profile-form';
-
 const ProfileDialog = ({ onClose }: Props) => {
   const { me } = useAuth();
 
@@ -44,7 +42,6 @@ const ProfileDialog = ({ onClose }: Props) => {
   }, [showAnimation]);
 
   const toast = useToast();
-  const avatarUrl = me.avatar || defaultAvatar;
 
   const methods = useForm<FormValues>({
     defaultValues: {
@@ -134,11 +131,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                 <div className="text-center pt-4 flex flex-col justify-between">
                   <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
                     <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
-                      <img
-                        src={avatarUrl}
-                        className="-rotate-90 h-full"
-                        alt="Passport Figure generated with Machine Learning"
-                      />
+                      <UserAvatar user={me} />
                     </div>
                   </div>
                   <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
