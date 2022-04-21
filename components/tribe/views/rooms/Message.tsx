@@ -12,7 +12,7 @@ import { formatDateRelative } from 'utils/date';
 import type { RoomMessage } from 'tools/types/room';
 
 interface Props {
-  isAContinuosMessage: boolean;
+  isAMessageContinuation: boolean;
   message: RoomMessage;
 }
 
@@ -27,7 +27,7 @@ const isSameOriginURL = (url): URL | null => {
 };
 
 const Message = ({
-  isAContinuosMessage,
+  isAMessageContinuation,
   message: {
     sender: { avatar, displayName, username },
     createdAt,
@@ -60,7 +60,7 @@ const Message = ({
       return (
         <p
           className={
-            isAContinuosMessage
+            isAMessageContinuation
               ? 'text-sm text-white/30 whitespace-pre-line'
               : 'pl-52 text-sm text-white/30 whitespace-pre-line'
           }
@@ -73,13 +73,13 @@ const Message = ({
     return (
       <p
         className={
-          isAContinuosMessage
+          isAMessageContinuation
             ? 'text-sm text-white/80 group whitespace-pre-line'
             : 'pl-52 text-sm text-white/80 whitespace-pre-line'
         }
       >
         <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
-          {!isAContinuosMessage
+          {!isAMessageContinuation
             ? new Date(createdAt).toLocaleString('en-US', {
                 hour: 'numeric',
                 hour12: true,
@@ -122,7 +122,7 @@ const Message = ({
       } hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
     >
       <div className="flex space-x-3">
-        {isAContinuosMessage && (
+        {isAMessageContinuation && (
           <>
             {avatar ? (
               <img
@@ -142,7 +142,7 @@ const Message = ({
           </>
         )}
         <div className="flex-1 space-y-1">
-          {isAContinuosMessage && (
+          {isAMessageContinuation && (
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-extrabold">
                 {displayName || username}

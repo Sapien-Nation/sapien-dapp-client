@@ -147,6 +147,21 @@ const Feed = ({
     ({ createdAt }) => formatDate(createdAt)
   );
 
+  const isAMessageContinuation = (
+    lastMessage: RoomMessage | null,
+    messageOwner: string
+  ) => {
+    if (lastMessage) {
+      if (lastMessage.sender.id === messageOwner) {
+        if (lastMessage.type === MessageType.Join) return true;
+        return false;
+      } else {
+        return true;
+      }
+    }
+    return true;
+  };
+
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -221,6 +236,7 @@ const Feed = ({
                   <>
                     {Object.keys(messagesData).map((timestamp) => {
                       const timestampMessages = messagesData[timestamp];
+                      console.log(timestampMessages);
                       return (
                         <>
                           <li key={timestamp}>
@@ -233,7 +249,7 @@ const Feed = ({
                             </time>
                           </li>
                           {timestampMessages.map((message, index) => {
-                            if (message.content.includes('joined')) {
+                            if (message.type === MessageType.Join) {
                               return (
                                 <JoinARoomMessage
                                   message={message}
@@ -241,14 +257,15 @@ const Feed = ({
                                 />
                               );
                             }
+
                             return (
                               <Message
                                 key={message.id}
                                 message={message}
-                                isAContinuosMessage={
-                                  timestampMessages[index - 1]?.sender.id !==
+                                isAMessageContinuation={isAMessageContinuation(
+                                  timestampMessages[index - 1] || null,
                                   message.sender.id
-                                }
+                                )}
                               />
                             );
                           })}
