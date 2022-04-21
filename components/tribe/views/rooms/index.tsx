@@ -27,6 +27,7 @@ import Details from './Details';
 import Message from './Message';
 import NotAMemberView from './NotAMemberView';
 import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
+import JoinARoomMessage from './JoinARoomMessage';
 
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
@@ -34,6 +35,7 @@ import { formatDate, formatDateRelative } from 'utils/date';
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
+import { useRoomDetails } from 'hooks/room';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
 
 // types
@@ -66,6 +68,7 @@ const Feed = ({
   const scrollToBottom = useRef(null);
 
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
+  const { createdAt } = useRoomDetails(roomID);
 
   useEffect(() => {
     handleScrollToBottom();
@@ -175,10 +178,10 @@ const Feed = ({
                   <li>
                     <time
                       className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-[48%] before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-[48%] after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                      dateTime={new Date().toISOString()}
+                      dateTime={createdAt}
                       data-testid="timestamp-divider-harambe"
                     >
-                      {formatDate(new Date().toISOString())}
+                      {formatDate(createdAt)}
                     </time>
                     <div
                       className={`py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
@@ -199,12 +202,12 @@ const Feed = ({
                               data-testid="message-timestamp"
                               className="text-xs text-white"
                             >
-                              {formatDateRelative(new Date().toISOString())}
+                              {formatDateRelative(createdAt)}
                             </time>
                           </div>
                           <p className="text-sm text-white/80 group">
                             <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
-                              {new Date().toLocaleString('en-US', {
+                              {new Date(createdAt).toLocaleString('en-US', {
                                 hour: 'numeric',
                                 hour12: true,
                               })}
@@ -230,6 +233,14 @@ const Feed = ({
                             </time>
                           </li>
                           {timestampMessages.map((message, index) => {
+                            if (message.content.includes('joined')) {
+                              return (
+                                <JoinARoomMessage
+                                  message={message}
+                                  key={message.id}
+                                />
+                              );
+                            }
                             return (
                               <Message
                                 key={message.id}

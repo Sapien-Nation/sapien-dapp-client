@@ -8,6 +8,33 @@ const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
   const { members } = useRoomDetails(query.viewID as string);
 
+  const renderMemberAvatar = (avatar: string, displayName: string) => {
+    if (avatar) {
+      return (
+        <img
+          className="w-10 h-10 rounded-full flex-shrink-0"
+          src={avatar}
+          alt=""
+        />
+      );
+    }
+
+    if (displayName === ' ') {
+      return (
+        <img
+          className="w-10 h-10 rounded-full flex-shrink-0"
+          src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/93383885-f529-46cb-9709-9421e0c7395e-110x110.png"
+          alt=""
+        />
+      );
+    }
+
+    return (
+      <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+        {displayName[0].toUpperCase()}
+      </div>
+    );
+  };
   return (
     <aside className="w-72 h-full overflow-auto border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700/50 lg:hidden">
@@ -33,28 +60,10 @@ const Details = ({ handleSidebar }) => {
                 data-testid="room-detail-member"
                 key={id}
                 className="flex gap-2 items-center mb-4 cursor-pointer"
-                onClick={() => {
-                  // if (me.id === id) {ss
-                  //   setDialog(Dialog.Profile);
-                  // } else {
-                  //   setSelectedProfile(id);
-                  //   setDialog(Dialog.PublicProfile);
-                  // }
-                }}
               >
-                {avatar ? (
-                  <img
-                    className="w-10 h-10 rounded-full flex-shrink-0"
-                    src={avatar}
-                    alt=""
-                  />
-                ) : (
-                  <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-                    {displayName ? displayName[0].toUpperCase() : 'A'}
-                  </div>
-                )}
+                {renderMemberAvatar(avatar, displayName)}
                 <span>
-                  {displayName || 'No Name'}{' '}
+                  {displayName === ' ' ? 'Sapien User' : displayName}{' '}
                   <span className="text-xs">
                     {index === 0 ? '(Admin)' : ''}
                   </span>
