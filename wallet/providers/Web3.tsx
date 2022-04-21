@@ -245,6 +245,34 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
         const gasPrice = await getGasPrice();
 
+        console.log('Getting Gas Price');
+        const testGasPrice = Web3Library.utils
+          .toWei(new BN(gasPrice), 'gwei')
+          .toNumber();
+        console.log(`Okay done testGasPrice: ${testGasPrice}`);
+
+        console.log('Now safeTransactionForm');
+        console.log(
+          contracts.passportContract.methods
+            .safeTransferFrom(walletAddress, to, tokenId)
+            .encodeABI()
+        );
+
+        console.log('Okay now Signing Transactioon');
+        console.log({
+          from: walletAddress,
+          gasPrice: Web3Library.utils
+            .toWei(new BN(gasPrice), 'gwei')
+            .toNumber(),
+          gasLimit: config.GAS_LIMIT,
+          to: config.PASSPORT_CONTRACT_ADDRESS,
+          value: '0x0',
+          data: contracts.passportContract.methods
+            .safeTransferFrom(walletAddress, to, tokenId)
+            .encodeABI(),
+        });
+
+        console.log('All looks good');
         const signedTx =
           await WalletAPIRef.current.eth.accounts.signTransaction(
             {
@@ -261,6 +289,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             },
             `0x${privKey}`
           );
+
+        console.log('Now Forward data biconomy');
         const forwardData = await biconomy.getForwardRequestAndMessageToSign(
           signedTx.rawTransaction
         );
