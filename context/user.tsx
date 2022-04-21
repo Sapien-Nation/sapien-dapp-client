@@ -11,7 +11,7 @@ import type { User } from 'tools/types/user';
 
 export interface Authentication {
   me: User | null;
-  clearSession: () => void;
+  clearSession: (redirect?: string) => void;
   isLoggingIn: boolean;
   setSession: (
     tokens: {
@@ -43,10 +43,10 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const isLoggingIn = data === undefined;
 
-  const clearSession = () => {
+  const clearSession = (redirect = '/') => {
     removeTokens();
     mutate('/api/v3/user/me', null, false);
-    push('/');
+    push(redirect);
   };
 
   const setSession = async (

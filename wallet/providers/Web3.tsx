@@ -107,6 +107,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     };
   })();
 
+  console.log('DELETE THIS BEFORE PRODUCTION');
+  console.log(config);
+  console.log('DELETE THIS BEFORE PRODUCTION');
+
   useEffect(() => {
     const initWeb3WithBiconomy = async () => {
       try {

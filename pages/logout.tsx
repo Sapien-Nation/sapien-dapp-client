@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import * as Sentry from '@sentry/nextjs';
 
 // api
@@ -15,6 +16,7 @@ import { useToast } from 'context/toast';
 
 const LogoutPage: NextPage = () => {
   const toast = useToast();
+  const { query } = useRouter();
   const { clearSession, me } = useAuth();
 
   useEffect(() => {
@@ -27,11 +29,11 @@ const LogoutPage: NextPage = () => {
         }
       }
 
-      clearSession();
+      clearSession((query?.redirect as string) ?? undefined);
     };
 
     logoutUser();
-  }, [clearSession, me, toast]);
+  }, [clearSession, me, query?.redirect, toast]);
 
   return <></>;
 };

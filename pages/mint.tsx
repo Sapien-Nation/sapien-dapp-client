@@ -1,4 +1,5 @@
 import { RefreshIcon } from '@heroicons/react/solid';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
@@ -14,7 +15,7 @@ import { useToast } from 'context/toast';
 
 // types
 import type { NextPage } from 'next';
-import { ProfileTribe } from 'tools/types/tribe';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const FeedbackView = ({ code }: { code: number }) => {
@@ -122,6 +123,13 @@ const Mint = () => {
                   <>Mint Passport</>
                 )}
               </button>
+              <p className="text-xs">
+                Minting Passport as <span>{me.email}</span> wanna use other
+                account?{' '}
+                <Link passHref href="/logout?redirect=/mint">
+                  <a className="font-extrabold">Switch account</a>
+                </Link>
+              </p>
             </div>
           </div>
         );
