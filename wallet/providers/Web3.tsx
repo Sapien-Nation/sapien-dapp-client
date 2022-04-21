@@ -260,11 +260,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         .call();
 
       if (tokenAddress === me.walletAddress) {
-        const metamaskAddress = getMetamaskAddress();
         const gasPrice = await getGasPrice(config.GAS_STATION_URL);
 
         const tx = await contracts.passportContract.methods
-          .safeTransferFrom(me.walletAddress, metamaskAddress, tokenId)
+          .safeTransferFrom(me.walletAddress, to, tokenId)
           .send({
             from: me.walletAddress,
             signatureType: biconomy.EIP712_SIGN,
