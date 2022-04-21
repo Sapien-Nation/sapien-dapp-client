@@ -1,17 +1,15 @@
-import { Network } from '@ethersproject/networks';
+import { Biconomy } from '@biconomy/mexa';
 import * as Sentry from '@sentry/nextjs';
 import _range from 'lodash/range';
-import { ethers } from 'ethers';
 import { BN } from 'ethereumjs-util';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
-import { Contract } from '@ethersproject/contracts';
 
 // api
-import { getGasPrice, connectWallet, getTokenMetadata } from '../api';
+import { getGasPrice, getTokenMetadata } from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -25,13 +23,8 @@ import type { AbiItem } from 'web3-utils';
 import Web3Library from 'web3';
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
-interface Web3Error {
-  message: string;
-  code: number;
-}
-
 interface Web3 {
-  isWeb3Ready: boolean;
+  isReady: boolean;
   walletAPI: {
     handleWithdraw: (toAddress: string, tokenId: number) => Promise<string>;
     handleDeposit: () => Promise<string>;
@@ -39,7 +32,7 @@ interface Web3 {
     getPassportBalance: (address: string) => Promise<number>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
-  web3Error: Web3Error | null;
+  error: any | null;
 }
 
 interface WalletConfig {
@@ -61,11 +54,12 @@ interface Web3ProviderProps {
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 const Web3Context = createContext<Web3>({
-  isWeb3Ready: false,
+  isReady: false,
   walletAPI: null,
-  web3Error: null,
+  error: null,
 });
 
+const debugWeb3 = false;
 const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
 const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
 
@@ -73,10 +67,13 @@ const { useAccounts, useProvider } = metaMaskHooks;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
   const { me } = useAuth();
+  const [error, setError] = useState<Error | null>(null);
+  const [contracts, setContracts] = useState<null | Record<string, any>>(null);
+  const [biconomy, setBiconomy] = useState<any>(null);
+  const WalletAPIRef = useRef(null);
 
   const account = useAccounts();
   const getMetamaskAddress = () => account[0];
-  const metamaskProvider = useProvider();
 
   //----------------------------------------------------------------------------------------------------------------------------
   const config: WalletConfig = (() => {
@@ -87,7 +84,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         RPC_PROVIDER: 'https://polygon-rpc.com/',
         SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
         BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
-        PASSPORT_CONTRACT_ADDRESS: '0x8E2aAf7aCdCFD363d65C86856e9CBeF1EcB238a4', // TODO set when deployed
+        PASSPORT_CONTRACT_ADDRESS: '0xf0b3c046101689bc2d81da72f492a8d2dad3b238', // TODO set when deployed
         BICONOMY_API_KEY: walletBiconomyApiKey,
         EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
         GAS_STATION_URL: 'https://gasstation-mainnet.matic.network/',
@@ -109,32 +106,74 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     };
   })();
 
-  const polygonNetwork: Network = {
-    name: 'matic',
-    chainId: config.POLY_NETWORK_ID,
-    _defaultProvider: (providers) =>
-      new providers.JsonRpcProvider(config.RPC_PROVIDER),
-  };
+  useEffect(() => {
+    const initWeb3WithBiconomy = async () => {
+      try {
+        const biconomy = new Biconomy(
+          new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
+          {
+            walletProvider: window.ethereum,
+            apiKey: config.BICONOMY_API_KEY,
+            debug: debugWeb3,
+          }
+        );
+        setBiconomy(biconomy);
 
-  const ethersProvider = ethers.getDefaultProvider(polygonNetwork);
+        biconomy.onEvent(biconomy.READY, async () => {
+          if (debugWeb3) {
+            console.log('@Biconomy/mexa ready, initializing Web3API');
+          }
 
-  const Web3API = new Web3Library(config.RPC_PROVIDER);
-  const contracts = {
-    passportContract: new Web3API.eth.Contract(
-      PassportContractAbi as Array<AbiItem>,
-      config.PASSPORT_CONTRACT_ADDRESS
-    ),
-    platformSPNContract: new Web3API.eth.Contract(
-      PlatformContractAbi as AbiItem[],
-      config.SPN_TOKEN_ADDRESS
-    ),
-    platformSPNDomainData: {
-      name: 'Sapien Network',
-      version: '1',
-      verifyingContract: config.SPN_TOKEN_ADDRESS,
-      salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(64, '0')}`,
-    },
-  };
+          const biconomyWeb3 = new Web3Library(biconomy);
+          setContracts({
+            passportContract: new biconomyWeb3.eth.Contract(
+              PassportContractAbi as Array<AbiItem>,
+              config.PASSPORT_CONTRACT_ADDRESS
+            ),
+            platformPassportDomainData: {
+              name: 'Sapien Network',
+              version: '1',
+              verifyingContract: config.PASSPORT_CONTRACT_ADDRESS,
+              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
+                64,
+                '0'
+              )}`,
+            },
+            platformSPNContract: new biconomyWeb3.eth.Contract(
+              PlatformContractAbi as AbiItem[],
+              config.SPN_TOKEN_ADDRESS
+            ),
+            platformSPNDomainData: {
+              name: 'Sapien Network',
+              version: '1',
+              verifyingContract: config.SPN_TOKEN_ADDRESS,
+              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
+                64,
+                '0'
+              )}`,
+            },
+          });
+
+          setError(null);
+          WalletAPIRef.current = biconomyWeb3;
+        });
+
+        biconomy.onEvent(biconomy.ERROR, (error, message) => {
+          if (debugWeb3) {
+            console.error('Error initializing @Biconomy/mexa', error, message);
+          }
+
+          Sentry.captureException(error);
+          setError(error);
+        });
+      } catch (err) {
+        setError(err);
+      }
+    };
+
+    initWeb3WithBiconomy();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getWalletBalanceSPN = async () => {
     try {
@@ -212,36 +251,32 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
   const handleWithdraw = async (
-    toAddress: string,
+    to: string,
     tokenId: number
   ): Promise<string> => {
     try {
-      // TODO call wallet API connect to get torus private key
-      const { privKey } = await connectWallet();
+      const tokenAddress = contracts.passportContract.methods
+        .ownerOf(tokenId)
+        .call();
 
-      const signer = new ethers.Wallet(privKey, ethersProvider);
+      if (tokenAddress === me.walletAddress) {
+        const metamaskAddress = getMetamaskAddress();
+        const gasPrice = await getGasPrice(config.GAS_STATION_URL);
 
-      const contract = await new Contract(
-        config.PASSPORT_CONTRACT_ADDRESS,
-        PassportContractAbi,
-        signer
-      );
+        const tx = await contracts.passportContract.methods
+          .safeTransferFrom(me.walletAddress, metamaskAddress, tokenId)
+          .send({
+            from: me.walletAddress,
+            signatureType: biconomy.EIP712_SIGN,
+            gasPrice: Web3Library.utils
+              .toWei(new BN(gasPrice), 'gwei')
+              .toNumber(),
+            gasLimit: config.GAS_LIMIT,
+          });
 
-      const gasPrice = await getGasPrice(config.GAS_STATION_URL);
-
-      const tx = await contract.transferFrom(
-        me.walletAddress,
-        toAddress,
-        tokenId,
-        {
-          gasPrice: Web3Library.utils
-            .toWei(new BN(gasPrice), 'gwei')
-            .toNumber(),
-          gasLimit: config.GAS_LIMIT,
-        }
-      );
-
-      return tx.hash;
+        return tx.transactionHash;
+      }
+      return Promise.reject('"Token does not belong to this wallet."');
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err.message);
@@ -253,21 +288,20 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       const metamaskAddress = getMetamaskAddress();
       const tokens = await getWalletTokens(metamaskAddress);
 
-      const signer = await metamaskProvider.getSigner();
+      const gasPrice = await getGasPrice(config.GAS_STATION_URL);
 
-      const contract = await new Contract(
-        config.PASSPORT_CONTRACT_ADDRESS,
-        PassportContractAbi,
-        signer
-      );
+      const tx = await contracts.passportContract.methods
+        .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
+        .send({
+          from: metamaskAddress,
+          signatureType: biconomy.EIP712_SIGN,
+          gasPrice: Web3Library.utils
+            .toWei(new BN(gasPrice), 'gwei')
+            .toNumber(),
+          gasLimit: config.GAS_LIMIT,
+        });
 
-      const tx = await contract.transferFrom(
-        metamaskAddress,
-        me.walletAddress,
-        tokens[0].id
-      );
-
-      return tx.hash;
+      return tx.transactionHash;
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err);
@@ -277,8 +311,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   return (
     <Web3Context.Provider
       value={{
-        isWeb3Ready: true,
-        web3Error: null,
+        isReady: WalletAPIRef.current !== null,
+        error: error,
         walletAPI: {
           handleWithdraw,
           handleDeposit,
