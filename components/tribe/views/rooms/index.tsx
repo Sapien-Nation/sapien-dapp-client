@@ -236,7 +236,6 @@ const Feed = ({
                   <>
                     {Object.keys(messagesData).map((timestamp) => {
                       const timestampMessages = messagesData[timestamp];
-                      console.log(timestampMessages);
                       return (
                         <>
                           <li key={timestamp}>

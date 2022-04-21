@@ -2,6 +2,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { formatDate } from 'utils/date';
+import { formatTokenID } from 'utils/passport';
+
 // components
 import {
   DialogPassport,
@@ -21,10 +24,10 @@ interface FormValues {
 }
 
 interface Props {
-  passportID: string;
+  tokenID: string;
 }
 
-const PassportPage = ({ passportID }: Props) => {
+const PassportPage = ({ tokenID }: Props) => {
   const [showAnimation, setShowAnimation] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const methods = useForm<FormValues>({
@@ -34,21 +37,20 @@ const PassportPage = ({ passportID }: Props) => {
   useEffect(() => {
     if (showAnimation) {
       setTimeout(() => {
-        setShowAnimation(false);
         setShowDialog(true);
-      }, 4000);
+      }, 8000);
     }
   }, [showAnimation]);
 
   return (
-    <Query api={`/api/v3/passports/${passportID}`}>
+    <Query api={`/api/v3/passport/metadata/${tokenID}`}>
       {(passport: Passport) => {
         return (
           <>
             {showAnimation && (
-              <div className="fixed z-10 inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 transition-opacity">
+              <div className="fixed z-10 inset-0 flex items-center justify-center bg-sapien-neutral-800 bg-opacity-75 transition-opacity">
                 <div className="bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                  <LottiePlayer />
+                  <LottiePlayer width={'1100px'} height={'660px'} />
                 </div>
               </div>
             )}
@@ -62,6 +64,7 @@ const PassportPage = ({ passportID }: Props) => {
                 cancelLabel="Close"
                 showCancel={false}
                 showConfirm={false}
+                showClose={false}
               >
                 <div className="px-8">
                   <FormProvider {...methods}>
@@ -72,9 +75,11 @@ const PassportPage = ({ passportID }: Props) => {
                       <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                         <div className="text-center pt-4 flex flex-col justify-between">
                           <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
-                            <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
+                            <div className="bg-black h-full w-full hexagon flex items-center justify-center">
                               <img
-                                src={passport.image}
+                                src={
+                                  'https://media.discordapp.net/attachments/638413050944159758/966572205901226014/unknown.png'
+                                }
                                 className="-rotate-90 h-full"
                                 alt="Passport Figure generated with Machine Learning"
                               />
@@ -82,38 +87,38 @@ const PassportPage = ({ passportID }: Props) => {
                           </div>
                           <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
                             <span className="hexagon-2 bg-gray-700 block text-gray-400 p-1">
-                              {passport?.displayName}
+                              {passport.displayName}
                             </span>
                           </span>
                         </div>
                         <div className="w-full">
-                          <ul className="flex justify-between text-xs text-center">
+                          <ul className="flex justify-between text-xs text-left">
                             <li>
-                              <span className="block text-gray-400 mb-1">
-                                Passport #
+                              <span className="block font-bold text-gray-400 mb-1">
+                                Passport Number
                               </span>
                               <span className="text-gray-300 font-semibold">
-                                {passport?.passportId ?? '-'}
+                                {formatTokenID(String(passport.passportId))}
                               </span>
                             </li>
                             <li>
-                              <span className="block text-gray-400 mb-1">
+                              <span className="block font-bold text-gray-400 mb-1">
                                 Issue Date
                               </span>
                               <span className="text-gray-300 font-semibold">
-                                {passport?.issueDate ?? '-'}
+                                {formatDate(passport.issueDate, 'LLLL d y')}
                               </span>
                             </li>
                             <li>
-                              <span className="block text-gray-400 mb-1">
+                              <span className="block font-bold text-gray-400 mb-1">
                                 Issuing Authority
                               </span>
                               <span className="text-gray-300 font-semibold">
-                                {passport?.issuingAuthority ?? '-'}
+                                {passport.issuingAuthority}
                               </span>
                             </li>
                           </ul>
-                          <div className="mt-5 flex justify-between gap-5">
+                          <div className="mt-1 flex justify-between gap-5">
                             <div
                               style={{
                                 clipPath:
@@ -134,7 +139,6 @@ const PassportPage = ({ passportID }: Props) => {
                                       value.length > 0 || 'is required',
                                   },
                                 }}
-                                value={passport.displayName}
                               />
                             </div>
                             <div
@@ -157,7 +161,6 @@ const PassportPage = ({ passportID }: Props) => {
                                       value.length > 0 || 'is required',
                                   },
                                 }}
-                                value={passport.username}
                               />
                             </div>
                           </div>
@@ -175,7 +178,6 @@ const PassportPage = ({ passportID }: Props) => {
                               name="title"
                               placeholder="Title"
                               readOnly
-                              value={passport.title}
                             />
                           </div>
                         </div>
@@ -191,7 +193,7 @@ const PassportPage = ({ passportID }: Props) => {
                           name="bio"
                           maxLength={1000}
                           placeholder="Bio"
-                          className="!border-[1px] border-sapien-80 !bg-transparent"
+                          className="!border-[1px] !border-sapien-80 !bg-transparent"
                           readOnly
                           rules={{
                             validate: {
@@ -223,12 +225,12 @@ const PassportPage = ({ passportID }: Props) => {
 const PassportPageProxy: NextPage = () => {
   const { query } = useRouter();
 
-  if (!query.passportID) return null;
+  if (!query.tokenID) return null;
 
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <PassportPage passportID={query.passportID as string} />
+      <PassportPage tokenID={query.tokenID as string} />
     </>
   );
 };

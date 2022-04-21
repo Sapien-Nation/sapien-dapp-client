@@ -15,6 +15,7 @@ interface Props {
   onConfirm?: (event?: unknown) => void;
   showCancel?: boolean;
   showConfirm?: boolean;
+  showClose?: boolean;
   title?: string;
   show: boolean;
 }
@@ -28,6 +29,7 @@ const DialogPassport = ({
   show,
   showCancel = true,
   showConfirm = true,
+  showClose = true,
   onClose,
   onCancel = onClose || (() => null),
   onConfirm,
@@ -108,14 +110,17 @@ const DialogPassport = ({
             <div className="py-20 inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full md:min-w-570">
               <div className="px-4 sm:p-8 pb-4">
                 <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
-                  <button
-                    type="button"
-                    className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
-                    onClick={onCancel}
-                  >
-                    <span className="sr-only">Close</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
-                  </button>
+                  {showClose && (
+                    <button
+                      type="button"
+                      className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                      onClick={onCancel}
+                    >
+                      {}
+                      <span className="sr-only">Close</span>
+                      <XIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                  )}
                 </div>
                 <div className="mt-3 sm:mt-5">
                   <HeadlessDialog.Title

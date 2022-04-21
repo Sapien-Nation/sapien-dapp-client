@@ -1,6 +1,8 @@
 import { useForm, FormProvider } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 
+import { formatDate } from 'utils/date';
+
 // components
 import {
   UserAvatar,
@@ -14,6 +16,9 @@ import { LottiePlayer } from 'lottie';
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
+
+// utils
+import { formatTokenID } from 'utils/passport';
 
 interface FormValues {
   bio: string;
@@ -64,7 +69,6 @@ const ProfileDialog = ({ onClose }: Props) => {
   };
 
   const renderView = () => {
-    console.log(`RENDERING: ${me.passport}`);
     if (me.passport === null) {
       return (
         <Dialog
@@ -136,9 +140,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                   </div>
                   <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
                     <span className="hexagon-2 bg-gray-700 block text-gray-400 p-1">
-                      {me.displayName.replace(' ', '').length
-                        ? me.displayName
-                        : 'Name'}
+                      {me.displayName === ' ' ? 'Name' : me.displayName}
                     </span>
                   </span>
                 </div>
@@ -149,7 +151,9 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Passport #
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport?.passportId ?? '-'}
+                        {me.passport === null
+                          ? '00000000'
+                          : formatTokenID(String(me.passport.passportId))}
                       </span>
                     </li>
                     <li>
@@ -157,7 +161,9 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Issue Date
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport?.issueDate ?? '-'}
+                        {me.passport.issueDate
+                          ? formatDate(me.passport.issueDate, 'LLLL d y')
+                          : '-'}
                       </span>
                     </li>
                     <li>
@@ -165,7 +171,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Issuing Authority
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport?.issuingAuthority ?? '-'}
+                        Sapien Nation
                       </span>
                     </li>
                   </ul>
@@ -247,7 +253,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                   name="bio"
                   maxLength={1000}
                   placeholder="Bio"
-                  className="!border-[1px] border-sapien-80 !bg-transparent"
+                  className="!border-[1px] !border-sapien-80 !bg-transparent"
                   readOnly
                   rules={{
                     validate: {
@@ -276,7 +282,7 @@ const ProfileDialog = ({ onClose }: Props) => {
       {showAnimation && (
         <div className="fixed z-10 inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 transition-opacity">
           <div className="bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <LottiePlayer />
+            <LottiePlayer width={'1100px'} height={'660px'} />
           </div>
         </div>
       )}

@@ -24,7 +24,6 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
   }, []);
 
   const renderView = (profile: PublicProfile) => {
-    console.log(profile.passport);
     if (profile.passport === null || profile.passport === undefined) {
       return (
         <div className="bg-sapien-neutral-600 rounded-xl mb-4">
