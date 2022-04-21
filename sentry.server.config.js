@@ -5,7 +5,7 @@
 import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
-  dsn: 'https://9f7b808280284e358fb721b089712449@o415262.ingest.sentry.io/6346908',
-  enabled: process.env.NEXT_PUBLIC_ENV === 'POC',
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  enabled: process.env.NEXT_PUBLIC_ENV !== 'LOCAL',
   tracesSampleRate: 1.0,
 });

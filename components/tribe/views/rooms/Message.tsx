@@ -79,12 +79,12 @@ const Message = ({
         }
       >
         <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
-          {!isAMessageContinuation
-            ? new Date(createdAt).toLocaleString('en-US', {
+          {isAMessageContinuation
+            ? ''
+            : new Date(createdAt).toLocaleString('en-US', {
                 hour: 'numeric',
                 hour12: true,
-              })
-            : ''}
+              })}
         </span>{' '}
         <Linkify
           tagName="p"

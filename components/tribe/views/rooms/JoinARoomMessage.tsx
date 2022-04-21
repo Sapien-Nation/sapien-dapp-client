@@ -18,7 +18,7 @@ const JoinARoomMessage = ({ createdAt, username }: Props) => {
     return (
       <>
         Hi <span className="font-extrabold text-yellow-500">{username}</span>{' '}
-        welcome to the Room 👋{' '}
+        welcome to the room 👋{' '}
       </>
     );
   };

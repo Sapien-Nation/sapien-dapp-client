@@ -322,7 +322,7 @@ const Room = () => {
   const handleFetchMore = async (cursor: string) => {
     try {
       setLoading(true);
-      mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=50`;
+      mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
       const response = await axios(mutateFetchAPI);
       mutate(
         apiKey,
