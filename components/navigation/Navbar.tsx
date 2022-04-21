@@ -8,15 +8,12 @@ import Link from 'next/link';
 import { useAuth } from 'context/user';
 
 // components
+import { ProfileDialog } from 'components/profile';
 import { Avatar } from 'components/common';
 
 // ui
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-// @ts-ignore
-const ProfileDialog = dynamic<any>(() =>
-  import('components/profile').then((mod) => mod.ProfileDialogPassport)
-);
 
 enum Dialog {
   Profile,
