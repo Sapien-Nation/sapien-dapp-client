@@ -216,7 +216,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
               </div>
               <a
                 className="underline  text-sm flex flex-row items-center gap-2"
-                href={`https://polygonscan.com/tx/${withdrawTXHash}`}
+                href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${withdrawTXHash}`}
                 target="_blank"
                 rel="noreferrer"
               >

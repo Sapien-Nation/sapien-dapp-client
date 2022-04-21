@@ -13,12 +13,15 @@ import { TorusKey } from '@toruslabs/customauth';
 // types
 import type { User } from 'tools/types/user';
 
-const debugTorus = false;
-const walletIsMainnet = Boolean(
-  process.env.NEXT_PUBLIC_WALLET_IS_MAINNET === 'true'
-);
+const debugTorus = Boolean(process.env.NEXT_PUBLIC_DEBUG_TORUS);
 const walletVerifier = process.env.NEXT_PUBLIC_WALLET_VERIFIER;
 const walletSubVerifier = process.env.NEXT_PUBLIC_WALLET_SUB_VERIFIER;
+
+export declare const TORUS_NETWORK: {
+  readonly TESTNET: 'testnet';
+  readonly MAINNET: 'mainnet';
+  readonly CYAN: 'cyan';
+};
 
 interface Torus {
   error: Error | null;
@@ -72,12 +75,10 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
     }
   ) => {
     const TorusDirectSDK = new DirectWebSdk({
-      baseUrl:
-        typeof window === 'undefined'
-          ? '/api/serviceworker'
-          : `${window.location.origin}/api/serviceworker`,
+      baseUrl: process.env.NEXT_PUBLIC_TORUS_SDK_BASE_URL,
       enableLogging: Boolean(debugTorus),
-      network: walletIsMainnet ? 'mainnet' : 'testnet',
+      network: process.env
+        .NEXT_PUBLIC_TORUS_NETWORK as typeof TORUS_NETWORK[keyof typeof TORUS_NETWORK],
     });
     try {
       await TorusDirectSDK.init(initOptions);

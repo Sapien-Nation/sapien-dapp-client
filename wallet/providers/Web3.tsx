@@ -41,7 +41,6 @@ interface WalletConfig {
   POLY_NETWORK_ID: number;
   RPC_PROVIDER: string;
   SPN_TOKEN_ADDRESS: string;
-  BADGE_STORE_ADDRESS: string;
   PASSPORT_CONTRACT_ADDRESS: string;
   BICONOMY_API_KEY: string;
   EXPLORER_BASE_URL: string;
@@ -60,11 +59,9 @@ const Web3Context = createContext<Web3>({
   error: null,
 });
 
-const debugWeb3 = false;
-const walletIsMainnet = process.env.NEXT_PUBLIC_WALLET_IS_MAINNET;
-const walletBiconomyApiKey = process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY;
+const debugWeb3 = Boolean(process.env.NEXT_PUBLIC_DEBUG_BICONOMY);
 
-const { useAccounts, useProvider } = metaMaskHooks;
+const { useAccounts } = metaMaskHooks;
 
 const Web3Provider = ({ children }: Web3ProviderProps) => {
   const { me } = useAuth();
@@ -77,35 +74,18 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const getMetamaskAddress = () => account[0];
 
   //----------------------------------------------------------------------------------------------------------------------------
-  const config: WalletConfig = (() => {
-    if (walletIsMainnet === 'true') {
-      return {
-        MAINNET_NETWORK_ID: 1,
-        POLY_NETWORK_ID: 137,
-        RPC_PROVIDER: 'https://polygon-rpc.com/',
-        SPN_TOKEN_ADDRESS: '0x3Cd92Be3Be24daf6D03c46863f868F82D74905bA', // Mainnet SPN
-        BADGE_STORE_ADDRESS: '0x2ee22E2fFBd1f2450A6879D34172341da31726be',
-        PASSPORT_CONTRACT_ADDRESS: '0xf0b3c046101689bc2d81da72f492a8d2dad3b238', // TODO set when deployed
-        BICONOMY_API_KEY: walletBiconomyApiKey,
-        EXPLORER_BASE_URL: 'https://polygonscan.com/tx/',
-        GAS_STATION_URL: 'https://gasstation-mainnet.matic.network/',
-        GAS_LIMIT: 300000,
-      };
-    }
-
-    return {
-      MAINNET_NETWORK_ID: 5,
-      POLY_NETWORK_ID: 80001,
-      RPC_PROVIDER: 'https://rpc-mumbai.matic.today/',
-      SPN_TOKEN_ADDRESS: '0x2d280CeF1B0Ab6E78a700824Ebe368C2E1B00BEd', // Mumbai SPN
-      BADGE_STORE_ADDRESS: '0x59cD3d76cC9EA4f626629337664A3CbD78F48474',
-      PASSPORT_CONTRACT_ADDRESS: '0xF58c8Fbb8fE6F49E536D4df3A684626261d01a87',
-      BICONOMY_API_KEY: walletBiconomyApiKey,
-      EXPLORER_BASE_URL: 'https://mumbai.polygonscan.com/tx/',
-      GAS_STATION_URL: 'https://gasstation-mumbai.matic.today/',
-      GAS_LIMIT: 30000,
-    };
-  })();
+  const config = {
+    MAINNET_NETWORK_ID: Number(process.env.NEXT_PUBLIC_MAINNET_NETWORK_ID),
+    POLY_NETWORK_ID: Number(process.env.NEXT_PUBLIC_POLY_NETWORK_ID),
+    RPC_PROVIDER: process.env.NEXT_PUBLIC_RPC_PROVIDER,
+    SPN_TOKEN_ADDRESS: process.env.NEXT_PUBLIC_SPN_TOKEN_ADDRESS,
+    PASSPORT_CONTRACT_ADDRESS:
+      process.env.NEXT_PUBLIC_PASSPORT_CONTRACT_ADDRESS,
+    BICONOMY_API_KEY: process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY,
+    EXPLORER_BASE_URL: process.env.NEXT_PUBLIC_EXPLORER_BASE_URL,
+    GAS_STATION_URL: process.env.NEXT_PUBLIC_GAS_STATION_URL,
+    GAS_LIMIT: 30000,
+  };
 
   console.log('DELETE THIS BEFORE PRODUCTION');
   console.log(config);

@@ -430,7 +430,7 @@ const Deposit = ({ handleBack }: Props) => {
             </div>
             <a
               className="underline  text-sm flex flex-row items-center gap-2"
-              href={`https://polygonscan.com/tx/${depositTXHash}`}
+              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${depositTXHash}`}
               target="_blank"
               rel="noreferrer"
             >
