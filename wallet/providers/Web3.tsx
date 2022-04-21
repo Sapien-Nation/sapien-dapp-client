@@ -2,6 +2,7 @@ import { Biconomy } from '@biconomy/mexa';
 import * as Sentry from '@sentry/nextjs';
 import _range from 'lodash/range';
 import { BN } from 'ethereumjs-util';
+import * as sigUtil from 'eth-sig-util';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
 // contracts
@@ -9,7 +10,7 @@ import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
 
 // api
-import { getGasPrice, getTokenMetadata } from '../api';
+import { getGasPrice, getTokenMetadata, connectWallet } from '../api';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -255,23 +256,55 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     tokenId: number
   ): Promise<string> => {
     try {
-      const tokenAddress = contracts.passportContract.methods
+      const tokenAddress = await contracts.passportContract.methods
         .ownerOf(tokenId)
         .call();
 
       if (tokenAddress === me.walletAddress) {
+        const { privKey } = await connectWallet();
+        const from = me.walletAddress;
+
         const gasPrice = await getGasPrice(config.GAS_STATION_URL);
 
-        const tx = await contracts.passportContract.methods
-          .safeTransferFrom(me.walletAddress, to, tokenId)
-          .send({
-            from: me.walletAddress,
-            signatureType: biconomy.EIP712_SIGN,
-            gasPrice: Web3Library.utils
-              .toWei(new BN(gasPrice), 'gwei')
-              .toNumber(),
-            gasLimit: config.GAS_LIMIT,
-          });
+        let txParams = {
+          from,
+          gasPrice: Web3Library.utils
+            .toWei(new BN(gasPrice), 'gwei')
+            .toNumber(),
+          gasLimit: config.GAS_LIMIT,
+          to: config.PASSPORT_CONTRACT_ADDRESS,
+          value: '0x0',
+          data: contracts.passportContract.methods
+            .safeTransferFrom(from, to, tokenId)
+            .encodeABI(),
+        };
+
+        const signedTx =
+          await WalletAPIRef.current.eth.accounts.signTransaction(
+            txParams,
+            `0x${privKey}`
+          );
+        const forwardData = await biconomy.getForwardRequestAndMessageToSign(
+          signedTx.rawTransaction
+        );
+
+        const signature = sigUtil.signTypedMessage(
+          Buffer.from(privKey, 'hex'),
+          { data: forwardData.eip712Format },
+          'V4'
+        );
+
+        let rawTransaction = signedTx.rawTransaction;
+
+        let data = {
+          signature: signature,
+          forwardRequest: forwardData.request,
+          rawTransaction: rawTransaction,
+          signatureType: biconomy.EIP712_SIGN,
+        };
+
+        // Get the transaction Hash using the Event Emitter returned
+        const tx = await WalletAPIRef.current.eth.sendSignedTransaction(data);
 
         return tx.transactionHash;
       }
