@@ -1,4 +1,4 @@
-import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
+import { RefreshIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
 
 // components
