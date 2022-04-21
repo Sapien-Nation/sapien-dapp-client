@@ -243,9 +243,8 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       if (tokenAddress === walletAddress) {
         const { privKey } = await connectWallet();
 
-        const gasPrice = await getGasPrice();
-
-        console.log('Getting Gas Price');
+        const gasPrice = await getGasPrice(config.GAS_LIMIT / 4);
+        console.log('Getting gwei from ', gasPrice);
         const testGasPrice = Web3Library.utils
           .toWei(new BN(gasPrice), 'gwei')
           .toNumber();
@@ -311,7 +310,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
         return tx.transactionHash;
       }
-      return Promise.reject('"Token does not belong to this wallet."');
+      return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
       Sentry.captureException(err);
       return Promise.reject(err.message);

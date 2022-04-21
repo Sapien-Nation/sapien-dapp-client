@@ -12,10 +12,10 @@ export const connectWallet = () =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getGasPrice = () =>
+export const getGasPrice = (fallbackGasPrice = 7500) =>
   axios
     .get(gasStationUrl)
-    .then((response) => response.data?.fast)
+    .then((response) => response.data?.fast?.maxFee ?? fallbackGasPrice)
     .catch((_err) => '50'); // default value
 
 export const getTokenMetadata = (tokenId): Promise<Token> =>
