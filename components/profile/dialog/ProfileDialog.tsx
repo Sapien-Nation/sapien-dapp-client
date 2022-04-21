@@ -28,15 +28,11 @@ const form = 'updat-profile-form';
 
 const ProfileDialog = ({ onClose }: Props) => {
   const { me } = useAuth();
-  console.log(`PASSPORT? ${me.passport}`);
-  me.passport = true;
 
   const [showAnimation, setShowAnimation] = useState(
     me.passport ? true : false
   );
   const [showDialog, setShowDialog] = useState(me.passport ? false : true);
-
-  console.log(`SHOW ANIMATION? ${showAnimation}`);
 
   useEffect(() => {
     if (showAnimation) {
