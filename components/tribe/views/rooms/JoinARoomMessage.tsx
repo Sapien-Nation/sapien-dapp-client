@@ -4,22 +4,20 @@ import { ArrowNarrowRightIcon } from '@heroicons/react/solid';
 import { formatDateRelative } from 'utils/date';
 
 // types
-import type { RoomMessage } from 'tools/types/room';
+import type { ISOString } from 'tools/types/common';
 
 interface Props {
-  message: RoomMessage;
+  createdAt: ISOString;
+  username: string;
 }
 
-const JoinARoomMessage = ({ message }: Props) => {
+const JoinARoomMessage = ({ createdAt, username }: Props) => {
   const renderRandomMessage = () => {
     // TODO figured out message
-    const hour = new Date(message.createdAt).getHours();
+    const hour = new Date(createdAt).getHours();
     return (
       <>
-        Hi{' '}
-        <span className="font-extrabold text-yellow-500">
-          {message.sender.username}
-        </span>{' '}
+        Hi <span className="font-extrabold text-yellow-500">{username}</span>{' '}
         welcome to the Room 👋{' '}
       </>
     );
@@ -33,9 +31,7 @@ const JoinARoomMessage = ({ message }: Props) => {
         </div>
         <p className="text-sm text-white/80 group whitespace-pre-line">
           {renderRandomMessage()}
-          <span className="ml-2 text-xs">
-            {formatDateRelative(message.createdAt)}
-          </span>
+          <span className="ml-2 text-xs">{formatDateRelative(createdAt)}</span>
         </p>{' '}
       </div>
     </li>

@@ -252,7 +252,8 @@ const Feed = ({
                             if (message.type === MessageType.Join) {
                               return (
                                 <JoinARoomMessage
-                                  message={message}
+                                  createdAt={message.createdAt}
+                                  username={message.sender.username}
                                   key={message.id}
                                 />
                               );

@@ -136,7 +136,9 @@ const Message = ({
                 className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
                 data-testid="message-avatar"
               >
-                {displayName?.[0]?.toUpperCase() || username[0].toUpperCase()}
+                {displayName === ' '
+                  ? username[0].toUpperCase()
+                  : displayName?.[0]?.toUpperCase()}
               </div>
             )}
           </>
@@ -145,7 +147,7 @@ const Message = ({
           {isAMessageContinuation && (
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-extrabold">
-                {displayName || username}
+                {displayName === ' ' ? username : displayName}
               </h3>
               <time
                 data-testid="message-timestamp"
