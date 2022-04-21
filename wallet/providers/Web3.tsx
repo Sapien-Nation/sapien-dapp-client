@@ -44,7 +44,6 @@ interface WalletConfig {
   PASSPORT_CONTRACT_ADDRESS: string;
   BICONOMY_API_KEY: string;
   EXPLORER_BASE_URL: string;
-  GAS_STATION_URL: string;
   GAS_LIMIT: number;
 }
 
@@ -248,7 +247,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         const { privKey } = await connectWallet();
         const from = me.walletAddress;
 
-        const gasPrice = await getGasPrice(config.GAS_STATION_URL);
+        const gasPrice = await getGasPrice();
 
         const signedTx =
           await WalletAPIRef.current.eth.accounts.signTransaction(
@@ -298,7 +297,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       const metamaskAddress = getMetamaskAddress();
       const tokens = await getWalletTokens(metamaskAddress);
 
-      const gasPrice = await getGasPrice(config.GAS_STATION_URL);
+      const gasPrice = await getGasPrice();
 
       const tx = await contracts.passportContract.methods
         .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
