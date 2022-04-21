@@ -20,7 +20,7 @@ interface Props {
 }
 
 const DialogPassport = ({
-  bgOpacity = 'bg-opacity-75',
+  bgOpacity = 'bg-opacity-0',
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
   isFetching = false,
@@ -105,16 +105,7 @@ const DialogPassport = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div
-              className="py-20 inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden bg-transparent transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full md:min-w-570"
-              style={{
-                backgroundImage: `url('/images/passport_bg.svg')`,
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: '155% auto',
-                backgroundAttachment: 'fixed',
-                backgroundPosition: 'center center',
-              }}
-            >
+            <div className="py-20 inline-block align-bottom rounded-lg pt-5 text-left overflow-hidden transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full md:min-w-570">
               <div className="px-4 sm:p-8 pb-4">
                 <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                   <button

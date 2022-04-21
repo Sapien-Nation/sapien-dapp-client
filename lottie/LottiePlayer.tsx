@@ -17,7 +17,7 @@ const LottiePlayer = ({
     <Lottie
       animationData={lottieJson}
       play
-      loop
+      loop={false}
       style={{ margin, width, height }}
     />
   );

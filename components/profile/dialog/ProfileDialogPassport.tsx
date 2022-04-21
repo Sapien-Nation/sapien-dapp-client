@@ -33,9 +33,9 @@ const ProfileDialog = ({ onClose }: Props) => {
   useEffect(() => {
     if (showAnimation) {
       setTimeout(() => {
-        setShowAnimation(false);
+        //setShowAnimation(false);
         setShowDialog(true);
-      }, 4000);
+      }, 7000);
     }
   }, [showAnimation]);
 
