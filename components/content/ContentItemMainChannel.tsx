@@ -3,11 +3,15 @@ import Link from 'next/link';
 // constants
 import { ContentMimeType } from 'tools/constants/content';
 
+// components
+import { UserAvatar } from 'components/common';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
+import type { User } from 'tools/types/user';
 
 interface Props {
   content: ContentType;
@@ -17,7 +21,7 @@ interface Props {
 const ContentItemMainChannel = ({
   content: {
     id,
-    owner: { avatar, displayName },
+    owner: { avatar, displayName, userName },
     createdAt,
     body,
     imagePreview,
@@ -47,18 +51,16 @@ const ContentItemMainChannel = ({
               body
             )}
             <div className="flex items-center gap-2">
-              <div className="flex gap-1">
-                {avatar ? (
-                  <img
-                    className="w-5 h-5 object-cover rounded-full"
-                    src={avatar}
-                    alt="Sapien Post Image"
-                  />
-                ) : (
-                  <div className="w-5 h-5 bg-sapien-neutral-200 rounded-full flex items-center justify-center font-extrabold text-sm">
-                    {displayName[0].toUpperCase()}
-                  </div>
-                )}
+              <div className="flex gap-1 items-center">
+                <UserAvatar
+                  user={
+                    {
+                      username: userName,
+                      avatar,
+                      displayName,
+                    } as User
+                  }
+                />
                 <h3 className="text-sm font-medium text-gray-400">
                   {displayName}
                 </h3>

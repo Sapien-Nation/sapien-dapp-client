@@ -10,7 +10,7 @@ import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 
 // components
-import { Avatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -66,17 +66,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     <>
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
-        {me.avatar ? (
-          <img
-            className="self-start inline-block h-10 w-10 rounded-full mr-4"
-            src={me.avatar}
-            alt=""
-          />
-        ) : (
-          <div className="self-start inline-block h-10 w-10 rounded-full mr-4">
-            <Avatar />
-          </div>
-        )}
+        <div className="mr-4">
+          <UserAvatar user={me} />
+        </div>
         <form
           id="room-editor"
           className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2"

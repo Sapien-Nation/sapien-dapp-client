@@ -53,27 +53,31 @@ const MainChannel = () => {
 
   return (
     <>
+      <SEO title={tribe.name} />
+      <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-        <SEO title={tribe.name} />
-        <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
         <Query
           api={`/api/v3/tribe/${tribeID}`}
           loader={<ChannelHeaderPlaceholder />}
         >
-          {(tribe: MainFeedTribe) => <MainChannelHeader tribe={tribe} />}
+          {(tribeInfo: MainFeedTribe) => (
+            <>
+              <MainChannelHeader tribe={tribeInfo} />
+              <div className="mt-4 min-h-400">
+                <ul>
+                  {tribeInfo.identifier === 'sapien' ? (
+                    <li>
+                      <ContentItemMainChannel
+                        content={welcomeMessage}
+                        tribeID={tribeID as string}
+                      />
+                    </li>
+                  ) : null}
+                </ul>
+              </div>
+            </>
+          )}
         </Query>
-        <div className="mt-4 min-h-400">
-          <ul>
-            {tribe.identifier === 'sapien' ? (
-              <li>
-                <ContentItemMainChannel
-                  content={welcomeMessage}
-                  tribeID={tribeID as string}
-                />
-              </li>
-            ) : null}
-          </ul>
-        </div>
       </div>
 
       {/* Dialogs */}
