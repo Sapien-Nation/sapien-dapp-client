@@ -266,22 +266,20 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
         const gasPrice = await getGasPrice(config.GAS_STATION_URL);
 
-        let txParams = {
-          from,
-          gasPrice: Web3Library.utils
-            .toWei(new BN(gasPrice), 'gwei')
-            .toNumber(),
-          gasLimit: config.GAS_LIMIT,
-          to: config.PASSPORT_CONTRACT_ADDRESS,
-          value: '0x0',
-          data: contracts.passportContract.methods
-            .safeTransferFrom(from, to, tokenId)
-            .encodeABI(),
-        };
-
         const signedTx =
           await WalletAPIRef.current.eth.accounts.signTransaction(
-            txParams,
+            {
+              from,
+              gasPrice: Web3Library.utils
+                .toWei(new BN(gasPrice), 'gwei')
+                .toNumber(),
+              gasLimit: config.GAS_LIMIT,
+              to: config.PASSPORT_CONTRACT_ADDRESS,
+              value: '0x0',
+              data: contracts.passportContract.methods
+                .safeTransferFrom(from, to, tokenId)
+                .encodeABI(),
+            },
             `0x${privKey}`
           );
         const forwardData = await biconomy.getForwardRequestAndMessageToSign(
@@ -294,17 +292,13 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           'V4'
         );
 
-        let rawTransaction = signedTx.rawTransaction;
-
-        let data = {
+        // Get the transaction Hash using the Event Emitter returned
+        const tx = await WalletAPIRef.current.eth.sendSignedTransaction({
           signature: signature,
           forwardRequest: forwardData.request,
-          rawTransaction: rawTransaction,
+          rawTransaction: signedTx.rawTransaction,
           signatureType: biconomy.EIP712_SIGN,
-        };
-
-        // Get the transaction Hash using the Event Emitter returned
-        const tx = await WalletAPIRef.current.eth.sendSignedTransaction(data);
+        });
 
         return tx.transactionHash;
       }
