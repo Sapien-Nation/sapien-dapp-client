@@ -83,7 +83,9 @@ const MainChannelHeader = ({ tribe }: Props) => {
         </div>
       </div>
       {tribe.description && (
-        <p className="ml-8 mt-8 text-gray-500">{tribe.description}</p>
+        <p className="ml-8 mt-8 text-gray-500 whitespace-pre-line">
+          {tribe.description}
+        </p>
       )}
     </div>
   );
