@@ -20,6 +20,7 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports = process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN
-  ? withPreact(withSentryConfig(moduleExports, sentryWebpackPluginOptions))
-  : moduleExports;
+const sentryDisabledFlagForRelease = true;
+module.exports = sentryDisabledFlagForRelease
+  ? moduleExports
+  : withPreact(withSentryConfig(moduleExports, sentryWebpackPluginOptions));
