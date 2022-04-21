@@ -97,11 +97,11 @@ const Mint = () => {
             </div>
             <div className="relative flex justify-center items-center flex-col h-full w-full gap-4">
               <h4 className="text-3xl sm:text-5xl font-extrabold bg-sapien-80">
-                Join the Sapien Nation
+                Find your tribe and ignite the new renaissance!
               </h4>
               <p>
-                Click on the text below to mint your passport and start the
-                awesome experience of the first Metaverse Newspaper{' '}
+                Click below to mint your passport. You will be redirected to the
+                Sapien Network private beta.{' '}
               </p>
               <button
                 type="button"
