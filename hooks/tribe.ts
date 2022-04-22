@@ -127,6 +127,11 @@ export const useGetCurrentView = (
       name: 'content',
       id: 'content',
     },
+    {
+      type: View.Passport,
+      name: 'passport',
+      id: 'passport',
+    },
     ...channels,
     ...rooms,
   ];

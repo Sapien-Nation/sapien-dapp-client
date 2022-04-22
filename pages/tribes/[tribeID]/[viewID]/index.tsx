@@ -7,7 +7,13 @@ import { View } from 'constants/tribe';
 
 // components
 import { SEO, ErrorView, NotFound } from 'components/common';
-import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
+import {
+  Channel,
+  ContentView,
+  MainChannel,
+  PassportView,
+  RoomView,
+} from 'components/tribe';
 
 // hooks
 import { useGetCurrentView } from 'hooks/tribe';
@@ -25,6 +31,8 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
   const renderView = () => {
     switch (view.type) {
+      case View.Passport:
+        return <PassportView />;
       case View.Content:
         return <ContentView />;
       case View.Room:

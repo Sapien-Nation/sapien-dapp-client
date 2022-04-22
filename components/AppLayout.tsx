@@ -45,8 +45,8 @@ const AppLayout = ({ children }: Props) => {
     return children;
   }
 
-  // Passports View
-  if (pathname.startsWith('/passports')) return children;
+  // Passport View
+  if (pathname.startsWith('/passport')) return children;
 
   // Mint View
   if (pathname.startsWith('/mint')) return children;

@@ -4,4 +4,5 @@ export enum View {
   NotFound,
   MainChannel,
   Room,
+  Passport,
 }
