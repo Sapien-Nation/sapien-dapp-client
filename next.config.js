@@ -20,6 +20,8 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports = Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
+console.log('reading envs');
+console.log(process.env);
+module.exports = false
   ? withPreact(withSentryConfig(moduleExports, sentryWebpackPluginOptions))
   : moduleExports;
