@@ -27,7 +27,7 @@ const ErrorPage: NextPage = () => {
   return (
     <>
       <SEO title="404" />
-      <div className="text-center h-full w-full flex justify-center">
+      <div className="text-center h-full w-full flex justify-center p-8">
         <div className="flex flex-col items-center">
           <div className="flex-shrink-0 pt-16 mt-6">
             <img
@@ -57,18 +57,16 @@ const ErrorPage: NextPage = () => {
                 className="mt-4 border-t border-b border-gray-800 divide-y divide-gray-800"
               >
                 {links.map((link, linkIdx) => (
-                  <li
-                    key={linkIdx}
-                  >
+                  <li key={linkIdx}>
                     <Link href={link.path} passHref>
                       <a className="relative py-6 flex items-start space-x-4">
                         <div className="flex-shrink-0">
-                        <span className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-50">
-                          <link.icon
-                            className="h-6 w-6 text-indigo-700"
-                            aria-hidden="true"
-                          />
-                        </span>
+                          <span className="flex items-center justify-center h-12 w-12 rounded-lg bg-indigo-50">
+                            <link.icon
+                              className="h-6 w-6 text-indigo-700"
+                              aria-hidden="true"
+                            />
+                          </span>
                         </div>
                         <div className="min-w-0 flex-1 text-left">
                           <h3 className="text-base font-medium text-white">

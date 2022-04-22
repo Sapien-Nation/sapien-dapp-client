@@ -66,26 +66,24 @@ const Navbar = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col text-left gap-1 mt-2">
+                  <Link
+                    href={`/tribes/${query.tribeID}/passport?tokenID=${2}`}
+                    passHref
+                  >
+                    <a className="font-medium text-sm text-white mt-2">
+                      View Passport
+                    </a>
+                  </Link>
+                  {passport?.tokenId ? (
                     <Link
-                      href={`/tribes/${query.tribeID}/passport?tokenID=${2}`}
+                      href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
                       passHref
                     >
-                      <a className="font-medium text-sm text-white">
+                      <a className="font-medium text-sm text-white mt-2">
                         View Passport
                       </a>
                     </Link>
-                    {passport?.tokenId ? (
-                      <Link
-                        href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
-                        passHref
-                      >
-                        <a className="font-medium text-sm text-white">
-                          View Passport
-                        </a>
-                      </Link>
-                    ) : null}
-                  </div>
+                  ) : null}
                   <div className="mt-4 text-left">
                     <Link href="/logout">
                       <a className="font-medium text-sm text-purple-600 hover:text-purple-500 flex">
@@ -128,7 +126,7 @@ const Navbar = () => {
                         </a>
                         <a
                           href="https://common.sapien.network/privacy.html"
-                          className="font-medium text-sm text-white"
+                          className="font-medium text-sm text-white mt-2"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -136,7 +134,7 @@ const Navbar = () => {
                         </a>
                         <a
                           href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
-                          className="font-medium text-sm text-white"
+                          className="font-medium text-sm text-white mt-2"
                           target="_blank"
                           rel="noreferrer"
                         >
@@ -144,7 +142,7 @@ const Navbar = () => {
                         </a>
                         <a
                           href="https://common.sapien.network/dmca.html"
-                          className="font-medium text-sm text-white"
+                          className="font-medium text-sm text-white mt-2"
                           target="_blank"
                           rel="noreferrer"
                         >

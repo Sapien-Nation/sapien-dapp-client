@@ -1,9 +1,10 @@
 import { CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { LogoutIcon } from '@heroicons/react/solid';
+import { LogoutIcon, CogIcon } from '@heroicons/react/solid';
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
@@ -31,6 +32,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const { me } = useAuth();
+  const { query } = useRouter();
   const passport = usePassport();
 
   return (
@@ -97,47 +99,16 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                         </a>
                       </Link>
                     </div>
-                    <div className="flex flex-col text-left mt-4">
-                      {passport?.tokenId ? (
-                        <Link href={`/passport/${passport.tokenId}`} passHref>
-                          <a className="font-medium text-sm text-white text-left mb-2">
-                            View Passport
-                          </a>
-                        </Link>
-                      ) : null}
-                      <a
-                        href="https://common.sapien.network/terms.html"
-                        className="font-medium text-sm text-white"
-                        target="_blank"
-                        rel="noreferrer"
+                    {passport?.tokenId ? (
+                      <Link
+                        href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
+                        passHref
                       >
-                        Terms of Service
-                      </a>
-                      <a
-                        href="https://common.sapien.network/privacy.html"
-                        className="mt-2 font-medium text-sm text-white"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Privacy Policy
-                      </a>
-                      <a
-                        href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
-                        className="mt-2 font-medium text-sm text-white"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Content Policy
-                      </a>
-                      <a
-                        href="https://common.sapien.network/dmca.html"
-                        className="mt-2 font-medium text-sm text-white"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        DMCA
-                      </a>
-                    </div>
+                        <a className="font-medium text-sm text-white mt-4">
+                          View Passport
+                        </a>
+                      </Link>
+                    ) : null}
                     <div className="mt-4 text-left">
                       <Link href="/logout">
                         <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
@@ -165,6 +136,64 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                 </span>
               </Menu.Button>
             </div>
+          </Menu>
+          <Menu as="div">
+            {({ open }) => (
+              <>
+                <div>
+                  <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="h-full">
+                      <div className="flex flex-col text-left gap-1 mt-2">
+                        <a
+                          href="https://common.sapien.network/terms.html"
+                          className="font-medium text-sm text-white"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Terms of Service
+                        </a>
+                        <a
+                          href="https://common.sapien.network/privacy.html"
+                          className="font-medium text-sm text-white mt-2"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Privacy Policy
+                        </a>
+                        <a
+                          href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
+                          className="font-medium text-sm text-white mt-2"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Content Policy
+                        </a>
+                        <a
+                          href="https://common.sapien.network/dmca.html"
+                          className="font-medium text-sm text-white mt-2"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          DMCA
+                        </a>
+                      </div>
+                    </div>
+                  </Menu.Items>
+                </div>
+
+                <Menu.Button
+                  type="button"
+                  className={`${
+                    open ? 'bg-gray-800' : ''
+                  } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                >
+                  <>
+                    <span className="sr-only">View Policies</span>
+                    <CogIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </Menu.Button>
+              </>
+            )}
           </Menu>
         </div>
       </div>
