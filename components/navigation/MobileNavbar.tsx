@@ -86,16 +86,17 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       <div className="px-3 py-3">
                         <UserAvatar user={me} passport={passport} />
                       </div>
-                      <Link href="/profile" passHref>
-                        <a className="flex flex-col flex-wrap break-words">
-                          <span className="text-xs truncate w-30">
-                            @{me.username}
-                          </span>
-                          <span className="truncate w-32 pr-2">
-                            {me.displayName}
-                          </span>
-                        </a>
-                      </Link>
+                      <a
+                        className="flex flex-col flex-wrap break-words"
+                        onClick={() => setDialog(Dialog.Profile)}
+                      >
+                        <span className="text-xs truncate w-30">
+                          @{me.username}
+                        </span>
+                        <span className="truncate w-32 pr-2">
+                          {me.displayName}
+                        </span>
+                      </a>
                     </div>
                     <div className="flex flex-col text-left mt-4">
                       {passport?.tokenId ? (
