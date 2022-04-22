@@ -110,8 +110,8 @@ const AppLayout = ({ children }: Props) => {
                     alt="sapien"
                   />
                   <span className="text-white text-sm text-center">
-                    Do you know that there was a time where a huge gorila look
-                    into the eyes to the Wall street bull?{' '}
+                    Did you know that on October 18, 2021, our giant bronze
+                    statue of Harambe stared down the Bull of Wall Street?{' '}
                   </span>
                 </div>
               </div>
