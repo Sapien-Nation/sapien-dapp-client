@@ -66,14 +66,6 @@ const Navbar = () => {
                       </span>
                     </div>
                   </div>
-                  <Link
-                    href={`/tribes/${query.tribeID}/passport?tokenID=${2}`}
-                    passHref
-                  >
-                    <a className="font-medium text-sm text-white mt-2">
-                      View Passport
-                    </a>
-                  </Link>
                   {passport?.tokenId ? (
                     <Link
                       href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}

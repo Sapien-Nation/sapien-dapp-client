@@ -41,7 +41,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
     defaultValues: {
       displayName: passport.displayName,
       username: passport.username,
-      bio: 'No Bio yet, comming soon...',
+      bio: 'Coming soon!',
       title: 'Founding Member of the Sapien Nation',
     },
   });
@@ -103,7 +103,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                         Passport Number
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {query.tokenID}
+                        {passport.tokenId}
                       </span>
                     </li>
                     <li>
@@ -231,7 +231,7 @@ const PassportTokenIDPageProxy: NextPage = () => {
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <Query api={`/api/v3/passport/metadata/${query.tokenID}`}>
+      <Query api={`/api/v3/passports/${query.tokenID}`}>
         {(passport: Passport) => {
           if (passport === null) {
             return <Redirect path="" />;

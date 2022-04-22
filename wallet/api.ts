@@ -26,7 +26,7 @@ export const getGasPrice = (fallbackGasPrice = 7500) =>
       }
       return fallbackGasPrice;
     })
-    .catch((_err) => '50'); // default value
+    .catch((_err) => fallbackGasPrice);
 
 export const getTokenMetadata = (tokenId): Promise<Token> =>
   instance

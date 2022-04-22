@@ -14,7 +14,7 @@ import { useWeb3 } from 'wallet/providers';
 
 // types
 import type { Token } from '../../types';
-import { ExternalLinkIcon } from '@heroicons/react/solid';
+import { ExternalLinkIcon, XCircleIcon } from '@heroicons/react/solid';
 
 interface Props {
   handleBack: () => void;
@@ -26,6 +26,7 @@ enum View {
   Form,
   Home,
   Success,
+  WithdrawError,
 }
 
 interface ForgotPasswordFormValues {
@@ -35,6 +36,7 @@ interface ForgotPasswordFormValues {
 const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
   const [view, setView] = useState(View.Home);
   const [withdrawTXHash, setWithdrawTXHash] = useState('');
+  const [withdrawTXErrorHash, setWithdrawTXErrorHash] = useState('');
   const [clipboardWalletText, setClipboardWalletText] = useState('');
 
   const { walletAPI } = useWeb3();
@@ -69,6 +71,11 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
   const onSubmit = async ({ address }: ForgotPasswordFormValues) => {
     try {
       const hash = await walletAPI.handleWithdraw(address, token.id);
+
+      if (hash === 'Some Error From TX Error') {
+        setWithdrawTXErrorHash(hash);
+        setView(View.WithdrawError);
+      }
 
       setWithdrawTXHash(hash);
       setView(View.Success);
@@ -203,7 +210,35 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
             </div>
           </div>
         );
-
+      case View.WithdrawError:
+        return (
+          <>
+            <div className="flex justify-between items-center">
+              <h5 className="text-xl text-red-400 font-extrabold tracking-wide flex items-center gap-2">
+                Deposit Error
+                <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+              </h5>
+            </div>
+            <a
+              className="underline  text-sm flex flex-row items-center gap-2"
+              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${withdrawTXErrorHash}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              See Transaction Error Details{' '}
+              <ExternalLinkIcon className="w-5 h-5" />
+            </a>
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setView(View.Form)}
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Try Again
+              </button>
+            </div>
+          </>
+        );
       case View.Success:
         return (
           <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">

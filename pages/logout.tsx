@@ -15,7 +15,6 @@ import { NextPage } from 'next';
 import { useToast } from 'context/toast';
 
 const LogoutPage: NextPage = () => {
-  const toast = useToast();
   const { query } = useRouter();
   const { clearSession, me } = useAuth();
 
@@ -32,10 +31,28 @@ const LogoutPage: NextPage = () => {
       clearSession((query?.redirect as string) ?? undefined);
     };
 
-    logoutUser();
-  }, [clearSession, me, query?.redirect, toast]);
+    setTimeout(() => {
+      logoutUser();
+    }, 2000);
+  }, []);
 
-  return <></>;
+  return (
+    <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+      <div className="absolute inset-0">
+        <img
+          className="h-full w-full object-cover"
+          src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+          alt="People working on laptops"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+      </div>
+      <div className="relative flex justify-center items-center flex-col h-full w-full gap-4">
+        <h4 className="text-3xl sm:text-5xl font-extrabold bg-sapien-80 animate-pulse">
+          Closing Session.
+        </h4>
+      </div>
+    </div>
+  );
 };
 
 export default LogoutPage;
