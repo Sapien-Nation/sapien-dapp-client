@@ -7,7 +7,6 @@ import { formatDate } from 'utils/date';
 
 // components
 import {
-  DialogPassport,
   Query,
   Redirect,
   SEO,
@@ -15,17 +14,15 @@ import {
   TextInput,
 } from 'components/common';
 
+// utils
+import { formatAvatarName, formatTokenID } from 'utils/passport';
+
 // types
 import type { NextPage } from 'next';
 import type { Passport } from 'tools/types/passport';
 
 // assets
 import lottieJson from 'public/static/passport.json';
-
-const formatAvatarName = (name: string) => {
-  const maxLength = 14;
-  return name.length > maxLength ? name.slice(0, maxLength) + '...' : name;
-};
 
 interface Props {
   passport: Passport;
@@ -96,7 +93,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                               Passport Number
                             </span>
                             <span className="text-gray-300 font-semibold">
-                              {query.tokenID}
+                              {formatTokenID(Number(query.tokenID))}
                             </span>
                           </li>
                           <li>
