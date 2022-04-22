@@ -9,8 +9,8 @@ interface Props {
   passport?: UserPassport;
 }
 
-const UserAvatar = ({ user, passport }: Props) => {
-  if (passport.image) {
+const UserAvatar = ({ user, passport = null }: Props) => {
+  if (passport) {
     return (
       <img
         className="w-10 h-10 rounded-full flex-shrink-0"
