@@ -115,6 +115,7 @@ const PassportPage = ({ passportID }: Props) => {
                                 Passport Number
                               </span>
                               <span className="text-gray-300 font-semibold">
+                                {/* @ts-ignore */}
                                 {formatTokenID(String(passport.tokenId))}
                               </span>
                             </li>
