@@ -8,3 +8,8 @@ export const formatTokenID = (tokenId: string) => {
 
   return formatted;
 };
+
+export const formatAvatarName = (name: string) => {
+  const maxLength = 14;
+  return name.length > maxLength ? name.slice(0, maxLength) + '...' : name;
+};
