@@ -7,6 +7,7 @@ import { ErrorView } from './views';
 import type { SWRConfiguration, Key } from 'swr';
 
 interface Props {
+  allowNullable?: boolean;
   api: Key;
   children?: Function | null;
   empty?: React.ReactNode;
@@ -21,6 +22,7 @@ export type Error = {
 };
 
 const Query = ({
+  allowNullable = false,
   api,
   children,
   empty,
@@ -32,11 +34,13 @@ const Query = ({
   const { data, error, isValidating, mutate } = useSWR(api, options);
 
   if (api !== null) {
-    if ((!data && !error) || (showValidating && isValidating)) {
-      return loader;
-    }
-    if (!error && data.length === 0 && Boolean(empty)) {
-      return empty;
+    if (allowNullable === false) {
+      if ((!data && !error) || (showValidating && isValidating)) {
+        return loader;
+      }
+      if (!error && data.length === 0 && Boolean(empty)) {
+        return empty;
+      }
     }
   }
 
