@@ -47,8 +47,8 @@ const LogoutPage: NextPage = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
       </div>
       <div className="relative flex justify-center items-center flex-col h-full w-full gap-4">
-        <h4 className="text-3xl sm:text-5xl font-extrabold bg-sapien-80 animate-pulse">
-          Closing Session.
+        <h4 className="text-3xl sm:text-5xl font-extrabold ">
+          See you later 👋
         </h4>
       </div>
     </div>
