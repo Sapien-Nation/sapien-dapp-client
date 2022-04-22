@@ -67,14 +67,6 @@ const Navbar = () => {
                     </div>
                   </div>
                   <div className="flex flex-col text-left gap-1 mt-2">
-                    <Link
-                      href={`/tribes/${query.tribeID}/passport?tokenID=${2}`}
-                      passHref
-                    >
-                      <a className="font-medium text-sm text-white">
-                        View Passport
-                      </a>
-                    </Link>
                     {passport?.tokenId ? (
                       <Link
                         href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
