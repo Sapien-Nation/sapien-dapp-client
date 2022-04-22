@@ -18,7 +18,7 @@ const Wallet = dynamic(() => import('wallet/Wallet'));
 const Navbar = () => {
   const { me } = useAuth();
   const passport = usePassport();
-  console.log(passport);
+
   return (
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
@@ -66,14 +66,13 @@ const Navbar = () => {
                     </div>
                   </div>
                   <div className="flex flex-col text-left mt-4">
-                    {passport && (
-                      <Link href={`/passport/${passport.tokenID}`} passHref>
+                    {passport?.tokenId ? (
+                      <Link href={`/passport/${passport.tokenId}`} passHref>
                         <a className="font-medium text-sm text-white text-left">
                           View Passport
                         </a>
                       </Link>
-                    )}
-
+                    ) : null}
                     <Link href="/terms">
                       <a className="mt-2 font-medium text-sm text-white">
                         Terms & Conditions

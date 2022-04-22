@@ -11,7 +11,6 @@ import {
   CreateChannelDialog,
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
-import { ErrorView } from 'components/common';
 
 // hooks
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
