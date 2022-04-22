@@ -11,7 +11,7 @@ const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
   const { members } = useRoomDetails(query.viewID as string);
 
-  const renderMemberAvatar = (avatar: string, displayName: string) => {
+  const renderMemberAvatar = (avatar: string, username: string) => {
     if (avatar) {
       return (
         <img
@@ -22,19 +22,9 @@ const Details = ({ handleSidebar }) => {
       );
     }
 
-    if (displayName === ' ') {
-      return (
-        <img
-          className="w-10 h-10 rounded-full flex-shrink-0"
-          src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/93383885-f529-46cb-9709-9421e0c7395e-110x110.png"
-          alt=""
-        />
-      );
-    }
-
     return (
       <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-        {displayName[0].toUpperCase()}
+        {username[0].toUpperCase()}
       </div>
     );
   };
@@ -58,16 +48,16 @@ const Details = ({ handleSidebar }) => {
           </h3>
         </div>
         <ul className="px-5">
-          {members.map(({ avatar, displayName, id, userType }, index) => {
+          {members.map(({ avatar, id, userType, username }) => {
             return (
               <li
                 data-testid="room-detail-member"
                 key={id}
                 className="flex gap-2 items-center mb-4 cursor-pointer"
               >
-                {renderMemberAvatar(avatar, displayName)}
+                {renderMemberAvatar(avatar, username)}
                 <span>
-                  {displayName === ' ' ? 'Sapien User' : displayName}{' '}
+                  {username}
                   <span className="text-xs">
                     {userType === RoomMemberType.Admin ? '(Admin)' : ''}
                   </span>
