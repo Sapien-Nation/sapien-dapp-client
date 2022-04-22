@@ -120,7 +120,7 @@ const AppLayout = ({ children }: Props) => {
         }
       >
         {(tribes: Array<ProfileTribe>) => (
-          <Query api="/api/v3/me/passport">
+          <Query api="/api/v3/me/passport" ignoreError>
             {() => (
               <main className="h-full flex">
                 <nav
