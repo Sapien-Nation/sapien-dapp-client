@@ -34,6 +34,7 @@ const LogoutPage: NextPage = () => {
     setTimeout(() => {
       logoutUser();
     }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
