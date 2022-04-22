@@ -45,7 +45,7 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const clearSession = (redirect = '/') => {
     removeTokens();
-    mutate('/api/v3/user/me', null, false);
+    mutate('/api/v3/user/me', null, true);
     push(redirect);
   };
 
