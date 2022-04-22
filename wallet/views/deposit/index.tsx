@@ -31,6 +31,7 @@ const { useAccounts, useError, useChainId, useIsActive, useIsActivating } =
 
 enum View {
   DepositPassport,
+  DepositError,
   Home,
   Success,
 }
@@ -43,9 +44,10 @@ const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
   const [userBalance, setUserBalance] = useState(0);
   const [depositTXHash, setDepositTXHash] = useState('');
-  const [showPolygonError, setShowPolygonError] = useState(false);
   const [tokensToDeposit, setTokensToDeposit] = useState([]);
+  const [showPolygonError, setShowPolygonError] = useState(false);
   const [isFetchingBalance, setIsFetchingBalance] = useState(true);
+  const [depositTXErrorHash, setDepositTXErrorHash] = useState('');
   const [isFetchingMetamaskTokens, setIsFetchingMetamaskTokens] =
     useState(false);
 
@@ -116,6 +118,10 @@ const Deposit = ({ handleBack }: Props) => {
       if (isOnPolygonNetwork) {
         const hash = await walletAPI.handleDeposit();
 
+        if (hash === 'Some Error From TX Error') {
+          setDepositTXErrorHash(hash);
+          setView(View.DepositError);
+        }
         setDepositTXHash(hash);
         setView(View.Success);
       } else {
@@ -416,6 +422,35 @@ const Deposit = ({ handleBack }: Props) => {
                 Deposit Tokens
               </button>
               <Tooltip ref={depositTokensRef} text="Cooming Soon." />
+            </div>
+          </>
+        );
+      case View.DepositError:
+        return (
+          <>
+            <div className="flex justify-between items-center">
+              <h5 className="text-xl text-red-400 font-extrabold tracking-wide flex items-center gap-2">
+                Deposit Error
+                <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+              </h5>
+            </div>
+            <a
+              className="underline  text-sm flex flex-row items-center gap-2"
+              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${depositTXErrorHash}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              See Transaction Error Details{' '}
+              <ExternalLinkIcon className="w-5 h-5" />
+            </a>
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setView(View.Home)}
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Try Again
+              </button>
             </div>
           </>
         );
