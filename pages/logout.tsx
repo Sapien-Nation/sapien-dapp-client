@@ -34,8 +34,7 @@ const LogoutPage: NextPage = () => {
     setTimeout(() => {
       logoutUser();
     }, 2000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [clearSession, me, query?.redirect]);
 
   return (
     <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
