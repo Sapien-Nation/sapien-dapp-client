@@ -39,7 +39,7 @@ const Details = ({ handleSidebar }) => {
 
   return (
     <aside className="w-72 h-full overflow-auto border-l border-gray-700">
-      <div className="absolute -left-10 top-0 bg-sapien-red-700/50 hidden">
+      <div className="absolute -left-10 top-0 bg-sapien-red-700/50 lg:hidden">
         <button
           type="button"
           className="flex items-center justify-center h-10 w-10 focus:outline-none"
