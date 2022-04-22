@@ -22,9 +22,17 @@ const Details = ({ handleSidebar }) => {
       );
     }
 
+    if (username) {
+      return (
+        <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+          {username[0].toUpperCase()}
+        </div>
+      );
+    }
+
     return (
       <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
-        {username[0].toUpperCase()}
+        S
       </div>
     );
   };

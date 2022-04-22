@@ -75,10 +75,12 @@ const Feed = ({
   }, []);
 
   const handleScrollToBottom = () => {
-    scrollToBottom.current.scrollIntoView({
-      block: 'nearest',
-      inline: 'start',
-    });
+    if (scrollToBottom?.current) {
+      scrollToBottom.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
   };
 
   useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
