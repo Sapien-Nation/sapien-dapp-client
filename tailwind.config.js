@@ -25,6 +25,7 @@ module.exports = {
         'sapien-60': '#A166F2',
         'sapien-40': '#C099F7',
         'sapien-20': '#E0CCFB',
+        'sapien-dark-purple': '#2E1247',
         'sapien-pink': '#FF4279',
         'sapien-pink-80': '#FF6894',
         'sapien-pink-60': '#FF8EAF',
@@ -54,29 +55,40 @@ module.exports = {
         '15': '15px'
       },
       height: {
+        '35px': '35px',
         '150': '150px',
         '320': '320px',
-        '660': '660px'
+        '660': '660px',
       },
       minHeight: {
         '250': '250px',
         '400': '400px',
-        '8-75': '8.75rem'
+        '8-75': '8.75rem',
+        '64px': '64px'
       },
       minWidth: {
         '570': '570px',
       },
       maxWidth: {
         '250': '250px',
-        '1100': '1100px'
+        '1100px': '1100px'
       },
       padding: {
+        '1px': '1px',
         '52': '52px',
       },
       width: {
+        '1px': '1px',
         '500': '500px',
         '48': '48%',
-        '1100': '1100px'
+        '1100px': '1100px'
+      },
+      rotate: {
+        '45deg': '45deg'
+      },
+      spacing: {
+        '12px': '12px',
+        '10px': '10px',
       }
     },
   },

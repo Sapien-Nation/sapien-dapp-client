@@ -63,7 +63,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
               animationData={lottieJson}
               play
               loop={false}
-              className="max-w-1100 w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
+              className="max-w-1100px w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
             />
             {showPassport && (
               <div className="px-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -74,7 +74,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                   >
                     <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                       <div className="text-center pt-4 flex flex-col justify-between">
-                        <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
+                        <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-1px">
                           <div className="bg-black h-full w-full hexagon flex items-center justify-center">
                             <img
                               src={passport.image}
@@ -83,7 +83,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                             />
                           </div>
                         </div>
-                        <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
+                        <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5">
                           <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
                             {formatAvatarName(passport.name)}
                           </span>
@@ -122,12 +122,12 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                               clipPath:
                                 'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                             }}
-                            className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                            className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                           >
                             <TextInput
                               aria-label="name"
                               autoComplete="name"
-                              className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                              className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                               name="displayName"
                               placeholder="Name"
                               readOnly
@@ -137,6 +137,9 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                                     value.length > 0 || 'is required',
                                 },
                               }}
+                              style={{
+                                background: 'transparent',
+                              }}
                             />
                           </div>
                           <div
@@ -144,12 +147,12 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                               clipPath:
                                 'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                             }}
-                            className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                            className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                           >
                             <TextInput
                               aria-label="username"
                               autoComplete="username"
-                              className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                              className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                               name="username"
                               placeholder="Username"
                               readOnly
@@ -159,6 +162,9 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                                     value.length > 0 || 'is required',
                                 },
                               }}
+                              style={{
+                                background: 'transparent',
+                              }}
                             />
                           </div>
                         </div>
@@ -167,15 +173,18 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                             clipPath:
                               'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                           }}
-                          className="mt-3 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                          className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                         >
                           <TextInput
                             aria-label="title"
                             autoComplete="title"
-                            className="!bg-transparent appearance-none min-h-[64px] border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                             name="title"
                             placeholder="Title"
                             readOnly
+                            style={{
+                              background: 'transparent',
+                            }}
                           />
                         </div>
                       </div>
@@ -185,13 +194,13 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                         clipPath:
                           'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                       }}
-                      className="mt-3 relative before:absolute before:pointer-events-none before:h-[35px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[35px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
+                      className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                     >
                       <TextareaInput
                         name="bio"
                         maxLength={1000}
                         placeholder="Bio"
-                        className="!border-[1px] !border-sapien-80 !bg-transparent"
+                        className="!border-[1px] !border-sapien-80"
                         readOnly
                         rules={{
                           validate: {
@@ -206,6 +215,9 @@ const PassportTokenIDPage = ({ passport }: Props) => {
                           },
                         }}
                         value={passport.bio}
+                        style={{
+                          background: 'transparent',
+                        }}
                       />
                     </div>
                   </form>
