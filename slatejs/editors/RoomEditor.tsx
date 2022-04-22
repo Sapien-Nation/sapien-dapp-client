@@ -70,7 +70,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     <>
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
-        <div className="mr-4">
+        <div className="mr-4 w-12">
           <UserAvatar user={me} passport={passport} />
         </div>
         <form
@@ -104,7 +104,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             </ul>
           ) : null}
 
-          <div className="flex flex-row">
+          <div className="flex flex-col sm:flex-row">
             <Slate
               editor={editor}
               value={value}
@@ -117,7 +117,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                   }
                 }}
                 placeholder={`Leave a message on ${name}`}
-                className="w-full py-2 break-all"
+                className="max-w-250 w-full py-2 break-all"
                 {...slateProps}
               />
             </Slate>
