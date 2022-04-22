@@ -41,7 +41,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
     defaultValues: {
       displayName: passport.displayName,
       username: passport.username,
-      bio: 'No Bio yet, comming soon...',
+      bio: 'Coming soon!',
       title: 'Founding Member of the Sapien Nation',
     },
   });
