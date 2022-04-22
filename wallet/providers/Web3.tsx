@@ -83,7 +83,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     BICONOMY_API_KEY: process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY,
     EXPLORER_BASE_URL: process.env.NEXT_PUBLIC_EXPLORER_BASE_URL,
     GAS_STATION_URL: process.env.NEXT_PUBLIC_GAS_STATION_URL,
-    GAS_LIMIT: 30000,
+    GAS_LIMIT: 300000,
   };
 
   useEffect(() => {
