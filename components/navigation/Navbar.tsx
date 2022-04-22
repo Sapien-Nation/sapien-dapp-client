@@ -68,16 +68,43 @@ const Navbar = () => {
                   <div className="flex flex-col text-left mt-4">
                     {passport?.tokenId ? (
                       <Link href={`/passport/${passport.tokenId}`} passHref>
-                        <a className="font-medium text-sm text-white text-left">
+                        <a className="font-medium text-sm text-white text-left mb-2">
                           View Passport
                         </a>
                       </Link>
                     ) : null}
-                    <Link href="/terms">
-                      <a className="mt-2 font-medium text-sm text-white">
-                        Terms & Conditions
-                      </a>
-                    </Link>
+                    <a
+                      href="https://common.sapien.network/terms.html"
+                      className="font-medium text-sm text-white"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Terms of Service
+                    </a>
+                    <a
+                      href="https://common.sapien.network/privacy.html"
+                      className="mt-2 font-medium text-sm text-white"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Privacy Policy
+                    </a>
+                    <a
+                      href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
+                      className="mt-2 font-medium text-sm text-white"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Content Policy
+                    </a>
+                    <a
+                      href="https://common.sapien.network/dmca.html"
+                      className="mt-2 font-medium text-sm text-white"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      DMCA
+                    </a>
                   </div>
                   <div className="mt-4 text-left">
                     <Link href="/logout">
