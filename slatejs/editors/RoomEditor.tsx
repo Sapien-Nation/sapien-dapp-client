@@ -143,24 +143,22 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                       leaveTo="opacity-0 translate-y-1"
                     >
                       <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-500 sm:px-0">
-                        <Popover.Button>
-                          <Picker
-                            onSelect={(event) => insertEmoji(editor, event)}
-                            perLine={6}
-                            style={{
-                              position: 'absolute',
-                              bottom: 60,
-                              right: 0,
-                              width: '430px',
-                            }}
-                            theme="dark"
-                            disableAutoFocus={true}
-                            groupNames={{ smileys_people: 'PEOPLE' }}
-                            native
-                            showPreview={false}
-                            title=""
-                          />
-                        </Popover.Button>
+                        <Picker
+                          onSelect={(event) => insertEmoji(editor, event)}
+                          perLine={6}
+                          style={{
+                            position: 'absolute',
+                            bottom: 60,
+                            right: 0,
+                            width: '430px',
+                          }}
+                          theme="dark"
+                          disableAutoFocus={true}
+                          groupNames={{ smileys_people: 'PEOPLE' }}
+                          native
+                          showPreview={false}
+                          title=""
+                        />
                       </Popover.Panel>
                     </Transition>
                   </>
