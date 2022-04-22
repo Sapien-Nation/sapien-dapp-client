@@ -30,6 +30,7 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
   const { walletAPI } = useWeb3();
 
   const handleGetTokens = useCallback(async () => {
+    setError(null);
     try {
       setIsFetching(true);
 
