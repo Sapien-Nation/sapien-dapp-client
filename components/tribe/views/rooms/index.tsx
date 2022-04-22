@@ -221,7 +221,7 @@ const Feed = ({
                             </time>
                           </div>
                           <p className="text-sm text-white/80 group">
-                            {`This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`}
+                            {`This is the beginning of the conversation on the room: ${room.name}, say Hi! or Hola!`}
                           </p>
                         </div>
                       </div>
