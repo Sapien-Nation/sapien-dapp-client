@@ -221,12 +221,6 @@ const Feed = ({
                             </time>
                           </div>
                           <p className="text-sm text-white/80 group">
-                            <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
-                              {new Date(createdAt).toLocaleString('en-US', {
-                                hour: 'numeric',
-                                hour12: true,
-                              })}
-                            </span>{' '}
                             {`This is the beggining of the conversation on the room: ${room.name}, say Hi! or Hola!`}
                           </p>
                         </div>
