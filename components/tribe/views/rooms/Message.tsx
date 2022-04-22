@@ -74,8 +74,8 @@ const Message = ({
       <p
         className={
           isAMessageContinuation
-            ? 'text-sm text-white/80 group whitespace-pre-line'
-            : 'pl-52 text-sm text-white/80 whitespace-pre-line'
+            ? 'text-sm text-white/80 group whitespace-pre-line break-all'
+            : 'pl-52 text-sm text-white/80 whitespace-pre-line break-all'
         }
       >
         <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">

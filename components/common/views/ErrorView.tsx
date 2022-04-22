@@ -24,7 +24,7 @@ const ErrorView = ({
   }, []);
 
   return (
-    <div className="items-left min-h-full min-w-full sm:p-24">
+    <div className="min-h-full min-w-full">
       <div className="rounded-md shadow-2xl bg-gray-800 w-full h-full items-center flex justify-center flex-col sm:px-0 px-4">
         <img
           className="pr-1 w-24 mx-auto pb-4 rounded-r-lg"
