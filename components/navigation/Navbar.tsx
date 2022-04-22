@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 // context
 import { useAuth } from 'context/user';
+import { usePassport } from 'hooks/passport';
 
 // components
 import { UserAvatar } from 'components/common';
@@ -26,6 +27,7 @@ const Navbar = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const { me } = useAuth();
+  const passport = usePassport();
 
   return (
     <>
@@ -63,7 +65,7 @@ const Navbar = () => {
                   <div className="h-full">
                     <div className="flex items-center">
                       <div className="px-3 py-3">
-                        <UserAvatar user={me} />
+                        <UserAvatar user={me} passport={passport} />
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="text-xs truncate w-30">
@@ -103,7 +105,7 @@ const Navbar = () => {
                   <span className="flex w-full items-center">
                     <span className="flex min-w-0 items-center w-full justify-between">
                       <div className=" px-5 py-3 ">
-                        <UserAvatar user={me} />
+                        <UserAvatar user={me} passport={passport} />
                       </div>
                     </span>
                   </span>

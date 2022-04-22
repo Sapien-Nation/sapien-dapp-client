@@ -18,6 +18,9 @@ import { useAuth } from 'context/user';
 // constants
 import { defaultValue, ElementType } from '../constants';
 
+// hooks
+import { usePassport } from 'hooks/passport';
+
 // utils
 import { insertEmoji, serialize } from '../utils';
 
@@ -39,6 +42,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [attachments, setAttachments] = useState<Array<File>>([]);
 
   const { me } = useAuth();
+  const passport = usePassport();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -67,7 +71,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
         <div className="mr-4">
-          <UserAvatar user={me} />
+          <UserAvatar user={me} passport={passport} />
         </div>
         <form
           id="room-editor"

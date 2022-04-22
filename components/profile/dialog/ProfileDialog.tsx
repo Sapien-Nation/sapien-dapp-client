@@ -16,6 +16,9 @@ import {
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
+// hooks
+import { usePassport } from 'hooks/passport';
+
 // utils
 import { formatTokenID } from 'utils/passport';
 
@@ -29,26 +32,24 @@ interface Props {
 
 const form = 'updat-profile-form';
 const ProfileDialog = ({ onClose }: Props) => {
-  const { me } = useAuth();
+  const passport = usePassport();
 
-  const [showAnimation, setShowAnimation] = useState(
-    me.passport ? true : false
-  );
-  const [showDialog, setShowDialog] = useState(me.passport ? false : true);
   const [imgSrc, setImgSrc] = useState('');
+  const [showDialog, setShowDialog] = useState(Boolean(passport));
+
+  const { me } = useAuth();
 
   useEffect(() => {
     setImgSrc('/images/passport_edited_medium.gif?' + new Date().getTime());
   }, []);
 
   useEffect(() => {
-    if (showAnimation) {
+    if (Boolean(passport)) {
       setTimeout(() => {
-        // setShowAnimation(false);
         setShowDialog(true);
       }, 6500);
     }
-  }, [showAnimation]);
+  }, []);
 
   const toast = useToast();
 
@@ -65,7 +66,6 @@ const ProfileDialog = ({ onClose }: Props) => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      // TODO API Call
       console.log(values);
     } catch (err) {
       toast({ message: err });
@@ -73,7 +73,7 @@ const ProfileDialog = ({ onClose }: Props) => {
   };
 
   const renderView = () => {
-    if (me.passport === null) {
+    if (passport === null) {
       return (
         <Dialog
           form={form}
@@ -141,7 +141,7 @@ const ProfileDialog = ({ onClose }: Props) => {
                 <div className="text-center pt-4 flex flex-col justify-between">
                   <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-[1px]">
                     <div className="bg-gray-700 h-full w-full hexagon flex items-center justify-center">
-                      <UserAvatar user={me} />
+                      <UserAvatar user={me} passport={passport} />
                     </div>
                   </div>
                   <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
@@ -157,9 +157,9 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Passport #
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport === null
+                        {passport === null
                           ? '00000000'
-                          : formatTokenID(String(me.passport.passportId))}
+                          : formatTokenID(String(passport.passportId))}
                       </span>
                     </li>
                     <li>
@@ -167,8 +167,8 @@ const ProfileDialog = ({ onClose }: Props) => {
                         Issue Date
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {me.passport?.issueDate
-                          ? formatDate(me.passport?.issueDate, 'LLLL d y')
+                        {passport?.issueDate
+                          ? formatDate(passport?.issueDate, 'LLLL d y')
                           : '-'}
                       </span>
                     </li>
@@ -285,7 +285,7 @@ const ProfileDialog = ({ onClose }: Props) => {
 
   return (
     <>
-      {showAnimation && (
+      {Boolean(passport) && (
         <div className="fixed z-10 inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 transition-opacity">
           <div className="bg-opacity-75 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <img src={imgSrc} style={{ width: 1100, height: 660 }} alt="" />

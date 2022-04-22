@@ -2,29 +2,29 @@
 import { useAuth } from 'context/user';
 
 // types
-import type { User } from 'tools/types/user';
-import type { ContentOwner } from 'tools/types/content';
+import type { User, UserPassport } from 'tools/types/user';
 
 interface Props {
   user: User;
+  passport?: UserPassport;
 }
 
-const Avatar = ({ user }: Props) => {
-  if (user.avatar) {
+const UserAvatar = ({ user, passport }: Props) => {
+  if (passport.image) {
     return (
       <img
         className="w-10 h-10 rounded-full flex-shrink-0"
-        src={user.avatar}
+        src={passport.image}
         alt=""
       />
     );
   }
 
-  if (user.passport) {
+  if (user.avatar) {
     return (
       <img
         className="w-10 h-10 rounded-full flex-shrink-0"
-        src={user.passport.media}
+        src={user.avatar}
         alt=""
       />
     );
@@ -46,4 +46,4 @@ const Avatar = ({ user }: Props) => {
   );
 };
 
-export default Avatar;
+export default UserAvatar;

@@ -11,6 +11,9 @@ import { useAuth } from 'context/user';
 // components
 import { UserAvatar } from 'components/common';
 
+// hooks
+import { usePassport } from 'hooks/passport';
+
 // ui
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
@@ -26,7 +29,9 @@ enum Dialog {
 
 const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+
   const { me } = useAuth();
+  const passport = usePassport();
 
   return (
     <>
@@ -130,7 +135,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
                     <div className=" px-5 py-3 ">
-                      <UserAvatar user={me} />
+                      <UserAvatar user={me} passport={passport} />
                     </div>
                   </span>
                 </span>

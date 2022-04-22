@@ -120,61 +120,63 @@ const AppLayout = ({ children }: Props) => {
         }
       >
         {(tribes: Array<ProfileTribe>) => (
-          <>
-            <main className="h-full flex">
-              <nav
-                className={
-                  mobileMenuOpen
-                    ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                    : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                }
-              >
-                <div className="flex-1 flex min-h-0 lg:h-auto h-full">
-                  <div
-                    className={`${
-                      mobileMenuOpen ? '-right-10' : 'right-0'
-                    } absolute top-0 bg-sapien-red-700/50 lg:hidden`}
-                  >
-                    <button
-                      type="button"
-                      className="flex items-center justify-center h-10 w-10 focus:outline-none"
-                      onClick={() => setMobileMenuOpen(false)}
+          <Query api="/api/v3/me/passport">
+            {() => (
+              <main className="h-full flex">
+                <nav
+                  className={
+                    mobileMenuOpen
+                      ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                      : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                  }
+                >
+                  <div className="flex-1 flex min-h-0 lg:h-auto h-full">
+                    <div
+                      className={`${
+                        mobileMenuOpen ? '-right-10' : 'right-0'
+                      } absolute top-0 bg-sapien-red-700/50 lg:hidden`}
                     >
-                      <span className="sr-only">Close sidebar</span>
-                      <XIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
+                      <button
+                        type="button"
+                        className="flex items-center justify-center h-10 w-10 focus:outline-none"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <span className="sr-only">Close sidebar</span>
+                        <XIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    </div>
+                    <TribeBar
+                      tribes={tribes}
+                      mobileMenuOpen={mobileMenuOpen}
+                      handleMobileMenu={handleMobileMenu}
+                    />
+                    {isHomePage === false && <>{renderNavigation()}</>}
                   </div>
-                  <TribeBar
-                    tribes={tribes}
-                    mobileMenuOpen={mobileMenuOpen}
-                    handleMobileMenu={handleMobileMenu}
-                  />
-                  {isHomePage === false && <>{renderNavigation()}</>}
+                </nav>
+                <div className="flex-1 min-w-0 flex flex-col">
+                  <Web3Provider>
+                    <div className="lg:hidden">
+                      <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
+                    </div>
+                    <div className="hidden lg:block">
+                      <Navbar />
+                    </div>
+                  </Web3Provider>
+                  <div className="flex-1 flex overflow-hidden">
+                    <section
+                      aria-labelledby="primary-heading"
+                      className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative"
+                    >
+                      {children}
+                    </section>
+                  </div>
                 </div>
-              </nav>
-              <div className="flex-1 min-w-0 flex flex-col">
-                <Web3Provider>
-                  <div className="lg:hidden">
-                    <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
-                  </div>
-                  <div className="hidden lg:block">
-                    <Navbar />
-                  </div>
-                </Web3Provider>
-                <div className="flex-1 flex overflow-hidden">
-                  <section
-                    aria-labelledby="primary-heading"
-                    className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative"
-                  >
-                    {children}
-                  </section>
-                </div>
-              </div>
-            </main>
-          </>
+              </main>
+            )}
+          </Query>
         )}
       </Query>
     </div>
