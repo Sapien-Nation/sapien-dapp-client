@@ -1,6 +1,9 @@
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 
+// constats
+import { RoomMemberType } from 'tools/constants/rooms';
+
 // hooks
 import { useRoomDetails } from 'hooks/room';
 
@@ -35,6 +38,7 @@ const Details = ({ handleSidebar }) => {
       </div>
     );
   };
+
   return (
     <aside className="w-72 h-full overflow-auto border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700/50 lg:hidden">
@@ -54,7 +58,7 @@ const Details = ({ handleSidebar }) => {
           </h3>
         </div>
         <ul className="px-5">
-          {members.map(({ avatar, displayName, id }, index) => {
+          {members.map(({ avatar, displayName, id, userType }, index) => {
             return (
               <li
                 data-testid="room-detail-member"
@@ -65,7 +69,7 @@ const Details = ({ handleSidebar }) => {
                 <span>
                   {displayName === ' ' ? 'Sapien User' : displayName}{' '}
                   <span className="text-xs">
-                    {index === 0 ? '(Admin)' : ''}
+                    {userType === RoomMemberType.Admin ? '(Admin)' : ''}
                   </span>
                 </span>
               </li>
