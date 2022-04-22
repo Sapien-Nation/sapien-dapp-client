@@ -212,7 +212,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
                                 {isUploading &&
                                 fileType &&
                                 fileType === 'avatar' ? (
-                                  <div className="absolute top-4 right-1.5">
+                                  <div className="absolute top-15 left-15">
                                     <svg
                                       role="status"
                                       className="mr-2 w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-primary-200"

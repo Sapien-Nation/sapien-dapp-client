@@ -50,6 +50,9 @@ module.exports = {
         'sapien-neutral-800': '#171219',
         'sapien-red-700': '#FF4279',
       },
+      inset: {
+        '15': '15px'
+      },
       height: {
         '150': '150px',
         '320': '320px',
@@ -61,6 +64,9 @@ module.exports = {
       },
       minWidth: {
         '570': '570px',
+      },
+      maxWidth: {
+        '250': '250px',
       },
       padding: {
         '52': '52px',
