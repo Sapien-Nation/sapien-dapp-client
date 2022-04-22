@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import * as Sentry from '@sentry/nextjs';
 
@@ -14,6 +15,8 @@ const ErrorView = ({
   message = 'Looks like something went wrong here!',
   onRetry = () => window.location.reload(),
 }: Props) => {
+  const { push, reload } = useRouter();
+
   useEffect(() => {
     const error = new Error(message);
     Sentry.captureException(error);
@@ -43,11 +46,17 @@ const ErrorView = ({
           {message}
         </span>
         <div className="py-6 bottom-0 flex gap-4">
-          <Link href="/">
-            <a className="mt-4 inline-block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-              Go Home
-            </a>
-          </Link>
+          <button
+            onClick={() => {
+              push('/');
+              setTimeout(() => {
+                reload();
+              }, 10);
+            }}
+            className="mt-4 inline-block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          >
+            Go Home
+          </button>
 
           <a
             target="_blank"
