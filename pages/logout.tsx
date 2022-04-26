@@ -24,7 +24,7 @@ const LogoutPage: NextPage = () => {
         try {
           await logout({ email: me.email });
         } catch (err) {
-          Sentry.captureException(err);
+          Sentry.captureMessage(err);
         }
       }
 
