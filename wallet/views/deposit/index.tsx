@@ -139,7 +139,7 @@ const Deposit = ({ handleBack }: Props) => {
     if (isFetchingBalance)
       return <span className="text-xs">(Loading Balance...)</span>;
 
-    return <span className="text-xs">(${userBalance} SPN)</span>;
+    return <span className="text-xs">({userBalance} SPN)</span>;
   };
 
   const renderView = () => {
