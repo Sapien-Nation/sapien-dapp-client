@@ -345,7 +345,7 @@ const Room = () => {
       );
       setLoading(false);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       setLoading(false);
     }
   };

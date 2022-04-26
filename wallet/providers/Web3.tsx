@@ -143,7 +143,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             console.error('Error initializing @Biconomy/mexa', error, message);
           }
 
-          Sentry.captureException(error);
+          Sentry.captureMessage(message);
           setError(error);
         });
       } catch (err) {
@@ -163,7 +163,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return Number(balance);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -176,7 +176,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return Number(passportBalance);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -203,7 +203,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             image: tokenMetadata.image,
           };
         } catch (err) {
-          Sentry.captureException(err);
+          Sentry.captureMessage(err);
           return {
             id: null,
             name: `Token ${token} FAILED `,
@@ -226,7 +226,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           .map((result) => (result as any).reason),
       ];
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -284,7 +284,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err.message);
     }
   };
@@ -309,7 +309,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return tx.transactionHash;
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };

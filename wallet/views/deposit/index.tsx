@@ -128,7 +128,7 @@ const Deposit = ({ handleBack }: Props) => {
         setShowPolygonError(true);
       }
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       toast({
         message: err.message,
       });
