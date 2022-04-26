@@ -1,5 +1,8 @@
 import { useForm, FormProvider } from 'react-hook-form';
 
+// api
+import { leaveFeedback } from 'api/feedback';
+
 // constants
 import { ToastType } from 'constants/toast';
 
@@ -11,7 +14,7 @@ import {
   TextInputLabel,
 } from 'components/common';
 
-//hooks
+// hooks
 import { useToast } from 'context/toast';
 
 // types
@@ -22,7 +25,7 @@ interface Props {
 }
 
 interface FormValues {
-  type: string;
+  type: FeedbackType;
   description: string;
 }
 
@@ -50,21 +53,23 @@ const FeedbackDialog = ({ onClose }: Props) => {
   const methods = useForm<FormValues>({
     defaultValues: {
       description: '',
-      type: 'FEEDBACK',
+      type: FeedbackType.Feedback,
     },
   });
+
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
   } = methods;
 
-  const onSubmit = async ({ description, type, ...rest }: FormValues) => {
+  const onSubmit = async ({ description, type }: FormValues) => {
     try {
       toast({
         message: 'Thanks for your cooperation!',
         type: ToastType.Success,
       });
 
+      await leaveFeedback({ description, type });
       onClose();
     } catch (error) {
       toast({
@@ -82,55 +87,52 @@ const FeedbackDialog = ({ onClose }: Props) => {
       form={form}
       confirmLabel="Submit"
     >
-      <>
-        <div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)} id={form}>
-                <div className="sm:overflow-hidden">
-                  <div className="mt-8">
-                    <Select
-                      defaultValue={Feedbacks[1].value}
-                      name="type"
-                      items={Feedbacks}
-                    />
-                  </div>
-                  <div>
-                    <div>
-                      <TextInputLabel
-                        label="Description"
-                        name="description"
-                        error={errors.description?.message}
-                      />
-                      <div className="mt-1 relative rounded-md shadow-sm">
-                        <TextareaInput
-                          name="description"
-                          maxLength={1000}
-                          placeholder="Describe your tribe"
-                          rules={{
-                            validate: {
-                              required: (value) =>
-                                value.length > 0 || 'is required',
-                              maxLength: (value) => {
-                                if (value?.length > 0) {
-                                  return (
-                                    value?.length <= 1001 ||
-                                    'Must be only 1000 characters long'
-                                  );
-                                }
-                              },
-                            },
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          id={form}
+          className="mt-5 md:mt-0 md:col-span-2"
+        >
+          <div className="sm:overflow-hidden">
+            <div className="mt-8">
+              <Select
+                defaultValue={Feedbacks[1].value}
+                name="type"
+                items={Feedbacks}
+              />
+            </div>
+            <div>
+              <div>
+                <TextInputLabel
+                  label="Description"
+                  name="description"
+                  error={errors.description?.message}
+                />
+                <div className="mt-1 relative rounded-md shadow-sm">
+                  <TextareaInput
+                    name="description"
+                    maxLength={1000}
+                    placeholder="Describe your tribe"
+                    rules={{
+                      validate: {
+                        required: (value) => value.length > 0 || 'is required',
+                        maxLength: (value) => {
+                          if (value?.length > 0) {
+                            return (
+                              value?.length <= 1001 ||
+                              'Must be only 1000 characters long'
+                            );
+                          }
+                        },
+                      },
+                    }}
+                  />
                 </div>
-              </form>
-            </FormProvider>
+              </div>
+            </div>
           </div>
-        </div>
-      </>
+        </form>
+      </FormProvider>
     </Dialog>
   );
 };
