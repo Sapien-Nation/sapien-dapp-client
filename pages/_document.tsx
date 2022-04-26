@@ -11,6 +11,10 @@ class MyDocument extends Document {
           />
           <meta name="robots" content="index, follow" />
           <meta name="theme-color" content="#6200eaf" />
+          <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1.0"
+          />
           <link href="/static/favicon.ico" rel="icon" type="image/png" />
         </Head>
         <body className="h-full relative overflow-hidden">

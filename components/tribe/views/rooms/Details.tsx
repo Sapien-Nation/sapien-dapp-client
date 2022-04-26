@@ -64,12 +64,12 @@ const Details = ({ handleSidebar }) => {
                 className="flex gap-2 items-center mb-4 cursor-pointer"
               >
                 {renderMemberAvatar(avatar, username)}
-                <span>
-                  {username}
-                  <span className="text-xs">
-                    {userType === RoomMemberType.Admin ? '(Admin)' : ''}
-                  </span>
-                </span>
+                <span className="truncate">{username}</span>
+                {userType === RoomMemberType.Admin ? (
+                  <span className="text-xs"> (Admin) </span>
+                ) : (
+                  ''
+                )}
               </li>
             );
           })}
