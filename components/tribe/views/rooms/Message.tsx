@@ -1,6 +1,8 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 import Linkify from 'linkify-react';
+import { Menu, Transition } from '@headlessui/react';
+import { DotsVerticalIcon, TrashIcon } from '@heroicons/react/solid';
 
 // constants
 import { MessageType } from 'tools/constants/rooms';
@@ -14,6 +16,7 @@ import type { RoomMessage } from 'tools/types/room';
 interface Props {
   isAMessageContinuation: boolean;
   message: RoomMessage;
+  handleDeleteMessage: () => void;
 }
 
 const isSameOriginURL = (url): URL | null => {
@@ -34,6 +37,7 @@ const Message = ({
     content,
     type,
   },
+  handleDeleteMessage,
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
 
@@ -83,6 +87,7 @@ const Message = ({
             ? ''
             : new Date(createdAt).toLocaleString('en-US', {
                 hour: 'numeric',
+                minute: '2-digit',
                 hour12: true,
               })}
         </span>{' '}
@@ -156,7 +161,7 @@ const Message = ({
           {renderBody()}
         </div>
       </div>
-      {/* <Menu
+      <Menu
         as="div"
         className={`${
           messageFocused ? 'block' : 'hidden'
@@ -180,7 +185,7 @@ const Message = ({
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute z-10 right-0 w-56 -top-3 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
-            <div className="px-1 py-1">
+            {/* <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => {
                   return (
@@ -197,7 +202,7 @@ const Message = ({
                   );
                 }}
               </Menu.Item>
-            </div>
+            </div> */}
             <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => (
@@ -207,6 +212,7 @@ const Message = ({
                         ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
                         : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
                     }
+                    onClick={handleDeleteMessage}
                   >
                     <TrashIcon className="w-5 mr-2" />
                     Delete
@@ -216,7 +222,7 @@ const Message = ({
             </div>
           </Menu.Items>
         </Transition>
-      </Menu> */}
+      </Menu>
     </li>
   );
 };

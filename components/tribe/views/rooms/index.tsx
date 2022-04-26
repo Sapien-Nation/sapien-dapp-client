@@ -28,6 +28,7 @@ import Message from './Message';
 import NotAMemberView from './NotAMemberView';
 import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 import JoinARoomMessage from './JoinARoomMessage';
+import { DeleteMessageDialog } from 'components/tribe/dialogs';
 
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
@@ -51,6 +52,10 @@ interface Props {
   hasMoreData: boolean;
 }
 
+enum Dialog {
+  DeleteMessage,
+}
+
 const Feed = ({
   apiKey,
   data,
@@ -61,6 +66,7 @@ const Feed = ({
   hasMoreData,
 }: Props) => {
   const [showMobileDetails, setShowMobileDetails] = useState(false);
+  const [dialog, setDialog] = useState(null);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -140,6 +146,10 @@ const Feed = ({
 
   const hanleMobileSidebar = useCallback(() => {
     setShowMobileDetails(false);
+  }, []);
+
+  const handleDeleteMessage = useCallback(() => {
+    setDialog(Dialog.DeleteMessage);
   }, []);
 
   const messagesData = _groupBy(
@@ -260,6 +270,7 @@ const Feed = ({
                                   timestampMessages[index - 1] || null,
                                   message.sender.id
                                 )}
+                                handleDeleteMessage={handleDeleteMessage}
                               />
                             );
                           })}
@@ -286,6 +297,10 @@ const Feed = ({
         >
           <Details handleSidebar={hanleMobileSidebar} />
         </div>
+        {/* Modals */}
+        {dialog === Dialog.DeleteMessage && (
+          <DeleteMessageDialog onClose={() => setDialog(null)} />
+        )}
       </>
     </div>
   );
