@@ -241,7 +241,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const { walletAddress } = me;
       if (tokenAddress === walletAddress) {
-        const { privKey } = await connectWallet();
+        const { key } = await connectWallet();
 
         const gasPrice = await getGasPrice(config.GAS_LIMIT / 4);
 
@@ -259,7 +259,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
                 .safeTransferFrom(walletAddress, to, tokenId)
                 .encodeABI(),
             },
-            `0x${privKey}`
+            `0x${key}`
           );
 
         const forwardData = await biconomy.getForwardRequestAndMessageToSign(
@@ -267,7 +267,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         );
 
         const signature = sigUtil.signTypedMessage(
-          Buffer.from(privKey, 'hex'),
+          Buffer.from(key, 'hex'),
           { data: forwardData.eip712Format },
           'V4'
         );
