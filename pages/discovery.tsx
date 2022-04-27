@@ -11,7 +11,7 @@ const DiscoveryPage: NextPage = () => {
     <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
       <SEO title="Discover Tribes" />
       <h1 className="sr-only">Discovery Tribes Page</h1>
-      <Query api="/api/v3/tribe/discovery" loader={<DiscoveryPlaceholder />}>
+      <Query api="/core-api/tribe/discovery" loader={<DiscoveryPlaceholder />}>
         {(tribes: Array<DiscoveryTribe>) => (
           <ul
             aria-label="Tribes list"

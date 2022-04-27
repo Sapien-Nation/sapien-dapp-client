@@ -125,7 +125,7 @@ const Mint = ({
   };
 
   return (
-    <Query api="/api/v3/profile/tribes">
+    <Query api="/core-api/profile/tribes">
       {(tribes: Array<ProfileTribe>) => {
         return (
           <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
@@ -217,7 +217,7 @@ const MintPage: NextPage = () => {
   return (
     <>
       <SEO title="Minting" />
-      <Query api="/api/v3/passport/mint-checker">
+      <Query api="/core-api/passport/mint-checker">
         {(response: MintStatus) => renderView(response)}
       </Query>
     </>

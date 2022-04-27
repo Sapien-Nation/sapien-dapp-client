@@ -15,11 +15,11 @@ import type { ProfileTribe } from 'tools/types/tribe';
 export const useUserNotifications = () => {
   const { cache } = useSWRConfig();
 
-  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
+  const tribes: Array<ProfileTribe> = cache.get('/core-api/profile/tribes');
   const {
     notifications,
   }: { count: number; notifications: Array<Notification> } = cache.get(
-    '/api/v3/notification/all'
+    '/core-api/notification/all'
   );
 
   return tribes.reduce<Record<string, Array<Notification>>>(
@@ -37,7 +37,7 @@ export const useNotificationsListener = () => {
   const handleNotification = useCallback(
     ({ data }: { data: Notification }) => {
       mutate(
-        '/api/v3/notification/all',
+        '/core-api/notification/all',
         ({ notifications }: { notifications: Array<Notification> }) => ({
           count: notifications.length + 1,
           notifications: [
@@ -86,11 +86,11 @@ export const useTribeNotifications = (
 } => {
   const { cache } = useSWRConfig();
 
-  const tribes: Array<ProfileTribe> = cache.get('/api/v3/profile/tribes');
+  const tribes: Array<ProfileTribe> = cache.get('/core-api/profile/tribes');
   const {
     notifications,
   }: { count: number; notifications: Array<Notification> } = cache.get(
-    '/api/v3/notification/all'
+    '/core-api/notification/all'
   );
 
   const allNotifications = tribes.reduce<Record<string, Array<Notification>>>(

@@ -7,7 +7,7 @@ export const login = async (body: {
   client: string;
 }) =>
   authInstance
-    .post('/api/v3/auth/login', body)
+    .post('/auth-api/login', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
@@ -21,18 +21,18 @@ export const register = async (body: {
   client: string;
 }) =>
   authInstance
-    .post('/api/v3/auth/signup', body)
+    .post('/auth-api/signup', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const logout = async (body: { email: string }) =>
   authInstance
-    .post('/api/v3/auth/logout', body)
+    .post('/auth-api/logout', body)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const forgot = async (body: { email: string }) =>
   authInstance
-    .post('/api/v3/user/change-password', body)
+    .post('/user-api/change-password', body)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const changePassword = async ({
@@ -43,7 +43,7 @@ export const changePassword = async ({
   token: string;
 }) =>
   authInstance
-    .post('/api/v3/user/reset-password', {
+    .post('/user-api/reset-password', {
       password,
       token,
     })
@@ -54,7 +54,7 @@ export const refresh = async (
   type: string
 ): Promise<{ token: string }> =>
   authInstance
-    .post('/api/v3/auth/refresh', {
+    .post('/auth-api/refresh', {
       refresh,
       type,
     })

@@ -57,7 +57,7 @@ const MainChannel = () => {
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
         <Query
-          api={`/api/v3/tribe/${tribeID}`}
+          api={`/core-api/tribe/${tribeID}`}
           loader={<ChannelHeaderPlaceholder />}
         >
           {(tribeInfo: MainFeedTribe) => (

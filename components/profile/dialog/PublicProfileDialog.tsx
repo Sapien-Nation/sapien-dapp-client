@@ -145,7 +145,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
       {showDialog && (
         <Dialog show isFetching={false} onClose={onClose}>
           <Query
-            api={`/api/v3/user/${profileID}`}
+            api={`/core-api/user/${profileID}`}
             options={{ fetcher }}
             loader={
               <div className="min-h-250 flex justiy-center items-center">

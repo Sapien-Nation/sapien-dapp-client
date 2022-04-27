@@ -300,7 +300,7 @@ const Room = () => {
 
   const { mutate } = useSWRConfig();
 
-  const apiKey = `/api/v3/room/${roomID}/messages`;
+  const apiKey = `/core-api/room/${roomID}/messages`;
   const {
     data: swrData,
     error,
@@ -358,7 +358,7 @@ const RoomProxy = () => {
   if (_isEmpty(query)) return null;
 
   return (
-    <Query api={`/api/v3/room/${query.viewID}`} ignoreError loader={null}>
+    <Query api={`/core-api/room/${query.viewID}`} ignoreError loader={null}>
       {(data) => {
         if (data?.message === 'User is not a memeber of the room')
           return <NotAMemberView />;

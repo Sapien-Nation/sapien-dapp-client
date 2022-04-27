@@ -16,7 +16,7 @@ interface Props {
 
 const ContentView = ({ contentID }: Props) => {
   return (
-    <Query api={`/api/v3/post/${contentID}`} loader={null}>
+    <Query api={`/core-api/post/${contentID}`} loader={null}>
       {(content: Content) => (
         <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
           <ContentDetail content={content} />
