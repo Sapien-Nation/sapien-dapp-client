@@ -1,18 +1,27 @@
+import axios from 'axios';
 import _isObject from 'lodash/isObject';
 
 // api
-import instance, { authInstance } from 'api';
-import axios from 'axios';
+import instance from 'api';
 
 // types
 import { Token } from './types';
 
 const gasStationUrl = process.env.NEXT_PUBLIC_GAS_STATION_URL;
-export const connectWallet = () =>
-  authInstance
-    .post('/wallet-api/connect')
+export const connectWallet = () => {
+  const tokens = window.localStorage.getItem('tokens');
+  const { token } = JSON.parse(tokens);
+
+  return axios
+    .get('/api/torus/connect', {
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+};
 
 export const getGasPrice = (fallbackGasPrice = 7500) =>
   axios

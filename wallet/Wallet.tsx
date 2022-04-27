@@ -1,4 +1,5 @@
 import { RefreshIcon } from '@heroicons/react/outline';
+import { ExclamationIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 
 // components
@@ -9,7 +10,6 @@ import { useWeb3 } from './providers';
 
 // types
 import type { Token } from './types';
-import { ExclamationIcon } from '@heroicons/react/solid';
 
 enum View {
   Home,
