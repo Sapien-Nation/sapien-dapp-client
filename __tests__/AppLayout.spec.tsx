@@ -151,7 +151,6 @@ describe('LoggedIn', () => {
     ).toBe(`http://localhost/logout`);
 
     expect(screen.getByText(`@${loggedInUser.username}`)).toBeInTheDocument();
-    expect(screen.getByText(loggedInUser.displayName)).toBeInTheDocument();
   });
 
   test('render tribe bar', () => {

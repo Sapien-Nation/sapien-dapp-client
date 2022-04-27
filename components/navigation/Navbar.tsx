@@ -61,9 +61,6 @@ const Navbar = () => {
                       <span className="text-xs truncate w-30">
                         @{me.username}
                       </span>
-                      <span className="truncate w-32 pr-2">
-                        {me.displayName}
-                      </span>
                     </div>
                   </div>
                   {passport?.tokenId ? (

@@ -17,7 +17,7 @@ interface Props {
 const ContentItem = ({
   content: {
     id,
-    owner: { avatar, displayName },
+    owner: { avatar, userName },
     createdAt,
     body,
     imagePreview,
@@ -62,11 +62,11 @@ const ContentItem = ({
                   />
                 ) : (
                   <div className="w-5 h-5 bg-sapien-neutral-200 rounded-full flex items-center justify-center font-extrabold text-sm">
-                    {displayName[0].toUpperCase()}
+                    {userName[0].toUpperCase()}
                   </div>
                 )}
                 <h3 className="text-sm font-medium text-gray-400">
-                  {displayName}
+                  {userName}
                 </h3>
               </div>
               <p className="text-xs text-gray-500">

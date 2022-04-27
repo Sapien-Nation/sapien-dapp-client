@@ -92,7 +92,6 @@ const Feed = ({
         sender: {
           avatar: message.by.avatar,
           id: message.by.id,
-          displayName: message.by.displayName,
           username: message.by.username,
         },
         type: MessageType.Text,
@@ -123,7 +122,6 @@ const Feed = ({
         id: nanoid(),
         sender: {
           avatar: me.avatar,
-          displayName: me.displayName,
           id: me.id,
           username: me.username,
         },

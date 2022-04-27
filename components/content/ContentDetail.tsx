@@ -17,7 +17,7 @@ interface Props {
 
 const ContentItem = ({
   content: {
-    owner: { avatar, displayName, userName },
+    owner: { avatar, userName },
     createdAt,
     body,
     mimeType,
@@ -42,11 +42,10 @@ const ContentItem = ({
                 {
                   username: userName,
                   avatar,
-                  displayName,
                 } as User
               }
             />
-            <h3 className="text-sm font-medium text-gray-400">{displayName}</h3>
+            <h3 className="text-sm font-medium text-gray-400">{userName}</h3>
           </div>
           <p className="text-xs text-gray-500">
             {formatDateRelative(createdAt)}

@@ -32,7 +32,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
               <div className="w-20 h-20 -mt-16 rounded-full flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
                 user
               </div>
-              <h1 className="text-md mt-2">{profile.displayName}</h1>
+              <h1 className="text-md mt-2">{profile.username}</h1>
             </div>
           </div>
           <div className="p-4">
@@ -56,7 +56,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
             </div>
             <span className="hexagon-2 bg-sapien-60 p-[1px] text-sm block mt-5">
               <span className="hexagon-2 bg-gray-700 block text-gray-400 p-1">
-                {profile.displayName}
+                {profile.username}
               </span>
             </span>
           </div>
@@ -85,7 +85,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
                   }}
                   className="mt-3 p-3 flex items-center !bg-transparent min-h-[64px] border border-sapien-80 relative before:absolute before:pointer-events-none before:h-[30px] before:w-[1px] before:bg-sapien-60 before:rotate-[45deg] before:-top-[12px] before:left-[10px] after:absolute after:pointer-events-none after:h-[30px] after:w-[1px] after:bg-sapien-60 after:rotate-[45deg] after:-bottom-[12px] after:right-[10px]"
                 >
-                  {profile.displayName}
+                  {profile.username}
                 </dd>
               </div>
               <div className="flex-1">

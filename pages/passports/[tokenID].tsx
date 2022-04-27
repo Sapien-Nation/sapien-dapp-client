@@ -36,7 +36,7 @@ const PassportTokenIDPage = ({ passport }: Props) => {
 
   const methods = useForm({
     defaultValues: {
-      displayName: passport.displayName,
+      displayName: passport.username,
       username: passport.username,
       bio: 'Coming soon!',
       title: 'Founding Member of the Sapien Nation',

@@ -44,7 +44,6 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
     type: ContentType.POST,
     owner: {
       id: '10_000_000',
-      displayName: 'Robert Giometti',
       userName: 'robgiometti',
       avatar:
         'https://cdn.discordapp.com/avatars/187385335725031424/ed2e737cb7906bbdf658a178ff5908d6.webp?size=128',

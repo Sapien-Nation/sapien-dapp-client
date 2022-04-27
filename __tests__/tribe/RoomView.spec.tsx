@@ -49,13 +49,11 @@ const senderOne = mockRoomMessageSender({
   id: mockUserOne.id,
   avatar: mockUserOne.avatar,
   username: mockUserOne.username,
-  displayName: mockUserOne.displayName,
 });
 const senderTwo = mockRoomMessageSender({
   id: mockUserTwo.id,
   avatar: mockUserTwo.avatar,
   username: mockUserTwo.username,
-  displayName: mockUserTwo.displayName,
 });
 
 // TODO there might be a clever solution for this
@@ -259,7 +257,7 @@ test('it can see room messages, details and post messages', async () => {
     if (messagesWithHeadersIndexes.includes(index)) {
       expect(
         messageRTLItem.getByRole('heading', {
-          name: message.sender.displayName,
+          name: message.sender.username,
         })
       ).toBeInTheDocument();
       expect(messageRTLItem.getByTestId('message-avatar')).toBeInTheDocument();
@@ -270,7 +268,7 @@ test('it can see room messages, details and post messages', async () => {
     } else {
       expect(
         messageRTLItem.queryByRole('heading', {
-          name: message.sender.displayName,
+          name: message.sender.username,
         })
       ).not.toBeInTheDocument();
       expect(
@@ -310,7 +308,7 @@ test('it can see room messages, details and post messages', async () => {
     if (index === 0) {
       expect(within(item).getByText(/(Admin)/i)).toBeInTheDocument();
     } else {
-      expect(within(item).getByText(member.displayName)).toBeInTheDocument();
+      expect(within(item).getByText(member.username)).toBeInTheDocument();
     }
   });
 });

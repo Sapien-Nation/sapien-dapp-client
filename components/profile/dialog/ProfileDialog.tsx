@@ -25,7 +25,7 @@ const ProfileDialog = ({ onClose }: Props) => {
         <div className="flex flex-col md:flex-row py-4 bg-transparent rounded-b-xl mb-4">
           <div className="relative ml-4 flex flex-col items-center">
             <UserAvatar user={me} />
-            <h1 className="text-md mt-2">{me.displayName}</h1>
+            <h1 className="text-md mt-2">{me.username}</h1>
           </div>
         </div>
       </div>

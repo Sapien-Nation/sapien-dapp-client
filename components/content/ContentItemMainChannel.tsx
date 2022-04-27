@@ -21,7 +21,7 @@ interface Props {
 const ContentItemMainChannel = ({
   content: {
     id,
-    owner: { avatar, displayName, userName },
+    owner: { avatar, userName },
     createdAt,
     body,
     imagePreview,
@@ -57,12 +57,11 @@ const ContentItemMainChannel = ({
                     {
                       username: userName,
                       avatar,
-                      displayName,
                     } as User
                   }
                 />
                 <h3 className="text-sm font-medium text-gray-400">
-                  {displayName}
+                  {userName}
                 </h3>
               </div>
               <p className="text-xs text-gray-500">
