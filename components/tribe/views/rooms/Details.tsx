@@ -6,12 +6,14 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 // constats
 import { RoomMemberType } from 'tools/constants/rooms';
 
-// hooks
-import { useRoomDetails } from 'hooks/room';
+// components
+import { Query } from 'components/common';
+
+// types
+import type { RoomDetailMember } from 'tools/types/room';
 
 const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
-  const { members } = useRoomDetails(query.viewID as string);
 
   const renderMemberAvatar = (avatar: string, username: string) => {
     if (avatar) {
@@ -51,46 +53,50 @@ const Details = ({ handleSidebar }) => {
           <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
         </button>
       </div>
-      <>
-        <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
-          <h3 className="text-md  text-sapien-neutral-400 font-bold ">
-            Members ({members.length})
-          </h3>
-        </div>
-        <ul className="px-5 overflow-auto flex-1">
-          <AutoSizer>
-            {({ height, width }) => (
-              <List
-                className="List"
-                height={height}
-                itemCount={members.length}
-                itemSize={55}
-                width={width}
-              >
-                {({ index, style }) => {
-                  const { id, avatar, username, userType } = members[index];
-                  return (
-                    <li
-                      data-testid="room-detail-member"
-                      key={id}
-                      className="flex gap-2 items-center mb-4 cursor-pointer"
-                      style={style}
-                    >
-                      {renderMemberAvatar(avatar, username)}
-                      <span className="truncate">{username}</span>
-                      {userType === RoomMemberType.Admin ? (
-                        <span className="text-xs"> (Admin) </span>
-                      ) : (
-                        ''
-                      )}
-                    </li>
-                  );
-                }}
-              </List>
-            )}
-          </AutoSizer>
-        </ul>
-      </>
+      <Query api={`/core-api/room/${query.viewID}/members`}>
+        {(members: Array<RoomDetailMember>) => (
+          <>
+            <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
+              <h3 className="text-md  text-sapien-neutral-400 font-bold ">
+                Members ({members.length})
+              </h3>
+            </div>
+            <ul className="px-5 overflow-auto flex-1">
+              <AutoSizer>
+                {({ height, width }) => (
+                  <List
+                    className="List"
+                    height={height}
+                    itemCount={members.length}
+                    itemSize={55}
+                    width={width}
+                  >
+                    {({ index, style }) => {
+                      const { id, avatar, username, userType } = members[index];
+                      return (
+                        <li
+                          data-testid="room-detail-member"
+                          key={id}
+                          className="flex gap-2 items-center mb-4 cursor-pointer"
+                          style={style}
+                        >
+                          {renderMemberAvatar(avatar, username)}
+                          <span className="truncate">{username}</span>
+                          {userType === RoomMemberType.Admin ? (
+                            <span className="text-xs"> (Admin) </span>
+                          ) : (
+                            ''
+                          )}
+                        </li>
+                      );
+                    }}
+                  </List>
+                )}
+              </AutoSizer>
+            </ul>
+          </>
+        )}
+      </Query>
     </aside>
   );
 };
