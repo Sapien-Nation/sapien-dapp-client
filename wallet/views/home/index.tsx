@@ -60,8 +60,8 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
           <p className="text-sm text-white grid gap-4 items-center justify-center mt-6 ">
             <span>
               Sometimes servers play games, this is not the expection, but
-              don&lsquo;t&lsquo; worry we got you, try to refresh the menu, or
-              click the button below
+              don&lsquo;t worry we got you, try to refresh the menu, or click
+              the button below
             </span>
             <button
               type="button"
