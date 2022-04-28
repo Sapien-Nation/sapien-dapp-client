@@ -236,7 +236,7 @@ const PassportTokenIDPageProxy: NextPage = () => {
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <Query api={`/api/v3/passport/metadata/${query.tokenID}`}>
+      <Query api={`/core-api/passport/metadata/${query.tokenID}`}>
         {(passport: Passport) => {
           if (passport === null) {
             return <Redirect path="" />;

@@ -37,7 +37,7 @@ const AuthenticationProvider = ({ children }: Props) => {
   }>('tokens', null);
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
-  const { data, mutate: authMutate } = useSWR<User>('/api/v3/user/me', {
+  const { data, mutate: authMutate } = useSWR<User>('/user-api/me', {
     fetcher,
   });
 
@@ -45,7 +45,7 @@ const AuthenticationProvider = ({ children }: Props) => {
 
   const clearSession = (redirect = '/') => {
     removeTokens();
-    mutate('/api/v3/user/me', null, true);
+    mutate('/user-api/me', null, true);
     push(redirect);
   };
 

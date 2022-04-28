@@ -1,5 +1,7 @@
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
+import { FixedSizeList as List } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
 
 // constats
 import { RoomMemberType } from 'tools/constants/rooms';
@@ -38,7 +40,7 @@ const Details = ({ handleSidebar }) => {
   };
 
   return (
-    <aside className="w-72 h-full overflow-auto border-l border-gray-700">
+    <aside className="w-72 h-full flex flex-col border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700 lg:hidden">
         <button
           type="button"
@@ -55,24 +57,38 @@ const Details = ({ handleSidebar }) => {
             Members ({members.length})
           </h3>
         </div>
-        <ul className="px-5">
-          {members.map(({ avatar, id, userType, username }) => {
-            return (
-              <li
-                data-testid="room-detail-member"
-                key={id}
-                className="flex gap-2 items-center mb-4 cursor-pointer"
+        <ul className="px-5 overflow-auto flex-1">
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                className="List"
+                height={height}
+                itemCount={members.length}
+                itemSize={55}
+                width={width}
               >
-                {renderMemberAvatar(avatar, username)}
-                <span className="truncate">{username}</span>
-                {userType === RoomMemberType.Admin ? (
-                  <span className="text-xs"> (Admin) </span>
-                ) : (
-                  ''
-                )}
-              </li>
-            );
-          })}
+                {({ index, style }) => {
+                  const { id, avatar, username, userType } = members[index];
+                  return (
+                    <li
+                      data-testid="room-detail-member"
+                      key={id}
+                      className="flex gap-2 items-center mb-4 cursor-pointer"
+                      style={style}
+                    >
+                      {renderMemberAvatar(avatar, username)}
+                      <span className="truncate">{username}</span>
+                      {userType === RoomMemberType.Admin ? (
+                        <span className="text-xs"> (Admin) </span>
+                      ) : (
+                        ''
+                      )}
+                    </li>
+                  );
+                }}
+              </List>
+            )}
+          </AutoSizer>
         </ul>
       </>
     </aside>

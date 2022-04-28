@@ -129,15 +129,15 @@ const renderWithProviders = (
 
 // Cache Set
 export const setUser = (user = mockUser()) => {
-  cache.set('/api/v3/user/me', user);
+  cache.set('/core-api/user/me', user);
   return user;
 };
 
 export const setAllTribes = (tribes = []) =>
-  cache.set('/api/v3/profile/tribes', tribes);
+  cache.set('/core-api/profile/tribes', tribes);
 
 export const setLoggedOutUser = (user = mockUser()) =>
-  cache.set('/api/v3/user/me', null);
+  cache.set('/core-api/user/me', null);
 
 // helpers
 export const createFile = (name = 'tet.png', type = 'image/png') =>

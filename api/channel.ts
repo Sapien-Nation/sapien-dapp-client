@@ -15,12 +15,12 @@ export const createChannel = (
   body: CreateChannelBody
 ): Promise<ProfileTribeChannel> =>
   axios
-    .post('/api/v3/channel', body)
+    .post('/core-api/channel', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const uploadImage = (data: FormData) =>
   axios
-    .post('/api/v3/channel/image', data)
+    .post('/core-api/channel/image', data)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

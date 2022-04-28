@@ -29,7 +29,7 @@ const NotAMemberView = () => {
     try {
       await joinRoom(roomID);
 
-      mutate(`/api/v3/room/${roomID}`);
+      mutate(`/core-api/room/${roomID}`);
     } catch (err) {
       toast({ message: err });
     }

@@ -20,12 +20,12 @@ export const socketURL = process.env.NEXT_PUBLIC_SOCKET_URL;
 export const localInstance = axios.create();
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: '',
   withCredentials: true,
 });
 
 export const authInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
+  baseURL: '',
   withCredentials: true,
 });
 
@@ -64,7 +64,7 @@ export const fetcher = (url: string) => {
     .catch(({ response }) => Promise.reject(response.data.message));
 };
 
-export const authFetcher = (url = '/api/v3/user/me') =>
+export const authFetcher = (url = '/user-api/me') =>
   authInstance
     .get(url)
     .then(({ data }) => data)

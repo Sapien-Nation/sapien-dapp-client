@@ -54,7 +54,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
       });
 
       mutate(
-        '/api/v3/profile/tribes',
+        '/core-api/profile/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((tribe) => {
             if (tribe.id === tribeID) {

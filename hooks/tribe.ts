@@ -56,19 +56,19 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
 export const useSapienTribe = (): ProfileTribe => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/api/v3/profile/tribes')[0];
+  return cache.get('/core-api/profile/tribes')[0];
 };
 
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/api/v3/profile/tribes').find(({ id }) => id === tribeID);
+  return cache.get('/core-api/profile/tribes').find(({ id }) => id === tribeID);
 };
 
 export const useMainTribe = (): { tribeID: string } => {
   const { cache } = useSWRConfig();
 
-  const tribe: ProfileTribe = cache.get('/api/v3/profile/tribes')[0];
+  const tribe: ProfileTribe = cache.get('/core-api/profile/tribes')[0];
 
   return { tribeID: tribe.id };
 };
@@ -76,7 +76,7 @@ export const useMainTribe = (): { tribeID: string } => {
 export const useTribeChannels = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
-    .get('/api/v3/profile/tribes')
+    .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
   return tribe
@@ -93,7 +93,7 @@ export const useTribeChannels = (tribeID: string) => {
 export const useTribeRooms = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
-    .get('/api/v3/profile/tribes')
+    .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
   return tribe?.rooms?.map(({ name, id }) => ({
@@ -110,7 +110,7 @@ export const useGetCurrentView = (
   const { cache } = useSWRConfig();
 
   const tribe: ProfileTribe = cache
-    .get('/api/v3/profile/tribes')
+    .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
   const rooms = useTribeRooms(tribe.id);
   const channels = useTribeChannels(tribe.id);

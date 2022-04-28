@@ -224,7 +224,7 @@ const PassportTokenIDPageProxy: NextPage = () => {
   return (
     <div className="h-full flex">
       <SEO title="Sapien Nation Passport" />
-      <Query api={`/api/v3/passports/${query.tokenID}`}>
+      <Query api={`/core-api/passports/${query.tokenID}`}>
         {(passport: Passport) => {
           if (passport === null) {
             return <Redirect path="" />;

@@ -39,6 +39,6 @@ export const getGasPrice = (fallbackGasPrice = 7500) =>
 
 export const getTokenMetadata = (tokenId): Promise<Token> =>
   instance
-    .get(`/api/v3/passport/metadata/${tokenId}`)
+    .get(`/core-api/passport/metadata/${tokenId}`)
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));

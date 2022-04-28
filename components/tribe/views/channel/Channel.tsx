@@ -41,7 +41,7 @@ const Channel = () => {
   const { data } = useGetInfinitePages<{
     data: Array<Content>;
     nextCursor: string | null;
-  }>(`/api/v3/channel/${channel.id}/feed`);
+  }>(`/core-api/channel/${channel.id}/feed`);
 
   const toast = useToast();
 
@@ -92,7 +92,7 @@ const Channel = () => {
         <SEO title={channel.name} />
         <h1 className="sr-only">{channel.name}</h1>
         <Query
-          api={`/api/v3/channel/${viewID}`}
+          api={`/core-api/channel/${viewID}`}
           loader={<ChannelHeaderPlaceholder />}
         >
           {(channel: ChannelType) => (

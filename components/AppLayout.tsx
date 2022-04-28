@@ -98,7 +98,7 @@ const AppLayout = ({ children }: Props) => {
   return (
     <div className="relative h-full bg-sapien-neutral-600">
       <Query
-        api="/api/v3/profile/tribes"
+        api="/core-api/profile/tribes"
         loader={
           <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
             <div className="mx-auto w-full max-w-sm lg:w-96">
@@ -151,7 +151,7 @@ const AppLayout = ({ children }: Props) => {
                 {isHomePage === false && <>{renderNavigation()}</>}
               </div>
             </nav>
-            <Query api="/api/v3/me/passport" allowNullable>
+            <Query api="/core-api/me/passport" allowNullable>
               {() => (
                 <div className="flex-1 min-w-0 flex flex-col">
                   <Web3Provider>
