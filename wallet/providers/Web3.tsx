@@ -20,7 +20,7 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Token } from '../types';
+import type { Token, UserTransactions } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -37,6 +37,7 @@ interface Web3 {
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
+    getUserTransactions: () => Promise<Array<UserTransactions>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   error: any | null;
@@ -332,6 +333,15 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  const getUserTransactions = async (): Promise<Array<UserTransactions>> => {
+    try {
+      return [{ transactionHash: '123' }];
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
   return (
     <Web3Context.Provider
       value={{
@@ -342,6 +352,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           handleDeposit,
           getWalletBalanceSPN,
           getWalletTokens,
+          getUserTransactions,
           getPassportBalance,
         },
       }}

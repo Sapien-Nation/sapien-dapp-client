@@ -3,3 +3,7 @@ export interface Token {
   name: string;
   image: string | null;
 }
+
+export interface UserTransactions {
+  transactionHash: string;
+}
