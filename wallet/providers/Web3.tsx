@@ -273,20 +273,19 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         );
 
         // Get the transaction Hash using the Event Emitter returned
-        await WalletAPIRef.current.eth.sendSignedTransaction(
-          {
-            signature: signature,
-            forwardRequest: forwardData.request,
-            rawTransaction: signedTx.rawTransaction,
-            signatureType: biconomy.EIP712_SIGN,
-          },
-          (err, txHash) => {
-            if (err) {
-              return Promise.reject('Some Error From TX Error');
-            }
-            return Promise.resolve(txHash);
-          }
-        );
+        const data = await WalletAPIRef.current.eth.sendSignedTransaction({
+          signature: signature,
+          forwardRequest: forwardData.request,
+          rawTransaction: signedTx.rawTransaction,
+          signatureType: biconomy.EIP712_SIGN,
+        });
+
+        if (data === null) {
+          // @see https://web3js.readthedocs.io/en/v1.2.11/web3-eth.html#eth-gettransactionreceipt-return 'null if no receipt was found:'
+          return Promise.reject('Receipt Address was found.');
+        }
+
+        return data.transactionHash;
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
@@ -302,24 +301,21 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const gasPrice = await getGasPrice();
 
-      await contracts.passportContract.methods
+      const data = await contracts.passportContract.methods
         .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
-        .send(
-          {
-            from: metamaskAddress,
-            signatureType: biconomy.EIP712_SIGN,
-            gasPrice: Web3Library.utils
-              .toWei(new BN(gasPrice), 'gwei')
-              .toNumber(),
-            gasLimit: config.GAS_LIMIT,
-          },
-          (err, txHash) => {
-            if (err) {
-              return Promise.reject('Some Error From TX Error');
-            }
-            return Promise.resolve(txHash);
-          }
-        );
+        .send({
+          from: metamaskAddress,
+          signatureType: biconomy.EIP712_SIGN,
+          gasPrice: Web3Library.utils
+            .toWei(new BN(gasPrice), 'gwei')
+            .toNumber(),
+          gasLimit: config.GAS_LIMIT,
+        });
+
+      if (data === null || data === undefined)
+        return Promise.reject('Unknow error');
+
+      return data.transactionHash;
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
