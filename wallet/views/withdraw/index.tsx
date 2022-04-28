@@ -8,6 +8,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'web3-utils';
 
+// constants
+import { ErrorTypes } from 'wallet/constants';
+
 // hooks
 import { useToast } from 'context/toast';
 import { useWeb3 } from 'wallet/providers';
@@ -70,9 +73,9 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
 
   const onSubmit = async ({ address }: ForgotPasswordFormValues) => {
     try {
-      const hash = await walletAPI.handleWithdraw(address, token.id);
+      const { hash, type } = await walletAPI.handleWithdraw(address, token.id);
 
-      if (hash === 'Some Error From TX Error') {
+      if (type === ErrorTypes.Fail) {
         setWithdrawTXErrorHash(hash);
         setView(View.WithdrawError);
       }

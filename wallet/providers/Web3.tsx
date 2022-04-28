@@ -5,12 +5,15 @@ import { BN } from 'ethereumjs-util';
 import * as sigUtil from 'eth-sig-util';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
+// api
+import { getGasPrice, getTokenMetadata, connectWallet } from '../api';
+
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
 
-// api
-import { getGasPrice, getTokenMetadata, connectWallet } from '../api';
+// constants
+import { ErrorTypes } from '../constants';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -27,7 +30,10 @@ import Web3Library from 'web3';
 interface Web3 {
   isReady: boolean;
   walletAPI: {
-    handleWithdraw: (toAddress: string, tokenId: number) => Promise<string>;
+    handleWithdraw: (
+      toAddress: string,
+      tokenId: number
+    ) => Promise<{ type: ErrorTypes; hash: string }>;
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
@@ -233,7 +239,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   const handleWithdraw = async (
     to: string,
     tokenId: number
-  ): Promise<string> => {
+  ): Promise<{ type: ErrorTypes; hash: string }> => {
     try {
       const tokenAddress = await contracts.passportContract.methods
         .ownerOf(tokenId)
@@ -285,7 +291,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           return Promise.reject('Receipt Address was found.');
         }
 
-        return data.transactionHash;
+        if (data.error) {
+          return { hash: data.transactionHash, type: ErrorTypes.Fail };
+        }
+
+        return { hash: data.transactionHash, type: ErrorTypes.Success };
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
