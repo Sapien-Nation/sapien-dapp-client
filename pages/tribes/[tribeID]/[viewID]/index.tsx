@@ -1,19 +1,17 @@
 import _isEmpty from 'lodash/isEmpty';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
 // constants
 import { View } from 'constants/tribe';
 
 // components
 import { SEO, ErrorView, NotFound } from 'components/common';
-import {
-  Channel,
-  ContentView,
-  MainChannel,
-  PassportView,
-  RoomView,
-} from 'components/tribe';
+import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
+const PassportView = dynamic(() =>
+  import('components/tribe').then((views) => views.PassportView)
+);
 
 // hooks
 import { useGetCurrentView } from 'hooks/tribe';
