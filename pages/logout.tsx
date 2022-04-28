@@ -11,9 +11,6 @@ import { useAuth } from 'context/user';
 // types
 import { NextPage } from 'next';
 
-// context
-import { useToast } from 'context/toast';
-
 const LogoutPage: NextPage = () => {
   const { query } = useRouter();
   const { clearSession, me } = useAuth();
