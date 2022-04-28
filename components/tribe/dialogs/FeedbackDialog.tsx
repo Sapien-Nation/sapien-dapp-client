@@ -26,7 +26,7 @@ interface Props {
 
 interface FormValues {
   type: FeedbackType;
-  description: string;
+  message: string;
 }
 
 const Feedbacks = [
@@ -52,7 +52,7 @@ const FeedbackDialog = ({ onClose }: Props) => {
   const toast = useToast();
   const methods = useForm<FormValues>({
     defaultValues: {
-      description: '',
+      message: '',
       type: FeedbackType.Feedback,
     },
   });
@@ -62,14 +62,15 @@ const FeedbackDialog = ({ onClose }: Props) => {
     handleSubmit,
   } = methods;
 
-  const onSubmit = async ({ description, type }: FormValues) => {
+  const onSubmit = async ({ message, type }: FormValues) => {
     try {
+      await leaveFeedback({ message, type });
+
       toast({
         message: 'Thanks for your cooperation!',
         type: ToastType.Success,
       });
 
-      await leaveFeedback({ description, type });
       onClose();
     } catch (error) {
       toast({
@@ -104,13 +105,13 @@ const FeedbackDialog = ({ onClose }: Props) => {
             <div>
               <div>
                 <TextInputLabel
-                  label="Description"
-                  name="description"
-                  error={errors.description?.message}
+                  label="message"
+                  name="message"
+                  error={errors.message?.message}
                 />
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <TextareaInput
-                    name="description"
+                    name="message"
                     maxLength={1000}
                     placeholder="Describe your tribe"
                     rules={{
