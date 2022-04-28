@@ -1,5 +1,3 @@
-import * as Sentry from '@sentry/nextjs';
-
 // api
 import { mintPassport } from 'api/passport';
 
@@ -8,7 +6,6 @@ import {
   cache,
   mockRouter,
   render,
-  setLoggedOutUser,
   setUser,
   waitFor,
   screen,
@@ -31,7 +28,8 @@ const router = mockRouter({
   pathname: '/mint',
 });
 
-(mintPassport as jest.Mock).mockReturnValue({});
+const tokenId = '1';
+(mintPassport as jest.Mock).mockReturnValue({ tokenId });
 
 const error = { message: 'Error' };
 const getMintButton = () =>
@@ -43,7 +41,10 @@ beforeEach(() => {
   jest.clearAllMocks();
 
   setUser();
-  cache.set('/api/v3/passport/mint-checker', { code: 100 });
+  cache.set('/core-api/passport/mint-checker', {
+    code: 100,
+    avatar: 'http://',
+  });
 });
 
 test('mint passport', async () => {
@@ -51,7 +52,17 @@ test('mint passport', async () => {
   renderPage();
 
   expect(
-    screen.getByRole('heading', { name: 'Join the Sapien Nation' })
+    screen.getByRole('heading', {
+      name: 'Find your tribe and ignite the new renaissance!',
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('img', {
+      name: /sapien avatar transition/i,
+    })
+  ).toHaveAttribute('src', 'http://');
+  expect(
+    screen.getByText(/minting passport as wanna use other account\?/i)
   ).toBeInTheDocument();
 
   // on error
@@ -68,18 +79,37 @@ test('mint passport', async () => {
     expect(mintPassport).toHaveBeenCalledTimes(2);
   });
 
-  expect(push).toHaveBeenCalledWith(`/tribes/${tribe.id}/home#minted`);
+  expect(push).toHaveBeenCalledWith(`/tribes/1000/passport?tokenID=${tokenId}`);
 });
 
 test('when already have a passport minted', () => {
-  cache.set('/api/v3/passport/mint-checker', { code: null });
+  cache.set('/core-api/passport/mint-checker', { code: null });
   renderPage();
 
-  expect(push).toHaveBeenCalledWith('/');
+  expect(
+    screen.getByRole('img', { name: 'People working on laptops' })
+  ).toHaveAttribute(
+    'src',
+    'https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg'
+  );
+
+  expect(
+    screen.getByRole('link', {
+      name: 'Launch App',
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole('link', {
+      name: 'Switch Account',
+    })
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/You already have a Passport minted with the email/i)
+  ).toBeInTheDocument();
 });
 
 test('Whe user need to buy a passport on dist apps', async () => {
-  cache.set('/api/v3/passport/mint-checker', { code: 101 });
+  cache.set('/core-api/passport/mint-checker', { code: 101 });
   renderPage();
 
   expect(
@@ -97,11 +127,11 @@ test('Whe user need to buy a passport on dist apps', async () => {
         name: 'Buy a passport',
       }) as HTMLLinkElement
     ).href
-  ).toBe('http://localhost/HOST/passport/purchase');
+  ).toBe('http://localhost/HOSTpassport/purchase');
 });
 
 test('when user need to finish passport flow on dist apps', async () => {
-  cache.set('/api/v3/passport/mint-checker', { code: 102 });
+  cache.set('/core-api/passport/mint-checker', { code: 102 });
   renderPage();
 
   expect(
@@ -121,5 +151,5 @@ test('when user need to finish passport flow on dist apps', async () => {
         name: 'Click here to continue',
       }) as HTMLLinkElement
     ).href
-  ).toBe('http://localhost/HOST/passport/purchase');
+  ).toBe('http://localhost/HOSTpassport/purchase');
 });

@@ -100,13 +100,7 @@ const FeedbackView = ({ code }: { code: number }) => {
   );
 };
 
-const Mint = ({
-  avatar,
-  figureName,
-}: {
-  avatar: string;
-  figureName: string;
-}) => {
+const Mint = ({ avatar }: { avatar: string }) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
@@ -202,12 +196,10 @@ const MintPage: NextPage = () => {
       </>
     );
 
-  const renderView = ({ avatar, code, figureName }: MintStatus) => {
-    return <Mint avatar={avatar} figureName={figureName} />;
-
+  const renderView = ({ avatar, code }: MintStatus) => {
     if (code === null) return <NothingToMintview />;
 
-    if (code === 100) return <Mint avatar={avatar} figureName={figureName} />;
+    if (code === 100) return <Mint avatar={avatar} />;
 
     if (code === 101) return <FeedbackView code={101} />;
 

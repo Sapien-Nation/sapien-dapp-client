@@ -19,6 +19,7 @@ jest.mock('api/authentication');
 
 const push = jest.fn();
 const router = mockRouter({
+  pathname: '/register',
   push,
 });
 
