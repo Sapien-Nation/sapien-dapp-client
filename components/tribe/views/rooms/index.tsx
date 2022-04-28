@@ -79,19 +79,15 @@ const Feed = ({
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
   const { createdAt } = useRoomDetails(roomID);
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
+    // This is safe to do ,since this view is wrapped on a <Query /> and deduplication avoid making extra queries
+    // @see https://swr.vercel.app/docs/advanced/performance#deduplication
     handleScrollToBottom();
   }, []);
 
-  const handleScrollToBottom = () => {
-    if (scrollToBottom?.current) {
-      scrollToBottom.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-      });
-    }
-  };
-
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Websockets events
   useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
     if (message.extra.roomId === roomID) {
       handleAddMessage({
@@ -107,6 +103,17 @@ const Feed = ({
       });
     }
   });
+
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Handlers
+  const handleScrollToBottom = () => {
+    if (scrollToBottom?.current) {
+      scrollToBottom.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  };
 
   const handleAddMessage = async (message: RoomMessage) => {
     await mutate(
@@ -156,6 +163,8 @@ const Feed = ({
     setDialog(Dialog.DeleteMessage);
   }, []);
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Derivated State
   const messagesData = _groupBy(
     _sortyBy(data, (message) => new Date(message.createdAt)),
     ({ createdAt }) => formatDate(createdAt)
@@ -176,6 +185,7 @@ const Feed = ({
     return true;
   };
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -318,26 +328,23 @@ const Feed = ({
   );
 };
 
-const Room = () => {
+interface RoomProps {
+  apiKey: string;
+  roomID: string;
+}
+
+const Room = ({ apiKey, roomID }: RoomProps) => {
   const { query } = useRouter();
   const [isLoading, setLoading] = useState(false);
 
   const { tribeID } = query;
-  const roomID = query.viewID as string;
 
   const { mutate } = useSWRConfig();
 
-  const apiKey = `/core-api/room/${roomID}/messages`;
-  const {
-    data: swrData,
-    error,
-    mutate: revalidate,
-  } = useGetInfinitePages<{
+  const { data: swrData, mutate: revalidate } = useGetInfinitePages<{
     data: Array<RoomMessage>;
     nextCursor: string | null;
   }>(apiKey);
-
-  if (!swrData && !error) return <LoadingMessagesSkeleton />;
 
   let mutateFetchAPI = apiKey;
   const handleFetchMore = async (cursor: string) => {
@@ -384,12 +391,19 @@ const RoomProxy = () => {
 
   if (_isEmpty(query)) return null;
 
+  const roomID = query.viewID as string;
+  const apiKey = `/core-api/room/${roomID}/messages`;
+
   return (
-    <Query api={`/core-api/room/${query.viewID}`} ignoreError loader={null}>
+    <Query api={`/core-api/room/${roomID}`} ignoreError loader={null}>
       {(data) => {
         if (data?.message === 'User is not a memeber of the room')
           return <NotAMemberView />;
-        return <Room />;
+        return (
+          <Query api={apiKey} loader={<LoadingMessagesSkeleton />}>
+            {() => <Room roomID={roomID} apiKey={apiKey} />}
+          </Query>
+        );
       }}
     </Query>
   );
