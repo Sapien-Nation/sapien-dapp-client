@@ -113,11 +113,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         false
       );
 
-      toast({
-        message: 'Tribe created successfully',
-        type: ToastType.Success,
-      });
-
       onClose();
       push(`/tribes/${response.id}/home`);
     } catch (error) {

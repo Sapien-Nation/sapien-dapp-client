@@ -185,36 +185,18 @@ const Message = ({
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute z-10 right-0 w-56 -top-3 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
-            {/* <div className="px-1 py-1">
-              <Menu.Item>
-                {({ active }) => {
-                  return (
-                    <button
-                      className={
-                        active
-                          ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
-                          : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
-                      }
-                    >
-                      <PencilAltIcon className="w-5 mr-2" />
-                      Edit
-                    </button>
-                  );
-                }}
-              </Menu.Item>
-            </div> */}
             <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => (
                   <button
                     className={
                       active
-                        ? 'bg-gray-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
-                        : 'text-gray-400 group flex rounded items-center w-full px-2 py-2 text-sm'
+                        ? 'bg-red-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
+                        : ' group flex rounded items-center w-full px-2 py-2 text-sm text-red-400'
                     }
                     onClick={handleDeleteMessage}
                   >
-                    <TrashIcon className="w-5 mr-2" />
+                    <TrashIcon className="w-5 mr-2 text-white" />
                     Delete
                   </button>
                 )}

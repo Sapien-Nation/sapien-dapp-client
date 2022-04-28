@@ -80,8 +80,7 @@ const Channel = () => {
     } catch (error) {
       setPublishing(false);
       toast({
-        message:
-          error.message || 'Error while creating the content, please try again',
+        message: error,
       });
     }
   };

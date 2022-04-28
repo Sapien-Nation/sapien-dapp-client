@@ -28,7 +28,7 @@ import Message from './Message';
 import NotAMemberView from './NotAMemberView';
 import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 import JoinARoomMessage from './JoinARoomMessage';
-import { DeleteMessageDialog } from 'components/tribe/dialogs';
+import DeleteMessageDialog from './dialogs/DeleteMessageDialog';
 
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
@@ -65,8 +65,11 @@ const Feed = ({
   revalidate,
   hasMoreData,
 }: Props) => {
-  const [showMobileDetails, setShowMobileDetails] = useState(false);
   const [dialog, setDialog] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState<RoomMessage | null>(
+    null
+  );
+  const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -148,7 +151,8 @@ const Feed = ({
     setShowMobileDetails(false);
   }, []);
 
-  const handleDeleteMessage = useCallback(() => {
+  const handleDeleteMessage = useCallback((message) => {
+    setSelectedMessage(message);
     setDialog(Dialog.DeleteMessage);
   }, []);
 
@@ -270,7 +274,9 @@ const Feed = ({
                                   timestampMessages[index - 1] || null,
                                   message.sender.id
                                 )}
-                                handleDeleteMessage={handleDeleteMessage}
+                                handleDeleteMessage={() =>
+                                  handleDeleteMessage(message)
+                                }
                               />
                             );
                           })}
@@ -299,7 +305,13 @@ const Feed = ({
         </div>
         {/* Modals */}
         {dialog === Dialog.DeleteMessage && (
-          <DeleteMessageDialog onClose={() => setDialog(null)} />
+          <DeleteMessageDialog
+            onClose={() => {
+              setDialog(null);
+              setSelectedMessage(null);
+            }}
+            message={selectedMessage}
+          />
         )}
       </>
     </div>

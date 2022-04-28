@@ -69,11 +69,6 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
         false
       );
 
-      toast({
-        message: 'Room created successfully',
-        type: ToastType.Success,
-      });
-
       onClose();
       push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {

@@ -1,39 +1,41 @@
 import { useForm, FormProvider } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
-// constants
-import { ToastType } from 'constants/toast';
+// api
+import { deleteMessage } from 'api/room';
 
 // components
 import { Dialog } from 'components/common';
+import MessagePreview from '../MessagePreview';
 
 // hooks
 import { useToast } from 'context/toast';
 
+// types
+import type { RoomMessage } from 'tools/types/room';
+
 interface Props {
   onClose: () => void;
+  message: RoomMessage;
 }
 
 const form = 'delete-message-form';
-const DeleteMessageDialog = ({ onClose }: Props) => {
+const DeleteMessageDialog = ({ onClose, message }: Props) => {
   const toast = useToast();
   const methods = useForm();
+  const { query } = useRouter();
+  const { handleSubmit } = methods;
 
-  const {
-    formState: { errors },
-    handleSubmit,
-  } = methods;
+  const roomID = query.viewID as string;
 
   const onSubmit = async () => {
     try {
-      toast({
-        message: 'Message deleted successfully',
-        type: ToastType.Success,
-      });
+      await deleteMessage(roomID, message.id);
 
       onClose();
     } catch (error) {
       toast({
-        message: error || 'Service unavailable',
+        message: error,
       });
     }
   };
@@ -53,6 +55,9 @@ const DeleteMessageDialog = ({ onClose }: Props) => {
             Are you sure you want to delete this message?
           </p>
         </form>
+        <div>
+          <MessagePreview message={message} />
+        </div>
       </FormProvider>
     </Dialog>
   );
