@@ -11,7 +11,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 // api
 import axios from 'api';
-import { sendMessage } from 'api/room';
+import { deleteMessage, sendMessage } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -88,34 +88,29 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
-  useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+  useSocketEvent(WSEvents.NewMessage, async (message: RoomNewMessage) => {
     if (message.extra.roomId === roomID) {
-      handleAddMessage({
-        content: message.payload,
-        createdAt: message.createdAt,
-        id: message.id,
-        sender: {
-          avatar: message.by.avatar,
-          id: message.by.id,
-          username: message.by.username,
-        },
-        type: MessageType.Text,
-      });
+      try {
+        await handleAddMessageMutation({
+          content: message.payload,
+          createdAt: message.createdAt,
+          id: message.id,
+          sender: {
+            avatar: message.by.avatar,
+            id: message.by.id,
+            username: message.by.username,
+          },
+          type: MessageType.Text,
+        });
+      } catch (err) {
+        Sentry.captureMessage(err);
+      }
     }
   });
 
-  //----------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Handlers
-  const handleScrollToBottom = () => {
-    if (scrollToBottom?.current) {
-      scrollToBottom.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-      });
-    }
-  };
-
-  const handleAddMessage = async (message: RoomMessage) => {
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Mutations
+  const handleAddMessageMutation = async (message: RoomMessage) => {
     await mutate(
       apiKey,
       ({ data, nextCursor }) => {
@@ -128,11 +123,46 @@ const Feed = ({
     );
   };
 
+  const handleRemoveMessageMutation = async (messageID: string) => {
+    await mutate(
+      apiKey,
+      ({ data, nextCursor }) => {
+        return {
+          data: data.filter(({ id }) => id !== messageID),
+          nextCursor: nextCursor,
+        };
+      },
+      false
+    );
+  };
+
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Handlers
+  const handleScrollToBottom = () => {
+    if (scrollToBottom?.current) {
+      scrollToBottom.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  };
+
+  const handleRemoveMessage = async (messageID) => {
+    try {
+      await handleRemoveMessageMutation(messageID);
+      // await deleteMessage(roomID, id);
+
+      await revalidate();
+    } catch (err) {
+      toast({ message: err });
+    }
+  };
+
   const handleMessageSubmit = async (content: string) => {
     if (content === '') return;
 
     try {
-      await handleAddMessage({
+      await handleAddMessageMutation({
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -156,11 +186,6 @@ const Feed = ({
 
   const hanleMobileSidebar = useCallback(() => {
     setShowMobileDetails(false);
-  }, []);
-
-  const handleDeleteMessage = useCallback((message) => {
-    setSelectedMessage(message);
-    setDialog(Dialog.DeleteMessage);
   }, []);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -284,9 +309,13 @@ const Feed = ({
                                   timestampMessages[index - 1] || null,
                                   message.sender.id
                                 )}
-                                handleDeleteMessage={() =>
-                                  handleDeleteMessage(message)
-                                }
+                                onMenuItemClick={(type) => {
+                                  setSelectedMessage(message);
+
+                                  if (type === 'delete') {
+                                    setDialog(Dialog.DeleteMessage);
+                                  }
+                                }}
                               />
                             );
                           })}
@@ -319,6 +348,14 @@ const Feed = ({
             onClose={() => {
               setDialog(null);
               setSelectedMessage(null);
+            }}
+            onDelete={() => {
+              setDialog(null);
+
+              setTimeout(() => {
+                handleRemoveMessage(selectedMessage.id);
+                setSelectedMessage(null);
+              }, 500);
             }}
             message={selectedMessage}
           />

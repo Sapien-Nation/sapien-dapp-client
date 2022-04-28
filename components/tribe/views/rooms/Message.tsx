@@ -16,7 +16,7 @@ import type { RoomMessage } from 'tools/types/room';
 interface Props {
   isAMessageContinuation: boolean;
   message: RoomMessage;
-  handleDeleteMessage: () => void;
+  onMenuItemClick: (type: 'delete' | 'edit') => void;
 }
 
 const isSameOriginURL = (url): URL | null => {
@@ -37,7 +37,7 @@ const Message = ({
     content,
     type,
   },
-  handleDeleteMessage,
+  onMenuItemClick,
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
 
@@ -194,7 +194,7 @@ const Message = ({
                         ? 'bg-red-800 text-white group flex rounded items-center w-full px-2 py-2 text-sm'
                         : ' group flex rounded items-center w-full px-2 py-2 text-sm text-red-400'
                     }
-                    onClick={handleDeleteMessage}
+                    onClick={() => onMenuItemClick('delete')}
                   >
                     <TrashIcon className="w-5 mr-2 text-white" />
                     Delete
