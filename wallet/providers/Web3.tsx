@@ -273,14 +273,20 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         );
 
         // Get the transaction Hash using the Event Emitter returned
-        const tx = await WalletAPIRef.current.eth.sendSignedTransaction({
-          signature: signature,
-          forwardRequest: forwardData.request,
-          rawTransaction: signedTx.rawTransaction,
-          signatureType: biconomy.EIP712_SIGN,
-        });
-
-        return tx.transactionHash;
+        await WalletAPIRef.current.eth.sendSignedTransaction(
+          {
+            signature: signature,
+            forwardRequest: forwardData.request,
+            rawTransaction: signedTx.rawTransaction,
+            signatureType: biconomy.EIP712_SIGN,
+          },
+          (err, txHash) => {
+            if (err) {
+              return Promise.reject('Some Error From TX Error');
+            }
+            return Promise.resolve(txHash);
+          }
+        );
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
@@ -296,18 +302,24 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const gasPrice = await getGasPrice();
 
-      const tx = await contracts.passportContract.methods
+      await contracts.passportContract.methods
         .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
-        .send({
-          from: metamaskAddress,
-          signatureType: biconomy.EIP712_SIGN,
-          gasPrice: Web3Library.utils
-            .toWei(new BN(gasPrice), 'gwei')
-            .toNumber(),
-          gasLimit: config.GAS_LIMIT,
-        });
-
-      return tx.transactionHash;
+        .send(
+          {
+            from: metamaskAddress,
+            signatureType: biconomy.EIP712_SIGN,
+            gasPrice: Web3Library.utils
+              .toWei(new BN(gasPrice), 'gwei')
+              .toNumber(),
+            gasLimit: config.GAS_LIMIT,
+          },
+          (err, txHash) => {
+            if (err) {
+              return Promise.reject('Some Error From TX Error');
+            }
+            return Promise.resolve(txHash);
+          }
+        );
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
