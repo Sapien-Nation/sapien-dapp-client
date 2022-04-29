@@ -40,7 +40,11 @@ import { useRoomDetails } from 'hooks/room';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
 
 // types
-import type { RoomMessage, RoomNewMessage } from 'tools/types/room';
+import type {
+  RoomDeleteMessage,
+  RoomMessage,
+  RoomNewMessage,
+} from 'tools/types/room';
 
 interface Props {
   apiKey: string;
@@ -86,32 +90,27 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
-  useSocketEvent(WSEvents.NewMessage, async (message: RoomNewMessage) => {
-    if (message.extra.roomId === roomID) {
-      try {
-        await handleAddMessageMutation({
-          content: message.payload,
-          createdAt: message.createdAt,
-          id: message.extra.messageId,
-          sender: {
-            avatar: message.by.avatar,
-            id: message.by.id,
-            username: message.by.username,
-          },
-          type: MessageType.Text,
-        });
-      } catch (err) {
-        Sentry.captureMessage(err);
-      }
-    }
-  });
-
   useSocketEvent(
-    WSEvents.DeleteMessage,
-    async (message: { extra: { roomId: string; messageId: string } }) => {
-      if (message.extra.roomId === roomID) {
+    async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
+      if (data.extra.roomId === roomID) {
         try {
-          await handleRemoveMessageMutation(message.extra.messageId);
+          if (type === WSEvents.NewMessage) {
+            await handleAddMessageMutation({
+              content: (data as RoomNewMessage).payload,
+              createdAt: (data as RoomNewMessage).createdAt,
+              id: (data as RoomNewMessage).extra.messageId,
+              sender: {
+                avatar: (data as RoomNewMessage).by.avatar,
+                id: (data as RoomNewMessage).by.id,
+                username: (data as RoomNewMessage).by.username,
+              },
+              type: MessageType.Text,
+            });
+          } else if (type === WSEvents.DeleteMessage) {
+            await handleRemoveMessageMutation(
+              (data as RoomDeleteMessage).extra.messageId
+            );
+          }
         } catch (err) {
           Sentry.captureMessage(err);
         }

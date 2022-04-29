@@ -10,10 +10,7 @@ export const useSocket = () => {
   return context;
 };
 
-export const useSocketEvent = (
-  eventName: string,
-  callback: (...args: any) => void
-) => {
+export const useSocketEvent = (callback: (...args: any) => void) => {
   const { socket } = useSocket();
   const { me } = useAuth();
 
@@ -21,12 +18,10 @@ export const useSocketEvent = (
     if (me && socket) {
       socket.onmessage = (event) => {
         const eventData = JSON.parse(event.data);
-        if (eventData.type === eventName) {
-          callback(eventData.data);
-        }
+        callback(eventData.type, eventData.data);
       };
     }
-  }, [callback, eventName, socket, me]);
+  }, [callback, socket, me]);
 };
 
 export const useSocketEmit = (
