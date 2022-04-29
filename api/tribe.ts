@@ -20,12 +20,12 @@ export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
 
 export const uploadImage = (data: FormData) =>
   axios
-    .post('/core-api/image', data)
+    .post('/core-api/tribe/image', data)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const joinTribe = (tribeID: string) =>
   axios
-    .post(`/core-api/${tribeID}/join`)
+    .post(`/core-api/tribe/${tribeID}/join`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
