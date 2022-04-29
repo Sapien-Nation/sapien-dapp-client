@@ -14,7 +14,7 @@ export interface CreateTribeBody {
 
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
   axios
-    .post('/core-api', body)
+    .post('/core-api/tribe', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
