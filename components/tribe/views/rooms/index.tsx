@@ -48,7 +48,6 @@ interface Props {
   onScrollTop: () => void;
   roomID: string;
   tribeID: string;
-  revalidate: KeyedMutator<any>;
   hasMoreData: boolean;
 }
 
@@ -62,7 +61,6 @@ const Feed = ({
   roomID,
   tribeID,
   onScrollTop,
-  revalidate,
   hasMoreData,
 }: Props) => {
   const [dialog, setDialog] = useState(null);
@@ -146,6 +144,27 @@ const Feed = ({
     );
   };
 
+  const handleUpdateMesssageMutation = async (
+    newMessage: RoomMessage,
+    optimisticMessageId: string
+  ) => {
+    await mutate(
+      apiKey,
+      ({ data, nextCursor }) => {
+        return {
+          data: data.map((message) => {
+            if (message.id === optimisticMessageId) {
+              return newMessage;
+            }
+            return message;
+          }),
+          nextCursor: nextCursor,
+        };
+      },
+      false
+    );
+  };
+
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Handlers
   const handleScrollToBottom = () => {
@@ -171,7 +190,7 @@ const Feed = ({
     if (content === '') return;
 
     try {
-      await handleAddMessageMutation({
+      const optimisticMessage = {
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -182,12 +201,19 @@ const Feed = ({
         },
         type: MessageType.Optimistic,
         status: 'A',
-      });
+      };
+      await handleAddMessageMutation(optimisticMessage);
 
       handleScrollToBottom();
-      await sendMessage(roomID, { content });
+      const newMessage = await sendMessage(roomID, { content });
 
-      await revalidate();
+      await handleUpdateMesssageMutation(
+        {
+          ...optimisticMessage,
+          ...newMessage,
+        },
+        optimisticMessage.id
+      );
     } catch (err) {
       toast({ message: err });
     }
@@ -384,7 +410,7 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
 
   const { mutate } = useSWRConfig();
 
-  const { data: swrData, mutate: revalidate } = useGetInfinitePages<{
+  const { data: swrData } = useGetInfinitePages<{
     data: Array<RoomMessage>;
     nextCursor: string | null;
   }>(apiKey);
@@ -423,7 +449,6 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
           handleFetchMore(swrData?.nextCursor);
         }
       }}
-      revalidate={revalidate}
       hasMoreData={swrData?.nextCursor !== null}
     />
   );
