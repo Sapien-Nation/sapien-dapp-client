@@ -327,7 +327,7 @@ const Feed = ({
             </InfiniteScroll>
             <div ref={scrollToBottom} className="block" />
           </div>
-          <div className="px-5">
+          <div className="px-0 sm:px-5">
             {/* @ts-ignore */}
             <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
           </div>

@@ -70,7 +70,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     <>
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
-        <div className="mr-4 w-12">
+        <div className="mr-4 w-12 hidden sm:block">
           <UserAvatar user={me} passport={passport} />
         </div>
         <form
@@ -104,7 +104,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             </ul>
           ) : null}
 
-          <div className="flex flex-col sm:flex-row">
+          <div className="flex">
             <Slate
               editor={editor}
               value={value}
@@ -164,14 +164,16 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                   </>
                 )}
               </Popover>
-              <button
-                className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
-                onClick={(event) => {
-                  handleSubmit(event);
-                }}
-              >
-                <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
-              </button>
+              {serialize(value).length > 0 && (
+                <button
+                  className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
+                  onClick={(event) => {
+                    handleSubmit(event);
+                  }}
+                >
+                  <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
+                </button>
+              )}
             </div>
           </div>
         </form>
