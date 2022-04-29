@@ -14,6 +14,7 @@ import { formatDateRelative } from 'utils/date';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
+import { Transition } from '@headlessui/react';
 
 interface Props {
   isAMessageContinuation: boolean;
@@ -122,14 +123,20 @@ const Message = ({
     );
   };
   return (
-    <li
+    <Transition
+      show
+      leave="transition-opacity duration-150"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
+      as="li"
       data-testid="room-message"
-      ref={messageRef}
-      className={`py-2 ${
-        messageFocused ? 'bg-gray-800' : ''
-      } hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group`}
+      className={
+        messageFocused
+          ? 'py-2 bg-gray-800 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group'
+          : 'py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group'
+      }
     >
-      <div className="flex space-x-3">
+      <div className="flex space-x-3" ref={messageRef}>
         {isAMessageContinuation && (
           <>
             {avatar ? (
@@ -173,7 +180,7 @@ const Message = ({
           onMenuItemClick={onMenuItemClick}
         />
       )}
-    </li>
+    </Transition>
   );
 };
 

@@ -108,6 +108,16 @@ const Feed = ({
     }
   });
 
+  useSocketEvent(WSEvents.DeleteMessage, async (message: RoomNewMessage) => {
+    if (message.extra.roomId === roomID) {
+      try {
+        await handleRemoveMessageMutation(message.id);
+      } catch (err) {
+        Sentry.captureMessage(err);
+      }
+    }
+  });
+
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   // Mutations
   const handleAddMessageMutation = async (message: RoomMessage) => {
@@ -342,23 +352,20 @@ const Feed = ({
           <Details handleSidebar={hanleMobileSidebar} />
         </div>
         {/* Modals */}
-        {dialog === Dialog.DeleteMessage && (
-          <DeleteMessageDialog
-            onClose={() => {
-              setDialog(null);
-              setSelectedMessage(null);
-            }}
-            onDelete={() => {
-              setDialog(null);
+        <DeleteMessageDialog
+          onClose={() => {
+            setDialog(null);
+          }}
+          onDelete={() => {
+            setDialog(null);
 
-              setTimeout(() => {
-                handleRemoveMessage(selectedMessage.id);
-                setSelectedMessage(null);
-              }, 500);
-            }}
-            message={selectedMessage}
-          />
-        )}
+            setTimeout(() => {
+              handleRemoveMessage(selectedMessage.id);
+            }, 500);
+          }}
+          open={dialog === Dialog.DeleteMessage}
+          message={selectedMessage}
+        />
       </>
     </div>
   );

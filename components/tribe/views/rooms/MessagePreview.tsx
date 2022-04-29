@@ -10,7 +10,7 @@ interface Props {
   message: RoomMessage;
 }
 
-const Message = ({
+const MessagePreview = ({
   message: {
     sender: { avatar, username },
     createdAt,
@@ -69,4 +69,4 @@ const Message = ({
   );
 };
 
-export default Message;
+export default MessagePreview;
