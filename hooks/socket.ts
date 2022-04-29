@@ -18,6 +18,9 @@ export const useSocketEvent = (
   const { me } = useAuth();
 
   useEffect(() => {
+    console.log(`subscribing to eventName: ${eventName}`);
+    console.log({ me });
+    console.log({ socket });
     if (me && socket) {
       socket.onmessage = (event) => {
         const eventData = JSON.parse(event.data);
