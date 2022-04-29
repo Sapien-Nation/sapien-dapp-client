@@ -150,9 +150,8 @@ const Feed = ({
   const handleRemoveMessage = async (messageID) => {
     try {
       await handleRemoveMessageMutation(messageID);
-      // await deleteMessage(roomID, id);
 
-      await revalidate();
+      await deleteMessage(roomID, messageID);
     } catch (err) {
       toast({ message: err });
     }
