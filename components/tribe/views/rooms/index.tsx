@@ -87,12 +87,14 @@ const Feed = ({
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
   useSocketEvent(WSEvents.NewMessage, async (message: RoomNewMessage) => {
+    console.log(`you are on roomID `, { roomID });
+    console.log(`New Message arrive`, { message });
     if (message.extra.roomId === roomID) {
       try {
         await handleAddMessageMutation({
           content: message.payload,
           createdAt: message.createdAt,
-          id: message.id,
+          id: message.extra.messageId,
           sender: {
             avatar: message.by.avatar,
             id: message.by.id,
