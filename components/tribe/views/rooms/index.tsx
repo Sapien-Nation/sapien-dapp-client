@@ -106,15 +106,18 @@ const Feed = ({
     }
   });
 
-  useSocketEvent(WSEvents.DeleteMessage, async (message: RoomNewMessage) => {
-    if (message.extra.roomId === roomID) {
-      try {
-        await handleRemoveMessageMutation(message.id);
-      } catch (err) {
-        Sentry.captureMessage(err);
+  useSocketEvent(
+    WSEvents.DeleteMessage,
+    async (message: { extra: { roomId: string; messageId: string } }) => {
+      if (message.extra.roomId === roomID) {
+        try {
+          await handleRemoveMessageMutation(message.extra.messageId);
+        } catch (err) {
+          Sentry.captureMessage(err);
+        }
       }
     }
-  });
+  );
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   // Mutations
