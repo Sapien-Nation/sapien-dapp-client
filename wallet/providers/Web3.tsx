@@ -6,7 +6,12 @@ import * as sigUtil from 'eth-sig-util';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
 // api
-import { getGasPrice, getTokenMetadata, connectWallet } from '../api';
+import {
+  getGasPrice,
+  getTokenMetadata,
+  connectWallet,
+  getTxHistory,
+} from '../api';
 
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
@@ -335,7 +340,32 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   const getUserTransactions = async (): Promise<Array<UserTransactions>> => {
     try {
-      return [{ transactionHash: '123' }];
+      const { walletAddress } = me;
+      let txList: Array<UserTransactions> = [];
+      const eth = WalletAPIRef.current.eth;
+      const page = 1,
+        offset = 10,
+        sort = 'desc'; // todo: should be input params.
+
+      // retrieve txList using a polygonscan api
+      txList = await getTxHistory(walletAddress, page, offset, sort);
+
+      // // retrieve txList using a traditional way
+      // const currentBlock = eth.blockNumber;
+      // let n = await eth.getTransactionCount(walletAddress, currentBlock);
+      // for (let i=currentBlock; i >= 0 && (n > 0); --i) {
+      //   const block = await eth.getBlock(i, true);
+      //   if (block && block.transactions) {
+      //     block.transactions.forEach(function(e) {
+      //       if ((walletAddress === e.from || walletAddress === e.to) && e.from !== e.to) {
+      //         txList.push({transactionHash: e.hash})
+      //         --n;
+      //       }
+      //     });
+      //   }
+      // }
+      // txList = txList.slice((page - 1) * offset, page * offset);
+      return txList;
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
