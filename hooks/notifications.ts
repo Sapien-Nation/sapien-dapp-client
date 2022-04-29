@@ -57,25 +57,25 @@ export const useNotificationsListener = () => {
     [mutate]
   );
 
-  useSocketEvent(NotificationType.ChannelInvite, handleNotification);
-  useSocketEvent(NotificationType.JoinRequestResolved, handleNotification);
-  useSocketEvent(NotificationType.NewReply, handleNotification);
-  useSocketEvent(NotificationType.ReportPost, handleNotification);
-  useSocketEvent(NotificationType.Mentioned, handleNotification);
-  useSocketEvent(NotificationType.BadgeUser, handleNotification);
-  useSocketEvent(NotificationType.BadgePost, handleNotification);
-  useSocketEvent(NotificationType.SendSPNUser, handleNotification);
-  useSocketEvent(NotificationType.SendSPNPost, handleNotification);
-  useSocketEvent(NotificationType.DepositSPN, handleNotification);
-  useSocketEvent(NotificationType.WithdrawSPN, handleNotification);
-  useSocketEvent(NotificationType.BadgePurchasedForAdmin, handleNotification);
-  useSocketEvent(NotificationType.BadgePurchased, handleNotification);
-  useSocketEvent(
-    NotificationType.BadgePriceUpdatedForAdmin,
-    handleNotification
-  );
-  useSocketEvent(NotificationType.LeaveTribe, handleNotification);
-  useSocketEvent(NotificationType.SapienBadgeReceived, handleNotification);
+  // useSocketEvent(NotificationType.ChannelInvite, handleNotification);
+  // useSocketEvent(NotificationType.JoinRequestResolved, handleNotification);
+  // useSocketEvent(NotificationType.NewReply, handleNotification);
+  // useSocketEvent(NotificationType.ReportPost, handleNotification);
+  // useSocketEvent(NotificationType.Mentioned, handleNotification);
+  // useSocketEvent(NotificationType.BadgeUser, handleNotification);
+  // useSocketEvent(NotificationType.BadgePost, handleNotification);
+  // useSocketEvent(NotificationType.SendSPNUser, handleNotification);
+  // useSocketEvent(NotificationType.SendSPNPost, handleNotification);
+  // useSocketEvent(NotificationType.DepositSPN, handleNotification);
+  // useSocketEvent(NotificationType.WithdrawSPN, handleNotification);
+  // useSocketEvent(NotificationType.BadgePurchasedForAdmin, handleNotification);
+  // useSocketEvent(NotificationType.BadgePurchased, handleNotification);
+  // useSocketEvent(
+  //   NotificationType.BadgePriceUpdatedForAdmin,
+  //   handleNotification
+  // );
+  // useSocketEvent(NotificationType.LeaveTribe, handleNotification);
+  // useSocketEvent(NotificationType.SapienBadgeReceived, handleNotification);
 };
 
 export const useTribeNotifications = (
