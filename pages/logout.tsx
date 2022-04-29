@@ -11,9 +11,6 @@ import { useAuth } from 'context/user';
 // types
 import { NextPage } from 'next';
 
-// context
-import { useToast } from 'context/toast';
-
 const LogoutPage: NextPage = () => {
   const { query } = useRouter();
   const { clearSession, me } = useAuth();
@@ -24,7 +21,7 @@ const LogoutPage: NextPage = () => {
         try {
           await logout({ email: me.email });
         } catch (err) {
-          Sentry.captureException(err);
+          Sentry.captureMessage(err);
         }
       }
 

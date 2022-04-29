@@ -1,21 +1,28 @@
 import { RefreshIcon } from '@heroicons/react/outline';
+import { ExclamationIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 
 // components
-import { DepositView, HomeView, TokenView, WithdrawView } from './views';
+import {
+  DepositView,
+  HistoryView,
+  HomeView,
+  TokenView,
+  WithdrawView,
+} from './views';
 
 // hooks
 import { useWeb3 } from './providers';
 
 // types
 import type { Token } from './types';
-import { ExclamationIcon } from '@heroicons/react/solid';
 
 enum View {
   Home,
   Deposit,
   Token,
   Withdraw,
+  History,
 }
 
 const Wallet = () => {
@@ -100,6 +107,8 @@ const Wallet = () => {
             }}
           />
         );
+      case View.History:
+        return <HistoryView handleBack={() => setView(View.Home)} />;
       case View.Deposit:
         return <DepositView handleBack={() => setView(View.Home)} />;
       case View.Withdraw:

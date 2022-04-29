@@ -18,14 +18,20 @@ export const createRoom = (body: CreateRoomBody) =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+export const joinRoom = (roomID: string) =>
+  axios
+    .post(`/core-api/room/${roomID}/join`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const sendMessage = (roomID: string, body: CreateRoomMessage) =>
   axios
     .post(`/core-api/room/${roomID}/message`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const joinRoom = (roomID: string) =>
+export const deleteMessage = (roomID: string, messageID: string) =>
   axios
-    .post(`/core-api/room/${roomID}/join`)
+    .delete(`/core-api/room/${roomID}/message/${messageID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

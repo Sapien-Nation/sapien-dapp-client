@@ -5,19 +5,27 @@ import { BN } from 'ethereumjs-util';
 import * as sigUtil from 'eth-sig-util';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
+// api
+import {
+  getGasPrice,
+  getTokenMetadata,
+  connectWallet,
+  getTxHistory,
+} from '../api';
+
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
 
-// api
-import { getGasPrice, getTokenMetadata, connectWallet } from '../api';
+// constants
+import { ErrorTypes } from '../constants';
 
 // hooks
 import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Token } from '../types';
+import type { Token, UserTransactions } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -27,10 +35,14 @@ import Web3Library from 'web3';
 interface Web3 {
   isReady: boolean;
   walletAPI: {
-    handleWithdraw: (toAddress: string, tokenId: number) => Promise<string>;
+    handleWithdraw: (
+      toAddress: string,
+      tokenId: number
+    ) => Promise<{ type: ErrorTypes; hash: string }>;
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
+    getUserTransactions: () => Promise<Array<UserTransactions>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   error: any | null;
@@ -143,7 +155,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             console.error('Error initializing @Biconomy/mexa', error, message);
           }
 
-          Sentry.captureException(error);
+          Sentry.captureMessage(message);
           setError(error);
         });
       } catch (err) {
@@ -163,7 +175,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return Number(balance);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -176,7 +188,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return Number(passportBalance);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -203,7 +215,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             image: tokenMetadata.image,
           };
         } catch (err) {
-          Sentry.captureException(err);
+          Sentry.captureMessage(err);
           return {
             id: null,
             name: `Token ${token} FAILED `,
@@ -226,14 +238,14 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           .map((result) => (result as any).reason),
       ];
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
   const handleWithdraw = async (
     to: string,
     tokenId: number
-  ): Promise<string> => {
+  ): Promise<{ type: ErrorTypes; hash: string }> => {
     try {
       const tokenAddress = await contracts.passportContract.methods
         .ownerOf(tokenId)
@@ -241,7 +253,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const { walletAddress } = me;
       if (tokenAddress === walletAddress) {
-        const { privKey } = await connectWallet();
+        const { key } = await connectWallet();
 
         const gasPrice = await getGasPrice(config.GAS_LIMIT / 4);
 
@@ -259,7 +271,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
                 .safeTransferFrom(walletAddress, to, tokenId)
                 .encodeABI(),
             },
-            `0x${privKey}`
+            `0x${key}`
           );
 
         const forwardData = await biconomy.getForwardRequestAndMessageToSign(
@@ -267,24 +279,33 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         );
 
         const signature = sigUtil.signTypedMessage(
-          Buffer.from(privKey, 'hex'),
+          Buffer.from(key, 'hex'),
           { data: forwardData.eip712Format },
           'V4'
         );
 
         // Get the transaction Hash using the Event Emitter returned
-        const tx = await WalletAPIRef.current.eth.sendSignedTransaction({
+        const data = await WalletAPIRef.current.eth.sendSignedTransaction({
           signature: signature,
           forwardRequest: forwardData.request,
           rawTransaction: signedTx.rawTransaction,
           signatureType: biconomy.EIP712_SIGN,
         });
 
-        return tx.transactionHash;
+        if (data === null) {
+          // @see https://web3js.readthedocs.io/en/v1.2.11/web3-eth.html#eth-gettransactionreceipt-return 'null if no receipt was found:'
+          return Promise.reject('Receipt Address was found.');
+        }
+
+        if (data.error) {
+          return { hash: data.transactionHash, type: ErrorTypes.Fail };
+        }
+
+        return { hash: data.transactionHash, type: ErrorTypes.Success };
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       return Promise.reject(err.message);
     }
   };
@@ -296,7 +317,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const gasPrice = await getGasPrice();
 
-      const tx = await contracts.passportContract.methods
+      const data = await contracts.passportContract.methods
         .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
         .send({
           from: metamaskAddress,
@@ -307,9 +328,46 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           gasLimit: config.GAS_LIMIT,
         });
 
-      return tx.transactionHash;
+      if (data === null || data === undefined)
+        return Promise.reject('Unknow error');
+
+      return data.transactionHash;
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
+  const getUserTransactions = async (): Promise<Array<UserTransactions>> => {
+    try {
+      const { walletAddress } = me;
+      let txList: Array<UserTransactions> = [];
+      const eth = WalletAPIRef.current.eth;
+      const page = 1,
+        offset = 10,
+        sort = 'desc'; // todo: should be input params.
+
+      // retrieve txList using a polygonscan api
+      txList = await getTxHistory(walletAddress, page, offset, sort);
+
+      // // retrieve txList using a traditional way
+      // const currentBlock = eth.blockNumber;
+      // let n = await eth.getTransactionCount(walletAddress, currentBlock);
+      // for (let i=currentBlock; i >= 0 && (n > 0); --i) {
+      //   const block = await eth.getBlock(i, true);
+      //   if (block && block.transactions) {
+      //     block.transactions.forEach(function(e) {
+      //       if ((walletAddress === e.from || walletAddress === e.to) && e.from !== e.to) {
+      //         txList.push({transactionHash: e.hash})
+      //         --n;
+      //       }
+      //     });
+      //   }
+      // }
+      // txList = txList.slice((page - 1) * offset, page * offset);
+      return txList;
+    } catch (err) {
+      Sentry.captureMessage(err);
       return Promise.reject(err);
     }
   };
@@ -324,6 +382,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           handleDeposit,
           getWalletBalanceSPN,
           getWalletTokens,
+          getUserTransactions,
           getPassportBalance,
         },
       }}

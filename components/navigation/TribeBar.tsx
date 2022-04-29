@@ -1,5 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { GlobeAltIcon, PlusIcon } from '@heroicons/react/outline';
+import {
+  GlobeAltIcon,
+  PlusIcon,
+  AnnotationIcon,
+} from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -7,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 // components
 import TribeBarItem from './TribeBarItem';
 import { Tooltip } from 'components/common';
-import { CreateTribeDialog } from 'components/tribe/dialogs';
+import { CreateTribeDialog, FeedbackDialog } from 'components/tribe/dialogs';
 
 // context
 import { useAuth } from 'context/user';
@@ -23,6 +27,7 @@ interface Props {
 
 enum Dialog {
   CreateTribe,
+  Feedback,
 }
 
 const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
@@ -36,6 +41,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
   const tooltipRef = useRef(null);
   const profileRef = useRef(null);
   const createTribeRef = useRef(null);
+  const feedbackRef = useRef(null);
 
   const isOnProfilePage = pathname.includes('/profile');
 
@@ -97,7 +103,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           ))}
         </div>
 
-        <div className="border-t-[1px] border-gray-800 block w-full" />
+        <div className="border-t-[1px] border-gray-800 block w-full justify-between" />
 
         <Link href="/discovery">
           <a
@@ -114,24 +120,43 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           </a>
         </Link>
         <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" />
+        <div>
+          <button
+            onClick={() => {
+              setDialog(Dialog.CreateTribe);
+              handleMobileMenu();
+            }}
+            type="button"
+            className="group p-3 mb-16 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+            ref={createTribeRef.current?.setTriggerRef}
+          >
+            <PlusIcon className="h-6 w-6" />
+            <span className="sr-only">Click here to create a new Tribe</span>
+          </button>
+          <Tooltip ref={createTribeRef} text="Create a new Tribe" />
+        </div>
+
         <button
           onClick={() => {
-            setDialog(Dialog.CreateTribe);
+            setDialog(Dialog.Feedback);
             handleMobileMenu();
           }}
           type="button"
-          className="group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
-          ref={createTribeRef.current?.setTriggerRef}
+          className="group absolute bottom-6 p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+          ref={feedbackRef.current?.setTriggerRef}
         >
-          <PlusIcon className="h-6 w-6" />
-          <span className="sr-only">Click here to create a new Tribe</span>
+          <AnnotationIcon className="h-6 w-6" />
+          <span className="sr-only">Share your feedback?</span>
         </button>
-        <Tooltip ref={createTribeRef} text="Create a new Tribe" />
+        <Tooltip ref={feedbackRef} text="Share your feedback?" />
       </div>
 
       {/* Modals */}
       {dialog === Dialog.CreateTribe && (
         <CreateTribeDialog onClose={() => setDialog(null)} />
+      )}
+      {dialog === Dialog.Feedback && (
+        <FeedbackDialog onClose={() => setDialog(null)} />
       )}
     </>
   );

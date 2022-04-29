@@ -14,18 +14,18 @@ export interface CreateTribeBody {
 
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
   axios
-    .post('/core-api', body)
+    .post('/core-api/tribe', body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const uploadImage = (data: FormData) =>
   axios
-    .post('/core-api/image', data)
+    .post('/core-api/tribe/image', data)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const joinTribe = (tribeID: string) =>
   axios
-    .post(`/core-api/${tribeID}/join`)
+    .post(`/core-api/tribe/${tribeID}/join`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

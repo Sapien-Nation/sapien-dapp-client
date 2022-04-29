@@ -10,18 +10,14 @@ interface Props {
   onRetry?: () => void | null;
 }
 
-const ErrorView = ({
-  code = 500,
-  message = 'Looks like something went wrong here!',
-  onRetry = () => window.location.reload(),
-}: Props) => {
+const ErrorView = ({ code, message, onRetry }: Props) => {
   const { push, reload } = useRouter();
 
   useEffect(() => {
-    const error = new Error(message);
-    Sentry.captureException(error);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (message) {
+      Sentry.captureMessage(message);
+    }
+  }, [message]);
 
   return (
     <div className="min-h-full min-w-full flex flex-col">
@@ -32,10 +28,13 @@ const ErrorView = ({
           alt="sapien"
         />
         <div className="grid gap-6 max-w-lg">
-          <p className="text-lg">
-            <span className="font-extrabold">{code}.</span> This is the code of
-            an error
-          </p>
+          {code && (
+            <p className="text-lg">
+              <span className="font-extrabold">{code}.</span> This is the code
+              of an error
+            </p>
+          )}
+          {message && <p className="text-lg">{message}</p>}
           <h2 className="text-white text-5x font-semibold subpixel-antialiased">
             Sapiens... &quot;🍌&quot; we have a problem, but dont worry our
             engineering team has been already notified and will be working on

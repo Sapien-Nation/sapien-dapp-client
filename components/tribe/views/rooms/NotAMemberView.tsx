@@ -97,7 +97,7 @@ const NotAMemberView = () => {
               </li>
             </ul>
           </div>
-          <div className="px-5">
+          <div className="px-0 sm:px-5">
             <RoomEditor
               onSubmit={() => {}}
               name={''}

@@ -118,11 +118,11 @@ const TorusProvider = ({ children }: TorusProviderProps) => {
           setTorusSDK(TorusDirectSDK);
           return torusKeys;
         } catch (err) {
-          Sentry.captureException(err);
+          Sentry.captureMessage(err);
           return Promise.reject(err);
         }
       } else {
-        Sentry.captureException(err);
+        Sentry.captureMessage(err);
         return Promise.reject(err);
       }
     }

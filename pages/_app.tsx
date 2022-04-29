@@ -1,4 +1,5 @@
 import { SWRConfig } from 'swr';
+import Head from 'next/head';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ThemeProvider } from 'next-themes';
 import * as Sentry from '@sentry/nextjs';
@@ -44,7 +45,15 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
           <AuthenticationProvider>
             <SocketProvider>
               <AppLayout>
-                <Component {...pageProps} />
+                <>
+                  <Head>
+                    <meta
+                      name="viewport"
+                      content="width=device-width,initial-scale=1.0"
+                    />
+                  </Head>
+                  <Component {...pageProps} />
+                </>
               </AppLayout>
             </SocketProvider>
           </AuthenticationProvider>

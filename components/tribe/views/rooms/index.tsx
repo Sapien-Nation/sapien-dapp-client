@@ -11,7 +11,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 // api
 import axios from 'api';
-import { sendMessage } from 'api/room';
+import { deleteMessage, sendMessage } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -28,6 +28,7 @@ import Message from './Message';
 import NotAMemberView from './NotAMemberView';
 import LoadingMessagesSkeleton from './LoadingMessagesPlaceholder';
 import JoinARoomMessage from './JoinARoomMessage';
+import DeleteMessageDialog from './dialogs/DeleteMessageDialog';
 
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
@@ -51,6 +52,10 @@ interface Props {
   hasMoreData: boolean;
 }
 
+enum Dialog {
+  DeleteMessage,
+}
+
 const Feed = ({
   apiKey,
   data,
@@ -60,6 +65,10 @@ const Feed = ({
   revalidate,
   hasMoreData,
 }: Props) => {
+  const [dialog, setDialog] = useState(null);
+  const [selectedMessage, setSelectedMessage] = useState<RoomMessage | null>(
+    null
+  );
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const toast = useToast();
@@ -70,36 +79,48 @@ const Feed = ({
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
   const { createdAt } = useRoomDetails(roomID);
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
+    // This is safe to do ,since this view is wrapped on a <Query /> and deduplication avoid making extra queries
+    // @see https://swr.vercel.app/docs/advanced/performance#deduplication
     handleScrollToBottom();
   }, []);
 
-  const handleScrollToBottom = () => {
-    if (scrollToBottom?.current) {
-      scrollToBottom.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-      });
-    }
-  };
-
-  useSocketEvent(WSEvents.NewMessage, (message: RoomNewMessage) => {
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Websockets events
+  useSocketEvent(WSEvents.NewMessage, async (message: RoomNewMessage) => {
     if (message.extra.roomId === roomID) {
-      handleAddMessage({
-        content: message.payload,
-        createdAt: message.createdAt,
-        id: message.id,
-        sender: {
-          avatar: message.by.avatar,
-          id: message.by.id,
-          username: message.by.username,
-        },
-        type: MessageType.Text,
-      });
+      try {
+        await handleAddMessageMutation({
+          content: message.payload,
+          createdAt: message.createdAt,
+          id: message.id,
+          sender: {
+            avatar: message.by.avatar,
+            id: message.by.id,
+            username: message.by.username,
+          },
+          type: MessageType.Text,
+        });
+      } catch (err) {
+        Sentry.captureMessage(err);
+      }
     }
   });
 
-  const handleAddMessage = async (message: RoomMessage) => {
+  useSocketEvent(WSEvents.DeleteMessage, async (message: RoomNewMessage) => {
+    if (message.extra.roomId === roomID) {
+      try {
+        await handleRemoveMessageMutation(message.id);
+      } catch (err) {
+        Sentry.captureMessage(err);
+      }
+    }
+  });
+
+  //---------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Mutations
+  const handleAddMessageMutation = async (message: RoomMessage) => {
     await mutate(
       apiKey,
       ({ data, nextCursor }) => {
@@ -112,11 +133,45 @@ const Feed = ({
     );
   };
 
+  const handleRemoveMessageMutation = async (messageID: string) => {
+    await mutate(
+      apiKey,
+      ({ data, nextCursor }) => {
+        return {
+          data: data.filter(({ id }) => id !== messageID),
+          nextCursor: nextCursor,
+        };
+      },
+      false
+    );
+  };
+
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Handlers
+  const handleScrollToBottom = () => {
+    if (scrollToBottom?.current) {
+      scrollToBottom.current.scrollIntoView({
+        block: 'nearest',
+        inline: 'start',
+      });
+    }
+  };
+
+  const handleRemoveMessage = async (messageID) => {
+    try {
+      await handleRemoveMessageMutation(messageID);
+
+      await deleteMessage(roomID, messageID);
+    } catch (err) {
+      toast({ message: err });
+    }
+  };
+
   const handleMessageSubmit = async (content: string) => {
     if (content === '') return;
 
     try {
-      await handleAddMessage({
+      await handleAddMessageMutation({
         content,
         createdAt: new Date().toISOString(),
         id: nanoid(),
@@ -142,6 +197,8 @@ const Feed = ({
     setShowMobileDetails(false);
   }, []);
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Derivated State
   const messagesData = _groupBy(
     _sortyBy(data, (message) => new Date(message.createdAt)),
     ({ createdAt }) => formatDate(createdAt)
@@ -162,6 +219,7 @@ const Feed = ({
     return true;
   };
 
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
@@ -260,6 +318,13 @@ const Feed = ({
                                   timestampMessages[index - 1] || null,
                                   message.sender.id
                                 )}
+                                onMenuItemClick={(type) => {
+                                  setSelectedMessage(message);
+
+                                  if (type === 'delete') {
+                                    setDialog(Dialog.DeleteMessage);
+                                  }
+                                }}
                               />
                             );
                           })}
@@ -272,7 +337,7 @@ const Feed = ({
             </InfiniteScroll>
             <div ref={scrollToBottom} className="block" />
           </div>
-          <div className="px-5">
+          <div className="px-0 sm:px-5">
             {/* @ts-ignore */}
             <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
           </div>
@@ -286,31 +351,43 @@ const Feed = ({
         >
           <Details handleSidebar={hanleMobileSidebar} />
         </div>
+        {/* Modals */}
+        <DeleteMessageDialog
+          onClose={() => {
+            setDialog(null);
+          }}
+          onDelete={() => {
+            setDialog(null);
+
+            setTimeout(() => {
+              handleRemoveMessage(selectedMessage.id);
+            }, 500);
+          }}
+          open={dialog === Dialog.DeleteMessage}
+          message={selectedMessage}
+        />
       </>
     </div>
   );
 };
 
-const Room = () => {
+interface RoomProps {
+  apiKey: string;
+  roomID: string;
+}
+
+const Room = ({ apiKey, roomID }: RoomProps) => {
   const { query } = useRouter();
   const [isLoading, setLoading] = useState(false);
 
   const { tribeID } = query;
-  const roomID = query.viewID as string;
 
   const { mutate } = useSWRConfig();
 
-  const apiKey = `/core-api/room/${roomID}/messages`;
-  const {
-    data: swrData,
-    error,
-    mutate: revalidate,
-  } = useGetInfinitePages<{
+  const { data: swrData, mutate: revalidate } = useGetInfinitePages<{
     data: Array<RoomMessage>;
     nextCursor: string | null;
   }>(apiKey);
-
-  if (!swrData && !error) return <LoadingMessagesSkeleton />;
 
   let mutateFetchAPI = apiKey;
   const handleFetchMore = async (cursor: string) => {
@@ -330,7 +407,7 @@ const Room = () => {
       );
       setLoading(false);
     } catch (err) {
-      Sentry.captureException(err);
+      Sentry.captureMessage(err);
       setLoading(false);
     }
   };
@@ -357,12 +434,19 @@ const RoomProxy = () => {
 
   if (_isEmpty(query)) return null;
 
+  const roomID = query.viewID as string;
+  const apiKey = `/core-api/room/${roomID}/messages`;
+
   return (
-    <Query api={`/core-api/room/${query.viewID}`} ignoreError loader={null}>
+    <Query api={`/core-api/room/${roomID}`} ignoreError loader={null}>
       {(data) => {
         if (data?.message === 'User is not a memeber of the room')
           return <NotAMemberView />;
-        return <Room />;
+        return (
+          <Query api={apiKey} loader={<LoadingMessagesSkeleton />}>
+            {() => <Room roomID={roomID} apiKey={apiKey} />}
+          </Query>
+        );
       }}
     </Query>
   );

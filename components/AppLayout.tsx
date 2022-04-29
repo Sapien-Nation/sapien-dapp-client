@@ -132,7 +132,7 @@ const AppLayout = ({ children }: Props) => {
                 <div
                   className={`${
                     mobileMenuOpen ? '-right-10' : 'right-0'
-                  } absolute top-0 bg-sapien-red-700/50 lg:hidden`}
+                  } absolute top-0 bg-sapien-red-700 lg:hidden`}
                 >
                   <button
                     type="button"
