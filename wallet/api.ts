@@ -9,7 +9,8 @@ import { Token, Transaction } from './types';
 
 const gasStationUrl = process.env.NEXT_PUBLIC_GAS_STATION_URL;
 const polygonAPIUrl = process.env.NEXT_PUBLIC_POLYGON_API_URL;
-const polygonscanAPIKey = process.env.POLYGONSCAN_KEY;
+const polygonscanAPIKey = process.env.NEXT_PUBLIC_POLYGONSCAN_KEY;
+
 export const connectWallet = () => {
   const tokens = window.localStorage.getItem('tokens');
   const { token } = JSON.parse(tokens);
@@ -45,7 +46,17 @@ export const getTokenMetadata = (tokenId): Promise<Token> =>
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getTxHistory = (address, page, offset, sort) =>
+export const getTxHistory = ({
+  address,
+  page,
+  offset,
+  sort,
+}: {
+  address: string;
+  page: number;
+  offset: number;
+  sort: string;
+}) =>
   axios
     .get(
       `${polygonAPIUrl}?module=account&
@@ -59,14 +70,5 @@ export const getTxHistory = (address, page, offset, sort) =>
     apikey=${polygonscanAPIKey}
   `
     )
-    .then((response) => {
-      /*response.data : {
-      "status": "1",
-      "message": "OK",  // "No transactions found" when account has no transactions yet
-      "result": Array<Transaction>
-    }*/
-      return response.data.result.map((tx: Transaction) => {
-        transactionHash: tx.hash;
-      });
-    })
+    .then((response) => response)
     .catch(({ response }) => Promise.reject(response.data.message));

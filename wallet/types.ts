@@ -4,10 +4,6 @@ export interface Token {
   image: string | null;
 }
 
-export interface UserTransactions {
-  transactionHash: string;
-}
-
 export interface Transaction {
   blockNumber: string;
   timeStamp: string;

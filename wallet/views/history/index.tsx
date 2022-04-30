@@ -7,7 +7,7 @@ import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
 
 // types
-import type { UserTransactions } from '../../types';
+import type { Transaction } from '../../types';
 
 // web3
 import { useWeb3 } from '../../providers';
@@ -17,9 +17,13 @@ interface Props {
 }
 
 const Home = ({ handleBack }: Props) => {
+  const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
-  const [transactions, setTransactions] = useState<Array<UserTransactions>>([]);
+  const [transactions, setTransactions] = useState<Array<Transaction>>([]);
+  const [hasMoreTransactions, setHasMoreTransactions] = useState(false);
+  const [isFetchingMoreTransactions, setIsFetchingMoreTransactions] =
+    useState(false);
 
   const { walletAPI } = useWeb3();
 
@@ -28,18 +32,69 @@ const Home = ({ handleBack }: Props) => {
     try {
       setIsFetching(true);
 
-      const transactions = await walletAPI.getUserTransactions();
-      setTransactions(transactions);
+      const { transactions, hasMore } = await walletAPI.getUserTransactions(
+        page
+      );
+
       setError(null);
+      setHasMoreTransactions(hasMore);
+      setTransactions(transactions);
     } catch (err) {
       setError(err);
     }
     setIsFetching(false);
-  }, [walletAPI]);
+  }, [page, walletAPI]);
 
   useEffect(() => {
     handleGetTransactions();
   }, [handleGetTransactions, walletAPI]);
+
+  // Todo call this to fetch more transactions
+  const handleLoadMoreTransactions = async () => {
+    try {
+      setIsFetchingMoreTransactions(true);
+
+      const { transactions, hasMore } = await walletAPI.getUserTransactions(
+        page + 1
+      );
+
+      setHasMoreTransactions(hasMore);
+      setPage(page + 1);
+      setTransactions([...transactions, ...transactions]);
+
+      setError(null);
+    } catch (err) {
+      setError(err);
+    }
+    setIsFetchingMoreTransactions(false);
+  };
+
+  const renderLoadMoreButton = () => {
+    if (isFetchingMoreTransactions)
+      return (
+        <button
+          type="button"
+          disabled
+          className="w-full py-2 cursor-not-allowed px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+        >
+          <RefreshIcon className="w-5 animate-spin" />
+          Fetching transactions
+        </button>
+      );
+
+    if (hasMoreTransactions === true)
+      return (
+        <button
+          type="button"
+          onClick={handleLoadMoreTransactions}
+          className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+        >
+          Load More
+        </button>
+      );
+
+    return null;
+  };
 
   if (isFetching) {
     return (
@@ -116,11 +171,11 @@ const Home = ({ handleBack }: Props) => {
             </button>
           </p>
         )}
-        {transactions.map(({ transactionHash }) => (
-          <li key={transactionHash}>
+        {transactions.map(({ hash }) => (
+          <li key={hash}>
             <a
               className="underline  text-sm flex flex-row items-center gap-2"
-              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${transactionHash}`}
+              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${hash}`}
               target="_blank"
               rel="noreferrer"
             >
@@ -129,6 +184,7 @@ const Home = ({ handleBack }: Props) => {
           </li>
         ))}
       </ul>
+      {renderLoadMoreButton()}
     </div>
   );
 };

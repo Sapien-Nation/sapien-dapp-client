@@ -25,7 +25,7 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Token, UserTransactions } from '../types';
+import type { Token, Transaction } from '../types';
 import type { AbiItem } from 'web3-utils';
 
 // web3
@@ -42,21 +42,12 @@ interface Web3 {
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
-    getUserTransactions: () => Promise<Array<UserTransactions>>;
+    getUserTransactions: (
+      page?: number
+    ) => Promise<{ transactions: Array<Transaction>; hasMore: boolean }>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   error: any | null;
-}
-
-interface WalletConfig {
-  MAINNET_NETWORK_ID: number;
-  POLY_NETWORK_ID: number;
-  RPC_PROVIDER: string;
-  SPN_TOKEN_ADDRESS: string;
-  PASSPORT_CONTRACT_ADDRESS: string;
-  BICONOMY_API_KEY: string;
-  EXPLORER_BASE_URL: string;
-  GAS_LIMIT: number;
 }
 
 interface Web3ProviderProps {
@@ -338,37 +329,23 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getUserTransactions = async (): Promise<Array<UserTransactions>> => {
+  const getUserTransactions = async (
+    page = 1
+  ): Promise<{ transactions: Array<Transaction>; hasMore: boolean }> => {
     try {
       const { walletAddress } = me;
-      let txList: Array<UserTransactions> = [];
-      const eth = WalletAPIRef.current.eth;
-      const page = 1,
-        offset = 10,
-        sort = 'desc'; // todo: should be input params.
 
-      // retrieve txList using a polygonscan api
-      txList = await getTxHistory(walletAddress, page, offset, sort);
+      const { data } = await getTxHistory({
+        address: walletAddress,
+        page,
+        offset: page * 10,
+        sort: 'desc',
+      });
 
-      // // retrieve txList using a traditional way
-      // const currentBlock = eth.blockNumber;
-      // let n = await eth.getTransactionCount(walletAddress, currentBlock);
-      // for (let i=currentBlock; i >= 0 && (n > 0); --i) {
-      //   const block = await eth.getBlock(i, true);
-      //   if (block && block.transactions) {
-      //     block.transactions.forEach(function(e) {
-      //       if ((walletAddress === e.from || walletAddress === e.to) && e.from !== e.to) {
-      //         txList.push({transactionHash: e.hash})
-      //         --n;
-      //       }
-      //     });
-      //   }
-      // }
-      // txList = txList.slice((page - 1) * offset, page * offset);
-      return txList;
+      return { transactions: data, hasMore: data.length === 10 };
     } catch (err) {
       Sentry.captureMessage(err);
-      return Promise.reject(err);
+      return Promise.resolve({ transactions: [], hasMore: false });
     }
   };
 
