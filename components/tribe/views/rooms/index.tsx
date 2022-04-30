@@ -91,25 +91,33 @@ const Feed = ({
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
   useSocketEvent(
+    [WSEvents.NewMessage, WSEvents.DeleteMessage],
     async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
       if (data.extra.roomId === roomID) {
         try {
-          if (type === WSEvents.NewMessage) {
-            await handleAddMessageMutation({
-              content: (data as RoomNewMessage).payload,
-              createdAt: (data as RoomNewMessage).createdAt,
-              id: (data as RoomNewMessage).extra.messageId,
-              sender: {
-                avatar: (data as RoomNewMessage).by.avatar,
-                id: (data as RoomNewMessage).by.id,
-                username: (data as RoomNewMessage).by.username,
-              },
-              type: MessageType.Text,
-            });
-          } else if (type === WSEvents.DeleteMessage) {
-            await handleRemoveMessageMutation(
-              (data as RoomDeleteMessage).extra.messageId
-            );
+          switch (type) {
+            case WSEvents.NewMessage:
+              await handleAddMessageMutation({
+                content: (data as RoomNewMessage).payload,
+                createdAt: (data as RoomNewMessage).createdAt,
+                id: (data as RoomNewMessage).extra.messageId,
+                sender: {
+                  avatar: (data as RoomNewMessage).by.avatar,
+                  id: (data as RoomNewMessage).by.id,
+                  username: (data as RoomNewMessage).by.username,
+                },
+                type: MessageType.Text,
+              });
+              break;
+            case WSEvents.DeleteMessage:
+              await handleRemoveMessageMutation(
+                (data as RoomDeleteMessage).extra.messageId
+              );
+              break;
+            default:
+              console.info(`No handler for eventType: ${type}`);
+              Sentry.captureMessage(`No handler for eventType: ${type}`);
+              break;
           }
         } catch (err) {
           Sentry.captureMessage(err);
