@@ -1,10 +1,9 @@
 import {
   ArrowLeftIcon,
   CheckCircleIcon,
-  DocumentDuplicateIcon,
   RefreshIcon,
 } from '@heroicons/react/outline';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { isAddress } from 'web3-utils';
 
@@ -40,26 +39,9 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
   const [view, setView] = useState(View.Home);
   const [withdrawTXHash, setWithdrawTXHash] = useState('');
   const [withdrawTXErrorHash, setWithdrawTXErrorHash] = useState('');
-  const [clipboardWalletText, setClipboardWalletText] = useState('');
 
   const { walletAPI } = useWeb3();
 
-  useEffect(() => {
-    const getClipboardText = async () => {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (isAddress(text)) {
-          setClipboardWalletText(text);
-        } else {
-          setClipboardWalletText('');
-        }
-      } catch (err) {
-        //
-      }
-    };
-
-    getClipboardText();
-  }, []);
   const toast = useToast();
 
   const {
@@ -106,43 +88,27 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
                 your wallet address
               </p>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium">
-                    Destination Wallet
-                  </label>
-                  <div className="relative mt-1">
-                    <input
-                      id="address"
-                      type="text"
-                      aria-label="Wallet Address"
-                      autoComplete="address"
-                      required
-                      placeholder="Enter Wallet Address"
-                      className="bg-gray-800 appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      {...register('address', {
-                        validate: {
-                          isValidAddress: (value) => {
-                            return isAddress(value);
-                          },
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="email" className="block text-sm font-medium">
+                  Destination Wallet
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="address"
+                    type="text"
+                    aria-label="Wallet Address"
+                    autoComplete="address"
+                    required
+                    placeholder="Enter Wallet Address"
+                    className="bg-gray-800 appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                    {...register('address', {
+                      validate: {
+                        isValidAddress: (value) => {
+                          return isAddress(value);
                         },
-                      })}
-                    />
-                    {clipboardWalletText && (
-                      <button
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none cursor-pointer z-20"
-                        onClick={() => {
-                          setValue('address', clipboardWalletText);
-                          setClipboardWalletText('');
-                        }}
-                      >
-                        <DocumentDuplicateIcon
-                          className="w-5 h-5 cursor-pointer"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    )}
-                  </div>
+                      },
+                    })}
+                  />
                 </div>
 
                 <div className="text-center gap-2 flex flex-col">
