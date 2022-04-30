@@ -5,7 +5,7 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const ContentSecurityPolicy = `
   default-src 'self';
   object-src 'self';
-  script-src-elem 'self' 'unsafe-inline' http://localhost:3000 https://localhost:3000 data:;
+  script-src-elem 'self' 'unsafe-inline' data: http://localhost:3000 https://localhost:3000 https://static.cloudflareinsights.com;
   script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.youtube.com *.ytimg.com;
   child-src *.youtube.com *.ytimg.com;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
