@@ -73,8 +73,6 @@ build-qat:
     - rm -rf tools
     - git clone http://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
     #- git submodule sync && git submodule update
-    #- cd ..
-    #- ls -l src/tools
     - export KUBECONFIG=~/.kube/kubeconfig_sapien-qat-cluster
     - export AWS_PROFILE=sapien-qat
     - export AWS_REGION=us-east-2
