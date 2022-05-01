@@ -60,7 +60,7 @@ cleanup-sandbox:
   tags:
     - front-sandbox
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+    - docker images -q | xargs -l docker rmi -f
   when: manual
   only:
     <<: *sandbox_triggers  
@@ -101,7 +101,7 @@ cleanup-qat:
   tags:
     - front-qat
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+    - docker images -q | xargs -l docker rmi -f
   when: manual
   only:
     <<: *qat_triggers  
@@ -145,7 +145,7 @@ cleanup-poc:
   tags:
     - front-poc
   script:
-    - docker images | awk '{print $3}' | xargs -l docker rmi -f
+    - docker images -q | xargs -l docker rmi -f
   when: manual
   only:
     <<: *poc_triggers   
