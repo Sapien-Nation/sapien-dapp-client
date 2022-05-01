@@ -136,7 +136,7 @@ build-poc:
     - kubectl apply -f front-dep.yml
   environment:
     name: poc
-    url: https://front-poc.sapien.network  
+    url: https://app.sapien.network  
   only:
     <<: *poc_triggers
 
