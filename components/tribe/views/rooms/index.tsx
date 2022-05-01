@@ -388,20 +388,21 @@ const Feed = ({
           <Details handleSidebar={hanleMobileSidebar} />
         </div>
         {/* Modals */}
-        <DeleteMessageDialog
-          onClose={() => {
-            setDialog(null);
-          }}
-          onDelete={() => {
-            setDialog(null);
+        {dialog === Dialog.DeleteMessage && (
+          <DeleteMessageDialog
+            onClose={() => {
+              setDialog(null);
+            }}
+            onDelete={() => {
+              setDialog(null);
 
-            setTimeout(() => {
-              handleRemoveMessage(selectedMessage.id);
-            }, 500);
-          }}
-          open={dialog === Dialog.DeleteMessage}
-          message={selectedMessage}
-        />
+              setTimeout(() => {
+                handleRemoveMessage(selectedMessage.id);
+              }, 500);
+            }}
+            message={selectedMessage}
+          />
+        )}
       </>
     </div>
   );

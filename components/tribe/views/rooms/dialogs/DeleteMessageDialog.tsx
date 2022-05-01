@@ -9,12 +9,11 @@ interface Props {
   onClose: () => void;
   onDelete: () => void;
   message: RoomMessage;
-  open: boolean;
 }
 
-const DeleteMessageDialog = ({ onClose, onDelete, message, open }: Props) => (
+const DeleteMessageDialog = ({ onClose, onDelete, message }: Props) => (
   <Dialog
-    show={open}
+    show
     isFetching={false}
     onClose={onClose}
     title="Delete Message!"
