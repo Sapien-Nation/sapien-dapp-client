@@ -243,9 +243,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         .call();
 
       const { walletAddress } = me;
+      console.log('tokenAddress => %j: ', tokenAddress);
+      console.log('walletAddress => %j: ', walletAddress);
       if (tokenAddress === walletAddress) {
         const { key } = await connectWallet();
-
+        console.log(`key length  [ Withdraw ] =>  ${key?.length}`);
         const gasPrice = await getGasPrice(config.GAS_LIMIT / 4);
 
         const signedTx =

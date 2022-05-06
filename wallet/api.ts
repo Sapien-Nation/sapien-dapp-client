@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _isObject from 'lodash/isObject';
+import * as Sentry from '@sentry/nextjs';
 
 // api
 import instance from 'api';
@@ -23,7 +24,10 @@ export const connectWallet = () => {
       },
     })
     .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
+    .catch((error) => {
+      Sentry.captureException(error);
+      return Promise.reject(error?.response?.data?.message ?? 'Error');
+    });
 };
 
 export const getGasPrice = (fallbackGasPrice = 7500) =>

@@ -65,28 +65,36 @@ const moduleExports = {
   },
   // TODO add websocket endpoint
   async rewrites() {
-    return [
-      {
-        source: '/core-api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v3/:path*`,
-      },
-      {
-        source: '/core-api/user/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/:path*`,
-      },
-      {
-        source: '/user-api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/user/:path*`,
-      },
-      {
-        source: '/auth-api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/auth/:path*`,
-      },
-      {
-        source: '/wallet-api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/wallet/:path*`,
-      },
-    ];
+    return {
+      afterFiles: [
+        {
+          source: '/core-api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v3/:path*`,
+        },
+        {
+          source: '/core-api/user/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/:path*`,
+        },
+        {
+          source: '/user-api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/user/:path*`,
+        },
+        {
+          source: '/auth-api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/auth/:path*`,
+        },
+        {
+          source: '/wallet-api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/wallet/:path*`,
+        }
+      ],
+      fallback: [
+        {
+          source: '/wallet-api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/wallet/:path*`,
+        }
+      ],
+    };
   },
 };
 
