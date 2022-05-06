@@ -28,8 +28,6 @@ const connectWallet = async (headers) =>
     )
     .then(({ data }) => data)
     .catch((error) => {
-      console.log(' ↓↓↓↓↓ internal Wallet API failed ↓↓↓↓↓');
-      console.log(error.toJSON());
       Sentry.captureException(error);
       return Promise.reject(error?.response?.data?.message ?? 'Error');
     });
@@ -38,19 +36,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log('req.cookies => %j: ', req.cookies);
   if (req.method === 'GET') {
     try {
       const data = await connectWallet(req.headers);
       if (data.key) {
-        const keyy = decrypt(data.key);
-        console.log(
-          'DECRYPTED KEY length [connectWallet handler] => %j: ',
-          keyy?.length
-        );
-        Sentry.captureMessage(
-          `DECRYPTED KEY length [connectWallet handler] => %j: , ${keyy?.length}`
-        );
         return res.status(200).json({ key: decrypt(data.key) });
       }
 
