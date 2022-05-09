@@ -1,4 +1,4 @@
-import { UserGroupIcon, PlusIcon } from '@heroicons/react/outline';
+import { BellIcon, UserGroupIcon, PlusIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ import {
 
 // hooks
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
+import { Query } from 'components/common';
 
 interface Props {
   handleMobileMenu: () => void;
@@ -48,12 +49,47 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 className={
                   asPath === `/tribes/${tribeID}/home`
                     ? 'font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
-                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 '
                 }
                 onClick={handleMobileMenu}
               >
                 <UserGroupIcon className="h-5 w-5 mr-4" />
                 {name}
+              </a>
+            </Link>
+            <Link href={`/tribes/${tribeID}/notifications`} passHref>
+              <a
+                className={
+                  asPath === `/tribes/${tribeID}/notifications`
+                    ? 'mt-4 font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+                    : 'mt-4 relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2'
+                }
+                onClick={handleMobileMenu}
+              >
+                <BellIcon className="h-5 w-5 mr-4" />
+                Notifications
+                <Query
+                  api="/notifications-api/todo"
+                  options={{
+                    fetcher: () => [
+                      { read: true },
+                      { read: false },
+                      { read: false },
+                    ],
+                  }}
+                >
+                  {(data) => {
+                    // TODO use https://tailwindcss.com/docs/animation#ping
+                    return (
+                      <span className="flex h-3 w-3">
+                        <span className="animate-ping relative inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500">
+                          {data.filter(({ read }) => read === false).length}
+                        </span>
+                      </span>
+                    );
+                  }}
+                </Query>
               </a>
             </Link>
             {/* <button
