@@ -86,6 +86,8 @@ const Feed = ({
     // This is safe to do ,since this view is wrapped on a <Query /> and deduplication avoid making extra queries
     // @see https://swr.vercel.app/docs/advanced/performance#deduplication
     handleScrollToBottom();
+
+    // TODO Call API to read all this Room notifications
   }, []);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------

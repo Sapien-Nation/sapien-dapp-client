@@ -121,6 +121,7 @@ const AppLayout = ({ children }: Props) => {
       >
         {(tribes: Array<ProfileTribe>) => (
           <main className="h-full flex">
+            <Query api="/core-api/notification/all" loader={null} />
             <nav
               className={
                 mobileMenuOpen
