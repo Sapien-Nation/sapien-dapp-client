@@ -11,6 +11,8 @@ import {
   getTokenMetadata,
   connectWallet,
   getTxHistory,
+  deposit,
+  withdraw,
 } from '../api';
 
 // contracts
@@ -292,6 +294,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           return { hash: data.transactionHash, type: ErrorTypes.Fail };
         }
 
+        await withdraw(tokenId);
         return { hash: data.transactionHash, type: ErrorTypes.Success };
       }
       return Promise.reject('Token does not belong to this wallet.');
@@ -308,8 +311,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const gasPrice = await getGasPrice();
 
+      const tokenId = tokens[0].id;
       const data = await contracts.passportContract.methods
-        .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
+        .safeTransferFrom(metamaskAddress, me.walletAddress, tokenId)
         .send({
           from: metamaskAddress,
           signatureType: biconomy.EIP712_SIGN,
@@ -322,6 +326,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       if (data === null || data === undefined)
         return Promise.reject('Unknow error');
 
+      await deposit(tokenId);
       return data.transactionHash;
     } catch (err) {
       Sentry.captureMessage(err);

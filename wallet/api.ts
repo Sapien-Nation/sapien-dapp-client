@@ -76,3 +76,15 @@ export const getTxHistory = ({
     )
     .then((response) => response)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const deposit = (tokenId): Promise<Token> =>
+  instance
+    .post(`/api/v3/wallet/deposit/${tokenId}`)
+    .then((response) => response.data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const withdraw = (tokenId): Promise<Token> =>
+  instance
+    .post(`/api/v3/wallet/withdraw/${tokenId}`)
+    .then((response) => response.data)
+    .catch(({ response }) => Promise.reject(response.data.message));
