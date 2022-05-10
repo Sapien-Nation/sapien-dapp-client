@@ -79,14 +79,23 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                   }}
                 >
                   {(data) => {
-                    // TODO use https://tailwindcss.com/docs/animation#ping
+                    const notificationCount = data.filter(
+                      ({ read }) => read === false
+                    ).length;
                     return (
-                      <span className="flex h-3 w-3">
-                        <span className="animate-ping relative inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500">
-                          {data.filter(({ read }) => read === false).length}
-                        </span>
-                      </span>
+                      <>
+                        {data.filter(({ read }) => read === false).length >
+                        0 ? (
+                          <span className="flex h-5 w-5 relative ml-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center text-10px font-bold">
+                              {notificationCount >= 100
+                                ? '99+'
+                                : notificationCount}
+                            </span>
+                          </span>
+                        ) : null}
+                      </>
                     );
                   }}
                 </Query>
