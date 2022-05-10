@@ -89,6 +89,9 @@ module.exports = {
       spacing: {
         '12px': '12px',
         '10px': '10px',
+      },
+      fontSize: {
+        '10px': '10px'
       }
     },
   },
