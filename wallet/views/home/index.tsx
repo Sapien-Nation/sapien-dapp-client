@@ -7,6 +7,9 @@ import {
 import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
 
+// helpers
+import { getShortWalletAddress } from 'utils/wallet';
+
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
@@ -85,7 +88,9 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
       <div className="grid grid-cols-3 gap-1 items-center border-b-[1px] border-gray-800 p-3">
         <div className="flex flex-col items-center col-start-2">
           <span>Account</span>
-          <span className="text-sm">0xD7E...1A2E</span>
+          <span className="text-sm">
+            {getShortWalletAddress(me.walletAddress)}
+          </span>
         </div>
         <div className="flex justify-end">
           <DotsVerticalIcon className=" h-6 w-6" aria-hidden="true" />
