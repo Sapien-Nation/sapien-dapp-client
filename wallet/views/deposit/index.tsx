@@ -486,7 +486,7 @@ const Deposit = ({ handleBack }: Props) => {
   };
 
   return (
-    <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+    <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
       <div className="h-full space-y-6 w-72">{renderView()}</div>
     </div>
   );

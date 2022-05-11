@@ -75,7 +75,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
     switch (view) {
       case View.Form: {
         return (
-          <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+          <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
             <div className="w-72 h-96 flex flex-col gap-4">
               <h5 className="text-xl text-white font-extrabold tracking-wide flex items-left gap-2">
                 <button onClick={() => setView(View.Home)}>
@@ -143,7 +143,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
       }
       case View.Home:
         return (
-          <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+          <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
             <div className="w-72 h-96 flex flex-col gap-4">
               <h5 className="text-xl text-white font-extrabold tracking-wide flex items-left gap-2">
                 <button onClick={handleBack}>
@@ -210,7 +210,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
         );
       case View.Success:
         return (
-          <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+          <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
             <div className="w-72 h-96 flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <h5 className="text-xl text-green-400 font-extrabold tracking-wide flex items-center gap-2">

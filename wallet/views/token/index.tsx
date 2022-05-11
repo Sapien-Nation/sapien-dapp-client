@@ -11,7 +11,7 @@ interface Props {
 
 const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
   return (
-    <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+    <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
       <div className="w-72 h-96 flex flex-col  gap-4">
         <h5 className="text-xl text-white font-extrabold tracking-wide flex items-left gap-2">
           <button onClick={handleBack}>
