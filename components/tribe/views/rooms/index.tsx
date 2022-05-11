@@ -72,6 +72,7 @@ const Feed = ({
     null
   );
   const [showMobileDetails, setShowMobileDetails] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -110,6 +111,18 @@ const Feed = ({
                 },
                 type: MessageType.Text,
               });
+
+              if (
+                window.pageYOffset + window.innerHeight >=
+                scrollToBottom.current.offsetTop
+              ) {
+                handleScrollToBottom();
+              } else {
+                setUnreadMessages(
+                  (currentUnreadMessages) => currentUnreadMessages + 1
+                );
+              }
+
               break;
             case WSEvents.DeleteMessage:
               await handleRemoveMessageMutation(
@@ -179,13 +192,18 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Handlers
-  const handleScrollToBottom = () => {
+  const handleScrollToBottom = (behavior: 'auto' | 'smooth' = 'auto') => {
     if (scrollToBottom?.current) {
       scrollToBottom.current.scrollIntoView({
         block: 'nearest',
         inline: 'start',
+        behavior,
       });
     }
+
+    // TODO read all messages (if any)
+    // TODO update tribe navigation if unread = true
+    setUnreadMessages(0);
   };
 
   const handleRemoveMessage = async (messageID) => {
@@ -261,6 +279,28 @@ const Feed = ({
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
+        {unreadMessages > 0 && (
+          <button
+            onClick={() => {
+              handleScrollToBottom('smooth');
+            }}
+            className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 font-extrabold"
+          >
+            You have {unreadMessages} new messages
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                event.preventDefault();
+
+                // TODO call API to read messages
+                // TODO update channel UI on tribe Navigation
+                setUnreadMessages(0);
+              }}
+            >
+              Mark as Read
+            </button>
+          </button>
+        )}
         <SEO title={room.name} />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
           <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
