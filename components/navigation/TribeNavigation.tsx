@@ -44,17 +44,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
   const { name } = tribe;
 
-  const getChannelListItemClassName = (id) => {
+  const getRoomListItemClassName = (id: string, hasUnreadMessages: boolean) => {
     const isOnChannelView = id === viewID;
-    const haveUnreadNotifications = false; // TODO we need to filter unreadNotifications to see if there is unread notifications
 
     if (isOnChannelView) {
-      if (haveUnreadNotifications)
+      if (hasUnreadMessages)
         return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
       return 'text-sm bg-sapien-neutral-800 rounded-md';
     }
 
-    if (haveUnreadNotifications)
+    if (hasUnreadMessages)
       return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
 
     return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
@@ -170,9 +169,12 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
             <ul className="px-2 py-2 cursor-pointer">
-              {rooms.map(({ id, name }) => {
+              {rooms.map(({ id, name, hasUnreadMessages }) => {
                 return (
-                  <li className={getChannelListItemClassName(id)} key={id}>
+                  <li
+                    className={getRoomListItemClassName(id, hasUnreadMessages)}
+                    key={id}
+                  >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
                       <a
                         className="block px-2 py-1 my-1"
