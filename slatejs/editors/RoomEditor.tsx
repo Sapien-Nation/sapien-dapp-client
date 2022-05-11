@@ -5,24 +5,20 @@ import { EmojiHappyIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
 import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useCallback, useMemo, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import { Editor, createEditor, Transforms, Range } from 'slate';
-import {
-  Slate,
-  Editable,
-  useSelected,
-  useFocused,
-  withReact,
-} from 'slate-react';
+import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 
 // components
 import { UserAvatar } from 'components/common';
+import { Element } from '../components';
 
 // context
 import { useAuth } from 'context/user';
 
 // constants
-import { defaultValue, ElementType } from '../constants';
+import { defaultValue, ElementType, MentionType } from '../constants';
 
 // hooks
 import { usePassport } from 'hooks/passport';
@@ -37,40 +33,46 @@ interface Props {
   name: string;
   onSubmit: (text: string) => void;
   slateProps?: EditableProps;
+  roomID?: string;
 }
 
 const editorID = 'slatejs-editor';
-const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
+const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
-  const [attachments, setAttachments] = useState<Array<File>>([]);
-  const [target, setTarget] = useState<Range | undefined>();
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
+  const [target, setTarget] = useState<Range | undefined>();
+  const [attachments, setAttachments] = useState<Array<File>>([]);
 
+  const { cache } = useSWRConfig();
   const editor = useMemo(
     () => withMentions(withReact(withHistory(createEditor()))),
     []
   );
-  const renderElement = useCallback((props) => <Element {...props} />, []);
 
+  const mentions = useMemo(
+    () =>
+      (cache.get(`/core-api/room/${roomID}/members`) ?? [])
+        .filter(({ username }) => {
+          return username.toLowerCase().startsWith(search.toLowerCase());
+        })
+        .map(({ id, avatar, username }) => ({
+          id,
+          avatar,
+          label: username,
+          type: MentionType.Member,
+        })),
+    [cache, roomID, search]
+  );
+
+  //----------------------------------------------------------------------------------------------------------------
   const { me } = useAuth();
   const passport = usePassport();
 
-  const MEMBERLIST = [
-    {
-      id: '1',
-      username: 'sabbir',
-      avatar:
-        'https://d151dmflpumpzp.cloudfront.net/thumbnails/profiles/avatar/c1f486a7-96d5-4940-a9c4-15537384dd12-110x110.jpeg',
-    },
-    {
-      id: '2',
-      username: 'ethaan',
-      avatar:
-        'https://d151dmflpumpzp.cloudfront.net/thumbnails/profiles/avatar/c84bf641-0d8d-4f43-b298-62d3a1eb02f6-110x110.jpeg',
-    },
-  ];
+  //----------------------------------------------------------------------------------------------------------------
+  const renderElement = useCallback((props) => <Element {...props} />, []);
 
+  //----------------------------------------------------------------------------------------------------------------
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
@@ -97,56 +99,25 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     [editor, onSubmit, value]
   );
 
-  const Element = (props) => {
-    const { attributes, children, element } = props;
-    switch (element.type) {
-      case 'mention':
-        return <Mention {...props} />;
-      default:
-        return <p {...attributes}>{children}</p>;
-    }
-  };
-
-  const Mention = ({ attributes, children, element }) => {
-    const selected = useSelected();
-    const focused = useFocused();
-    return (
-      <span
-        {...attributes}
-        contentEditable={false}
-        className={`${
-          selected && focused ? 'shadow-md' : 'none'
-        } p-1 mx-1 align-baseline inline-block rounded bg-gray-700 text-gray-300 text-xs`}
-      >
-        @{element.member?.username}
-        {children}
-      </span>
-    );
-  };
-
-  const members = MEMBERLIST.filter(({ username }) =>
-    username.toLowerCase().startsWith(search.toLowerCase())
-  ).slice(0, 10);
-
   const onKeyDown = useCallback(
     (event) => {
       if (target) {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
-            const prevIndex = index >= members.length - 1 ? 0 : index + 1;
+            const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           case 'ArrowUp':
             event.preventDefault();
-            const nextIndex = index <= 0 ? members.length - 1 : index - 1;
+            const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           case 'Tab':
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, target);
-            insertMention(editor, members[index]);
+            insertMention(editor, mentions[index]);
             setTarget(null);
             break;
           case 'Escape':
@@ -160,40 +131,50 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         handleSubmit(event);
       }
     },
-    [index, target, editor, handleSubmit, members]
+    [target, index, mentions, editor, handleSubmit]
   );
 
-  return (
-    <>
-      {target && members.length > 0 && (
+  //----------------------------------------------------------------------------------------------------------------
+  const renderMentions = () => {
+    if (target) {
+      return (
         <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
           <h3 className="text-sm">Members</h3>
-          {members.map(({ id, avatar, username }, idx) => (
-            <div
-              key={id}
-              className={`${
-                idx === index ? 'bg-gray-900' : ''
-              } mt-3 py-2 px-3 rounded-md`}
-            >
-              <div className="flex items-center gap-2">
-                {avatar && (
-                  <img
-                    className="w-5 h-5 rounded-full flex-shrink-0"
-                    src={avatar}
-                    alt={username}
-                  />
-                )}
-                {!avatar && username && (
-                  <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                    {username[0].toUpperCase()}
-                  </div>
-                )}
-                {username}
+          {mentions.map(({ id, avatar, label }, mentionIndex) => (
+            <>
+              <div
+                key={id}
+                className={`${
+                  mentionIndex === index ? 'bg-gray-900' : ''
+                } mt-3 py-2 px-3 rounded-md`}
+              >
+                <div className="flex items-center gap-2">
+                  {avatar && (
+                    <img
+                      className="w-5 h-5 rounded-full flex-shrink-0"
+                      src={avatar}
+                      alt={label}
+                    />
+                  )}
+                  {!avatar && label && (
+                    <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
+                      {label[0].toUpperCase()}
+                    </div>
+                  )}
+                  {label}
+                </div>
               </div>
-            </div>
+            </>
           ))}
+          <div className="w-full divide-solid " />
         </div>
-      )}
+      );
+    }
+  };
+  return (
+    <>
+      {renderMentions()}
+
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
         <div className="mr-4 w-12 hidden sm:block">

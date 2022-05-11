@@ -162,13 +162,11 @@ const Feed = ({
     roomID,
     hasUnreadMessages
   ) => {
-    console.log(roomID);
     mutate(
       '/core-api/profile/tribes',
       (tribes: Array<ProfileTribe>) =>
         tribes.map((tribe) => {
           if (tribe.id === tribeID) {
-            console.log('lol');
             return {
               ...tribe,
               rooms: tribe.rooms.map((tribeRoom) => {
@@ -462,7 +460,11 @@ const Feed = ({
           </div>
           <div className="px-0 sm:px-5">
             {/* @ts-ignore */}
-            <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
+            <RoomEditor
+              onSubmit={handleMessageSubmit}
+              name={room.name}
+              roomID={room.id}
+            />
           </div>
         </div>
 

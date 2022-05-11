@@ -1,4 +1,4 @@
-import { Editor, createEditor, Transforms, Range } from 'slate';
+import { Transforms } from 'slate';
 
 export const insertMention = (editor, member) => {
   const mention = {
