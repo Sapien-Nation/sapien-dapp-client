@@ -58,10 +58,9 @@ build-sandbox:
 cleanup-sandbox:
   stage: cleanupImages
   tags:
-    - front-sandbox
+    - front
   script:
     - docker images -q | xargs -l docker rmi -f
-  when: manual
   only:
     <<: *sandbox_triggers  
 

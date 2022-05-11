@@ -13,8 +13,10 @@ import {
 } from 'components/tribe/dialogs';
 
 // hooks
+import { useTribeNotifications } from 'hooks/notifications';
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
-import { Query } from 'components/common';
+
+// types
 
 interface Props {
   handleMobileMenu: () => void;
@@ -27,18 +29,36 @@ enum Dialog {
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
 
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
   const channels = useTribeChannels(tribeID as string);
+  const { unreadNotificationsCount } = useTribeNotifications();
 
   if (!tribe || !rooms) {
     return;
   }
 
   const { name } = tribe;
+
+  const getRoomListItemClassName = (id: string, hasUnreadMessages: boolean) => {
+    const isOnChannelView = id === viewID;
+
+    if (isOnChannelView) {
+      if (hasUnreadMessages)
+        return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-neutral-800 rounded-md';
+    }
+
+    if (hasUnreadMessages)
+      return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+
+    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
+  };
+
   return (
     <>
       <div className="w-full">
@@ -68,37 +88,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               >
                 <BellIcon className="h-5 w-5 mr-4" />
                 Notifications
-                <Query
-                  api="/notifications-api/todo"
-                  options={{
-                    fetcher: () => [
-                      { read: true },
-                      { read: false },
-                      { read: false },
-                    ],
-                  }}
-                >
-                  {(data) => {
-                    const notificationCount = data.filter(
-                      ({ read }) => read === false
-                    ).length;
-                    return (
-                      <>
-                        {data.filter(({ read }) => read === false).length >
-                        0 ? (
-                          <span className="flex h-5 w-5 relative ml-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center text-10px font-bold">
-                              {notificationCount >= 100
-                                ? '99+'
-                                : notificationCount}
-                            </span>
-                          </span>
-                        ) : null}
-                      </>
-                    );
-                  }}
-                </Query>
+                {unreadNotificationsCount > 0 && (
+                  <span className="flex h-5 w-5 relative ml-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center text-10px font-bold">
+                      {unreadNotificationsCount >= 100
+                        ? '99+'
+                        : unreadNotificationsCount}
+                    </span>
+                  </span>
+                )}
               </a>
             </Link>
             {/* <button
@@ -170,14 +169,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
             <ul className="px-2 py-2 cursor-pointer">
-              {rooms.map(({ id, name }) => {
+              {rooms.map(({ id, name, hasUnreadMessages }) => {
                 return (
                   <li
-                    className={
-                      id === viewID
-                        ? 'text-sm bg-sapien-neutral-800 rounded-md'
-                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                    }
+                    className={getRoomListItemClassName(id, hasUnreadMessages)}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>

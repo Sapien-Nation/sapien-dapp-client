@@ -72,6 +72,10 @@ const moduleExports = {
           destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v3/:path*`,
         },
         {
+          source: '/core-api/notification/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v3/notification/:path*`,
+        },
+        {
           source: '/core-api/user/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/:path*`,
         },
@@ -86,13 +90,13 @@ const moduleExports = {
         {
           source: '/wallet-api/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/wallet/:path*`,
-        }
+        },
       ],
       fallback: [
         {
           source: '/wallet-api/:path*',
           destination: `${process.env.NEXT_PUBLIC_API_AUTH_URL}/api/v3/wallet/:path*`,
-        }
+        },
       ],
     };
   },
@@ -105,6 +109,8 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports = Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
-  ? withPreact(withSentryConfig(moduleExports, sentryWebpackPluginOptions))
-  : moduleExports;
+module.exports = withPreact(
+  Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
+    ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+    : moduleExports
+);
