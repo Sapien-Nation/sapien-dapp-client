@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/outline';
 import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
+import { Menu, Transition } from '@headlessui/react';
 
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
@@ -25,9 +26,10 @@ import { useWeb3 } from '../../providers';
 interface Props {
   onDeposit: () => void;
   onSelectToken: (token: Token) => void;
+  onViewHistory: () => void;
 }
 
-const Home = ({ onDeposit, onSelectToken }: Props) => {
+const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -93,7 +95,29 @@ const Home = ({ onDeposit, onSelectToken }: Props) => {
           </span>
         </div>
         <div className="flex justify-end">
-          <DotsVerticalIcon className=" h-6 w-6" aria-hidden="true" />
+          <Menu as="div">
+            <Menu.Button>
+              <DotsVerticalIcon className="w-5 text-gray-400" />
+            </Menu.Button>
+            <Transition>
+              <Menu.Items className="absolute right-0 w-56 z-10 origin-top-right bg-white rounded-md">
+                <div className="">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={onViewHistory}
+                        className={`${
+                          active ? 'bg-primary-200 text-white' : 'text-gray-900'
+                        } group flex w-full items-center rounded-md p-2 text-sm`}
+                      >
+                        View History
+                      </button>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
         </div>
       </div>
       <div className="py-6 px-4">

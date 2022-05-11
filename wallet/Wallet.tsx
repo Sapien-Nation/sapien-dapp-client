@@ -92,6 +92,7 @@ const Wallet = () => {
               setToken(token);
               setView(View.Token);
             }}
+            onViewHistory={() => setView(View.History)}
           />
         );
       case View.Token:
