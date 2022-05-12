@@ -112,6 +112,7 @@ const Feed = ({
                   username: (data as RoomNewMessage).by.username,
                 },
                 type: MessageType.Text,
+                mentions: [],
               });
 
               if (
@@ -276,6 +277,7 @@ const Feed = ({
         },
         type: MessageType.Optimistic,
         status: 'A',
+        mentions: [],
       };
       await handleAddMessageMutation(optimisticMessage);
 
