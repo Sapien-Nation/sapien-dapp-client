@@ -34,6 +34,7 @@ import DeleteMessageDialog from './dialogs/DeleteMessageDialog';
 import { formatDate, formatDateRelative } from 'utils/date';
 
 // hooks
+import useOnScreen from 'hooks/useOnScreen';
 import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
 import { useRoomDetails, useRoomMembers } from 'hooks/room';
@@ -73,8 +74,8 @@ const Feed = ({
   const [selectedMessage, setSelectedMessage] = useState<RoomMessage | null>(
     null
   );
-  const [showMobileDetails, setShowMobileDetails] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -84,6 +85,8 @@ const Feed = ({
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
   const roomMembers = useRoomMembers(roomID);
   const { createdAt } = useRoomDetails(roomID);
+
+  const reachBottom = useOnScreen(scrollToBottom);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -96,6 +99,15 @@ const Feed = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room.id]);
 
+  useEffect(() => {
+    if (reachBottom === true) {
+      handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+
+      if (unreadMessages > 0) {
+        setUnreadMessages(0);
+      }
+    }
+  }, [reachBottom]);
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
   useSocketEvent(
