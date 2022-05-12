@@ -324,28 +324,30 @@ const Feed = ({
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
-        {unreadMessages > 0 && (
-          <button
-            onClick={() => handleScrollToBottom('smooth')}
-            className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 font-extrabold"
-          >
-            You have {unreadMessages} new messages
-            <button
-              onClick={(event) => {
-                event.stopPropagation();
-                event.preventDefault();
-
-                // TODO call API to read messages
-                setUnreadMessages(0);
-                handleUnreadReadMessagesOnTribeNavigation(room.id, false);
-              }}
-            >
-              Mark as Read
-            </button>
-          </button>
-        )}
         <SEO title={room.name} />
-        <div className="flex flex-col h-full flex-1 overflow-hidden">
+        <div className="flex flex-col h-full flex-1 overflow-hidden relative">
+          {unreadMessages > 0 && (
+            <button
+              onClick={() => handleScrollToBottom('smooth')}
+              className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 rounded-b-lg items-center"
+            >
+              You have {unreadMessages} new messages
+              <button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+
+                  // TODO call API to read messages
+                  setUnreadMessages(0);
+                  handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+                }}
+                className="font-semibold"
+              >
+                Mark as Read
+              </button>
+            </button>
+          )}
+
           <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
             <button
               aria-label="Toggle Details"
