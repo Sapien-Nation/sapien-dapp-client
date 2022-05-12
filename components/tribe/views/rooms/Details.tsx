@@ -1,3 +1,5 @@
+import _groupBy from 'lodash/groupBy';
+import { useCallback, useMemo } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { FixedSizeList as List } from 'react-window';
@@ -8,6 +10,11 @@ import { RoomMemberType } from 'tools/constants/rooms';
 
 // hooks
 import { useRoomMembers } from 'hooks/room';
+
+const groupLabel = {
+  [RoomMemberType.Admin]: 'ADMIN',
+  [RoomMemberType.Participant]: 'PARTICIPANTS',
+};
 
 const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
@@ -39,6 +46,24 @@ const Details = ({ handleSidebar }) => {
     );
   };
 
+  const membersList = useMemo(() => {
+    const groups = _groupBy(members, (member) => member.userType);
+
+    return Object.entries(groups)
+      .map(([key, value]) => {
+        return [
+          {
+            id: null,
+            avatar: null,
+            username: null,
+            userType: key,
+          },
+          ...value,
+        ];
+      })
+      .reduce((prev, acc) => [...prev, ...acc], []);
+  }, [members]);
+
   return (
     <aside className="w-72 h-full flex flex-col border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700 lg:hidden">
@@ -63,12 +88,12 @@ const Details = ({ handleSidebar }) => {
               <List
                 className="List"
                 height={height}
-                itemCount={members.length}
+                itemCount={membersList.length}
                 itemSize={55}
                 width={width}
               >
                 {({ index, style }) => {
-                  const { id, avatar, username, userType } = members[index];
+                  const { id, avatar, username, userType } = membersList[index];
                   return (
                     <li
                       data-testid="room-detail-member"
@@ -76,13 +101,13 @@ const Details = ({ handleSidebar }) => {
                       className="flex gap-2 items-center mb-4 cursor-pointer"
                       style={style}
                     >
-                      {renderMemberAvatar(avatar, username)}
-                      <span className="truncate">{username}</span>
-                      {userType === RoomMemberType.Admin ? (
-                        <span className="text-xs"> (Admin) </span>
-                      ) : (
-                        ''
+                      {id === null && (
+                        <span className="text-sm">
+                          {groupLabel[userType] ?? '-'}
+                        </span>
                       )}
+                      {username && renderMemberAvatar(avatar, username)}
+                      <span className="truncate">{username}</span>
                     </li>
                   );
                 }}
