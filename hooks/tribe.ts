@@ -132,11 +132,6 @@ export const useGetCurrentView = (
       name: 'passport',
       id: 'passport',
     },
-    {
-      type: View.Notification,
-      name: 'notifications',
-      id: 'notifications',
-    },
     ...channels,
     ...rooms,
   ];

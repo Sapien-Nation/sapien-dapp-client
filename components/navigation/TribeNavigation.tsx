@@ -13,7 +13,6 @@ import {
 } from 'components/tribe/dialogs';
 
 // hooks
-import { useTribeNotifications } from 'hooks/notifications';
 import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
 
 // types
@@ -36,7 +35,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
   const channels = useTribeChannels(tribeID as string);
-  const { unreadNotificationsCount } = useTribeNotifications();
 
   if (!tribe || !rooms) {
     return;
@@ -75,29 +73,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               >
                 <UserGroupIcon className="h-5 w-5 mr-4" />
                 {name}
-              </a>
-            </Link>
-            <Link href={`/tribes/${tribeID}/notifications`} passHref>
-              <a
-                className={
-                  asPath === `/tribes/${tribeID}/notifications`
-                    ? 'mt-4 font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
-                    : 'mt-4 relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2'
-                }
-                onClick={handleMobileMenu}
-              >
-                <BellIcon className="h-5 w-5 mr-4" />
-                Notifications
-                {unreadNotificationsCount > 0 && (
-                  <span className="flex h-5 w-5 relative ml-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-5 w-5 bg-red-500 items-center justify-center text-10px font-bold">
-                      {unreadNotificationsCount >= 100
-                        ? '99+'
-                        : unreadNotificationsCount}
-                    </span>
-                  </span>
-                )}
               </a>
             </Link>
             {/* <button
