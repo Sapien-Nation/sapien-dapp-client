@@ -4,7 +4,7 @@ export const insertMention = (editor, member) => {
   const mention = {
     type: 'mention',
     member,
-    children: [{ text: '' }],
+    children: [{ text: `<@${member.id}>` }],
   };
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
