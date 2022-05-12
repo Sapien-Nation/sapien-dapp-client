@@ -146,7 +146,16 @@ const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
                 key={id}
                 className={`${
                   mentionIndex === index ? 'bg-gray-900' : ''
-                } mt-3 py-2 px-3 rounded-md`}
+                } mt-3 py-2 px-3 rounded-md cursor-pointer`}
+                onClick={() => {
+                  setIndex(mentionIndex);
+                  Transforms.select(editor, target);
+                  insertMention(editor, mentions[index]);
+                  setTarget(null);
+                }}
+                onMouseEnter={() => {
+                  setIndex(mentionIndex);
+                }}
               >
                 <div className="flex items-center gap-2">
                   {avatar && (
