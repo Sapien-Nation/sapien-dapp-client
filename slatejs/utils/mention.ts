@@ -1,5 +1,8 @@
 import { Transforms } from 'slate';
 
+// constants
+import { MentionType } from '../constants';
+
 export const insertMention = (editor, member) => {
   const mention = {
     type: 'mention',
@@ -23,3 +26,17 @@ export const withMentions = (editor) => {
 
   return editor;
 };
+
+export const getMentionsArrayFromCacheForOptimistic = (users, body) => {
+  console.log(users);
+  console.log(body);
+  return users;
+};
+
+export const getMentionsArrayFromCacheForUI = (users) =>
+  users.map(({ id, avatar, username }) => ({
+    id,
+    avatar,
+    label: username,
+    type: MentionType.Member,
+  }));

@@ -36,7 +36,7 @@ import { formatDate, formatDateRelative } from 'utils/date';
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
-import { useRoomDetails } from 'hooks/room';
+import { useRoomDetails, useRoomMembers } from 'hooks/room';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
 
 // types
@@ -46,6 +46,7 @@ import type {
   RoomNewMessage,
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
+import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
 
 interface Props {
   apiKey: string;
@@ -81,6 +82,7 @@ const Feed = ({
   const scrollToBottom = useRef(null);
 
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
+  const roomMembers = useRoomMembers(roomID);
   const { createdAt } = useRoomDetails(roomID);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -91,6 +93,7 @@ const Feed = ({
 
     // TODO Call API to read all this Room notifications
     handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room.id]);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -166,25 +169,23 @@ const Feed = ({
     mutate(
       '/core-api/profile/tribes',
       (tribes: Array<ProfileTribe>) =>
-        tribes.map((tribe) => {
-          if (tribe.id === tribeID) {
-            return {
-              ...tribe,
-              rooms: tribe.rooms.map((tribeRoom) => {
-                if (tribeRoom.id === roomID) {
-                  return {
-                    ...tribeRoom,
-                    hasUnreadMessages,
-                  };
-                }
+        tribes.map((tribe) =>
+          tribe.id === tribeID
+            ? {
+                ...tribe,
+                rooms: tribe.rooms.map((tribeRoom) => {
+                  if (tribeRoom.id === roomID) {
+                    return {
+                      ...tribeRoom,
+                      hasUnreadMessages,
+                    };
+                  }
 
-                return tribeRoom;
-              }),
-            };
-          }
-
-          return tribe;
-        }),
+                  return tribeRoom;
+                }),
+              }
+            : tribe
+        ),
       false
     );
   };
@@ -263,8 +264,6 @@ const Feed = ({
   };
 
   const handleMessageSubmit = async (content: string) => {
-    if (content === '') return;
-
     try {
       const optimisticMessage = {
         content,
@@ -277,7 +276,7 @@ const Feed = ({
         },
         type: MessageType.Optimistic,
         status: 'A',
-        mentions: [],
+        mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
       };
       await handleAddMessageMutation(optimisticMessage);
 
@@ -464,11 +463,7 @@ const Feed = ({
           </div>
           <div className="px-0 sm:px-5">
             {/* @ts-ignore */}
-            <RoomEditor
-              onSubmit={handleMessageSubmit}
-              name={room.name}
-              roomID={room.id}
-            />
+            <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
           </div>
         </div>
 
@@ -573,7 +568,11 @@ const RoomProxy = () => {
           return <NotAMemberView />;
         return (
           <Query api={apiKey} loader={<LoadingMessagesSkeleton />}>
-            {() => <Room roomID={roomID} apiKey={apiKey} />}
+            {() => (
+              <Query api={`/core-api/room/${roomID}/members`}>
+                {() => <Room roomID={roomID} apiKey={apiKey} />}
+              </Query>
+            )}
           </Query>
         );
       }}

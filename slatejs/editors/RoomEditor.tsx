@@ -5,7 +5,6 @@ import { EmojiHappyIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
 import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useCallback, useMemo, useState } from 'react';
-import { useSWRConfig } from 'swr';
 import { Editor, createEditor, Transforms, Range } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
@@ -22,47 +21,56 @@ import { defaultValue, ElementType, MentionType } from '../constants';
 
 // hooks
 import { usePassport } from 'hooks/passport';
+import { useRoomMembers } from 'hooks/room';
 
 // utils
-import { insertEmoji, serialize, insertMention, withMentions } from '../utils';
+import {
+  insertEmoji,
+  serialize,
+  insertMention,
+  withMentions,
+  getMentionsArrayFromCacheForUI,
+} from '../utils';
 
 // types
 import type { EditableProps } from 'slate-react/dist/components/editable';
+import { useRouter } from 'next/router';
 
 interface Props {
   name: string;
   onSubmit: (text: string) => void;
   slateProps?: EditableProps;
-  roomID?: string;
 }
 
 const editorID = 'slatejs-editor';
-const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
+const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
   const [target, setTarget] = useState<Range | undefined>();
   const [attachments, setAttachments] = useState<Array<File>>([]);
 
-  const { cache } = useSWRConfig();
+  const { query } = useRouter();
   const editor = useMemo(
     () => withMentions(withReact(withHistory(createEditor()))),
     []
   );
 
-  const mentions = useMemo(
+  const roomID = query.viewID as string;
+  const roomMembers = useRoomMembers(roomID);
+  const availableMentionsList = useMemo(
     () =>
-      (cache.get(`/core-api/room/${roomID}/members`) ?? [])
-        .filter(({ username }) => {
-          return username.toLowerCase().startsWith(search.toLowerCase());
+      getMentionsArrayFromCacheForUI(roomMembers)
+        .filter(({ label }) => {
+          return label.toLowerCase().startsWith(search.toLowerCase());
         })
-        .map(({ id, avatar, username }) => ({
+        .map(({ id, avatar, label }) => ({
           id,
           avatar,
-          label: username,
+          label,
           type: MentionType.Member,
         })),
-    [cache, roomID, search]
+    [roomMembers, search]
   );
 
   //----------------------------------------------------------------------------------------------------------------
@@ -105,19 +113,21 @@ const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
-            const prevIndex = index >= mentions.length - 1 ? 0 : index + 1;
+            const prevIndex =
+              index >= availableMentionsList.length - 1 ? 0 : index + 1;
             setIndex(prevIndex);
             break;
           case 'ArrowUp':
             event.preventDefault();
-            const nextIndex = index <= 0 ? mentions.length - 1 : index - 1;
+            const nextIndex =
+              index <= 0 ? availableMentionsList.length - 1 : index - 1;
             setIndex(nextIndex);
             break;
           case 'Tab':
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, target);
-            insertMention(editor, mentions[index]);
+            insertMention(editor, availableMentionsList[index]);
             setTarget(null);
             break;
           case 'Escape':
@@ -131,7 +141,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
         handleSubmit(event);
       }
     },
-    [target, index, mentions, editor, handleSubmit]
+    [target, index, availableMentionsList, editor, handleSubmit]
   );
 
   //----------------------------------------------------------------------------------------------------------------
@@ -140,7 +150,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
       return (
         <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
           <h3 className="text-sm">Members</h3>
-          {mentions.map(({ id, avatar, label }, mentionIndex) => (
+          {availableMentionsList.map(({ id, avatar, label }, mentionIndex) => (
             <>
               <div
                 key={id}
@@ -150,7 +160,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {}, roomID }: Props) => {
                 onClick={() => {
                   setIndex(mentionIndex);
                   Transforms.select(editor, target);
-                  insertMention(editor, mentions[index]);
+                  insertMention(editor, availableMentionsList[index]);
                   setTarget(null);
                 }}
                 onMouseEnter={() => {
