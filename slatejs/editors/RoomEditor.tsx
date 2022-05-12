@@ -146,7 +146,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
   //----------------------------------------------------------------------------------------------------------------
   const renderMentions = () => {
-    if (target) {
+    if (target && availableMentionsList.length > 0) {
       return (
         <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
           <h3 className="text-sm">Members</h3>

@@ -27,11 +27,28 @@ export const withMentions = (editor) => {
   return editor;
 };
 
-export const getMentionsArrayFromCacheForOptimistic = (users, body) => {
-  console.log(users);
-  console.log(body);
-  return users;
-};
+export const isNodeMention = (node: string) =>
+  node.charAt(0) === '<' &&
+  node.charAt(1) === '@' &&
+  node.charAt(node.length - 1) === '>';
+
+export const getUserIDFromNode = (node: string) =>
+  node.replace('<@', '').replace('>', '');
+
+export const getMentionsArrayFromCacheForOptimistic = (users, body) =>
+  body
+    .split(' ')
+    .map((node) => {
+      if (isNodeMention(node)) {
+        const userID = getUserIDFromNode(node);
+        const user = users.find(({ id }) => id === userID);
+
+        return user;
+      }
+
+      return false;
+    })
+    .filter(Boolean);
 
 export const getMentionsArrayFromCacheForUI = (users) =>
   users.map(({ id, avatar, username }) => ({

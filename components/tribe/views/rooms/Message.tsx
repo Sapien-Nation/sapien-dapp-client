@@ -15,6 +15,7 @@ import { formatDateRelative } from 'utils/date';
 // types
 import type { RoomMessage } from 'tools/types/room';
 import { Transition } from '@headlessui/react';
+import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
 
 interface Props {
   isAMessageContinuation: boolean;
@@ -39,6 +40,7 @@ const Message = ({
     createdAt,
     content,
     type,
+    mentions,
   },
   onMenuItemClick,
 }: Props) => {
@@ -60,6 +62,27 @@ const Message = ({
     };
   }, []);
 
+  const renderContent = () => {
+    return content.split(' ').map((node) => {
+      if (isNodeMention(node)) {
+        const userID = getUserIDFromNode(node);
+        const user = mentions?.find(({ id }) => id === userID);
+        if (user) {
+          return (
+            <>
+              {' '}
+              <span className="p-1 mx-1 align-baseline inline-block rounded bg-gray-700 text-gray-300 text-xs">
+                @{user.username}
+              </span>{' '}
+            </>
+          );
+        }
+        return ` ${node} `;
+      }
+      return ` ${node} `;
+    });
+  };
+
   const renderBody = () => {
     if (type === MessageType.OptimisticWithAttachment)
       return <span>TODO handle UI for Optimistic Attachments</span>;
@@ -73,7 +96,7 @@ const Message = ({
               : 'pl-52 text-sm text-white/30 whitespace-pre-line'
           }
         >
-          {content}
+          {renderContent()}
         </p>
       );
     }
@@ -117,7 +140,7 @@ const Message = ({
             },
           }}
         >
-          {content}
+          {renderContent()}
         </Linkify>
       </p>
     );
