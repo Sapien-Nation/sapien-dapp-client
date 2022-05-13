@@ -6,5 +6,5 @@ import type { UserPassport } from 'tools/types/user';
 export const usePassport = (): UserPassport => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/core-api/passport');
+  return cache.get('/core-api/me/passport');
 };

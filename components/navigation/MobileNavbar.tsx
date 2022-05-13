@@ -126,6 +126,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       <Link
                         href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
                         passHref
+                        prefetch={false}
                       >
                         <a className="font-medium text-sm text-white mt-4">
                           View Passport
