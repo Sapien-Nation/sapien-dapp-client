@@ -127,7 +127,10 @@ const Feed = ({
                   username: (data as RoomNewMessage).by.username,
                 },
                 type: MessageType.Text,
-                mentions: [],
+                mentions: getMentionsArrayFromCacheForOptimistic(
+                  roomMembers,
+                  (data as RoomNewMessage).payload
+                ),
               });
 
               if (
