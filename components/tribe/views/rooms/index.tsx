@@ -266,7 +266,9 @@ const Feed = ({
       if (room.unreads > 0) {
         await readRoom(roomID);
       }
-    } catch (err) {}
+    } catch (err) {
+      Sentry.captureMessage(err);
+    }
   };
 
   const handleScrollToBottom = (behavior: 'auto' | 'smooth' = 'auto') => {

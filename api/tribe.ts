@@ -29,3 +29,9 @@ export const joinTribe = (tribeID: string) =>
     .post(`/core-api/tribe/${tribeID}/join`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const leaveTribe = (tribeID: string) =>
+  axios
+    .post(`/core-api/tribe/${tribeID}/leave`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));

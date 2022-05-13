@@ -1,8 +1,13 @@
+import * as Sentry from '@sentry/nextjs';
 import _random from 'lodash/random';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { useCopyToClipboard } from 'react-use';
+import { useSWRConfig } from 'swr';
+
+// api
+import { leaveTribe } from 'api/tribe';
 
 // components
 import { Tooltip } from 'components/common';
@@ -15,6 +20,7 @@ import { ToastType } from 'constants/toast';
 
 // hooks
 import { useToast } from 'context/toast';
+import { useMainTribe } from 'hooks/tribe';
 
 interface Props {
   isContextMenuOpen: any;
@@ -30,7 +36,11 @@ function TribeBarItem({
   handleMobileMenu,
 }: Props) {
   const { query } = useRouter();
+  const { mutate } = useSWRConfig();
+
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
+  const { redirectToMainTribeChannel } = useMainTribe();
+
   const { tribeID } = query;
 
   const [_, copyToClipboard] = useCopyToClipboard();
@@ -42,10 +52,38 @@ function TribeBarItem({
     });
   };
 
+  const handleLeaveTribe = async () => {
+    try {
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
+        false
+      );
+
+      if (tribeID === tribe.id) {
+        redirectToMainTribeChannel();
+      }
+
+      await leaveTribe(tribeID as string);
+
+      // TODO will keep this commented, but basically this is to revalidate you actually leave the tribe
+      // might be to much since you can refresh the app
+      // mutate(
+      //   '/core-api/profile/tribes',
+      //   (tribes: Array<ProfileTribe>) => tribes,
+      //   true
+      // );
+    } catch (err) {
+      Sentry.captureMessage(err);
+    }
+  };
   const toast = useToast();
 
   const tooltipRef = useRef(null);
 
+  // TODO read this from permissions.canLeave
+  const canLeave = true;
   return (
     <div className="relative">
       <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
@@ -101,7 +139,7 @@ function TribeBarItem({
             left: contextMenuPosition.left,
             top: contextMenuPosition.top,
           }}
-          className="fixed max-h-max w-40 bottom-1 z-50 bg-black p-2 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400"
+          className="fixed max-h-max w-56 bottom-1 z-50 bg-black p-4 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400"
         >
           <div
             onClick={handleCopyToClipboard}
@@ -109,6 +147,14 @@ function TribeBarItem({
           >
             Invite People
           </div>
+          {canLeave === true && (
+            <div
+              onClick={handleLeaveTribe}
+              className="text-sm cursor-pointer mt-4 hover:bg-sapien-neutral-600 bg-red-800 text-gray-200 p-2 rounded"
+            >
+              Leave Tribe
+            </div>
+          )}
         </div>
       )}
 
