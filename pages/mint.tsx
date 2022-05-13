@@ -135,13 +135,15 @@ const Mint = ({ avatar }: { avatar: string }) => {
               <h4 className="text-3xl sm:text-5xl font-extrabold">
                 Find your tribe and ignite the new renaissance!
               </h4>
-              <div className="aspect-w-1 aspect-h-1 sm:aspect-w-3 sm:aspect-h-2">
-                <img
-                  className="object-cover max-w-sm mx-auto rounded-xl shadow-lg shadow-white/50 border-double border-4 border-sky-500"
-                  src={avatar}
-                  alt="Sapien Avatar Transition"
-                />
-              </div>
+              {avatar && (
+                <div className="aspect-w-1 aspect-h-1 sm:aspect-w-3 sm:aspect-h-2">
+                  <img
+                    className="object-cover max-w-sm mx-auto rounded-xl shadow-lg shadow-white/50 border-double border-4 border-sky-500"
+                    src={avatar}
+                    alt="Sapien Avatar Transition"
+                  />
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => handleMint(tribes[0])}

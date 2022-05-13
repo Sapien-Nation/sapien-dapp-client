@@ -13,7 +13,15 @@ import {
 } from 'components/tribe/dialogs';
 
 // hooks
-import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
+import {
+  useTribe,
+  // useTribeChannels,
+  useTribePermission,
+  useTribeRooms,
+} from 'hooks/tribe';
+import { RedDot } from 'components/common';
+
+// types
 
 interface Props {
   handleMobileMenu: () => void;
@@ -26,18 +34,35 @@ enum Dialog {
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+
   const { asPath, query } = useRouter();
   const { tribeID, viewID } = query;
 
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
-  const channels = useTribeChannels(tribeID as string);
-
+  // const channels = useTribeChannels(tribeID as string);
+  const [canAddRoom] = useTribePermission(tribeID as string, ['canAddRoom']);
   if (!tribe || !rooms) {
     return;
   }
 
   const { name } = tribe;
+
+  const getRoomListItemClassName = (id: string, hasUnreadMessages: boolean) => {
+    const isOnChannelView = id === viewID;
+
+    if (isOnChannelView) {
+      if (hasUnreadMessages)
+        return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-neutral-800 rounded-md';
+    }
+
+    if (hasUnreadMessages)
+      return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+
+    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
+  };
+
   return (
     <>
       <div className="w-full">
@@ -48,7 +73,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 className={
                   asPath === `/tribes/${tribeID}/home`
                     ? 'font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
-                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 '
                 }
                 onClick={handleMobileMenu}
               >
@@ -114,33 +139,33 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
         <div>
           <nav>
-            <button
-              aria-label="Create Room"
-              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => {
-                setDialog(Dialog.CreateRoom);
-                handleMobileMenu();
-              }}
-            >
-              ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
-            </button>
+            {canAddRoom === true && (
+              <button
+                aria-label="Create Room"
+                className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+                onClick={() => {
+                  setDialog(Dialog.CreateRoom);
+                  handleMobileMenu();
+                }}
+              >
+                ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
+              </button>
+            )}
             <ul className="px-2 py-2 cursor-pointer">
-              {rooms.map(({ id, name }) => {
+              {rooms.map(({ id, name, unreads }) => {
                 return (
                   <li
-                    className={
-                      id === viewID
-                        ? 'text-sm bg-sapien-neutral-800 rounded-md'
-                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                    }
+                    className={getRoomListItemClassName(id, unreads > 0)}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
                       <a
-                        className="block px-2 py-1 my-1"
+                        className="flex px-2 py-1 my-1 items-center gap-2"
                         onClick={handleMobileMenu}
                       >
-                        # {name}
+                        <div className="flex">
+                          # {name} <RedDot count={unreads} />
+                        </div>
                       </a>
                     </Link>
                   </li>

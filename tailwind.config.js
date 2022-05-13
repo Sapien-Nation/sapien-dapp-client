@@ -8,7 +8,7 @@ module.exports = {
         'ping-slow': 'ping 2s linear infinite',
       },
       backgroundImage: {
-        'mint': "url('https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png')",
+        mint: "url('https://d1bdmh0gdusw0k.cloudfront.net/images/misc/passport_sapien_nation.png')",
       },
       gridTemplateColumns: {
         'discovery-grid': 'repeat(auto-fill,minmax(248px,1fr))',
@@ -52,49 +52,54 @@ module.exports = {
         'sapien-red-700': '#FF4279',
       },
       inset: {
-        '15': '15px'
+        15: '15px',
       },
       height: {
         '35px': '35px',
-        '150': '150px',
-        '320': '320px',
-        '660': '660px',
+        150: '150px',
+        320: '320px',
+        660: '660px',
       },
       minHeight: {
-        '250': '250px',
-        '400': '400px',
+        250: '250px',
+        400: '400px',
         '8-75': '8.75rem',
-        '64px': '64px'
+        '64px': '64px',
       },
       minWidth: {
-        '570': '570px',
+        '20px': '20px',
+        570: '570px',
       },
       maxWidth: {
-        '250': '250px',
-        '1100px': '1100px'
+        250: '250px',
+        '1100px': '1100px',
       },
       padding: {
         '1px': '1px',
-        '52': '52px',
+        52: '52px',
       },
       width: {
         '1px': '1px',
-        '500': '500px',
-        '48': '48%',
-        '1100px': '1100px'
+        500: '500px',
+        48: '48%',
+        '1100px': '1100px',
       },
       rotate: {
-        '45deg': '45deg'
+        '45deg': '45deg',
       },
       spacing: {
         '12px': '12px',
         '10px': '10px',
-      }
+      },
+      fontSize: {
+        '10px': '10px',
+      },
     },
   },
   content: [
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
+    './wallet/**/*.{js,jsx,ts,tsx}',
   ],
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp')],
 };

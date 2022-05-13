@@ -1,3 +1,5 @@
+import _groupBy from 'lodash/groupBy';
+import { useCallback, useMemo } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { FixedSizeList as List } from 'react-window';
@@ -6,14 +8,17 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 // constats
 import { RoomMemberType } from 'tools/constants/rooms';
 
-// components
-import { Query } from 'components/common';
+// hooks
+import { useRoomMembers } from 'hooks/room';
 
-// types
-import type { RoomDetailMember } from 'tools/types/room';
+const groupLabel = {
+  [RoomMemberType.Admin]: 'ADMIN',
+  [RoomMemberType.Participant]: 'PARTICIPANTS',
+};
 
 const Details = ({ handleSidebar }) => {
   const { query } = useRouter();
+  const members = useRoomMembers(query.viewID as string);
 
   const renderMemberAvatar = (avatar: string, username: string) => {
     if (avatar) {
@@ -41,6 +46,24 @@ const Details = ({ handleSidebar }) => {
     );
   };
 
+  const membersList = useMemo(() => {
+    const groups = _groupBy(members, (member) => member.userType);
+
+    return Object.entries(groups)
+      .map(([key, value]) => {
+        return [
+          {
+            id: null,
+            avatar: null,
+            username: null,
+            userType: key,
+          },
+          ...value,
+        ];
+      })
+      .reduce((prev, acc) => [...prev, ...acc], []);
+  }, [members]);
+
   return (
     <aside className="w-72 h-full flex flex-col border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700 lg:hidden">
@@ -53,50 +76,46 @@ const Details = ({ handleSidebar }) => {
           <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
         </button>
       </div>
-      <Query api={`/core-api/room/${query.viewID}/members`}>
-        {(members: Array<RoomDetailMember>) => (
-          <>
-            <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
-              <h3 className="text-md  text-sapien-neutral-400 font-bold ">
-                Members ({members.length})
-              </h3>
-            </div>
-            <ul className="px-5 overflow-auto flex-1">
-              <AutoSizer>
-                {({ height, width }) => (
-                  <List
-                    className="List"
-                    height={height}
-                    itemCount={members.length}
-                    itemSize={55}
-                    width={width}
-                  >
-                    {({ index, style }) => {
-                      const { id, avatar, username, userType } = members[index];
-                      return (
-                        <li
-                          data-testid="room-detail-member"
-                          key={id}
-                          className="flex gap-2 items-center mb-4 cursor-pointer"
-                          style={style}
-                        >
-                          {renderMemberAvatar(avatar, username)}
-                          <span className="truncate">{username}</span>
-                          {userType === RoomMemberType.Admin ? (
-                            <span className="text-xs"> (Admin) </span>
-                          ) : (
-                            ''
-                          )}
-                        </li>
-                      );
-                    }}
-                  </List>
-                )}
-              </AutoSizer>
-            </ul>
-          </>
-        )}
-      </Query>
+      <>
+        <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
+          <h3 className="text-md  text-sapien-neutral-400 font-bold ">
+            Members ({members.length})
+          </h3>
+        </div>
+        <ul className="px-5 overflow-auto flex-1">
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                className="List"
+                height={height}
+                itemCount={membersList.length}
+                itemSize={55}
+                width={width}
+              >
+                {({ index, style }) => {
+                  const { id, avatar, username, userType } = membersList[index];
+                  return (
+                    <li
+                      data-testid="room-detail-member"
+                      key={id}
+                      className="flex gap-2 items-center mb-4 cursor-pointer"
+                      style={style}
+                    >
+                      {id === null && (
+                        <span className="text-sm">
+                          {groupLabel[userType] ?? '-'}
+                        </span>
+                      )}
+                      {username && renderMemberAvatar(avatar, username)}
+                      <span className="truncate">{username}</span>
+                    </li>
+                  );
+                }}
+              </List>
+            )}
+          </AutoSizer>
+        </ul>
+      </>
     </aside>
   );
 };

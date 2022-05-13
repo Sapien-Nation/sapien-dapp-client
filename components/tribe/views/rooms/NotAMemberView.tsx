@@ -11,7 +11,6 @@ import { useToast } from 'context/toast';
 
 // components
 import { SEO } from 'components/common';
-import { RoomEditor } from 'slatejs';
 
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
@@ -96,13 +95,6 @@ const NotAMemberView = () => {
                 </div>
               </li>
             </ul>
-          </div>
-          <div className="px-0 sm:px-5">
-            <RoomEditor
-              onSubmit={() => {}}
-              name={''}
-              slateProps={{ readOnly: true }}
-            />
           </div>
         </div>
       </>

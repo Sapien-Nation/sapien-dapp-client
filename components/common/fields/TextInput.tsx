@@ -8,6 +8,7 @@ interface Props extends InputProps {
   maxLength?: number;
   replaceWhiteSpace?: boolean;
   rules?: any;
+  valueModifier?: (val: string) => string | null;
 }
 
 const TextInput = ({
@@ -17,13 +18,20 @@ const TextInput = ({
   replaceWhiteSpace = false,
   rules = {},
   inputMode,
+  disabled,
+  valueModifier,
   ...rest
 }: Props) => {
   const { register } = useFormContext();
 
   return (
     <input
-      className="appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+      disabled={disabled}
+      className={
+        disabled
+          ? 'appearance-none block w-full px-3 py-2 border bg-gray-500 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-not-allowed'
+          : 'appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
+      }
       onKeyPress={(event) => {
         if (pattern) {
           if (!pattern.test(event.key)) {
@@ -58,7 +66,7 @@ const TextInput = ({
             value = maxLength;
           }
 
-          event.target.value = value;
+          event.target.value = valueModifier ? valueModifier(value) : value;
         },
       })}
     />

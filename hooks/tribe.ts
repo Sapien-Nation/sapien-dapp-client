@@ -1,4 +1,5 @@
 import { useSWRConfig } from 'swr';
+import { useRouter } from 'next/router';
 
 // constants
 import { View } from 'constants/tribe';
@@ -59,18 +60,44 @@ export const useSapienTribe = (): ProfileTribe => {
   return cache.get('/core-api/profile/tribes')[0];
 };
 
+export const useTribePermission = (
+  tribeID: string,
+  permissionList: Array<string>
+): Array<boolean> => {
+  const { cache } = useSWRConfig();
+
+  const tribe = cache
+    .get('/core-api/profile/tribes')
+    .find(({ id }) => id === tribeID);
+
+  if (tribe?.permissions) {
+    return permissionList.map((permission) => tribe.permissions[permission]);
+  }
+
+  return permissionList.map(() => false);
+};
+
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
   return cache.get('/core-api/profile/tribes').find(({ id }) => id === tribeID);
 };
 
-export const useMainTribe = (): { tribeID: string } => {
+export const useMainTribe = (): {
+  tribeID: string;
+  redirectToMainTribeChannel: () => void;
+} => {
+  const { push } = useRouter();
   const { cache } = useSWRConfig();
 
   const tribe: ProfileTribe = cache.get('/core-api/profile/tribes')[0];
 
-  return { tribeID: tribe.id };
+  return {
+    tribeID: tribe.id,
+    redirectToMainTribeChannel: () => {
+      push(`/tribes/${tribe.id}/home`);
+    },
+  };
 };
 
 export const useTribeChannels = (tribeID: string) => {
@@ -96,10 +123,11 @@ export const useTribeRooms = (tribeID: string) => {
     .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  return tribe?.rooms?.map(({ name, id }) => ({
+  return tribe?.rooms?.map(({ name, id, unreads }) => ({
     type: View.Room,
     name,
     id,
+    unreads,
   }));
 };
 

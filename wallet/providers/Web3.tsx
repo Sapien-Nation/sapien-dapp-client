@@ -10,7 +10,10 @@ import {
   getGasPrice,
   getTokenMetadata,
   connectWallet,
-  getTxHistory,
+  deposit,
+  withdraw,
+  getSentTxHistory,
+  getReceivedTxHistory,
 } from '../api';
 
 // contracts
@@ -25,9 +28,9 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Token, Transaction } from '../types';
+import type { Token } from '../types';
 import type { AbiItem } from 'web3-utils';
-
+import type { Transaction } from 'tools/types/web3';
 // web3
 import Web3Library from 'web3';
 
@@ -42,9 +45,7 @@ interface Web3 {
     handleDeposit: () => Promise<string>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
-    getUserTransactions: (
-      page?: number
-    ) => Promise<{ transactions: Array<Transaction>; hasMore: boolean }>;
+    getUserTransactions: () => Promise<Array<Transaction>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
   } | null;
   error: any | null;
@@ -292,6 +293,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           return { hash: data.transactionHash, type: ErrorTypes.Fail };
         }
 
+        await withdraw(tokenId);
         return { hash: data.transactionHash, type: ErrorTypes.Success };
       }
       return Promise.reject('Token does not belong to this wallet.');
@@ -308,8 +310,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       const gasPrice = await getGasPrice();
 
+      const tokenId = tokens[0].id;
       const data = await contracts.passportContract.methods
-        .safeTransferFrom(metamaskAddress, me.walletAddress, tokens[0].id)
+        .safeTransferFrom(metamaskAddress, me.walletAddress, tokenId)
         .send({
           from: metamaskAddress,
           signatureType: biconomy.EIP712_SIGN,
@@ -322,6 +325,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       if (data === null || data === undefined)
         return Promise.reject('Unknow error');
 
+      await deposit(tokenId);
       return data.transactionHash;
     } catch (err) {
       Sentry.captureMessage(err);
@@ -329,23 +333,20 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getUserTransactions = async (
-    page = 1
-  ): Promise<{ transactions: Array<Transaction>; hasMore: boolean }> => {
+  const getUserTransactions = async (page = 1): Promise<Array<Transaction>> => {
     try {
-      const { walletAddress } = me;
+      const sentHistory = await getSentTxHistory(me.walletAddress);
+      const receivedHistory = await getReceivedTxHistory(me.walletAddress);
 
-      const { data } = await getTxHistory({
-        address: walletAddress,
-        page,
-        offset: page * 10,
-        sort: 'desc',
-      });
-
-      return { transactions: data, hasMore: data.length === 10 };
+      return [
+        ...(sentHistory.data.err ? [] : sentHistory.data.result.transfers),
+        ...(receivedHistory.data.err
+          ? []
+          : receivedHistory.data.result.transfers),
+      ];
     } catch (err) {
       Sentry.captureMessage(err);
-      return Promise.resolve({ transactions: [], hasMore: false });
+      return Promise.resolve([]);
     }
   };
 

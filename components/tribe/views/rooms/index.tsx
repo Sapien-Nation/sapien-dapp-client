@@ -5,13 +5,13 @@ import _groupBy from 'lodash/groupBy';
 import _sortyBy from 'lodash/sortBy';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
-import { KeyedMutator, useSWRConfig } from 'swr';
+import { useSWRConfig } from 'swr';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 // api
 import axios from 'api';
-import { deleteMessage, sendMessage } from 'api/room';
+import { deleteMessage, sendMessage, readRoom } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -34,9 +34,10 @@ import DeleteMessageDialog from './dialogs/DeleteMessageDialog';
 import { formatDate, formatDateRelative } from 'utils/date';
 
 // hooks
+import useOnScreen from 'hooks/useOnScreen';
 import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
-import { useRoomDetails } from 'hooks/room';
+import { useRoomDetails, useRoomMembers } from 'hooks/room';
 import useGetInfinitePages from 'hooks/useGetInfinitePages';
 
 // types
@@ -45,6 +46,8 @@ import type {
   RoomMessage,
   RoomNewMessage,
 } from 'tools/types/room';
+import type { ProfileTribe } from 'tools/types/tribe';
+import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
 
 interface Props {
   apiKey: string;
@@ -71,6 +74,7 @@ const Feed = ({
   const [selectedMessage, setSelectedMessage] = useState<RoomMessage | null>(
     null
   );
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const [showMobileDetails, setShowMobileDetails] = useState(false);
 
   const toast = useToast();
@@ -79,15 +83,32 @@ const Feed = ({
   const scrollToBottom = useRef(null);
 
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
+  const roomMembers = useRoomMembers(roomID);
   const { createdAt } = useRoomDetails(roomID);
+
+  const reachBottom = useOnScreen(scrollToBottom);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
     // This is safe to do ,since this view is wrapped on a <Query /> and deduplication avoid making extra queries
     // @see https://swr.vercel.app/docs/advanced/performance#deduplication
     handleScrollToBottom();
-  }, []);
 
+    handleReadMessagesUnblock();
+    handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [room.id]);
+
+  useEffect(() => {
+    if (reachBottom === true) {
+      handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+
+      if (unreadMessages > 0) {
+        setUnreadMessages(0);
+        handleReadMessagesUnblock();
+      }
+    }
+  }, [reachBottom]);
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
   useSocketEvent(
@@ -107,7 +128,23 @@ const Feed = ({
                   username: (data as RoomNewMessage).by.username,
                 },
                 type: MessageType.Text,
+                mentions: getMentionsArrayFromCacheForOptimistic(
+                  roomMembers,
+                  (data as RoomNewMessage).payload
+                ),
               });
+
+              if (
+                window.pageYOffset + window.innerHeight >=
+                scrollToBottom.current.offsetTop
+              ) {
+                handleScrollToBottom();
+              } else {
+                setUnreadMessages(
+                  (currentUnreadMessages) => currentUnreadMessages + 1
+                );
+              }
+
               break;
             case WSEvents.DeleteMessage:
               await handleRemoveMessageMutation(
@@ -122,12 +159,59 @@ const Feed = ({
         } catch (err) {
           Sentry.captureMessage(err);
         }
+      } else {
+        switch (type) {
+          case WSEvents.NewMessage:
+            handleUnreadReadMessagesOnTribeNavigation(
+              data.extra.roomId,
+              true,
+              data.extra.messageId
+            );
+            break;
+          default:
+            console.info(`No handler for eventType: ${type}`);
+            Sentry.captureMessage(`No handler for eventType: ${type}`);
+            break;
+        }
       }
     }
   );
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   // Mutations
+
+  // This function is to set read/unread value on the passed RoomID
+  // to update the TribeNavigation read status
+  const handleUnreadReadMessagesOnTribeNavigation = (
+    roomID,
+    shouldIncrement = false,
+    lastMessageId = ''
+  ) => {
+    mutate(
+      '/core-api/profile/tribes',
+      (tribes: Array<ProfileTribe>) =>
+        tribes.map((tribe) =>
+          tribe.id === tribeID
+            ? {
+                ...tribe,
+                rooms: tribe.rooms.map((tribeRoom) => {
+                  if (tribeRoom.id === roomID) {
+                    return {
+                      ...tribeRoom,
+                      unreads: shouldIncrement ? tribeRoom.unreads + 1 : 0,
+                      lastMessageId: lastMessageId,
+                    };
+                  }
+
+                  return tribeRoom;
+                }),
+              }
+            : tribe
+        ),
+      false
+    );
+  };
+
   const handleAddMessageMutation = async (message: RoomMessage) => {
     await mutate(
       apiKey,
@@ -177,13 +261,28 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Handlers
-  const handleScrollToBottom = () => {
+  const handleReadMessagesUnblock = async () => {
+    try {
+      if (room.unreads > 0) {
+        await readRoom(roomID);
+      }
+    } catch (err) {
+      Sentry.captureMessage(err);
+    }
+  };
+
+  const handleScrollToBottom = (behavior: 'auto' | 'smooth' = 'auto') => {
     if (scrollToBottom?.current) {
       scrollToBottom.current.scrollIntoView({
         block: 'nearest',
         inline: 'start',
+        behavior,
       });
     }
+
+    handleReadMessagesUnblock();
+    setUnreadMessages(0);
+    handleUnreadReadMessagesOnTribeNavigation(room.id, false);
   };
 
   const handleRemoveMessage = async (messageID) => {
@@ -197,8 +296,6 @@ const Feed = ({
   };
 
   const handleMessageSubmit = async (content: string) => {
-    if (content === '') return;
-
     try {
       const optimisticMessage = {
         content,
@@ -211,6 +308,7 @@ const Feed = ({
         },
         type: MessageType.Optimistic,
         status: 'A',
+        mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
       };
       await handleAddMessageMutation(optimisticMessage);
 
@@ -260,7 +358,29 @@ const Feed = ({
     <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
       <>
         <SEO title={room.name} />
-        <div className="flex flex-col h-full flex-1 overflow-hidden">
+        <div className="flex flex-col h-full flex-1 overflow-hidden relative">
+          {unreadMessages > 0 && (
+            <button
+              onClick={() => handleScrollToBottom('smooth')}
+              className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 rounded-b-lg items-center"
+            >
+              You have {unreadMessages} new messages
+              <button
+                onClick={(event) => {
+                  event.stopPropagation();
+                  event.preventDefault();
+
+                  handleReadMessagesUnblock();
+                  setUnreadMessages(0);
+                  handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+                }}
+                className="font-semibold"
+              >
+                Mark as Read
+              </button>
+            </button>
+          )}
+
           <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
             <button
               aria-label="Toggle Details"
@@ -480,7 +600,11 @@ const RoomProxy = () => {
           return <NotAMemberView />;
         return (
           <Query api={apiKey} loader={<LoadingMessagesSkeleton />}>
-            {() => <Room roomID={roomID} apiKey={apiKey} />}
+            {() => (
+              <Query api={`/core-api/room/${roomID}/members`}>
+                {() => <Room roomID={roomID} apiKey={apiKey} />}
+              </Query>
+            )}
           </Query>
         );
       }}

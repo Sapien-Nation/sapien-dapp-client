@@ -35,3 +35,9 @@ export const deleteMessage = (roomID: string, messageID: string) =>
     .delete(`/core-api/room/${roomID}/message/${messageID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const readRoom = (roomID: string) =>
+  axios
+    .post(`/core-api/room/${roomID}/read/`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));

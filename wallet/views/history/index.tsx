@@ -7,7 +7,7 @@ import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
 
 // types
-import type { Transaction } from '../../types';
+import type { Transaction } from 'tools/types/web3';
 
 // web3
 import { useWeb3 } from '../../providers';
@@ -16,14 +16,17 @@ interface Props {
   handleBack: () => void;
 }
 
+enum View {
+  Details,
+  Home,
+}
+
 const Home = ({ handleBack }: Props) => {
-  const [page, setPage] = useState(1);
+  const [view, setView] = useState(View.Home);
   const [error, setError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [transactions, setTransactions] = useState<Array<Transaction>>([]);
-  const [hasMoreTransactions, setHasMoreTransactions] = useState(false);
-  const [isFetchingMoreTransactions, setIsFetchingMoreTransactions] =
-    useState(false);
 
   const { walletAPI } = useWeb3();
 
@@ -32,74 +35,24 @@ const Home = ({ handleBack }: Props) => {
     try {
       setIsFetching(true);
 
-      const { transactions, hasMore } = await walletAPI.getUserTransactions(
-        page
-      );
+      const transactions = await walletAPI.getUserTransactions();
 
       setError(null);
-      setHasMoreTransactions(hasMore);
       setTransactions(transactions);
     } catch (err) {
       setError(err);
     }
     setIsFetching(false);
-  }, [page, walletAPI]);
+  }, [walletAPI]);
 
   useEffect(() => {
     handleGetTransactions();
   }, [handleGetTransactions, walletAPI]);
 
-  // Todo call this to fetch more transactions
-  const handleLoadMoreTransactions = async () => {
-    try {
-      setIsFetchingMoreTransactions(true);
-
-      const { transactions, hasMore } = await walletAPI.getUserTransactions(
-        page + 1
-      );
-
-      setHasMoreTransactions(hasMore);
-      setPage(page + 1);
-      setTransactions([...transactions, ...transactions]);
-
-      setError(null);
-    } catch (err) {
-      setError(err);
-    }
-    setIsFetchingMoreTransactions(false);
-  };
-
-  const renderLoadMoreButton = () => {
-    if (isFetchingMoreTransactions)
+  const renderView = () => {
+    if (isFetching) {
       return (
-        <button
-          type="button"
-          disabled
-          className="w-full py-2 cursor-not-allowed px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-        >
-          <RefreshIcon className="w-5 animate-spin" />
-          Fetching transactions
-        </button>
-      );
-
-    if (hasMoreTransactions === true)
-      return (
-        <button
-          type="button"
-          onClick={handleLoadMoreTransactions}
-          className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white  bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-        >
-          Load More
-        </button>
-      );
-
-    return null;
-  };
-
-  if (isFetching) {
-    return (
-      <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
-        <div className="w-56 h-26">
+        <div>
           <div className="flex justify-between items-center">
             <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
               Loading History
@@ -110,14 +63,12 @@ const Home = ({ handleBack }: Props) => {
             Fetching your transaction history detail 🐒.
           </p>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (error) {
-    return (
-      <div className="bg-sapien-gray-700 opacity-25 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
-        <div className="w-64 h-64">
+    if (error) {
+      return (
+        <div>
           <div className="flex justify-center">
             <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
               <button onClick={handleBack}>
@@ -142,49 +93,93 @@ const Home = ({ handleBack }: Props) => {
             </button>
           </p>
         </div>
-      </div>
-    );
-  }
+      );
+    }
+
+    switch (view) {
+      case View.Details:
+        return (
+          <div>
+            <div className="flex justify-between items-center">
+              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setView(View.Home);
+                    setTransaction(null);
+                  }}
+                >
+                  <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                {transaction.hash}
+              </h5>
+            </div>
+            <div>TODO transaction details {transaction.hash}</div>
+          </div>
+        );
+      case View.Home: {
+        return (
+          <div>
+            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <button onClick={handleBack}>
+                <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+              Transactions
+            </h5>
+            <div>
+              <ul>
+                {transactions.length === 0 && isFetching === false && (
+                  <p className="text-sm text-white grid gap-4 items-center justify-center mt-6 ">
+                    <span>
+                      You don&apos;t have a transaction yet, please try
+                      refreshing or come back in a few minutes.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleGetTransactions}
+                      disabled={isFetching}
+                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      Refresh Transactions
+                    </button>
+                  </p>
+                )}
+                {transactions.map((tx, index) => {
+                  const { asset, hash, value } = tx;
+                  const isLastItem = index < transactions.length - 1;
+                  return (
+                    <li
+                      key={hash}
+                      onClick={() => setTransaction(tx)}
+                      className={`${
+                        isLastItem ? 'border-b border-gray-700' : ''
+                      } flex flex-col items-end py-1 `}
+                    >
+                      <span>
+                        {value} {asset}
+                      </span>
+                      <a
+                        target="_blank"
+                        className="underline text-sm flex flex-row gap-2"
+                        rel="noreferrer"
+                        href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${hash}`}
+                      >
+                        See Transaction Details{' '}
+                        <ExternalLinkIcon className="w-5 h-5" />
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        );
+      }
+    }
+  };
 
   return (
-    <div className="flex justify-between items-center">
-      <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
-        <button onClick={handleBack}>
-          <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
-        </button>
-        Transactions
-      </h5>
-      <ul>
-        {transactions.length === 0 && isFetching === false && (
-          <p className="text-sm text-white grid gap-4 items-center justify-center mt-6 ">
-            <span>
-              You don&apos;t have a transaction yet, please try refreshing or
-              come back in a few minutes.
-            </span>
-            <button
-              type="button"
-              onClick={handleGetTransactions}
-              disabled={isFetching}
-              className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Refresh Transactions
-            </button>
-          </p>
-        )}
-        {transactions.map(({ hash }) => (
-          <li key={hash}>
-            <a
-              className="underline  text-sm flex flex-row items-center gap-2"
-              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${hash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              See Transaction Details <ExternalLinkIcon className="w-5 h-5" />
-            </a>
-          </li>
-        ))}
-      </ul>
-      {renderLoadMoreButton()}
+    <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4 flex">
+      <div className="w-64">{renderView()}</div>
     </div>
   );
 };

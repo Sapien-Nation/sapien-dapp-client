@@ -113,7 +113,7 @@ const FeedbackDialog = ({ onClose }: Props) => {
                   <TextareaInput
                     name="message"
                     maxLength={1000}
-                    placeholder="Describe your tribe"
+                    placeholder="Let us know how to improve Sapien!"
                     rules={{
                       validate: {
                         required: (value) => value.length > 0 || 'is required',

@@ -1,7 +1,14 @@
 import Linkify from 'linkify-react';
+import { useRouter } from 'next/router';
+
+// hooks
+import { useRoomMembers } from 'hooks/room';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
+
+// utils
+import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
@@ -17,6 +24,36 @@ const MessagePreview = ({
     content,
   },
 }: Props) => {
+  const { query } = useRouter();
+
+  const roomMembers = useRoomMembers(query.viewID as string);
+
+  const renderContent = () => {
+    const elements = content.split('\n\n');
+
+    return elements.map((node, index) => {
+      return node
+        .split(' ')
+        .map((singleNode) => {
+          if (isNodeMention(singleNode)) {
+            const userID = getUserIDFromNode(singleNode);
+            const user = roomMembers.find(({ id }) => id === userID);
+            if (user) {
+              return (
+                <span className="align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  {' '}
+                  @{user.username}{' '}
+                </span>
+              );
+            }
+            return ` ${singleNode} `;
+          }
+          return ` ${singleNode} `;
+        })
+        .concat(index === elements.length - 1 ? '' : '\n\n');
+    });
+  };
+
   return (
     <div className="py-2 bg-gray-800 rounded-md px-6 flex justify-between items-start group mt-4">
       <div className="flex space-x-3">
@@ -60,7 +97,7 @@ const MessagePreview = ({
                 className: { url: 'underline text-blue-500' },
               }}
             >
-              {content}
+              {renderContent()}
             </Linkify>
           </p>
         </div>

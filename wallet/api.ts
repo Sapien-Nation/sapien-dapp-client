@@ -6,11 +6,11 @@ import * as Sentry from '@sentry/nextjs';
 import instance from 'api';
 
 // types
-import { Token, Transaction } from './types';
+import { Token } from './types';
 
 const gasStationUrl = process.env.NEXT_PUBLIC_GAS_STATION_URL;
-const polygonAPIUrl = process.env.NEXT_PUBLIC_POLYGON_API_URL;
-const polygonscanAPIKey = process.env.NEXT_PUBLIC_POLYGONSCAN_KEY;
+const alchemyAPIUrl = process.env.NEXT_PUBLIC_ALCHEMYSCAN_URL;
+const alchemyAPIKey = process.env.NEXT_PUBLIC_ALCHEMYSCAN_KEY;
 
 export const connectWallet = () => {
   const tokens = window.localStorage.getItem('tokens');
@@ -50,29 +50,68 @@ export const getTokenMetadata = (tokenId): Promise<Token> =>
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getTxHistory = ({
-  address,
-  page,
-  offset,
-  sort,
-}: {
-  address: string;
-  page: number;
-  offset: number;
-  sort: string;
-}) =>
+export const getSentTxHistory = (address) =>
   axios
-    .get(
-      `${polygonAPIUrl}?module=account&
-    action=txlist&
-    address=${address}&
-    startblock=0&
-    endblock=99999999&
-    page=${page}&
-    offset=${offset}&
-    sort=${sort}&
-    apikey=${polygonscanAPIKey}
-  `
+    .post(
+      `${alchemyAPIUrl}/${alchemyAPIKey}`,
+      {
+        jsonrpc: '2.0',
+        id: 0,
+        method: 'alchemy_getAssetTransfers',
+        params: [
+          {
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            excludeZeroValue: false,
+            category: ['external'],
+            fromAddress: address,
+          },
+        ],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     )
     .then((response) => response)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const getReceivedTxHistory = (address) =>
+  axios
+    .post(
+      `${alchemyAPIUrl}/${alchemyAPIKey}`,
+      {
+        jsonrpc: '2.0',
+        id: 0,
+        method: 'alchemy_getAssetTransfers',
+        params: [
+          {
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            excludeZeroValue: false,
+            category: ['external'],
+            toAddress: address,
+          },
+        ],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((response) => response)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const deposit = (tokenId): Promise<Token> =>
+  instance
+    .post(`/api/v3/wallet/deposit/${tokenId}`)
+    .then((response) => response.data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const withdraw = (tokenId): Promise<Token> =>
+  instance
+    .post(`/api/v3/wallet/withdraw/${tokenId}`)
+    .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));

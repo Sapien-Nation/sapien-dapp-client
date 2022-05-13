@@ -18,6 +18,15 @@ export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+export const editTribe = (
+  tribeID: string,
+  body: CreateTribeBody
+): Promise<ProfileTribe> =>
+  axios
+    .put(`/core-api/tribe/${tribeID}`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const uploadImage = (data: FormData) =>
   axios
     .post('/core-api/tribe/image', data)
@@ -27,5 +36,11 @@ export const uploadImage = (data: FormData) =>
 export const joinTribe = (tribeID: string) =>
   axios
     .post(`/core-api/tribe/${tribeID}/join`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const leaveTribe = (tribeID: string) =>
+  axios
+    .post(`/core-api/tribe/${tribeID}/leave`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

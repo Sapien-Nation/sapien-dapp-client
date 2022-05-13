@@ -9,3 +9,8 @@ export const defaultValue = [
     key: null,
   },
 ];
+
+export enum MentionType {
+  All = 'all',
+  Member = 'member',
+}
