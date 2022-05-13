@@ -1,3 +1,4 @@
+import { ClipboardCopyIcon } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
 import _random from 'lodash/random';
 import Link from 'next/link';
@@ -139,21 +140,24 @@ function TribeBarItem({
             left: contextMenuPosition.left,
             top: contextMenuPosition.top,
           }}
-          className="fixed max-h-max w-56 bottom-1 z-50 bg-black p-4 rounded shadow-lg ring-black ring-opacity-5 focus:outline-none text-gray-400"
+          className="fixed max-h-max w-64 bottom-1 z-50 py-2 bg-black p-2 rounded-md shadow-lg ring-black ring-opacity-5 focus:outline-none text-white"
         >
           <div
             onClick={handleCopyToClipboard}
-            className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-gray-200 p-2 rounded"
+            className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between"
           >
-            Invite People
+            Invite People <ClipboardCopyIcon className="aria-hidden w-5 h-5" />
           </div>
           {canLeave === true && (
-            <div
-              onClick={handleLeaveTribe}
-              className="text-sm cursor-pointer mt-4 hover:bg-sapien-neutral-600 bg-red-800 text-gray-200 p-2 rounded"
-            >
-              Leave Tribe
-            </div>
+            <>
+              <div className="w-full border-t border-gray-600" />
+              <div
+                onClick={handleLeaveTribe}
+                className="text-sm cursor-pointer mt-4 hover:bg-red-600 bg-red-800 text-gray-200 p-2 rounded"
+              >
+                Leave <span className="font-extrabold">{tribe.name}</span> Tribe
+              </div>
+            </>
           )}
         </div>
       )}
