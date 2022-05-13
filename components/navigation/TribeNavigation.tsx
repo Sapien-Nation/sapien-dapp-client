@@ -144,10 +144,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
             <ul className="px-2 py-2 cursor-pointer">
-              {rooms.map(({ id, name, hasUnreadMessages }) => {
+              {rooms.map(({ id, name, unreads }) => {
                 return (
                   <li
-                    className={getRoomListItemClassName(id, hasUnreadMessages)}
+                    className={getRoomListItemClassName(id, unreads > 0)}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
@@ -155,7 +155,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         className="block px-2 py-1 my-1"
                         onClick={handleMobileMenu}
                       >
-                        # {name}
+                        # {name} {unreads > 0 ? <span>{unreads}</span> : null}
                       </a>
                     </Link>
                   </li>

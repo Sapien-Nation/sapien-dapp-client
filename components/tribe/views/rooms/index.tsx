@@ -11,7 +11,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 // api
 import axios from 'api';
-import { deleteMessage, sendMessage } from 'api/room';
+import { deleteMessage, sendMessage, readRoom } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -94,7 +94,7 @@ const Feed = ({
     // @see https://swr.vercel.app/docs/advanced/performance#deduplication
     handleScrollToBottom();
 
-    // TODO Call API to read all this Room notifications
+    handleReadMessagesUnblock();
     handleUnreadReadMessagesOnTribeNavigation(room.id, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room.id]);
@@ -105,6 +105,7 @@ const Feed = ({
 
       if (unreadMessages > 0) {
         setUnreadMessages(0);
+        handleReadMessagesUnblock();
       }
     }
   }, [reachBottom]);
@@ -161,7 +162,11 @@ const Feed = ({
       } else {
         switch (type) {
           case WSEvents.NewMessage:
-            handleUnreadReadMessagesOnTribeNavigation(data.extra.roomId, true);
+            handleUnreadReadMessagesOnTribeNavigation(
+              data.extra.roomId,
+              true,
+              data.extra.messageId
+            );
             break;
           default:
             console.info(`No handler for eventType: ${type}`);
@@ -179,7 +184,8 @@ const Feed = ({
   // to update the TribeNavigation read status
   const handleUnreadReadMessagesOnTribeNavigation = (
     roomID,
-    hasUnreadMessages
+    shouldIncrement = false,
+    lastMessageId = ''
   ) => {
     mutate(
       '/core-api/profile/tribes',
@@ -192,7 +198,8 @@ const Feed = ({
                   if (tribeRoom.id === roomID) {
                     return {
                       ...tribeRoom,
-                      hasUnreadMessages,
+                      unreads: shouldIncrement ? tribeRoom.unreads + 1 : 0,
+                      lastMessageId: lastMessageId,
                     };
                   }
 
@@ -254,6 +261,14 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Handlers
+  const handleReadMessagesUnblock = async () => {
+    try {
+      if (room.unreads > 0) {
+        await readRoom(roomID);
+      }
+    } catch (err) {}
+  };
+
   const handleScrollToBottom = (behavior: 'auto' | 'smooth' = 'auto') => {
     if (scrollToBottom?.current) {
       scrollToBottom.current.scrollIntoView({
@@ -263,7 +278,7 @@ const Feed = ({
       });
     }
 
-    // TODO call API to read messages if there are messages to read
+    handleReadMessagesUnblock();
     setUnreadMessages(0);
     handleUnreadReadMessagesOnTribeNavigation(room.id, false);
   };
@@ -353,7 +368,7 @@ const Feed = ({
                   event.stopPropagation();
                   event.preventDefault();
 
-                  // TODO call API to read messages
+                  handleReadMessagesUnblock();
                   setUnreadMessages(0);
                   handleUnreadReadMessagesOnTribeNavigation(room.id, false);
                 }}
