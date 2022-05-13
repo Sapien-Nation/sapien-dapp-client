@@ -24,7 +24,7 @@ const Navbar = () => {
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
           {/* Wallet dropdown */}
-          <Menu as="div">
+          {/* <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification/all">
                 {({ unread }: { unread: number }) => (
@@ -44,14 +44,14 @@ const Navbar = () => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                        {/* <RedDot count={unread} animate /> */}
+                        <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
                   </>
                 )}
               </Query>
             )}
-          </Menu>
+          </Menu> */}
           {/* Wallet dropdown */}
           <Menu as="div">
             {({ open }) => (

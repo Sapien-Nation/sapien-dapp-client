@@ -102,6 +102,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                 placeholder="The Sapien Tribe"
                 maxLength={50}
                 pattern={/^[a-zA-Z\s]$/}
+                valueModifier={(str) => str.replace(' ', '-')}
                 rules={{
                   validate: {
                     required: (value) => value.length > 0 || 'is required',

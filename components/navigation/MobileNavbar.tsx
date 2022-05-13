@@ -48,7 +48,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
         {/* Wallet dropdown */}
         <div className="flex relative gap-2">
           {/* Wallet dropdown */}
-          <Menu as="div">
+          {/* <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification/all">
                 {({ unread }: { unread: number }) => (
@@ -68,14 +68,14 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                        {/* <RedDot count={unread} animate /> */}
+                        <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
                   </>
                 )}
               </Query>
             )}
-          </Menu>
+          </Menu> */}
           <Menu as="div">
             {({ open }) => (
               <>

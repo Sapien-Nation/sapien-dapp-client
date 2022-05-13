@@ -66,11 +66,15 @@ export const useTribePermission = (
 ): Array<boolean> => {
   const { cache } = useSWRConfig();
 
-  const { permissions } = cache
+  const tribe = cache
     .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  return permissionList.map((permission) => permissions[permission]);
+  if (tribe?.permissions) {
+    return permissionList.map((permission) => tribe.permissions[permission]);
+  }
+
+  return permissionList.map(() => false);
 };
 
 export const useTribe = (tribeID: string): ProfileTribe => {

@@ -24,10 +24,8 @@ const Notifications = () => {
 
   return (
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
-      <div className="grid grid-cols-3 gap-1 items-center border-b-[1px] border-gray-800 p-3">
-        <div className="flex flex-col items-center col-start-2">
-          <span>Notifications</span>
-        </div>
+      <div className="flex gap-1 items-center p-3">
+        <span>Notification Center</span>
         <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
@@ -43,7 +41,7 @@ const Notifications = () => {
                         disabled={unread === 0}
                         className={`${
                           active ? 'bg-primary-200 text-white' : 'text-gray-900'
-                        } group flex w-full items-center rounded-md p-2 text-sm`}
+                        } group flex w-full items-center rounded-md p-2 text-sm disabled:cursor-not-allowed`}
                       >
                         Mark all as read
                       </button>

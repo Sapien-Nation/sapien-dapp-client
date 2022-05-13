@@ -8,6 +8,7 @@ interface Props extends InputProps {
   maxLength?: number;
   replaceWhiteSpace?: boolean;
   rules?: any;
+  valueModifier?: (val: string) => string | null;
 }
 
 const TextInput = ({
@@ -18,6 +19,7 @@ const TextInput = ({
   rules = {},
   inputMode,
   disabled,
+  valueModifier,
   ...rest
 }: Props) => {
   const { register } = useFormContext();
@@ -64,7 +66,7 @@ const TextInput = ({
             value = maxLength;
           }
 
-          event.target.value = value;
+          event.target.value = valueModifier ? valueModifier(value) : value;
         },
       })}
     />

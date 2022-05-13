@@ -41,7 +41,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
   // const channels = useTribeChannels(tribeID as string);
-  const [canAddRoom] = useTribePermission(tribeID as string, ['canAddRom']);
+  const [canAddRoom] = useTribePermission(tribeID as string, ['canAddRoom']);
   if (!tribe || !rooms) {
     return;
   }
@@ -164,7 +164,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         onClick={handleMobileMenu}
                       >
                         <div className="flex">
-                          # {name} <RedDot animate count={unreads} />
+                          # {name} <RedDot count={unreads} />
                         </div>
                       </a>
                     </Link>
