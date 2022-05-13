@@ -78,7 +78,7 @@ const Message = ({
     }
 
     if (isMeMention) {
-      return 'py-2 hover:bg-gray-600 border-l-8 border-l-gray-600 px-4 flex justify-between items-start group bg-gray-700';
+      return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5';
     }
 
     return 'py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group';

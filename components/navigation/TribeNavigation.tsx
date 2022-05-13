@@ -160,7 +160,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
                       <a
-                        className="block px-2 py-1 my-1"
+                        className="flex px-2 py-1 my-1 items-center gap-2"
                         onClick={handleMobileMenu}
                       >
                         <div className="flex">

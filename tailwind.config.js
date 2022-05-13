@@ -67,6 +67,7 @@ module.exports = {
         '64px': '64px',
       },
       minWidth: {
+        '20px': '20px',
         570: '570px',
       },
       maxWidth: {
