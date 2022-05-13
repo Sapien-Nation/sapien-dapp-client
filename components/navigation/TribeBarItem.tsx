@@ -157,9 +157,9 @@ function TribeBarItem({
               <div className="w-full border-t border-gray-600" />
               <div
                 onClick={handleLeaveTribe}
-                className="text-sm cursor-pointer mt-4 hover:bg-red-600 bg-red-800 text-gray-200 p-2 rounded"
+                className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between"
               >
-                Leave <span className="font-extrabold">{tribe.name}</span> Tribe
+                Leave Tribe
               </div>
             </>
           )}
