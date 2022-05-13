@@ -81,6 +81,7 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
         form={form}
         formDefaultValues={formDefaultValues}
         onSubmit={onSubmit}
+        isEdit
       />
     </Dialog>
   );

@@ -20,7 +20,7 @@ import { ToastType } from 'constants/toast';
 
 // hooks
 import { useToast } from 'context/toast';
-import { useMainTribe } from 'hooks/tribe';
+import { useMainTribe, useTribe, useTribePermission } from 'hooks/tribe';
 
 interface Props {
   isContextMenuOpen: any;
@@ -38,10 +38,12 @@ function TribeBarItem({
   const { query } = useRouter();
   const { mutate } = useSWRConfig();
 
-  const [contextMenuPosition, setContextMenuPosition] = useState(null);
-  const { redirectToMainTribeChannel } = useMainTribe();
-
   const { tribeID } = query;
+
+  const [contextMenuPosition, setContextMenuPosition] = useState(null);
+
+  const [canLeave] = useTribePermission(tribe.id, ['canLeave']);
+  const { redirectToMainTribeChannel } = useMainTribe();
 
   const [_, copyToClipboard] = useCopyToClipboard();
   const handleCopyToClipboard = () => {
@@ -82,8 +84,6 @@ function TribeBarItem({
 
   const tooltipRef = useRef(null);
 
-  // TODO read this from permissions.canLeave
-  const canLeave = true;
   return (
     <div className="relative">
       <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>

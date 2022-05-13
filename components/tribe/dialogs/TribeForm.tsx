@@ -32,10 +32,16 @@ export interface FormValues {
 interface Props {
   form: string;
   formDefaultValues: any;
+  isEdit?: boolean;
   onSubmit: any;
 }
 
-const TribeForm = ({ form, onSubmit, formDefaultValues }: Props) => {
+const TribeForm = ({
+  form,
+  isEdit = false,
+  onSubmit,
+  formDefaultValues,
+}: Props) => {
   const toast = useToast();
   const avatarFileInput = useRef(null);
   const coverFileInput = useRef(null);
@@ -234,6 +240,8 @@ const TribeForm = ({ form, onSubmit, formDefaultValues }: Props) => {
                         },
                       }}
                       pattern={/^[a-zA-Z0-9]$/}
+                      readOnly={isEdit}
+                      disabled={isEdit}
                     />
                   </div>
                   <div>

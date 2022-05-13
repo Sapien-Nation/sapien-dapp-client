@@ -60,6 +60,19 @@ export const useSapienTribe = (): ProfileTribe => {
   return cache.get('/core-api/profile/tribes')[0];
 };
 
+export const useTribePermission = (
+  tribeID: string,
+  permissionList: Array<string>
+): Array<boolean> => {
+  const { cache } = useSWRConfig();
+
+  const { permissions } = cache
+    .get('/core-api/profile/tribes')
+    .find(({ id }) => id === tribeID);
+
+  return permissionList.map((permission) => permissions[permission]);
+};
+
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
