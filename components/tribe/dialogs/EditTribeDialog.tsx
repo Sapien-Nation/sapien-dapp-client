@@ -66,14 +66,7 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
 
       const response = await editTribe(tribe.id, body);
 
-      mutate(
-        `/core-api/tribe/${tribe.id}`,
-        (data) => ({
-          ...data,
-          ...response,
-        }),
-        false
-      );
+      mutate(`/core-api/tribe/${tribe.id}`, () => response, true);
 
       onClose();
     } catch (error) {

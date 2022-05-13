@@ -56,27 +56,31 @@ function TribeBarItem({
   };
 
   const handleLeaveTribe = async () => {
+    const isLeavingTheCurrentTribe = tribeID === tribe.id;
     try {
-      mutate(
-        '/core-api/profile/tribes',
-        (tribes: Array<ProfileTribe>) =>
-          tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
-        false
-      );
+      if (isLeavingTheCurrentTribe === false) {
+        mutate(
+          '/core-api/profile/tribes',
+          (tribes: Array<ProfileTribe>) =>
+            tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
+          false
+        );
+      }
 
-      if (tribeID === tribe.id) {
+      if (isLeavingTheCurrentTribe === true) {
         redirectToMainTribeChannel();
       }
 
       await leaveTribe(tribeID as string);
 
-      // TODO will keep this commented, but basically this is to revalidate you actually leave the tribe
-      // might be to much since you can refresh the app
-      // mutate(
-      //   '/core-api/profile/tribes',
-      //   (tribes: Array<ProfileTribe>) => tribes,
-      //   true
-      // );
+      if (isLeavingTheCurrentTribe === true) {
+        mutate(
+          '/core-api/profile/tribes',
+          (tribes: Array<ProfileTribe>) =>
+            tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
+          false
+        );
+      }
     } catch (err) {
       Sentry.captureMessage(err);
     }

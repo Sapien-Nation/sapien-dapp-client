@@ -44,7 +44,7 @@ const Navbar = () => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6" aria-hidden="true" />
-                        <RedDot count={unread} animate />
+                        {/* <RedDot count={unread} animate /> */}
                       </div>
                     </Menu.Button>
                   </>

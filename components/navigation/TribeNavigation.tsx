@@ -164,7 +164,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         onClick={handleMobileMenu}
                       >
                         <div className="flex">
-                          # {name} <RedDot count={unreads} />
+                          # {name}
+                          {/* # {name} <RedDot count={unreads} /> */}
                         </div>
                       </a>
                     </Link>
