@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
 
 // api
-import { createTribe, CreateTribeBody } from 'api/tribe';
+import { editTribe, CreateTribeBody } from 'api/tribe';
 
 // components
 import TribeForm from './TribeForm';
@@ -14,26 +12,23 @@ import { useToast } from 'context/toast';
 
 // types
 import type { FormValues } from './TribeForm';
-import type { ProfileTribe } from 'tools/types/tribe';
+import type { MainFeedTribe } from 'tools/types/tribe';
 
 interface Props {
   onClose: () => void;
+  tribe: MainFeedTribe;
 }
 
-const form = 'create-tribe-form';
+const form = 'edit-tribe-form';
 
-const CreateTribeDialog = ({ onClose }: Props) => {
+const EditTribeDialog = ({ onClose, tribe }: Props) => {
   const toast = useToast();
-  const { push } = useRouter();
-  const { mutate } = useSWRConfig();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formDefaultValues = {
-    avatar: null,
-    cover: null,
-    description: '',
-    identifier: '',
-    name: '',
+    description: tribe.description,
+    identifier: tribe.identifier,
+    name: tribe.name,
   };
 
   const onSubmit = async ({
@@ -62,20 +57,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         });
       }
 
-      const response = await createTribe(body);
-
-      mutate(
-        '/core-api/profile/tribes',
-        (tribes: Array<ProfileTribe>) => [
-          tribes[0],
-          response,
-          ...tribes.slice(1),
-        ],
-        false
-      );
+      await editTribe(tribe.id, body);
 
       onClose();
-      push(`/tribes/${response.id}/home`);
     } catch (error) {
       toast({
         message: error,
@@ -89,9 +73,9 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       show
       isFetching={isSubmitting}
       onClose={onClose}
-      title="Create a Tribe"
+      title="Edit Tribe"
       form={form}
-      confirmLabel="Create"
+      confirmLabel="Save"
     >
       <TribeForm
         form={form}
@@ -102,4 +86,4 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   );
 };
 
-export default CreateTribeDialog;
+export default EditTribeDialog;
