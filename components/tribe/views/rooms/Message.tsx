@@ -1,3 +1,4 @@
+import { Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import Linkify from 'linkify-react';
@@ -9,13 +10,17 @@ import { useAuth } from 'context/user';
 import { MessageType } from 'tools/constants/rooms';
 import MessageOwnerMenu from './MessageOwnerMenu';
 
+// utils
+import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
+
+// hooks
+import { useRoomMembers } from 'hooks/room';
+
 // helpers
 import { formatDateRelative } from 'utils/date';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
-import { Transition } from '@headlessui/react';
-import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
 
 interface Props {
   isAMessageContinuation: boolean;
@@ -40,15 +45,20 @@ const Message = ({
     createdAt,
     content,
     type,
-    mentions,
   },
   onMenuItemClick,
 }: Props) => {
   const [messageFocused, setMessageFocused] = useState(false);
 
-  const { me } = useAuth();
-  const { push } = useRouter();
   const messageRef = useRef(null);
+
+  const { me } = useAuth();
+  const { push, query } = useRouter();
+
+  const roomID = query.viewID as string;
+  const roomMembers = useRoomMembers(roomID);
+
+  const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) > 0;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -62,24 +72,40 @@ const Message = ({
     };
   }, []);
 
+  const getMessageClassName = () => {
+    if (messageFocused) {
+      return 'py-2 bg-gray-800 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group';
+    }
+
+    if (isMeMention) {
+      return 'py-2 hover:bg-gray-600 border-l-8 border-l-gray-600 px-4 flex justify-between items-start group bg-gray-700';
+    }
+
+    return 'py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group';
+  };
+
   const renderContent = () => {
-    return content.split(' ').map((node) => {
-      if (isNodeMention(node)) {
-        const userID = getUserIDFromNode(node);
-        const user = mentions?.find(({ id }) => id === userID);
-        if (user) {
-          return (
-            <>
-              {' '}
-              <span className="p-1 mx-1 align-baseline inline-block rounded bg-gray-700 text-gray-300 text-xs">
-                @{user.username}
-              </span>{' '}
-            </>
-          );
-        }
-        return ` ${node} `;
-      }
-      return ` ${node} `;
+    const elements = content.split('\n\n');
+    return elements.map((node, index) => {
+      return node
+        .split(' ')
+        .map((singleNode) => {
+          if (isNodeMention(singleNode)) {
+            const userID = getUserIDFromNode(singleNode);
+            const user = roomMembers.find(({ id }) => id === userID);
+            if (user) {
+              return (
+                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  {' '}
+                  @{user.username}{' '}
+                </span>
+              );
+            }
+            return ` ${singleNode} `;
+          }
+          return ` ${singleNode} `;
+        })
+        .concat(index === elements.length - 1 ? '' : '\n\n');
     });
   };
 
@@ -145,6 +171,7 @@ const Message = ({
       </p>
     );
   };
+
   return (
     <Transition
       show
@@ -153,11 +180,7 @@ const Message = ({
       leaveTo="opacity-0"
       as="li"
       data-testid="room-message"
-      className={
-        messageFocused
-          ? 'py-2 bg-gray-800 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group'
-          : 'py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group'
-      }
+      className={getMessageClassName()}
     >
       <div className="flex space-x-3" ref={messageRef}>
         {isAMessageContinuation && (

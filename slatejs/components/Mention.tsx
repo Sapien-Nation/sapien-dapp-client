@@ -10,7 +10,7 @@ const Mention = ({ attributes, children, element }) => {
       contentEditable={false}
       className={`${
         selected && focused ? 'shadow-md' : 'none'
-      } p-1 mx-1 align-baseline inline-block rounded bg-gray-700 text-gray-300 text-xs`}
+      } p-1 mx-1 align-baseline inline-block rounded bg-sapien text-white text-extrabold text-xs`}
     >
       @{element.member.label}
       {children}
