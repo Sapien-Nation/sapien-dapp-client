@@ -23,7 +23,7 @@ export const editTribe = (
   body: CreateTribeBody
 ): Promise<ProfileTribe> =>
   axios
-    .post(`/core-api/tribe/${tribeID}`, body)
+    .put(`/core-api/tribe/${tribeID}`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 

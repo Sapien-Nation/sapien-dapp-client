@@ -31,7 +31,7 @@ export interface FormValues {
 
 interface Props {
   form: string;
-  formDefaultValues: any;
+  defaultValues: any;
   isEdit?: boolean;
   onSubmit: any;
 }
@@ -40,7 +40,7 @@ const TribeForm = ({
   form,
   isEdit = false,
   onSubmit,
-  formDefaultValues,
+  defaultValues,
 }: Props) => {
   const toast = useToast();
   const avatarFileInput = useRef(null);
@@ -49,9 +49,7 @@ const TribeForm = ({
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const methods = useForm<FormValues>({
-    defaultValues: {
-      ...formDefaultValues,
-    },
+    defaultValues,
   });
 
   const {
