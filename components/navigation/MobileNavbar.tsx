@@ -1,4 +1,4 @@
-import { CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
+import { BellIcon, CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { LogoutIcon, CogIcon } from '@heroicons/react/solid';
 import { Fragment, useState } from 'react';
@@ -10,15 +10,14 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'context/user';
 
 // components
-import { UserAvatar } from 'components/common';
+import { Query, RedDot, UserAvatar } from 'components/common';
+// @ts-ignore
+const Wallet = dynamic(() => import('wallet/Wallet'));
+const Notifications = dynamic(() => import('components/notifications'));
+import { ProfileDialog } from 'components/profile';
 
 // hooks
 import { usePassport } from 'hooks/passport';
-
-// ui
-// @ts-ignore
-const Wallet = dynamic(() => import('wallet/Wallet'));
-import { ProfileDialog } from 'components/profile';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
@@ -48,6 +47,35 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
         </button>
         {/* Wallet dropdown */}
         <div className="flex relative gap-2">
+          {/* Wallet dropdown */}
+          <Menu as="div">
+            {({ open }) => (
+              <Query api="/core-api/notification/all">
+                {({ unread }: { unread: number }) => (
+                  <>
+                    <div>
+                      <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Notifications />
+                      </Menu.Items>
+                    </div>
+
+                    <Menu.Button
+                      type="button"
+                      className={`${
+                        open ? 'bg-gray-800' : ''
+                      } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                    >
+                      <div className="relative">
+                        <span className="sr-only">View notifications</span>
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        <RedDot count={unread} animate />
+                      </div>
+                    </Menu.Button>
+                  </>
+                )}
+              </Query>
+            )}
+          </Menu>
           <Menu as="div">
             {({ open }) => (
               <>

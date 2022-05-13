@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
+import { BellIcon, CreditCardIcon, CogIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,11 +9,10 @@ import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
 // components
-import { UserAvatar } from 'components/common';
-
-// ui
+import { Query, RedDot, UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
+const Notifications = dynamic(() => import('components/notifications'));
 
 const Navbar = () => {
   const { me } = useAuth();
@@ -24,6 +23,35 @@ const Navbar = () => {
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
+          {/* Wallet dropdown */}
+          <Menu as="div">
+            {({ open }) => (
+              <Query api="/core-api/notification/all">
+                {({ unread }: { unread: number }) => (
+                  <>
+                    <div>
+                      <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Notifications />
+                      </Menu.Items>
+                    </div>
+
+                    <Menu.Button
+                      type="button"
+                      className={`${
+                        open ? 'bg-gray-800' : ''
+                      } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                    >
+                      <div className="relative">
+                        <span className="sr-only">View notifications</span>
+                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        <RedDot count={unread} animate />
+                      </div>
+                    </Menu.Button>
+                  </>
+                )}
+              </Query>
+            )}
+          </Menu>
           {/* Wallet dropdown */}
           <Menu as="div">
             {({ open }) => (

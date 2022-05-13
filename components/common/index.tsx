@@ -2,6 +2,7 @@ export * from './Toast';
 export * from './views';
 export * from './fields';
 
+export { default as RedDot } from './RedDot';
 export { default as UserAvatar } from './UserAvatar';
 export { default as Dialog } from './Dialog';
 export { default as DialogPassport } from './DialogPassport';

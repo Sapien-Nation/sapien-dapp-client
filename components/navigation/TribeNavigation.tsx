@@ -19,6 +19,7 @@ import {
   useTribePermission,
   useTribeRooms,
 } from 'hooks/tribe';
+import { RedDot } from 'components/common';
 
 // types
 
@@ -162,7 +163,9 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         className="block px-2 py-1 my-1"
                         onClick={handleMobileMenu}
                       >
-                        # {name} {unreads > 0 ? <span>{unreads}</span> : null}
+                        <div className="flex">
+                          # {name} <RedDot count={unreads} />
+                        </div>
                       </a>
                     </Link>
                   </li>
