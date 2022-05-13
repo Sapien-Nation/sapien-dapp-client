@@ -1,4 +1,4 @@
-import { BellIcon, UserGroupIcon, PlusIcon } from '@heroicons/react/outline';
+import { UserGroupIcon, PlusIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -13,7 +13,12 @@ import {
 } from 'components/tribe/dialogs';
 
 // hooks
-import { useTribe, useTribeChannels, useTribeRooms } from 'hooks/tribe';
+import {
+  useTribe,
+  // useTribeChannels,
+  useTribePermission,
+  useTribeRooms,
+} from 'hooks/tribe';
 
 // types
 
@@ -34,8 +39,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
-  const channels = useTribeChannels(tribeID as string);
-
+  // const channels = useTribeChannels(tribeID as string);
+  const [canAddRoom] = useTribePermission(tribeID as string, ['canAddRom']);
   if (!tribe || !rooms) {
     return;
   }
@@ -133,16 +138,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
         <div>
           <nav>
-            <button
-              aria-label="Create Room"
-              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => {
-                setDialog(Dialog.CreateRoom);
-                handleMobileMenu();
-              }}
-            >
-              ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
-            </button>
+            {canAddRoom === true && (
+              <button
+                aria-label="Create Room"
+                className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+                onClick={() => {
+                  setDialog(Dialog.CreateRoom);
+                  handleMobileMenu();
+                }}
+              >
+                ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
+              </button>
+            )}
             <ul className="px-2 py-2 cursor-pointer">
               {rooms.map(({ id, name, unreads }) => {
                 return (

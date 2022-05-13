@@ -15,6 +15,7 @@ import { useToast } from 'context/toast';
 
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
+import { useTribePermission } from 'hooks/tribe';
 
 interface Props {
   tribe: MainFeedTribe;
@@ -30,6 +31,8 @@ const MainChannelHeader = ({ tribe }: Props) => {
   const { query } = useRouter();
   const { tribeID } = query;
   const [_, copyToClipboard] = useCopyToClipboard();
+
+  const [canEdit] = useTribePermission(tribe.id, ['canEdit']);
 
   const handleCopyToClipboard = () => {
     copyToClipboard(`${window?.location.origin}/join/${tribeID}`);
@@ -103,14 +106,16 @@ const MainChannelHeader = ({ tribe }: Props) => {
             </p>
           )}
           <div>
-            <button
-              className="flex justify-end text-sapien-neutral-200 px-8 py-5"
-              onClick={() => {
-                setDialog(Dialog.EditTribe);
-              }}
-            >
-              <PencilIcon className="h-6 w-6" />
-            </button>
+            {canEdit === true && (
+              <button
+                className="flex justify-end text-sapien-neutral-200 px-8 py-5"
+                onClick={() => {
+                  setDialog(Dialog.EditTribe);
+                }}
+              >
+                <PencilIcon className="h-6 w-6" />
+              </button>
+            )}
           </div>
         </div>
       </div>
