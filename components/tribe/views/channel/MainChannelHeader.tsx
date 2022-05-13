@@ -100,11 +100,9 @@ const MainChannelHeader = ({ tribe }: Props) => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between mt-8">
-          {tribe.description && (
-            <p className="ml-8 text-gray-500 whitespace-pre-line line-clamp-5 flex-1">
-              {tribe.description}
-            </p>
-          )}
+          <p className="ml-8 text-gray-500 whitespace-pre-line line-clamp-5 flex-1">
+            {tribe.description}
+          </p>
           <div>
             {canEdit === true && (
               <button
