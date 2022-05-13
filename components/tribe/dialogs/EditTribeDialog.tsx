@@ -26,6 +26,8 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formDefaultValues = {
+    avatar: { key: '', url: tribe.avatar },
+    cover: { key: '', url: tribe.cover },
     description: tribe.description,
     identifier: tribe.identifier,
     name: tribe.name,
