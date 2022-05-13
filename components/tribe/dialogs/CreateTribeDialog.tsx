@@ -28,14 +28,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const { mutate } = useSWRConfig();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formDefaultValues = {
-    avatar: null,
-    cover: null,
-    description: '',
-    identifier: '',
-    name: '',
-  };
-
   const onSubmit = async ({
     description,
     identifier,
@@ -95,7 +87,13 @@ const CreateTribeDialog = ({ onClose }: Props) => {
     >
       <TribeForm
         form={form}
-        formDefaultValues={formDefaultValues}
+        defaultValues={{
+          avatar: null,
+          cover: null,
+          description: '',
+          identifier: '',
+          name: '',
+        }}
         onSubmit={onSubmit}
       />
     </Dialog>
