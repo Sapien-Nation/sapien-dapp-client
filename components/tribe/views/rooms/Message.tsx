@@ -1,4 +1,5 @@
 import { Transition } from '@headlessui/react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import Linkify from 'linkify-react';
@@ -11,9 +12,15 @@ import { MessageType } from 'tools/constants/rooms';
 import MessageOwnerMenu from './MessageOwnerMenu';
 
 // utils
-import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
+import {
+  getRoomlIDFromNode,
+  getUserIDFromNode,
+  isNodeRoomMention,
+  isNodeUserMention,
+} from 'slatejs/utils';
 
 // hooks
+import { useTribeRooms } from 'hooks/tribe';
 import { useRoomMembers } from 'hooks/room';
 
 // helpers
@@ -56,6 +63,8 @@ const Message = ({
   const { push, query } = useRouter();
 
   const roomID = query.viewID as string;
+  const tribeID = query.tribeID as string;
+  const tribeRooms = useTribeRooms(tribeID);
   const roomMembers = useRoomMembers(roomID);
 
   const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
@@ -90,7 +99,7 @@ const Message = ({
       return node
         .split(' ')
         .map((singleNode) => {
-          if (isNodeMention(singleNode)) {
+          if (isNodeUserMention(singleNode)) {
             const userID = getUserIDFromNode(singleNode);
             const user = roomMembers.find(({ id }) => id === userID);
             if (user) {
@@ -100,9 +109,38 @@ const Message = ({
                   @{user.username}{' '}
                 </span>
               );
+            } else {
+              return (
+                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  {' '}
+                  @sapien_user{' '}
+                </span>
+              );
             }
-            return ` ${singleNode} `;
           }
+
+          if (isNodeRoomMention(singleNode)) {
+            const roomID = getRoomlIDFromNode(singleNode);
+            const room = tribeRooms.find(({ id }) => id === roomID);
+            if (room) {
+              return (
+                <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
+                  <a className='className="p-1 align-baseline rounded bg-sapien-80 text-white tracking-wide text-extrabold text-md cursor-pointer'>
+                    {' '}
+                    #{room.name}{' '}
+                  </a>
+                </Link>
+              );
+            } else {
+              return (
+                <span className="p-1 align-baseline rounded bg-sapien-80 text-white text-extrabold text-md cursor-pointer">
+                  {' '}
+                  #deleted_room{' '}
+                </span>
+              );
+            }
+          }
+
           return ` ${singleNode} `;
         })
         .concat(index === elements.length - 1 ? '' : '\n\n');

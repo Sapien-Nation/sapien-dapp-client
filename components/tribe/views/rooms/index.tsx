@@ -108,6 +108,7 @@ const Feed = ({
         handleReadMessagesUnblock();
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reachBottom]);
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events

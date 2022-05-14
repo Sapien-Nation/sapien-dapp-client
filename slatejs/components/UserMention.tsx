@@ -1,6 +1,6 @@
 import { useSelected, useFocused } from 'slate-react';
 
-const Mention = ({ attributes, children, element }) => {
+const UserMention = ({ attributes, children, element }) => {
   const focused = useFocused();
   const selected = useSelected();
 
@@ -18,4 +18,4 @@ const Mention = ({ attributes, children, element }) => {
   );
 };
 
-export default Mention;
+export default UserMention;

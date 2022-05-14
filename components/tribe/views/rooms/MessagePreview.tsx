@@ -8,7 +8,7 @@ import { useRoomMembers } from 'hooks/room';
 import { formatDateRelative } from 'utils/date';
 
 // utils
-import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
+import { getUserIDFromNode, isNodeUserMention } from 'slatejs/utils';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
@@ -35,7 +35,7 @@ const MessagePreview = ({
       return node
         .split(' ')
         .map((singleNode) => {
-          if (isNodeMention(singleNode)) {
+          if (isNodeUserMention(singleNode)) {
             const userID = getUserIDFromNode(singleNode);
             const user = roomMembers.find(({ id }) => id === userID);
             if (user) {
