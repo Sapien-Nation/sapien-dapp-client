@@ -9,7 +9,7 @@ import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
 // components
-import { Query, RedDot, UserAvatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 const Notifications = dynamic(() => import('components/notifications'));

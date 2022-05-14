@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'context/user';
 
 // components
-import { Query, RedDot, UserAvatar } from 'components/common';
+import { UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 const Notifications = dynamic(() => import('components/notifications'));

@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const withPreact = require('next-plugin-preact');
 const { withSentryConfig } = require('@sentry/nextjs');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const ContentSecurityPolicy = `
   default-src 'self';
@@ -109,8 +112,11 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports = withPreact(
-  Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
-    ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
-    : moduleExports
-);
+module.exports =
+  process.env.ANALYZE === 'true'
+    ? withBundleAnalyzer({})
+    : withPreact(
+        Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
+          ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+          : moduleExports
+      );

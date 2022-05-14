@@ -7,10 +7,18 @@ import * as Sentry from '@sentry/nextjs';
 interface Props {
   code?: number;
   message?: string;
+  subtitle?: string;
   onRetry?: () => void | null;
 }
 
-const ErrorView = ({ code, message, onRetry }: Props) => {
+const ErrorView = ({
+  code,
+  message,
+  onRetry,
+  subtitle = `Sapiens... &quot;🍌&quot; we have a problem, but dont worry our
+engineering team has been already notified and will be working on
+fixing this PRONTO`,
+}: Props) => {
   const { push, reload } = useRouter();
 
   useEffect(() => {
@@ -36,9 +44,7 @@ const ErrorView = ({ code, message, onRetry }: Props) => {
           )}
           {message && <p className="text-lg">{message}</p>}
           <h2 className="text-white text-5x font-semibold subpixel-antialiased">
-            Sapiens... &quot;🍌&quot; we have a problem, but dont worry our
-            engineering team has been already notified and will be working on
-            fixing this PRONTO
+            {subtitle}
           </h2>
           <div className="py-6 bottom-0 flex gap-4 justify-center">
             <button

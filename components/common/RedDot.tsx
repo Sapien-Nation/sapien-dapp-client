@@ -4,7 +4,7 @@ interface Props {
 }
 
 const RedDot = ({ animate = false, count }: Props) => {
-  if (count === 0) return null;
+  if (!count) return null;
 
   return (
     <span className="h-5 w-5 ml-2">
