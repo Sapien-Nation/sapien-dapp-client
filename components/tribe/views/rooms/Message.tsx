@@ -58,7 +58,7 @@ const Message = ({
   const roomID = query.viewID as string;
   const roomMembers = useRoomMembers(roomID);
 
-  const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) > 0;
+  const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
