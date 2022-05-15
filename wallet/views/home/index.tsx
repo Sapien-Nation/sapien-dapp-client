@@ -4,8 +4,10 @@ import {
   XCircleIcon,
   PhotographIcon,
 } from '@heroicons/react/outline';
+import { ClipboardCopyIcon } from '@heroicons/react/solid';
 import _chunk from 'lodash/chunk';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCopyToClipboard } from 'react-use';
 import { Menu, Transition } from '@headlessui/react';
 
 // helpers
@@ -13,6 +15,9 @@ import { getShortWalletAddress } from 'utils/wallet';
 
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
+
+// components
+import { Tooltip } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -33,9 +38,13 @@ const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [isFetching, setIsFetching] = useState(true);
+  const [copyToClipboardSuccess, setCopyToClipboardSuccess] = useState(false);
+
+  const copyAddressTooltip = useRef(null);
 
   const { me } = useAuth();
   const { walletAPI } = useWeb3();
+  const [_, copyToClipboard] = useCopyToClipboard();
 
   const handleGetTokens = useCallback(async () => {
     setError(null);
@@ -88,12 +97,35 @@ const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
   return (
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="grid grid-cols-3 gap-1 items-center border-b-[1px] border-gray-800 p-3">
-        <div className="flex flex-col items-center col-start-2">
-          <span>Account</span>
+        <button
+          className="flex flex-col items-center col-start-2 cursor-pointer"
+          onClick={(event) => {
+            event.stopPropagation();
+
+            copyToClipboard(me.walletAddress);
+            setCopyToClipboardSuccess(true);
+
+            setTimeout(() => {
+              setCopyToClipboardSuccess(false);
+            }, 1000);
+          }}
+          ref={copyAddressTooltip.current?.setTriggerRef}
+        >
+          <div className="flex gap-2 items-center">
+            <span>Account</span>{' '}
+            <ClipboardCopyIcon className="aria-hidden w-5 h-5" />
+          </div>
           <span className="text-sm">
             {getShortWalletAddress(me.walletAddress)}
           </span>
-        </div>
+        </button>
+        <Tooltip
+          ref={copyAddressTooltip}
+          text={
+            copyToClipboardSuccess ? 'Copied to Clipboard' : 'Copy to Clipboard'
+          }
+          placement="bottom"
+        />
         <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
