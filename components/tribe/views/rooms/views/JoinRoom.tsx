@@ -15,7 +15,7 @@ import { SEO } from 'components/common';
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
 
-const NotAMemberView = () => {
+const JoinRoom = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
@@ -102,4 +102,4 @@ const NotAMemberView = () => {
   );
 };
 
-export default NotAMemberView;
+export default JoinRoom;

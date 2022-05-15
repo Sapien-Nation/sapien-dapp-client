@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import { View } from 'constants/tribe';
 
 // components
-import { SEO, ErrorView, NotFound } from 'components/common';
+import { SEO, ErrorView, NotFound, Query } from 'components/common';
 import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
 const PassportView = dynamic(() =>
   import('components/tribe').then((views) => views.PassportView)
@@ -33,8 +33,15 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         return <PassportView />;
       case View.Content:
         return <ContentView />;
-      case View.Room:
-        return <RoomView />;
+      case View.Room: {
+        return (
+          <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
+            {({ message, name }) => (
+              <RoomView isMember={Boolean(message) === false} name={name} />
+            )}
+          </Query>
+        );
+      }
       case View.Channel:
         return <Channel />;
       case View.MainChannel:

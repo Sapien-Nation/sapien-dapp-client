@@ -1,4 +1,4 @@
-const LoadingMessagesSkeleton = () => {
+const Skeleton = () => {
   return (
     <ul className="animate-pulse list-none">
       <li>
@@ -136,4 +136,4 @@ const LoadingMessagesSkeleton = () => {
   );
 };
 
-export default LoadingMessagesSkeleton;
+export default Skeleton;
