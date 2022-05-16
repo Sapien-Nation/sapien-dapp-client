@@ -7,7 +7,7 @@ export const insertRoomMention = (editor, room) => {
   const mention = {
     type: CustomNode.RoomMention,
     room,
-    children: [{ text: `<#${room.id}> ` }],
+    children: [{ text: `<#${room.id}>` }],
   };
 
   Transforms.insertNodes(editor, mention);
@@ -18,7 +18,7 @@ export const insertUserMention = (editor, member) => {
   const mention = {
     type: CustomNode.UserMention,
     member,
-    children: [{ text: `<@${member.id}> ` }],
+    children: [{ text: `<@${member.id}>` }],
   };
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
