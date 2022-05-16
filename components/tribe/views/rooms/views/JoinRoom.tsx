@@ -56,7 +56,7 @@ const JoinRoom = () => {
                   <div className="flex space-x-3 w-full">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
+                      src="/images/harambe_sapien.png"
                       alt="monkey with glasses"
                     />
                     <div className="flex-1 space-y-1">

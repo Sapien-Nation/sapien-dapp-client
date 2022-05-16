@@ -32,7 +32,7 @@ fixing this PRONTO`,
       <div className="rounded-md shadow-2xl bg-gray-800 w-full h-full items-center flex justify-center flex-col sm:px-0 px-4 flex-1 py-8">
         <img
           className="w-24 mx-auto mb-8 rounded-r-lg"
-          src="https://cdn.discordapp.com/attachments/723232557797212261/964188953781633095/Default-PFP-No-BG.png"
+          src="/images/harambe_sapien.png"
           alt="sapien"
         />
         <div className="grid gap-6 max-w-lg">

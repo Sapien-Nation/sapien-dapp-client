@@ -27,7 +27,7 @@ const WelcomeMessage = () => {
         <div className="flex space-x-3">
           <img
             className="h-10 w-10 rounded-full"
-            src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
+            src="/images/harambe_sapien.png"
             alt=""
             data-testid="message-avatar"
           />

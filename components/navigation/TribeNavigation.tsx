@@ -21,9 +21,6 @@ import {
 } from 'hooks/tribe';
 import { RedDot } from 'components/common';
 
-// assets
-import SapienNation from './assets/SapienNation.png';
-
 // types
 
 interface Props {
@@ -81,7 +78,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 onClick={handleMobileMenu}
               >
                 <img
-                  src={SapienNation.src}
+                  src="/images/sapien_nation.png"
                   alt="Sapien Nation"
                   className="w-6"
                 />
