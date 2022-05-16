@@ -13,7 +13,7 @@ import { useToast } from 'context/toast';
 
 // types
 import type { FormValues } from './TribeForm';
-import type { MainFeedTribe } from 'tools/types/tribe';
+import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   onClose: () => void;
@@ -67,7 +67,22 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
       const response = await editTribe(tribe.id, body);
 
       mutate(`/core-api/tribe/${tribe.id}`, () => response, true);
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((cacheTribe) => {
+            if (cacheTribe.id === tribe.id) {
+              return {
+                ...cacheTribe,
+                name: response.name,
+                avatar: response.avatar,
+              };
+            }
 
+            return cacheTribe;
+          }),
+        false
+      );
       onClose();
     } catch (error) {
       console.log(error);
