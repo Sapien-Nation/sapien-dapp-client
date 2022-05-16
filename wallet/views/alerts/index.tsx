@@ -1,9 +1,13 @@
 import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { useAuth } from 'context/user';
 import { useState } from 'react';
 import { useLocalStorage } from 'react-use';
 
 // components
 import { Query } from 'components/common';
+
+// helpers
+import { getShortWalletAddress } from 'utils/wallet';
 
 interface Props {
   handleBack: VoidFunction;
@@ -86,6 +90,7 @@ enum View {
 }
 
 const Alerts = ({ handleBack }: Props) => {
+  const { me } = useAuth();
   const [view, setView] = useState(View.Home);
   const [selectedAlertID, setSelectedAlertID] = useState<number | null>(null);
 
@@ -114,8 +119,29 @@ const Alerts = ({ handleBack }: Props) => {
                 {alert.name}
               </h5>
             </div>
-            <div className="py-6 px-1">
+            <div className="py-6 px-1 flex flex-col gap-5">
               <div>{alert.descriptionLarge()}</div>
+              <span>I agree to uphold the values of the Sapien Nation</span>
+              <div className="flex justify-between">
+                <input
+                  disabled
+                  className={
+                    true
+                      ? 'appearance-none block w-full px-3 py-2 border bg-gray-500 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-not-allowed'
+                      : 'appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
+                  }
+                  value={getShortWalletAddress(me.walletAddress)}
+                />
+                <button
+                  className={
+                    false
+                      ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                      : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                  }
+                >
+                  Sign
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -136,7 +162,7 @@ const Alerts = ({ handleBack }: Props) => {
               </h5>
             </div>
             <div className="py-6 px-1">
-              <ol className="flex w-72 mx-auto">
+              <ol className="flex flex-col mx-auto">
                 {alerts.map((alert) => (
                   <li
                     key={alert.name}
@@ -148,9 +174,9 @@ const Alerts = ({ handleBack }: Props) => {
                     }}
                     className={
                       // TODO CSS for when a notification is already read
-                      readAlerts.includes(alert.id)
-                        ? 'cursor-pointer hover:bg-sapien-80 w-full h-12'
-                        : 'cursor-pointer hover:bg-sapien-80 w-full h-12'
+                      `${
+                        readAlerts.includes(alert.id) ? '' : ''
+                      } cursor-pointer hover:bg-sapien-80 w-full rounded-md p-2`
                     }
                   >
                     <p>{alert.descriptionShort}</p>

@@ -169,7 +169,7 @@ const Home = ({
                             active
                               ? 'bg-primary-200 text-white'
                               : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm`}
+                          } group flex w-full items-center p-2 text-sm rounded-md`}
                         >
                           View History
                         </button>
@@ -186,7 +186,7 @@ const Home = ({
                             active
                               ? 'bg-primary-200 text-white'
                               : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm`}
+                          } group flex w-full items-center p-2 text-sm rounded-md`}
                         >
                           Alerts
                         </button>
