@@ -55,6 +55,7 @@ const Details = ({ handleSidebar }) => {
           {
             id: null,
             avatar: null,
+            displayName: null,
             username: null,
             userType: key,
           },
@@ -93,21 +94,32 @@ const Details = ({ handleSidebar }) => {
                 width={width}
               >
                 {({ index, style }) => {
-                  const { id, avatar, username, userType } = membersList[index];
+                  const { id, avatar, displayName, username, userType } =
+                    membersList[index];
                   return (
                     <li
                       data-testid="room-detail-member"
                       key={id}
-                      className="flex gap-2 items-center mb-4 cursor-pointer"
+                      className="flex gap-2 items-center mb-4 cursor-pointer truncate"
                       style={style}
                     >
-                      {id === null && (
-                        <span className="text-sm">
+                      {id === null ? (
+                        <h3 className="text-sm text-gray-300">
                           {groupLabel[userType] ?? '-'}
-                        </span>
+                        </h3>
+                      ) : (
+                        <>
+                          {username && renderMemberAvatar(avatar, username)}
+                          <div className="truncate leading-none">
+                            <span className="block truncate">
+                              {displayName}
+                            </span>
+                            <span className="truncate text-xs text-gray-400">
+                              @{username}
+                            </span>
+                          </div>
+                        </>
                       )}
-                      {username && renderMemberAvatar(avatar, username)}
-                      <span className="truncate">{username}</span>
                     </li>
                   );
                 }}
