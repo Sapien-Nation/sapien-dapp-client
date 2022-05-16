@@ -21,6 +21,9 @@ import {
 } from 'hooks/tribe';
 import { RedDot } from 'components/common';
 
+// assets
+import SapienNation from './assets/SapienNation.png';
+
 // types
 
 interface Props {
@@ -72,12 +75,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <a
                 className={
                   asPath === `/tribes/${tribeID}/home`
-                    ? 'font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
-                    : 'relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 '
+                    ? 'gap-1 font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-base flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
+                    : 'gap-1 relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-base flex rounded-lg focus:outline-none px-4 py-2 hover:bg-sapien-neutral-800'
                 }
                 onClick={handleMobileMenu}
               >
-                <UserGroupIcon className="h-5 w-5 mr-4" />
+                <img
+                  src={SapienNation.src}
+                  alt="Sapien Nation"
+                  className="w-6"
+                />
                 {name}
               </a>
             </Link>
