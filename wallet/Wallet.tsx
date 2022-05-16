@@ -44,20 +44,17 @@ const Wallet = () => {
             </div>
             <p className="text-sm text-white grid gap-4 items-center justify-center mt-6">
               <span>
-                There was an error while loading the Web3 libraries we use to
-                give you the best wallet experience
-              </span>
-              <span>
-                We recommend you to close and re-open this Dialog, if error
-                persist please contact{' '}
+                There was an error loading our Web3 library. Please try
+                reloading the page or contact{' '}
                 <a
-                  href="mailto:passports@sapien.network"
+                  href="mailto:support@sapien.network"
                   className="text-blue-500 font-extrabold underline"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  passports@sapien.network
+                  support@sapien.network
                 </a>{' '}
+                if the error persists.
               </span>
             </p>
           </div>
