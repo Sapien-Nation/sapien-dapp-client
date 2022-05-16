@@ -26,11 +26,13 @@ enum Dialog {
 }
 
 const MainChannelHeader = ({ tribe }: Props) => {
-  const toast = useToast();
   const [dialog, setDialog] = useState<Dialog | null>(null);
+
+  const toast = useToast();
   const { query } = useRouter();
-  const { tribeID } = query;
   const [_, copyToClipboard] = useCopyToClipboard();
+
+  const { tribeID } = query;
 
   const [canEdit] = useTribePermission(tribe.id, ['canEdit']);
 
