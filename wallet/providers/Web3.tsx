@@ -21,7 +21,7 @@ import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
 
 // constants
-import { ErrorTypes } from '../constants.tsx';
+import { ErrorTypes } from '../constants';
 
 // hooks
 import { useAuth } from 'context/user';
