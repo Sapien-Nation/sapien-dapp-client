@@ -91,7 +91,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
         </div>
       </div>
       {channel.description && (
-        <p className="ml-8 mt-8 text-gray-500 whitespace-pre-line line-clamp-5">
+        <p className="ml-8 mt-8 text-gray-300 whitespace-pre-line line-clamp-5">
           {channel.description}
         </p>
       )}
