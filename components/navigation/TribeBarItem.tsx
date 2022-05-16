@@ -199,7 +199,7 @@ function TribeBarItem({
       </div>
 
       {dialog === Dialog.EditTribe && (
-        <Query api={`/core-api/tribe/${tribeID}`} loader={null}>
+        <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
           {(tribeInfo: MainFeedTribe) => (
             <EditTribeDialog
               tribe={tribeInfo}
