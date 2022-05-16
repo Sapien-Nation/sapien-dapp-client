@@ -32,9 +32,15 @@ interface Props {
   onDeposit: () => void;
   onSelectToken: (token: Token) => void;
   onViewHistory: () => void;
+  onViewAlerts: () => void;
 }
 
-const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
+const Home = ({
+  onDeposit,
+  onSelectToken,
+  onViewHistory,
+  onViewAlerts,
+}: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -132,20 +138,42 @@ const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
               <DotsVerticalIcon className="w-5 text-gray-400" />
             </Menu.Button>
             <Transition>
-              <Menu.Items className="absolute right-0 w-56 z-10 origin-top-right bg-white rounded-md">
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                {' '}
                 <div className="">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={onViewHistory}
-                        className={`${
-                          active ? 'bg-primary-200 text-white' : 'text-gray-900'
-                        } group flex w-full items-center rounded-md p-2 text-sm`}
-                      >
-                        View History
-                      </button>
-                    )}
-                  </Menu.Item>
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={onViewHistory}
+                          className={`${
+                            active
+                              ? 'bg-primary-200 text-white'
+                              : 'text-gray-900'
+                          } group flex w-full items-center p-2 text-sm`}
+                        >
+                          View History
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
+
+                  <div className="px-1 py-1">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={onViewAlerts}
+                          className={`${
+                            active
+                              ? 'bg-primary-200 text-white'
+                              : 'text-gray-900'
+                          } group flex w-full items-center p-2 text-sm`}
+                        >
+                          Alerts
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </div>
                 </div>
               </Menu.Items>
             </Transition>

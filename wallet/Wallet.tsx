@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 // components
 import {
+  AlertsView,
   DepositView,
   HistoryView,
   HomeView,
@@ -18,6 +19,7 @@ import { useWeb3 } from './providers';
 import type { Token } from './types';
 
 enum View {
+  Alerts,
   Home,
   Deposit,
   Token,
@@ -81,6 +83,8 @@ const Wallet = () => {
     }
 
     switch (view) {
+      case View.Alerts:
+        return <AlertsView handleBack={() => setView(View.Home)} />;
       case View.Home:
         return (
           <HomeView
@@ -90,6 +94,7 @@ const Wallet = () => {
               setView(View.Token);
             }}
             onViewHistory={() => setView(View.History)}
+            onViewAlerts={() => setView(View.Alerts)}
           />
         );
       case View.Token:

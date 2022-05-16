@@ -1,3 +1,4 @@
+export { default as AlertsView } from './alerts';
 export { default as DepositView } from './deposit';
 export { default as HistoryView } from './history';
 export { default as HomeView } from './home';
