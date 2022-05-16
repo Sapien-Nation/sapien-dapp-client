@@ -84,7 +84,7 @@ const FeedbackDialog = ({ onClose }: Props) => {
       show
       isFetching={isSubmitting}
       onClose={onClose}
-      title="Help us to be a better Sapien!"
+      title="Help us improve Sapien!"
       form={form}
       confirmLabel="Submit"
     >
@@ -105,7 +105,7 @@ const FeedbackDialog = ({ onClose }: Props) => {
             <div>
               <div>
                 <TextInputLabel
-                  label="message"
+                  label="Message"
                   name="message"
                   error={errors.message?.message}
                 />
@@ -113,7 +113,6 @@ const FeedbackDialog = ({ onClose }: Props) => {
                   <TextareaInput
                     name="message"
                     maxLength={1000}
-                    placeholder="Let us know how to improve Sapien!"
                     rules={{
                       validate: {
                         required: (value) => value.length > 0 || 'is required',
