@@ -104,8 +104,8 @@ function TribeBarItem({
       <div className="relative">
         <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
           <a
-            className={`group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 bg-gray-700 hover:bg-gray-50 hover:text-gray-900 ${
-              tribeID === tribe.id && 'bg-gray-50'
+            className={`h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 border-2 border-white/10 hover:border-gray-400 hover:text-gray-900 ${
+              tribeID === tribe.id && 'border-white'
             }`}
             onClick={(event) => {
               if (event.type === 'contextmenu') {
@@ -136,12 +136,12 @@ function TribeBarItem({
           >
             {tribe.avatar ? (
               <img
-                className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
+                className="w-full h-full rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
                 alt={''}
                 src={tribe.avatar}
               />
             ) : (
-              <div className="h-12 w-12 p-1 rounded-xl font-bold text-black group-hover:text-gray-500 flex items-center justify-center">
+              <div className="w-full h-full rounded-lg bg-gray-700 font-bold text-black group-hover:text-gray-500 flex items-center justify-center">
                 {tribe.name[0].toUpperCase()}
               </div>
             )}
