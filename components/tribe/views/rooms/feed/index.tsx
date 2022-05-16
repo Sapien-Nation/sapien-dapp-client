@@ -23,6 +23,7 @@ import { RoomEditor } from 'slatejs';
 import Details from './Details';
 import Message from './Message';
 import JoinARoomMessage from './JoinARoomMessage';
+import WelcomeMessage from './WelcomeMessage';
 
 // helpers
 import { formatDate } from 'utils/date';
@@ -33,6 +34,9 @@ import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
 import { useRoomMembers } from 'hooks/room';
 
+// slate
+import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
+
 // types
 import type {
   RoomDeleteMessage,
@@ -40,7 +44,6 @@ import type {
   RoomNewMessage,
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
-import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
 
 interface Props {
   apiKey: string;
@@ -49,10 +52,6 @@ interface Props {
   roomID: string;
   tribeID: string;
   hasMoreData: boolean;
-}
-
-enum Dialog {
-  DeleteMessage,
 }
 
 const Feed = ({
@@ -384,6 +383,7 @@ const Feed = ({
             >
               <ul role="list" className="p-5 flex flex-col mb-2">
                 <>
+                  <WelcomeMessage />
                   {Object.keys(messagesData).map((timestamp) => {
                     const timestampMessages = messagesData[timestamp];
                     return (

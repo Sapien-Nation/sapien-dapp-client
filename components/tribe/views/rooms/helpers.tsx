@@ -48,14 +48,14 @@ export const renderContent = (
           const room = rooms.find(({ id }) => id === roomID);
           if (room) {
             return (
-              <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                <>
+              <>
+                <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
                   <a className='className="p-1 align-baseline rounded bg-sapien-80 text-white tracking-wide text-extrabold text-md cursor-pointer'>
                     {' '}
                     #{room.name}
-                  </a>{' '}
-                </>
-              </Link>
+                  </a>
+                </Link>{' '}
+              </>
             );
           } else {
             return (
