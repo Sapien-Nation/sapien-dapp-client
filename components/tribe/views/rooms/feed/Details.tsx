@@ -83,7 +83,7 @@ const Details = ({ handleSidebar }) => {
             Members ({members.length})
           </h3>
         </div>
-        <ul className="px-5 overflow-auto flex-1">
+        <ul className="overflow-auto flex-1">
           <AutoSizer>
             {({ height, width }) => (
               <List
@@ -100,7 +100,7 @@ const Details = ({ handleSidebar }) => {
                     <li
                       data-testid="room-detail-member"
                       key={id}
-                      className="flex gap-2 items-center mb-4 cursor-pointer truncate"
+                      className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5"
                       style={style}
                     >
                       {id === null ? (

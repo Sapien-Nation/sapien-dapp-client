@@ -37,7 +37,7 @@ const JoinRoom = () => {
 
   const date = new Date().toISOString();
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
+    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-3xl">
       <>
         <SEO title="Join the Room" />
         <div className="flex flex-col h-full flex-1 overflow-hidden">

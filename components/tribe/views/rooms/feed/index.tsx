@@ -334,7 +334,7 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
+    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-t-3xl">
       <>
         <div className="flex flex-col h-full flex-1 overflow-hidden relative">
           {unreadMessages > 0 && (
@@ -438,7 +438,7 @@ const Feed = ({
 
         {/* Room Details */}
         <div
-          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 ${
+          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl ${
             showMobileDetails ? 'right-0' : '-right-full'
           }`}
         >
