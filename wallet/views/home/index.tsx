@@ -10,6 +10,9 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { Menu, Transition } from '@headlessui/react';
 
+// api
+import { mintPassport } from 'api/passport';
+
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
 
@@ -17,7 +20,7 @@ import { getShortWalletAddress } from 'utils/wallet';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
 // components
-import { Tooltip } from 'components/common';
+import { Query, Tooltip } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -43,7 +46,9 @@ const Home = ({
 }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
+  const [mintError, setMinError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
+  const [isMintingPassport, setIsMintingPassport] = useState(false);
   const [copyToClipboardSuccess, setCopyToClipboardSuccess] = useState(false);
 
   const copyAddressTooltip = useRef(null);
@@ -65,6 +70,20 @@ const Home = ({
     }
     setIsFetching(false);
   }, [walletAPI]);
+
+  const handleMint = async () => {
+    setMinError(null);
+    setIsMintingPassport(true);
+    try {
+      const data = await mintPassport(me.walletAddress);
+
+      setIsMintingPassport(false);
+      await handleGetTokens();
+    } catch (err) {
+      setMinError(err);
+    }
+    setIsMintingPassport(false);
+  };
 
   useEffect(() => {
     handleGetTokens();
@@ -250,6 +269,45 @@ const Home = ({
             </li>
           ))}
         </ol>
+
+        {isFetching === false && tokens.length === 0 && (
+          <Query api="/core-api/passport/mint-checker">
+            {({
+              code,
+              figureName,
+            }: {
+              code: number | null;
+              figureName: string;
+            }) => {
+              if (code === 100) {
+                return (
+                  <div className="mt-4 grid gap-4">
+                    <button
+                      type="button"
+                      onClick={handleMint}
+                      disabled={isFetching}
+                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      {isMintingPassport
+                        ? 'Minting...'
+                        : `Mint Sapien Passport (${figureName})`}
+                    </button>
+
+                    {mintError && (
+                      <span className="text-xs text-red-400 flex justify-center items-center">
+                        {mintError.includes('Returned error:')
+                          ? mintError.replace('Returned error:', '')
+                          : mintError}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+
+              return null;
+            }}
+          </Query>
+        )}
       </div>
     </div>
   );
