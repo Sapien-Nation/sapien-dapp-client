@@ -117,9 +117,10 @@ const Message = ({
         <p
           className={
             isAMessageContinuation
-              ? 'text-sm text-white/30 whitespace-pre-line'
-              : 'pl-52 text-sm text-white/30 whitespace-pre-line'
+              ? 'text-sm text-white/30 whitespace-pre-line break-words'
+              : 'pl-52 text-sm text-white/30 whitespace-pre-line break-words'
           }
+          style={{ wordBreak: 'break-word' }}
         >
           {renderContent(content, roomMembers, tribeRooms, tribeID)}
         </p>
@@ -130,9 +131,10 @@ const Message = ({
       <p
         className={
           isAMessageContinuation
-            ? 'text-sm text-white/80 group whitespace-pre-line break-all'
-            : 'pl-52 text-sm text-white/80 whitespace-pre-line break-all'
+            ? 'text-sm text-white/80 group whitespace-pre-line break-words'
+            : 'pl-52 text-sm text-white/80 whitespace-pre-line break-words'
         }
+        style={{ wordBreak: 'break-word' }}
       >
         <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
           {isAMessageContinuation

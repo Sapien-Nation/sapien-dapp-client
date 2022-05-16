@@ -59,7 +59,10 @@ const MessagePreview = ({
               {formatDateRelative(createdAt)}
             </time>
           </div>
-          <p className="text-sm text-white/80 group whitespace-pre-line break-all">
+          <p
+            className="text-sm text-white/80 group whitespace-pre-line break-words"
+            style={{ wordBreak: 'break-word' }}
+          >
             <Linkify
               tagName="p"
               options={{
