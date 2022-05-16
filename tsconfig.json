@@ -24,7 +24,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "wallet/constants.tss"  ],
   "exclude": [
     "node_modules"
   ],

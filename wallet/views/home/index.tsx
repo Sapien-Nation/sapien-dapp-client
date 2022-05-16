@@ -16,11 +16,14 @@ import { mintPassport } from 'api/passport';
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
 
+// hooks
+import { useUnreadAlerts } from 'wallet/hooks';
+
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
 // components
-import { Query, Tooltip } from 'components/common';
+import { Query, RedDot, Tooltip } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -56,6 +59,7 @@ const Home = ({
   const { me } = useAuth();
   const { walletAPI } = useWeb3();
   const [_, copyToClipboard] = useCopyToClipboard();
+  const { count } = useUnreadAlerts();
 
   const handleGetTokens = useCallback(async () => {
     setError(null);
@@ -154,7 +158,16 @@ const Home = ({
         <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
-              <DotsVerticalIcon className="w-5 text-gray-400" />
+              <div className="relative">
+                <DotsVerticalIcon className="w-5 text-gray-400" />
+
+                {count > 0 && (
+                  <>
+                    <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-red-300 animate-ping"></div>
+                    <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-red-300"></div>
+                  </>
+                )}
+              </div>
             </Menu.Button>
             <Transition>
               <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -180,16 +193,19 @@ const Home = ({
                   <div className="px-1 py-1">
                     <Menu.Item>
                       {({ active }) => (
-                        <button
-                          onClick={onViewAlerts}
-                          className={`${
-                            active
-                              ? 'bg-primary-200 text-white'
-                              : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm rounded-md`}
-                        >
-                          Alerts
-                        </button>
+                        <div className="relative">
+                          <button
+                            onClick={onViewAlerts}
+                            className={`${
+                              active
+                                ? 'bg-primary-200 text-white'
+                                : 'text-gray-900'
+                            } group flex w-full items-center p-2 text-sm rounded-md`}
+                          >
+                            Alerts
+                            <RedDot animate={false} count={count} />
+                          </button>
+                        </div>
                       )}
                     </Menu.Item>
                   </div>
