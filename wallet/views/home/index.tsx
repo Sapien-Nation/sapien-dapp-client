@@ -69,7 +69,7 @@ const Home = ({ onDeposit, onSelectToken, onViewHistory }: Props) => {
       <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
         <div className="w-64">
           <div className="flex justify-center">
-            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2 text-center">
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2 text-center">
               Network Issues.
               <XCircleIcon className="w-5" />
             </h5>

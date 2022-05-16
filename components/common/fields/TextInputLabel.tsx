@@ -16,7 +16,7 @@ const TextInputLabel = ({ error, extraLabel = null, name, label }: Props) => {
       }
       id={error ? `${name}-error` : ''}
     >
-      <span className={error ? 'font-extrabold' : 'font-medium'}>{label}</span>{' '}
+      <span className={error ? 'font-bold' : 'font-medium'}>{label}</span>{' '}
       {error}
       {extraLabel}
     </label>

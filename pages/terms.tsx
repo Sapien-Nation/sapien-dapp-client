@@ -3,7 +3,7 @@ function Terms() {
   return (
     <div className="bg-white text-black mx-auto max-w-7xl p-5 text-sm">
       <h1>
-        <strong className="font-extrabold">Sapien Terms of Use</strong>
+        <strong className="font-bold">Sapien Terms of Use</strong>
       </h1>
       <p>
         Welcome to Sapien, Sapien Network, Inc.’s (“Company” or “Sapien" or “we”
@@ -49,7 +49,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">1. Functioning of the Site</strong>
+        <strong className="font-bold">1. Functioning of the Site</strong>
       </p>
       <br />
       <p>
@@ -74,7 +74,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">2. Privacy Policy.</strong>
+        <strong className="font-bold">2. Privacy Policy.</strong>
       </p>
       <br />
       <p>
@@ -87,9 +87,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
-          3. Ownership; Proprietary Rights.
-        </strong>
+        <strong className="font-bold">3. Ownership; Proprietary Rights.</strong>
       </p>
       <br />
       <p>
@@ -115,7 +113,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">4. Media.</strong>
+        <strong className="font-bold">4. Media.</strong>
       </p>
       <br />
       <p>
@@ -215,7 +213,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">Prohibited Uses</strong>
+        <strong className="font-bold">Prohibited Uses</strong>
       </p>
       <br />
       <p>
@@ -301,7 +299,7 @@ function Terms() {
         </li>
       </ul>
       <p>
-        <strong className="font-extrabold">6. Third-Party Sites</strong>
+        <strong className="font-bold">6. Third-Party Sites</strong>
       </p>
       <br />
       <p>
@@ -329,7 +327,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">7. Mobile Services</strong>
+        <strong className="font-bold">7. Mobile Services</strong>
       </p>
       <br />
       <p>
@@ -341,7 +339,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">8. Third-Party Services</strong>
+        <strong className="font-bold">8. Third-Party Services</strong>
       </p>
       <br />
       <p>
@@ -363,7 +361,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">9. Contests</strong>
+        <strong className="font-bold">9. Contests</strong>
       </p>
       <br />
       <p>
@@ -401,7 +399,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">10. Termination</strong>
+        <strong className="font-bold">10. Termination</strong>
       </p>
       <br />
       <p>
@@ -425,9 +423,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
-          10. Disclaimers; No Warranties
-        </strong>
+        <strong className="font-bold">10. Disclaimers; No Warranties</strong>
       </p>
       <br />
       <p>
@@ -449,7 +445,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
+        <strong className="font-bold">
           11. Indemnification; Hold Harmless
         </strong>
       </p>
@@ -471,7 +467,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
+        <strong className="font-bold">
           12. Limitation of Liability and Damages
         </strong>
       </p>
@@ -495,7 +491,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">13. Arbitration</strong>
+        <strong className="font-bold">13. Arbitration</strong>
       </p>
       <br />
       <p>
@@ -590,7 +586,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">14. Claims</strong>
+        <strong className="font-bold">14. Claims</strong>
       </p>
       <br />
       <p>
@@ -601,7 +597,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">15. Changes to Agreement</strong>
+        <strong className="font-bold">15. Changes to Agreement</strong>
       </p>
       <br />
       <p>
@@ -615,9 +611,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
-          16. Electronic Communications
-        </strong>
+        <strong className="font-bold">16. Electronic Communications</strong>
       </p>
       <br />
       <p>
@@ -632,7 +626,7 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">17. Miscellaneous</strong>
+        <strong className="font-bold">17. Miscellaneous</strong>
       </p>
       <br />
       <p>
@@ -661,20 +655,17 @@ function Terms() {
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">18. Contact Information</strong>
+        <strong className="font-bold">18. Contact Information</strong>
       </p>
       <br />
       <p>
         The Site is provided by Sapien Network, Inc. If you have any questions,
         complaints or claims with respect to the Site, you may contact Sapien at{' '}
-        <strong className="font-extrabold">
-          accountservices@sapien.network
-        </strong>
-        .
+        <strong className="font-bold">accountservices@sapien.network</strong>.
       </p>
       <br />
       <p>
-        <strong className="font-extrabold">
+        <strong className="font-bold">
           19. Sapien Passport Purchase Terms and Conditions
         </strong>
       </p>
@@ -774,21 +765,21 @@ function Terms() {
       </p>
       <br />
       <ul className="list-decimal grid gap-6 mb-4 px-6">
-        <li className="font-extrabold">
+        <li className="font-bold">
           Founding Members may consider launching their own social currencies
           and may receive UBI from the Sapien Nation to invest in communities
           that matter to them.
         </li>
-        <li className="font-extrabold">
+        <li className="font-bold">
           Sapien NFT Passports create a form of decentralized digital identity,
           and are planned to utilize zero-knowledge proofs to protect personal
           information and share only what is required with others.
         </li>
-        <li className="font-extrabold">
+        <li className="font-bold">
           The Passport is also planned to record achievements, contributions,
           and other interactions with other DAOs in the Sapien Nation.
         </li>
-        <li className="font-extrabold">
+        <li className="font-bold">
           Founders may eventually be able to use the NFT passport to manage
           roles and permissions on the Sapien Tribe Protocol and may utilize the
           passport to access community events, merchandise, and other gated

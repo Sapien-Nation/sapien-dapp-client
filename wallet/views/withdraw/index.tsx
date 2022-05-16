@@ -85,7 +85,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
         return (
           <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
             <div className="w-72 h-96 flex flex-col gap-4">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-left gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-left gap-2">
                 <button onClick={() => setView(View.Home)}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -153,7 +153,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-red-400 font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-red-400 font-bold tracking-wide flex items-center gap-2">
                 Deposit Error
                 <XCircleIcon className="h-5 w-5" aria-hidden="true" />
               </h5>
@@ -183,7 +183,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
           <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
             <div className="w-72 h-96 flex flex-col gap-4">
               <div className="flex justify-between items-center">
-                <h5 className="text-xl text-green-400 font-extrabold tracking-wide flex items-center gap-2">
+                <h5 className="text-xl text-green-400 font-bold tracking-wide flex items-center gap-2">
                   Withdraw Succeeded
                   <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
                 </h5>

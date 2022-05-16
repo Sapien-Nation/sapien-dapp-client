@@ -14,8 +14,7 @@ module.exports = {
         'discovery-grid': 'repeat(auto-fill,minmax(248px,1fr))',
       },
       fontFamily: {
-        sans: ['Averta', 'sans-serif'],
-        extrabold: ['Averta Bold', 'sans-serif'],
+        sans: ['Titillium Web', 'sans-serif'],
       },
       colors: {
         primary: '#6200EA',

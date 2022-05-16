@@ -37,7 +37,7 @@ const Wallet = () => {
         <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
           <div className="w-64">
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 Error
                 <ExclamationIcon className="w-5" />
               </h5>
@@ -48,7 +48,7 @@ const Wallet = () => {
                 reloading the page or contact{' '}
                 <a
                   href="mailto:support@sapien.network"
-                  className="text-blue-500 font-extrabold underline"
+                  className="text-blue-500 font-bold underline"
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -67,7 +67,7 @@ const Wallet = () => {
         <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
           <div className="w-56 h-26">
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 Loading Libraries
                 <RefreshIcon className="w-5 animate-spin" />
               </h5>

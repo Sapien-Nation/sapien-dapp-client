@@ -56,12 +56,12 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (hasUnreadMessages)
-        return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+        return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
       return 'text-sm bg-sapien-neutral-800 rounded-md';
     }
 
     if (hasUnreadMessages)
-      return 'text-sm bg-sapien-white font-extrabold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
 
     return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
@@ -75,7 +75,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <a
                 className={
                   asPath === `/tribes/${tribeID}/home`
-                    ? 'gap-1 font-extrabold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-base flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
+                    ? 'gap-1 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-base flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
                     : 'gap-1 relative w-full cursor-pointer tracking-wide items-center uppercase font-medium text-base flex rounded-lg focus:outline-none px-4 py-2 hover:bg-sapien-neutral-800'
                 }
                 onClick={handleMobileMenu}

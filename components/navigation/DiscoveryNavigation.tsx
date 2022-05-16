@@ -8,7 +8,7 @@ const DiscoveryNavigation = () => {
         <nav className="mt-2">
           <span
             className={
-              'relative w-full cursor-pointer tracking-wide items-center font-extrabold uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
+              'relative w-full cursor-pointer tracking-wide items-center font-bold uppercase font-medium text-xs flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200'
             }
           >
             All Topics

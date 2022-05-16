@@ -29,7 +29,7 @@ const PublicProfileDialog = ({ profileID, onClose }: Props) => {
           <div className="bg-gradient-to-r bg-sapien-neutral-200 h-28 shadow-md rounded-lg relative flex justify-center items-center py-4" />
           <div className="flex flex-col md:flex-row py-4">
             <div className="relative md:ml-4 ml-0 flex flex-col items-center">
-              <div className="w-20 h-20 -mt-16 rounded-full flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
+              <div className="w-20 h-20 -mt-16 rounded-full flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-bold text-xl">
                 user
               </div>
               <h1 className="text-md mt-2">{profile.username}</h1>

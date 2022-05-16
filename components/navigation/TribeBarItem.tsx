@@ -130,7 +130,7 @@ function TribeBarItem({
               src={tribe.avatar}
             />
           ) : (
-            <div className="h-12 w-12 p-1 rounded-xl font-extrabold text-black group-hover:text-gray-500 flex items-center justify-center">
+            <div className="h-12 w-12 p-1 rounded-xl font-bold text-black group-hover:text-gray-500 flex items-center justify-center">
               {tribe.name[0].toUpperCase()}
             </div>
           )}

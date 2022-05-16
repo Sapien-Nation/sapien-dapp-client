@@ -38,8 +38,8 @@ fixing this PRONTO`,
         <div className="grid gap-6 max-w-lg">
           {code && (
             <p className="text-lg">
-              <span className="font-extrabold">{code}.</span> This is the code
-              of an error
+              <span className="font-bold">{code}.</span> This is the code of an
+              error
             </p>
           )}
           {message && <p className="text-lg">{message}</p>}

@@ -132,7 +132,7 @@ const Mint = ({ avatar }: { avatar: string }) => {
               <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
             </div>
             <div className="relative flex justify-center items-center mb-5 flex-col h-full w-full gap-4">
-              <h4 className="text-3xl sm:text-5xl font-extrabold">
+              <h4 className="text-3xl sm:text-5xl font-bold">
                 Find your tribe and ignite the new renaissance!
               </h4>
               {avatar && (
@@ -167,7 +167,7 @@ const Mint = ({ avatar }: { avatar: string }) => {
                 Minting Passport as <span>{me.email}</span> wanna use other
                 account?{' '}
                 <Link passHref href="/logout?redirect=/mint">
-                  <a className="font-extrabold">Switch account</a>
+                  <a className="font-bold">Switch account</a>
                 </Link>
               </p>
             </div>

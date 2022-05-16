@@ -37,7 +37,7 @@ const Layout = ({ children, title }: Props) => {
                   alt="sapien"
                 />
               </div>
-              <h2 className="mt-6 text-3xl font-extrabold">{title}</h2>
+              <h2 className="mt-6 text-3xl font-bold">{title}</h2>
             </div>
 
             <div className="mt-8">

@@ -207,7 +207,7 @@ const Message = ({
           <div className="flex-1 space-y-1">
             {isAMessageContinuation && (
               <div className="flex items-center gap-2">
-                <h3 className="text-sm font-extrabold">{username}</h3>
+                <h3 className="text-sm font-bold">{username}</h3>
                 <time
                   data-testid="message-timestamp"
                   className="text-xs text-white"

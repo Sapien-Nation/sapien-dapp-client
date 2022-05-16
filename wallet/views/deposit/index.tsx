@@ -147,7 +147,7 @@ const Deposit = ({ handleBack }: Props) => {
       return (
         <>
           <div className="flex justify-between items-center">
-            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2 text-center">
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2 text-center">
               Network Issue.
               <XCircleIcon className="w-5" />
             </h5>
@@ -268,7 +268,7 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -348,7 +348,7 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -429,7 +429,7 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-red-400 font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-red-400 font-bold tracking-wide flex items-center gap-2">
                 Deposit Error
                 <XCircleIcon className="h-5 w-5" aria-hidden="true" />
               </h5>
@@ -458,7 +458,7 @@ const Deposit = ({ handleBack }: Props) => {
         return (
           <>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-green-400 font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-green-400 font-bold tracking-wide flex items-center gap-2">
                 Deposit Succeeded
                 <CheckCircleIcon className="h-5 w-5" aria-hidden="true" />
               </h5>
