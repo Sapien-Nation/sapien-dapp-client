@@ -24,17 +24,21 @@ export const renderContent = (
           const user = users.find(({ id }) => id === userID);
           if (user) {
             return (
-              <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
-                {' '}
-                @{user.username}{' '}
-              </span>
+              <>
+                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  {' '}
+                  @{user.username}
+                </span>{' '}
+              </>
             );
           } else {
             return (
-              <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
-                {' '}
-                @sapien_user{' '}
-              </span>
+              <>
+                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  {' '}
+                  @{userID.replaceAll('-', '')}
+                </span>{' '}
+              </>
             );
           }
         }
@@ -45,18 +49,22 @@ export const renderContent = (
           if (room) {
             return (
               <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                <a className='className="p-1 align-baseline rounded bg-sapien-80 text-white tracking-wide text-extrabold text-md cursor-pointer'>
-                  {' '}
-                  #{room.name}{' '}
-                </a>
+                <>
+                  <a className='className="p-1 align-baseline rounded bg-sapien-80 text-white tracking-wide text-extrabold text-md cursor-pointer'>
+                    {' '}
+                    #{room.name}
+                  </a>{' '}
+                </>
               </Link>
             );
           } else {
             return (
-              <span className="p-1 align-baseline rounded bg-sapien-80 text-white text-extrabold text-md cursor-pointer">
-                {' '}
-                #deleted_room{' '}
-              </span>
+              <>
+                <span className="p-1 align-baseline rounded bg-sapien-80 text-white text-extrabold text-md cursor-pointer">
+                  {' '}
+                  #deleted_room
+                </span>{' '}
+              </>
             );
           }
         }
