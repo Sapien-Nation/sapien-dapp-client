@@ -38,7 +38,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
           <img
             alt={channel.name}
             src={channel.cover}
-            className="object-fill w-full h-full rounded-lg"
+            className="object-cover w-full h-full rounded-lg"
           />
         </div>
       ) : (

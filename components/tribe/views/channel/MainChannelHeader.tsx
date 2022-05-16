@@ -51,7 +51,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
             <img
               alt={tribe.name}
               src={tribe.cover}
-              className="object-fill w-full h-full rounded-lg"
+              className="object-cover w-full h-full rounded-lg"
             />
           </div>
         ) : (
