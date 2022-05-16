@@ -48,7 +48,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
         <div className="relative">
           {channel.avatar ? (
             <img
-              className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0"
+              className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 object-cover"
               src={channel.avatar}
               alt=""
             />
