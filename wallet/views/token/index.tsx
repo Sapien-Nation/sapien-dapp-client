@@ -27,6 +27,7 @@ enum View {
   DeclarationOfSovereignty,
   Home,
   ConfirmSign,
+  Success,
 }
 
 const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
@@ -36,7 +37,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
 
   const { me } = useAuth();
   const { mutate } = useSWRConfig();
-  const apiKey = `/core-api/token/${token.id}/signed`;
+  const apiKey = `/core-api/passport/${token.id}/signed`;
 
   const handleSignToken = async () => {
     setIsFetching(true);
@@ -46,6 +47,8 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
       setSignError(null);
 
       mutate(apiKey, () => ({ signed: true }), false);
+
+      setView(View.Success);
     } catch (err) {
       setSignError(err);
     }
@@ -54,6 +57,18 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
 
   const renderView = () => {
     switch (view) {
+      case View.Success:
+        return (
+          <>
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-left gap-2">
+              <button onClick={handleBack}>
+                <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+              Go home
+            </h5>
+            <div>TODO success message</div>
+          </>
+        );
       case View.ConfirmSign:
         return (
           <>
@@ -141,7 +156,6 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               </button>
               <Query
                 api={apiKey}
-                options={{ fetcher: () => ({ signed: false }) }}
                 loader={
                   <button
                     type="button"
