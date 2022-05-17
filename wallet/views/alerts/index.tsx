@@ -1,27 +1,15 @@
 import { ArrowLeftIcon } from '@heroicons/react/outline';
 import { useState } from 'react';
-import { useLocalStorage } from 'react-use';
+
+// hooks
+import { useUnreadAlerts } from 'wallet/hooks';
+
+// constants
+import { alerts } from '../../constants';
 
 interface Props {
   handleBack: VoidFunction;
 }
-
-// New notifications start at top
-// TODO sort by date, by usin Array.sort() or just manually when adding more and more notifications
-const alerts = [
-  {
-    createdAt: '2022-05-16T18:01:17.160Z', // output from new Date().toISOString();
-    id: 1,
-    name: 'Sign Passport',
-    descriptionShort: 'Its time to sign your passport!',
-    descriptionLarge: () => (
-      <p>
-        Its time to sign your passport! inside a component, go crazy descriptive
-        here
-      </p>
-    ),
-  },
-];
 
 enum View {
   Home,
@@ -32,10 +20,7 @@ const Alerts = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
   const [selectedAlertID, setSelectedAlertID] = useState<number | null>(null);
 
-  const [readAlerts, setReadAlerts] = useLocalStorage<Array<Number>>(
-    'readAlerts',
-    []
-  );
+  const { readAlerts, setReadAlerts } = useUnreadAlerts();
 
   const renderView = () => {
     switch (view) {
@@ -57,7 +42,7 @@ const Alerts = ({ handleBack }: Props) => {
                 {alert.name}
               </h5>
             </div>
-            <div className="py-6 px-1">
+            <div className="py-6 px-1 flex flex-col gap-5">
               <div>{alert.descriptionLarge()}</div>
             </div>
           </div>
@@ -65,7 +50,10 @@ const Alerts = ({ handleBack }: Props) => {
       }
       case View.Home: {
         const handleReadAlert = (alertID: number) => {
-          setReadAlerts([...readAlerts, alertID]);
+          const alreadySeen = readAlerts.includes(alertID);
+          if (alreadySeen === false) {
+            setReadAlerts([...readAlerts, alertID]);
+          }
         };
 
         return (
@@ -79,7 +67,7 @@ const Alerts = ({ handleBack }: Props) => {
               </h5>
             </div>
             <div className="py-6 px-1">
-              <ol className="flex w-72 mx-auto">
+              <ol className="flex flex-col mx-auto">
                 {alerts.map((alert) => (
                   <li
                     key={alert.name}
@@ -91,9 +79,9 @@ const Alerts = ({ handleBack }: Props) => {
                     }}
                     className={
                       // TODO CSS for when a notification is already read
-                      readAlerts.includes(alert.id)
-                        ? 'cursor-pointer hover:bg-sapien-80 w-full h-12'
-                        : 'cursor-pointer hover:bg-sapien-80 w-full h-12'
+                      `${
+                        readAlerts.includes(alert.id) ? '' : ''
+                      } cursor-pointer hover:bg-sapien-80 w-full rounded-md p-2`
                     }
                   >
                     <p>{alert.descriptionShort}</p>

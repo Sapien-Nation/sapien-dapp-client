@@ -118,6 +118,6 @@ export const withdraw = (tokenId): Promise<Token> =>
 
 export const signPassport = (tokenId): Promise<Token> =>
   instance
-    .get(`/core-api/passport/${tokenId}/sign`)
+    .post(`/core-api/passport/${tokenId}/sign`)
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));

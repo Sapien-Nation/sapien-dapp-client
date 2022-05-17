@@ -112,7 +112,7 @@ const Details = ({ handleSidebar }) => {
                           {username && renderMemberAvatar(avatar, username)}
                           <div className="truncate leading-none">
                             <span className="block truncate">
-                              {displayName}
+                              {displayName === ' ' ? '[hidden]' : displayName}
                             </span>
                             <span className="truncate text-xs text-gray-400">
                               @{username}

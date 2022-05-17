@@ -10,14 +10,20 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { useCopyToClipboard } from 'react-use';
 import { Menu, Transition } from '@headlessui/react';
 
+// api
+import { mintPassport } from 'api/passport';
+
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
+
+// hooks
+import { useUnreadAlerts } from 'wallet/hooks';
 
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
 // components
-import { Tooltip } from 'components/common';
+import { Query, RedDot, Tooltip } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -43,7 +49,9 @@ const Home = ({
 }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
+  const [mintError, setMinError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
+  const [isMintingPassport, setIsMintingPassport] = useState(false);
   const [copyToClipboardSuccess, setCopyToClipboardSuccess] = useState(false);
 
   const copyAddressTooltip = useRef(null);
@@ -51,6 +59,7 @@ const Home = ({
   const { me } = useAuth();
   const { walletAPI } = useWeb3();
   const [_, copyToClipboard] = useCopyToClipboard();
+  const { count } = useUnreadAlerts();
 
   const handleGetTokens = useCallback(async () => {
     setError(null);
@@ -65,6 +74,20 @@ const Home = ({
     }
     setIsFetching(false);
   }, [walletAPI]);
+
+  const handleMint = async () => {
+    setMinError(null);
+    setIsMintingPassport(true);
+    try {
+      const data = await mintPassport(me.walletAddress);
+
+      setIsMintingPassport(false);
+      await handleGetTokens();
+    } catch (err) {
+      setMinError(err);
+    }
+    setIsMintingPassport(false);
+  };
 
   useEffect(() => {
     handleGetTokens();
@@ -135,10 +158,19 @@ const Home = ({
         <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
-              <DotsVerticalIcon className="w-5 text-gray-400" />
+              <div className="relative">
+                <DotsVerticalIcon className="w-5 text-gray-400" />
+
+                {count > 0 && (
+                  <>
+                    <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-red-300 animate-ping"></div>
+                    <div className="absolute top-0 right-0 -mr-1 -mt-1 w-2 h-2 rounded-full bg-red-300"></div>
+                  </>
+                )}
+              </div>
             </Menu.Button>
             <Transition>
-              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                 {' '}
                 <div className="">
                   <div className="px-1 py-1">
@@ -150,7 +182,7 @@ const Home = ({
                             active
                               ? 'bg-primary-200 text-white'
                               : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm`}
+                          } group flex w-full items-center p-2 text-sm rounded-md`}
                         >
                           View History
                         </button>
@@ -161,16 +193,19 @@ const Home = ({
                   <div className="px-1 py-1">
                     <Menu.Item>
                       {({ active }) => (
-                        <button
-                          onClick={onViewAlerts}
-                          className={`${
-                            active
-                              ? 'bg-primary-200 text-white'
-                              : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm`}
-                        >
-                          Alerts
-                        </button>
+                        <div className="relative">
+                          <button
+                            onClick={onViewAlerts}
+                            className={`${
+                              active
+                                ? 'bg-primary-200 text-white'
+                                : 'text-gray-900'
+                            } group flex w-full items-center p-2 text-sm rounded-md`}
+                          >
+                            Alerts
+                            <RedDot animate={false} count={count} />
+                          </button>
+                        </div>
                       )}
                     </Menu.Item>
                   </div>
@@ -237,19 +272,52 @@ const Home = ({
                       <PhotographIcon className="px-1 py-1 w-6" />
                     </>
                   ) : (
-                    <div className="rounded-full w-14 h-14 relative overflow-hidden">
-                      <img
-                        className="mx-auto my-0 h-auto w-full"
-                        src={token.image}
-                        alt=""
-                      />
-                    </div>
+                    <img className="rounded-full" src={token.image} alt="" />
                   )}
                 </>
               )}
             </li>
           ))}
         </ol>
+
+        {isFetching === false && tokens.length === 0 && (
+          <Query api="/core-api/passport/mint-checker">
+            {({
+              code,
+              figureName,
+            }: {
+              code: number | null;
+              figureName: string;
+            }) => {
+              if (code === 100) {
+                return (
+                  <div className="mt-4 grid gap-4">
+                    <button
+                      type="button"
+                      onClick={handleMint}
+                      disabled={isFetching}
+                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      {isMintingPassport
+                        ? 'Minting...'
+                        : `Mint Sapien Passport (${figureName})`}
+                    </button>
+
+                    {mintError && (
+                      <span className="text-xs text-red-400 flex justify-center items-center">
+                        {mintError.includes('Returned error:')
+                          ? mintError.replace('Returned error:', '')
+                          : mintError}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+
+              return null;
+            }}
+          </Query>
+        )}
       </div>
     </div>
   );

@@ -164,7 +164,7 @@ function TribeBarItem({
               Invite People{' '}
               <ClipboardCopyIcon className="aria-hidden w-5 h-5" />
             </div>
-            {false && (
+            {canLeave && (
               <>
                 <div className="w-full border-t border-gray-600" />
                 <div
@@ -199,7 +199,7 @@ function TribeBarItem({
       </div>
 
       {dialog === Dialog.EditTribe && (
-        <Query api={`/core-api/tribe/${tribeID}`} loader={null}>
+        <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
           {(tribeInfo: MainFeedTribe) => (
             <EditTribeDialog
               tribe={tribeInfo}
