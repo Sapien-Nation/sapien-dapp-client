@@ -141,7 +141,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               </button>
               <Query
                 api={apiKey}
-                options={{ fetcher: () => false }}
+                options={{ fetcher: () => ({ signed: false }) }}
                 loader={
                   <button
                     type="button"
