@@ -8,6 +8,9 @@ import { signPassport } from '../../api';
 // context
 import { useAuth } from 'context/user';
 
+// constants
+import { PassportStatus } from 'tools/constants/user';
+
 // components
 import { Query } from 'components/common';
 
@@ -53,7 +56,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
           ...me,
           passport: {
             ...me.passport,
-            status: 'S', // TODO PassportStatus.S
+            status: PassportStatus.S,
           },
         }),
         false

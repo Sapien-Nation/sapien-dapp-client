@@ -8,6 +8,9 @@ import { signPassport } from 'wallet/api';
 // context
 import { useAuth } from 'context/user';
 
+// constants
+import { PassportStatus } from 'tools/constants/user';
+
 // components
 import UpgradeView from '../upgrade';
 
@@ -74,7 +77,7 @@ const Wallet = () => {
           ...me,
           passport: {
             ...me.passport,
-            status: 'S', // TODO PassportStatus.S
+            status: PassportStatus.S,
           },
         }),
         false

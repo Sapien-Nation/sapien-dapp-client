@@ -5,6 +5,7 @@ import { UpgradeView, WalletView } from './views';
 
 // constants
 import { Role } from 'tools/constants/tribe';
+import { PassportStatus } from 'tools/constants/user';
 
 // context
 import { useAuth } from 'context/user';
@@ -52,9 +53,7 @@ const UpgradeViewProxy = () => {
     return <NotFound message="You dont have access to see this content" />;
   }
 
-  // TODO
-  // const haveAPassportSigned = me.passport?.status === PassportStatus.S;
-  if (true) {
+  if (me.passport?.status === PassportStatus.S) {
     return (
       <Web3Provider>
         <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
