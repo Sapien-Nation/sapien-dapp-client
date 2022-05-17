@@ -50,9 +50,9 @@ export const renderContent = (
             return (
               <>
                 <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                  <a className='className="p-1 align-baseline rounded bg-sapien-80 text-white tracking-wide text-extrabold text-md cursor-pointer'>
+                  <a className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
                     {' '}
-                    #{room.name}
+                    # {room.name}
                   </a>
                 </Link>{' '}
               </>
@@ -60,9 +60,9 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="p-1 align-baseline rounded bg-sapien-80 text-white text-extrabold text-md cursor-pointer">
+                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
                   {' '}
-                  #deleted_room
+                  # deleted_room
                 </span>{' '}
               </>
             );

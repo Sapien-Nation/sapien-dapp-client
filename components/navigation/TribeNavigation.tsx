@@ -75,20 +75,20 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <a
                 className={
                   asPath === `/tribes/${tribeID}/home`
-                    ? 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-3 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
-                    : 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-3 py-2 hover:bg-sapien-neutral-800'
+                    ? 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 bg-sapien-neutral-800'
+                    : 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 hover:bg-sapien-neutral-800'
                 }
                 onClick={handleMobileMenu}
               >
                 <img
                   src="/images/sapien_nation.png"
                   alt="Sapien Nation"
-                  className="w-6"
+                  className="w-6 pt-0.5"
                 />
-                <span className="flex-1">{name}</span>
-                <Menu as="div" className="relative text-left -right-4">
+                <span className="flex-1 truncate">{name}</span>
+                <Menu as="div" className="relative text-left -right-2">
                   <div>
-                    <Menu.Button className="inline-flex w-full justify-center rounded-md bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                    <Menu.Button className="inline-flex w-full justify-center rounded-md bg-opacity-20 px-2 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                       <ChevronDownIcon
                         className="h-5 w-5 text-gray-50 hover:text-violet-100"
                         aria-hidden="true"

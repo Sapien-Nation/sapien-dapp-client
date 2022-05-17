@@ -333,7 +333,7 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-t-3xl">
+    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0 lg:rounded-tl-3xl">
       <>
         <div className="flex flex-col h-full flex-1 overflow-hidden relative">
           {unreadMessages > 0 && (

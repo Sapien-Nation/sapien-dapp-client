@@ -105,7 +105,7 @@ function TribeBarItem({
         <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
           <a
             className={`h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 border-2 border-white/10 hover:border-gray-400 hover:text-gray-900 ${
-              tribeID === tribe.id && 'border-white'
+              tribeID === tribe.id && 'border-white hover:border-white'
             }`}
             onClick={(event) => {
               if (event.type === 'contextmenu') {
@@ -136,7 +136,7 @@ function TribeBarItem({
           >
             {tribe.avatar ? (
               <img
-                className="w-full h-full rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
+                className="w-full h-full rounded-lg text-gray-400 bg-gray-900 group-hover:text-gray-500"
                 alt={''}
                 src={tribe.avatar}
               />
