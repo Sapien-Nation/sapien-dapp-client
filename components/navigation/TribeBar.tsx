@@ -60,7 +60,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
       {/* Static sidebar for desktop */}
       <div
         aria-label="Sidebar"
-        className="py-6 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
+        className="py-5 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
       >
         {isOnProfilePage && (
           <>
@@ -109,7 +109,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           <a
             className={`group p-3 cursor-pointer rounded-lg flex items-center text-base font-medium w-10 h-10 ${
               pathname === '/discovery'
-                ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
+                ? 'text-gray-900 bg-gray-50'
                 : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
             }`}
             ref={tooltipRef.current?.setTriggerRef}
@@ -142,7 +142,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             handleMobileMenu();
           }}
           type="button"
-          className="group w-10 h-10 absolute bottom-6 p-3 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+          className="group w-10 h-10 absolute bottom-5 p-3 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
           ref={feedbackRef.current?.setTriggerRef}
         >
           <AnnotationIcon className="h-6 w-6" />

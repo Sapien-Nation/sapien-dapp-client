@@ -56,14 +56,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (hasUnreadMessages)
-        return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
-      return 'text-sm bg-sapien-neutral-800 rounded-md';
+        return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-neutral-800 rounded-l-md';
     }
 
     if (hasUnreadMessages)
-      return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
+    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md';
   };
 
   return (
@@ -110,10 +110,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           {({ active }) => (
                             <button
                               className={`${
-                                active
-                                  ? 'bg-gray-800 text-white'
-                                  : 'text-gray-300'
-                              } group flex w-full items-center rounded-sm px-2 py-2 text-sm`}
+                                active ? 'bg-gray-800' : ''
+                              } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
                             >
                               <SparklesIcon className="w-5 mr-1" />
                               Upgrade Tribe
@@ -197,16 +195,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             {canAddRoom === true && (
               <button
                 aria-label="Create Room"
-                className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+                className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
                 onClick={() => {
                   setDialog(Dialog.CreateRoom);
                   handleMobileMenu();
                 }}
               >
-                ROOMS <PlusIcon className="text-sapien-neutral-200 w-5" />
+                ROOMS <PlusIcon className="text-sapien-neutral-200 w-4" />
               </button>
             )}
-            <ul className="px-2 py-2 cursor-pointer">
+            <ul className="pl-1 py-2 cursor-pointer -mr-2">
               {rooms.map(({ id, name, unreads }) => {
                 return (
                   <li

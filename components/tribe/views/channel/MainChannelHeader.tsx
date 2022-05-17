@@ -75,7 +75,9 @@ const MainChannelHeader = ({ tribe }: Props) => {
           </div>
           <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
             <div className="flex flex-col justify-center sm:ml-12">
-              <h1 className="text-xl text-center sm:text-left">{tribe.name}</h1>
+              <h1 className="text-xl text-center sm:text-left font-semibold">
+                {tribe.name}
+              </h1>
               <h2 className="text-gray-500 mb-4 sm:mb-0">
                 {tribe.membersCount} members
               </h2>
@@ -85,7 +87,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
                 <button
                   onClick={handleCopyToClipboard}
                   type="button"
-                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none"
+                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 focus:outline-none font-semibold"
                 >
                   Invite
                 </button>
