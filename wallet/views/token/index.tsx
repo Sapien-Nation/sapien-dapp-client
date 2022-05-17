@@ -89,18 +89,31 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               </button>
               Confirm
             </h5>
-            <button
-              type="button"
-              disabled={isFetching}
-              onClick={handleSignToken}
-              className={
-                isFetching
-                  ? 'w-full py-2 px-4 flex animate-pulse justify-center items-center cursor-not-allowed gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
-                  : 'w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
-              }
-            >
-              {isFetching ? ' Signing Passport...' : 'Confirm'}
-            </button>
+            <div className="flex flex-col gap-5">
+              <span>
+                <p>
+                  Please confirm the signing of your Sapien Passport. This will
+                  make your passport untradeable and unlock a host of benefits
+                  on the Sapien Platform.
+                </p>
+                <p>
+                  (Note: This action is irreversible, once a passport is signed
+                  it can not leave your Sapien wallet).
+                </p>
+              </span>
+              <button
+                type="button"
+                disabled={isFetching}
+                onClick={handleSignToken}
+                className={
+                  isFetching
+                    ? 'w-full py-2 px-4 flex animate-pulse justify-center items-center cursor-not-allowed gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
+                    : 'w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
+                }
+              >
+                {isFetching ? ' Signing Passport...' : 'Confirm'}
+              </button>
+            </div>
             {signError && (
               <span className="text-xs text-red-400 flex justify-center items-center">
                 {signError}

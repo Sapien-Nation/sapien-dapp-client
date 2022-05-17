@@ -170,7 +170,7 @@ const Home = ({
               </div>
             </Menu.Button>
             <Transition>
-              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                 {' '}
                 <div className="">
                   <div className="px-1 py-1">
@@ -272,13 +272,7 @@ const Home = ({
                       <PhotographIcon className="px-1 py-1 w-6" />
                     </>
                   ) : (
-                    <div className="rounded-full w-14 h-14 relative overflow-hidden">
-                      <img
-                        className="mx-auto my-0 h-auto w-full"
-                        src={token.image}
-                        alt=""
-                      />
-                    </div>
+                    <img className="rounded-full" src={token.image} alt="" />
                   )}
                 </>
               )}
