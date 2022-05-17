@@ -8,7 +8,14 @@ import { View } from 'constants/tribe';
 
 // components
 import { SEO, ErrorView, NotFound, Query } from 'components/common';
-import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
+import {
+  Channel,
+  ContentView,
+  MainChannel,
+  RoomView,
+  UpgradeView,
+  VaultView,
+} from 'components/tribe';
 const PassportView = dynamic(() =>
   import('components/tribe').then((views) => views.PassportView)
 );
@@ -29,6 +36,8 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
   const renderView = () => {
     switch (view.type) {
+      case View.Vault:
+        return <VaultView />;
       case View.Passport:
         return <PassportView />;
       case View.Content:
@@ -46,6 +55,8 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         return <Channel />;
       case View.MainChannel:
         return <MainChannel />;
+      case View.Upgrade:
+        return <UpgradeView />;
       case View.NotFound:
         return <NotFound message="You dont have access to see this content" />;
       default:

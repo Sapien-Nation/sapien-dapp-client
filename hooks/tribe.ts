@@ -159,6 +159,16 @@ export const useGetCurrentView = (
       name: 'passport',
       id: 'passport',
     },
+    {
+      type: View.Vault,
+      name: 'vault',
+      id: 'vault',
+    },
+    {
+      type: View.Upgrade,
+      name: 'upgrade',
+      id: 'upgrade',
+    },
     ...channels,
     ...rooms,
   ];

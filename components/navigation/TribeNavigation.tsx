@@ -13,6 +13,7 @@ import {
   CreateChannelDialog,
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
+import { Query, RedDot } from 'components/common';
 
 // hooks
 import {
@@ -21,9 +22,8 @@ import {
   useTribePermission,
   useTribeRooms,
 } from 'hooks/tribe';
-import { RedDot } from 'components/common';
 
-// icons
+// assets
 import VaultIcon from './assets/Vault';
 
 interface Props {
@@ -105,35 +105,58 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 mt-2 w-60 origin-top-right divide-y divide-gray-100 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="px-1 py-1 ">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <button
-                              className={`${
-                                active ? 'bg-gray-800' : ''
-                              } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
-                            >
-                              <SparklesIcon className="w-5 mr-1" />
-                              Upgrade Tribe
-                            </button>
-                          )}
-                        </Menu.Item>
-                      </div>
+                      <Query
+                        api={`/core-api/tribe/${tribeID}/upgrade`}
+                        options={{ fetcher: () => ({ canUpgrade: true }) }}
+                      >
+                        {({ canUpgrade }: { canUpgrade: boolean }) => (
+                          <div className="px-1 py-1 ">
+                            <Menu.Item>
+                              {({ active }) => (
+                                <>
+                                  {canUpgrade === true ? (
+                                    <Link
+                                      href={`/tribes/${tribeID}/upgrade`}
+                                      passHref
+                                    >
+                                      <a
+                                        className={`${
+                                          active ? 'bg-gray-800' : ''
+                                        } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
+                                      >
+                                        <SparklesIcon className="w-5 mr-1" />
+                                        Upgrade Tribe
+                                      </a>
+                                    </Link>
+                                  ) : (
+                                    <div>
+                                      <SparklesIcon className="w-5 mr-1" />
+                                      Tribe Upgraded
+                                    </div>
+                                  )}
+                                </>
+                              )}
+                            </Menu.Item>
+                          </div>
+                        )}
+                      </Query>
                     </Menu.Items>
                   </Transition>
                 </Menu>
               </a>
             </Link>
-            <button
-              aria-label="Create Room"
-              className="px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300"
-              onClick={() => {
-                handleMobileMenu();
-              }}
-            >
-              <VaultIcon />
-              Create Vault
-            </button>
+            <Link aria-label="Tribe Vault" href={`/tribes/${tribeID}/vault`}>
+              <a
+                className={
+                  asPath === `/tribes/${tribeID}/vault`
+                    ? 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
+                    : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
+                }
+              >
+                <VaultIcon />
+                Create Vault
+              </a>
+            </Link>
             {/* <button
               aria-label="Create Channel"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
