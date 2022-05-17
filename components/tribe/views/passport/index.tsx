@@ -13,6 +13,9 @@ import {
   TextInput,
 } from 'components/common';
 
+// context
+import { useToast } from 'context/toast';
+
 // utils
 import { formatDate } from 'utils/date';
 import { formatAvatarName, formatTokenID } from 'utils/passport';
@@ -22,13 +25,12 @@ import type { NextPage } from 'next';
 import type { Passport } from 'tools/types/passport';
 
 interface Props {
+  animationData: any;
   passport: Passport;
 }
 
-const PassportTokenIDPage = ({ passport }: Props) => {
-  const [error, setError] = useState<Error | null>(null);
+const PassportTokenIDPage = ({ animationData, passport }: Props) => {
   const [showPassport, setshowPassport] = useState(false);
-  const [animationData, setAnimationData] = useState<object | null>(null);
 
   const { query } = useRouter();
 
@@ -42,24 +44,6 @@ const PassportTokenIDPage = ({ passport }: Props) => {
   });
 
   useEffect(() => {
-    // work around for 31mb file
-    const fetchLottieJSON = async () => {
-      try {
-        const request = await fetch(
-          'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
-        );
-        const data = await request.json();
-
-        setError(null);
-        setAnimationData(data);
-      } catch (err) {
-        setError(err);
-      }
-    };
-    fetchLottieJSON();
-  }, []);
-
-  useEffect(() => {
     if (animationData) {
       setTimeout(() => {
         setshowPassport(true);
@@ -67,21 +51,15 @@ const PassportTokenIDPage = ({ passport }: Props) => {
     }
   }, [animationData]);
 
-  if (error) return <ErrorView message="Passport Animation Error" />;
-
-  if (animationData === null) return null;
-
   return (
     <div className="inset-0 flex items-center justify-center bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
       <div className="pt-4 px-4 pb-20 text-center sm:block sm:p-0 relative w-full">
-        {animationData !== null && (
-          <Lottie
-            animationData={animationData}
-            play
-            loop={false}
-            className="max-w-1100px w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
-          />
-        )}
+        <Lottie
+          animationData={animationData}
+          play
+          loop={false}
+          className="max-w-1100px w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
+        />
         {showPassport && (
           <div className="px-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <FormProvider {...methods}>
@@ -247,9 +225,42 @@ const PassportTokenIDPage = ({ passport }: Props) => {
 };
 
 const PassportTokenIDPageProxy: NextPage = () => {
+  const [error, setError] = useState<Error | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
+  const [animationData, setAnimationData] = useState<object | null>(null);
+
+  const toast = useToast();
   const { query } = useRouter();
 
+  useEffect(() => {
+    // work around for 31mb file
+    const fetchLottieJSON = async () => {
+      setError(null);
+      setIsFetching(true);
+      try {
+        const request = await fetch(
+          'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
+        );
+        const data = await request.json();
+
+        setAnimationData(data);
+      } catch (err) {
+        setError(err);
+        toast({ message: err });
+      }
+      setIsFetching(false);
+    };
+
+    if (query.tokenID) {
+      fetchLottieJSON();
+    }
+  }, [query.tokenID, toast]);
+
   if (!query.tokenID) return null;
+
+  if (isFetching === true) return <h1>TODO Loading...</h1>;
+
+  if (error) return <ErrorView message="Error Loading Passport Animation" />;
 
   return (
     <>
@@ -260,7 +271,12 @@ const PassportTokenIDPageProxy: NextPage = () => {
             return <Redirect path="" />;
           }
 
-          return <PassportTokenIDPage passport={passport} />;
+          return (
+            <PassportTokenIDPage
+              passport={passport}
+              animationData={animationData}
+            />
+          );
         }}
       </Query>
     </>
