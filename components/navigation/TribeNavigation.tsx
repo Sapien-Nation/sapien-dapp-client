@@ -75,8 +75,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <a
                 className={
                   asPath === `/tribes/${tribeID}/home`
-                    ? 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-4 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
-                    : 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-4 py-2 hover:bg-sapien-neutral-800'
+                    ? 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-3 py-2 bg-primary-200 hover:bg-sapien-neutral-800'
+                    : 'gap-1 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-base flex rounded-lg focus:outline-none px-3 py-2 hover:bg-sapien-neutral-800'
                 }
                 onClick={handleMobileMenu}
               >

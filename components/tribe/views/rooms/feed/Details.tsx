@@ -79,7 +79,7 @@ const Details = ({ handleSidebar }) => {
       </div>
       <>
         <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
-          <h3 className="text-md  text-sapien-neutral-400 font-bold ">
+          <h3 className="text-md  text-gray-300 font-bold ">
             Members ({members.length})
           </h3>
         </div>
