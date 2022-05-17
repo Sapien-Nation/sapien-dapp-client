@@ -33,6 +33,7 @@ import useOnScreen from 'hooks/useOnScreen';
 import { useTribeRooms } from 'hooks/tribe';
 import { useSocketEvent } from 'hooks/socket';
 import { useRoomMembers } from 'hooks/room';
+import { usePassport } from 'hooks/passport';
 
 // slate
 import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
@@ -67,6 +68,7 @@ const Feed = ({
 
   const toast = useToast();
   const { me } = useAuth();
+  const passport = usePassport();
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
 
@@ -280,7 +282,7 @@ const Feed = ({
         createdAt: new Date().toISOString(),
         id: nanoid(),
         sender: {
-          avatar: me.avatar,
+          avatar: me.avatat || passport.image,
           id: me.id,
           username: me.username,
         },
