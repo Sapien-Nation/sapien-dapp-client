@@ -41,12 +41,23 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
 
   const handleSignToken = async () => {
     setIsFetching(true);
+    setSignError(null);
+
     try {
       await signPassport(token.id);
 
-      setSignError(null);
-
-      mutate(apiKey, () => ({ signed: true }), false);
+      mutate(apiKey, () => ({ canSign: false, signed: true }), false);
+      mutate(
+        '/user-api/me',
+        (me) => ({
+          ...me,
+          passport: {
+            ...me.passport,
+            status: 'S',
+          },
+        }),
+        false
+      );
 
       setView(View.Success);
     } catch (err) {
