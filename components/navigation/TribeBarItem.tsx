@@ -43,8 +43,11 @@ function TribeBarItem({
 }: Props) {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
+  const toast = useToast();
   const { query } = useRouter();
   const { mutate } = useSWRConfig();
+
+  const tooltipRef = useRef(null);
 
   const { tribeID } = query;
 
@@ -95,9 +98,6 @@ function TribeBarItem({
       Sentry.captureMessage(err);
     }
   };
-  const toast = useToast();
-
-  const tooltipRef = useRef(null);
 
   return (
     <>

@@ -1,11 +1,17 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import * as Sentry from '@sentry/nextjs';
 import { SparklesIcon, PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { Fragment, useState } from 'react';
+import { useSWRConfig } from 'swr';
+
+// api
+import { leaveTribe } from 'api/tribe';
 
 // constants
+import { Role } from 'tools/constants/tribe';
 import { AboutObject } from 'tools/constants/rooms';
 
 // components
@@ -17,14 +23,17 @@ import { Query, RedDot } from 'components/common';
 
 // hooks
 import {
+  useMainTribe,
   useTribe,
-  // useTribeChannels,
   useTribePermission,
   useTribeRooms,
 } from 'hooks/tribe';
 
 // assets
 import VaultIcon from './assets/Vault';
+
+// types
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   handleMobileMenu: () => void;
@@ -38,18 +47,42 @@ enum Dialog {
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
+  const { mutate } = useSWRConfig();
   const { asPath, query } = useRouter();
+
   const { tribeID, viewID } = query;
 
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
-  // const channels = useTribeChannels(tribeID as string);
-  const [canAddRoom] = useTribePermission(tribeID as string, ['canAddRoom']);
+  const [canAddRoom, canLeave] = useTribePermission(tribeID as string, [
+    'canAddRoom',
+    'canLeave',
+  ]);
+  const { redirectToMainTribeChannel } = useMainTribe();
+
   if (!tribe || !rooms) {
     return;
   }
 
-  const { name } = tribe;
+  const { name, role } = tribe;
+  const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
+
+  const handleLeaveTribe = async () => {
+    try {
+      redirectToMainTribeChannel();
+
+      await leaveTribe(tribeID as string);
+
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
+        false
+      );
+    } catch (err) {
+      Sentry.captureMessage(err);
+    }
+  };
 
   const getRoomListItemClassName = (id: string, hasUnreadMessages: boolean) => {
     const isOnChannelView = id === viewID;
@@ -105,58 +138,76 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 mt-2 w-60 origin-top-right divide-y divide-gray-100 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Query
-                        api={`/core-api/tribe/${tribeID}/upgrade`}
-                        options={{ fetcher: () => ({ canUpgrade: true }) }}
-                      >
-                        {({ canUpgrade }: { canUpgrade: boolean }) => (
-                          <div className="px-1 py-1 ">
-                            <Menu.Item>
-                              {({ active }) => (
-                                <>
-                                  {canUpgrade === true ? (
-                                    <Link
-                                      href={`/tribes/${tribeID}/upgrade`}
-                                      passHref
-                                    >
-                                      <a
-                                        className={`${
-                                          active ? 'bg-gray-800' : ''
-                                        } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
-                                      >
-                                        <SparklesIcon className="w-5 mr-1" />
-                                        Upgrade Tribe
-                                      </a>
-                                    </Link>
-                                  ) : (
-                                    <div>
-                                      <SparklesIcon className="w-5 mr-1" />
-                                      Tribe Upgraded
-                                    </div>
-                                  )}
-                                </>
-                              )}
-                            </Menu.Item>
-                          </div>
+                      <div className="px-1 py-1 ">
+                        {tribe.isUpgraded === true && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <div>
+                                <SparklesIcon className="w-5 mr-1" />
+                                Tribe Upgraded
+                              </div>
+                            )}
+                          </Menu.Item>
                         )}
-                      </Query>
+
+                        {tribe.isUpgraded === false && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <Link
+                                href={`/tribes/${tribeID}/upgrade`}
+                                passHref
+                              >
+                                <a
+                                  className={`${
+                                    active ? 'bg-gray-800' : ''
+                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
+                                >
+                                  <SparklesIcon className="w-5 mr-1" />
+                                  Upgrade Tribe
+                                </a>
+                              </Link>
+                            )}
+                          </Menu.Item>
+                        )}
+                      </div>
+
+                      <div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <>
+                              {canLeave === true ? (
+                                <button
+                                  onClick={handleLeaveTribe}
+                                  className={`${
+                                    active ? 'bg-gray-800' : ''
+                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                                >
+                                  Leave Tribe
+                                </button>
+                              ) : null}
+                            </>
+                          )}
+                        </Menu.Item>
+                      </div>
                     </Menu.Items>
                   </Transition>
                 </Menu>
               </a>
             </Link>
-            <Link aria-label="Tribe Vault" href={`/tribes/${tribeID}/vault`}>
-              <a
-                className={
-                  asPath === `/tribes/${tribeID}/vault`
-                    ? 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
-                    : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
-                }
-              >
-                <VaultIcon />
-                Create Vault
-              </a>
-            </Link>
+            {tribe.isUpgraded === true && isTribeOwnerOrTribeAdmin === true && (
+              <Link aria-label="Tribe Vault" href={`/tribes/${tribeID}/vault`}>
+                <a
+                  className={
+                    asPath === `/tribes/${tribeID}/vault`
+                      ? 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
+                      : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
+                  }
+                >
+                  <VaultIcon />
+                  Create Vault
+                </a>
+              </Link>
+            )}
             {/* <button
               aria-label="Create Channel"
               className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"

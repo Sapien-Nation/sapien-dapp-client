@@ -1,5 +1,5 @@
 import { Menu } from '@headlessui/react';
-import { BellIcon, CreditCardIcon, CogIcon } from '@heroicons/react/outline';
+import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

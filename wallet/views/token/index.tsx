@@ -53,7 +53,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
           ...me,
           passport: {
             ...me.passport,
-            status: 'S',
+            status: 'S', // TODO PassportStatus.S
           },
         }),
         false
@@ -141,11 +141,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               <button
                 type="button"
                 onClick={() => setView(View.ConfirmSign)}
-                className={
-                  isFetching
-                    ? 'w-full py-2 px-4 flex animate-pulse justify-center items-center cursor-not-allowed gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
-                    : 'w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
-                }
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Sign
               </button>
