@@ -1,8 +1,6 @@
 stages:
  - build
  - cleanupImages
- #- push_to_ecr
- #- deploy
 
 variables:
   # this variable can be overriden by pipeline run variable
