@@ -11,6 +11,9 @@ import { useAuth } from 'context/user';
 // components
 import { Query } from 'components/common';
 
+// helpers
+import { getShortWalletAddress } from 'utils/wallet';
+
 // types
 import type { Token } from '../../types';
 
@@ -88,14 +91,26 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               </button>
               Declaration
             </h5>
-            <p>TODO declaration and wallet form here {me.walletAddress}</p>
-            <button
-              type="button"
-              onClick={() => setView(View.ConfirmSign)}
-              className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Sign
-            </button>
+            <div className="py-6 px-1 flex flex-col gap-5">
+              <p>TODO: Declaration</p>
+              <span>I agree to uphold the values of the Sapien Nation</span>
+              <input
+                disabled
+                className="appearance-none block w-full px-3 py-2 border bg-gray-500 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-not-allowed text-center"
+                value={getShortWalletAddress(me.walletAddress)}
+              />
+              <button
+                type="button"
+                onClick={() => setView(View.ConfirmSign)}
+                className={
+                  isFetching
+                    ? 'w-full py-2 px-4 flex animate-pulse justify-center items-center cursor-not-allowed gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
+                    : 'w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
+                }
+              >
+                Sign
+              </button>
+            </div>
           </>
         );
       case View.Home:
@@ -168,7 +183,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
 
   return (
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
-      <div className="w-72 h-96 flex flex-col gap-4">{renderView()}</div>
+      <div className="w-72 flex flex-col gap-4">{renderView()}</div>
     </div>
   );
 };
