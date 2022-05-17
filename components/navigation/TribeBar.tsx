@@ -107,7 +107,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
 
         <Link href="/discovery">
           <a
-            className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium w-10 h-10 ${
+            className={`group p-3 cursor-pointer rounded-lg flex items-center text-base font-medium w-10 h-10 ${
               pathname === '/discovery'
                 ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
                 : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
@@ -127,7 +127,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
               handleMobileMenu();
             }}
             type="button"
-            className="group w-10 h-10 p-3 mb-16 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+            className="group w-10 h-10 p-3 mb-16 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
             ref={createTribeRef.current?.setTriggerRef}
           >
             <PlusIcon className="h-6 w-6" />
@@ -142,7 +142,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             handleMobileMenu();
           }}
           type="button"
-          className="group w-10 h-10 absolute bottom-6 p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+          className="group w-10 h-10 absolute bottom-6 p-3 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
           ref={feedbackRef.current?.setTriggerRef}
         >
           <AnnotationIcon className="h-6 w-6" />
