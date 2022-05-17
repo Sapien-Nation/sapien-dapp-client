@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { PencilIcon } from '@heroicons/react/outline';
 
 // components
-import EditTribeDialog from 'components/tribe/dialogs/EditTribeDialog';
+import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // constants
 import { ToastType } from 'constants/toast';

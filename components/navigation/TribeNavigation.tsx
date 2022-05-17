@@ -20,6 +20,7 @@ import {
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
 import { Query, RedDot } from 'components/common';
+import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
 import {
@@ -33,7 +34,7 @@ import {
 import VaultIcon from './assets/Vault';
 
 // types
-import type { ProfileTribe } from 'tools/types/tribe';
+import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   handleMobileMenu: () => void;
@@ -42,6 +43,7 @@ interface Props {
 enum Dialog {
   CreateChannel,
   CreateRoom,
+  EditTribe,
 }
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
@@ -54,10 +56,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
   const tribe = useTribe(tribeID as string);
   const rooms = useTribeRooms(tribeID as string);
-  const [canAddRoom, canLeave] = useTribePermission(tribeID as string, [
-    'canAddRoom',
-    'canLeave',
-  ]);
+  const [canAddRoom, canLeave, canEdit] = useTribePermission(
+    tribeID as string,
+    ['canAddRoom', 'canLeave', 'canEdit']
+  );
   const { redirectToMainTribeChannel } = useMainTribe();
 
   if (!tribe || !rooms) {
@@ -141,12 +143,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       <div className="px-1 py-1 ">
                         {tribe.isUpgraded === true && (
                           <Menu.Item>
-                            {({ active }) => (
-                              <div>
-                                <SparklesIcon className="w-5 mr-1" />
-                                Tribe Upgraded
-                              </div>
-                            )}
+                            <div>
+                              <SparklesIcon className="w-5 mr-1" />
+                              Tribe Upgraded
+                            </div>
                           </Menu.Item>
                         )}
 
@@ -175,6 +175,20 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <>
+                              <div
+                                onClick={() => {
+                                  setDialog(Dialog.EditTribe);
+                                }}
+                                className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between"
+                              >
+                                Edit Tribe
+                              </div>
+                            </>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <>
                               {canLeave === true ? (
                                 <button
                                   onClick={handleLeaveTribe}
@@ -194,7 +208,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 </Menu>
               </a>
             </Link>
-            {tribe.isUpgraded === true && isTribeOwnerOrTribeAdmin === true && (
+            {false && (
               <Link aria-label="Tribe Vault" href={`/tribes/${tribeID}/vault`}>
                 <a
                   className={
@@ -204,7 +218,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                   }
                 >
                   <VaultIcon />
-                  Create Vault
+                  Manage Badges
                 </a>
               </Link>
             )}
@@ -312,6 +326,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
         )}
         {dialog === Dialog.CreateChannel && (
           <CreateChannelDialog onClose={() => setDialog(null)} />
+        )}
+        {dialog === Dialog.EditTribe && (
+          <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
+            {(tribeInfo: MainFeedTribe) => (
+              <EditTribeDialog
+                tribe={tribeInfo}
+                onClose={() => setDialog(null)}
+              />
+            )}
+          </Query>
         )}
       </div>
     </>

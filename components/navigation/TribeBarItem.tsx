@@ -12,7 +12,7 @@ import { leaveTribe } from 'api/tribe';
 
 // components
 import { Query, Tooltip } from 'components/common';
-import EditTribeDialog from 'components/tribe/dialogs/EditTribeDialog';
+import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // constants
 import { ToastType } from 'constants/toast';

@@ -53,7 +53,7 @@ const UpgradeViewProxy = () => {
     return <NotFound message="You dont have access to see this content" />;
   }
 
-  if (me.passport?.status === PassportStatus.S) {
+  if (me.passport?.status === PassportStatus.P) {
     return (
       <Web3Provider>
         <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
