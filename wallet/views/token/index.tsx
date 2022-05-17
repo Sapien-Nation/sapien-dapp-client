@@ -166,11 +166,19 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
                   </button>
                 }
               >
-                {({ signed }: { signed: boolean }) => {
-                  if (signed === true)
+                {({
+                  canSign,
+                  signed,
+                }: {
+                  canSign: boolean;
+                  signed: boolean;
+                }) => {
+                  if (canSign === false)
                     return (
                       <span className="text-xs text-green-400 flex justify-center items-center">
-                        Passport already Signed{' '}
+                        {signed
+                          ? 'Passport Signed.'
+                          : 'You already have a passport signed in your wallet'}{' '}
                         <BadgeCheckIcon
                           className="h-5 w-5"
                           aria-hidden="true"
