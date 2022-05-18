@@ -27,7 +27,11 @@ enum View {
   History,
 }
 
-const Wallet = () => {
+interface Props {
+  showDeclarationDialog: () => void;
+}
+
+const Wallet = ({ showDeclarationDialog }: Props) => {
   const [view, setView] = useState(View.Home);
   const [token, setToken] = useState<Token | null>(null);
 
@@ -108,6 +112,7 @@ const Wallet = () => {
             onWithdraw={() => {
               setView(View.Withdraw);
             }}
+            showDeclarationDialog={showDeclarationDialog}
           />
         );
       case View.History:

@@ -25,6 +25,7 @@ interface Props {
   handleBack: () => void;
   token: Token;
   onWithdraw: (token: Token) => void;
+  showDeclarationDialog?: () => void;
 }
 
 enum View {
@@ -38,7 +39,12 @@ enum Dialog {
   DeclarationOfSovereignty,
 }
 
-const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
+const TokenView = ({
+  handleBack,
+  token,
+  onWithdraw,
+  showDeclarationDialog,
+}: Props) => {
   const [view, setView] = useState(View.Home);
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [signError, setSignError] = useState<string | null>(null);
@@ -141,13 +147,16 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               Declaration
             </h5>
             <div className="py-6 px-1 flex flex-col gap-5">
-              <p>TODO: Declaration</p>
-              <button
-                type="button"
-                onClick={() => setDialog(Dialog.DeclarationOfSovereignty)}
-              >
-                Open Dialog
-              </button>
+              <p>
+                The world is at a turning point and we are faced with tremendous
+                uncertainty in all directions...{' '}
+                <button
+                  className="underline hover:cursor-pointer"
+                  onClick={showDeclarationDialog}
+                >
+                  see more
+                </button>
+              </p>
               <span>I agree to uphold the values of the Sapien Nation</span>
               <input
                 readOnly

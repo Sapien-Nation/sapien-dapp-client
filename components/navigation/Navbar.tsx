@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
@@ -10,14 +11,22 @@ import { usePassport } from 'hooks/passport';
 
 // components
 import { UserAvatar } from 'components/common';
+import DeclarationOfSovereigntyDialog from 'wallet/dialog/DeclarationOfSovereigntyDialog';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 const Notifications = dynamic(() => import('components/notifications'));
 
+enum Dialog {
+  DeclarationDialog,
+}
+
 const Navbar = () => {
   const { me } = useAuth();
   const { query } = useRouter();
+  const [dialog, setDialog] = useState<Dialog | null>(null);
   const passport = usePassport();
+
+  const handleShowDeclarationDialog = () => setDialog(Dialog.DeclarationDialog);
 
   return (
     <div className="shadow">
@@ -58,7 +67,9 @@ const Navbar = () => {
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet />
+                    <Wallet
+                      showDeclarationDialog={handleShowDeclarationDialog}
+                    />
                   </Menu.Items>
                 </div>
 
@@ -185,6 +196,11 @@ const Navbar = () => {
               </>
             )}
           </Menu>
+
+          {/* dialogs */}
+          {dialog === Dialog.DeclarationDialog && (
+            <DeclarationOfSovereigntyDialog onClose={() => setDialog(null)} />
+          )}
         </div>
       </div>
     </div>
