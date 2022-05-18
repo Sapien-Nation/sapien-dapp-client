@@ -13,6 +13,7 @@ import { PassportStatus } from 'tools/constants/user';
 
 // components
 import { Query, Tooltip } from 'components/common';
+import { DeclarationOfSovereigntyDialog } from './dialogs';
 
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
@@ -33,8 +34,13 @@ enum View {
   Success,
 }
 
+enum Dialog {
+  DeclarationOfSovereignty,
+}
+
 const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
   const [view, setView] = useState(View.Home);
+  const [dialog, setDialog] = useState<Dialog | null>(null);
   const [signError, setSignError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
   const tooltipRef = useRef(null);
@@ -136,6 +142,12 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
             </h5>
             <div className="py-6 px-1 flex flex-col gap-5">
               <p>TODO: Declaration</p>
+              <button
+                type="button"
+                onClick={() => setDialog(Dialog.DeclarationOfSovereignty)}
+              >
+                Open Dialog
+              </button>
               <span>I agree to uphold the values of the Sapien Nation</span>
               <input
                 readOnly
@@ -224,6 +236,16 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
                 }}
               </Query>
             </div>
+
+            {/* Dialogs */}
+            {dialog === Dialog.DeclarationOfSovereignty && (
+              <DeclarationOfSovereigntyDialog
+                onClose={(event) => {
+                  event.stopPropagation();
+                  setDialog(null);
+                }}
+              />
+            )}
           </>
         );
     }
