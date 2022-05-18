@@ -8,7 +8,7 @@ import { Fragment, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 // api
-import { leaveTribe } from 'api/tribe';
+import { leaveTribe, readAllTribeNotifications } from 'api/tribe';
 
 // constants
 import { Role } from 'tools/constants/tribe';
@@ -67,7 +67,35 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   }
 
   const { name, role } = tribe;
+
+  const hasRoomsNotifications = rooms.some(({ unreads }) => Boolean(unreads));
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
+
+  const handleReadAllRooms = async () => {
+    try {
+      await readAllTribeNotifications(tribeID as string);
+
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((cacheTribe) =>
+            cacheTribe.id === tribeID
+              ? {
+                  ...cacheTribe,
+                  rooms: cacheTribe.rooms.map((cacheRoom) => ({
+                    ...cacheRoom,
+                    unreads: 0,
+                    lastMessageId: '',
+                  })),
+                }
+              : cacheTribe
+          ),
+        false
+      );
+    } catch (err) {
+      Sentry.captureMessage(err);
+    }
+  };
 
   const handleLeaveTribe = async () => {
     try {
@@ -172,34 +200,53 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       </div>
 
                       <div>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <>
-                              <div
-                                onClick={() => {
-                                  setDialog(Dialog.EditTribe);
-                                }}
-                                className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between"
-                              >
-                                Edit Tribe
-                              </div>
-                            </>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <>
-                              {canLeave === true ? (
-                                <button
-                                  onClick={handleLeaveTribe}
-                                  className={`${
-                                    active ? 'bg-gray-800' : ''
-                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                        {canEdit === true && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <>
+                                <div
+                                  onClick={() => {
+                                    setDialog(Dialog.EditTribe);
+                                  }}
+                                  className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between normal-case"
                                 >
-                                  Leave Tribe
-                                </button>
-                              ) : null}
-                            </>
+                                  Edit Tribe
+                                </div>
+                              </>
+                            )}
+                          </Menu.Item>
+                        )}
+
+                        {canLeave && (
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                onClick={handleLeaveTribe}
+                                className={`${
+                                  active ? 'bg-gray-800' : ''
+                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                              >
+                                Leave Tribe
+                              </button>
+                            )}
+                          </Menu.Item>
+                        )}
+
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              disabled={!hasRoomsNotifications}
+                              onClick={handleReadAllRooms}
+                              className={`${
+                                active ? 'bg-gray-800' : ''
+                              } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white ${
+                                hasRoomsNotifications
+                                  ? 'cursor-pointer'
+                                  : 'cursor-not-allowed'
+                              }`}
+                            >
+                              Read all
+                            </button>
                           )}
                         </Menu.Item>
                       </div>
