@@ -1,4 +1,5 @@
 import { Transforms } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 // constants
 import { MentionType, CustomNode } from '../constants';
@@ -12,6 +13,7 @@ export const insertRoomMention = (editor, room) => {
 
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
+  ReactEditor.focus(editor);
 };
 
 export const insertUserMention = (editor, member) => {
@@ -22,6 +24,7 @@ export const insertUserMention = (editor, member) => {
   };
   Transforms.insertNodes(editor, mention);
   Transforms.move(editor);
+  ReactEditor.focus(editor);
 };
 
 export const withRoomMentions = (editor) => {

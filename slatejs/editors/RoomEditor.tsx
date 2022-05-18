@@ -208,7 +208,10 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       case FloatMenu.Channels: {
         if (target && tribeRoomsList.length > 0) {
           return (
-            <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
+            <div
+              className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
+              style={{ bottom: '6.6rem' }}
+            >
               <h3 className="text-sm uppercase text-gray-200">Tribe Rooms</h3>
               {tribeRoomsList.map(({ id, label }, channelIndex) => (
                 <>
@@ -242,7 +245,10 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       case FloatMenu.Members: {
         if (target && roomMembersList.length > 0) {
           return (
-            <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
+            <div
+              className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
+              style={{ bottom: '6.6rem' }}
+            >
               <h3 className="text-sm uppercase text-gray-200">Members</h3>
               {roomMembersList.map(({ id, avatar, label }, mentionIndex) => (
                 <>
@@ -291,9 +297,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
   return (
     <>
-      {renderFloatMenu()}
-
       <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
+        {renderFloatMenu()}
+
         {/* Avatar */}
         <div className="mr-4 w-12 hidden sm:block">
           <UserAvatar user={me} passport={passport} />

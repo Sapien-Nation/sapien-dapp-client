@@ -11,7 +11,7 @@ const RoomMention = ({ attributes, children, element }) => {
         contentEditable={false}
         className={`${
           selected && focused ? 'shadow-md' : 'none'
-        } p-0.5 mx-1 align-baseline inline-block rounded-sm font-semibold bg-sapien-80 underline text-white text-xs`}
+        } p-0.5 mx-1 align-baseline inline-block rounded-sm font-semibold bg-sapien underline text-white text-xs`}
       >
         # {element.room.label}
         {children}
