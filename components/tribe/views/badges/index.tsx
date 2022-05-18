@@ -2,10 +2,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 // components
-import { Query } from 'components/common';
+import { Overlay, Query } from 'components/common';
+import BadgeView from './badge';
+import Sidebar from './navigation';
 
 // hooks
-import { useTribe } from 'hooks/tribe';
+import { useTribeBadges } from 'hooks/tribe/badge';
+
+// types
+import type { TribeBadge } from 'tools/types/tribe';
 
 enum View {
   Badge,
@@ -13,87 +18,62 @@ enum View {
 }
 
 const BadgesView = () => {
-  const [view] = useState(View.Home);
+  const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
-  const { back, query } = useRouter();
+  const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
-  const tribe = useTribe(tribeID);
+  const { back } = useRouter();
+  const tribeBadges = useTribeBadges(tribeID);
 
-  //--------------------------------------------------------------------------
   const renderView = () => {
-    switch (view) {
-      case View.Badge:
-        return <h1>Badge Edit view</h1>;
-      case View.Home:
-        return 'Home Vault View';
+    if (selectedBadge === null) {
+      if (tribeBadges.length === 0) {
+        return <h1>No Badges View</h1>;
+      }
+
+      return (
+        <h1>
+          No Badge Selected (for some reason) might never happend but still
+        </h1>
+      );
     }
+
+    return <BadgeView badge={selectedBadge} />;
   };
 
   return (
-    <div
-      className="relative z-10"
-      aria-labelledby="slide-over-title"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="w-full h-full bg-white">
-            <div className="px-4 sm:px-6 py-4 sm:py-6">
-              <div className="flex items-start justify-between">
-                <h2
-                  className="text-lg font-medium text-gray-900"
-                  id="slide-over-title"
-                >
-                  {tribe.name} <span className="font-extrabold">Badges</span>
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => back()}
-                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  <span className="sr-only">Close vault pannel</span>
-                  <svg
-                    className="h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <Query
-                api={`/core-api/tribe/${tribeID}/vault`}
-                options={{
-                  fetcher: () => ({
-                    badges: [],
-                  }),
-                }}
-                loader={<h1>TODO Vault Loader....</h1>}
-              >
-                {({ badges }: any) => {
-                  <div>
-                    {badges.length} TODO render tribe bar with badges and add
-                    new badge +<div>{renderView()}</div>
-                  </div>;
-                }}
-              </Query>
-            </div>
-          </div>
-        </div>
+    <Overlay title="Badges Managment" onClose={back}>
+      <div>
+        <Sidebar setSelectedBadge={setSelectedBadge} />
+        {renderView()}
       </div>
-    </div>
+    </Overlay>
   );
 };
 
-export default BadgesView;
+const BadgesViewProxy = () => {
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+
+  return (
+    <Query
+      api={`/core-api/tribe/${tribeID}/vault`}
+      options={{
+        fetcher: () => ({
+          badges: [],
+        }),
+      }}
+      loader={null}
+    >
+      {() => (
+        <div>
+          <BadgesView />
+        </div>
+      )}
+    </Query>
+  );
+};
+export default BadgesViewProxy;

@@ -1,21 +1,12 @@
-import { useState } from 'react';
+// types
+import type { TribeBadge } from 'tools/types/tribe';
 
-enum View {
-  Home,
+interface Props {
+  badge: TribeBadge;
 }
 
-const Badge = () => {
-  const [view, setView] = useState(View.Home);
-
-  //--------------------------------------------------------------------------
-  const renderView = () => {
-    switch (view) {
-      case View.Home:
-        return 'Home Badge View';
-    }
-  };
-
-  return <>{renderView()}</>;
+const BadgeView = ({ badge }: Props) => {
+  return <h1>TODO badge tabs and forms here {badge.name}</h1>;
 };
 
-export default Badge;
+export default BadgeView;

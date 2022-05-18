@@ -49,7 +49,7 @@
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.1",
     "meta-fetcher": "^3.1.1",
-    "nanoid": "^3.3.1",
+    "nanoid": "^3.3.4",
     "next": "^12.1.4",
     "next-compose-plugins": "^2.2.1",
     "next-plugin-preact": "^3.0.6",

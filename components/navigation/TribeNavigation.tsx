@@ -257,8 +257,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
 
-            {/* TODO Manage Badges */}
-            {false && (
+            {/* TODO check for isTribeOwnerOrTribeAdmin */}
+            {true && (
               <Link
                 aria-label="Tribe Badges"
                 href={`/tribes/${tribeID}/badges`}
