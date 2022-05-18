@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Fragment, useState, forwardRef } from 'react';
+import { Fragment, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 // api
@@ -168,34 +168,35 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 mt-2 w-60 origin-top-right divide-y divide-gray-700 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="px-1 py-1">
-                        {tribe.isUpgraded === true && (
-                          <Menu.Item>
-                            <div>
-                              <SparklesIcon className="w-5 mr-1" />
-                              Tribe Upgraded
-                            </div>
-                          </Menu.Item>
-                        )}
-
-                        {tribe.isUpgraded === false && (
-                          <Menu.Item>
-                            {({ active }) => (
-                              //@ts-ignore
-                              <MenuLink
-                                className={`${
-                                  active ? 'bg-gray-800' : ''
-                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
-                                href={`/tribes/${tribeID}/upgrade`}
-                                passHref
-                              >
+                      {false && (
+                        <div className="px-1 py-1">
+                          {tribe.isUpgraded === true && (
+                            <Menu.Item>
+                              <div>
                                 <SparklesIcon className="w-5 mr-1" />
-                                Upgrade Tribe
-                              </MenuLink>
-                            )}
-                          </Menu.Item>
-                        )}
-                      </div>
+                                Tribe Upgraded
+                              </div>
+                            </Menu.Item>
+                          )}
+
+                          {tribe.isUpgraded === false && (
+                            <Menu.Item>
+                              {({ active }) => (
+                                <MenuLink
+                                  className={`${
+                                    active ? 'bg-gray-800' : ''
+                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
+                                  href={`/tribes/${tribeID}/upgrade`}
+                                  passHref
+                                >
+                                  <SparklesIcon className="w-5 mr-1" />
+                                  Upgrade Tribe
+                                </MenuLink>
+                              )}
+                            </Menu.Item>
+                          )}
+                        </div>
+                      )}
 
                       <div className="px-1 py-1">
                         {canEdit === true && (
@@ -211,21 +212,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                                   Edit Tribe
                                 </div>
                               </>
-                            )}
-                          </Menu.Item>
-                        )}
-
-                        {canLeave && (
-                          <Menu.Item>
-                            {({ active }) => (
-                              <button
-                                onClick={handleLeaveTribe}
-                                className={`${
-                                  active ? 'bg-gray-800' : ''
-                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
-                              >
-                                Leave Tribe
-                              </button>
                             )}
                           </Menu.Item>
                         )}
@@ -248,11 +234,30 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           )}
                         </Menu.Item>
                       </div>
+
+                      {canLeave && (
+                        <div className="px-1 py-1">
+                          <Menu.Item>
+                            {({ active }) => (
+                              <button
+                                onClick={handleLeaveTribe}
+                                className={`${
+                                  active ? 'bg-gray-800' : ''
+                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                              >
+                                Leave Tribe
+                              </button>
+                            )}
+                          </Menu.Item>
+                        </div>
+                      )}
                     </Menu.Items>
                   </Transition>
                 </Menu>
               </a>
             </Link>
+
+            {/* TODO Manage Badges */}
             {false && (
               <Link aria-label="Tribe Vault" href={`/tribes/${tribeID}/vault`}>
                 <a

@@ -17,7 +17,7 @@ import { mintPassport } from 'api/passport';
 import { getShortWalletAddress } from 'utils/wallet';
 
 // hooks
-import { useUnreadAlerts } from 'wallet/hooks';
+import { useUnreadNotifications } from 'wallet/hooks';
 
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
@@ -38,14 +38,14 @@ interface Props {
   onDeposit: () => void;
   onSelectToken: (token: Token) => void;
   onViewHistory: () => void;
-  onViewAlerts: () => void;
+  onViewNotifications: () => void;
 }
 
 const Home = ({
   onDeposit,
   onSelectToken,
   onViewHistory,
-  onViewAlerts,
+  onViewNotifications,
 }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
@@ -59,7 +59,7 @@ const Home = ({
   const { me } = useAuth();
   const { walletAPI } = useWeb3();
   const [_, copyToClipboard] = useCopyToClipboard();
-  const { count } = useUnreadAlerts();
+  const { count } = useUnreadNotifications();
 
   const handleGetTokens = useCallback(async () => {
     setError(null);
@@ -195,14 +195,14 @@ const Home = ({
                       {({ active }) => (
                         <div className="relative">
                           <button
-                            onClick={onViewAlerts}
+                            onClick={onViewNotifications}
                             className={`${
                               active
                                 ? 'bg-primary-200 text-white'
                                 : 'text-gray-900'
                             } group flex w-full items-center p-2 text-sm rounded-md`}
                           >
-                            Alerts
+                            Notifications
                             <RedDot animate={false} count={count} />
                           </button>
                         </div>

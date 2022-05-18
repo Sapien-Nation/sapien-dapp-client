@@ -1,12 +1,18 @@
 import { forwardRef } from 'react';
 import Link from 'next/link';
 
-const MenuLink = forwardRef((props, ref) => {
-  // @ts-ignore
+// types
+import type { LinkProps } from 'next/link';
+
+interface Props extends LinkProps {
+  children: React.ReactNode;
+  className: string;
+}
+
+const MenuLink = forwardRef<HTMLAnchorElement, Props>((props, ref) => {
   let { href, children, ...rest } = props;
   return (
     <Link href={href}>
-      {/* @ts-ignore */}
       <a ref={ref} {...rest}>
         {children}
       </a>
