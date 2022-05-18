@@ -282,7 +282,7 @@ const Feed = ({
         createdAt: new Date().toISOString(),
         id: nanoid(),
         sender: {
-          avatar: me.avatat || passport.image,
+          avatar: me.avatar || passport.image,
           id: me.id,
           username: me.username,
         },
