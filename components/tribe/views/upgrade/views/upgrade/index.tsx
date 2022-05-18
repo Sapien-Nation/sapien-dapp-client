@@ -16,7 +16,6 @@ import { useAuth } from 'context/user';
 
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
-import { mockTribeMember } from 'tools/mocks/tribe';
 
 enum View {
   Confirm,
@@ -265,16 +264,7 @@ const UpgradeViewProxy = () => {
   const tribeID = query.tribeID as string;
 
   return (
-    <Query
-      api={`/core-api/tribe/${tribeID}/members`}
-      options={{
-        fetcher: () => [
-          mockTribeMember(),
-          mockTribeMember({ displayName: 'Ethaanpump', id: '2000' }),
-          mockTribeMember({ displayName: 'Carlos', id: '3000' }),
-        ],
-      }}
-    >
+    <Query api={`/core-api/tribe/${tribeID}/members`}>
       {() => {
         return <UpgradeView />;
       }}
