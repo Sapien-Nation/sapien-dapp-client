@@ -4,7 +4,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, forwardRef } from 'react';
 import { useSWRConfig } from 'swr';
 
 // api
@@ -19,7 +19,7 @@ import {
   CreateChannelDialog,
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
-import { Query, RedDot } from 'components/common';
+import { MenuLink, Query, RedDot } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
@@ -167,8 +167,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 mt-2 w-60 origin-top-right divide-y divide-gray-100 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <div className="px-1 py-1 ">
+                    <Menu.Items className="absolute right-0 mt-2 w-60 origin-top-right divide-y divide-gray-700 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <div className="px-1 py-1">
                         {tribe.isUpgraded === true && (
                           <Menu.Item>
                             <div>
@@ -181,25 +181,23 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         {tribe.isUpgraded === false && (
                           <Menu.Item>
                             {({ active }) => (
-                              <Link
+                              //@ts-ignore
+                              <MenuLink
+                                className={`${
+                                  active ? 'bg-gray-800' : ''
+                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
                                 href={`/tribes/${tribeID}/upgrade`}
                                 passHref
                               >
-                                <a
-                                  className={`${
-                                    active ? 'bg-gray-800' : ''
-                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
-                                >
-                                  <SparklesIcon className="w-5 mr-1" />
-                                  Upgrade Tribe
-                                </a>
-                              </Link>
+                                <SparklesIcon className="w-5 mr-1" />
+                                Upgrade Tribe
+                              </MenuLink>
                             )}
                           </Menu.Item>
                         )}
                       </div>
 
-                      <div>
+                      <div className="px-1 py-1">
                         {canEdit === true && (
                           <Menu.Item>
                             {({ active }) => (
