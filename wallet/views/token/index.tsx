@@ -240,8 +240,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
             {/* Dialogs */}
             {dialog === Dialog.DeclarationOfSovereignty && (
               <DeclarationOfSovereigntyDialog
-                onClose={(event) => {
-                  event.stopPropagation();
+                onClose={() => {
                   setDialog(null);
                 }}
               />

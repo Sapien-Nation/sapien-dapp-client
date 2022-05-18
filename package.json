@@ -47,6 +47,7 @@
     "linkify-react": "^3.0.4",
     "linkifyjs": "^3.0.5",
     "lodash": "^4.17.21",
+    "match-sorter": "^6.3.1",
     "meta-fetcher": "^3.1.1",
     "nanoid": "^3.3.1",
     "next": "^12.1.4",

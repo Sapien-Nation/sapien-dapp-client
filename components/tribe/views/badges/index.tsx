@@ -12,7 +12,7 @@ enum View {
   Home,
 }
 
-const VaultView = () => {
+const BadgesView = () => {
   const [view] = useState(View.Home);
 
   const { back, query } = useRouter();
@@ -47,7 +47,7 @@ const VaultView = () => {
                   className="text-lg font-medium text-gray-900"
                   id="slide-over-title"
                 >
-                  {tribe.name} <span className="font-extrabold">Vault</span>
+                  {tribe.name} <span className="font-extrabold">Badges</span>
                 </h2>
                 <button
                   type="button"
@@ -96,4 +96,4 @@ const VaultView = () => {
   );
 };
 
-export default VaultView;
+export default BadgesView;

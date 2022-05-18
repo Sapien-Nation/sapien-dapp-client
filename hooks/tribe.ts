@@ -6,7 +6,7 @@ import { View } from 'constants/tribe';
 import { ContentMimeType, ContentType } from 'tools/constants/content';
 
 // types
-import type { ProfileTribe } from 'tools/types/tribe';
+import type { ProfileTribe, TribeMember } from 'tools/types/tribe';
 import type { Content } from 'tools/types/content';
 
 interface CurrentView {
@@ -81,6 +81,12 @@ export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
   return cache.get('/core-api/profile/tribes').find(({ id }) => id === tribeID);
+};
+
+export const useTribeMembers = (tribeID: string): Array<TribeMember> => {
+  const { cache } = useSWRConfig();
+
+  return cache.get(`/core-api/tribe/${tribeID}/members`);
 };
 
 export const useMainTribe = (): {
@@ -160,9 +166,9 @@ export const useGetCurrentView = (
       id: 'passport',
     },
     {
-      type: View.Vault,
-      name: 'vault',
-      id: 'vault',
+      type: View.Badges,
+      name: 'badges',
+      id: 'badges',
     },
     {
       type: View.Upgrade,

@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-
 import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 interface Props {
   code?: number;

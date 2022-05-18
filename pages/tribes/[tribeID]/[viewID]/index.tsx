@@ -9,12 +9,12 @@ import { View } from 'constants/tribe';
 // components
 import { SEO, ErrorView, NotFound, Query } from 'components/common';
 import {
+  BadgesView,
   Channel,
   ContentView,
   MainChannel,
   RoomView,
   UpgradeView,
-  VaultView,
 } from 'components/tribe';
 const PassportView = dynamic(() =>
   import('components/tribe').then((views) => views.PassportView)
@@ -36,8 +36,8 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
   const renderView = () => {
     switch (view.type) {
-      case View.Vault:
-        return <VaultView />;
+      case View.Badges:
+        return <BadgesView />;
       case View.Passport:
         return <PassportView />;
       case View.Content:
