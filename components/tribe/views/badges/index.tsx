@@ -68,11 +68,7 @@ const BadgesViewProxy = () => {
       }}
       loader={null}
     >
-      {() => (
-        <div>
-          <BadgesView />
-        </div>
-      )}
+      {() => <BadgesView />}
     </Query>
   );
 };

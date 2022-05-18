@@ -24,7 +24,7 @@ const UpgradeViewProxy = () => {
 
   const tribeID = query.tribeID as string;
 
-  const { name, isUpgraded, role } = useTribe(tribeID);
+  const { isUpgraded, role } = useTribe(tribeID);
 
   if (isUpgraded === true) {
     if (role === Role.Owner || role === Role.Admin) {

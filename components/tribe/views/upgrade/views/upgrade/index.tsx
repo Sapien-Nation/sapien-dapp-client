@@ -11,6 +11,9 @@ import { upgradeTribe } from 'api/tribe';
 // components
 import { Query } from 'components/common';
 
+// context
+import { useAuth } from 'context/user';
+
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
 import { mockTribeMember } from 'tools/mocks/tribe';
@@ -29,10 +32,13 @@ const UpgradeView = () => {
   const [selectedOwners, setSelectedOwners] = useState([]);
   const [approvalsCount, setApprovalsCount] = useState(0);
 
+  const { me } = useAuth();
   const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
-  const tribeMembers = useTribeMembers(tribeID);
+  const tribeMembers = useTribeMembers(tribeID).filter(
+    ({ id }) => id !== me.id
+  );
 
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
@@ -110,7 +116,7 @@ const UpgradeView = () => {
             <div className="py-4 flex gap-4">
               <button
                 type="button"
-                onClick={() => push(`/tribes/${tribeID}/home`)}
+                onClick={() => setView(View.Owners)}
                 className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Back
@@ -189,9 +195,10 @@ const UpgradeView = () => {
               {matchSorter(tribeMembers, searchTerm, {
                 keys: ['displayName'],
               }).map((member) => {
-                const isSelected = Boolean(
-                  selectedOwners.find(({ id }) => id === member.id)
+                const isSelected = selectedOwners.find(
+                  ({ id }) => id === member.id
                 );
+
                 return (
                   <div key={member.id}>
                     <span>{member.displayName}</span>
@@ -213,7 +220,9 @@ const UpgradeView = () => {
                 );
               })}
               <div>
-                {selectedOwners.length} Members will receive the owner badge
+                {selectedOwners.length === tribeMembers.length
+                  ? `All the ${tribeMembers.length} of the Tribe will recive the owner badge`
+                  : `${tribeMembers.length} Members will receive the owner badge`}
               </div>
             </div>
             <div className="py-4 flex gap-4">
@@ -261,8 +270,8 @@ const UpgradeViewProxy = () => {
       options={{
         fetcher: () => [
           mockTribeMember(),
-          mockTribeMember({ displayName: 'Ethaanpump' }),
-          mockTribeMember({ displayName: 'Carlos' }),
+          mockTribeMember({ displayName: 'Ethaanpump', id: '2000' }),
+          mockTribeMember({ displayName: 'Carlos', id: '3000' }),
         ],
       }}
     >

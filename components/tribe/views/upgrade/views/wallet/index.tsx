@@ -69,8 +69,6 @@ const Wallet = () => {
     setError(null);
 
     try {
-      // TODO remove this when we are ready to sign passport
-      // when do we are ready? when the UI is done
       // await signPassport(selectedToken.id);
 
       mutate(
