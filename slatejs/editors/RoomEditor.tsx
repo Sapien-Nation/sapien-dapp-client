@@ -385,6 +385,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                 onKeyDown={onKeyDown}
                 placeholder={`Leave a message on ${name}`}
                 className="max-w-250 w-full py-2 break-all"
+                style={{ cursor: 'text' }}
                 {...slateProps}
               />
             </Slate>

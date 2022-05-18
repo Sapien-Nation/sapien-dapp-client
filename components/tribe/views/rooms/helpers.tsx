@@ -25,7 +25,7 @@ export const renderContent = (
           if (user) {
             return (
               <>
-                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
                   {' '}
                   @{user.username}
                 </span>{' '}
@@ -34,7 +34,7 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
                   {' '}
                   @{userID.replaceAll('-', '')}
                 </span>{' '}
@@ -50,7 +50,7 @@ export const renderContent = (
             return (
               <>
                 <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                  <a className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                  <a className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
                     {' '}
                     # {room.name}
                   </a>
@@ -60,7 +60,7 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="p-1 align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
                   {' '}
                   # deleted_room
                 </span>{' '}

@@ -11,7 +11,7 @@ const UserMention = ({ attributes, children, element }) => {
         contentEditable={false}
         className={`${
           selected && focused ? 'shadow-md' : 'none'
-        } p-1 mx-1 align-baseline inline-block rounded bg-sapien text-white text-extrabold text-xs`}
+        } px-0.5 mx-1 align-baseline inline-block font-semibold rounded-sm bg-sapien text-white text-xs`}
       >
         @{element.member.label}
         {children}
