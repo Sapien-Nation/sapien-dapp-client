@@ -17,3 +17,6 @@ export { default as Tooltip } from './Tooltip';
 export { default as Search } from './Search';
 export { default as Page } from './Page';
 export { default as Query } from './Query';
+
+// types
+export type { Props as DialogProps } from './Dialog';

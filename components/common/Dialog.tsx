@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 
-interface Props {
+export interface Props {
   actions?: React.ReactElement;
   bgOpacity?: string;
   cancelLabel?: string;

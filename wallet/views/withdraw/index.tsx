@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { isAddress } from 'web3-utils';
 
 // components
-import WithdrawConfirmationDialog from 'wallet/dialog/WithdrawConfirmationDialog';
+import { WithdrawConfirmationDialog } from 'wallet/views/dialogs';
 
 // constants
 import { ErrorTypes } from 'wallet/constants';
