@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, BadgeCheckIcon } from '@heroicons/react/outline';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useSWRConfig } from 'swr';
 
 // api
@@ -12,7 +12,7 @@ import { useAuth } from 'context/user';
 import { PassportStatus } from 'tools/constants/user';
 
 // components
-import { Query } from 'components/common';
+import { Query, Tooltip } from 'components/common';
 
 // helpers
 import { getShortWalletAddress } from 'utils/wallet';
@@ -37,6 +37,7 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
   const [view, setView] = useState(View.Home);
   const [signError, setSignError] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const tooltipRef = useRef(null);
 
   const { me } = useAuth();
   const { mutate } = useSWRConfig();
@@ -137,10 +138,12 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
               <p>TODO: Declaration</p>
               <span>I agree to uphold the values of the Sapien Nation</span>
               <input
-                disabled
-                className="appearance-none block w-full px-3 py-2 border bg-gray-500 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm cursor-not-allowed text-center"
+                readOnly
+                ref={tooltipRef.current?.setTriggerRef}
+                className="appearance-none block w-full px-3 py-2 border bg-gray-500 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none sm:text-sm cursor-default text-center"
                 value={getShortWalletAddress(me.walletAddress)}
               />
+              <Tooltip ref={tooltipRef} text={me.walletAddress} />
               <button
                 type="button"
                 onClick={() => setView(View.ConfirmSign)}
