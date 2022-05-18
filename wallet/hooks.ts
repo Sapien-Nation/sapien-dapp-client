@@ -1,17 +1,16 @@
 import { useLocalStorage } from 'react-use';
 
 // constants
-import { alerts } from './constants';
+import { notifications } from './constants';
 
-export const useUnreadAlerts = () => {
-  const [readAlerts, setReadAlerts] = useLocalStorage<Array<Number>>(
-    'readAlerts',
-    []
-  );
+export const useUnreadNotifications = () => {
+  const [readedNotifications, setReadedNotifications] = useLocalStorage<
+    Array<Number>
+  >('readNotifications', []);
 
   return {
-    count: alerts.length - readAlerts.length,
-    readAlerts,
-    setReadAlerts,
+    count: notifications.length - readedNotifications.length,
+    readedNotifications,
+    setReadedNotifications,
   };
 };

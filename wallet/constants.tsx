@@ -6,7 +6,7 @@ export enum ErrorTypes {
   Success,
 }
 
-export const alerts = [
+export const notifications = [
   {
     createdAt: '2022-05-16T18:01:17.160Z',
     id: 1,
