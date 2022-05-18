@@ -29,6 +29,7 @@ enum View {
   ConfirmSign,
   Success,
   Token,
+  Tokens,
 }
 
 const Wallet = () => {
@@ -99,10 +100,12 @@ const Wallet = () => {
 
   const renderView = () => {
     if (web3Error) {
+      // https://sapienteam.atlassian.net/browse/PVD-223
       return <h1>Web3 Error!</h1>;
     }
 
     if (isWeb3Ready === false) {
+      // https://sapienteam.atlassian.net/browse/PVD-216
       return <h1>Web3 Loading</h1>;
     }
 
@@ -111,6 +114,9 @@ const Wallet = () => {
 
     switch (view) {
       case View.Home:
+        return <h1>https://sapienteam.atlassian.net/browse/PVD-211</h1>;
+      case View.Tokens:
+        // https://sapienteam.atlassian.net/browse/PVD-212
         return (
           <ol>
             {tokens.map((token) => (
@@ -137,6 +143,7 @@ const Wallet = () => {
           </ol>
         );
       case View.ConfirmSign:
+        // https://sapienteam.atlassian.net/browse/PVD-215
         return (
           <>
             <button onClick={() => setView(View.Home)}>Cancel</button>
@@ -173,8 +180,10 @@ const Wallet = () => {
           </>
         );
       case View.Success:
+        // https://sapienteam.atlassian.net/browse/PVD-217
         return <UpgradeView />;
       case View.DeclarationOfSovereignty:
+        // https://sapienteam.atlassian.net/browse/PVD-214
         return (
           <>
             <span>TODO DeclarationOfSovereignty</span>
@@ -195,6 +204,7 @@ const Wallet = () => {
           </>
         );
       case View.Token:
+        // https://sapienteam.atlassian.net/browse/PVD-213
         return (
           <>
             <button onClick={() => setView(View.Home)}>Go Back</button>

@@ -55,17 +55,21 @@ const UpgradeViewProxy = () => {
 
   if (me.passport?.status === PassportStatus.P) {
     return (
-      <Web3Provider>
-        <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-          <WalletView />
-        </div>
-      </Web3Provider>
+      <>
+        <SEO title="Upgrade" />
+        <h1 className="sr-only">Tribe Upgrade View</h1>
+        <Web3Provider>
+          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+            <WalletView />
+          </div>
+        </Web3Provider>
+      </>
     );
   }
 
   return (
     <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-      <SEO title={name} />
+      <SEO title="Upgrade" />
       <h1 className="sr-only">Tribe Upgrade View</h1>
       <UpgradeView />
     </div>
