@@ -282,7 +282,7 @@ const Feed = ({
         createdAt: new Date().toISOString(),
         id: nanoid(),
         sender: {
-          avatar: me.avatar || passport.image,
+          avatar: me.avatar || passport?.image,
           id: me.id,
           username: me.username,
         },
@@ -303,7 +303,7 @@ const Feed = ({
         optimisticMessage.id
       );
     } catch (err) {
-      toast({ message: err });
+      toast({ message: err.message || err });
     }
   };
 

@@ -114,6 +114,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       event.stopPropagation();
 
       const text = serialize(value);
+      if (!text?.trim()) return;
 
       onSubmit(text);
 
