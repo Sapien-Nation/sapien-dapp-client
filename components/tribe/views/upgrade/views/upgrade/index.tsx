@@ -167,6 +167,7 @@ const UpgradeView = () => {
               <select
                 id="approvals"
                 name="approvals"
+                value={threshold}
                 onChange={(event) => setThreshold(Number(event.target.value))}
                 className="rounded p-2 mt-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200 bg-sapien-neutral-500 border border-sapien-neutral-400 focus:border-primary-200 focus:ring-primary-200"
               >
