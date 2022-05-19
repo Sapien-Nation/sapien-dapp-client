@@ -3,10 +3,13 @@ import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
 import * as Sentry from '@sentry/nextjs';
 import { ethers } from 'ethers';
 
-export const createVault = async (
-  owners: Array<string>,
-  threshold: number
-): Promise<string> => {
+export const createVault = async ({
+  owners,
+  threshold,
+}: {
+  owners: Array<string>;
+  threshold: number;
+}): Promise<string> => {
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const safeOwner = provider.getSigner(0);

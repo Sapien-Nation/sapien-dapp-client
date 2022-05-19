@@ -22,6 +22,9 @@ import { useTribeMembers } from 'hooks/tribe';
 import { VaultIcon } from 'assets';
 import { BoostIcon, CrownIcon } from '../../assets';
 
+// web3
+import { createVault } from './web3';
+
 enum View {
   Confirm,
   Home,
@@ -32,9 +35,9 @@ enum View {
 
 const UpgradeView = () => {
   const [view, setView] = useState(View.Home);
+  const [threshold, setThreshold] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOwners, setSelectedOwners] = useState([]);
-  const [approvalsCount, setApprovalsCount] = useState(0);
 
   const { me } = useAuth();
   const { push, query } = useRouter();
@@ -47,7 +50,19 @@ const UpgradeView = () => {
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
     try {
-      await upgradeTribe(tribeID);
+      const safeAddress = await createVault({
+        owners: selectedOwners.map(({ walletAddress }) => walletAddress),
+        threshold,
+      });
+
+      await upgradeTribe(tribeID, {
+        safeAddress,
+        owners: selectedOwners.map(({ id, walletAddress }) => ({
+          id,
+          walletAddress,
+        })),
+        threshold,
+      });
       setView(View.Success);
     } catch (err) {
       setView(View.Confirm);
@@ -129,9 +144,7 @@ const UpgradeView = () => {
               <select
                 id="approvals"
                 name="approvals"
-                onChange={(event) =>
-                  setApprovalsCount(Number(event.target.value))
-                }
+                onChange={(event) => setThreshold(Number(event.target.value))}
                 className="rounded p-2 mt-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200 bg-sapien-neutral-500 border border-sapien-neutral-400 focus:border-primary-200 focus:ring-primary-200"
               >
                 {_range(1, selectedOwners.length + 1).map((val) => {
@@ -153,12 +166,10 @@ const UpgradeView = () => {
               </button>
               <button
                 type="button"
-                disabled={
-                  approvalsCount === 0 || approvalsCount > selectedOwners.length
-                }
+                disabled={threshold === 0 || threshold > selectedOwners.length}
                 onClick={handleUpgradeTribe}
                 className={
-                  approvalsCount === 0 || approvalsCount > selectedOwners.length
+                  threshold === 0 || threshold > selectedOwners.length
                     ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
                     : 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
                 }
