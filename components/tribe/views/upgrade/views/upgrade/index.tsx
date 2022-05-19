@@ -10,7 +10,7 @@ import { CheckIcon, SearchIcon, XIcon } from '@heroicons/react/outline';
 import { upgradeTribe } from 'api/tribe';
 
 // components
-import { Query } from 'components/common';
+import { Query, LottiePlayer } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -59,20 +59,24 @@ const UpgradeView = () => {
     switch (view) {
       case View.Success:
         return (
-          <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <div className="px-4 py-5 sm:px-6">
-              <h5 className="text-xl text-white font-bold tracking-wide text-center">
-                Tribe Upgraded
-              </h5>
-            </div>
-            <div className="px-4 py-5 sm:p-6">
-              <p className="text-lg text-white justify-center mt-3">
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
                 Congratulations!
-              </p>
+              </h1>
             </div>
-            <div className="py-4 flex gap-4">
+            <div className="bg-gradient-to-r to-sapien-dark-purple from-sapien-neutral-400 px-4 py-2 font-semibold text-lg mt-3 rounded-md text-center">
+              Tribe Upgraded Successfully!
+            </div>
+            <div className="flex flex-col items-center">
+              <LottiePlayer lottie="/lottie/UpgradeSuccess.json" />
+            </div>
+            <p className="mt-5 text-sm text-gray-300 text-center">
+              Click the button below to manage your badges.
+            </p>
+            <div className="py-4 flex justify-center">
               <Link href={`/tribes/${tribeID}/badges`} passHref>
-                <a className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                <a className="py-2 px-4 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
                   Manage Badges
                 </a>
               </Link>
@@ -306,7 +310,7 @@ const UpgradeView = () => {
               <p className="mt-5 text-sm text-gray-300">
                 {selectedOwners.length === tribeMembers.length ? (
                   <>
-                    All of the selected members will recive an{' '}
+                    All of the selected members will receive an{' '}
                     <span className="underline">owner</span> badge
                   </>
                 ) : (
