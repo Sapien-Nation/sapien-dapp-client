@@ -171,7 +171,7 @@ const Home = ({
               </div>
             </Menu.Button>
             <Transition>
-              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-700 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                 {' '}
                 <div className="">
                   <div className="px-1 py-1">
@@ -180,10 +180,8 @@ const Home = ({
                         <button
                           onClick={onViewHistory}
                           className={`${
-                            active
-                              ? 'bg-primary-200 text-white'
-                              : 'text-gray-900'
-                          } group flex w-full items-center p-2 text-sm rounded-md`}
+                            active ? 'bg-gray-800' : ''
+                          } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
                         >
                           View History
                         </button>
@@ -198,10 +196,8 @@ const Home = ({
                           <button
                             onClick={onViewNotifications}
                             className={`${
-                              active
-                                ? 'bg-primary-200 text-white'
-                                : 'text-gray-900'
-                            } group flex w-full items-center p-2 text-sm rounded-md`}
+                              active ? 'bg-gray-800' : ''
+                            } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
                           >
                             <span className="mr-1">Notifications</span>
                             <RedDot animate={false} count={count} />

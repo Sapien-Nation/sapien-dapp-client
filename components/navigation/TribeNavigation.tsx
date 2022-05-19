@@ -202,16 +202,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         {canEdit === true && (
                           <Menu.Item>
                             {({ active }) => (
-                              <>
-                                <div
-                                  onClick={() => {
-                                    setDialog(Dialog.EditTribe);
-                                  }}
-                                  className="text-sm cursor-pointer hover:bg-sapien-neutral-600 text-white p-2 rounded flex justify-between normal-case"
-                                >
-                                  Edit Tribe
-                                </div>
-                              </>
+                              <button
+                                onClick={() => {
+                                  setDialog(Dialog.EditTribe);
+                                }}
+                                className={`${
+                                  active ? 'bg-gray-800' : ''
+                                } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                              >
+                                Edit Tribe
+                              </button>
                             )}
                           </Menu.Item>
                         )}
