@@ -209,16 +209,25 @@ const Wallet = () => {
         );
       case View.Tokens:
         return (
-          <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <div className="px-4 py-5 sm:px-6">
-              <h5 className="text-xl text-white font-bold tracking-wide text-center">
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              {isFetchingTokens ? (
+                <RefreshIcon className="w-12 animate-spin" />
+              ) : null}
+              <h1
+                className={
+                  isFetchingTokens
+                    ? 'text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100'
+                    : 'text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2'
+                }
+              >
                 {isFetchingTokens
                   ? 'Loading Tokens...'
-                  : 'This are the tokens we found on your Sapien Wallet'}
-              </h5>
+                  : 'Sapien Wallet Tokens'}
+              </h1>
             </div>
-            <div className="px-4 py-5 sm:p-6">
-              <ol>
+            <div className="mt-6">
+              <ol className="flex flex-wrap gap-5">
                 {tokens.map((token) => (
                   <li
                     key={token.name}
@@ -231,12 +240,10 @@ const Wallet = () => {
                   >
                     <>
                       {token.id === null ? (
-                        <>
-                          <PhotographIcon className="px-1 py-1 w-6" />
-                        </>
+                        <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
                       ) : (
                         <img
-                          className="rounded-full w-32 h-32 cursor-pointer"
+                          className="rounded-full w-16 h-16 cursor-pointer object-cover"
                           src={token.image}
                           alt=""
                         />
