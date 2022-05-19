@@ -55,6 +55,27 @@ const UpgradeView = () => {
     }
   };
 
+  const renderHelperText = () => {
+    if (selectedOwners.length === 0) return null;
+
+    if (selectedOwners.length === tribeMembers.length) {
+      return (
+        <>
+          All of the members of the tribe will receive an{' '}
+          <span className="underline">owner</span> badge
+        </>
+      );
+    }
+
+    return (
+      <>
+        <span className="text-bold">{selectedOwners.length}</span> Member(s)
+        will receive an{' '}
+        <span className="underline decoration-white">owner</span> badge
+      </>
+    );
+  };
+
   const renderView = () => {
     switch (view) {
       case View.Success:
@@ -307,21 +328,7 @@ const UpgradeView = () => {
                   </div>
                 </div>
               </div>
-              <p className="mt-5 text-sm text-gray-300">
-                {selectedOwners.length === tribeMembers.length ? (
-                  <>
-                    All of the selected members will receive an{' '}
-                    <span className="underline">owner</span> badge
-                  </>
-                ) : (
-                  <>
-                    <span className="text-bold">{tribeMembers.length}</span>{' '}
-                    Member(s) will receive an{' '}
-                    <span className="underline decoration-white">owner</span>{' '}
-                    badge
-                  </>
-                )}
-              </p>
+              <p className="mt-5 text-sm text-gray-300">{renderHelperText()}</p>
             </div>
             <div className="mb-4 mt-6 flex gap-10 justify-center">
               <button
