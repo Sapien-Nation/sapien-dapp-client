@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import _range from 'lodash/range';
 import { useState } from 'react';
+import Lottie from 'react-lottie-player';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { matchSorter } from 'match-sorter';
@@ -10,7 +11,7 @@ import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { upgradeTribe } from 'api/tribe';
 
 // components
-import { Query, LottiePlayer } from 'components/common';
+import { Query } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -19,8 +20,10 @@ import { useAuth } from 'context/user';
 import { useTribeMembers } from 'hooks/tribe';
 
 // assets
-import { VaultIcon } from 'assets';
-import { CrownIcon } from '../../assets';
+import AssignOwnersJSONLottie from '../lottie/AssignOwners.json';
+import CreateVaultJSONLottie from '../lottie/CreateVault.json';
+import UpgradeTribeJSONLottie from '../lottie/UpgradeTribe.json';
+import UpgradeSuccessJSONLottie from '../lottie/UpgradeSuccess.json';
 
 // web3
 import { createVault } from './web3';
@@ -107,7 +110,7 @@ const UpgradeView = () => {
       case View.Success:
         return (
           <div>
-            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
               <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
                 Congratulations!
               </h1>
@@ -116,7 +119,11 @@ const UpgradeView = () => {
               Tribe Upgraded Successfully!
             </div>
             <div className="flex flex-col items-center">
-              <LottiePlayer lottie="/lottie/UpgradeSuccess.json" />
+              <Lottie
+                animationData={UpgradeSuccessJSONLottie}
+                play
+                className="w-52 h-52"
+              />
             </div>
             <p className="mt-5 text-sm text-gray-300 text-center">
               Click the button below to manage your badges.
@@ -133,11 +140,11 @@ const UpgradeView = () => {
       case View.Confirm:
         return (
           <div>
-            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <LottiePlayer
-                lottie="/lottie/CreateVault.json"
-                width="200px"
-                height="200px"
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
+              <Lottie
+                animationData={CreateVaultJSONLottie}
+                play
+                className="w-52 h-52"
               />
               <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
                 Create Vault
@@ -201,11 +208,11 @@ const UpgradeView = () => {
       case View.Home:
         return (
           <div>
-            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <LottiePlayer
-                lottie="/lottie/UpgradeTribe.json"
-                width="200px"
-                height="200px"
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
+              <Lottie
+                animationData={UpgradeTribeJSONLottie}
+                play
+                className="w-52 h-52"
               />
               <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center decoration-double decoration-gray-500 decoration-2">
                 Upgrade Tribe
@@ -276,11 +283,11 @@ const UpgradeView = () => {
       case View.Owners:
         return (
           <div>
-            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <LottiePlayer
-                lottie="/lottie/AssignOwners.json"
-                width="200px"
-                height="200px"
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
+              <Lottie
+                animationData={AssignOwnersJSONLottie}
+                play
+                className="w-52 h-52"
               />
               <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center ">
                 Assign Owners
@@ -437,9 +444,7 @@ const UpgradeViewProxy = () => {
 
   return (
     <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => {
-        return <UpgradeView />;
-      }}
+      {() => <UpgradeView />}
     </Query>
   );
 };

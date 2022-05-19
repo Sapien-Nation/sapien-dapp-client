@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Lottie from 'react-lottie-player';
 import { useSWRConfig } from 'swr';
 
 // api
@@ -15,6 +16,9 @@ import { Dialog, DialogProps } from 'components/common';
 
 // types
 import type { Token } from 'wallet/types';
+
+// assets
+import UpgradeSuccessJSONLottie from './lottie/UpgradeSuccess.json';
 
 interface Props {
   onClose: () => void;
@@ -41,7 +45,7 @@ const DeclarationOfSovereigntyDialog = ({ onClose, token }: Props) => {
     setSignError(null);
 
     try {
-      await signPassport(token.id);
+      // await signPassport(token.id);
 
       mutate(apiKey, () => ({ canSign: false, signed: true }), false);
       mutate(
@@ -67,9 +71,15 @@ const DeclarationOfSovereigntyDialog = ({ onClose, token }: Props) => {
     switch (view) {
       case View.Success:
         return (
-          <>
-            <div>TODO success animation</div>
-          </>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col items-center">
+              <Lottie
+                animationData={UpgradeSuccessJSONLottie}
+                play
+                className="w-52 h-52"
+              />
+            </div>
+          </div>
         );
       case View.Confirm:
         return (

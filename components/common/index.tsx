@@ -10,7 +10,6 @@ export { default as Dropdown } from './Dropdown';
 export { default as MenuLink } from './MenuLink';
 export { default as SEO } from './SEO';
 export { default as InputField } from './fields/TextInput';
-export { default as LottiePlayer } from './LottiePlayer';
 export { default as Redirect } from './Redirect';
 export { default as Overlay } from './Overlay';
 export { default as Tooltip } from './Tooltip';
