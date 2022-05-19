@@ -12,6 +12,12 @@ export interface CreateTribeBody {
   name: string;
 }
 
+export interface UpgradeTribeBody {
+  safeAddress: string;
+  threshold: number;
+  owners: Array<{ id: string; walletAddress: string }>;
+}
+
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
   axios
     .post('/core-api/tribe', body)
@@ -51,7 +57,7 @@ export const readAllTribeNotifications = (tribeID: string) =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const upgradeTribe = (tribeID: string) =>
+export const upgradeTribe = (tribeID: string, body: UpgradeTribeBody) =>
   axios
     .post(`/core-api/tribe/${tribeID}/upgrade`)
     .then(({ data }) => data)
