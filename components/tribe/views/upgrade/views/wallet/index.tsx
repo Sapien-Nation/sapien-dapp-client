@@ -135,16 +135,15 @@ const Wallet = () => {
 
     if (isWeb3Ready === false) {
       return (
-        <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6">
-            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
-              Loading Sapien Wallet API tools{' '}
-              <span className="animate-pulse">...</span>
-              <RefreshIcon className="w-5 animate-spin" />
-            </h5>
+        <div>
+          <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+            <RefreshIcon className="w-12 animate-spin" />
+            <h1 className="text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100">
+              Loading Sapien Wallet API tools...
+            </h1>
           </div>
-          <div className="px-4 py-5 sm:p-6">
-            <p className="text-lg text-white grid gap-4 items-center justify-center mt-6">
+          <div>
+            <p className="text-lg grid gap-4 items-center justify-center text-gray-300">
               Bring the bananas, and leave the APIs to us 🙉.
             </p>
           </div>
