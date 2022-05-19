@@ -35,7 +35,7 @@ enum View {
 
 const UpgradeView = () => {
   const [view, setView] = useState(View.Home);
-  const [threshold, setThreshold] = useState(0);
+  const [threshold, setThreshold] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOwners, setSelectedOwners] = useState([]);
 
@@ -70,13 +70,13 @@ const UpgradeView = () => {
     }
   };
 
-  const renderHelperText = () => {
+  const renderOwnersHelperText = () => {
     if (selectedOwners.length === 0) return null;
 
     if (selectedOwners.length === tribeMembers.length) {
       return (
         <>
-          All of the members of the tribe will receive an{' '}
+          All tribe members will receive an{' '}
           <span className="underline">Owner</span> badge
         </>
       );
@@ -87,6 +87,17 @@ const UpgradeView = () => {
         <span className="text-bold">{selectedOwners.length}</span> Member(s)
         will receive an{' '}
         <span className="underline decoration-white">Owner</span> badge
+      </>
+    );
+  };
+
+  const renderConfirmHelperText = () => {
+    return (
+      <>
+        <span className="text-bold">
+          {threshold} out of {selectedOwners.length} owners must sign every
+          transaction.
+        </span>
       </>
     );
   };
@@ -123,15 +134,20 @@ const UpgradeView = () => {
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <VaultIcon fill="white" className="w-12 animate-pulse" />
-              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
+              <LottiePlayer
+                lottie="/lottie/CreateVault.json"
+                width="200px"
+                height="200px"
+              />
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
                 Create Vault
               </h1>
             </div>
             <div>
               <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
                 Vault transactions must be approved by owners, how many
-                approvals do you want to require? This can be updated later.
+                approvals do you want to require? This can also be updated
+                later.
               </p>
             </div>
             <div>
@@ -156,6 +172,9 @@ const UpgradeView = () => {
                 })}
               </select>
             </div>
+            <p className="mt-5 text-sm text-gray-300">
+              {renderConfirmHelperText()}
+            </p>
             <div className="mb-4 mt-6 flex gap-10 justify-center">
               <button
                 type="button"
@@ -368,7 +387,9 @@ const UpgradeView = () => {
                   </div>
                 </div>
               </div>
-              <p className="mt-5 text-sm text-gray-300">{renderHelperText()}</p>
+              <p className="mt-5 text-sm text-gray-300">
+                {renderOwnersHelperText()}
+              </p>
             </div>
             <div className="mb-4 mt-6 flex gap-10 justify-center">
               <button
