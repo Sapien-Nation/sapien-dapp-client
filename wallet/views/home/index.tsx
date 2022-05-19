@@ -202,7 +202,7 @@ const Home = ({
                                 : 'text-gray-900'
                             } group flex w-full items-center p-2 text-sm rounded-md`}
                           >
-                            Notifications
+                            <span className="mr-1">Notifications</span>
                             <RedDot animate={false} count={count} />
                           </button>
                         </div>

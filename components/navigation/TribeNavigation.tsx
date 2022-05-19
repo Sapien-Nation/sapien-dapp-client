@@ -357,7 +357,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         className="flex px-2 py-1 my-1 items-center gap-2"
                         onClick={handleMobileMenu}
                       >
-                        <div className="flex">
+                        <div className="flex gap-1">
                           # {name} <RedDot count={unreads} />
                         </div>
                       </a>
