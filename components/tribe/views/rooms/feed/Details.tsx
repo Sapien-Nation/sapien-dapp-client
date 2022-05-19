@@ -24,7 +24,7 @@ const Details = ({ handleSidebar }) => {
     if (avatar) {
       return (
         <img
-          className="w-10 h-10 rounded-full flex-shrink-0"
+          className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
           src={avatar}
           alt=""
         />
