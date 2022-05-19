@@ -298,7 +298,10 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
   return (
     <>
-      <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
+      <div
+        className="flex items-center w-full bg-sapien-neutral-600 shadow px-6 py-6 relative cursor-default"
+        style={{ borderRadius: '0.75rem 0.75rem 0 0' }}
+      >
         {renderFloatMenu()}
 
         {/* Avatar */}
