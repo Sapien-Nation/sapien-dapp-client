@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { matchSorter } from 'match-sorter';
+import { CheckIcon } from '@heroicons/react/outline';
 
 // api
 import { upgradeTribe } from 'api/tribe';
@@ -16,6 +17,9 @@ import { useAuth } from 'context/user';
 
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
+
+// assets
+import BoostIcon from '../../assets/Boost';
 
 enum View {
   Confirm,
@@ -135,36 +139,48 @@ const UpgradeView = () => {
         );
       case View.Home:
         return (
-          <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <div className="px-4 py-5 sm:px-6">
-              <h5 className="text-xl text-white font-bold tracking-wide text-center">
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              <BoostIcon fill="white" className="w-12 animate-pulse" />
+              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
                 Upgrade Tribe
-              </h5>
+              </h1>
             </div>
-            <div className="px-4 py-5 sm:p-6">
-              <p className="text-lg text-white justify-center mt-3">
+            <div>
+              <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
                 To upgrade your tribe you must have a signed Sapien Nation
                 Passport. Your passport will be permanently linked to your tribe
                 after it is upgraded. After your Tribe is upgraded you will
                 receive access to the following benefits:
               </p>
-              <ol>
-                <li>Vault Creation</li>
-                <li>Issue Badges</li>
+              <div className="bg-gradient-to-r to-sapien-dark-purple from-sapien-neutral-400 px-4 py-2 font-semibold text-lg mt-3">
+                Benefits
+              </div>
+              <ol className="text-gray-300 bg-black p-4 space-y-1.5">
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Vault Creation
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Issue Badges
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Early Access
+                  Features
+                </li>
               </ol>
             </div>
-            <div className="py-4 flex gap-4">
+            <div className="mb-4 mt-6 flex gap-10 justify-center">
               <button
                 type="button"
                 onClick={() => push(`/tribes/${tribeID}/home`)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => setView(View.Owners)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Start
               </button>
@@ -251,11 +267,7 @@ const UpgradeView = () => {
     }
   };
 
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">{renderView()}</div>
-    </div>
-  );
+  return <div className="max-w-2xl mx-auto">{renderView()}</div>;
 };
 
 const UpgradeViewProxy = () => {
