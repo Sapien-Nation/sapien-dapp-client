@@ -66,7 +66,7 @@ const BadgesViewProxy = () => {
   const { role, isUpgraded } = useTribe(tribeID);
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
 
-  if (isUpgraded === false) {
+  if (false) {
     return (
       <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
         <div className="absolute inset-0">
