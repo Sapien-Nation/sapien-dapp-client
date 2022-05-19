@@ -119,7 +119,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             <span className="sr-only">Go to Explore</span>
           </a>
         </Link>
-        <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" />
+        <Tooltip ref={tooltipRef} text="Discover new Sapien Tribes" />
         <div>
           <button
             onClick={() => {
