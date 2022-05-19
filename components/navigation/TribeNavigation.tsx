@@ -48,6 +48,7 @@ enum Dialog {
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+  const [isFetching, setIsFetching] = useState(false);
 
   const { mutate } = useSWRConfig();
   const { asPath, query } = useRouter();
@@ -71,9 +72,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const hasRoomsNotifications = rooms.some(({ unreads }) => Boolean(unreads));
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
 
-  const handleReadAllRooms = async () => {
+  const handleReadAll = async (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    setIsFetching(true);
     try {
-      await readAllTribeNotifications(tribeID as string);
+      // TODO fix this
+      // await readAllTribeNotifications(tribeID as string);
 
       mutate(
         '/core-api/profile/tribes',
@@ -95,6 +101,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
     } catch (err) {
       Sentry.captureMessage(err);
     }
+    setIsFetching(false);
   };
 
   const handleLeaveTribe = async () => {
@@ -219,8 +226,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              disabled={!hasRoomsNotifications}
-                              onClick={handleReadAllRooms}
+                              disabled={!hasRoomsNotifications || isFetching}
+                              onClick={handleReadAll}
                               className={`${
                                 active ? 'bg-gray-800' : ''
                               } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-white ${
@@ -229,7 +236,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                                   : 'cursor-not-allowed'
                               }`}
                             >
-                              Read all
+                              Mark all as read
                             </button>
                           )}
                         </Menu.Item>

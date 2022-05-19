@@ -53,7 +53,7 @@ export const leaveTribe = (tribeID: string) =>
 
 export const readAllTribeNotifications = (tribeID: string) =>
   axios
-    .post(`/core-api/tribe/${tribeID}/readAll`)
+    .post(`/core-api/notification/tribe/${tribeID}/read`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
