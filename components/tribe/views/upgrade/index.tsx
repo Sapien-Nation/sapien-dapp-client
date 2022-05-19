@@ -25,7 +25,7 @@ const UpgradeViewPage = () => {
   const tribeID = query.tribeID as string;
 
   const { isUpgraded, role } = useTribe(tribeID);
-
+  /*
   if (isUpgraded === true) {
     if (role === Role.Owner || role === Role.Admin) {
       return (
@@ -66,7 +66,7 @@ const UpgradeViewPage = () => {
       </>
     );
   }
-
+*/
   return (
     <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
       <SEO title="Upgrade" />

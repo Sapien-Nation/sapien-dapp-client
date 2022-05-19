@@ -20,7 +20,7 @@ import { useTribeMembers } from 'hooks/tribe';
 
 // assets
 import { VaultIcon } from 'assets';
-import { BoostIcon, CrownIcon } from '../../assets';
+import { CrownIcon } from '../../assets';
 
 // web3
 import { createVault } from './web3';
@@ -183,31 +183,55 @@ const UpgradeView = () => {
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <BoostIcon fill="white" className="w-12 animate-pulse" />
-              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
+              <LottiePlayer
+                lottie="/lottie/UpgradeTribe.json"
+                width="200px"
+                height="200px"
+              />
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center decoration-double decoration-gray-500 decoration-2">
                 Upgrade Tribe
               </h1>
             </div>
             <div>
-              <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
+              <p className="py-2 text-lg text-gray-400 justify-center mb-6">
                 To upgrade your tribe you must have a signed Sapien Nation
                 Passport. Your passport will be permanently linked to your tribe
-                after it is upgraded. After your Tribe is upgraded you will
-                receive access to the following benefits:
+                and will become non-transferrable (
+                <a
+                  href="https://vitalik.ca/general/2022/01/26/soulbound.html"
+                  className="text-purple-600"
+                  target="_blank" rel="noreferrer"
+                >
+                  Soulbound
+                </a>
+                ).
               </p>
-              <div className="bg-gradient-to-r to-sapien-dark-purple from-sapien-neutral-400 px-4 py-2 font-semibold text-lg mt-3 rounded-t-md">
+              <p className="text-lg text-gray-400 justify-center mb-6">
+                After your Tribe is upgraded you will receive access to the
+                following benefits:
+              </p>
+              <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-2 font-semibold text-lg mt-3 rounded-t-md">
                 Benefits
               </div>
               <ol className="text-gray-300 bg-black p-4 space-y-1.5 rounded-b-md">
                 <li className="flex items-center gap-1">
-                  <CheckIcon className="text-sapien-green w-6" /> Vault Creation
+                  <CheckIcon className="text-sapien-green w-6" /> Create a Vault
                 </li>
                 <li className="flex items-center gap-1">
-                  <CheckIcon className="text-sapien-green w-6" /> Issue Badges
+                  <CheckIcon className="text-sapien-green w-6" /> Issue NFT
+                  Badges
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Priority
+                  Support
                 </li>
                 <li className="flex items-center gap-1">
                   <CheckIcon className="text-sapien-green w-6" /> Early Access
                   Features
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Verified DAO
+                  in the Network
                 </li>
               </ol>
             </div>
@@ -233,8 +257,12 @@ const UpgradeView = () => {
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <CrownIcon fill="white" className="w-12 animate-pulse" />
-              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
+              <LottiePlayer
+                lottie="/lottie/AssignOwners.json"
+                width="200px"
+                height="200px"
+              />
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center ">
                 Assign Owners
               </h1>
             </div>
