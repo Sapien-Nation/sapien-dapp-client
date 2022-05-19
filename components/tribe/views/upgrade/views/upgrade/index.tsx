@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { matchSorter } from 'match-sorter';
-import { CheckIcon, SearchIcon, XIcon } from '@heroicons/react/outline';
+import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 // api
 import { upgradeTribe } from 'api/tribe';
