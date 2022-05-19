@@ -341,7 +341,7 @@ const Feed = ({
           {unreadMessages > 0 && (
             <button
               onClick={() => handleScrollToBottom('smooth')}
-              className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 rounded-b-lg items-center"
+              className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 items-center"
             >
               You have {unreadMessages} new messages
               <button
