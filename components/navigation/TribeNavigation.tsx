@@ -194,7 +194,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                                 <MenuLink
                                   className={`${
                                     active ? 'bg-gray-800' : ''
-                                  } group flex w-full items-center rounded-sm px-1 py-2 text-sm text-primary-100`}
+                                  } group flex w-full items-center rounded-sm px-1 py-2 text-sm text-primary-200`}
                                   href={`/tribes/${tribeID}/upgrade`}
                                   passHref
                                 >
