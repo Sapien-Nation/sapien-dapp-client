@@ -390,7 +390,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               <Editable
                 renderElement={renderElement}
                 onKeyDown={onKeyDown}
-                placeholder={`Leave a message on ${name}`}
+                placeholder={`Leave a message in ${name}`}
                 className="max-w-250 w-full py-2 break-all"
                 style={{ cursor: 'text' }}
                 {...slateProps}
