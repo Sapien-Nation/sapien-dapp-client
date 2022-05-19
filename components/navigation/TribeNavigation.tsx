@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
 import { useSWRConfig } from 'swr';
+import Lottie from 'react-lottie-player';
 
 // api
 import { leaveTribe, readAllTribeNotifications } from 'api/tribe';
@@ -31,6 +32,7 @@ import {
 } from 'hooks/tribe';
 
 // assets
+import starJSONLottie from 'components/navigation/lottie/star.json';
 import { VaultIcon } from 'assets';
 
 // types
@@ -192,11 +194,15 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                                 <MenuLink
                                   className={`${
                                     active ? 'bg-gray-800' : ''
-                                  } group flex w-full items-center rounded-sm px-2 py-2 text-sm text-primary-100`}
+                                  } group flex w-full items-center rounded-sm px-1 py-2 text-sm text-primary-100`}
                                   href={`/tribes/${tribeID}/upgrade`}
                                   passHref
                                 >
-                                  <SparklesIcon className="w-5 mr-1" />
+                                  <Lottie
+                                    animationData={starJSONLottie}
+                                    play
+                                    className="w-6 h-6 mr-1"
+                                  />
                                   Upgrade Tribe
                                 </MenuLink>
                               )}
