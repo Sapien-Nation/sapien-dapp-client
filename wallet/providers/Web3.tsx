@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/nextjs';
 import _range from 'lodash/range';
 import { BN } from 'ethereumjs-util';
 import * as sigUtil from 'eth-sig-util';
+import { ethers } from 'ethers';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
 // api
@@ -34,6 +35,11 @@ import type { Transaction } from 'tools/types/web3';
 // web3
 import Web3Library from 'web3';
 
+// Gnosis safe
+import SafeServiceClient from '@gnosis.pm/safe-service-client';
+import Safe, { SafeFactory, SafeAccountConfig } from '@gnosis.pm/safe-core-sdk';
+import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
+
 //----------------------------------------------------------------------------------------------------------------------------------------------------
 interface Web3 {
   isReady: boolean;
@@ -47,6 +53,7 @@ interface Web3 {
     getPassportBalance: (address: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
+    createVault: (owners: Array<string>, threshold: number) => Promise<string>;
   } | null;
   error: any | null;
 }
@@ -93,6 +100,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   useEffect(() => {
     const initWeb3WithBiconomy = async () => {
       try {
+        // await createVault(['0x29eB8e014D182dDAFB14602A8d297680D6584859', '0xf432638B93336D2537bBe07fF8BCdA541d244bc2', '0xD4a1453D1E9a6De301A85495227f8E74d51A3094'], 2);
         const biconomy = new Biconomy(
           new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
           {
@@ -350,6 +358,33 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  const createVault = async (
+    owners: Array<string>,
+    threshold: number
+  ): Promise<string> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const safeOwner = provider.getSigner(0);
+
+      const ethAdapter = new EthersAdapter({
+        ethers,
+        signer: safeOwner,
+      });
+      const safeFactory = await SafeFactory.create({ ethAdapter });
+
+      const safeAccountConfig: SafeAccountConfig = {
+        owners,
+        threshold,
+      };
+
+      const safeSdk: Safe = await safeFactory.deploySafe({ safeAccountConfig });
+      return safeSdk.getAddress();
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err.message);
+    }
+  };
+
   return (
     <Web3Context.Provider
       value={{
@@ -362,6 +397,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           getWalletTokens,
           getUserTransactions,
           getPassportBalance,
+          createVault,
         },
       }}
     >
