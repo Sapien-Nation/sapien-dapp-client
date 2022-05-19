@@ -153,7 +153,8 @@ const Home = ({
           text={
             copyToClipboardSuccess ? 'Copied to Clipboard' : 'Copy to Clipboard'
           }
-          placement="bottom"
+          placement="right"
+          offset={2.5}
         />
         <div className="flex justify-end">
           <Menu as="div">
