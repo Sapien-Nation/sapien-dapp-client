@@ -6,7 +6,11 @@ interface Props {
 }
 
 const BadgeNavItem = ({ badge }: Props) => {
-  return <span>{badge.name}</span>;
+  return (
+    <span className="bg-white border-2 border-black p-3 text-black rounded-lg">
+      {badge.name}
+    </span>
+  );
 };
 
 export default BadgeNavItem;
