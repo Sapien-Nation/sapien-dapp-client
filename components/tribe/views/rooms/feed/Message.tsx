@@ -88,14 +88,14 @@ const Message = ({
 
   const getMessageClassName = () => {
     if (messageFocused) {
-      return 'py-2 bg-gray-800 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group';
+      return 'py-2 bg-gray-800 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
     }
 
     if (isMeMention) {
-      return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5';
+      return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5 relative';
     }
 
-    return 'py-2 hover:bg-gray-800 rounded-md px-6 flex justify-between items-start group';
+    return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
   };
 
   const handleRemoveMessage = async (messageID) => {
@@ -136,7 +136,7 @@ const Message = ({
         }
         style={{ wordBreak: 'break-word' }}
       >
-        <span className="text-[10px] hidden group-hover:block absolute left-12 text-gray-400">
+        <span className="text-[10px] hidden group-hover:block absolute left-6 text-gray-400 top-2">
           {isAMessageContinuation
             ? ''
             : new Date(createdAt).toLocaleString('en-US', {
