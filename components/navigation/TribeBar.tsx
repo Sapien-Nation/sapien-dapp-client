@@ -146,9 +146,9 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           ref={feedbackRef.current?.setTriggerRef}
         >
           <AnnotationIcon className="h-6 w-6" />
-          <span className="sr-only">Share your feedback?</span>
+          <span className="sr-only">Share your feedback</span>
         </button>
-        <Tooltip ref={feedbackRef} text="Share your feedback?" />
+        <Tooltip ref={feedbackRef} text="Share your feedback" />
       </div>
 
       {/* Modals */}
