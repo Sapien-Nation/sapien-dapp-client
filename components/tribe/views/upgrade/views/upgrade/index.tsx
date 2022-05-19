@@ -77,7 +77,7 @@ const UpgradeView = () => {
       return (
         <>
           All of the members of the tribe will receive an{' '}
-          <span className="underline">owner</span> badge
+          <span className="underline">Owner</span> badge
         </>
       );
     }
@@ -86,7 +86,7 @@ const UpgradeView = () => {
       <>
         <span className="text-bold">{selectedOwners.length}</span> Member(s)
         will receive an{' '}
-        <span className="underline decoration-white">owner</span> badge
+        <span className="underline decoration-white">Owner</span> badge
       </>
     );
   };
@@ -112,7 +112,7 @@ const UpgradeView = () => {
             </p>
             <div className="py-4 flex justify-center">
               <Link href={`/tribes/${tribeID}/badges`} passHref>
-                <a className="py-2 px-4 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                <a className="py-2 px-4 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
                   Manage Badges
                 </a>
               </Link>
@@ -200,7 +200,8 @@ const UpgradeView = () => {
                 <a
                   href="https://vitalik.ca/general/2022/01/26/soulbound.html"
                   className="text-purple-600"
-                  target="_blank" rel="noreferrer"
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   Soulbound
                 </a>
@@ -282,12 +283,12 @@ const UpgradeView = () => {
                       {selectedOwners.map((owner) => (
                         <div
                           key={owner.id}
-                          className="flex justify-center items-center m-1 font-medium py-1 px-2 rounded-full text-primary-700 bg-primary-100 border border-primary-300 "
+                          className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
                         >
-                          <div className="text-xs font-normal leading-none max-w-full flex-initial">
+                          <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
                             {owner.displayName}
                           </div>
-                          <div className="flex flex-auto flex-row-reverse">
+                          <div className="flex flex-auto flex-row-reverse text-white ml-1">
                             <button
                               onClick={() => {
                                 setSelectedOwners(
@@ -375,7 +376,7 @@ const UpgradeView = () => {
                 onClick={() => {
                   setView(View.Home);
                 }}
-                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Back
               </button>
@@ -387,8 +388,8 @@ const UpgradeView = () => {
                 }}
                 className={
                   selectedOwners.length === 0
-                    ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
-                    : 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
+                    ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
+                    : 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
                 }
               >
                 Next
