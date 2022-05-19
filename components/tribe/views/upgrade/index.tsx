@@ -18,7 +18,7 @@ import { useTribe } from 'hooks/tribe';
 import { useRouter } from 'next/router';
 import { NotFound, SEO } from 'components/common';
 
-const UpgradeViewProxy = () => {
+const UpgradeViewPage = () => {
   const { me } = useAuth();
   const { query } = useRouter();
 
@@ -76,4 +76,4 @@ const UpgradeViewProxy = () => {
   );
 };
 
-export default UpgradeViewProxy;
+export default UpgradeViewPage;
