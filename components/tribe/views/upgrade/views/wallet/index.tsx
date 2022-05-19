@@ -105,29 +105,29 @@ const Wallet = () => {
   const renderView = () => {
     if (web3Error) {
       return (
-        <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6">
-            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
+        <div>
+          <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+            <ExclamationIcon className="w-12 animate-pulse text-sapien-red-700" />
+            <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-sapien-red-700 decoration-2">
               Wallet API Error
-              <ExclamationIcon className="w-5" />
-            </h5>
+            </h1>
           </div>
-          <div className="px-4 py-5 sm:p-6">
-            <p className="text-lg text-white grid gap-4 items-center justify-center mt-6">
-              <span>
-                There was an error loading our Web3 library. Please try
-                reloading the page or contact{' '}
-                <a
-                  href="mailto:support@sapien.network"
-                  className="text-blue-500 font-bold underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  support@sapien.network
-                </a>{' '}
-                if the error persists.
-              </span>
-            </p>{' '}
+          <div className="text-center">
+            <p className="text-lg text-gray-300 grid gap-4 items-center justify-center mt-5">
+              There was an error loading our Web3 library.
+            </p>
+            <p className="text-sm mt-2 text-gray-300">
+              Please try reloading the page or contact{' '}
+              <a
+                href="mailto:support@sapien.network"
+                className="text-primary-200 font-bold underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                support@sapien.network
+              </a>{' '}
+              if the error persists.
+            </p>
           </div>
         </div>
       );
