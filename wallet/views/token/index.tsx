@@ -33,7 +33,7 @@ const TokenView = ({
           options to manipulate your transfer
         </p>
         <img
-          className="rounded-full px-1 py-1 w-20 h-20 self-center"
+          className="rounded-full px-1 py-1 w-20 h-20 self-center object-cover"
           src={token.image}
           alt=""
         />

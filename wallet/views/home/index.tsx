@@ -272,7 +272,11 @@ const Home = ({
                       <PhotographIcon className="px-1 py-1 w-6" />
                     </>
                   ) : (
-                    <img className="rounded-full" src={token.image} alt="" />
+                    <img
+                      className="rounded-full object-cover"
+                      src={token.image}
+                      alt=""
+                    />
                   )}
                 </>
               )}
