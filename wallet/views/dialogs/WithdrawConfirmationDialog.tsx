@@ -2,7 +2,7 @@
 import { Dialog } from 'components/common';
 
 // types
-import type { Token } from '../types';
+import type { Token } from '../../types';
 
 interface Props {
   address: string;

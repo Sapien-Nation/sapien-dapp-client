@@ -2,10 +2,7 @@ import * as React from 'react';
 
 const VaultIcon = (props) => (
   <svg
-    className="svg-icon"
     style={{
-      width: '1em',
-      height: '1em',
       verticalAlign: 'middle',
       fill: 'currentColor',
       overflow: 'hidden',

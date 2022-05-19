@@ -31,7 +31,7 @@ import {
 } from 'hooks/tribe';
 
 // assets
-import VaultIcon from './assets/Vault';
+import { VaultIcon } from 'assets';
 
 // types
 import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
@@ -257,8 +257,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
 
-            {/* TODO check for isTribeOwnerOrTribeAdmin */}
-            {true && (
+            {/* TODO remove this for development */}
+            {isTribeOwnerOrTribeAdmin && tribe.isUpgraded === true && (
               <Link
                 aria-label="Tribe Badges"
                 href={`/tribes/${tribeID}/badges`}
@@ -270,7 +270,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
                   }
                 >
-                  <VaultIcon />
+                  <VaultIcon className="w-3.5" />
                   Manage Badges
                 </a>
               </Link>

@@ -3,6 +3,7 @@ import {
   PhotographIcon,
   RefreshIcon,
 } from '@heroicons/react/solid';
+import { CheckIcon, XIcon } from '@heroicons/react/outline';
 import { useCallback, useEffect, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import { useRouter } from 'next/router';
@@ -24,6 +25,10 @@ import { useWeb3 } from 'wallet/providers';
 
 // types
 import type { Token } from 'wallet/types';
+
+// assets
+import { VaultIcon } from 'assets';
+import { BoostIcon, CrownIcon } from '../../assets';
 
 enum View {
   Home,
@@ -69,8 +74,6 @@ const Wallet = () => {
     setError(null);
 
     try {
-      // TODO remove this when we are ready to sign passport
-      // when do we are ready? when the UI is done
       // await signPassport(selectedToken.id);
 
       mutate(
@@ -107,29 +110,29 @@ const Wallet = () => {
   const renderView = () => {
     if (web3Error) {
       return (
-        <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6">
-            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
+        <div>
+          <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+            <ExclamationIcon className="w-12 animate-pulse text-sapien-red-700" />
+            <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-sapien-red-700 decoration-2">
               Wallet API Error
-              <ExclamationIcon className="w-5" />
-            </h5>
+            </h1>
           </div>
-          <div className="px-4 py-5 sm:p-6">
-            <p className="text-lg text-white grid gap-4 items-center justify-center mt-6">
-              <span>
-                There was an error loading our Web3 library. Please try
-                reloading the page or contact{' '}
-                <a
-                  href="mailto:support@sapien.network"
-                  className="text-blue-500 font-bold underline"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  support@sapien.network
-                </a>{' '}
-                if the error persists.
-              </span>
-            </p>{' '}
+          <div className="text-center">
+            <p className="text-lg text-gray-300 grid gap-4 items-center justify-center mt-5">
+              There was an error loading our Web3 library.
+            </p>
+            <p className="text-sm mt-2 text-gray-300">
+              Please try reloading the page or contact{' '}
+              <a
+                href="mailto:support@sapien.network"
+                className="text-primary-200 font-bold underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                support@sapien.network
+              </a>{' '}
+              if the error persists.
+            </p>
           </div>
         </div>
       );
@@ -137,16 +140,15 @@ const Wallet = () => {
 
     if (isWeb3Ready === false) {
       return (
-        <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-          <div className="px-4 py-5 sm:px-6">
-            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
-              Loading Sapien Wallet API tools{' '}
-              <span className="animate-pulse">...</span>
-              <RefreshIcon className="w-5 animate-spin" />
-            </h5>
+        <div>
+          <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+            <RefreshIcon className="w-12 animate-spin" />
+            <h1 className="text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100">
+              Loading Sapien Wallet API tools...
+            </h1>
           </div>
-          <div className="px-4 py-5 sm:p-6">
-            <p className="text-lg text-white grid gap-4 items-center justify-center mt-6">
+          <div>
+            <p className="text-lg grid gap-4 items-center justify-center text-gray-300">
               Bring the bananas, and leave the APIs to us 🙉.
             </p>
           </div>
@@ -157,36 +159,48 @@ const Wallet = () => {
     switch (view) {
       case View.Home:
         return (
-          <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <div className="px-4 py-5 sm:px-6">
-              <h5 className="text-xl text-white font-bold tracking-wide text-center">
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              <BoostIcon fill="white" className="w-12 animate-pulse" />
+              <h1 className="text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2">
                 Upgrade Tribe
-              </h5>
+              </h1>
             </div>
-            <div className="px-4 py-5 sm:p-6">
-              <p className="text-lg text-white justify-center mt-3">
+            <div>
+              <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
                 To upgrade your tribe you must have a signed Sapien Nation
                 Passport. Your passport will be permanently linked to your tribe
                 after it is upgraded. After your Tribe is upgraded you will
                 receive access to the following benefits:
               </p>
-              <ol>
-                <li>Vault Creation</li>
-                <li>Issue Badges</li>
+              <div className="bg-gradient-to-r to-sapien-dark-purple from-sapien-neutral-400 px-4 py-2 font-semibold text-lg mt-3 rounded-t-md">
+                Benefits
+              </div>
+              <ol className="text-gray-300 bg-black p-4 space-y-1.5 rounded-b-md">
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Vault Creation
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Issue Badges
+                </li>
+                <li className="flex items-center gap-1">
+                  <CheckIcon className="text-sapien-green w-6" /> Early Access
+                  Features
+                </li>
               </ol>
             </div>
-            <div className="py-4 flex gap-4">
+            <div className="mb-4 mt-6 flex gap-10 justify-center">
               <button
                 type="button"
                 onClick={() => push(`/tribes/${query.tribeID as string}/home`)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => setView(View.Tokens)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Sign Passport
               </button>
@@ -195,16 +209,25 @@ const Wallet = () => {
         );
       case View.Tokens:
         return (
-          <div className="overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <div className="px-4 py-5 sm:px-6">
-              <h5 className="text-xl text-white font-bold tracking-wide text-center">
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              {isFetchingTokens ? (
+                <RefreshIcon className="w-12 animate-spin" />
+              ) : null}
+              <h1
+                className={
+                  isFetchingTokens
+                    ? 'text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100'
+                    : 'text-xl lg:text-3xl italic text-white font-bold tracking-wide text-center underline decoration-double decoration-gray-500 decoration-2'
+                }
+              >
                 {isFetchingTokens
                   ? 'Loading Tokens...'
-                  : 'This are the tokens we found on your Sapien Wallet'}
-              </h5>
+                  : 'Sapien Wallet Tokens'}
+              </h1>
             </div>
-            <div className="px-4 py-5 sm:p-6">
-              <ol>
+            <div className="mt-6">
+              <ol className="flex flex-wrap gap-5">
                 {tokens.map((token) => (
                   <li
                     key={token.name}
@@ -217,12 +240,10 @@ const Wallet = () => {
                   >
                     <>
                       {token.id === null ? (
-                        <>
-                          <PhotographIcon className="px-1 py-1 w-6" />
-                        </>
+                        <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
                       ) : (
                         <img
-                          className="rounded-full w-32 h-32 cursor-pointer"
+                          className="rounded-full w-16 h-16 cursor-pointer object-cover"
                           src={token.image}
                           alt=""
                         />

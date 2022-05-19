@@ -13,7 +13,7 @@ const UserAvatar = ({ user, passport = null }: Props) => {
   if (passport) {
     return (
       <img
-        className="w-10 h-10 rounded-full flex-shrink-0"
+        className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
         src={passport.image}
         alt=""
       />
@@ -23,7 +23,7 @@ const UserAvatar = ({ user, passport = null }: Props) => {
   if (user.avatar) {
     return (
       <img
-        className="w-10 h-10 rounded-full flex-shrink-0"
+        className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
         src={user.avatar}
         alt=""
       />

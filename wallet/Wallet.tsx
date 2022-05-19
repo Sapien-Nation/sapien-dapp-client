@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@heroicons/react/outline';
 import { ExclamationIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // components
 import {
@@ -28,10 +28,11 @@ enum View {
 }
 
 interface Props {
+  setTokenToSign: (token: Token) => void;
   showDeclarationDialog: () => void;
 }
 
-const Wallet = ({ showDeclarationDialog }: Props) => {
+const Wallet = ({ setTokenToSign, showDeclarationDialog }: Props) => {
   const [view, setView] = useState(View.Home);
   const [token, setToken] = useState<Token | null>(null);
 
@@ -112,7 +113,10 @@ const Wallet = ({ showDeclarationDialog }: Props) => {
             onWithdraw={() => {
               setView(View.Withdraw);
             }}
-            showDeclarationDialog={showDeclarationDialog}
+            showDeclarationDialog={() => {
+              setTokenToSign(token);
+              showDeclarationDialog();
+            }}
           />
         );
       case View.History:
