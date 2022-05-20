@@ -45,7 +45,7 @@ const TokenView = ({
           >
             Withdraw
           </button>
-          <Query
+          {/* <Query
             api={`/core-api/passport/${token.id}/signed`}
             loader={
               <button
@@ -78,7 +78,7 @@ const TokenView = ({
                 </button>
               );
             }}
-          </Query>
+          </Query> */}
         </div>
       </div>
     </div>
