@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { Role } from 'tools/constants/tribe';
 
 // components
-import BadgeView from './badge';
+import { BadgeCreationView } from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
 import { Overlay, Query } from 'components/common';
@@ -18,7 +18,7 @@ import { useTribe } from 'hooks/tribe';
 import type { TribeBadge } from 'tools/types/tribe';
 
 enum View {
-  Badge,
+  BadgeCreation,
   Home,
   Search,
 }
@@ -29,8 +29,6 @@ const BadgesView = () => {
   const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
   const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
 
   const { back } = useRouter();
 
@@ -44,9 +42,9 @@ const BadgesView = () => {
           </div>
         );
       }
-      case View.Badge:
+      case View.BadgeCreation:
         return (
-          <BadgeView
+          <BadgeCreationView
             badge={selectedBadge}
             onCancel={() => setView(View.Home)}
           />
@@ -61,9 +59,8 @@ const BadgesView = () => {
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <Sidebar
           setSelectedBadge={(badge) => {
-            console.log(badge);
             setSelectedBadge(badge);
-            setView(View.Badge);
+            setView(View.BadgeCreation);
           }}
           showSearch={() => setView(View.Search)}
         />
