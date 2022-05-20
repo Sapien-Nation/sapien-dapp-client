@@ -96,7 +96,7 @@ const UpgradeView = () => {
 
     return (
       <>
-        <span className="text-bold">{selectedOwners.length - 1}</span> Member(s)
+        <span className="text-bold">{selectedOwners.length}</span> Member(s)
         will receive an{' '}
         <span className="underline decoration-white">Owner</span> badge
       </>
@@ -107,7 +107,7 @@ const UpgradeView = () => {
     return (
       <>
         <span className="text-bold">
-          {threshold} out of {selectedOwners.length - 1} owners must sign every
+          {threshold} out of {selectedOwners.length} owners must sign every
           transaction.
         </span>
       </>
@@ -180,7 +180,7 @@ const UpgradeView = () => {
                 onChange={(event) => setThreshold(Number(event.target.value))}
                 className="rounded p-2 mt-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200 bg-sapien-neutral-500 border border-sapien-neutral-400 focus:border-primary-200 focus:ring-primary-200"
               >
-                {_range(1, selectedOwners.length).map((val) => {
+                {_range(1, selectedOwners.length + 1).map((val) => {
                   return (
                     <option key={val} value={val}>
                       {val}
