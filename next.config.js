@@ -112,11 +112,15 @@ const sentryWebpackPluginOptions = {
   silent: true,
 };
 
-module.exports =
-  process.env.ANALYZE === 'true'
-    ? withBundleAnalyzer({})
-    : withPreact(
-        Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
-          ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
-          : moduleExports
-      );
+if (process.env.IS_LEAN_ENVIROMENT === 'true') {
+  module.exports = withPreact(moduleExports);
+} else {
+  module.exports =
+    process.env.ANALYZE === 'true'
+      ? withBundleAnalyzer({})
+      : withPreact(
+          Boolean(process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN)
+            ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+            : moduleExports
+        );
+}
