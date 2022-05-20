@@ -26,6 +26,7 @@ const UpgradeViewPage = () => {
 
   const { isUpgraded, role } = useTribe(tribeID);
 
+  // TODO get back this
   // if (isUpgraded === true) {
   //   if (role === Role.Owner || role === Role.Admin) {
   //     return (
