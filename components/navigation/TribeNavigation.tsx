@@ -71,7 +71,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
   const { name, role } = tribe;
 
-  const hasRoomsNotifications = rooms.some(({ unreads }) => Boolean(unreads));
+  const hasRoomsNotifications = rooms.some(({ hasUnread }) => hasUnread);
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
 
   const handleReadAll = async (event) => {
@@ -80,8 +80,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     setIsFetching(true);
     try {
-      // TODO fix this
-      // await readAllTribeNotifications(tribeID as string);
+      await readAllTribeNotifications(tribeID as string);
 
       mutate(
         '/core-api/profile/tribes',
@@ -123,16 +122,24 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
     }
   };
 
-  const getRoomListItemClassName = (id: string, hasUnreadMessages: boolean) => {
+  const getRoomListItemClassName = ({
+    id,
+    unreadMentions,
+    hasUnread,
+  }: {
+    id: string;
+    unreadMentions: number;
+    hasUnread: boolean;
+  }) => {
     const isOnChannelView = id === viewID;
 
     if (isOnChannelView) {
-      if (hasUnreadMessages)
+      if (unreadMentions > 0)
         return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
       return 'text-sm bg-sapien-neutral-800 rounded-l-md';
     }
 
-    if (hasUnreadMessages)
+    if (unreadMentions > 0 || hasUnread === true)
       return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
 
     return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md';
@@ -359,10 +366,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </button>
             )}
             <ul className="pl-1 py-2 cursor-pointer -mr-2">
-              {rooms.map(({ id, name, unreads }) => {
+              {rooms.map(({ id, name, unreadMentions, hasUnread }) => {
                 return (
                   <li
-                    className={getRoomListItemClassName(id, unreads > 0)}
+                    className={getRoomListItemClassName({
+                      id,
+                      unreadMentions,
+                      hasUnread,
+                    })}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
@@ -371,7 +382,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         onClick={handleMobileMenu}
                       >
                         <div className="flex gap-1">
-                          # {name} <RedDot count={unreads} />
+                          # {name} <RedDot count={unreadMentions} />
                         </div>
                       </a>
                     </Link>

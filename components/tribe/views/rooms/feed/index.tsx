@@ -156,7 +156,13 @@ const Feed = ({
               handleUnreadReadMessagesOnTribeNavigation(
                 data.extra.roomId,
                 true,
-                data.extra.messageId
+                true
+              );
+            } else {
+              handleUnreadReadMessagesOnTribeNavigation(
+                data.extra.roomId,
+                false,
+                true
               );
             }
             break;
@@ -178,7 +184,7 @@ const Feed = ({
   const handleUnreadReadMessagesOnTribeNavigation = (
     roomID,
     shouldIncrement = false,
-    lastMessageId = ''
+    hasUnread = false
   ) => {
     mutate(
       '/core-api/profile/tribes',
@@ -191,8 +197,10 @@ const Feed = ({
                   if (tribeRoom.id === roomID) {
                     return {
                       ...tribeRoom,
-                      unreads: shouldIncrement ? tribeRoom.unreads + 1 : 0,
-                      lastMessageId: lastMessageId,
+                      unreadMentions: shouldIncrement
+                        ? tribeRoom.unreadMentions + 1
+                        : 0,
+                      hasUnread,
                     };
                   }
 
@@ -256,7 +264,7 @@ const Feed = ({
   // Handlers
   const handleReadMessagesUnblock = async () => {
     try {
-      if (room.unreads > 0) {
+      if (room.unreadMentions > 0) {
         await readRoom(roomID);
       }
     } catch (err) {
