@@ -7,18 +7,18 @@ export enum ErrorTypes {
 }
 
 export const notifications = [
-  {
-    createdAt: '2022-05-16T18:01:17.160Z',
-    id: 1,
-    name: 'Sign Passport',
-    descriptionShort: 'Its time to sign your passport!',
-    descriptionLarge: () => (
-      <p>
-        Its time to sign your passport! inside a component, go crazy descriptive
-        here
-      </p>
-    ),
-  },
+  // {
+  //   createdAt: '2022-05-16T18:01:17.160Z',
+  //   id: 1,
+  //   name: 'Sign Passport',
+  //   descriptionShort: 'Its time to sign your passport!',
+  //   descriptionLarge: () => (
+  //     <p>
+  //       Its time to sign your passport! inside a component, go crazy descriptive
+  //       here
+  //     </p>
+  //   ),
+  // },
   {
     createdAt: '2022-02-20T19:58:50.745Z',
     id: 2,
