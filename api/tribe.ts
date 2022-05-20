@@ -59,6 +59,6 @@ export const readAllTribeNotifications = (tribeID: string) =>
 
 export const upgradeTribe = (tribeID: string, body: UpgradeTribeBody) =>
   axios
-    .post(`/core-api/tribe/${tribeID}/upgrade`)
+    .post(`/core-api/tribe/${tribeID}/upgrade`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

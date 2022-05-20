@@ -37,12 +37,21 @@ enum View {
 }
 
 const UpgradeView = () => {
-  const [view, setView] = useState(View.Home);
-  const [threshold, setThreshold] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedOwners, setSelectedOwners] = useState([]);
-
   const { me } = useAuth();
+
+  const [view, setView] = useState(View.Home);
+  const [threshold, setThreshold] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedOwners, setSelectedOwners] = useState([
+    {
+      avatar: me.avatar,
+      id: me.id,
+      username: me.username,
+      displayName: me.displayName,
+      walletAddress: me.walletAddress,
+    },
+  ]);
+
   const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -87,7 +96,7 @@ const UpgradeView = () => {
 
     return (
       <>
-        <span className="text-bold">{selectedOwners.length}</span> Member(s)
+        <span className="text-bold">{selectedOwners.length - 1}</span> Member(s)
         will receive an{' '}
         <span className="underline decoration-white">Owner</span> badge
       </>
@@ -98,7 +107,7 @@ const UpgradeView = () => {
     return (
       <>
         <span className="text-bold">
-          {threshold} out of {selectedOwners.length} owners must sign every
+          {threshold} out of {selectedOwners.length - 1} owners must sign every
           transaction.
         </span>
       </>
@@ -171,7 +180,7 @@ const UpgradeView = () => {
                 onChange={(event) => setThreshold(Number(event.target.value))}
                 className="rounded p-2 mt-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200 bg-sapien-neutral-500 border border-sapien-neutral-400 focus:border-primary-200 focus:ring-primary-200"
               >
-                {_range(1, selectedOwners.length + 1).map((val) => {
+                {_range(1, selectedOwners.length).map((val) => {
                   return (
                     <option key={val} value={val}>
                       {val}
@@ -315,19 +324,21 @@ const UpgradeView = () => {
                           <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
                             {owner.displayName}
                           </div>
-                          <div className="flex flex-auto flex-row-reverse text-white ml-1">
-                            <button
-                              onClick={() => {
-                                setSelectedOwners(
-                                  selectedOwners.filter(
-                                    ({ id }) => id !== owner.id
-                                  )
-                                );
-                              }}
-                            >
-                              <XIcon className="w-5" />
-                            </button>
-                          </div>
+                          {owner.id !== me.id && (
+                            <div className="flex flex-auto flex-row-reverse text-white ml-1">
+                              <button
+                                onClick={() => {
+                                  setSelectedOwners(
+                                    selectedOwners.filter(
+                                      ({ id }) => id !== owner.id
+                                    )
+                                  );
+                                }}
+                              >
+                                <XIcon className="w-5" />
+                              </button>
+                            </div>
+                          )}
                         </div>
                       ))}
 
@@ -411,12 +422,15 @@ const UpgradeView = () => {
               </button>
               <button
                 type="button"
-                disabled={selectedOwners.length === 0}
+                disabled={selectedOwners.length === 1}
                 onClick={() => {
+                  if (threshold === null) {
+                    setThreshold(selectedOwners.length - 1);
+                  }
                   setView(View.Confirm);
                 }}
                 className={
-                  selectedOwners.length === 0
+                  selectedOwners.length === 1
                     ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
                     : 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
                 }
