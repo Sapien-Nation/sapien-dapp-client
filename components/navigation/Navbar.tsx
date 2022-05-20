@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Menu } from '@headlessui/react';
-import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
+import { CreditCardIcon, CogIcon, BellIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,8 +10,9 @@ import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
 // components
-import { UserAvatar } from 'components/common';
+import { UserAvatar, Query, RedDot } from 'components/common';
 import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
+const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 
@@ -35,7 +36,7 @@ const Navbar = () => {
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
           {/* Wallet dropdown */}
-          {/* <Menu as="div">
+          <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification/all">
                 {({ unread }: { unread: number }) => (
@@ -62,7 +63,7 @@ const Navbar = () => {
                 )}
               </Query>
             )}
-          </Menu> */}
+          </Menu>
           {/* Wallet dropdown */}
           <Menu as="div">
             {({ open }) => (

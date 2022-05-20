@@ -1,17 +1,11 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { nanoid } from 'nanoid';
-import { PlusIcon, SearchIcon } from '@heroicons/react/outline';
-
-// constants
-import { BadgeTypes } from 'tools/constants/tribe';
+import { PlusIcon } from '@heroicons/react/outline';
 
 // components
 import BadgeNavItem from './BadgeNavItem';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
-import { useTribeBadges } from 'hooks/tribe/badge';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -20,36 +14,26 @@ import type { TribeBadge } from 'tools/types/tribe';
 import { ContributorBadge } from 'assets';
 
 interface Props {
+  draftBadges: Array<TribeBadge>;
+  handleAddDraftBadge: () => void;
   showSearch: () => void;
   setSelectedBadge: (badge: TribeBadge) => void;
+  tribeBadges: Array<TribeBadge>;
 }
 
-const Sidebar = ({ showSearch, setSelectedBadge }: Props) => {
-  const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
-
+const Sidebar = ({
+  draftBadges,
+  showSearch,
+  setSelectedBadge,
+  tribeBadges,
+  handleAddDraftBadge,
+}: Props) => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
-  const tribeBadges = useTribeBadges(tribeID);
-
-  //---------------------------------------------------------------------
-  const handleAddLocalTribe = () => {
-    const badgeID = nanoid();
-
-    const badge = {
-      id: badgeID,
-      description: '',
-      name: badgeID,
-      color: '',
-      type: BadgeTypes.Draft,
-    };
-
-    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
-
-    return badge;
-  };
+  // const tribeBadges = useTribeBadges(tribeID);
 
   return (
     <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
@@ -67,10 +51,7 @@ const Sidebar = ({ showSearch, setSelectedBadge }: Props) => {
         </div>
         <div className="mt-5 flex-1">
           <button
-            onClick={() => {
-              const newBadge = handleAddLocalTribe();
-              setSelectedBadge(newBadge);
-            }}
+            onClick={handleAddDraftBadge}
             type="button"
             className="py-2 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
           >
@@ -89,6 +70,7 @@ const Sidebar = ({ showSearch, setSelectedBadge }: Props) => {
                 </li>
               );
             })}
+            <div className="border-t-2 border-gray-800" />
             {draftBadges.map((badge) => {
               return (
                 <li key={badge.id} className="flex flex-col gap-2">

@@ -14,7 +14,15 @@ interface Props {
 }
 
 const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
-  console.log(badge);
+  const getBadgeLabel = (type: BadgeTypes) => {
+    if (type === BadgeTypes.Draft) {
+      return '(DRAFT)';
+    } else if (type === BadgeTypes.Normal) {
+      return '(NORMAL)';
+    } else {
+      return '(OWNER)';
+    }
+  };
   return (
     <button
       onClick={() => onSelect()}
@@ -31,9 +39,7 @@ const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
         <ContributorBadge className="w-8 h-8" />
       )}
       <span className="text-ellipsis truncate flex-1">{badge.name}</span>
-      <span className="text-gray-500 text-xs">
-        ({badge.type === BadgeTypes.Draft ? 'DRAFT' : ''})
-      </span>
+      <span className="text-gray-500 text-xs">{getBadgeLabel(badge.type)}</span>
     </button>
   );
 };

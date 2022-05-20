@@ -1,16 +1,17 @@
+import { nanoid } from 'nanoid';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { XIcon } from '@heroicons/react/outline';
 
 // constants
-import { Role } from 'tools/constants/tribe';
+import { BadgeTypes, Role } from 'tools/constants/tribe';
 
 // components
-import { BadgeCreationView } from './badge';
+import { Overlay, Query } from 'components/common';
+import { BadgeCreationView, BadgeManageView } from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
-import { Overlay, Query } from 'components/common';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
@@ -18,20 +19,42 @@ import { useTribe } from 'hooks/tribe';
 // types
 import type { TribeBadge } from 'tools/types/tribe';
 
+// mocks
+import { mockTribeBadge } from 'tools/mocks/tribe';
+
 enum View {
+  BadgeManage,
   BadgeCreation,
   Home,
   Search,
 }
 
-const BadgesView = () => {
+interface Props {
+  tribeBadges: Array<TribeBadge>;
+}
+
+const BadgesView = ({ tribeBadges }: Props) => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
+  const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
   const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
-  const { query } = useRouter();
-
   const { back } = useRouter();
+
+  const handleAddDraftBadge = () => {
+    const badgeID = nanoid();
+
+    const badge = {
+      id: badgeID,
+      description: 'This is a draft badge, please edit this description.',
+      name: '[draft] badge',
+      color: '#6200EA',
+      type: BadgeTypes.Draft,
+    };
+
+    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
+    setSelectedBadge(badge);
+  };
 
   const renderView = () => {
     switch (view) {
@@ -72,6 +95,13 @@ const BadgesView = () => {
           </div>
         );
       }
+      case View.BadgeManage:
+        return (
+          <BadgeManageView
+            badge={selectedBadge!}
+            onCancel={() => setView(View.Home)}
+          />
+        );
       case View.BadgeCreation:
         return (
           <BadgeCreationView
@@ -80,7 +110,19 @@ const BadgesView = () => {
           />
         );
       case View.Search:
-        return <SearchView />;
+        return (
+          <SearchView
+            onSelect={(badge) => {
+              setDraftBadges((currentDraftBadges) => [
+                ...currentDraftBadges,
+                badge,
+              ]);
+              setSelectedBadge(badge);
+
+              setView(View.BadgeCreation);
+            }}
+          />
+        );
     }
   };
 
@@ -89,11 +131,23 @@ const BadgesView = () => {
       <div className="flex h-full">
         <div className="hidden md:flex md:w-64 md:flex-col md:inset-y-0">
           <Sidebar
+            handleAddDraftBadge={handleAddDraftBadge}
+            draftBadges={draftBadges}
             setSelectedBadge={(badge) => {
               setSelectedBadge(badge);
-              setView(View.BadgeCreation);
+
+              switch (badge.type) {
+                case BadgeTypes.Draft:
+                  setView(View.BadgeCreation);
+                  break;
+                case BadgeTypes.Normal:
+                case BadgeTypes.Owner:
+                  setView(View.BadgeManage);
+                  break;
+              }
             }}
             showSearch={() => setView(View.Search)}
+            tribeBadges={tribeBadges}
           />
         </div>
         <div className="flex-1 overflow-auto">
@@ -154,8 +208,33 @@ const BadgesViewProxy = () => {
   }
 
   return (
-    <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
-      {() => <BadgesView />}
+    <Query
+      api={`/core-api/tribe/${tribeID}/badges`}
+      loader={null}
+      options={{
+        fetcher: () => [
+          mockTribeBadge({
+            name: 'Owner 1',
+            color: '#sapien',
+            description: 'this is the owner badge',
+            type: BadgeTypes.Owner,
+          }),
+          mockTribeBadge({
+            name: 'Normal 1',
+            color: '#sapien',
+            description: 'this is the owner badge',
+            type: BadgeTypes.Normal,
+          }),
+          mockTribeBadge({
+            name: 'Normal 2',
+            color: '#sapien',
+            description: 'this is the owner badge',
+            type: BadgeTypes.Normal,
+          }),
+        ],
+      }}
+    >
+      {(tribeBadges) => <BadgesView tribeBadges={tribeBadges} />}
     </Query>
   );
 };

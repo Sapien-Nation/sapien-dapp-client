@@ -1,0 +1,15 @@
+{
+  "badges": [{
+    "name": "name",
+    "description": "color",
+    "color": "color"
+  }, {
+    "name": "name",
+    "description": "color",
+    "color": "color"
+  },{
+    "name": "name",
+    "description": "color",
+    "color": "color"
+  }]
+}
