@@ -24,6 +24,9 @@ import { formatAvatarName, formatTokenID } from 'utils/passport';
 import type { NextPage } from 'next';
 import type { Passport } from 'tools/types/passport';
 
+// assets
+import LoadingJSONData from './lottie/Loading.json';
+
 interface Props {
   animationData: any;
   passport: Passport;
@@ -226,7 +229,7 @@ const PassportTokenIDPage = ({ animationData, passport }: Props) => {
 
 const PassportTokenIDPageProxy: NextPage = () => {
   const [error, setError] = useState<Error | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
   const [animationData, setAnimationData] = useState<object | null>(null);
 
   const toast = useToast();
@@ -246,7 +249,6 @@ const PassportTokenIDPageProxy: NextPage = () => {
         setAnimationData(data);
       } catch (err) {
         setError(err);
-        toast({ message: err });
       }
       setIsFetching(false);
     };
@@ -254,11 +256,19 @@ const PassportTokenIDPageProxy: NextPage = () => {
     if (query.tokenID) {
       fetchLottieJSON();
     }
-  }, [query.tokenID, toast]);
+  }, [query.tokenID]);
 
   if (!query.tokenID) return null;
 
-  if (isFetching === true) return <h1>TODO Loading...</h1>;
+  if (isFetching === true)
+    return (
+      <Lottie
+        animationData={LoadingJSONData}
+        play
+        loop
+        className="max-w-1100px w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
+      />
+    );
 
   if (error) return <ErrorView message="Error Loading Passport Animation" />;
 
@@ -268,7 +278,7 @@ const PassportTokenIDPageProxy: NextPage = () => {
       <Query api={`/core-api/passport/metadata/${query.tokenID}`}>
         {(passport: Passport) => {
           if (passport === null) {
-            return <Redirect path="" />;
+            return <Redirect path="/" />;
           }
 
           return (
