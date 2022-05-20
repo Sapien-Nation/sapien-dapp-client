@@ -1,15 +1,13 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { Transition } from '@headlessui/react';
 
 interface Props {
   children: React.ReactNode;
-  title: string;
+  isOpen: boolean;
   onClose: () => void;
 }
 
-const Overlay = ({ children, title, onClose }: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
-
+const Overlay = ({ children, isOpen, onClose }: Props) => {
   return (
     <Transition.Root appear={true} show={isOpen} as={Fragment}>
       <div
@@ -30,41 +28,7 @@ const Overlay = ({ children, title, onClose }: Props) => {
         >
           <div className="fixed inset-0 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
-              <div className="w-full h-full bg-white">
-                <div className="px-4 sm:px-6 py-4 sm:py-6">
-                  <div className="flex items-start justify-between">
-                    <h2
-                      className="text-lg font-medium text-gray-900"
-                      id="slide-over-title"
-                    >
-                      {title}
-                    </h2>
-                    <button
-                      type="button"
-                      onClick={() => setIsOpen(false)}
-                      className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      <span className="sr-only">Close pannel</span>
-                      <svg
-                        className="h-6 w-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="2"
-                        stroke="currentColor"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                {children}
-              </div>
+              <div className="w-full h-full bg-white">{children}</div>
             </div>
           </div>
         </Transition.Child>
