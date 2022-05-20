@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-
 import * as Sentry from '@sentry/nextjs';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 interface Props {
   code?: number;
@@ -32,14 +30,14 @@ fixing this PRONTO`,
       <div className="rounded-md shadow-2xl bg-gray-800 w-full h-full items-center flex justify-center flex-col sm:px-0 px-4 flex-1 py-8">
         <img
           className="w-24 mx-auto mb-8 rounded-r-lg"
-          src="https://cdn.discordapp.com/attachments/723232557797212261/964188953781633095/Default-PFP-No-BG.png"
+          src="/images/harambe_sapien.png"
           alt="sapien"
         />
         <div className="grid gap-6 max-w-lg">
           {code && (
             <p className="text-lg">
-              <span className="font-extrabold">{code}.</span> This is the code
-              of an error
+              <span className="font-bold">{code}.</span> This is the code of an
+              error
             </p>
           )}
           {message && <p className="text-lg">{message}</p>}

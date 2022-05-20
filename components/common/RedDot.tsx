@@ -7,12 +7,15 @@ const RedDot = ({ animate = false, count }: Props) => {
   if (!count) return null;
 
   return (
-    <span className="h-5 w-5 ml-2">
+    <span className="relative flex items-center">
       {animate === true && (
-        <span className="absolute animate-ping inline-flex rounded-full bg-red-400 opacity-75 h-5 w-5" />
+        <span className="absolute animate-ping inline-flex rounded-full bg-red-400 opacity-75 h-2 w-2 right-0 bottom-2.5" />
       )}
-      <span className="rounded-full bg-red-500 text-white text-xs font-extrabold flex justify-center items-center h-5 w-5">
-        {count >= 100 ? '99+' : count}
+      <span
+        className="rounded- bg-sapien-red-700 text-white text-10px font-bold flex justify-center items-center h-4 min-w-16px px-1"
+        style={{ borderRadius: '100px' }}
+      >
+        {count}
       </span>
     </span>
   );

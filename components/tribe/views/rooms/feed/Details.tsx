@@ -24,7 +24,7 @@ const Details = ({ handleSidebar }) => {
     if (avatar) {
       return (
         <img
-          className="w-10 h-10 rounded-full flex-shrink-0"
+          className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
           src={avatar}
           alt=""
         />
@@ -55,6 +55,7 @@ const Details = ({ handleSidebar }) => {
           {
             id: null,
             avatar: null,
+            displayName: null,
             username: null,
             userType: key,
           },
@@ -78,11 +79,11 @@ const Details = ({ handleSidebar }) => {
       </div>
       <>
         <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
-          <h3 className="text-md  text-sapien-neutral-400 font-bold ">
+          <h3 className="text-md  text-gray-300 font-bold ">
             Members ({members.length})
           </h3>
         </div>
-        <ul className="px-5 overflow-auto flex-1">
+        <ul className="overflow-auto flex-1">
           <AutoSizer>
             {({ height, width }) => (
               <List
@@ -93,21 +94,32 @@ const Details = ({ handleSidebar }) => {
                 width={width}
               >
                 {({ index, style }) => {
-                  const { id, avatar, username, userType } = membersList[index];
+                  const { id, avatar, displayName, username, userType } =
+                    membersList[index];
                   return (
                     <li
                       data-testid="room-detail-member"
                       key={id}
-                      className="flex gap-2 items-center mb-4 cursor-pointer"
+                      className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5"
                       style={style}
                     >
-                      {id === null && (
-                        <span className="text-sm">
+                      {id === null ? (
+                        <h3 className="text-sm text-gray-300">
                           {groupLabel[userType] ?? '-'}
-                        </span>
+                        </h3>
+                      ) : (
+                        <>
+                          {username && renderMemberAvatar(avatar, username)}
+                          <div className="truncate leading-none">
+                            <span className="block truncate">
+                              {displayName === ' ' ? '[hidden]' : displayName}
+                            </span>
+                            <span className="truncate text-xs text-gray-400">
+                              @{username}
+                            </span>
+                          </div>
+                        </>
                       )}
-                      {username && renderMemberAvatar(avatar, username)}
-                      <span className="truncate">{username}</span>
                     </li>
                   );
                 }}

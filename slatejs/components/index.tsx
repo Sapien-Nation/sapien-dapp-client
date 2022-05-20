@@ -1,11 +1,17 @@
 // components
-import Mention from './Mention';
+import RoomMention from './RoomMention';
+import UserMention from './UserMention';
+
+// constants
+import { CustomNode } from '../constants';
 
 export const Element = (props) => {
   const { attributes, children, element } = props;
   switch (element.type) {
-    case 'mention':
-      return <Mention {...props} />;
+    case CustomNode.UserMention:
+      return <UserMention {...props} />;
+    case CustomNode.RoomMention:
+      return <RoomMention {...props} />;
     default:
       return <p {...attributes}>{children}</p>;
   }

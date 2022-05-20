@@ -8,6 +8,7 @@ import { Fragment, useCallback, useMemo, useState } from 'react';
 import { Editor, createEditor, Transforms, Range } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
+import { useRouter } from 'next/router';
 
 // components
 import { UserAvatar } from 'components/common';
@@ -22,24 +23,31 @@ import { defaultValue, ElementType, MentionType } from '../constants';
 // hooks
 import { usePassport } from 'hooks/passport';
 import { useRoomMembers } from 'hooks/room';
+import { useTribeRooms } from 'hooks/tribe';
 
 // utils
 import {
   insertEmoji,
   serialize,
-  insertMention,
-  withMentions,
+  insertUserMention,
+  withRoomMentions,
+  withUserMentions,
   getMentionsArrayFromCacheForUI,
+  insertRoomMention,
 } from '../utils';
 
 // types
 import type { EditableProps } from 'slate-react/dist/components/editable';
-import { useRouter } from 'next/router';
 
 interface Props {
   name: string;
   onSubmit: (text: string) => void;
   slateProps?: EditableProps;
+}
+
+enum FloatMenu {
+  Channels,
+  Members,
 }
 
 const editorID = 'slatejs-editor';
@@ -49,16 +57,23 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [search, setSearch] = useState('');
   const [target, setTarget] = useState<Range | undefined>();
   const [attachments, setAttachments] = useState<Array<File>>([]);
+  const [floatMenu, setFloatMenu] = useState<FloatMenu | null>(null);
 
   const { query } = useRouter();
   const editor = useMemo(
-    () => withMentions(withReact(withHistory(createEditor()))),
+    () =>
+      withRoomMentions(
+        withUserMentions(withReact(withHistory(createEditor())))
+      ),
     []
   );
 
+  const tribeID = query.tribeID as string;
   const roomID = query.viewID as string;
+
+  const tribeRooms = useTribeRooms(tribeID);
   const roomMembers = useRoomMembers(roomID);
-  const availableMentionsList = useMemo(
+  const roomMembersList = useMemo(
     () =>
       getMentionsArrayFromCacheForUI(roomMembers)
         .filter(({ label }) => {
@@ -71,6 +86,18 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
           type: MentionType.Member,
         })),
     [roomMembers, search]
+  );
+  const tribeRoomsList = useMemo(
+    () =>
+      tribeRooms
+        .filter(({ name }) => {
+          return name.toLowerCase().startsWith(search.toLowerCase());
+        })
+        .map(({ id, name }) => ({
+          id,
+          label: name,
+        })),
+    [tribeRooms, search]
   );
 
   //----------------------------------------------------------------------------------------------------------------
@@ -87,6 +114,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       event.stopPropagation();
 
       const text = serialize(value);
+      if (!text?.trim()) return;
 
       onSubmit(text);
 
@@ -113,25 +141,48 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         switch (event.key) {
           case 'ArrowDown':
             event.preventDefault();
-            const prevIndex =
-              index >= availableMentionsList.length - 1 ? 0 : index + 1;
-            setIndex(prevIndex);
+
+            if (floatMenu === FloatMenu.Members) {
+              const prevIndex =
+                index >= roomMembersList.length - 1 ? 0 : index + 1;
+              setIndex(prevIndex);
+            } else if (floatMenu === FloatMenu.Channels) {
+              const prevIndex =
+                index >= tribeRoomsList.length - 1 ? 0 : index + 1;
+              setIndex(prevIndex);
+            }
             break;
           case 'ArrowUp':
             event.preventDefault();
-            const nextIndex =
-              index <= 0 ? availableMentionsList.length - 1 : index - 1;
-            setIndex(nextIndex);
+            if (floatMenu === FloatMenu.Members) {
+              const nextIndex =
+                index <= 0 ? roomMembersList.length - 1 : index - 1;
+              setIndex(nextIndex);
+            } else if (floatMenu === FloatMenu.Channels) {
+              const nextIndex =
+                index <= 0 ? tribeRoomsList.length - 1 : index - 1;
+              setIndex(nextIndex);
+            }
+
             break;
           case 'Tab':
           case 'Enter':
             event.preventDefault();
             Transforms.select(editor, target);
-            insertMention(editor, availableMentionsList[index]);
+
+            if (floatMenu === FloatMenu.Members) {
+              insertUserMention(editor, roomMembersList[index]);
+            } else if (floatMenu === FloatMenu.Channels) {
+              insertRoomMention(editor, tribeRoomsList[index]);
+            }
+
+            setFloatMenu(null);
             setTarget(null);
             break;
           case 'Escape':
             event.preventDefault();
+
+            setFloatMenu(null);
             setTarget(null);
             break;
         }
@@ -141,60 +192,118 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         handleSubmit(event);
       }
     },
-    [target, index, availableMentionsList, editor, handleSubmit]
+    [
+      target,
+      floatMenu,
+      editor,
+      index,
+      roomMembersList,
+      tribeRoomsList,
+      handleSubmit,
+    ]
   );
 
   //----------------------------------------------------------------------------------------------------------------
-  const renderMentions = () => {
-    if (target && availableMentionsList.length > 0) {
-      return (
-        <div className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto">
-          <h3 className="text-sm">Members</h3>
-          {availableMentionsList.map(({ id, avatar, label }, mentionIndex) => (
-            <>
-              <div
-                key={id}
-                className={`${
-                  mentionIndex === index ? 'bg-gray-900' : ''
-                } mt-3 py-2 px-3 rounded-md cursor-pointer`}
-                onClick={() => {
-                  setIndex(mentionIndex);
-                  Transforms.select(editor, target);
-                  insertMention(editor, availableMentionsList[index]);
-                  setTarget(null);
-                }}
-                onMouseEnter={() => {
-                  setIndex(mentionIndex);
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  {avatar && (
-                    <img
-                      className="w-5 h-5 rounded-full flex-shrink-0"
-                      src={avatar}
-                      alt={label}
-                    />
-                  )}
-                  {!avatar && label && (
-                    <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                      {label[0].toUpperCase()}
+  const renderFloatMenu = () => {
+    switch (floatMenu) {
+      case FloatMenu.Channels: {
+        if (target && tribeRoomsList.length > 0) {
+          return (
+            <div
+              className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
+              style={{ bottom: '6.6rem' }}
+            >
+              <h3 className="text-sm uppercase text-gray-200">Tribe Rooms</h3>
+              {tribeRoomsList.map(({ id, label }, channelIndex) => (
+                <>
+                  <div
+                    key={id}
+                    className={`${
+                      channelIndex === index ? 'bg-gray-900' : ''
+                    } mt-3 py-2 px-3 rounded-md cursor-pointer`}
+                    onClick={() => {
+                      setIndex(channelIndex);
+                      Transforms.select(editor, target);
+                      insertRoomMention(editor, tribeRoomsList[index]);
+
+                      setFloatMenu(null);
+                      setTarget(null);
+                    }}
+                    onMouseEnter={() => {
+                      setIndex(channelIndex);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">{label}</div>
+                  </div>
+                </>
+              ))}
+              <div className="w-full divide-solid " />
+            </div>
+          );
+        }
+      }
+
+      case FloatMenu.Members: {
+        if (target && roomMembersList.length > 0) {
+          return (
+            <div
+              className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
+              style={{ bottom: '6.6rem' }}
+            >
+              <h3 className="text-sm uppercase text-gray-200">Members</h3>
+              {roomMembersList.map(({ id, avatar, label }, mentionIndex) => (
+                <>
+                  <div
+                    key={id}
+                    className={`${
+                      mentionIndex === index ? 'bg-gray-900' : ''
+                    } mt-3 py-2 px-3 rounded-md cursor-pointer`}
+                    onClick={() => {
+                      setIndex(mentionIndex);
+                      Transforms.select(editor, target);
+                      insertUserMention(editor, roomMembersList[index]);
+
+                      setFloatMenu(null);
+                      setTarget(null);
+                    }}
+                    onMouseEnter={() => {
+                      setIndex(mentionIndex);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      {avatar && (
+                        <img
+                          className="w-5 h-5 rounded-full flex-shrink-0"
+                          src={avatar}
+                          alt={label}
+                        />
+                      )}
+                      {!avatar && label && (
+                        <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
+                          {label[0].toUpperCase()}
+                        </div>
+                      )}
+                      {label}
                     </div>
-                  )}
-                  {label}
-                </div>
-              </div>
-            </>
-          ))}
-          <div className="w-full divide-solid " />
-        </div>
-      );
+                  </div>
+                </>
+              ))}
+              <div className="w-full divide-solid " />
+            </div>
+          );
+        }
+      }
     }
   };
+
   return (
     <>
-      {renderMentions()}
+      <div
+        className="flex items-center w-full bg-sapien-neutral-600 shadow px-6 py-6 relative cursor-default"
+        style={{ borderRadius: '0.75rem 0.75rem 0 0' }}
+      >
+        {renderFloatMenu()}
 
-      <div className="flex items-center w-full bg-sapien-neutral-600 rounded-xl shadow px-6 py-6 relative cursor-default">
         {/* Avatar */}
         <div className="mr-4 w-12 hidden sm:block">
           <UserAvatar user={me} passport={passport} />
@@ -249,29 +358,44 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                     before && Editor.range(editor, before, start);
                   const beforeText =
                     beforeRange && Editor.string(editor, beforeRange);
-                  const beforeMatch =
+                  const beforeMatchAt =
                     beforeText && beforeText.match(/^@(\w+)$/);
+                  const beforeMatchHash =
+                    beforeText && beforeText.match(/^#(\w+)$/);
                   const after = Editor.after(editor, start);
                   const afterRange = Editor.range(editor, start, after);
                   const afterText = Editor.string(editor, afterRange);
                   const afterMatch = afterText.match(/^(\s|$)/);
 
-                  if (beforeMatch && afterMatch) {
+                  if (beforeMatchAt && afterMatch) {
                     setTarget(beforeRange);
-                    setSearch(beforeMatch[1]);
+                    setSearch(beforeMatchAt[1]);
                     setIndex(0);
+
+                    setFloatMenu(FloatMenu.Members);
+                    return;
+                  }
+
+                  if (beforeMatchHash && afterMatch) {
+                    setTarget(beforeRange);
+                    setSearch(beforeMatchHash[1]);
+                    setIndex(0);
+
+                    setFloatMenu(FloatMenu.Channels);
                     return;
                   }
                 }
 
+                setFloatMenu(null);
                 setTarget(null);
               }}
             >
               <Editable
                 renderElement={renderElement}
                 onKeyDown={onKeyDown}
-                placeholder={`Leave a message on ${name}`}
+                placeholder={`Leave a message in ${name}`}
                 className="max-w-250 w-full py-2 break-all"
+                style={{ cursor: 'text' }}
                 {...slateProps}
               />
             </Slate>

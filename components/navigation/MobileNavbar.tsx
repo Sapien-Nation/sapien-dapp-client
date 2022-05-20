@@ -13,22 +13,25 @@ import { useAuth } from 'context/user';
 import { UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-const Notifications = dynamic(() => import('components/notifications'));
-import { ProfileDialog } from 'components/profile';
+import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
 
 // hooks
 import { usePassport } from 'hooks/passport';
+
+// types
+import type { Token } from 'wallet/types';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
 }
 
 enum Dialog {
-  Profile,
+  DeclarationDialog,
 }
 
 const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
+  const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
 
   const { me } = useAuth();
   const { query } = useRouter();
@@ -67,7 +70,7 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                     >
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
                         <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
@@ -81,7 +84,12 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-80 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet />
+                    <Wallet
+                      setTokenToSign={setTokenToSign}
+                      showDeclarationDialog={() =>
+                        setDialog(Dialog.DeclarationDialog)
+                      }
+                    />
                   </Menu.Items>
                 </div>
 
@@ -223,8 +231,11 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
       </div>
 
       {/* Dialogs */}
-      {dialog === Dialog.Profile && (
-        <ProfileDialog onClose={() => setDialog(null)} />
+      {dialog === Dialog.DeclarationDialog && (
+        <DeclarationOfSovereigntyDialog
+          onClose={() => setDialog(null)}
+          token={tokenToSign}
+        />
       )}
     </>
   );

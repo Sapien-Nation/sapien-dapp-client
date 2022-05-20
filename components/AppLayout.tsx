@@ -88,7 +88,7 @@ const AppLayout = ({ children }: Props) => {
 
     return (
       <div className="block flex-shrink-0 bg-sapien-neutral-600">
-        <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto">
+        <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </div>
@@ -165,7 +165,7 @@ const AppLayout = ({ children }: Props) => {
                   <div className="flex-1 flex overflow-hidden">
                     <section
                       aria-labelledby="primary-heading"
-                      className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative"
+                      className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
                     >
                       {children}
                     </section>

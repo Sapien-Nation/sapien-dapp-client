@@ -3,12 +3,11 @@ import { useRouter } from 'next/router';
 
 // hooks
 import { useRoomMembers } from 'hooks/room';
+import { useTribeRooms } from 'hooks/tribe';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
-
-// utils
-import { getUserIDFromNode, isNodeMention } from 'slatejs/utils';
+import { renderContent } from '../helpers';
 
 // types
 import type { RoomMessage } from 'tools/types/room';
@@ -25,34 +24,10 @@ const MessagePreview = ({
   },
 }: Props) => {
   const { query } = useRouter();
+  const tribeID = query.tribeID as string;
 
+  const tribeRooms = useTribeRooms(tribeID);
   const roomMembers = useRoomMembers(query.viewID as string);
-
-  const renderContent = () => {
-    const elements = content.split('\n\n');
-
-    return elements.map((node, index) => {
-      return node
-        .split(' ')
-        .map((singleNode) => {
-          if (isNodeMention(singleNode)) {
-            const userID = getUserIDFromNode(singleNode);
-            const user = roomMembers.find(({ id }) => id === userID);
-            if (user) {
-              return (
-                <span className="align-baseline rounded bg-sapien text-white text-extrabold text-xs cursor-pointer">
-                  {' '}
-                  @{user.username}{' '}
-                </span>
-              );
-            }
-            return ` ${singleNode} `;
-          }
-          return ` ${singleNode} `;
-        })
-        .concat(index === elements.length - 1 ? '' : '\n\n');
-    });
-  };
 
   return (
     <div className="py-2 bg-gray-800 rounded-md px-6 flex justify-between items-start group mt-4">
@@ -60,7 +35,7 @@ const MessagePreview = ({
         <>
           {avatar ? (
             <img
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 rounded-full object-cover"
               src={avatar}
               alt=""
               data-testid="message-avatar"
@@ -76,7 +51,7 @@ const MessagePreview = ({
         </>
         <div className="flex-1 space-y-1">
           <div className="flex items-center gap-2">
-            <h3 className="text-sm font-extrabold">{username}</h3>
+            <h3 className="text-sm font-bold">{username}</h3>
             <time
               data-testid="message-timestamp"
               className="text-xs text-white"
@@ -84,7 +59,10 @@ const MessagePreview = ({
               {formatDateRelative(createdAt)}
             </time>
           </div>
-          <p className="text-sm text-white/80 group whitespace-pre-line break-all">
+          <p
+            className="text-sm text-white/80 group whitespace-pre-line break-words"
+            style={{ wordBreak: 'break-word' }}
+          >
             <Linkify
               tagName="p"
               options={{
@@ -97,7 +75,7 @@ const MessagePreview = ({
                 className: { url: 'underline text-blue-500' },
               }}
             >
-              {renderContent()}
+              {renderContent(content, roomMembers, tribeRooms, tribeID)}
             </Linkify>
           </p>
         </div>

@@ -15,7 +15,7 @@ import { SEO } from 'components/common';
 // helpers
 import { formatDate, formatDateRelative } from 'utils/date';
 
-const NotAMemberView = () => {
+const JoinRoom = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   const toast = useToast();
@@ -37,7 +37,7 @@ const NotAMemberView = () => {
 
   const date = new Date().toISOString();
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-row p-0">
+    <div className="bg-sapien-neutral-800 h-full flex flex-1 flex-row p-0 lg:rounded-3xl">
       <>
         <SEO title="Join the Room" />
         <div className="flex flex-col h-full flex-1 overflow-hidden">
@@ -56,7 +56,7 @@ const NotAMemberView = () => {
                   <div className="flex space-x-3 w-full">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src="https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/b851e8f8-a660-4d6a-be68-6177a5d40956-110x110.png"
+                      src="/images/harambe_sapien.png"
                       alt="monkey with glasses"
                     />
                     <div className="flex-1 space-y-1">
@@ -102,4 +102,4 @@ const NotAMemberView = () => {
   );
 };
 
-export default NotAMemberView;
+export default JoinRoom;

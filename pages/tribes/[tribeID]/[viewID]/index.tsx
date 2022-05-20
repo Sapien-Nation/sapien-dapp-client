@@ -7,8 +7,15 @@ import dynamic from 'next/dynamic';
 import { View } from 'constants/tribe';
 
 // components
-import { SEO, ErrorView, NotFound } from 'components/common';
-import { Channel, ContentView, MainChannel, RoomView } from 'components/tribe';
+import { SEO, ErrorView, NotFound, Query } from 'components/common';
+import {
+  BadgesView,
+  Channel,
+  ContentView,
+  MainChannel,
+  RoomView,
+  UpgradeView,
+} from 'components/tribe';
 const PassportView = dynamic(() =>
   import('components/tribe').then((views) => views.PassportView)
 );
@@ -29,16 +36,27 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
   const renderView = () => {
     switch (view.type) {
+      case View.Badges:
+        return <BadgesView />;
       case View.Passport:
         return <PassportView />;
       case View.Content:
         return <ContentView />;
-      case View.Room:
-        return <RoomView />;
+      case View.Room: {
+        return (
+          <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
+            {({ message, name }) => (
+              <RoomView isMember={Boolean(message) === false} name={name} />
+            )}
+          </Query>
+        );
+      }
       case View.Channel:
         return <Channel />;
       case View.MainChannel:
         return <MainChannel />;
+      case View.Upgrade:
+        return <UpgradeView />;
       case View.NotFound:
         return <NotFound message="You dont have access to see this content" />;
       default:

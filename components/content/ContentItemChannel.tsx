@@ -61,7 +61,7 @@ const ContentItem = ({
                     alt="Sapien Post Image"
                   />
                 ) : (
-                  <div className="w-5 h-5 bg-sapien-neutral-200 rounded-full flex items-center justify-center font-extrabold text-sm">
+                  <div className="w-5 h-5 bg-sapien-neutral-200 rounded-full flex items-center justify-center font-bold text-sm">
                     {userName[0].toUpperCase()}
                   </div>
                 )}

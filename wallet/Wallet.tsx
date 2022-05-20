@@ -1,9 +1,10 @@
 import { RefreshIcon } from '@heroicons/react/outline';
 import { ExclamationIcon } from '@heroicons/react/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // components
 import {
+  NotificationsView,
   DepositView,
   HistoryView,
   HomeView,
@@ -18,6 +19,7 @@ import { useWeb3 } from './providers';
 import type { Token } from './types';
 
 enum View {
+  Notifications,
   Home,
   Deposit,
   Token,
@@ -25,7 +27,12 @@ enum View {
   History,
 }
 
-const Wallet = () => {
+interface Props {
+  setTokenToSign: (token: Token) => void;
+  showDeclarationDialog: () => void;
+}
+
+const Wallet = ({ setTokenToSign, showDeclarationDialog }: Props) => {
   const [view, setView] = useState(View.Home);
   const [token, setToken] = useState<Token | null>(null);
 
@@ -37,27 +44,24 @@ const Wallet = () => {
         <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
           <div className="w-64">
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 Error
                 <ExclamationIcon className="w-5" />
               </h5>
             </div>
             <p className="text-sm text-white grid gap-4 items-center justify-center mt-6">
               <span>
-                There was an error while loading the Web3 libraries we use to
-                give you the best wallet experience
-              </span>
-              <span>
-                We recommend you to close and re-open this Dialog, if error
-                persist please contact{' '}
+                There was an error loading our Web3 library. Please try
+                reloading the page or contact{' '}
                 <a
-                  href="mailto:passports@sapien.network"
-                  className="text-blue-500 font-extrabold underline"
+                  href="mailto:support@sapien.network"
+                  className="text-blue-500 font-bold underline"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  passports@sapien.network
+                  support@sapien.network
                 </a>{' '}
+                if the error persists.
               </span>
             </p>
           </div>
@@ -70,7 +74,7 @@ const Wallet = () => {
         <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
           <div className="w-56 h-26">
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 Loading Libraries
                 <RefreshIcon className="w-5 animate-spin" />
               </h5>
@@ -84,6 +88,8 @@ const Wallet = () => {
     }
 
     switch (view) {
+      case View.Notifications:
+        return <NotificationsView handleBack={() => setView(View.Home)} />;
       case View.Home:
         return (
           <HomeView
@@ -93,6 +99,7 @@ const Wallet = () => {
               setView(View.Token);
             }}
             onViewHistory={() => setView(View.History)}
+            onViewNotifications={() => setView(View.Notifications)}
           />
         );
       case View.Token:
@@ -105,6 +112,10 @@ const Wallet = () => {
             }}
             onWithdraw={() => {
               setView(View.Withdraw);
+            }}
+            showDeclarationDialog={() => {
+              setTokenToSign(token);
+              showDeclarationDialog();
             }}
           />
         );

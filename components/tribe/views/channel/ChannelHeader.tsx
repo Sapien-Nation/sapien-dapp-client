@@ -38,7 +38,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
           <img
             alt={channel.name}
             src={channel.cover}
-            className="object-fill w-full h-full rounded-lg"
+            className="object-cover w-full h-full rounded-lg"
           />
         </div>
       ) : (
@@ -48,19 +48,21 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
         <div className="relative">
           {channel.avatar ? (
             <img
-              className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0"
+              className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 object-cover"
               src={channel.avatar}
               alt=""
             />
           ) : (
-            <div className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl">
+            <div className="w-40 h-40 mr-auto ml-auto sm:mr-0 sm:ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-bold text-xl">
               {channel.name[0].toUpperCase()}
             </div>
           )}
         </div>
         <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
           <div className="flex flex-col justify-center sm:ml-12">
-            <h1 className="text-xl text-center sm:text-left">{channel.name}</h1>
+            <h1 className="text-xl text-center sm:text-left font-semibold">
+              {channel.name}
+            </h1>
             <h2 className="text-gray-500 mb-4 sm:mb-0">
               {channel.membersCount} members
             </h2>
@@ -69,7 +71,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
             <button
               onClick={handleCopyToClipboard}
               type="button"
-              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none"
+              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none font-semibold"
             >
               Invite
             </button>
@@ -91,7 +93,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
         </div>
       </div>
       {channel.description && (
-        <p className="ml-8 mt-8 text-gray-500 whitespace-pre-line line-clamp-5">
+        <p className="ml-8 mt-8 text-gray-300 whitespace-pre-line line-clamp-5">
           {channel.description}
         </p>
       )}

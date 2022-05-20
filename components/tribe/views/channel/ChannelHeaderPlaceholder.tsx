@@ -7,7 +7,7 @@ const ChannelHeaderPlaceholder = () => {
         <div className="bg-gradient-to-r bg-sapien-neutral-200 min-h-250 shadow-md rounded-lg relative flex justify-center items-center" />
         <div className="flex flex-col md:flex-row">
           <div className="relative">
-            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-extrabold text-xl"></div>
+            <div className="w-40 h-40 ml-8 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-bold text-xl"></div>
           </div>
           <div className="flex flex-col sm:flex-row justify-center mt-3 items-center sm:justify-between w-full">
             <div className="flex flex-col justify-center sm:ml-12">

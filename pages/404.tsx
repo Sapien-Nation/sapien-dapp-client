@@ -41,7 +41,7 @@ const ErrorPage: NextPage = () => {
               <p className="text-2xl font-semibold text-white uppercase tracking-wide">
                 Ops..
               </p>
-              <h1 className="mt-2 text-4xl font-extrabold text-gray-400 tracking-tight sm:text-5xl">
+              <h1 className="mt-2 text-4xl font-bold text-gray-400 tracking-tight sm:text-5xl">
                 This page does not exist.
               </h1>
               <p className="mt-2 text-lg text-gray-500">

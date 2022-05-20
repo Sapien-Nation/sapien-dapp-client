@@ -1,6 +1,6 @@
 // components
 import { Dialog } from 'components/common';
-import MessagePreview from '../MessagePreview';
+import MessagePreview from './MessagePreview';
 
 // types
 import type { RoomMessage } from 'tools/types/room';

@@ -70,7 +70,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
               alt=""
             />
           ) : (
-            <div className="w-full h-20 rounded-xl -mb-16 flex-shrink-0 bg-sapien-80" />
+            <div className="w-full h-20 rounded-xl -mb-16 flex-shrink-0 bg-sapien-neutral-400" />
           )}
         </div>
         <div className="relative">

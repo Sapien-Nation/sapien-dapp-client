@@ -54,7 +54,7 @@ const Home = ({ handleBack }: Props) => {
       return (
         <div>
           <div className="flex justify-between items-center">
-            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
               Loading History
               <RefreshIcon className="w-5 animate-spin" />
             </h5>
@@ -70,7 +70,7 @@ const Home = ({ handleBack }: Props) => {
       return (
         <div>
           <div className="flex justify-center">
-            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
               <button onClick={handleBack}>
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -101,7 +101,7 @@ const Home = ({ handleBack }: Props) => {
         return (
           <div>
             <div className="flex justify-between items-center">
-              <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
                 <button
                   onClick={() => {
                     setView(View.Home);
@@ -119,7 +119,7 @@ const Home = ({ handleBack }: Props) => {
       case View.Home: {
         return (
           <div>
-            <h5 className="text-xl text-white font-extrabold tracking-wide flex items-center gap-2">
+            <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
               <button onClick={handleBack}>
                 <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
               </button>

@@ -125,7 +125,7 @@ const DialogPassport = ({
                 <div className="mt-3 sm:mt-5">
                   <HeadlessDialog.Title
                     as="h2"
-                    className="text-xl leading-6 font-extrabold text-center"
+                    className="text-xl leading-6 font-bold text-center"
                   >
                     {title}
                   </HeadlessDialog.Title>

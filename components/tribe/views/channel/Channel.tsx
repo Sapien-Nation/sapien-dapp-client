@@ -1,6 +1,7 @@
+import { ArrowNarrowLeftIcon, RefreshIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowNarrowLeftIcon, RefreshIcon } from '@heroicons/react/outline';
+import useSWR from 'swr';
 
 // api
 import { createContent } from 'api/content';
@@ -18,7 +19,6 @@ import { useToast } from 'context/toast';
 
 // hooks
 import { useTribeChannels } from 'hooks/tribe';
-import useGetInfinitePages from 'hooks/useGetInfinitePages';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -38,10 +38,7 @@ const Channel = () => {
   const channel = useTribeChannels(tribeID as string).find(
     ({ id }) => id === viewID
   );
-  const { data } = useGetInfinitePages<{
-    data: Array<Content>;
-    nextCursor: string | null;
-  }>(`/core-api/channel/${channel.id}/feed`);
+  const { data } = useSWR(`/core-api/channel/${channel.id}/feed`);
 
   const toast = useToast();
 

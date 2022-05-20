@@ -60,13 +60,13 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
       {/* Static sidebar for desktop */}
       <div
         aria-label="Sidebar"
-        className="py-6 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
+        className="py-5 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
       >
         {isOnProfilePage && (
           <>
             <Link href="/profile">
               <a
-                className="group p-0.5 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 bg-gray-50"
+                className="group h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 border-2 border-white/10 hover:border-gray-400 hover:text-gray-900"
                 onClick={(event) => {
                   if (event.type === 'contextmenu') {
                     event.preventDefault();
@@ -80,7 +80,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
                 ref={profileRef.current?.setTriggerRef}
               >
                 <img
-                  className="h-12 w-12 p-1 rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
+                  className="w-full h-full rounded-xl text-gray-400 bg-gray-900 group-hover:text-gray-500"
                   alt={''}
                   src={me.avatar}
                 />
@@ -107,9 +107,9 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
 
         <Link href="/discovery">
           <a
-            className={`group p-3 cursor-pointer rounded-xl flex items-center text-base font-medium ${
+            className={`group p-3 cursor-pointer rounded-lg flex items-center text-base font-medium w-10 h-10 ${
               pathname === '/discovery'
-                ? 'text-gray-900 bg-gray-50 hover:bg-gray-700 hover:text-gray-50'
+                ? 'text-gray-900 bg-gray-50'
                 : 'text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900'
             }`}
             ref={tooltipRef.current?.setTriggerRef}
@@ -119,7 +119,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             <span className="sr-only">Go to Explore</span>
           </a>
         </Link>
-        <Tooltip ref={tooltipRef} text="Discover New Sapien Tribes" />
+        <Tooltip ref={tooltipRef} text="Discover new Sapien Tribes" />
         <div>
           <button
             onClick={() => {
@@ -127,7 +127,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
               handleMobileMenu();
             }}
             type="button"
-            className="group p-3 mb-16 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+            className="group w-10 h-10 p-3 mb-16 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
             ref={createTribeRef.current?.setTriggerRef}
           >
             <PlusIcon className="h-6 w-6" />
@@ -142,13 +142,13 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             handleMobileMenu();
           }}
           type="button"
-          className="group absolute bottom-6 p-3 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+          className="group w-10 h-10 absolute bottom-5 p-3 cursor-pointer rounded-lg flex items-center text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
           ref={feedbackRef.current?.setTriggerRef}
         >
           <AnnotationIcon className="h-6 w-6" />
-          <span className="sr-only">Share your feedback?</span>
+          <span className="sr-only">Share your feedback</span>
         </button>
-        <Tooltip ref={feedbackRef} text="Share your feedback?" />
+        <Tooltip ref={feedbackRef} text="Share your feedback" />
       </div>
 
       {/* Modals */}

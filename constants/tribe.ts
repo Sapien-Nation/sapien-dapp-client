@@ -5,4 +5,6 @@ export enum View {
   MainChannel,
   Room,
   Passport,
+  Badges,
+  Upgrade,
 }

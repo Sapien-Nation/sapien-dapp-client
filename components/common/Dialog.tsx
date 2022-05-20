@@ -2,9 +2,10 @@ import { Fragment } from 'react';
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 
-interface Props {
+export interface Props {
   actions?: React.ReactElement;
   bgOpacity?: string;
+  bgColor?: string;
   cancelLabel?: string;
   confirmLabel?: string;
   children?: React.ReactElement | null;
@@ -21,6 +22,7 @@ interface Props {
 
 const Dialog = ({
   bgOpacity = 'bg-opacity-75',
+  bgColor = 'bg-gray-700',
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
   isFetching = false,
@@ -87,7 +89,7 @@ const Dialog = ({
             leaveTo="opacity-0"
           >
             <HeadlessDialog.Overlay
-              className={`fixed inset-0 bg-gray-700 ${bgOpacity} transition-opacity`}
+              className={`fixed inset-0 ${bgColor} ${bgOpacity} transition-opacity`}
             />
           </Transition.Child>
           <span
@@ -105,7 +107,7 @@ const Dialog = ({
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block w-full align-bottom rounded-lg pt-5 text-left overflow-hidden bg-gray-900 shadow-neutral-800 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full md:min-w-570">
+            <div className="inline-block w-8ful align-bottom rounded-lg pt-3 text-left overflow-hidden bg-gray-900 shadow-purple-600 shadow transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full md:min-w-[670px]">
               <div className="px-4 sm:p-8 pb-4">
                 <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                   <button
@@ -120,7 +122,7 @@ const Dialog = ({
                 <div className="mt-3 sm:mt-5">
                   <HeadlessDialog.Title
                     as="h2"
-                    className="text-xl leading-6 font-extrabold text-center"
+                    className="text-xl leading-6 font-bold text-center"
                   >
                     {title}
                   </HeadlessDialog.Title>

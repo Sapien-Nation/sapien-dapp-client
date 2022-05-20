@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Menu } from '@headlessui/react';
-import { BellIcon, CreditCardIcon, CogIcon } from '@heroicons/react/outline';
+import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,11 +11,21 @@ import { usePassport } from 'hooks/passport';
 
 // components
 import { UserAvatar } from 'components/common';
+import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-const Notifications = dynamic(() => import('components/notifications'));
+
+// types
+import type { Token } from 'wallet/types';
+
+enum Dialog {
+  DeclarationDialog,
+}
 
 const Navbar = () => {
+  const [dialog, setDialog] = useState<Dialog | null>(null);
+  const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
+
   const { me } = useAuth();
   const { query } = useRouter();
   const passport = usePassport();
@@ -43,7 +54,7 @@ const Navbar = () => {
                     >
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
+                        <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
                         <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
@@ -58,7 +69,12 @@ const Navbar = () => {
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet />
+                    <Wallet
+                      setTokenToSign={setTokenToSign}
+                      showDeclarationDialog={() =>
+                        setDialog(Dialog.DeclarationDialog)
+                      }
+                    />
                   </Menu.Items>
                 </div>
 
@@ -185,6 +201,14 @@ const Navbar = () => {
               </>
             )}
           </Menu>
+
+          {/* dialogs */}
+          {dialog === Dialog.DeclarationDialog && (
+            <DeclarationOfSovereigntyDialog
+              onClose={() => setDialog(null)}
+              token={tokenToSign}
+            />
+          )}
         </div>
       </div>
     </div>

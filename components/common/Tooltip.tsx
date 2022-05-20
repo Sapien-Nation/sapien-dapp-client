@@ -9,11 +9,15 @@ interface Props {
   forceHidden?: boolean;
   text: string;
   placement?: string;
+  offset?: number;
 }
 
 // eslint-disable-next-line react/display-name
 const Tooltip = forwardRef(
-  ({ forceHidden = false, text, placement = 'right' }: Props, ref) => {
+  (
+    { forceHidden = false, text, placement = 'right', offset = 25 }: Props,
+    ref
+  ) => {
     const { getTooltipProps, setTooltipRef, setTriggerRef, visible } =
       usePopperTooltip(
         {},
@@ -24,7 +28,7 @@ const Tooltip = forwardRef(
             {
               name: 'offset',
               options: {
-                offset: [0, 25],
+                offset: [0, offset],
               },
             },
           ],
