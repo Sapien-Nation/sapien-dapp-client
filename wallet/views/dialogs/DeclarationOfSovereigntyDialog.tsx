@@ -72,6 +72,10 @@ const DeclarationOfSovereigntyDialog = ({ onClose, token }: Props) => {
       case View.Success:
         return (
           <div className="flex flex-col gap-5">
+            <p className="pt-3">
+              You are now a <b>Founding Member of the Sapien Nation</b>!
+            </p>
+            <p>You can now upgrade your tribe and create your own badges.</p>
             <div className="flex flex-col items-center">
               <Lottie
                 animationData={UpgradeSuccessJSONLottie}
@@ -257,10 +261,10 @@ const DeclarationOfSovereigntyDialog = ({ onClose, token }: Props) => {
         };
       case View.Success:
         return {
-          title: 'Passport Signed!',
+          title: 'Congrats! Passport Signed!',
           bgColor: 'bg-black',
           bgOpacity: 'bg-opacity-80',
-          confirmLabel: 'Done!',
+          confirmLabel: 'View Passport',
           onClose: onClose,
           showCancel: false,
           onConfirm: onClose,
