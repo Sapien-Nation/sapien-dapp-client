@@ -8,6 +8,7 @@ import { Role } from 'tools/constants/tribe';
 // components
 import BadgeView from './badge';
 import Sidebar from './navigation';
+import SearchView from './search';
 import { Overlay, Query } from 'components/common';
 
 // hooks
@@ -51,11 +52,7 @@ const BadgesView = () => {
           />
         );
       case View.Search:
-        return (
-          <div>
-            <h1>TODO Search View</h1>
-          </div>
-        );
+        return <SearchView />;
     }
   };
 
