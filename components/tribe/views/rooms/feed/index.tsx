@@ -151,13 +151,16 @@ const Feed = ({
         }
       } else {
         switch (type) {
-          case WSEvents.NewMessage:
-            handleUnreadReadMessagesOnTribeNavigation(
-              data.extra.roomId,
-              true,
-              data.extra.messageId
-            );
+          case WSEvents.NewMessage: {
+            if ((data as RoomNewMessage).extra.mentions.includes(me.id)) {
+              handleUnreadReadMessagesOnTribeNavigation(
+                data.extra.roomId,
+                true,
+                data.extra.messageId
+              );
+            }
             break;
+          }
           default:
             console.info(`No handler for eventType: ${type}`);
             Sentry.captureMessage(`No handler for eventType: ${type}`);
