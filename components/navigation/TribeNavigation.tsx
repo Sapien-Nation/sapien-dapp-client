@@ -184,7 +184,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute z-10 right-0 mt-2 w-60 origin-top-right divide-y divide-gray-700 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {false && (
+                      {isTribeOwnerOrTribeAdmin && (
                         <div className="px-1 py-1">
                           {tribe.isUpgraded === true && (
                             <Menu.Item>
@@ -278,7 +278,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             </Link>
 
             {/* TODO remove this for development */}
-            {false && (
+            {true && (
               <Link
                 aria-label="Tribe Badges"
                 href={`/tribes/${tribeID}/badges`}
