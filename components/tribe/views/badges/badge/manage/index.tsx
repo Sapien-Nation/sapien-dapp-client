@@ -2,13 +2,12 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+// components
+import { Members, Permissions, Settings } from '../forms';
+
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
-
-// components
-import { Query } from 'components/common';
-import { Members, Permissions, Settings } from '../forms';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -21,11 +20,9 @@ interface Props {
 
 enum View {
   Settings,
-  Members,
-  Permissions,
 }
 
-const BadgeView = ({ badge, onCancel }: Props) => {
+const ManageBadgeView = ({ badge, onCancel }: Props) => {
   const [view, setView] = useState(View.Settings);
 
   const { me } = useAuth();
@@ -43,16 +40,22 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     formState: { isSubmitting },
     handleSubmit,
     watch,
-    setValue,
   } = methods;
 
   const onSubmit = async () => {
     try {
-      // TODO api call to generate badge
+      // TODO api call to update badge
     } catch (error) {
       toast({
         message: error,
       });
+    }
+  };
+
+  const renderForm = () => {
+    switch (view) {
+      case View.Settings:
+        return <Settings />;
     }
   };
 
@@ -61,18 +64,6 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     'color',
     'description',
   ]);
-
-  const renderForm = () => {
-    switch (view) {
-      case View.Members:
-        return <Members />;
-      case View.Permissions:
-        return <Permissions />;
-      case View.Settings:
-        return <Settings />;
-    }
-  };
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -88,28 +79,6 @@ const BadgeView = ({ badge, onCancel }: Props) => {
             >
               Settings
             </button>
-            <button
-              className={`border-b-2 ${
-                view === View.Members ? 'border-sapien' : 'border-transparent'
-              } px-3`}
-              onClick={() => setView(View.Members)}
-              type="button"
-              disabled={isSubmitting}
-            >
-              Members
-            </button>
-            <button
-              className={`border-b-2 ${
-                view === View.Permissions
-                  ? 'border-sapien'
-                  : 'border-transparent'
-              } px-3`}
-              onClick={() => setView(View.Permissions)}
-              type="button"
-              disabled={isSubmitting}
-            >
-              Permissions
-            </button>
           </div>
           <div className="border border-gray-800 rounded-md">
             {renderForm()}
@@ -122,7 +91,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
               type="button"
               disabled={isSubmitting}
             >
-              Cancel
+              Reset
             </button>
             <button
               className="mx-1 p-2 rounded-md bg-primary hover:bg-sapien-80 hover:cursor-pointer"
@@ -134,7 +103,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
               }
               type="submit"
             >
-              Confirm
+              Update
             </button>
           </div>
         </div>
@@ -143,16 +112,4 @@ const BadgeView = ({ badge, onCancel }: Props) => {
   );
 };
 
-const BadgeViewProxy = ({ badge, onCancel }: Props) => {
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => <BadgeView badge={badge} onCancel={onCancel} />}
-    </Query>
-  );
-};
-
-export default BadgeViewProxy;
+export default ManageBadgeView;
