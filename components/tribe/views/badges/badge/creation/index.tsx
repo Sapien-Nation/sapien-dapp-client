@@ -36,6 +36,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
       description: badge.description,
       name: badge.name,
       owners: [me.walletAddress],
+      permissions: [],
     },
   });
 
@@ -43,7 +44,6 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     formState: { isSubmitting },
     handleSubmit,
     watch,
-    setValue,
   } = methods;
 
   const onSubmit = async () => {
@@ -155,4 +155,4 @@ const BadgeViewProxy = ({ badge, onCancel }: Props) => {
   );
 };
 
-export default BadgeViewProxy;
+export default BadgeView;

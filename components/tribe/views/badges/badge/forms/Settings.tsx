@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
 import { HexColorPicker } from 'react-colorful';
@@ -6,11 +7,18 @@ import { HexColorPicker } from 'react-colorful';
 import { TextInput, TextInputLabel } from 'components/common';
 import { useFormContext } from 'react-hook-form';
 
+// hooks
+import { useTribe } from 'hooks/tribe';
+
 const SettingsForm = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const popover = useRef();
 
+  const popover = useRef();
+  const { query } = useRouter();
   const { setValue, watch } = useFormContext();
+
+  const tribeID = query.tribeID as string;
+  const { avatar } = useTribe(tribeID);
 
   useClickAway(popover, () => {
     setIsOpen(!isOpen);
@@ -23,10 +31,11 @@ const SettingsForm = () => {
       <TextInputLabel label="Badge Icon" name="icon" error="" />
       <div className="relative">
         <img
-          src={'https://ui-avatars.com/api/?name=tribe'}
-          alt="tribe-avatar"
-          className={`border-2 border-[${badgeColor}] w-8 h-8 object-cover rounded-full`}
+          src={avatar}
+          alt="Tribe Avatar"
+          className={`border-2 w-8 h-8 object-cover rounded-full`}
           onClick={() => setIsOpen(!isOpen)}
+          style={{ borderColor: badgeColor }}
         />
         {isOpen && (
           <div className="absolute left-0" ref={popover}>

@@ -18,11 +18,12 @@ const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
     if (type === BadgeTypes.Draft) {
       return '(DRAFT)';
     } else if (type === BadgeTypes.Normal) {
-      return '(NORMAL)';
+      return '';
     } else {
-      return '(OWNER)';
+      return '(Default)';
     }
   };
+
   return (
     <button
       onClick={() => onSelect()}
@@ -33,7 +34,8 @@ const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
         <img
           src={logo}
           alt={badge.name}
-          className="w-8 h-8 object-cover rounded-full border-2 border-sapien"
+          style={{ borderColor: badge.color }}
+          className="w-8 h-8 object-cover rounded-full border-2 "
         />
       ) : (
         <ContributorBadge className="w-8 h-8" />

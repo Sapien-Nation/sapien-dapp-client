@@ -1,11 +1,14 @@
+import { useRouter } from 'next/router';
+
 // components
 import { Query } from 'components/common';
+import BadgeCard from './BadgeCard';
 
 // constants
 import { BadgeTypes } from 'tools/constants/tribe';
 
 // hooks
-import { useSapienTribe } from 'hooks/tribe';
+import { useTribe } from 'hooks/tribe';
 
 // mocks
 import { mockTribeBadge } from 'tools/mocks/tribe';
@@ -21,11 +24,13 @@ interface Props {
 }
 
 const Search = ({ onSelect }: Props) => {
-  const { avatar } = useSapienTribe();
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+  const { avatar } = useTribe(tribeID);
 
   const defaultBadges: Array<TribeBadge> = DefaultBadgesJSON.badges.map(
-    (badge, index) => ({
-      id: String(index),
+    (badge) => ({
       image: avatar,
       type: BadgeTypes.Normal,
       ...badge,
@@ -35,15 +40,20 @@ const Search = ({ onSelect }: Props) => {
   return (
     <div>
       <section>
+        <h1>Default Badges (from JSON)</h1>
+
         {defaultBadges.map((badge) => {
           return (
-            <button onClick={() => onSelect(badge)} key={badge.id}>
-              Add badge {badge.name}
-            </button>
+            <BadgeCard
+              badge={badge}
+              onClick={() => onSelect(badge)}
+              key={badge.id}
+            />
           );
         })}
       </section>
       <section>
+        <h1>Tribe Badges (from API)</h1>
         <Query
           api="/core-api/tribes/badges"
           loader={null}
@@ -71,15 +81,19 @@ const Search = ({ onSelect }: Props) => {
           }}
         >
           {(badges: Array<TribeBadge>) => {
-            <div>
-              {badges.map((badge) => {
-                return (
-                  <button onClick={() => onSelect(badge)} key={badge.id}>
-                    Add badge {badge.name}
-                  </button>
-                );
-              })}
-            </div>;
+            return (
+              <div>
+                {badges.map((badge) => {
+                  return (
+                    <BadgeCard
+                      badge={badge}
+                      onClick={() => onSelect(badge)}
+                      key={badge.id}
+                    />
+                  );
+                })}
+              </div>
+            );
           }}
         </Query>
       </section>

@@ -23,7 +23,6 @@ const MembersForm = () => {
 
   const [owners] = watch(['owners']);
 
-  console.log(owners);
   return (
     <div className="w-full">
       <div className="flex flex-col items-center relative">

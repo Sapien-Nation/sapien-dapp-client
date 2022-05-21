@@ -1,15 +1,24 @@
 {
   "badges": [{
-    "name": "name",
+    "id": "1",
+    "name": "Archiver",
     "description": "color",
-    "color": "color"
+    "color": "#e75555",
+    "owners": [],
+    "permissions": []
   }, {
-    "name": "name",
+    "id": "2",
+    "name": "Watcher",
     "description": "color",
-    "color": "color"
+    "color": "#a9e185",
+    "owners": [],
+    "permissions": []
   },{
-    "name": "name",
+    "id": "3",
+    "name": "Amazing",
     "description": "color",
-    "color": "color"
+    "color": "#6cdcdf",
+    "owners": [],
+    "permissions": []
   }]
 }

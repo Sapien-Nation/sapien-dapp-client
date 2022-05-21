@@ -14,6 +14,7 @@ import Sidebar from './navigation';
 import SearchView from './search';
 
 // hooks
+import { useAuth } from 'context/user';
 import { useTribe } from 'hooks/tribe';
 
 // types
@@ -21,25 +22,34 @@ import type { TribeBadge } from 'tools/types/tribe';
 
 // mocks
 import { mockTribeBadge } from 'tools/mocks/tribe';
+import { useTribeBadges } from 'hooks/tribe/badge';
 
 enum View {
   BadgeManage,
   BadgeCreation,
   Home,
   Search,
+  Placeholder,
 }
 
-interface Props {
-  tribeBadges: Array<TribeBadge>;
-}
+// Note
+// We are doing setTimeout(() => {}, 0)
+// and View.Placeholder since we use useForm({ defaultValues: { ... } })
+// And in order to re-render the form we need to make sure the UI is flushed
+// Option 1 -> One option could be move the "selected" badge to be router level, but the issue might persiste
+// Option 2 -> ??
 
-const BadgesView = ({ tribeBadges }: Props) => {
+const BadgesView = () => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
   const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
   const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
-  const { back } = useRouter();
+  const { me } = useAuth();
+  const { back, query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+  const tribeBadges = useTribeBadges(tribeID);
 
   const handleAddDraftBadge = () => {
     const badgeID = nanoid();
@@ -48,12 +58,20 @@ const BadgesView = ({ tribeBadges }: Props) => {
       id: badgeID,
       description: 'This is a draft badge, please edit this description.',
       name: '[draft] badge',
-      color: '#6200EA',
+      color: '#fff',
       type: BadgeTypes.Draft,
+      owners: [me.walletAddress],
+      permissions: [],
     };
 
-    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
-    setSelectedBadge(badge);
+    setView(View.Placeholder);
+
+    setTimeout(() => {
+      setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
+      setSelectedBadge(badge);
+
+      setView(View.BadgeCreation);
+    }, 0);
   };
 
   const renderView = () => {
@@ -95,13 +113,17 @@ const BadgesView = ({ tribeBadges }: Props) => {
           </div>
         );
       }
-      case View.BadgeManage:
+      case View.Placeholder:
+        // dirty hack to re-render form
+        return <></>;
+      case View.BadgeManage: {
         return (
           <BadgeManageView
             badge={selectedBadge!}
             onCancel={() => setView(View.Home)}
           />
         );
+      }
       case View.BadgeCreation:
         return (
           <BadgeCreationView
@@ -113,13 +135,17 @@ const BadgesView = ({ tribeBadges }: Props) => {
         return (
           <SearchView
             onSelect={(badge) => {
-              setDraftBadges((currentDraftBadges) => [
-                ...currentDraftBadges,
-                badge,
-              ]);
-              setSelectedBadge(badge);
+              setView(View.Placeholder);
 
-              setView(View.BadgeCreation);
+              setTimeout(() => {
+                setDraftBadges((currentDraftBadges) => [
+                  ...currentDraftBadges,
+                  badge,
+                ]);
+                setSelectedBadge(badge);
+
+                setView(View.BadgeCreation);
+              }, 0);
             }}
           />
         );
@@ -134,17 +160,21 @@ const BadgesView = ({ tribeBadges }: Props) => {
             handleAddDraftBadge={handleAddDraftBadge}
             draftBadges={draftBadges}
             setSelectedBadge={(badge) => {
-              setSelectedBadge(badge);
+              setView(View.Placeholder);
 
-              switch (badge.type) {
-                case BadgeTypes.Draft:
-                  setView(View.BadgeCreation);
-                  break;
-                case BadgeTypes.Normal:
-                case BadgeTypes.Owner:
-                  setView(View.BadgeManage);
-                  break;
-              }
+              setTimeout(() => {
+                setSelectedBadge(badge);
+
+                switch (badge.type) {
+                  case BadgeTypes.Draft:
+                    setView(View.BadgeCreation);
+                    break;
+                  case BadgeTypes.Normal:
+                  case BadgeTypes.Owner:
+                    setView(View.BadgeManage);
+                    break;
+                }
+              }, 0);
             }}
             showSearch={() => setView(View.Search)}
             tribeBadges={tribeBadges}
@@ -214,27 +244,33 @@ const BadgesViewProxy = () => {
       options={{
         fetcher: () => [
           mockTribeBadge({
-            name: 'Owner 1',
-            color: '#sapien',
-            description: 'this is the owner badge',
+            name: 'Treasurer',
+            color: '#6495ED',
+            description: 'This is the main badge',
             type: BadgeTypes.Owner,
           }),
           mockTribeBadge({
-            name: 'Normal 1',
-            color: '#sapien',
+            id: '2000',
+            name: 'Archiver',
+            color: '#2F4F4F',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,
           }),
           mockTribeBadge({
-            name: 'Normal 2',
-            color: '#sapien',
+            id: '3000',
+            name: 'Moderator',
+            color: '#FF1493',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,
           }),
         ],
       }}
     >
-      {(tribeBadges) => <BadgesView tribeBadges={tribeBadges} />}
+      {() => (
+        <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
+          {() => <BadgesView />}
+        </Query>
+      )}
     </Query>
   );
 };

@@ -3,15 +3,16 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 // components
+import { Query } from 'components/common';
 import { Members, Permissions, Settings } from '../forms';
 
 // context
-import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
 import type { BadgeFormValues } from '../types';
+import { options } from 'preact';
 
 interface Props {
   badge: TribeBadge;
@@ -20,22 +21,24 @@ interface Props {
 
 enum View {
   Settings,
+  Members,
+  Permissions,
 }
 
 const ManageBadgeView = ({ badge, onCancel }: Props) => {
   const [view, setView] = useState(View.Settings);
 
-  const { me } = useAuth();
+  console.log(badge);
   const toast = useToast();
   const methods = useForm<BadgeFormValues>({
     defaultValues: {
       color: badge.color,
       description: badge.description,
       name: badge.name,
-      owners: [me.walletAddress],
+      owners: badge.owners,
+      permissions: badge.permissions,
     },
   });
-
   const {
     formState: { isSubmitting },
     handleSubmit,
@@ -54,6 +57,10 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
 
   const renderForm = () => {
     switch (view) {
+      case View.Members:
+        return <Members />;
+      case View.Permissions:
+        return <Permissions />;
       case View.Settings:
         return <Settings />;
     }
@@ -78,6 +85,28 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
               disabled={isSubmitting}
             >
               Settings
+            </button>
+            <button
+              className={`border-b-2 ${
+                view === View.Members ? 'border-sapien' : 'border-transparent'
+              } px-3`}
+              onClick={() => setView(View.Members)}
+              type="button"
+              disabled={isSubmitting}
+            >
+              Members
+            </button>
+            <button
+              className={`border-b-2 ${
+                view === View.Permissions
+                  ? 'border-sapien'
+                  : 'border-transparent'
+              } px-3`}
+              onClick={() => setView(View.Permissions)}
+              type="button"
+              disabled={isSubmitting}
+            >
+              Permissions
             </button>
           </div>
           <div className="border border-gray-800 rounded-md">
@@ -109,6 +138,18 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
         </div>
       </form>
     </FormProvider>
+  );
+};
+
+const ManageBadgeViewProxy = ({ badge, onCancel }: Props) => {
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+
+  return (
+    <Query api={`/core-api/tribe/${tribeID}/members`}>
+      {() => <ManageBadgeView badge={badge} onCancel={onCancel} />}
+    </Query>
   );
 };
 
