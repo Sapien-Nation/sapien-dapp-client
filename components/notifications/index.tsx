@@ -10,8 +10,10 @@ import { useToast } from 'context/toast';
 
 const Notifications = () => {
   const toast = useToast();
-  const { notifications, unread } = useGlobalNotifications();
 
+  const { notifications } = useGlobalNotifications();
+
+  //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
     try {
       await makeAllAsRead();
@@ -20,6 +22,11 @@ const Notifications = () => {
         message: err,
       });
     }
+  };
+
+  //------------------------------------------------------------------------
+  const renderNotification = (notification) => {
+    return <span>TODO render notifications by type {notification.id}</span>;
   };
 
   return (
@@ -38,7 +45,7 @@ const Notifications = () => {
                     {({ active }) => (
                       <button
                         onClick={handleMarkAllAsRead}
-                        disabled={unread === 0}
+                        disabled={true}
                         className={`${
                           active ? 'bg-primary-200 text-white' : 'text-gray-900'
                         } group flex w-full items-center rounded-md p-2 text-sm disabled:cursor-not-allowed`}
@@ -53,7 +60,11 @@ const Notifications = () => {
           </Menu>
         </div>
       </div>
-      <div className="py-6 px-4">Comming Soon...</div>
+      <div className="py-6 px-4">
+        {notifications.map((notification) => (
+          <div key={notification.id}>{renderNotification(notification)}</div>
+        ))}
+      </div>
     </div>
   );
 };
