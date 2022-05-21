@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { PlusIcon } from '@heroicons/react/outline';
 
@@ -28,6 +29,7 @@ const Sidebar = ({
   tribeBadges,
   handleAddDraftBadge,
 }: Props) => {
+  const [selectedBadge, selectBadge] = useState<TribeBadge | null>(null);
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -64,20 +66,30 @@ const Sidebar = ({
                 <li key={badge.id} className="flex flex-col gap-2">
                   <BadgeNavItem
                     badge={badge}
+                    isSelected={badge.id === selectedBadge?.id}
                     logo={tribe.avatar}
-                    onSelect={() => setSelectedBadge(badge)}
+                    onSelect={() => {
+                      selectBadge(badge);
+                      setSelectedBadge(badge);
+                    }}
                   />
                 </li>
               );
             })}
-            <div className="border-t-2 border-gray-800" />
+            {draftBadges?.length ? (
+              <div className="border-t-2 !my-3 border-gray-800" />
+            ) : null}
             {draftBadges.map((badge) => {
               return (
                 <li key={badge.id} className="flex flex-col gap-2">
                   <BadgeNavItem
                     badge={badge}
+                    isSelected={badge.id === selectedBadge?.id}
                     logo={tribe.avatar}
-                    onSelect={() => setSelectedBadge(badge)}
+                    onSelect={() => {
+                      selectBadge(badge);
+                      setSelectedBadge(badge);
+                    }}
                   />
                 </li>
               );

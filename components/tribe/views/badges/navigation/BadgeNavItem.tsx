@@ -11,9 +11,10 @@ interface Props {
   logo?: string;
   badge: TribeBadge;
   onSelect: () => void;
+  isSelected: boolean;
 }
 
-const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
+const BadgeNavItem = ({ logo, badge, isSelected, onSelect }: Props) => {
   const getBadgeLabel = (type: BadgeTypes) => {
     if (type === BadgeTypes.Draft) {
       return '(DRAFT)';
@@ -28,19 +29,25 @@ const BadgeNavItem = ({ logo, badge, onSelect }: Props) => {
     <button
       onClick={() => onSelect()}
       aria-label="Select tribe"
-      className="border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300"
+      className={
+        isSelected
+          ? 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 bg-gray-800 font-semibold'
+          : 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 hover:bg-gray-800'
+      }
     >
       {logo ? (
         <img
           src={logo}
           alt={badge.name}
           style={{ borderColor: badge.color }}
-          className="w-8 h-8 object-cover rounded-full border-2 "
+          className="w-8 h-8 object-cover rounded-full border-2"
         />
       ) : (
         <ContributorBadge className="w-8 h-8" />
       )}
-      <span className="text-ellipsis truncate flex-1">{badge.name}</span>
+      <span className="text-ellipsis truncate flex-1 text-left">
+        {badge.name}
+      </span>
       <span className="text-gray-500 text-xs">{getBadgeLabel(badge.type)}</span>
     </button>
   );

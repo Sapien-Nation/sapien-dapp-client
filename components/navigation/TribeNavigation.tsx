@@ -33,7 +33,7 @@ import {
 
 // assets
 import starJSONLottie from 'components/navigation/lottie/star.json';
-import { VaultIcon } from 'assets';
+import { ManageIcon } from 'assets';
 
 // types
 import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
@@ -290,7 +290,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
                   }
                 >
-                  <VaultIcon className="w-3.5" />
+                  <ManageIcon className="w-4" fillColor="fill-white" />
                   Manage Badges
                 </a>
               </Link>
