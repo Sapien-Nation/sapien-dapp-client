@@ -74,7 +74,10 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-3">
+        <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
+          Create Badge
+        </h1>
+        <div className="flex flex-col gap-3 mt-5">
           <div className="flex justify-around border border-gray-800 rounded-md p-3">
             <button
               className={`border-b-2 ${
@@ -112,10 +115,9 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
           <div className="border border-gray-800 rounded-md">
             {renderForm()}
           </div>
-          <div className="flex items-center border border-gray-800 p-3 rounded-md">
-            <span className="flex flex-1">Create Badge</span>
+          <div className="flex justify-end border border-gray-800 p-3 rounded-md">
             <button
-              className="mx-1 p-2"
+              className="mx-1 p-2 text-sapien-red-700"
               onClick={onCancel}
               type="button"
               disabled={isSubmitting}

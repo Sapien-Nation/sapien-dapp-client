@@ -27,7 +27,7 @@ const MembersForm = () => {
     <div className="w-full">
       <div className="flex flex-col items-center relative">
         <div className="w-full">
-          <div className="my-2 p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
+          <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
             <div className="flex flex-auto flex-wrap">
               {owners.map((address) => {
                 const owner = tribeMembers.find(

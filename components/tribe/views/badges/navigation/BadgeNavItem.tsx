@@ -8,13 +8,13 @@ import type { TribeBadge } from 'tools/types/tribe';
 import { ContributorBadge } from 'assets';
 
 interface Props {
-  logo?: string;
+  image?: string;
   badge: TribeBadge;
   onSelect: () => void;
   isSelected: boolean;
 }
 
-const BadgeNavItem = ({ logo, badge, isSelected, onSelect }: Props) => {
+const BadgeNavItem = ({ image, badge, isSelected, onSelect }: Props) => {
   const getBadgeLabel = (type: BadgeTypes) => {
     if (type === BadgeTypes.Draft) {
       return '(DRAFT)';
@@ -35,9 +35,9 @@ const BadgeNavItem = ({ logo, badge, isSelected, onSelect }: Props) => {
           : 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 hover:bg-gray-800'
       }
     >
-      {logo ? (
+      {image ? (
         <img
-          src={logo}
+          src={image}
           alt={badge.name}
           style={{ borderColor: badge.color }}
           className="w-8 h-8 object-cover rounded-full border-2"

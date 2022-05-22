@@ -50,12 +50,14 @@ const BadgesView = () => {
 
   const tribeID = query.tribeID as string;
   const tribeBadges = useTribeBadges(tribeID);
+  const { avatar } = useTribe(tribeID);
 
   const handleAddDraftBadge = () => {
     const badgeID = nanoid();
 
     const badge = {
       id: badgeID,
+      image: avatar,
       description: 'This is a draft badge, please edit this description.',
       name: '[draft] badge',
       color: '#fff',
@@ -202,6 +204,7 @@ const BadgesViewProxy = () => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
+  const { avatar } = useTribe(tribeID);
 
   const { role, isUpgraded } = useTribe(tribeID);
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
@@ -244,14 +247,17 @@ const BadgesViewProxy = () => {
       options={{
         fetcher: () => [
           mockTribeBadge({
+            id: '1000',
             name: 'Treasurer',
             color: '#6495ED',
+            image: avatar,
             description: 'This is the main badge',
             type: BadgeTypes.Owner,
           }),
           mockTribeBadge({
             id: '2000',
             name: 'Archiver',
+            image: avatar,
             color: '#2F4F4F',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,
@@ -259,6 +265,7 @@ const BadgesViewProxy = () => {
           mockTribeBadge({
             id: '3000',
             name: 'Moderator',
+            image: avatar,
             color: '#FF1493',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,

@@ -40,40 +40,54 @@ const Search = ({ onSelect }: Props) => {
   return (
     <div>
       <section>
-        <h1>Default Badges (from JSON)</h1>
-
-        {defaultBadges.map((badge) => {
-          return (
-            <BadgeCard
-              badge={badge}
-              onClick={() => onSelect(badge)}
-              key={badge.id}
-            />
-          );
-        })}
+        <h2 className="text-lg text-sapien-neutral-200">
+          Default Badges (from JSON)
+        </h2>
+        <div className="space-y-3 mt-3">
+          {defaultBadges.map((badge) => {
+            return (
+              <BadgeCard
+                badge={badge}
+                onClick={() => onSelect(badge)}
+                key={badge.id}
+              />
+            );
+          })}
+        </div>
       </section>
-      <section>
-        <h1>Tribe Badges (from API)</h1>
+      <section className="mt-5">
+        <h2 className="text-lg text-sapien-neutral-200">
+          Tribe Badges (from API)
+        </h2>
         <Query
           api="/core-api/tribes/badges"
           loader={null}
           options={{
             fetcher: () => [
               mockTribeBadge({
+                id: '1',
                 name: 'The governance badge',
                 color: '#ffffff',
+                image:
+                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
                 description: 'Some description',
                 type: BadgeTypes.Normal,
               }),
               mockTribeBadge({
+                id: '2',
                 name: 'The (OTHER) tribe',
                 color: '#sapien',
+                image:
+                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
                 description: 'Some description',
                 type: BadgeTypes.Normal,
               }),
               mockTribeBadge({
+                id: '3',
                 name: 'the BBB Badge',
                 color: '#sapien',
+                image:
+                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
                 description: 'Some description',
                 type: BadgeTypes.Normal,
               }),
@@ -82,7 +96,7 @@ const Search = ({ onSelect }: Props) => {
         >
           {(badges: Array<TribeBadge>) => {
             return (
-              <div>
+              <div className="space-y-3 mt-3">
                 {badges.map((badge) => {
                   return (
                     <BadgeCard

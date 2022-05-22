@@ -67,7 +67,7 @@ const Sidebar = ({
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
-                    logo={tribe.avatar}
+                    image={tribe.avatar}
                     onSelect={() => {
                       selectBadge(badge);
                       setSelectedBadge(badge);
@@ -85,7 +85,7 @@ const Sidebar = ({
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
-                    logo={tribe.avatar}
+                    image={tribe.avatar}
                     onSelect={() => {
                       selectBadge(badge);
                       setSelectedBadge(badge);
