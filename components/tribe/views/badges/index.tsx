@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { XIcon } from '@heroicons/react/outline';
+import Lottie from 'react-lottie-player';
 
 // constants
 import { BadgeTypes, Role } from 'tools/constants/tribe';
@@ -23,6 +24,9 @@ import type { TribeBadge } from 'tools/types/tribe';
 // mocks
 import { mockTribeBadge } from 'tools/mocks/tribe';
 import { useTribeBadges } from 'hooks/tribe/badge';
+
+// assets
+import daoJSONData from './lottie/dao.json';
 
 enum View {
   BadgeManage,
@@ -82,34 +86,44 @@ const BadgesView = () => {
         return (
           <div>
             <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl mt-3 rounded-md">
-              <h1>Unlock your power with Badges!</h1>
+              <h1>Decentralize, automate, and grow your tribe</h1>
             </div>
-            <div className="whitespace-pre-line text-gray-300 space-y-2 pt-5 text-justify">
+            <div>
+              <Lottie
+                animationData={daoJSONData}
+                play
+                loop
+                className="max-w-1100px m-auto pt-6 h-[15rem]"
+              />
+            </div>
+            <div className="whitespace-pre-line text-gray-300 space-y-2 pt-3 text-justify">
+              <h2 className="text-2xl text-white"> Overview </h2>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-                mollitia, molestiae quas vel sint commodi repudiandae
-                consequuntur voluptatum laborum numquam blanditiis harum
-                quisquam eius sed odit fugiat iusto fuga praesentium optio,
-                eaque rerum! Provident similique accusantium nemo autem.
-                Veritatis obcaecati tenetur iure eius earum ut molestias
-                architecto voluptate aliquam nihil, eveniet aliquid culpa
-                officia aut! Impedit sit sunt quaerat, odit, tenetur error,
-                harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+                Badges are tokens that build a shared social ledger on Sapien.
               </p>
               <p>
-                quia. Quo neque error repudiandae fuga? Ipsa laudantium
-                molestias eos sapiente officiis modi at sunt excepturi expedita
-                sint?Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Maxime mollitia, molestiae quas vel sint commodi repudiandae
-                consequuntur voluptatum laborum numquam blanditiis harum
-                quisquam eius sed odit fugiat iusto fuga praesentium optio,
-                eaque rerum! Provident similique accusantium nemo autem.
-                Veritatis obcaecati tenetur iure eius earum ut molestias
-                architecto voluptate aliquam nihil, eveniet aliquid culpa
-                officia aut! Impedit sit sunt quaerat, odit, tenetur error,
-                harum nesciunt ipsum debitis quas aliquid. Reprehenderit, quia.
-                Quo neque error repudiandae fuga? Ipsa laudantium molestias eos
-                sapiente officiis modi at sunt excepturi expedita sint?
+                Badges may grant special privileges within communities on the
+                platform. For example, your tribe can use a badge to represent
+                membership, a credential, or a flag. You may also choose to use
+                another tribe’s badges in your community.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Owner Badge </h2>
+              <p>
+                Tribe members with the owner badge are able to access the vault
+                and issue new badges.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Moderator Badge </h2>
+              <p>
+                Tribe members with the moderator badge are able to manage rooms
+                and channels.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Custom Badges </h2>
+              <p>
+                As an issuing authority, feel free to create your own badges -
+                the possibilities are limitless!
               </p>
             </div>
           </div>
