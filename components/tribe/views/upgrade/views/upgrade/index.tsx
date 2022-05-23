@@ -65,6 +65,7 @@ const UpgradeView = () => {
       const safeAddress = await createVault({
         owners: selectedOwners.map(({ walletAddress }) => walletAddress),
         threshold,
+        senderAddress: '', // TODO whats this value?
       });
 
       await upgradeTribe(tribeID, {
