@@ -36,12 +36,20 @@ enum View {
   Success,
 }
 
+enum VaultStatus {
+  Creating,
+  DeployingStartup,
+  MultiSign,
+  Success,
+}
+
 const UpgradeView = () => {
   const { me } = useAuth();
 
   const [view, setView] = useState(View.Home);
   const [threshold, setThreshold] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [vaultStatus, setVaultStatus] = useState<VaultStatus | null>(null);
   const [selectedOwners, setSelectedOwners] = useState([
     {
       avatar: me.avatar,
@@ -61,13 +69,15 @@ const UpgradeView = () => {
 
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
+    setVaultStatus(VaultStatus.Creating);
     try {
       const safeAddress = await createVault({
         owners: selectedOwners.map(({ walletAddress }) => walletAddress),
         threshold,
-        senderAddress: '', // TODO whats this value?
+        senderAddress: me.walletAddress,
       });
 
+      setVaultStatus(VaultStatus.DeployingStartup);
       await upgradeTribe(tribeID, {
         safeAddress,
         owners: selectedOwners.map(({ id, walletAddress }) => ({
@@ -76,7 +86,16 @@ const UpgradeView = () => {
         })),
         threshold,
       });
+
+      // TODO multi sign
+      setVaultStatus(VaultStatus.MultiSign);
+      await new Promise((r) => setTimeout(r, 2000));
+
+      setVaultStatus(VaultStatus.Success);
+
+      await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
       setView(View.Success);
+      setVaultStatus(null);
     } catch (err) {
       setView(View.Confirm);
       Sentry.captureMessage(err);
@@ -444,7 +463,8 @@ const UpgradeView = () => {
       case View.Loading:
         return (
           <div>
-            <h1>https://sapienteam.atlassian.net/browse/PVD-222</h1>
+            TODO render upgrade checklist status
+            {vaultStatus}
           </div>
         );
     }
