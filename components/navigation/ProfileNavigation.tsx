@@ -32,7 +32,7 @@ const DiscoveryNavigation = () => {
             <a
               className={
                 asPath === '/profile'
-                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
+                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center font-semibold'
                   : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
               }
             >
@@ -43,7 +43,7 @@ const DiscoveryNavigation = () => {
             <a
               className={
                 asPath === '/profile/passport'
-                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
+                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center font-semibold'
                   : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
               }
             >
@@ -54,7 +54,7 @@ const DiscoveryNavigation = () => {
             <a
               className={
                 asPath === '/profile/badges'
-                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
+                  ? 'text-gray-300 text-sm bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center font-semibold'
                   : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md flex px-2 py-1 items-center'
               }
             >
