@@ -162,11 +162,6 @@ export const useGetCurrentView = (
       id: 'content',
     },
     {
-      type: View.Passport,
-      name: 'passport',
-      id: 'passport',
-    },
-    {
       type: View.Badges,
       name: 'badges',
       id: 'badges',

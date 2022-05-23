@@ -8,11 +8,6 @@ import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 
-// @ts-ignore
-const ProfileDialog = dynamic<any>(() =>
-  import('components/profile').then((mod) => mod.ProfileDialog)
-);
-
 // hooks
 import { useTribe, useWelcomeMessage } from 'hooks/tribe';
 
@@ -79,19 +74,6 @@ const MainChannel = () => {
           )}
         </Query>
       </div>
-
-      {/* Dialogs */}
-      {dialog === Dialog.Profile && (
-        <ProfileDialog
-          onClose={() => {
-            setDialog(null);
-
-            if (checkIfCommingFromMintedPage()) {
-              push(asPath.replace('#minted', ''));
-            }
-          }}
-        />
-      )}
     </>
   );
 };

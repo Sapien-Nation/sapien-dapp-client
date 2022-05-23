@@ -16,9 +16,6 @@ import {
   RoomView,
   UpgradeView,
 } from 'components/tribe';
-const PassportView = dynamic(() =>
-  import('components/tribe').then((views) => views.PassportView)
-);
 
 // hooks
 import { useGetCurrentView } from 'hooks/tribe';
@@ -38,8 +35,6 @@ const TribePage = ({ tribeID, viewID }: Props) => {
     switch (view.type) {
       case View.Badges:
         return <BadgesView />;
-      case View.Passport:
-        return <PassportView />;
       case View.Content:
         return <ContentView />;
       case View.Room: {

@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 
 // components
-import { SEO, Redirect, Query } from 'components/common';
+import { SEO, Redirect, Overlay, Query } from 'components/common';
 import {
   Navbar,
   MobileNavbar,
@@ -12,6 +12,8 @@ import {
   TribeNavigation,
   ProfileNavigation,
 } from 'components/navigation';
+import ProfileOverlay from './profile';
+
 // context
 import { useAuth } from 'context/user';
 
@@ -26,9 +28,11 @@ interface Props {
 }
 
 const AppLayout = ({ children }: Props) => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showProfileOverlay, setShowProfileOverlay] = useState(false);
+
   const { me } = useAuth();
   const { pathname } = useRouter();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -96,87 +100,107 @@ const AppLayout = ({ children }: Props) => {
   };
 
   return (
-    <div className="relative h-full bg-sapien-neutral-600">
-      <Query
-        api="/core-api/profile/tribes"
-        loader={
-          <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
-            <div className="mx-auto w-full max-w-sm lg:w-96">
-              <div>
-                <div className="flex flex-col justify-center items-center">
-                  <img
-                    className="pr-1 w-16 animate-bounce"
-                    src="/images/logooutlined.svg"
-                    alt="sapien"
-                  />
-                  <span className="text-white text-sm text-center">
-                    Did you know that on October 18, 2021, our giant bronze
-                    statue of Harambe stared down the Bull of Wall Street?{' '}
-                  </span>
+    <>
+      <div className="relative h-full bg-sapien-neutral-600">
+        <Query
+          api="/core-api/profile/tribes"
+          loader={
+            <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
+              <div className="mx-auto w-full max-w-sm lg:w-96">
+                <div>
+                  <div className="flex flex-col justify-center items-center">
+                    <img
+                      className="pr-1 w-16 animate-bounce"
+                      src="/images/logooutlined.svg"
+                      alt="sapien"
+                    />
+                    <span className="text-white text-sm text-center">
+                      Did you know that on October 18, 2021, our giant bronze
+                      statue of Harambe stared down the Bull of Wall Street?{' '}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        }
-      >
-        {(tribes: Array<ProfileTribe>) => (
-          <main className="h-full flex">
-            <nav
-              className={
-                mobileMenuOpen
-                  ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                  : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-              }
-            >
-              <div className="flex-1 flex min-h-0 lg:h-auto h-full">
-                <div
-                  className={`${
-                    mobileMenuOpen ? '-right-10' : 'right-0'
-                  } absolute top-0 bg-sapien-red-700 lg:hidden`}
-                >
-                  <button
-                    type="button"
-                    className="flex items-center justify-center h-10 w-10 focus:outline-none"
-                    onClick={() => setMobileMenuOpen(false)}
+          }
+        >
+          {(tribes: Array<ProfileTribe>) => (
+            <main className="h-full flex">
+              <nav
+                className={
+                  mobileMenuOpen
+                    ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                    : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                }
+              >
+                <div className="flex-1 flex min-h-0 lg:h-auto h-full">
+                  <div
+                    className={`${
+                      mobileMenuOpen ? '-right-10' : 'right-0'
+                    } absolute top-0 bg-sapien-red-700 lg:hidden`}
                   >
-                    <span className="sr-only">Close sidebar</span>
-                    <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
-                  </button>
-                </div>
-                <TribeBar
-                  tribes={tribes}
-                  mobileMenuOpen={mobileMenuOpen}
-                  handleMobileMenu={handleMobileMenu}
-                />
-                {isHomePage === false && <>{renderNavigation()}</>}
-              </div>
-            </nav>
-            <Query api="/core-api/me/passport" allowNullable>
-              {() => (
-                <div className="flex-1 min-w-0 flex flex-col">
-                  <Web3Provider>
-                    <div className="lg:hidden">
-                      <MobileNavbar setMobileMenuOpen={setMobileMenuOpen} />
-                    </div>
-                    <div className="hidden lg:block">
-                      <Navbar />
-                    </div>
-                  </Web3Provider>
-                  <div className="flex-1 flex overflow-hidden">
-                    <section
-                      aria-labelledby="primary-heading"
-                      className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
+                    <button
+                      type="button"
+                      className="flex items-center justify-center h-10 w-10 focus:outline-none"
+                      onClick={() => setMobileMenuOpen(false)}
                     >
-                      {children}
-                    </section>
+                      <span className="sr-only">Close sidebar</span>
+                      <XIcon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
+                    </button>
                   </div>
+                  <TribeBar
+                    tribes={tribes}
+                    mobileMenuOpen={mobileMenuOpen}
+                    handleMobileMenu={handleMobileMenu}
+                  />
+                  {isHomePage === false && <>{renderNavigation()}</>}
                 </div>
-              )}
-            </Query>
-          </main>
-        )}
-      </Query>
-    </div>
+              </nav>
+              <Query api="/core-api/me/passport" allowNullable>
+                {() => (
+                  <div className="flex-1 min-w-0 flex flex-col">
+                    <Web3Provider>
+                      <div className="lg:hidden">
+                        <MobileNavbar
+                          setMobileMenuOpen={setMobileMenuOpen}
+                          setShowProfileOverlay={() =>
+                            setShowProfileOverlay(true)
+                          }
+                        />
+                      </div>
+                      <div className="hidden lg:block">
+                        <Navbar
+                          setShowProfileOverlay={() =>
+                            setShowProfileOverlay(true)
+                          }
+                        />
+                      </div>
+                    </Web3Provider>
+                    <div className="flex-1 flex overflow-hidden">
+                      <section
+                        aria-labelledby="primary-heading"
+                        className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
+                      >
+                        {children}
+                      </section>
+                    </div>
+                  </div>
+                )}
+              </Query>
+            </main>
+          )}
+        </Query>
+      </div>
+      <Overlay
+        isOpen={showProfileOverlay}
+        onClose={() => setShowProfileOverlay(false)}
+      >
+        <ProfileOverlay />
+      </Overlay>
+    </>
   );
 };
 

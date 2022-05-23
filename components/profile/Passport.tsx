@@ -4,37 +4,24 @@ import { useRouter } from 'next/router';
 import Lottie from 'react-lottie-player';
 
 // components
-import {
-  ErrorView,
-  Query,
-  Redirect,
-  SEO,
-  TextareaInput,
-  TextInput,
-} from 'components/common';
-
-// context
-import { useToast } from 'context/toast';
+import { Query, SEO, TextareaInput, TextInput } from 'components/common';
 
 // utils
 import { formatDate } from 'utils/date';
 import { formatAvatarName, formatTokenID } from 'utils/passport';
 
-// types
-import type { NextPage } from 'next';
-import type { Passport } from 'tools/types/passport';
-
 // assets
 import LoadingJSONData from './lottie/Loading.json';
+import { usePassport } from 'hooks/passport';
 
 interface Props {
   animationData: any;
-  passport: Passport;
 }
 
-const PassportTokenIDPage = ({ animationData, passport }: Props) => {
+const PassportFormWithAnimation = ({ animationData }: Props) => {
   const [showPassport, setshowPassport] = useState(false);
 
+  const passport = usePassport();
   const { query } = useRouter();
 
   const methods = useForm({
@@ -83,7 +70,7 @@ const PassportTokenIDPage = ({ animationData, passport }: Props) => {
                     </div>
                     <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5">
                       <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
-                        {formatAvatarName(passport.name)}
+                        {formatAvatarName(passport.title)}
                       </span>
                     </span>
                   </div>
@@ -227,70 +214,41 @@ const PassportTokenIDPage = ({ animationData, passport }: Props) => {
   );
 };
 
-const PassportTokenIDPageProxy: NextPage = () => {
-  const [error, setError] = useState<Error | null>(null);
-  const [isFetching, setIsFetching] = useState(true);
-  const [animationData, setAnimationData] = useState<object | null>(null);
-
-  const toast = useToast();
-  const { query } = useRouter();
-
-  useEffect(() => {
-    // work around for 31mb file
-    const fetchLottieJSON = async () => {
-      setError(null);
-      setIsFetching(true);
-      try {
-        const request = await fetch(
-          'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
-        );
-        const data = await request.json();
-
-        setAnimationData(data);
-      } catch (err) {
-        setError(err);
-      }
-      setIsFetching(false);
-    };
-
-    if (query.tokenID) {
-      fetchLottieJSON();
-    }
-  }, [query.tokenID]);
-
-  if (!query.tokenID) return null;
-
-  if (isFetching === true)
-    return (
-      <Lottie
-        animationData={LoadingJSONData}
-        play
-        loop
-        className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
-      />
-    );
-
-  if (error) return <ErrorView message="Error Loading Passport Animation" />;
-
+const ProfilePassport = () => {
   return (
     <>
       <SEO title="Sapien Nation Passport" />
-      <Query api={`/core-api/passport/metadata/${query.tokenID}`}>
-        {(passport: Passport) => {
-          if (passport === null) {
-            return <Redirect path="/" />;
-          }
+      <Query
+        loader={
+          <Lottie
+            animationData={LoadingJSONData}
+            play
+            loop
+            className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
+          />
+        }
+        api="https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json"
+        options={{
+          fetcher: async () => {
+            try {
+              const request = await fetch(
+                'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
+              );
+              const data = await request.json();
 
-          return (
-            <PassportTokenIDPage
-              passport={passport}
-              animationData={animationData}
-            />
-          );
+              return data;
+            } catch (err) {
+              return Promise.reject(err);
+            }
+          },
+        }}
+      >
+        {(animationData: object) => {
+          return <PassportFormWithAnimation animationData={animationData} />;
         }}
       </Query>
     </>
   );
 };
 
-export default PassportTokenIDPageProxy;
+export default ProfilePassport;

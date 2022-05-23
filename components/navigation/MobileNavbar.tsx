@@ -24,13 +24,14 @@ import type { Token } from 'wallet/types';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
+  setShowProfileOverlay: () => void;
 }
 
 enum Dialog {
   DeclarationDialog,
 }
 
-const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
+const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
 
@@ -134,15 +135,12 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       </div>
                     </div>
                     {passport?.tokenId ? (
-                      <Link
-                        href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
-                        passHref
-                        prefetch={false}
+                      <button
+                        onClick={setShowProfileOverlay}
+                        className="font-medium text-sm text-white mt-4"
                       >
-                        <a className="font-medium text-sm text-white mt-4">
-                          View Passport
-                        </a>
-                      </Link>
+                        View Passport
+                      </button>
                     ) : null}
                     <div className="mt-4 text-left">
                       <Link href="/logout">

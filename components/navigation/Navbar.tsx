@@ -23,7 +23,11 @@ enum Dialog {
   DeclarationDialog,
 }
 
-const Navbar = () => {
+interface Props {
+  setShowProfileOverlay: () => void;
+}
+
+const Navbar = ({ setShowProfileOverlay }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
 
@@ -111,15 +115,12 @@ const Navbar = () => {
                     </div>
                   </div>
                   {passport?.tokenId ? (
-                    <Link
-                      href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
-                      passHref
-                      prefetch={false}
+                    <button
+                      className="font-medium text-sm text-white mt-2"
+                      onClick={setShowProfileOverlay}
                     >
-                      <a className="font-medium text-sm text-white mt-2">
-                        View Passport
-                      </a>
-                    </Link>
+                      View Passport
+                    </button>
                   ) : null}
                   <div className="mt-4 text-left">
                     <Link href="/logout">
