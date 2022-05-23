@@ -76,8 +76,8 @@ const PassportTokenIDPage = ({ animationData, passport }: Props) => {
                       <div className="bg-black h-full w-full hexagon flex items-center justify-center">
                         <img
                           src={passport.image}
-                          className="-rotate-90 h-full"
-                          alt="Passport Figure generated with Machine Learning"
+                          className="-rotate-90 h-full object-cover"
+                          alt="Passport Figure generated with Machine Learning "
                         />
                       </div>
                     </div>
