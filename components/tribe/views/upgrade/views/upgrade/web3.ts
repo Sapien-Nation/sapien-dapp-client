@@ -3,7 +3,10 @@ import Safe, {
   SafeAccountConfig,
   EthSignSignature,
 } from '@gnosis.pm/safe-core-sdk';
-import { SafeTransactionData } from '@gnosis.pm/safe-core-sdk-types';
+import {
+  SafeTransactionDataPartial,
+  SafeTransactionData,
+} from '@gnosis.pm/safe-core-sdk-types';
 import SafeServiceClient, {
   SafeMultisigTransactionResponse,
 } from '@gnosis.pm/safe-service-client';
@@ -36,7 +39,6 @@ const getEthAdapter = async () => {
 export const createVault = async ({
   owners,
   threshold,
-  senderAddress,
 }: {
   owners: Array<string>;
   threshold: number;
@@ -53,27 +55,42 @@ export const createVault = async ({
 
     const safeSdk: Safe = await safeFactory.deploySafe({ safeAccountConfig });
     const safeAddress = safeSdk.getAddress();
-
-    // // get transaction hash
-    // const to = '0x<address>';
-    // const data = '0x<data>';
-    // const value = '<eth_value_in_wei>';
-    // const transaction: SafeTransactionDataPartial = {
-    //   to,
-    //   data,
-    //   value
-    // }
-    // const safeTransaction = await safeSdk.createTransaction(transaction)
-    // const safeTxHash = await safeSdk.getTransactionHash(safeTransaction)
-    // const safeService = new SafeServiceClient({txServiceUrl, ethAdapter})
-    // await safeService.proposeTransaction({
-    //   safeAddress,
-    //   safeTransaction,
-    //   safeTxHash,
-    //   senderAddress, // safe owner proposing the transaction: upgrader's sapien wallet address
-    //   // origin  // Optional string that allows to provide more information about the app proposing the transaction.
-    // })
     return safeAddress;
+  } catch (err) {
+    Sentry.captureMessage(err);
+    return Promise.reject(err.message);
+  }
+};
+
+export const proposingTransaction = async ({
+  safeAddress,
+  senderAddress,
+}: {
+  safeAddress: string;
+  senderAddress: string;
+}): Promise<boolean> => {
+  try {
+    const ethAdapter = await getEthAdapter();
+    const safeSdk = await Safe.create({ ethAdapter, safeAddress });
+    const to = '0x<address>';
+    const data = '0x<data>';
+    const value = '<eth_value_in_wei>';
+    const transaction: SafeTransactionDataPartial = {
+      to,
+      data,
+      value,
+    };
+    const safeTransaction = await safeSdk.createTransaction(transaction);
+    const safeTxHash = await safeSdk.getTransactionHash(safeTransaction);
+    const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
+    await safeService.proposeTransaction({
+      safeAddress,
+      safeTransaction,
+      safeTxHash,
+      senderAddress, // safe owner proposing the transaction: upgrader's sapien wallet address
+      // origin  // Optional string that allows to provide more information about the app proposing the transaction.
+    });
+    return true;
   } catch (err) {
     Sentry.captureMessage(err);
     return Promise.reject(err.message);
