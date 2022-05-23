@@ -41,8 +41,7 @@ const Sidebar = ({
     <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
       <div className="flex-1 flex flex-col pt-5 pb-4 px-4">
         <div>
-          <h1 className="font-semibold">BADGES</h1>
-          <h2 className="gap-1 mt-3 font-bold relative w-full tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 bg-sapien-neutral-800">
+          <h2 className="gap-1 mb-3 font-bold relative w-full tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 bg-sapien-neutral-800">
             <img
               src="/images/sapien_nation.png"
               alt="Sapien Nation"
@@ -50,6 +49,7 @@ const Sidebar = ({
             />
             {tribe.name}
           </h2>
+          <h1 className="font-semibold">BADGES</h1>
         </div>
         <div className="mt-5 flex-1">
           <button
