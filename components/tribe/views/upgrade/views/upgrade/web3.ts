@@ -3,16 +3,15 @@ import Safe, {
   SafeAccountConfig,
   EthSignSignature,
 } from '@gnosis.pm/safe-core-sdk';
-import {
-  SafeTransactionDataPartial,
-  SafeTransactionData,
-} from '@gnosis.pm/safe-core-sdk-types';
+import { SafeTransactionData } from '@gnosis.pm/safe-core-sdk-types';
 import SafeServiceClient, {
   SafeMultisigTransactionResponse,
 } from '@gnosis.pm/safe-service-client';
 import EthersAdapter from '@gnosis.pm/safe-ethers-lib';
 import * as Sentry from '@sentry/nextjs';
 import { ethers } from 'ethers';
+
+// api
 import { connectWallet } from 'wallet/api';
 
 const txServiceUrl = process.env.NEXT_PUBLIC_SAFESERVICE_URL;
@@ -84,14 +83,16 @@ export const createVault = async ({
 export const signTransaction = async (
   safeAddress: string,
   safeTxHash: string
-): Promise<string> => {
+): Promise<boolean> => {
   try {
     const ethAdapter = await getEthAdapter();
     const safeSdk = await Safe.create({ ethAdapter, safeAddress });
     let signature = await safeSdk.signTransactionHash(safeTxHash);
+
     const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
     await safeService.confirmTransaction(safeTxHash, signature.data);
-    return 'Success';
+
+    return true;
   } catch (err) {
     Sentry.captureMessage(err);
     return Promise.reject(err.message);
@@ -102,14 +103,7 @@ export const signTransaction = async (
 export const isTransactionExecutable = (
   safeThreshold: number,
   transaction: SafeMultisigTransactionResponse
-) => {
-  try {
-    return transaction.confirmations.length >= safeThreshold;
-  } catch (err) {
-    Sentry.captureMessage(err);
-    return Promise.reject(err.message);
-  }
-};
+) => transaction.confirmations.length >= safeThreshold;
 
 export const executeTransaction = async (
   safeAddress: string,
@@ -120,6 +114,7 @@ export const executeTransaction = async (
     const safeSdk = await Safe.create({ ethAdapter, safeAddress });
     const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
     const transaction = await safeService.getTransaction(safeTxHash);
+
     const safeTransactionData: SafeTransactionData = {
       to: transaction.to,
       value: transaction.value,
@@ -144,10 +139,13 @@ export const executeTransaction = async (
     });
 
     const executeTxResponse = await safeSdk.executeTransaction(safeTransaction);
-    const receipt =
-      executeTxResponse.transactionResponse &&
-      (await executeTxResponse.transactionResponse.wait());
-    return receipt.transactionHash;
+
+    if (executeTxResponse?.transactionResponse) {
+      const receipt = await executeTxResponse.transactionResponse.wait();
+      return receipt.transactionHash;
+    }
+
+    return 'TODO RESPONSE FOR NOW TRANSPACTION RESPONSE';
   } catch (err) {
     Sentry.captureMessage(err);
     return Promise.reject(err.message);
