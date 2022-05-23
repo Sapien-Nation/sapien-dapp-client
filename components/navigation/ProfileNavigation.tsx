@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const DiscoveryNavigation = () => {
   return (
     <div className="w-full">
@@ -6,13 +8,15 @@ const DiscoveryNavigation = () => {
           Profile Settings
         </span>
         <nav className="mt-2">
-          <span
-            className={
-              'h-10 relative w-full cursor-pointer tracking-wide items-center font-bold uppercase text-xs flex rounded-lg focus:outline-none px-2 py-2 bg-sapien-neutral-800 hover:bg-sapien-neutral-800'
-            }
-          >
-            General
-          </span>
+          <Link href="/profile" passHref>
+            <a>General</a>
+          </Link>
+          <Link href="/profile/passport" passHref>
+            <a>Passport</a>
+          </Link>
+          <Link href="/profile/badges" passHref>
+            <a>Badges</a>
+          </Link>
         </nav>
       </div>
     </div>
