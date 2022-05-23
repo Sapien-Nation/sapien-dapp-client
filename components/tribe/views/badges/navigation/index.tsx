@@ -7,6 +7,7 @@ import BadgeNavItem from './BadgeNavItem';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
+import { useTribeBadges } from 'hooks/tribe/badge';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -18,24 +19,23 @@ interface Props {
   draftBadges: Array<TribeBadge>;
   handleAddDraftBadge: () => void;
   showSearch: () => void;
+  selectedBadge: TribeBadge | null;
   setSelectedBadge: (badge: TribeBadge) => void;
-  tribeBadges: Array<TribeBadge>;
 }
 
 const Sidebar = ({
   draftBadges,
   showSearch,
+  selectedBadge,
   setSelectedBadge,
-  tribeBadges,
   handleAddDraftBadge,
 }: Props) => {
-  const [selectedBadge, selectBadge] = useState<TribeBadge | null>(null);
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
-  // const tribeBadges = useTribeBadges(tribeID);
+  const tribeBadges = useTribeBadges(tribeID);
 
   return (
     <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
@@ -67,16 +67,14 @@ const Sidebar = ({
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
-                    image={tribe.avatar}
                     onSelect={() => {
-                      selectBadge(badge);
                       setSelectedBadge(badge);
                     }}
                   />
                 </li>
               );
             })}
-            {draftBadges?.length ? (
+            {draftBadges?.length > 0 ? (
               <div className="border-t-2 !my-3 border-gray-800" />
             ) : null}
             {draftBadges.map((badge) => {
@@ -85,9 +83,7 @@ const Sidebar = ({
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
-                    image={tribe.avatar}
                     onSelect={() => {
-                      selectBadge(badge);
                       setSelectedBadge(badge);
                     }}
                   />

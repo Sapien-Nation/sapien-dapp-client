@@ -11,13 +11,13 @@ import { BadgeTypes } from 'tools/constants/tribe';
 import { useTribe } from 'hooks/tribe';
 
 // mocks
-import { mockTribeBadge } from 'tools/mocks/tribe';
+import { mockTribeBadge, mockTribeDiscoveryBadge } from 'tools/mocks/tribe';
 
 // json
 import DefaultBadgesJSON from './DefaultBadges.json';
 
 // types
-import type { TribeBadge } from 'tools/types/tribe';
+import type { TribeBadge, TribeDiscoveryBadge } from 'tools/types/tribe';
 
 interface Props {
   onSelect: (badge: TribeBadge) => void;
@@ -64,7 +64,7 @@ const Search = ({ onSelect }: Props) => {
           loader={null}
           options={{
             fetcher: () => [
-              mockTribeBadge({
+              mockTribeDiscoveryBadge({
                 id: '1',
                 name: 'The governance badge',
                 color: '#ffffff',
@@ -73,7 +73,7 @@ const Search = ({ onSelect }: Props) => {
                 description: 'Some description',
                 type: BadgeTypes.Normal,
               }),
-              mockTribeBadge({
+              mockTribeDiscoveryBadge({
                 id: '2',
                 name: 'The (OTHER) tribe',
                 color: '#sapien',
@@ -82,7 +82,7 @@ const Search = ({ onSelect }: Props) => {
                 description: 'Some description',
                 type: BadgeTypes.Normal,
               }),
-              mockTribeBadge({
+              mockTribeDiscoveryBadge({
                 id: '3',
                 name: 'the BBB Badge',
                 color: '#sapien',
@@ -94,7 +94,7 @@ const Search = ({ onSelect }: Props) => {
             ],
           }}
         >
-          {(badges: Array<TribeBadge>) => {
+          {(badges: Array<TribeDiscoveryBadge>) => {
             return (
               <div className="space-y-3 mt-3">
                 {badges.map((badge) => {

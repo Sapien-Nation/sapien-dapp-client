@@ -1,5 +1,10 @@
+import { useRouter } from 'next/router';
+
 // constants
 import { BadgeTypes } from 'tools/constants/tribe';
+
+// hooks
+import { useTribe } from 'hooks/tribe';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -8,13 +13,17 @@ import type { TribeBadge } from 'tools/types/tribe';
 import { ContributorBadge } from 'assets';
 
 interface Props {
-  image?: string;
   badge: TribeBadge;
   onSelect: () => void;
   isSelected: boolean;
 }
 
-const BadgeNavItem = ({ image, badge, isSelected, onSelect }: Props) => {
+const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+  const tribe = useTribe(tribeID);
+
   const getBadgeLabel = (type: BadgeTypes) => {
     if (type === BadgeTypes.Draft) {
       return '(DRAFT)';
@@ -35,9 +44,9 @@ const BadgeNavItem = ({ image, badge, isSelected, onSelect }: Props) => {
           : 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 hover:bg-gray-800'
       }
     >
-      {image ? (
+      {tribe.avatar ? (
         <img
-          src={image}
+          src={tribe.avatar}
           alt={badge.name}
           style={{ borderColor: badge.color }}
           className="w-8 h-8 object-cover rounded-full border-2"

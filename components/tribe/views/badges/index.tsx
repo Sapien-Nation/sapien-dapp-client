@@ -192,8 +192,8 @@ const BadgesView = () => {
                 }
               }, 0);
             }}
+            selectedBadge={selectedBadge}
             showSearch={() => setView(View.Search)}
-            tribeBadges={tribeBadges}
           />
         </div>
         <div className="flex-1 overflow-auto">
@@ -264,14 +264,12 @@ const BadgesViewProxy = () => {
             id: '1000',
             name: 'Treasurer',
             color: '#6495ED',
-            image: avatar,
             description: 'This is the main badge',
             type: BadgeTypes.Owner,
           }),
           mockTribeBadge({
             id: '2000',
             name: 'Archiver',
-            image: avatar,
             color: '#2F4F4F',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,
@@ -279,7 +277,6 @@ const BadgesViewProxy = () => {
           mockTribeBadge({
             id: '3000',
             name: 'Moderator',
-            image: avatar,
             color: '#FF1493',
             description: 'this is the owner badge',
             type: BadgeTypes.Normal,
