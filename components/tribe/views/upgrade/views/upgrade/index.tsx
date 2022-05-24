@@ -29,6 +29,7 @@ import UpgradeSuccessJSONLottie from '../lottie/UpgradeSuccess.json';
 import { createVault } from './web3';
 
 enum View {
+  AlreadUpgraded,
   BadgeContract,
   Confirm,
   Home,
@@ -56,7 +57,7 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
 
   const [view, setView] = useState(() => {
     if (upgraded === true) {
-      return View.Success;
+      return View.AlreadUpgraded;
     }
 
     if (multisig === true && badgeContract === false) {
@@ -172,6 +173,8 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
 
   const renderView = () => {
     switch (view) {
+      case View.AlreadUpgraded:
+        return <h1>TODO ANKIT</h1>;
       case View.BadgeContract:
         return (
           <div>

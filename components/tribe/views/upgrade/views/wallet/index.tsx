@@ -227,6 +227,9 @@ const Wallet = () => {
               </h1>
             </div>
             <div className="mt-6">
+              <div className="text-gray-300">
+                <p>Please select one of the tokens listed below.</p>
+              </div>
               <ol className="flex flex-wrap gap-5">
                 {tokens.map((token) => (
                   <li

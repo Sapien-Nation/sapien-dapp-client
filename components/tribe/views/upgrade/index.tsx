@@ -6,10 +6,6 @@ import { UpgradeView, WalletView } from './views';
 
 // constants
 import { Role } from 'tools/constants/tribe';
-import { PassportStatus } from 'tools/constants/user';
-
-// context
-import { useAuth } from 'context/user';
 
 // providers
 import { Web3Provider } from 'wallet/providers';
@@ -22,7 +18,6 @@ const UpgradeViewPage = () => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
-
   const { role } = useTribe(tribeID);
 
   if (role === Role.Member) {
@@ -41,7 +36,7 @@ const UpgradeViewPage = () => {
 const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const UpgradeViewProxy = () => {
   return (
-    <Query api={`/core-api/passport/signed`} loader={null}>
+    <Query api="/core-api/passport/signed" loader={null}>
       {({
         hasPassport,
         hasSigned,
