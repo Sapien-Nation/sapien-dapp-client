@@ -85,7 +85,7 @@ const BadgesView = () => {
       case View.Home: {
         return (
           <div>
-            <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl mt-3 rounded-md">
+            <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl rounded-md">
               <h1>Decentralize, automate, and grow your tribe</h1>
             </div>
             <div>
@@ -199,7 +199,7 @@ const BadgesView = () => {
         <div className="flex-1 overflow-auto">
           <button
             type="button"
-            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-8"
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5"
             onClick={() => setIsOpen(false)}
           >
             <span className="sr-only">Close Badges Managment</span>
