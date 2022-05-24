@@ -351,6 +351,46 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           </nav>
         </div>
 
+        <button
+          aria-label="Create Room"
+          className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+          onClick={() => {}}
+        >
+          APPS <PlusIcon className="text-sapien-neutral-200 w-4" />
+        </button>
+
+        <ul className="pl-2 cursor-pointer -mr-2">
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Snapshot</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Github</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Notion</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Airtime</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Syndicate</div>
+            </a>
+          </li>
+        </ul>
+
         <div>
           <nav>
             {canAddRoom === true && (
