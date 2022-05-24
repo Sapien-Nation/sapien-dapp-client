@@ -17,7 +17,7 @@ interface Props {
 const BadgeCard = ({ badge, onClick }: Props) => {
   const { query } = useRouter();
 
-  const tribeID = badge.tribeID as string;
+  const tribeID = query.tribeID as string;
   const tribe = useTribe(tribeID);
 
   return (
