@@ -17,7 +17,7 @@ interface Props {
 const BadgeCard = ({ badge, onClick }: Props) => {
   const { query } = useRouter();
 
-  const tribeID = query.tribeID as string;
+  const tribeID = badge.tribeID as string;
   const tribe = useTribe(tribeID);
 
   return (
@@ -35,7 +35,7 @@ const BadgeCard = ({ badge, onClick }: Props) => {
       <div className="flex flex-1 gap-2">
         <div className="flex-1">
           <h3 className="font-semibold text-md">
-            {badge.sourceTribeName} - {badge.name}
+            {tribe.name} - {badge.name}
           </h3>
           <p className="text-sapien-neutral-200">{badge.description}</p>
         </div>
@@ -47,7 +47,7 @@ const BadgeCard = ({ badge, onClick }: Props) => {
             Select
           </button>
           <span className="block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-sapien-neutral-400 text-gray-400 mt-3">
-            {badge.numberOfUsage} Issued
+            {badge.numberIssued} Issued
           </span>
         </div>
       </div>

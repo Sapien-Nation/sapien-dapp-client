@@ -6,7 +6,7 @@
     "description": "This badge is granted to qualified community managers that meet the standards of the Sapien Nation.",
     "color": "#e75555",
     "owners": [],
-    "numberOfUsage": 455,
+    "numberIssued": 455,
     "permissions": []
   }, {
     "id": "2",
@@ -15,7 +15,7 @@
     "description": "An exclusive NFT badge granted to the most active users on the Airtime app. Unlocks ability to create new rooms and manage conversations.",
     "color": "#a9e185",
     "owners": [],
-    "numberOfUsage": 350,
+    "numberIssued": 357,
     "permissions": []
   },{
     "id": "3",
@@ -24,6 +24,7 @@
     "description": "Limited edition badge by the Bored Ape Yacht Club that lets access events hosted by the community.",
     "color": "#6cdcdf",
     "owners": [],
+    "numberIssued": 256,
     "permissions": []
   },{
     "id": "4",
@@ -32,6 +33,7 @@
     "description": "Issued to certified debate moderators on behalf of DebateDAO. Moderators have shown to facilitate productive and fair conversation over debatable topics.",
     "color": "#6cdcdf",
     "owners": [],
+    "numberIssued": 189,
     "permissions": []
   },{
     "id": "5",
@@ -40,7 +42,7 @@
     "description": "Badge granted to all investors across all the investment clubs on the SyndicateDAO protocol.",
     "color": "#6cdcdf",
     "owners": [],
-    "numberOfUsage": 500,
+    "numberIssued": 80,
     "permissions": []
   }]
 }
