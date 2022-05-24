@@ -180,7 +180,7 @@ const BadgesView = () => {
 
               setTimeout(() => {
                 setSelectedBadge(badge);
-
+                if (badge == null) return setView(View.Home);
                 switch (badge.type) {
                   case BadgeTypes.Draft:
                     setView(View.BadgeCreation);
