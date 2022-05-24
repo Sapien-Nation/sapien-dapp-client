@@ -45,7 +45,7 @@ const DeclarationOfSovereigntyDialog = ({ onClose, token }: Props) => {
     setSignError(null);
 
     try {
-      // await signPassport(token.id);
+      await signPassport(token.id);
 
       mutate(apiKey, () => ({ canSign: false, signed: true }), false);
       mutate(

@@ -77,8 +77,8 @@ const Wallet = () => {
       // await signPassport(selectedToken.id);
 
       mutate(
-        `/core-api/passport/${selectedToken.id}/signed`,
-        () => ({ canSign: false, signed: true }),
+        '/core-api/passport/signed',
+        (data) => ({ ...data, hasSign: true }),
         false
       );
       mutate(

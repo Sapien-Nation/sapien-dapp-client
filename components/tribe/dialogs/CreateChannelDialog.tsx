@@ -1,4 +1,4 @@
-import { XIcon, CameraIcon, CloudUploadIcon } from '@heroicons/react/outline';
+import { XIcon, CameraIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useState, useRef } from 'react';
