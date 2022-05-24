@@ -1,12 +1,4 @@
-import Safe, {
-  SafeFactory,
-  SafeAccountConfig,
-  EthSignSignature,
-} from '@gnosis.pm/safe-core-sdk';
-import {
-  SafeTransactionDataPartial,
-  SafeTransactionData,
-} from '@gnosis.pm/safe-core-sdk-types';
+import Safe, { SafeFactory, EthSignSignature } from '@gnosis.pm/safe-core-sdk';
 import SafeServiceClient, {
   SafeMultisigTransactionResponse,
 } from '@gnosis.pm/safe-service-client';
@@ -46,16 +38,16 @@ export const createVault = async ({
 }): Promise<string> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const safeFactory = await SafeFactory.create({ ethAdapter });
+    const { deploySafe } = await SafeFactory.create({ ethAdapter });
 
-    const safeAccountConfig: SafeAccountConfig = {
-      owners,
-      threshold,
-    };
+    const safeSdk: Safe = await deploySafe({
+      safeAccountConfig: {
+        owners,
+        threshold,
+      },
+    });
 
-    const safeSdk: Safe = await safeFactory.deploySafe({ safeAccountConfig });
-    const safeAddress = safeSdk.getAddress();
-    return safeAddress;
+    return safeSdk.getAddress();
   } catch (err) {
     Sentry.captureMessage(err);
     return Promise.reject(err.message);
@@ -71,25 +63,30 @@ export const proposingTransaction = async ({
 }): Promise<boolean> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const safeSdk = await Safe.create({ ethAdapter, safeAddress });
-    const to = '0x<address>';
-    const data = '0x<data>';
-    const value = '<eth_value_in_wei>';
-    const transaction: SafeTransactionDataPartial = {
-      to,
-      data,
-      value,
-    };
-    const safeTransaction = await safeSdk.createTransaction(transaction);
-    const safeTxHash = await safeSdk.getTransactionHash(safeTransaction);
-    const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
-    await safeService.proposeTransaction({
+
+    const { proposeTransaction } = new SafeServiceClient({
+      txServiceUrl,
+      ethAdapter,
+    });
+    const { createTransaction, getTransactionHash } = await Safe.create({
+      ethAdapter,
+      safeAddress,
+    });
+
+    const safeTransaction = await createTransaction({
+      to: '0x<address>',
+      data: '0x<data>',
+      value: '<eth_value_in_wei>',
+    });
+    const safeTxHash = await getTransactionHash(safeTransaction);
+    await proposeTransaction({
       safeAddress,
       safeTransaction,
       safeTxHash,
       senderAddress, // safe owner proposing the transaction: upgrader's sapien wallet address
       // origin  // Optional string that allows to provide more information about the app proposing the transaction.
     });
+
     return true;
   } catch (err) {
     Sentry.captureMessage(err);
@@ -103,11 +100,17 @@ export const signTransaction = async (
 ): Promise<boolean> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const safeSdk = await Safe.create({ ethAdapter, safeAddress });
-    let signature = await safeSdk.signTransactionHash(safeTxHash);
+    const { signTransactionHash } = await Safe.create({
+      ethAdapter,
+      safeAddress,
+    });
+    const { confirmTransaction } = new SafeServiceClient({
+      txServiceUrl,
+      ethAdapter,
+    });
 
-    const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
-    await safeService.confirmTransaction(safeTxHash, signature.data);
+    const signature = await signTransactionHash(safeTxHash);
+    await confirmTransaction(safeTxHash, signature.data);
 
     return true;
   } catch (err) {
@@ -122,17 +125,25 @@ export const isTransactionExecutable = (
   transaction: SafeMultisigTransactionResponse
 ) => transaction.confirmations.length >= safeThreshold;
 
+export const NoTransactionID = 'NO_TRANSACTION_RESPONSE';
 export const executeTransaction = async (
   safeAddress: string,
   safeTxHash: string
 ): Promise<string> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const safeSdk = await Safe.create({ ethAdapter, safeAddress });
-    const safeService = new SafeServiceClient({ txServiceUrl, ethAdapter });
-    const transaction = await safeService.getTransaction(safeTxHash);
 
-    const safeTransactionData: SafeTransactionData = {
+    const { getTransaction } = new SafeServiceClient({
+      txServiceUrl,
+      ethAdapter,
+    });
+    const { createTransaction, executeTransaction } = await Safe.create({
+      ethAdapter,
+      safeAddress,
+    });
+
+    const transaction = await getTransaction(safeTxHash);
+    const safeTransaction = await createTransaction({
       to: transaction.to,
       value: transaction.value,
       data: transaction.data,
@@ -143,10 +154,8 @@ export const executeTransaction = async (
       gasToken: transaction.gasToken,
       refundReceiver: transaction.refundReceiver,
       nonce: transaction.nonce,
-    };
-    const safeTransaction = await safeSdk.createTransaction(
-      safeTransactionData
-    );
+    });
+
     transaction.confirmations.forEach((confirmation) => {
       const signature = new EthSignSignature(
         confirmation.owner,
@@ -155,14 +164,14 @@ export const executeTransaction = async (
       safeTransaction.addSignature(signature);
     });
 
-    const executeTxResponse = await safeSdk.executeTransaction(safeTransaction);
+    const executeTxResponse = await executeTransaction(safeTransaction);
 
     if (executeTxResponse?.transactionResponse) {
       const receipt = await executeTxResponse.transactionResponse.wait();
       return receipt.transactionHash;
     }
 
-    return 'TODO RESPONSE FOR NOW TRANSPACTION RESPONSE';
+    return NoTransactionID;
   } catch (err) {
     Sentry.captureMessage(err);
     return Promise.reject(err.message);

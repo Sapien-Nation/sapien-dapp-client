@@ -4,7 +4,7 @@ import { useClickAway } from 'react-use';
 import { HexColorPicker } from 'react-colorful';
 
 // components
-import { TextInput, TextInputLabel } from 'components/common';
+import { TextareaInput, TextInput, TextInputLabel } from 'components/common';
 import { useFormContext } from 'react-hook-form';
 
 // hooks
@@ -50,7 +50,7 @@ const SettingsForm = () => {
       <TextInputLabel label="Badge Name" name="name" error="" />
       <TextInput name="name" aria-label="name" />
       <TextInputLabel label="Badge Description" name="description" error="" />
-      <TextInput name="description" aria-label="description" />
+      <TextareaInput name="description" aria-label="description" />
     </div>
   );
 };

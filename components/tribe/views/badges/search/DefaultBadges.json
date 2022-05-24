@@ -1,24 +1,43 @@
 {
   "badges": [{
     "id": "1",
-    "name": "Archiver",
-    "description": "color",
+    "name": "Community Manager",
+    "tribeID": "69f9e695-90f3-4e30-95f1-d5dafef8a190",
+    "description": "This badge is granted to qualified community managers that meet the standards of the Sapien Nation.",
     "color": "#e75555",
     "owners": [],
     "numberOfUsage": 455,
     "permissions": []
   }, {
     "id": "2",
-    "name": "Watcher",
-    "description": "color",
+    "name": "Conversation Host",
+    "tribeID": "17d23863-5da4-4b18-9abf-0cb655d75e2d",
+    "description": "An exclusive NFT badge granted to the most active users on the Airtime app. Unlocks ability to create new rooms and manage conversations.",
     "color": "#a9e185",
     "owners": [],
     "numberOfUsage": 350,
     "permissions": []
   },{
     "id": "3",
-    "name": "Amazing",
-    "description": "color",
+    "name": "Event Host",
+    "tribeID": "4cabb527-f398-4e11-bad1-f0c8ec24abf8",
+    "description": "Limited edition badge by the Bored Ape Yacht Club that lets access events hosted by the community.",
+    "color": "#6cdcdf",
+    "owners": [],
+    "permissions": []
+  },{
+    "id": "4",
+    "name": "Debate Moderator",
+    "tribeID": "9feebd72-5777-4f7c-9190-84f4ec1ff518",
+    "description": "Issued to certified debate moderators on behalf of DebateDAO. Moderators have shown to facilitate productive and fair conversation over debatable topics.",
+    "color": "#6cdcdf",
+    "owners": [],
+    "permissions": []
+  },{
+    "id": "5",
+    "name": "Certified Investor",
+    "tribeID": "5763ffd1-1478-4661-820b-8f1413c6785b",
+    "description": "Badge granted to all investors across all the investment clubs on the SyndicateDAO protocol.",
     "color": "#6cdcdf",
     "owners": [],
     "numberOfUsage": 500,

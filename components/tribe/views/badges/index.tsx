@@ -54,6 +54,7 @@ const BadgesView = () => {
 
   const tribeID = query.tribeID as string;
   const tribeBadges = useTribeBadges(tribeID);
+
   const { avatar } = useTribe(tribeID);
 
   const handleAddDraftBadge = () => {
@@ -63,7 +64,7 @@ const BadgesView = () => {
       id: badgeID,
       image: avatar,
       description: 'This is a draft badge, please edit this description.',
-      name: '[draft] badge',
+      name: 'new badge',
       color: '#fff',
       type: BadgeTypes.Draft,
       owners: [me.walletAddress],
@@ -144,7 +145,12 @@ const BadgesView = () => {
         return (
           <BadgeCreationView
             badge={selectedBadge}
-            onCancel={() => setView(View.Home)}
+            onCancel={() => {
+              setView(View.Home);
+              setDraftBadges((currentDraftBadges) =>
+                currentDraftBadges.filter((badge) => badge !== selectedBadge)
+              );
+            }}
           />
         );
       case View.Search:
@@ -180,7 +186,7 @@ const BadgesView = () => {
 
               setTimeout(() => {
                 setSelectedBadge(badge);
-
+                if (badge == null) return setView(View.Home);
                 switch (badge.type) {
                   case BadgeTypes.Draft:
                     setView(View.BadgeCreation);
@@ -262,23 +268,25 @@ const BadgesViewProxy = () => {
         fetcher: () => [
           mockTribeBadge({
             id: '1000',
-            name: 'Treasurer',
+            name: 'Owner',
             color: '#6495ED',
-            description: 'This is the main badge',
+            description: 'This is the owner badge',
             type: BadgeTypes.Owner,
           }),
           mockTribeBadge({
             id: '2000',
-            name: 'Archiver',
+            name: 'Community Manager',
             color: '#2F4F4F',
-            description: 'this is the owner badge',
+            description:
+              'This badge is granted to qualified community managers that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
           }),
           mockTribeBadge({
             id: '3000',
             name: 'Moderator',
             color: '#FF1493',
-            description: 'this is the owner badge',
+            description:
+              'This badge is granted to qualified moderators that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
           }),
         ],

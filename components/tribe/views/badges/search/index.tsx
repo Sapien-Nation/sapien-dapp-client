@@ -15,7 +15,7 @@ import { BadgeTypes } from 'tools/constants/tribe';
 import { useTribe } from 'hooks/tribe';
 
 // mocks
-import { mockTribeBadge, mockTribeDiscoveryBadge } from 'tools/mocks/tribe';
+import { mockTribeDiscoveryBadge } from 'tools/mocks/tribe';
 
 // json
 import DefaultBadgesJSON from './DefaultBadges.json';
@@ -176,9 +176,7 @@ const Search = ({ onSelect }: Props) => {
         </Listbox>
       </div>
       <section>
-        <h2 className="text-lg text-sapien-neutral-200">
-          Default Badges (from JSON)
-        </h2>
+        <h2 className="text-lg text-sapien-neutral-200">Sapien Badges</h2>
         <div className="space-y-3 mt-3">
           {matchSorter(defaultBadges, badgeSearchTerm, {
             keys: ['name'],
@@ -191,9 +189,9 @@ const Search = ({ onSelect }: Props) => {
           ))}
         </div>
       </section>
-      <section className="mt-5">
+      {/* <section className="mt-5">
         <h2 className="text-lg text-sapien-neutral-200">
-          Tribe Badges (from API)
+          Tribes by the community
         </h2>
         <Query
           api="/core-api/tribes/badges"
@@ -252,7 +250,7 @@ const Search = ({ onSelect }: Props) => {
             );
           }}
         </Query>
-      </section>
+      </section> */}
     </div>
   );
 };
