@@ -71,13 +71,15 @@ const UpgradeViewPage = () => {
             <a
               href={`${distributionURL}passport/purchase`}
               className="text-base font-medium bg-[#6200ea] pl-2 pr-2 rounded-lg"
+              target="_blank" rel="noreferrer"
             >
               Mint
             </a>{' '}
             an NFT or get one on a secondary market like{' '}
             <a
-              href={`${distributionURL}passport/purchase`}
+              href={`https://opensea.io/collection/sapien-nation-passport`}
               className="text-base font-medium bg-[#6200ea] pl-2 pr-2 rounded-lg"
+              target="_blank" rel="noreferrer"
             >
               Opensea
             </a>
