@@ -32,18 +32,25 @@ const BadgeCard = ({ badge, onClick }: Props) => {
       ) : (
         <ContributorBadge className="w-8 h-8" />
       )}
-      <div className="flex flex-1 text-sm gap-2 py-1">
+      <div className="flex flex-1 gap-2">
         <div className="flex-1">
-          <h3 className="font-semibold">{badge.name}</h3>
+          <h3 className="font-semibold text-md">{badge.name}</h3>
+          <span className="text-gray-300">
+            Tribe: {badge.sourceTribeName}{' '}
+            <span className="text-xs text-gray-400">(100 members)</span>
+          </span>
           <p className="text-sapien-neutral-200">{badge.description}</p>
         </div>
-        <div>
+        <div className="flex justify-end flex-col">
           <button
-            className="bg-gray-800 px-5 py-2 rounded-md"
+            className="bg-gray-800 text-gray-300 px-5 py-2 rounded-md"
             onClick={onClick}
           >
             Select
           </button>
+          <span className="block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-sapien-neutral-400 text-gray-400 mt-3">
+            #{badge.numberOfUsage} Usage
+          </span>
         </div>
       </div>
     </div>

@@ -197,15 +197,15 @@ const BadgesView = () => {
           />
         </div>
         <div className="flex-1 overflow-auto">
+          <button
+            type="button"
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-8"
+            onClick={() => setIsOpen(false)}
+          >
+            <span className="sr-only">Close Badges Managment</span>
+            <XIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
           <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8 relative">
-            <button
-              type="button"
-              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-0 top-5"
-              onClick={() => setIsOpen(false)}
-            >
-              <span className="sr-only">Close Badges Managment</span>
-              <XIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
             <div className="py-8">{renderView()}</div>
           </div>
         </div>

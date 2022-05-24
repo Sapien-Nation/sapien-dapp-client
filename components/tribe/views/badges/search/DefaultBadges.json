@@ -5,6 +5,7 @@
     "description": "color",
     "color": "#e75555",
     "owners": [],
+    "numberOfUsage": 455,
     "permissions": []
   }, {
     "id": "2",
@@ -12,6 +13,7 @@
     "description": "color",
     "color": "#a9e185",
     "owners": [],
+    "numberOfUsage": 350,
     "permissions": []
   },{
     "id": "3",
@@ -19,6 +21,7 @@
     "description": "color",
     "color": "#6cdcdf",
     "owners": [],
+    "numberOfUsage": 500,
     "permissions": []
   }]
 }
