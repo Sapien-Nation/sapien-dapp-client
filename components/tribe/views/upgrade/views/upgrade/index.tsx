@@ -37,19 +37,20 @@ enum View {
 }
 
 enum VaultStatus {
-  Creating,
-  DeployingStartup,
-  MultiSign,
-  Success,
+  Idle = 0,
+  Creating = 10,
+  Deploying = 40,
+  MultiSign = 70,
+  Success = 100,
 }
 
 const UpgradeView = () => {
   const { me } = useAuth();
 
   const [view, setView] = useState(View.Home);
-  const [threshold, setThreshold] = useState<number | null>(null);
+  const [threshold, setThreshold] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [vaultStatus, setVaultStatus] = useState<VaultStatus | null>(null);
+  const [vaultStatus, setVaultStatus] = useState<VaultStatus>(VaultStatus.Idle);
   const [selectedOwners, setSelectedOwners] = useState([
     {
       avatar: me.avatar,
@@ -77,7 +78,7 @@ const UpgradeView = () => {
         senderAddress: me.walletAddress,
       });
 
-      setVaultStatus(VaultStatus.DeployingStartup);
+      setVaultStatus(VaultStatus.Deploying);
       await upgradeTribe(tribeID, {
         safeAddress,
         owners: selectedOwners.map(({ id, walletAddress }) => ({
@@ -132,6 +133,57 @@ const UpgradeView = () => {
         </span>
       </>
     );
+  };
+
+  const getLoadingStatusText = () => {
+    switch (vaultStatus) {
+      case VaultStatus.Creating:
+        return 'Creating Vault';
+      case VaultStatus.Deploying:
+        return 'Deploying Badges';
+      case VaultStatus.MultiSign:
+        return 'Multisign';
+      case VaultStatus.Success:
+        return 'Finalizing...';
+      default:
+        return 'Starting...';
+    }
+  };
+
+  const getProgressClasses = () => {
+    let color = 'gray';
+    switch (vaultStatus) {
+      case VaultStatus.Creating:
+        color = 'green';
+        break;
+      case VaultStatus.Deploying:
+        color = 'blue';
+        break;
+      case VaultStatus.MultiSign:
+        color = 'pink';
+        break;
+      case VaultStatus.Success:
+        color = 'red';
+        break;
+      default:
+        return {
+          pertcentageSpanClassName: `text-xs font-semibold inline-block text-${color}-600`,
+          barWrapperClassName: `overflow-hidden h-2 mb-4 text-xs flex rounded bg-${color}-200`,
+          barInnerClassName: `shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-${color}-500`,
+          labelClassName: `text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-${color}-600 bg-${color}-200`,
+        };
+    }
+
+    return {
+      pertcentageSpanClassName:
+        'text-xs font-semibold inline-block text-green-600',
+      barWrapperClassName:
+        'overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200',
+      barInnerClassName:
+        'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500',
+      labelClassName:
+        'text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200',
+    };
   };
 
   const renderView = () => {
@@ -460,13 +512,40 @@ const UpgradeView = () => {
             </div>
           </div>
         );
-      case View.Loading:
+      case View.Loading: {
+        const {
+          labelClassName,
+          pertcentageSpanClassName,
+          barWrapperClassName,
+          barInnerClassName,
+        } = getProgressClasses();
         return (
           <div>
-            TODO render upgrade checklist status
-            {vaultStatus}
+            <div className="relative pt-1">
+              <div className="flex mb-2 items-center justify-between">
+                <div>
+                  <span className={labelClassName}>
+                    {getLoadingStatusText()}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className={pertcentageSpanClassName}>
+                    {vaultStatus}%
+                  </span>
+                </div>
+              </div>
+              <div className={barWrapperClassName}>
+                <div
+                  style={{
+                    width: `${vaultStatus}%`,
+                  }}
+                  className={barInnerClassName}
+                ></div>
+              </div>
+            </div>
           </div>
         );
+      }
     }
   };
 
