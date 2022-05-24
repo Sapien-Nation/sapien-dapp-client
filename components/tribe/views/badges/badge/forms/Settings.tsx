@@ -50,7 +50,11 @@ const SettingsForm = () => {
       <TextInputLabel label="Badge Name" name="name" error="" />
       <TextInput name="name" aria-label="name" />
       <TextInputLabel label="Badge Description" name="description" error="" />
-      <TextareaInput name="description" aria-label="description" />
+      <TextareaInput
+        name="description"
+        aria-label="description"
+        maxLength={4000}
+      />
     </div>
   );
 };

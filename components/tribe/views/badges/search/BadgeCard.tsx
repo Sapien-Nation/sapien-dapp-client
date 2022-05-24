@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-
 // assets
 import { ContributorBadge } from 'assets';
 
@@ -15,10 +13,7 @@ interface Props {
 }
 
 const BadgeCard = ({ badge, onClick }: Props) => {
-  const { query } = useRouter();
-
-  const tribeID = badge.tribeID as string;
-  const tribe = useTribe(tribeID);
+  const tribe = useTribe(badge.tribeID);
 
   return (
     <div className="rounded-md bg-sapien-neutral-600 flex p-5 gap-3">

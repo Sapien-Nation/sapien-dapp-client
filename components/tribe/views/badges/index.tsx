@@ -23,7 +23,6 @@ import type { TribeBadge } from 'tools/types/tribe';
 
 // mocks
 import { mockTribeBadge } from 'tools/mocks/tribe';
-import { useTribeBadges } from 'hooks/tribe/badge';
 
 // assets
 import daoJSONData from './lottie/dao.json';
@@ -42,7 +41,6 @@ enum View {
 // And in order to re-render the form we need to make sure the UI is flushed
 // Option 1 -> One option could be move the "selected" badge to be router level, but the issue might persiste
 // Option 2 -> ??
-
 const BadgesView = () => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
@@ -53,7 +51,6 @@ const BadgesView = () => {
   const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;
-  const tribeBadges = useTribeBadges(tribeID);
 
   const { avatar } = useTribe(tribeID);
 
@@ -63,12 +60,14 @@ const BadgesView = () => {
     const badge = {
       id: badgeID,
       image: avatar,
+      tribeID,
       description: 'This is a draft badge, please edit this description.',
       name: 'new badge',
       color: '#fff',
       type: BadgeTypes.Draft,
       owners: [me.walletAddress],
       permissions: [],
+      numberIssued: 0,
     };
 
     setView(View.Placeholder);

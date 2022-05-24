@@ -54,6 +54,33 @@ const UpgradeViewPage = () => {
     return <NotFound message="You dont have access to see this content" />;
   }
 
+  if (me.passport.status === PassportStatus.P) {
+    return (
+      <>
+        <SEO title="Upgrade" />
+        <h1 className="sr-only">Tribe Upgrade View</h1>
+        <Web3Provider>
+          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+            <WalletView />
+          </div>
+        </Web3Provider>
+      </>
+    );
+  }
+
+  return (
+    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+      <SEO title="Upgrade" />
+      <h1 className="sr-only">Tribe Upgrade View</h1>
+      <UpgradeView />
+    </div>
+  );
+};
+
+const UpgradeViewProxy = () => {
+  const { me } = useAuth();
+
+  // TODO should come from an API till mabed fix this
   if (me.passport === null) {
     return (
       <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
@@ -91,27 +118,7 @@ const UpgradeViewPage = () => {
     );
   }
 
-  if (me.passport.status === PassportStatus.P) {
-    return (
-      <>
-        <SEO title="Upgrade" />
-        <h1 className="sr-only">Tribe Upgrade View</h1>
-        <Web3Provider>
-          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-            <WalletView />
-          </div>
-        </Web3Provider>
-      </>
-    );
-  }
-
-  return (
-    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-      <SEO title="Upgrade" />
-      <h1 className="sr-only">Tribe Upgrade View</h1>
-      <UpgradeView />
-    </div>
-  );
+  return <UpgradeViewPage />;
 };
 
-export default UpgradeViewPage;
+export default UpgradeViewProxy;
