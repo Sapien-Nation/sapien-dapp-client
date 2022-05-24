@@ -18,38 +18,14 @@ import { Web3Provider } from 'wallet/providers';
 import { useTribe } from 'hooks/tribe';
 import { useRouter } from 'next/router';
 
-const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const UpgradeViewPage = () => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
-  const { isUpgraded, role } = useTribe(tribeID);
+  const { role } = useTribe(tribeID);
 
-  if (isUpgraded === true) {
-    if (role === Role.Owner || role === Role.Admin) {
-      return (
-        <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
-          <div className="absolute inset-0">
-            <img
-              className="h-full w-full object-cover"
-              src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
-              alt="People working on laptops"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
-          </div>
-          <div className="left-0 right-0 mx-auto h-full absolute w-full text-center">
-            <p className="text-xl text-white font-semibold mt-96 mx-auto w-96 h-96">
-              This tribe has been already been upgraded,{' '}
-              <Link href={`/tribes/${tribeID}/vault`} passHref>
-                <a className="underline">See the Vault</a>
-              </Link>
-            </p>
-          </div>
-        </div>
-      );
-    }
-
+  if (role === Role.Member) {
     return <NotFound message="You dont have access to see this content" />;
   }
 
@@ -62,17 +38,16 @@ const UpgradeViewPage = () => {
   );
 };
 
+const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const UpgradeViewProxy = () => {
-  const { me } = useAuth();
-
   return (
     <Query api={`/core-api/passport/signed`} loader={null}>
       {({
         hasPassport,
-        hasSign,
+        hasSigned,
       }: {
         hasPassport: boolean;
-        hasSign: boolean;
+        hasSigned: boolean;
       }) => {
         if (hasPassport === false)
           return (
@@ -110,7 +85,7 @@ const UpgradeViewProxy = () => {
             </div>
           );
 
-        if (hasSign === false) {
+        if (hasSigned === false) {
           return (
             <>
               <SEO title="Upgrade" />

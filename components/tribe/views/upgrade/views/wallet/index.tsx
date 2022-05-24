@@ -74,11 +74,11 @@ const Wallet = () => {
     setError(null);
 
     try {
-      // await signPassport(selectedToken.id);
+      await signPassport(selectedToken.id);
 
       mutate(
         '/core-api/passport/signed',
-        (data) => ({ ...data, hasSign: true }),
+        (data) => ({ ...data, hasSigned: true }),
         false
       );
       mutate(
