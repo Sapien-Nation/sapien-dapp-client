@@ -63,7 +63,7 @@ const BadgesView = () => {
       id: badgeID,
       image: avatar,
       description: 'This is a draft badge, please edit this description.',
-      name: '[draft] badge',
+      name: 'new badge',
       color: '#fff',
       type: BadgeTypes.Draft,
       owners: [me.walletAddress],
@@ -144,7 +144,12 @@ const BadgesView = () => {
         return (
           <BadgeCreationView
             badge={selectedBadge}
-            onCancel={() => setView(View.Home)}
+            onCancel={() => {
+              setView(View.Home);
+              setDraftBadges((currentDraftBadges) =>
+                currentDraftBadges.filter((badge) => badge !== selectedBadge)
+              );
+            }}
           />
         );
       case View.Search:
