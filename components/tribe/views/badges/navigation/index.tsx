@@ -49,9 +49,9 @@ const Sidebar = ({
             />
             {tribe.name}
           </h2>
-          <h1 className="font-semibold">BADGES</h1>
+          <h1 className="font-semibold mt-6 p-1">Manage Badges</h1>
         </div>
-        <div className="mt-5 flex-1">
+        <div className="mt-2 flex-1">
           <button
             onClick={handleAddDraftBadge}
             type="button"

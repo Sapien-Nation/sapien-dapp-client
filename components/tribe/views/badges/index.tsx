@@ -85,7 +85,7 @@ const BadgesView = () => {
       case View.Home: {
         return (
           <div>
-            <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl mt-3 rounded-md">
+            <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl rounded-md">
               <h1>Decentralize, automate, and grow your tribe</h1>
             </div>
             <div>
@@ -204,7 +204,10 @@ const BadgesView = () => {
               onClick={() => setIsOpen(false)}
             >
               <span className="sr-only">Close Badges Managment</span>
-              <XIcon className="h-6 w-6" aria-hidden="true" />
+              <XIcon
+                className="h-6 w-6 fixed right-[2rem]"
+                aria-hidden="true"
+              />
             </button>
             <div className="py-8">{renderView()}</div>
           </div>
