@@ -54,6 +54,7 @@ const BadgesView = () => {
 
   const tribeID = query.tribeID as string;
   const tribeBadges = useTribeBadges(tribeID);
+
   const { avatar } = useTribe(tribeID);
 
   const handleAddDraftBadge = () => {
@@ -269,21 +270,23 @@ const BadgesViewProxy = () => {
             id: '1000',
             name: 'Owner',
             color: '#6495ED',
-            description: 'This is the main badge',
+            description: 'This is the owner badge',
             type: BadgeTypes.Owner,
           }),
           mockTribeBadge({
             id: '2000',
-            name: 'Archiver',
+            name: 'Community Manager',
             color: '#2F4F4F',
-            description: 'this is the owner badge',
+            description:
+              'This badge is granted to qualified community managers that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
           }),
           mockTribeBadge({
             id: '3000',
             name: 'Moderator',
             color: '#FF1493',
-            description: 'this is the owner badge',
+            description:
+              'This badge is granted to qualified moderators that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
           }),
         ],

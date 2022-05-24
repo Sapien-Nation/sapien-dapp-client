@@ -81,9 +81,6 @@ const Sidebar = ({
                 </li>
               );
             })}
-            {draftBadges?.length > 0 ? (
-              <div className="border-t-2 !my-3 border-gray-800" />
-            ) : null}
             {draftBadges.map((badge) => {
               return (
                 <li key={badge.id} className="flex flex-col gap-2">
