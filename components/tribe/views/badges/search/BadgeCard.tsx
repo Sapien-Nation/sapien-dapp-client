@@ -34,11 +34,9 @@ const BadgeCard = ({ badge, onClick }: Props) => {
       )}
       <div className="flex flex-1 gap-2">
         <div className="flex-1">
-          <h3 className="font-semibold text-md">{badge.name}</h3>
-          <span className="text-gray-300">
-            Tribe: {badge.sourceTribeName}{' '}
-            <span className="text-xs text-gray-400">(100 members)</span>
-          </span>
+          <h3 className="font-semibold text-md">
+            {badge.sourceTribeName} - {badge.name}
+          </h3>
           <p className="text-sapien-neutral-200">{badge.description}</p>
         </div>
         <div className="flex justify-end flex-col">
@@ -49,7 +47,7 @@ const BadgeCard = ({ badge, onClick }: Props) => {
             Select
           </button>
           <span className="block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-sapien-neutral-400 text-gray-400 mt-3">
-            #{badge.numberOfUsage} Usage
+            {badge.numberOfUsage} Issued
           </span>
         </div>
       </div>

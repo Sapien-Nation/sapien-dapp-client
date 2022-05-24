@@ -176,7 +176,7 @@ const Search = ({ onSelect }: Props) => {
         </Listbox>
       </div>
       <section>
-        <h2 className="text-lg text-sapien-neutral-200">Sapien Badges</h2>
+        <h2 className="text-lg text-sapien-neutral-200">Badges</h2>
         <div className="space-y-3 mt-3">
           {matchSorter(defaultBadges, badgeSearchTerm, {
             keys: ['name'],

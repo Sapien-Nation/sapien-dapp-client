@@ -77,7 +77,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
-          Create Badge
+          Edit Badge
         </h1>
         <div className="flex flex-col gap-3 mt-5">
           <div className="flex justify-around border border-gray-800 rounded-md p-3">
