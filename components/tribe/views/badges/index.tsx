@@ -262,7 +262,7 @@ const BadgesViewProxy = () => {
         fetcher: () => [
           mockTribeBadge({
             id: '1000',
-            name: 'Treasurer',
+            name: 'Owner',
             color: '#6495ED',
             description: 'This is the main badge',
             type: BadgeTypes.Owner,
