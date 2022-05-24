@@ -8,10 +8,10 @@ import { matchSorter } from 'match-sorter';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 // api
-import { upgradeTribe } from 'api/tribe';
+import { finishTribeUpgrade, storeTribeSafeAddress } from 'api/tribe';
 
 // components
-import { Query } from 'components/common';
+import { ProgressBar, Query } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -29,6 +29,7 @@ import UpgradeSuccessJSONLottie from '../lottie/UpgradeSuccess.json';
 import { createVault } from './web3';
 
 enum View {
+  BadgeContract,
   Confirm,
   Home,
   Loading,
@@ -37,17 +38,33 @@ enum View {
 }
 
 enum VaultStatus {
-  Idle = 0,
-  Creating = 10,
-  Deploying = 40,
-  MultiSign = 70,
-  Success = 100,
+  Idle,
+  Creating,
+  StoringSafeAddress,
+  MultiSign,
+  Success,
 }
 
-const UpgradeView = () => {
+interface Props {
+  multisig: boolean;
+  badgeContract: boolean;
+  upgraded: boolean;
+}
+
+const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
   const { me } = useAuth();
 
-  const [view, setView] = useState(View.Home);
+  const [view, setView] = useState(() => {
+    if (upgraded === true) {
+      return View.Success;
+    }
+
+    if (multisig === true && badgeContract === false) {
+      return View.BadgeContract;
+    }
+
+    return View.Home;
+  });
   const [threshold, setThreshold] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [vaultStatus, setVaultStatus] = useState<VaultStatus>(VaultStatus.Idle);
@@ -68,6 +85,24 @@ const UpgradeView = () => {
     ({ id }) => id !== me.id
   );
 
+  const handleFinishUpgrade = async () => {
+    setView(View.Loading);
+    setVaultStatus(VaultStatus.MultiSign);
+    try {
+      setVaultStatus(VaultStatus.MultiSign);
+      await finishTribeUpgrade(tribeID);
+
+      setVaultStatus(VaultStatus.Success);
+
+      await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
+      setView(View.Success);
+      setVaultStatus(null);
+    } catch (err) {
+      setView(View.BadgeContract);
+      Sentry.captureMessage(err);
+    }
+  };
+
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
     setVaultStatus(VaultStatus.Creating);
@@ -78,8 +113,8 @@ const UpgradeView = () => {
         senderAddress: me.walletAddress,
       });
 
-      setVaultStatus(VaultStatus.Deploying);
-      await upgradeTribe(tribeID, {
+      setVaultStatus(VaultStatus.StoringSafeAddress);
+      await storeTribeSafeAddress(tribeID, {
         safeAddress,
         owners: selectedOwners.map(({ id, walletAddress }) => ({
           id,
@@ -135,59 +170,39 @@ const UpgradeView = () => {
     );
   };
 
-  const getLoadingStatusText = () => {
-    switch (vaultStatus) {
-      case VaultStatus.Creating:
-        return 'Creating Vault';
-      case VaultStatus.Deploying:
-        return 'Deploying Badges';
-      case VaultStatus.MultiSign:
-        return 'Multisign';
-      case VaultStatus.Success:
-        return 'Finalizing...';
-      default:
-        return 'Starting...';
-    }
-  };
-
-  const getProgressClasses = () => {
-    let color = 'gray';
-    switch (vaultStatus) {
-      case VaultStatus.Creating:
-        color = 'green';
-        break;
-      case VaultStatus.Deploying:
-        color = 'blue';
-        break;
-      case VaultStatus.MultiSign:
-        color = 'pink';
-        break;
-      case VaultStatus.Success:
-        color = 'red';
-        break;
-      default:
-        return {
-          pertcentageSpanClassName: `text-xs font-semibold inline-block text-${color}-600`,
-          barWrapperClassName: `overflow-hidden h-2 mb-4 text-xs flex rounded bg-${color}-200`,
-          barInnerClassName: `shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-${color}-500`,
-          labelClassName: `text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-${color}-600 bg-${color}-200`,
-        };
-    }
-
-    return {
-      pertcentageSpanClassName:
-        'text-xs font-semibold inline-block text-green-600',
-      barWrapperClassName:
-        'overflow-hidden h-2 mb-4 text-xs flex rounded bg-green-200',
-      barInnerClassName:
-        'shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500',
-      labelClassName:
-        'text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-green-600 bg-green-200',
-    };
-  };
-
   const renderView = () => {
     switch (view) {
+      case View.BadgeContract:
+        return (
+          <div>
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
+              <Lottie
+                animationData={CreateVaultJSONLottie}
+                play
+                className="w-52 h-52"
+              />
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
+                Complete Upgrade.
+              </h1>
+            </div>
+            <div>
+              <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
+                Remember that Vault transactions must be approved by owners, how
+                many approvals do you want to require? This can also be updated
+                later.
+              </p>
+            </div>
+            <div className="mb-4 mt-6 flex gap-10 justify-center">
+              <button
+                type="button"
+                onClick={handleFinishUpgrade}
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Finish Upgrade
+              </button>
+            </div>
+          </div>
+        );
       case View.Success:
         return (
           <div>
@@ -513,36 +528,29 @@ const UpgradeView = () => {
           </div>
         );
       case View.Loading: {
-        const {
-          labelClassName,
-          pertcentageSpanClassName,
-          barWrapperClassName,
-          barInnerClassName,
-        } = getProgressClasses();
+        const renderProgressBar = () => {
+          switch (vaultStatus) {
+            case VaultStatus.Creating:
+              return <ProgressBar value={25} text="Creating Vault." />;
+            case VaultStatus.StoringSafeAddress:
+              return <ProgressBar value={50} text="Storing Address." />;
+            case VaultStatus.MultiSign:
+              return <ProgressBar value={75} text="Multisign." />;
+            case VaultStatus.Success:
+              return <ProgressBar value={99} text="Finalazing." />;
+            default:
+              return <ProgressBar value={0} text="Starting." />;
+          }
+        };
+
         return (
           <div>
-            <div className="relative pt-1">
-              <div className="flex mb-2 items-center justify-between">
-                <div>
-                  <span className={labelClassName}>
-                    {getLoadingStatusText()}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className={pertcentageSpanClassName}>
-                    {vaultStatus}%
-                  </span>
-                </div>
-              </div>
-              <div className={barWrapperClassName}>
-                <div
-                  style={{
-                    width: `${vaultStatus}%`,
-                  }}
-                  className={barInnerClassName}
-                ></div>
-              </div>
+            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center decoration-double decoration-gray-500 decoration-2">
+                Please dont close this window
+              </h1>
             </div>
+            <div className="mt-12">{renderProgressBar()}</div>
           </div>
         );
       }
@@ -559,7 +567,25 @@ const UpgradeViewProxy = () => {
 
   return (
     <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => <UpgradeView />}
+      {() => (
+        <Query api={`/core-api/tribe/${tribeID}/upgrade-status`}>
+          {({
+            multisig,
+            badgeContract,
+            upgraded,
+          }: {
+            multisig: boolean;
+            badgeContract: boolean;
+            upgraded: boolean;
+          }) => (
+            <UpgradeView
+              multisig={multisig}
+              badgeContract={badgeContract}
+              upgraded={upgraded}
+            />
+          )}
+        </Query>
+      )}
     </Query>
   );
 };
