@@ -67,14 +67,20 @@ const UpgradeViewPage = () => {
         </div>
         <div className="left-0 right-0 mx-auto h-full absolute w-full text-center">
           <p className="text-xl text-white font-semibold mt-96 mx-auto w-96 h-96">
-            We didn&rsquo;t detect any passport for your account, go ahead an{' '}
+            To upgrade a tribe you need a Sapien Nation Passport. You can{' '}
             <a
               href={`${distributionURL}passport/purchase`}
-              className="text-base font-medium bg-primary-200"
+              className="text-base font-medium bg-[#6200ea] pl-2 pr-2 rounded-lg"
             >
-              Buy a passport
+              Mint
             </a>{' '}
-            and come back here.
+            an NFT or get one on a secondary market like{' '}
+            <a
+              href={`${distributionURL}passport/purchase`}
+              className="text-base font-medium bg-[#6200ea] pl-2 pr-2 rounded-lg"
+            >
+              Opensea
+            </a>
           </p>
         </div>
       </div>
