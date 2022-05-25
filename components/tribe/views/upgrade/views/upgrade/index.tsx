@@ -15,6 +15,7 @@ import { ProgressBar, Query } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
+import { useToast } from 'context/toast';
 
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
@@ -79,6 +80,7 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
     },
   ]);
 
+  const toast = useToast();
   const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -99,6 +101,9 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
       setView(View.Success);
       setVaultStatus(null);
     } catch (err) {
+      toast({
+        message: err.message,
+      });
       setView(View.BadgeContract);
       Sentry.captureMessage(err);
     }
@@ -124,9 +129,8 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
         threshold,
       });
 
-      // TODO multi sign
       setVaultStatus(VaultStatus.MultiSign);
-      await new Promise((r) => setTimeout(r, 2000));
+      await finishTribeUpgrade(tribeID);
 
       setVaultStatus(VaultStatus.Success);
 
