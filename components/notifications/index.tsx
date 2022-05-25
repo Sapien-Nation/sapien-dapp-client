@@ -4,6 +4,12 @@ import { Menu, Transition } from '@headlessui/react';
 // api
 import { makeAllAsRead } from 'api/notifications';
 
+// constants
+import { NotificationsType } from 'tools/constants/notifications';
+
+// components
+import { BadgeRequestApproval, OwnerBadgeAssignment } from './items';
+
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
 import { useToast } from 'context/toast';
@@ -13,6 +19,7 @@ const Notifications = () => {
 
   const { notifications } = useGlobalNotifications();
 
+  console.log(notifications);
   //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
     try {
@@ -26,7 +33,12 @@ const Notifications = () => {
 
   //------------------------------------------------------------------------
   const renderNotification = (notification) => {
-    return <span>TODO render notifications by type {notification.id}</span>;
+    switch (notification.type) {
+      case NotificationsType.BadgeRequestApproval:
+        return <BadgeRequestApproval notification={notification} />;
+      case NotificationsType.OwnerBadgeAssignment:
+        return <OwnerBadgeAssignment notification={notification} />;
+    }
   };
 
   return (

@@ -9,6 +9,9 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
+// constants
+import { NotificationsType } from 'tools/constants/notifications';
+
 // components
 import { UserAvatar, Query } from 'components/common';
 import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
@@ -18,6 +21,13 @@ const Wallet = dynamic(() => import('wallet/Wallet'));
 
 // types
 import type { Token } from 'wallet/types';
+
+// mocks
+import {
+  mockNotification,
+  mockNotificationReceiver,
+  mockNotificationSender,
+} from 'tools/mocks/notifications';
 
 enum Dialog {
   DeclarationDialog,
@@ -44,7 +54,27 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
             {({ open }) => (
               <Query
                 api="/core-api/notification/all"
-                options={{ fetcher: () => ({ notifications: [], unread: 0 }) }}
+                options={{
+                  fetcher: () => ({
+                    notifications: [
+                      mockNotification({
+                        type: NotificationsType.BadgeRequestApproval,
+                        by: mockNotificationSender({ username: 'ethaanpump' }),
+                        to: mockNotificationReceiver({
+                          username: 'robgiometti',
+                        }),
+                      }),
+                      mockNotification({
+                        type: NotificationsType.OwnerBadgeAssignment,
+                        by: mockNotificationSender({ username: 'ethaanpump' }),
+                        to: mockNotificationReceiver({
+                          username: 'carlosgzl',
+                        }),
+                      }),
+                    ],
+                    unread: 2,
+                  }),
+                }}
               >
                 {() => (
                   <>
