@@ -22,7 +22,7 @@ import { useTribe } from 'hooks/tribe';
 import type { TribeBadge } from 'tools/types/tribe';
 
 // mocks
-import { mockTribeBadge } from 'tools/mocks/tribe';
+import { mockTribeBadge, mockTribeBadgeTribe } from 'tools/mocks/tribe';
 
 // assets
 import daoJSONData from './lottie/dao.json';
@@ -52,7 +52,7 @@ const BadgesView = () => {
 
   const tribeID = query.tribeID as string;
 
-  const { avatar } = useTribe(tribeID);
+  const { avatar, name } = useTribe(tribeID);
 
   const handleAddDraftBadge = () => {
     const badgeID = nanoid();
@@ -60,7 +60,11 @@ const BadgesView = () => {
     const badge = {
       id: badgeID,
       image: avatar,
-      tribeID,
+      tribe: {
+        id: tribeID,
+        avatar,
+        name,
+      },
       description: 'This is a draft badge, please edit this description.',
       name: 'new badge',
       color: '#fff',
@@ -271,6 +275,7 @@ const BadgesViewProxy = () => {
             color: '#6495ED',
             description: 'This is the owner badge',
             type: BadgeTypes.Owner,
+            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
           }),
           mockTribeBadge({
             id: '2000',
@@ -279,6 +284,7 @@ const BadgesViewProxy = () => {
             description:
               'This badge is granted to qualified community managers that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
+            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
           }),
           mockTribeBadge({
             id: '3000',
@@ -287,6 +293,7 @@ const BadgesViewProxy = () => {
             description:
               'This badge is granted to qualified moderators that meet the standards of the Sapien Nation.',
             type: BadgeTypes.Normal,
+            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
           }),
         ],
       }}

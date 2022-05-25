@@ -351,7 +351,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           </nav>
         </div>
 
-        <button
+        {/* <button
           aria-label="Create Room"
           className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
           onClick={() => {}}
@@ -389,7 +389,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <div className="flex gap-1">Syndicate</div>
             </a>
           </li>
-        </ul>
+        </ul> */}
 
         <div>
           <nav>

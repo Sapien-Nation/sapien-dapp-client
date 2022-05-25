@@ -1,9 +1,6 @@
 // assets
 import { ContributorBadge } from 'assets';
 
-// hooks
-import { useTribe } from 'hooks/tribe';
-
 // types
 import type { TribeBadge } from 'tools/types/tribe';
 
@@ -13,14 +10,12 @@ interface Props {
 }
 
 const BadgeCard = ({ badge, onClick }: Props) => {
-  const tribe = useTribe(badge.tribeID);
-
   return (
     <div className="rounded-md bg-sapien-neutral-600 flex p-5 gap-3">
-      {tribe.avatar ? (
+      {badge.tribe.avatar ? (
         <img
-          src={tribe.avatar}
-          alt={badge.name}
+          src="" // TODO badge.image
+          alt={badge.tribe.avatar}
           style={{ borderColor: badge.color }}
           className="w-12 h-12 object-cover rounded-full border-2"
         />
@@ -30,7 +25,8 @@ const BadgeCard = ({ badge, onClick }: Props) => {
       <div className="flex flex-1 gap-2">
         <div className="flex-1">
           <h3 className="font-semibold text-md">
-            {tribe.name} - {badge.name}
+            {/* TODO tribe.name tbd with backend */}
+            {badge.tribe.name} - {badge.name}
           </h3>
           <p className="text-sapien-neutral-200">{badge.description}</p>
         </div>
