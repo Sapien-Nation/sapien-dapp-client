@@ -38,9 +38,9 @@ export const createVault = async ({
 }): Promise<string> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const { deploySafe } = await SafeFactory.create({ ethAdapter });
+    const SafeFactorySDK = await SafeFactory.create({ ethAdapter });
 
-    const safeSdk: Safe = await deploySafe({
+    const safeSdk: Safe = await SafeFactorySDK.deploySafe({
       safeAccountConfig: {
         owners,
         threshold,
@@ -64,22 +64,22 @@ export const proposingTransaction = async ({
   try {
     const ethAdapter = await getEthAdapter();
 
-    const { proposeTransaction } = new SafeServiceClient({
+    const SafeServiceClientSDK = new SafeServiceClient({
       txServiceUrl,
       ethAdapter,
     });
-    const { createTransaction, getTransactionHash } = await Safe.create({
+    const SafeSDK = await Safe.create({
       ethAdapter,
       safeAddress,
     });
 
-    const safeTransaction = await createTransaction({
+    const safeTransaction = await SafeSDK.createTransaction({
       to: '0x<address>',
       data: '0x<data>',
       value: '<eth_value_in_wei>',
     });
-    const safeTxHash = await getTransactionHash(safeTransaction);
-    await proposeTransaction({
+    const safeTxHash = await SafeSDK.getTransactionHash(safeTransaction);
+    await SafeServiceClientSDK.proposeTransaction({
       safeAddress,
       safeTransaction,
       safeTxHash,
@@ -100,17 +100,17 @@ export const signTransaction = async (
 ): Promise<boolean> => {
   try {
     const ethAdapter = await getEthAdapter();
-    const { signTransactionHash } = await Safe.create({
+    const SafeSDK = await Safe.create({
       ethAdapter,
       safeAddress,
     });
-    const { confirmTransaction } = new SafeServiceClient({
+    const SafeServiceClientSDK = new SafeServiceClient({
       txServiceUrl,
       ethAdapter,
     });
 
-    const signature = await signTransactionHash(safeTxHash);
-    await confirmTransaction(safeTxHash, signature.data);
+    const signature = await SafeSDK.signTransactionHash(safeTxHash);
+    await SafeServiceClientSDK.confirmTransaction(safeTxHash, signature.data);
 
     return true;
   } catch (err) {
@@ -133,17 +133,17 @@ export const executeTransaction = async (
   try {
     const ethAdapter = await getEthAdapter();
 
-    const { getTransaction } = new SafeServiceClient({
+    const SafeServiceClientSDK = new SafeServiceClient({
       txServiceUrl,
       ethAdapter,
     });
-    const { createTransaction, executeTransaction } = await Safe.create({
+    const SafeSDK = await Safe.create({
       ethAdapter,
       safeAddress,
     });
 
-    const transaction = await getTransaction(safeTxHash);
-    const safeTransaction = await createTransaction({
+    const transaction = await SafeServiceClientSDK.getTransaction(safeTxHash);
+    const safeTransaction = await SafeSDK.createTransaction({
       to: transaction.to,
       value: transaction.value,
       data: transaction.data,
@@ -164,7 +164,7 @@ export const executeTransaction = async (
       safeTransaction.addSignature(signature);
     });
 
-    const executeTxResponse = await executeTransaction(safeTransaction);
+    const executeTxResponse = await SafeSDK.executeTransaction(safeTransaction);
 
     if (executeTxResponse?.transactionResponse) {
       const receipt = await executeTxResponse.transactionResponse.wait();
