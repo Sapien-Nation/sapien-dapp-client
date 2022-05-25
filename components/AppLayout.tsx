@@ -195,10 +195,21 @@ const AppLayout = ({ children }: Props) => {
         </Query>
       </div>
       <Overlay
+        blur
         isOpen={showProfileOverlay}
         onClose={() => setShowProfileOverlay(false)}
       >
-        <ProfileOverlay />
+        <>
+          <button
+            type="button"
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-5 top-5"
+            onClick={() => setShowProfileOverlay(false)}
+          >
+            <span className="sr-only">Close Profile Passport</span>
+            <XIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+          <ProfileOverlay />
+        </>
       </Overlay>
     </>
   );

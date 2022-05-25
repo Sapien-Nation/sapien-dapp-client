@@ -2,12 +2,13 @@ import { Fragment } from 'react';
 import { Transition } from '@headlessui/react';
 
 interface Props {
+  blur?: boolean;
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const Overlay = ({ children, isOpen, onClose }: Props) => {
+const Overlay = ({ blur = false, children, isOpen, onClose }: Props) => {
   return (
     <Transition.Root appear={true} show={isOpen} as={Fragment}>
       <div
@@ -26,7 +27,11 @@ const Overlay = ({ children, isOpen, onClose }: Props) => {
           leaveTo="transform opacity-0 scale-95"
           afterLeave={() => onClose()}
         >
-          <div className="h-full overflow-hidden bg-sapien-neutral-800">
+          <div
+            className={`h-full overflow-hidden ${
+              blur ? 'backdrop-blur-md bg-black/30' : 'bg-sapien-neutral-800'
+            }`}
+          >
             {children}
           </div>
         </Transition.Child>

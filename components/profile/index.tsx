@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // components
-import Passport from './Passport';
+import PassportStatic from './PassportStatic';
 
 enum View {
   Passport,
@@ -13,11 +13,15 @@ const ProfileOverlay = () => {
   const renderView = () => {
     switch (view) {
       case View.Passport:
-        return <Passport />;
+        return <PassportStatic />;
     }
   };
 
-  return <div>{renderView()}</div>;
+  return (
+    <div className="h-full w-full flex items-center justify-center">
+      {renderView()}
+    </div>
+  );
 };
 
 export default ProfileOverlay;
