@@ -11,7 +11,7 @@ import { useSWRConfig } from 'swr';
 import { leaveTribe } from 'api/tribe';
 
 // components
-import TribeAvatar from 'components/navigation/TribeAvatar';
+import TribeAvatar from 'components/common/TribeAvatar';
 import { Query, Tooltip } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 

@@ -2,7 +2,7 @@
 import type { ProfileTribe } from 'tools/types/tribe';
 
 // components
-import TribeAvatar from 'components/navigation/TribeAvatar';
+import TribeAvatar from './TribeAvatar';
 
 interface Props {
   tribe: ProfileTribe;

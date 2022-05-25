@@ -17,6 +17,8 @@ export { default as Search } from './Search';
 export { default as Page } from './Page';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Query } from './Query';
+export { default as TribeAvatar } from './TribeAvatar';
+export { default as TribeHeader } from './TribeHeader';
 
 // types
 export type { Props as DialogProps } from './Dialog';

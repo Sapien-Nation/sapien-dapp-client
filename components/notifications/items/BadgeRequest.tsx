@@ -1,6 +1,6 @@
 // types
 import type { Notification } from 'tools/types/notifications';
-import TribeHeader from '../TribeHeader';
+import TribeHeader from 'components/common/TribeHeader';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
