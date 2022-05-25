@@ -31,6 +31,7 @@ import {
   mockNotificationReceiver,
   mockNotificationSender,
 } from 'tools/mocks/notifications';
+import { mockProfileTribe } from 'tools/mocks/tribe';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
@@ -76,6 +77,13 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                         to: mockNotificationReceiver({
                           username: 'robgiometti',
                         }),
+                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                        extra: {
+                          tribe: mockProfileTribe({
+                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                            name: 'TibiaGameplay',
+                          }),
+                        },
                       }),
                       mockNotification({
                         type: NotificationsType.BadgeReceived,
@@ -83,6 +91,13 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                         to: mockNotificationReceiver({
                           username: 'carlosgzl',
                         }),
+                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                        extra: {
+                          tribe: mockProfileTribe({
+                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                            name: 'Sapien',
+                          }),
+                        },
                       }),
                     ],
                     unread: 2,

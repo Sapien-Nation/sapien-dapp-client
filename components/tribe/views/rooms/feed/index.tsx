@@ -116,6 +116,7 @@ const Feed = ({
                   avatar: (data as RoomNewMessage).by.avatar,
                   id: (data as RoomNewMessage).by.id,
                   username: (data as RoomNewMessage).by.username,
+                  badge: null,
                 },
                 type: MessageType.Text,
                 mentions: getMentionsArrayFromCacheForOptimistic(
@@ -296,6 +297,7 @@ const Feed = ({
           avatar: me.avatar || passport?.image,
           id: me.id,
           username: me.username,
+          badge: null,
         },
         type: MessageType.Optimistic,
         status: 'A',

@@ -28,6 +28,7 @@ import {
   mockNotificationReceiver,
   mockNotificationSender,
 } from 'tools/mocks/notifications';
+import { mockProfileTribe } from 'tools/mocks/tribe';
 
 enum Dialog {
   DeclarationDialog,
@@ -64,6 +65,12 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                           username: 'robgiometti',
                         }),
                         tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                        extra: {
+                          tribe: mockProfileTribe({
+                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                            name: 'TibiaGameplay',
+                          }),
+                        },
                       }),
                       mockNotification({
                         type: NotificationsType.BadgeReceived,
@@ -72,6 +79,12 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                           username: 'carlosgzl',
                         }),
                         tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                        extra: {
+                          tribe: mockProfileTribe({
+                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                            name: 'Sapien',
+                          }),
+                        },
                       }),
                     ],
                     unread: 2,
