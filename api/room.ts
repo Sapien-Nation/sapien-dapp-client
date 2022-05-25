@@ -41,3 +41,9 @@ export const readRoom = (roomID: string) =>
     .post(`/core-api/room/${roomID}/read/`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const deleteRoom = (roomID: string) =>
+  axios
+    .delete(`/core-api/room/${roomID}`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));

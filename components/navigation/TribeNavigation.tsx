@@ -21,7 +21,7 @@ import {
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
 import { MenuLink, Query, RedDot } from 'components/common';
-import { EditTribeDialog } from 'components/tribe/dialogs';
+import { DeleteRoomDialog, EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
 import {
@@ -45,12 +45,14 @@ interface Props {
 enum Dialog {
   CreateChannel,
   CreateRoom,
+  DeleteRoom,
   EditTribe,
 }
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   const { mutate } = useSWRConfig();
   const { asPath, query } = useRouter();
@@ -433,7 +435,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           </nav>
         </div>
 
-        {/* Modals */}
+        {/* Dialogs */}
         {dialog === Dialog.CreateRoom && (
           <CreateRoomDialog
             aboutObject={AboutObject.Party}
@@ -441,9 +443,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             onClose={() => setDialog(null)}
           />
         )}
+
         {dialog === Dialog.CreateChannel && (
           <CreateChannelDialog onClose={() => setDialog(null)} />
         )}
+
+        {dialog === Dialog.DeleteRoom && (
+          <DeleteRoomDialog
+            onClose={() => setDialog(null)}
+            roomID={selectedRoom}
+          />
+        )}
+
         {dialog === Dialog.EditTribe && (
           <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
             {(tribeInfo: MainFeedTribe) => (

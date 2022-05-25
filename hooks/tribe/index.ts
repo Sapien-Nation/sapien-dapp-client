@@ -123,6 +123,15 @@ export const useTribeChannels = (tribeID: string) => {
     : [];
 };
 
+export const useTribeRoom = (tribeID: string, roomID: string) => {
+  const { cache } = useSWRConfig();
+  const tribe: ProfileTribe = cache
+    .get('/core-api/profile/tribes')
+    .find(({ id }) => id === tribeID);
+
+  return tribe?.rooms?.find((room) => room.id === roomID);
+};
+
 export const useTribeRooms = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
