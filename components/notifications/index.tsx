@@ -8,7 +8,7 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { BadgeRequestApproval, OwnerBadgeAssignment } from './items';
+import { Mention, BadgeRequest, BadgeReceived } from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -19,7 +19,6 @@ const Notifications = () => {
 
   const { notifications } = useGlobalNotifications();
 
-  console.log(notifications);
   //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
     try {
@@ -34,17 +33,19 @@ const Notifications = () => {
   //------------------------------------------------------------------------
   const renderNotification = (notification) => {
     switch (notification.type) {
-      case NotificationsType.BadgeRequestApproval:
-        return <BadgeRequestApproval notification={notification} />;
-      case NotificationsType.OwnerBadgeAssignment:
-        return <OwnerBadgeAssignment notification={notification} />;
+      case NotificationsType.Mention:
+        return <Mention notification={notification} />;
+      case NotificationsType.BadgeRequest:
+        return <BadgeRequest notification={notification} />;
+      case NotificationsType.BadgeReceived:
+        return <BadgeReceived notification={notification} />;
     }
   };
 
   return (
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="flex gap-1 items-center justify-between p-3">
-        <span>Notification Center</span>
+        <span>Notifications</span>
         <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
@@ -70,7 +71,7 @@ const Notifications = () => {
           </Menu>
         </div>
       </div>
-      <div className="py-6 px-4">
+      <div className="px-4">
         {notifications.map((notification) => (
           <div key={notification.id}>{renderNotification(notification)}</div>
         ))}

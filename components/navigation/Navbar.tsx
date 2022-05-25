@@ -58,18 +58,20 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                   fetcher: () => ({
                     notifications: [
                       mockNotification({
-                        type: NotificationsType.BadgeRequestApproval,
+                        type: NotificationsType.BadgeRequest,
                         by: mockNotificationSender({ username: 'ethaanpump' }),
                         to: mockNotificationReceiver({
                           username: 'robgiometti',
                         }),
+                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
                       }),
                       mockNotification({
-                        type: NotificationsType.OwnerBadgeAssignment,
+                        type: NotificationsType.BadgeReceived,
                         by: mockNotificationSender({ username: 'ethaanpump' }),
                         to: mockNotificationReceiver({
                           username: 'carlosgzl',
                         }),
+                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
                       }),
                     ],
                     unread: 2,

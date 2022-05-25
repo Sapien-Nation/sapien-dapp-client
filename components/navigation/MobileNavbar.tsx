@@ -71,14 +71,14 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                   fetcher: () => ({
                     notifications: [
                       mockNotification({
-                        type: NotificationsType.BadgeRequestApproval,
+                        type: NotificationsType.BadgeRequest,
                         by: mockNotificationSender({ username: 'ethaanpump' }),
                         to: mockNotificationReceiver({
                           username: 'robgiometti',
                         }),
                       }),
                       mockNotification({
-                        type: NotificationsType.OwnerBadgeAssignment,
+                        type: NotificationsType.BadgeReceived,
                         by: mockNotificationSender({ username: 'ethaanpump' }),
                         to: mockNotificationReceiver({
                           username: 'carlosgzl',
