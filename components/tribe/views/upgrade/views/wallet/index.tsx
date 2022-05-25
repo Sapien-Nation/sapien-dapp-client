@@ -227,7 +227,7 @@ const Wallet = () => {
               </h1>
             </div>
             <div className="mt-6">
-              <div className="text-gray-300">
+              <div className="text-gray-300 mb-3">
                 <p>Please select one of the tokens listed below.</p>
               </div>
               <ol className="flex flex-wrap gap-5">
@@ -291,7 +291,7 @@ const Wallet = () => {
                 onClick={handleSignToken}
                 className={
                   isFetching
-                    ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
+                    ? 'py-2 px-4 flex-1 justify-center animate-pulse items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
                     : 'py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
                 }
               >
