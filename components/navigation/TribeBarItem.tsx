@@ -11,6 +11,7 @@ import { useSWRConfig } from 'swr';
 import { leaveTribe } from 'api/tribe';
 
 // components
+import TribeAvatar from 'components/navigation/TribeAvatar';
 import { Query, Tooltip } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 
@@ -102,53 +103,15 @@ function TribeBarItem({
   return (
     <>
       <div className="relative">
-        <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
-          <a
-            className={`h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 border-2 border-white/10 hover:border-gray-400 hover:text-gray-900 ${
-              tribeID === tribe.id && 'border-white hover:border-white'
-            }`}
-            onClick={(event) => {
-              if (event.type === 'contextmenu') {
-                event.preventDefault();
-                if (tribe.isMain === false) {
-                  setContextMenuPosition({
-                    left: event.clientX,
-                    top: event.clientY,
-                  });
-                  onRightClick(tribe);
-                }
-              }
-              handleMobileMenu();
-            }}
-            onContextMenu={(event) => {
-              if (event.type === 'contextmenu') {
-                event.preventDefault();
-                if (tribe.isMain === false) {
-                  setContextMenuPosition({
-                    left: event.clientX,
-                    top: event.clientY,
-                  });
-                  onRightClick(tribe);
-                }
-              }
-            }}
-            ref={tooltipRef.current?.setTriggerRef}
-          >
-            {tribe.avatar ? (
-              <img
-                className="w-full h-full rounded-lg text-gray-400 bg-gray-900 group-hover:text-gray-500"
-                alt={''}
-                src={tribe.avatar}
-              />
-            ) : (
-              <div className="w-full h-full rounded-lg bg-gray-700 font-bold text-black group-hover:text-gray-500 flex items-center justify-center">
-                {tribe.name[0].toUpperCase()}
-              </div>
-            )}
-            <span className="sr-only">Go to {tribe.name}</span>
-          </a>
-        </Link>
-
+        <TribeAvatar
+          tribe={tribe}
+          onRightClick={onRightClick}
+          routerTribeID={tribeID}
+          tooltipRef={tooltipRef}
+          useBorder={true}
+          handleMobileMenu={handleMobileMenu}
+          setContextMenuPosition={setContextMenuPosition}
+        />
         {isContextMenuOpen?.id === tribe.id && (
           <div
             style={{
