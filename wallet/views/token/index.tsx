@@ -38,13 +38,6 @@ const TokenView = ({
           alt=""
         />
         <div className="text-center grid gap-6">
-          <button
-            type="button"
-            onClick={() => onWithdraw(token)}
-            className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-          >
-            Withdraw
-          </button>
           <Query
             api={`/core-api/passport/${token.id}/signed`}
             loader={
@@ -69,13 +62,24 @@ const TokenView = ({
                 );
 
               return (
-                <button
-                  type="button"
-                  onClick={showDeclarationDialog}
-                  className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                >
-                  Sign Passport
-                </button>
+                <>
+                  {signed === false ? (
+                    <button
+                      type="button"
+                      onClick={() => onWithdraw(token)}
+                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      Withdraw
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={showDeclarationDialog}
+                    className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                  >
+                    Sign Passport
+                  </button>
+                </>
               );
             }}
           </Query>

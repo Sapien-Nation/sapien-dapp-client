@@ -18,6 +18,9 @@ import { formatAvatarName, formatTokenID } from 'utils/passport';
 // assets
 import { PolygonFilter } from 'assets';
 
+// types
+import type { ProfileTribe } from 'tools/types/tribe';
+
 enum View {
   Passport,
   Badges,
@@ -269,11 +272,13 @@ const PassportForm = ({ setShowPassport }: Props) => {
                           <>
                             <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                               <TribeNotificationHeader
-                                tribe={{
-                                  id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                                  avatar: '',
-                                  name: `${tribe} ${index}`,
-                                }}
+                                tribe={
+                                  {
+                                    id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                                    avatar: '',
+                                    name: `${tribe} ${index}`,
+                                  } as ProfileTribe
+                                }
                               />
                               <ChevronUpIcon
                                 className={`${
