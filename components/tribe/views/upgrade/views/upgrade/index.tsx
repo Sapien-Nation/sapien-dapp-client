@@ -519,18 +519,13 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
               </button>
               <button
                 type="button"
-                disabled={selectedOwners.length === 1}
                 onClick={() => {
                   if (threshold === null) {
                     setThreshold(selectedOwners.length - 1);
                   }
                   setView(View.Confirm);
                 }}
-                className={
-                  selectedOwners.length === 1
-                    ? 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black cursor-not-allowed'
-                    : 'py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black'
-                }
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-[#6200ea] hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Next
               </button>
