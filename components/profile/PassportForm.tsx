@@ -13,6 +13,9 @@ import { usePassport } from 'hooks/passport';
 import { formatDate } from 'utils/date';
 import { formatAvatarName, formatTokenID } from 'utils/passport';
 
+// assets
+import { PolygonFilter } from 'assets';
+
 enum View {
   Passport,
   Badges,
@@ -40,20 +43,20 @@ const PassportForm = ({ setShowPassport }: Props) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={() => setShowPassport(false)} id={'updat-profile-form'}>
+        <PolygonFilter />
         <div className="flex flex-col min-w-[540px] min-h-[350px]">
           {view === View.Passport && (
             <>
               <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                 <div className="text-center pt-4 flex flex-col justify-between">
-                  <div className="bg-sapien-60 block h-32 w-36 hexagon rotate-90 p-1px">
-                    <div className="bg-black h-full w-full hexagon flex items-center justify-center">
-                      <img
-                        src={passport.image}
-                        className="-rotate-90 h-full object-cover"
-                        alt="Passport Figure generated with Machine Learning"
-                      />
-                    </div>
-                  </div>
+                  <div
+                    className="block h-40 w-40 hexagon p-1px"
+                    style={
+                      {
+                        '--passportImage': `url(${passport.image})`,
+                      } as React.CSSProperties
+                    }
+                  />
                   <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5">
                     <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
                       {formatAvatarName(passport.title)}

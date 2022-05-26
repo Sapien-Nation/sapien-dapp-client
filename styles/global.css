@@ -472,8 +472,19 @@
 }
 
 .hexagon {
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  color:red;
+  filter:url(#round);
 }
+.hexagon::before {
+  content:"";
+  display:block;
+  padding-top:86.6%;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  background-image: var(--passportImage);
+  background-position: center center;
+  background-size: cover;
+}
+
 .hexagon-2 {
   clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
 }
