@@ -335,7 +335,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getUserTransactions = async (page = 1): Promise<Array<Transaction>> => {
+  const getUserTransactions = async (): Promise<Array<Transaction>> => {
     try {
       const sentHistory = await getSentTxHistory(me.walletAddress);
       const receivedHistory = await getReceivedTxHistory(me.walletAddress);

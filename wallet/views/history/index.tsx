@@ -1,10 +1,9 @@
-import {
-  ArrowLeftIcon,
-  ExternalLinkIcon,
-  RefreshIcon,
-} from '@heroicons/react/outline';
+import { ArrowLeftIcon, RefreshIcon } from '@heroicons/react/outline';
 import _chunk from 'lodash/chunk';
 import { useCallback, useEffect, useState } from 'react';
+
+// components
+import { DefaultTransaction } from './transactions';
 
 // types
 import type { Transaction } from 'tools/types/web3';
@@ -48,6 +47,10 @@ const Home = ({ handleBack }: Props) => {
   useEffect(() => {
     handleGetTransactions();
   }, [handleGetTransactions, walletAPI]);
+
+  const renderTransaction = (transaction: Transaction) => {
+    return <DefaultTransaction transaction={transaction} />;
+  };
 
   const renderView = () => {
     if (isFetching) {
@@ -143,32 +146,19 @@ const Home = ({ handleBack }: Props) => {
                     </button>
                   </p>
                 )}
-                {transactions.map((tx, index) => {
-                  const { asset, hash, value } = tx;
-                  const isLastItem = index < transactions.length - 1;
-                  return (
-                    <li
-                      key={hash}
-                      onClick={() => setTransaction(tx)}
-                      className={`${
-                        isLastItem ? 'border-b border-gray-700' : ''
-                      } flex flex-col items-end py-1 `}
-                    >
-                      <span>
-                        {value} {asset}
-                      </span>
-                      <a
-                        target="_blank"
-                        className="underline text-sm flex flex-row gap-2"
-                        rel="noreferrer"
-                        href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${hash}`}
-                      >
-                        See Transaction Details{' '}
-                        <ExternalLinkIcon className="w-5 h-5" />
-                      </a>
-                    </li>
-                  );
-                })}
+                {transactions.map((tx, index) => (
+                  <li
+                    key={tx.hash}
+                    onClick={() => setTransaction(tx)}
+                    className={`${
+                      index < transactions.length - 1
+                        ? 'border-b border-gray-700'
+                        : ''
+                    } flex flex-col items-end py-1 `}
+                  >
+                    {renderTransaction(tx)}
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

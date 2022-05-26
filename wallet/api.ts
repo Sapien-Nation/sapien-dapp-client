@@ -8,10 +8,28 @@ import instance from 'api';
 // types
 import { Token } from './types';
 
+//----------------------------------------------------------------------
 const gasStationUrl = process.env.NEXT_PUBLIC_GAS_STATION_URL;
 const alchemyAPIUrl = process.env.NEXT_PUBLIC_ALCHEMYSCAN_URL;
 const alchemyAPIKey = process.env.NEXT_PUBLIC_ALCHEMYSCAN_KEY;
 
+const alchemyAPIKeyURL = `${alchemyAPIUrl}/${alchemyAPIKey}`;
+
+const getAlchemyTXhistoryPOSTParams = ({ options = {}, params = {} } = {}) => ({
+  jsonrpc: '2.0',
+  id: 0,
+  method: 'alchemy_getAssetTransfers',
+  params: {
+    fromBlock: '0x0',
+    toBlock: 'latest',
+    excludeZeroValue: false,
+    category: ['external'],
+    ...params,
+  },
+  ...options,
+});
+
+//----------------------------------------------------------------------
 export const connectWallet = () => {
   const tokens = window.localStorage.getItem('tokens');
   const { token } = JSON.parse(tokens);
@@ -53,21 +71,8 @@ export const getTokenMetadata = (tokenId): Promise<Token> =>
 export const getSentTxHistory = (address) =>
   axios
     .post(
-      `${alchemyAPIUrl}/${alchemyAPIKey}`,
-      {
-        jsonrpc: '2.0',
-        id: 0,
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            excludeZeroValue: false,
-            category: ['external'],
-            fromAddress: address,
-          },
-        ],
-      },
+      alchemyAPIKeyURL,
+      getAlchemyTXhistoryPOSTParams({ params: { fromAddress: address } }),
       {
         headers: {
           'Content-Type': 'application/json',
@@ -80,21 +85,8 @@ export const getSentTxHistory = (address) =>
 export const getReceivedTxHistory = (address) =>
   axios
     .post(
-      `${alchemyAPIUrl}/${alchemyAPIKey}`,
-      {
-        jsonrpc: '2.0',
-        id: 0,
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            excludeZeroValue: false,
-            category: ['external'],
-            toAddress: address,
-          },
-        ],
-      },
+      alchemyAPIKeyURL,
+      getAlchemyTXhistoryPOSTParams({ params: { toAddress: address } }),
       {
         headers: {
           'Content-Type': 'application/json',
