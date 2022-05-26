@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ArrowLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ChevronUpIcon } from '@heroicons/react/outline';
 
 // components
-import { TextareaInput, TextInput, TextInputLabel } from 'components/common';
+import { Disclosure } from '@headlessui/react';
+import { TextareaInput, TextInput } from 'components/common';
+import TribeNotificationHeader from 'components/notifications/items/TribeNotificationHeader';
 
 // hooks
 import { usePassport } from 'hooks/passport';
@@ -40,11 +42,12 @@ const PassportForm = ({ setShowPassport }: Props) => {
     },
   });
 
+  // TODO: We can move Passport and Badges into separate files (views)
   return (
     <FormProvider {...methods}>
-      <form onSubmit={() => setShowPassport(false)} id={'updat-profile-form'}>
+      <form onSubmit={() => setShowPassport(false)} id={'update-profile-form'}>
         <PolygonFilter />
-        <div className="flex flex-col min-w-[540px] min-h-[350px]">
+        <div className="flex flex-col w-[580px]">
           {view === View.Passport && (
             <>
               <div className="flex gap-5 flex-wrap sm:flex-nowrap">
@@ -60,7 +63,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
                   </div>
                   <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5 truncate">
                     <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
-                      {formatAvatarName(passport.title)}
+                      {formatAvatarName(passport.title) || 'Avatar Name'}
                     </span>
                   </span>
                 </div>
@@ -100,31 +103,6 @@ const PassportForm = ({ setShowPassport }: Props) => {
                       className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                     >
                       <TextInput
-                        aria-label="name"
-                        autoComplete="name"
-                        className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                        name="displayName"
-                        placeholder="Name"
-                        readOnly
-                        rules={{
-                          validate: {
-                            required: (value) =>
-                              value.length > 0 || 'is required',
-                          },
-                        }}
-                        style={{
-                          background: 'transparent',
-                        }}
-                      />
-                    </div>
-                    <div
-                      style={{
-                        clipPath:
-                          'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
-                      }}
-                      className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
-                    >
-                      <TextInput
                         aria-label="username"
                         autoComplete="username"
                         className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
@@ -150,18 +128,21 @@ const PassportForm = ({ setShowPassport }: Props) => {
                     }}
                     className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                   >
-                    <TextInput
-                      aria-label="title"
-                      autoComplete="title"
-                      className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      name="title"
-                      placeholder="Title"
-                      readOnly
-                      style={{
-                        background: 'transparent',
-                      }}
-                      // onClick={() => setView(View.Badges)} // Remove comment when back-end is ready
-                    />
+                    <select
+                      disabled
+                      className="appearance-none min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
+                      defaultValue={'badge_1'}
+                      name="type"
+                      onChange={() => setView(View.Badges)}
+                    >
+                      {['Badge 1', 'Badge 2', 'Badge 3'].map((val) => {
+                        return (
+                          <option className="bg-gray-800" key={val} value={val}>
+                            {val}
+                          </option>
+                        );
+                      })}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -201,18 +182,11 @@ const PassportForm = ({ setShowPassport }: Props) => {
           {view === View.Badges && (
             <>
               <div className="flex flex-col gap-3">
-                <div className="absolute top-12 flex justify-start">
-                  <button onClick={() => setView(View.Passport)}>
-                    <ArrowLeftIcon className="h-5 w-5" />
-                  </button>
-                </div>
                 <ul className="flex items-center justify-between text-xs text-left">
                   <li>
-                    <img
-                      alt=""
-                      className="h-10 w-10 rounded-full"
-                      src="https://ui-avatars.com/api/?name=A"
-                    />
+                    <button onClick={() => setView(View.Passport)}>
+                      <ArrowLeftIcon className="h-5 w-5" />
+                    </button>
                   </li>
                   <li>
                     <span className="block font-bold text-gray-400 mb-1">
@@ -237,6 +211,13 @@ const PassportForm = ({ setShowPassport }: Props) => {
                     <span className="text-gray-300 font-semibold">
                       Sapien Nation
                     </span>
+                  </li>
+                  <li>
+                    <img
+                      alt=""
+                      className="h-10 w-10 rounded-full"
+                      src="https://ui-avatars.com/api/?name=A"
+                    />
                   </li>
                 </ul>
                 <div className="flex justify-between gap-5">
@@ -263,28 +244,59 @@ const PassportForm = ({ setShowPassport }: Props) => {
                     value="JournoDAO Press Badge"
                   />
                 </div>
-                <TextInput
+                <TextareaInput
+                  maxLength={1000}
                   aria-label="description"
                   autoComplete="description"
-                  className="appearance-none  border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  className="border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                   name="description"
                   placeholder="Description"
+                  rows={3}
                   style={{
                     background: 'transparent',
                   }}
                   value="This badge is issued by JournoDAO to qualified journalists"
                 />
                 <span className="text-sm">Badge Access (20 Tribes)</span>
-                <div className="border rounded-md border-sapien-80 h-40 overflow-y-auto">
-                  <div className="border rounded-md border-gray-500 p-1 m-3">
-                    Sapien Nation 10 rooms
-                  </div>
-                  <div className="border rounded-md border-gray-500 p-1 m-3">
-                    Jurno DAO
-                  </div>
-                  <div className="border rounded-md border-gray-500 p-1 m-3">
-                    Jurno DAO
-                  </div>
+                {/* TODO: Remove mock data once we can integrate API */}
+                {/* TODO: Fix tribe prop */}
+                <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-52 overflow-y-auto">
+                  {Array(10)
+                    .fill('Tribe')
+                    .map((tribe, index) => (
+                      <Disclosure key={`${tribe}-${index}`}>
+                        {({ open }) => (
+                          <>
+                            <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                              <TribeNotificationHeader
+                                tribe={{
+                                  id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
+                                  avatar: '',
+                                  name: `${tribe} ${index}`,
+                                }}
+                              />
+                              <ChevronUpIcon
+                                className={`${
+                                  open ? 'rotate-180 transform' : ''
+                                } h-5 w-5 text-purple-500`}
+                              />
+                            </Disclosure.Button>
+                            <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                              <ul>
+                                {Array(10)
+                                  .fill('Room')
+                                  .map((room, index) => (
+                                    <li
+                                      className="text-md p-2 hover:bg-purple-200"
+                                      key={`${room}-${index}`}
+                                    >{`${room} ${index}`}</li>
+                                  ))}
+                              </ul>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
                 </div>
               </div>
             </>

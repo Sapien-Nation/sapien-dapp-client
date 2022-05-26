@@ -7,16 +7,12 @@ const PassportStatic = () => {
   const [showPassport, setShowPassport] = useState(false);
 
   return (
-    <div
-      className="py-20 px-12 transform"
-      style={{
-        backgroundImage: `url('/images/passport_background_transparent.png')`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '100% 100%',
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center center',
-      }}
-    >
+    <div className="flex items-center justify-center">
+      <img
+        alt="Passport"
+        className="absolute w-[690px] cover -z-10"
+        src="/images/passport_background_transparent.png"
+      />
       <PassportForm setShowPassport={setShowPassport} />
     </div>
   );
