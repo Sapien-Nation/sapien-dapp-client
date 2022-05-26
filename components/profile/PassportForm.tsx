@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FormProvider, useForm } from 'react-hook-form';
-import { ArrowLeftIcon, ChevronUpIcon } from '@heroicons/react/outline';
+import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 // components
 import { Disclosure } from '@headlessui/react';
@@ -134,11 +134,11 @@ const PassportForm = ({ setShowPassport }: Props) => {
                     <select
                       disabled
                       className="appearance-none min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
-                      defaultValue={'badge_1'}
+                      defaultValue={''}
                       name="type"
                       onChange={() => setView(View.Badges)}
                     >
-                      {['Badge 1', 'Badge 2', 'Badge 3'].map((val) => {
+                      {['', 'Badge 1', 'Badge 2', 'Badge 3'].map((val) => {
                         return (
                           <option className="bg-gray-800" key={val} value={val}>
                             {val}
@@ -280,7 +280,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
                                   } as ProfileTribe
                                 }
                               />
-                              <ChevronUpIcon
+                              <ChevronDownIcon
                                 className={`${
                                   open ? 'rotate-180 transform' : ''
                                 } h-5 w-5 text-purple-500`}
@@ -292,7 +292,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
                                   .fill('Room')
                                   .map((room, index) => (
                                     <li
-                                      className="text-md p-2 hover:bg-purple-200"
+                                      className="text-md p-2 hover:bg-purple-200 rounded-md"
                                       key={`${room}-${index}`}
                                     >{`${room} ${index}`}</li>
                                   ))}
