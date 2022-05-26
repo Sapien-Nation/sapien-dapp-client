@@ -49,15 +49,16 @@ const PassportForm = ({ setShowPassport }: Props) => {
             <>
               <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                 <div className="text-center pt-4 flex flex-col justify-between">
-                  <div
-                    className="block h-40 w-40 hexagon p-1px"
-                    style={
-                      {
-                        '--passportImage': `url(${passport.image})`,
-                      } as React.CSSProperties
-                    }
-                  />
-                  <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5">
+                  <div className="block h-40 w-40 rotate-90 p-1px hexagon-container">
+                    <div className="bg-black h-full w-full hexagon flex items-center justify-center">
+                      <img
+                        src={passport.image}
+                        className="-rotate-90 h-full object-cover"
+                        alt="Passport Figure generated with Machine Learning"
+                      />
+                    </div>
+                  </div>
+                  <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5 truncate">
                     <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
                       {formatAvatarName(passport.title)}
                     </span>
