@@ -49,7 +49,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
             <>
               <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                 <div className="text-center pt-4 flex flex-col justify-between">
-                  <div className="block h-40 w-40 rotate-90 p-1px hexagon-container">
+                  <div className="block h-36 w-40 rotate-90 p-1px hexagon-container">
                     <div className="bg-black h-full w-full hexagon flex items-center justify-center">
                       <img
                         src={passport.image}

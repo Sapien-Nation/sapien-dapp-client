@@ -30,6 +30,7 @@ const DeleteRoomDialog = ({ onClose, roomID }: Props) => {
   const room = useTribeRoom(tribeID, roomID);
 
   const handleDeleteRoom = async () => {
+    debugger;
     try {
       mutate(
         '/core-api/profile/tribes',
@@ -47,6 +48,8 @@ const DeleteRoomDialog = ({ onClose, roomID }: Props) => {
 
       // TODO wait for backend to complete this API
       // await deleteRoom(roomID);
+
+      onClose();
     } catch (err) {
       toast({
         message: err,
