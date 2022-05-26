@@ -35,8 +35,8 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
       color: badge.color,
       description: badge.description,
       name: badge.name,
-      owners: badge.owners,
-      permissions: badge.permissions,
+      owners: [],
+      permissions: [],
     },
   });
   const {

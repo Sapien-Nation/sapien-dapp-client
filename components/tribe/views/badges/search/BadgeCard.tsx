@@ -2,20 +2,20 @@
 import { ContributorBadge } from 'assets';
 
 // types
-import type { TribeBadge } from 'tools/types/tribe';
+import type { TribeDiscoveryBadge } from 'tools/types/tribe';
 
 interface Props {
-  badge: TribeBadge;
+  badge: TribeDiscoveryBadge;
   onClick: () => void;
 }
 
 const BadgeCard = ({ badge, onClick }: Props) => {
   return (
     <div className="rounded-md bg-sapien-neutral-600 flex p-5 gap-3">
-      {badge.tribe.avatar ? (
+      {badge.avatar ? (
         <img
-          src={badge.tribe.avatar}
-          alt={badge.tribe.avatar}
+          src={badge.avatar}
+          alt={badge.avatar}
           style={{ borderColor: badge.color }}
           className="w-12 h-12 object-cover rounded-full border-2"
         />
@@ -25,8 +25,7 @@ const BadgeCard = ({ badge, onClick }: Props) => {
       <div className="flex flex-1 gap-2">
         <div className="flex-1">
           <h3 className="font-semibold text-md">
-            {/* TODO tribe.name tbd with backend */}
-            {badge.tribe.name} - {badge.name}
+            {badge.tribeName} - {badge.name}
           </h3>
           <p className="text-sapien-neutral-200">{badge.description}</p>
         </div>

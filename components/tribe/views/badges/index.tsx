@@ -21,9 +21,6 @@ import { useTribe } from 'hooks/tribe';
 // types
 import type { TribeBadge } from 'tools/types/tribe';
 
-// mocks
-import { mockTribeBadge, mockTribeBadgeTribe } from 'tools/mocks/tribe';
-
 // assets
 import daoJSONData from './lottie/dao.json';
 
@@ -60,18 +57,11 @@ const BadgesView = () => {
     const badge = {
       id: badgeID,
       image: avatar,
-      tribe: {
-        id: tribeID,
-        avatar,
-        name,
-      },
+      avatar,
       description: 'This is a draft badge, please edit this description.',
       name: 'new badge',
       color: '#fff',
       type: BadgeTypes.Draft,
-      owners: [me.walletAddress],
-      permissions: [],
-      numberIssued: 0,
     };
 
     setView(View.Placeholder);

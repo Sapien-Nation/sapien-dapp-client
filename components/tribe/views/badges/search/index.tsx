@@ -18,37 +18,29 @@ import { useMainTribe, useTribe } from 'hooks/tribe';
 import DefaultBadgesJSON from './DefaultBadges.json';
 
 // types
-import type { TribeBadge } from 'tools/types/tribe';
+import type { TribeBadge, TribeDiscoveryBadge } from 'tools/types/tribe';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 interface Props {
-  onSelect: (badge: TribeBadge) => void;
+  onSelect: (badge: TribeDiscoveryBadge) => void;
 }
 
 const Search = ({ onSelect }: Props) => {
-  const [selected, setSelected] = useState();
-  const [tribeSearchTerm, setTribeSearchTerm] = useState('');
-  const [badgeSearchTerm, setBadgeSearchTerm] = useState('');
+  const [badgeSearchTerm] = useState('');
 
   const { tribeID: sapienTribeID } = useMainTribe();
   const sapienTribe = useTribe(sapienTribeID);
-  const profileTribes = useTribe;
 
-  const tribes = [];
-  const defaultBadges: Array<TribeBadge> = DefaultBadgesJSON.badges.map(
-    (badge) => ({
+  const defaultBadges: Array<TribeDiscoveryBadge> =
+    DefaultBadgesJSON.badges.map((badge) => ({
       ...badge,
       type: BadgeTypes.Normal,
-      tribe: {
-        id: sapienTribeID,
-        name: sapienTribe.name,
-        avatar: sapienTribe.avatar,
-      },
-    })
-  );
+      avatar: sapienTribe.avatar,
+      tribeName: sapienTribe.name,
+    }));
 
   return (
     <div>
@@ -159,68 +151,6 @@ const Search = ({ onSelect }: Props) => {
           ))}
         </div>
       </section>
-      {/* <section className="mt-5">
-        <h2 className="text-lg text-sapien-neutral-200">
-          Tribes by the community
-        </h2>
-        <Query
-          api="/core-api/tribes/badges"
-          loader={null}
-          options={{
-            fetcher: () => [
-              mockTribeDiscoveryBadge({
-                id: '1',
-                name: 'The governance badge',
-                color: '#ffffff',
-                image:
-                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
-                description: 'Some description',
-                type: BadgeTypes.Normal,
-                numberOfUsage: 100,
-                sourceTribeName: 'Airtime',
-              }),
-              mockTribeDiscoveryBadge({
-                id: '2',
-                name: 'The (OTHER) tribe',
-                color: '#sapien',
-                image:
-                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
-                description: 'Some description',
-                type: BadgeTypes.Normal,
-                numberOfUsage: 280,
-                sourceTribeName: 'TIBIA MMROPG',
-              }),
-              mockTribeDiscoveryBadge({
-                id: '3',
-                name: 'the BBB Badge',
-                color: '#sapien',
-                image:
-                  'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/0c7c8881-3c6b-4201-b129-62dcac16c23a-110x110.jpeg',
-                description: 'Some description',
-                type: BadgeTypes.Normal,
-                numberOfUsage: 200,
-                sourceTribeName: 'Good News',
-              }),
-            ],
-          }}
-        >
-          {(badges: Array<TribeDiscoveryBadge>) => {
-            return (
-              <div className="space-y-3 mt-3">
-                {matchSorter(badges, badgeSearchTerm, {
-                  keys: ['name'],
-                }).map((badge) => (
-                  <BadgeCard
-                    badge={badge}
-                    onClick={() => onSelect(badge)}
-                    key={badge.id}
-                  />
-                ))}
-              </div>
-            );
-          }}
-        </Query>
-      </section> */}
     </div>
   );
 };
