@@ -232,7 +232,7 @@ const BadgesViewProxy = () => {
   const { role, isUpgraded } = useTribe(tribeID);
   const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
 
-  if (false) {
+  if (isTribeOwnerOrTribeAdmin === false) {
     return (
       <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
         <div className="absolute inset-0">
@@ -244,60 +244,39 @@ const BadgesViewProxy = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
         </div>
         <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
-          {isTribeOwnerOrTribeAdmin === true ? (
-            <>
-              <p>You need to Upgrade this tribe in order to Manage Badges</p>
-              <div className="flex justify-between gap-4">
-                <Link passHref href={`/tribes/${tribeID}/upgrade`}>
-                  <a className="flex justify-center h-12 items-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
-                    Upgrade Tribe
-                  </a>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <p>You don&apos;t have access to see this view </p>
-          )}
+          <p>You don&apos;t have access to see this view </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isUpgraded === false) {
+    return (
+      <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+        <div className="absolute inset-0">
+          <img
+            className="h-full w-full object-cover"
+            src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+            alt="People working on laptops"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+        </div>
+        <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
+          <p>You need to Upgrade this tribe in order to Manage Badges</p>
+          <div className="flex justify-between gap-4">
+            <Link passHref href={`/tribes/${tribeID}/upgrade`}>
+              <a className="flex justify-center h-12 items-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                Upgrade Tribe
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <Query
-      api={`/core-api/tribe/${tribeID}/badges`}
-      loader={null}
-      options={{
-        fetcher: () => [
-          mockTribeBadge({
-            id: '1000',
-            name: 'Owner',
-            color: '#6495ED',
-            description: 'This is the owner badge',
-            type: BadgeTypes.Owner,
-            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
-          }),
-          mockTribeBadge({
-            id: '2000',
-            name: 'Community Manager',
-            color: '#2F4F4F',
-            description:
-              'This badge is granted to qualified community managers that meet the standards of the Sapien Nation.',
-            type: BadgeTypes.Normal,
-            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
-          }),
-          mockTribeBadge({
-            id: '3000',
-            name: 'Moderator',
-            color: '#FF1493',
-            description:
-              'This badge is granted to qualified moderators that meet the standards of the Sapien Nation.',
-            type: BadgeTypes.Normal,
-            tribe: mockTribeBadgeTribe({ name: 'Airtime' }),
-          }),
-        ],
-      }}
-    >
+    <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
       {() => (
         <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
           {() => <BadgesView />}

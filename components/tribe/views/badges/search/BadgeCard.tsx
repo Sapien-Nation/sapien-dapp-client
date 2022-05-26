@@ -14,7 +14,7 @@ const BadgeCard = ({ badge, onClick }: Props) => {
     <div className="rounded-md bg-sapien-neutral-600 flex p-5 gap-3">
       {badge.tribe.avatar ? (
         <img
-          src="" // TODO badge.image
+          src={badge.tribe.avatar}
           alt={badge.tribe.avatar}
           style={{ borderColor: badge.color }}
           className="w-12 h-12 object-cover rounded-full border-2"

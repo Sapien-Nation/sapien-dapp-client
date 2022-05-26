@@ -138,9 +138,8 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
       setView(View.Success);
       setVaultStatus(null);
     } catch (err) {
-      console.error(err);
       toast({
-        message: err.message,
+        message: err,
       });
       setView(View.Confirm);
       Sentry.captureMessage(err);

@@ -279,8 +279,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
 
-            {/* TODO remove this for development */}
-            {true && (
+            {isTribeOwnerOrTribeAdmin && tribe.isUpgraded === true && (
               <Link
                 aria-label="Tribe Badges"
                 href={`/tribes/${tribeID}/badges`}
@@ -429,7 +428,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
-                      <button
+                      {/* <button
                         className="px-2 hidden group-hover:block"
                         onClick={() => {
                           setSelectedRoom(id);
@@ -437,7 +436,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         }}
                       >
                         <XIcon className="w-4 h-4 text-gray-400" />
-                      </button>
+                      </button> */}
                     </div>
                   </li>
                 );

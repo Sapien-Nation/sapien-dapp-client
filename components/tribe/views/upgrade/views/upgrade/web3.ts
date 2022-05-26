@@ -24,7 +24,7 @@ const getEthAdapter = async () => {
       signer: safeOwner,
     });
   } catch (err) {
-    return Promise.reject(err.message);
+    return Promise.reject(typeof err === 'string' ? err : err.message);
   }
 };
 
@@ -49,8 +49,7 @@ export const createVault = async ({
 
     return safeSdk.getAddress();
   } catch (err) {
-    Sentry.captureMessage(err);
-    return Promise.reject(err.message);
+    return Promise.reject(err);
   }
 };
 

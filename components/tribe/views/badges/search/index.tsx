@@ -12,47 +12,13 @@ import BadgeCard from './BadgeCard';
 import { BadgeTypes } from 'tools/constants/tribe';
 
 // hooks
-import { useTribe } from 'hooks/tribe';
-
-// mocks
-import { mockTribeDiscoveryBadge } from 'tools/mocks/tribe';
+import { useMainTribe, useTribe } from 'hooks/tribe';
 
 // json
 import DefaultBadgesJSON from './DefaultBadges.json';
 
 // types
-import type { TribeBadge, TribeDiscoveryBadge } from 'tools/types/tribe';
-
-const TRIBES = [
-  {
-    id: '1',
-    value: 'All tribes',
-    name: 'All tribes',
-  },
-  {
-    id: '2',
-    value: 'Good News',
-    name: 'Good News',
-  },
-  {
-    id: '3',
-    value: 'Airtime',
-    name: 'Airtime',
-  },
-];
-
-const people = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' },
-  { id: 7, name: 'Caroline Schultz' },
-  { id: 8, name: 'Mason Heaney' },
-  { id: 9, name: 'Claudie Smitham' },
-  { id: 10, name: 'Emil Schaefer' },
-];
+import type { TribeBadge } from 'tools/types/tribe';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -63,26 +29,30 @@ interface Props {
 }
 
 const Search = ({ onSelect }: Props) => {
-  const { query } = useRouter();
-  const [selected, setSelected] = useState(TRIBES[0]);
+  const [selected, setSelected] = useState();
   const [tribeSearchTerm, setTribeSearchTerm] = useState('');
   const [badgeSearchTerm, setBadgeSearchTerm] = useState('');
 
-  const tribeID = query.tribeID as string;
-  const { avatar, name } = useTribe(tribeID);
+  const { tribeID: sapienTribeID } = useMainTribe();
+  const sapienTribe = useTribe(sapienTribeID);
+  const profileTribes = useTribe;
 
+  const tribes = [];
   const defaultBadges: Array<TribeBadge> = DefaultBadgesJSON.badges.map(
     (badge) => ({
-      image: avatar,
-      sourceTribeName: name,
-      type: BadgeTypes.Normal,
       ...badge,
+      type: BadgeTypes.Normal,
+      tribe: {
+        id: sapienTribeID,
+        name: sapienTribe.name,
+        avatar: sapienTribe.avatar,
+      },
     })
   );
 
   return (
     <div>
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mb-8 items-end sm:items-center">
+      {/* <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 mb-8 items-end sm:items-center">
         <div className="p-1 w-full flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded-full grow">
           <input
             autoFocus
@@ -124,7 +94,7 @@ const Search = ({ onSelect }: Props) => {
                       />
                     </div>
                     <div className="overflow-auto flex-1">
-                      {matchSorter(TRIBES, tribeSearchTerm, {
+                      {matchSorter([], tribeSearchTerm, {
                         keys: ['name'],
                       }).map((tribe) => {
                         return (
@@ -174,7 +144,7 @@ const Search = ({ onSelect }: Props) => {
             </>
           )}
         </Listbox>
-      </div>
+      </div> */}
       <section>
         <h2 className="text-lg text-sapien-neutral-200">Badges</h2>
         <div className="space-y-3 mt-3">

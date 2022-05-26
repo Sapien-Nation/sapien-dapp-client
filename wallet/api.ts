@@ -42,9 +42,8 @@ export const connectWallet = () => {
       },
     })
     .then(({ data }) => data)
-    .catch((error) => {
-      Sentry.captureException(error);
-      return Promise.reject(error?.response?.data?.message ?? 'Error');
+    .catch(({ response }) => {
+      return Promise.reject(response.data.message);
     });
 };
 
