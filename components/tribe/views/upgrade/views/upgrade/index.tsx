@@ -25,12 +25,13 @@ import AssignOwnersJSONLottie from '../lottie/AssignOwners.json';
 import CreateVaultJSONLottie from '../lottie/CreateVault.json';
 import UpgradeTribeJSONLottie from '../lottie/UpgradeTribe.json';
 import UpgradeSuccessJSONLottie from '../lottie/UpgradeSuccess.json';
+import AlreadyUpgradedJSONLottie from '../lottie/ape.json';
 
 // web3
 import { createVault } from './web3';
 
 enum View {
-  AlreadUpgraded,
+  AlreadyUpgraded,
   BadgeContract,
   Confirm,
   Home,
@@ -58,14 +59,14 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
 
   const [view, setView] = useState(() => {
     if (upgraded === true) {
-      return View.AlreadUpgraded;
+      return View.AlreadyUpgraded;
     }
 
     if (multisig === true && badgeContract === false) {
       return View.BadgeContract;
     }
 
-    return View.Home;
+    return View.AlreadyUpgraded;
   });
   const [threshold, setThreshold] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -180,8 +181,32 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
 
   const renderView = () => {
     switch (view) {
-      case View.AlreadUpgraded:
-        return <h1>TODO ANKIT</h1>;
+      case View.AlreadyUpgraded:
+        return (
+          <div>
+            <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+              <Lottie
+                animationData={AlreadyUpgradedJSONLottie}
+                play
+                className="w-52 h-52"
+              />
+              <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                Your Tribe is already upgraded!
+              </h1>
+
+              <p className="mt-5 text-sm text-gray-300 text-center">
+                Click the button below to manage your badges.
+              </p>
+              <div className="py-4 flex justify-center">
+                <Link href={`/tribes/${tribeID}/badges`} passHref>
+                  <a className="py-2 px-4 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                    Manage Badges
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </div>
+        );
       case View.BadgeContract:
         return (
           <div>
