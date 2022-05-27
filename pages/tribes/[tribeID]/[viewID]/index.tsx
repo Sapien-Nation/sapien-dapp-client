@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 
 // constants
 import { View } from 'constants/tribe';
+import { Role } from 'tools/constants/tribe';
 
 // components
 import { SEO, ErrorView, NotFound, Query } from 'components/common';
@@ -18,7 +19,10 @@ import {
 } from 'components/tribe';
 
 // hooks
-import { useGetCurrentView } from 'hooks/tribe';
+import { useGetCurrentView, useTribe } from 'hooks/tribe';
+
+// providers
+import { GnosisProvider } from 'wallet/providers/Gnosis';
 
 // types
 import type { NextPage } from 'next';
@@ -31,10 +35,45 @@ interface Props {
 const TribePage = ({ tribeID, viewID }: Props) => {
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
+  const { role, isUpgraded } = useTribe(tribeID as string);
+
   const renderView = () => {
     switch (view.type) {
-      case View.Badges:
-        return <BadgesView />;
+      case View.Badges: {
+        const isTribeOwnerOrTribeAdmin =
+          role === Role.Owner || role === Role.Admin;
+        if (isTribeOwnerOrTribeAdmin === false) {
+          return (
+            <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+              <div className="absolute inset-0">
+                <img
+                  className="h-full w-full object-cover"
+                  src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+                  alt="People working on laptops"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+              </div>
+              <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
+                <p>You don&apos;t have access to see this view </p>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
+            {() => (
+              <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
+                {() => (
+                  <GnosisProvider>
+                    <BadgesView />
+                  </GnosisProvider>
+                )}
+              </Query>
+            )}
+          </Query>
+        );
+      }
       case View.Content:
         return <ContentView />;
       case View.Room: {

@@ -5,18 +5,23 @@ import { useRouter } from 'next/router';
 import { XIcon } from '@heroicons/react/outline';
 import Lottie from 'react-lottie-player';
 
+// assets
+import ErrorJSONData from './lottie/Error.json';
+import LoadingJSONData from './lottie/Loading.json';
+
 // constants
-import { BadgeTypes, Role } from 'tools/constants/tribe';
+import { BadgeTypes } from 'tools/constants/tribe';
 
 // components
 import { Overlay, Query } from 'components/common';
-import { BadgeCreationView, BadgeManageView } from './badge';
+import { BadgeCreationView, BadgeManageView, ReadonlyBadgeView } from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
 
 // hooks
-import { useAuth } from 'context/user';
 import { useTribe } from 'hooks/tribe';
+import { useGnosis } from 'wallet/providers/Gnosis';
+import { useGnosisPendingTransactions } from 'hooks/tribe/transactions';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -30,26 +35,21 @@ enum View {
   Home,
   Search,
   Placeholder,
+  OwnerBadge,
 }
 
-// Note
-// We are doing setTimeout(() => {}, 0)
-// and View.Placeholder since we use useForm({ defaultValues: { ... } })
-// And in order to re-render the form we need to make sure the UI is flushed
-// Option 1 -> One option could be move the "selected" badge to be router level, but the issue might persiste
-// Option 2 -> ??
 const BadgesView = () => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
   const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
   const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
-  const { me } = useAuth();
   const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
-  const { avatar, name } = useTribe(tribeID);
+  const { avatar } = useTribe(tribeID);
+  const gnosisPendingTransactions = useGnosisPendingTransactions();
 
   const handleAddDraftBadge = () => {
     const badgeID = nanoid();
@@ -123,6 +123,8 @@ const BadgesView = () => {
           </div>
         );
       }
+      case View.OwnerBadge:
+        return <ReadonlyBadgeView badge={selectedBadge!} />;
       case View.Placeholder:
         // dirty hack to re-render form
         return <></>;
@@ -185,8 +187,10 @@ const BadgesView = () => {
                     setView(View.BadgeCreation);
                     break;
                   case BadgeTypes.Normal:
-                  case BadgeTypes.Owner:
                     setView(View.BadgeManage);
+                    break;
+                  case BadgeTypes.Owner:
+                    setView(View.OwnerBadge);
                     break;
                 }
               }, 0);
@@ -214,31 +218,15 @@ const BadgesView = () => {
 };
 
 const BadgesViewProxy = () => {
-  const { query } = useRouter();
+  const { back, query } = useRouter();
+  const {
+    gnosisAPI: { getAllPendingTransactions },
+    error,
+    connecting,
+  } = useGnosis();
 
   const tribeID = query.tribeID as string;
-  const { avatar } = useTribe(tribeID);
-
-  const { role, isUpgraded } = useTribe(tribeID);
-  const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
-
-  if (isTribeOwnerOrTribeAdmin === false) {
-    return (
-      <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
-        <div className="absolute inset-0">
-          <img
-            className="h-full w-full object-cover"
-            src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
-            alt="People working on laptops"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
-        </div>
-        <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
-          <p>You don&apos;t have access to see this view </p>
-        </div>
-      </div>
-    );
-  }
+  const { isUpgraded } = useTribe(tribeID);
 
   if (isUpgraded === false) {
     return (
@@ -265,14 +253,86 @@ const BadgesViewProxy = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Overlay onClose={back} isOpen>
+        <div className="flex h-full">
+          <div className="flex-1 overflow-auto">
+            <button
+              type="button"
+              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5"
+              onClick={back}
+            >
+              <span className="sr-only">Close Badges Managment</span>
+              <XIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
+            <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
+              <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+                <Lottie
+                  animationData={ErrorJSONData}
+                  play
+                  className="w-52 h-52"
+                />
+                <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                  There was an Error while loading the Badges Managment
+                </h1>
+
+                <p className="mt-5 text-sm text-gray-300 text-center">
+                  Please retry in a few seconds
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Overlay>
+    );
+  }
+
+  if (connecting === true) {
+    return (
+      <Overlay onClose={back} isOpen>
+        <div className="flex h-full">
+          <div className="flex-1 overflow-auto">
+            <button
+              type="button"
+              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5"
+              onClick={back}
+            >
+              <span className="sr-only">Close Badges Managment</span>
+              <XIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
+            <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
+              <Lottie
+                animationData={LoadingJSONData}
+                play
+                loop
+                className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
+              />
+            </div>
+          </div>
+        </div>
+      </Overlay>
+    );
+  }
+
   return (
-    <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
-      {() => (
-        <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
-          {() => <BadgesView />}
-        </Query>
-      )}
+    <Query
+      api={`/core-api/tribe/${tribeID}/pending/transactions`}
+      loader={null}
+      options={{
+        fetcher: async () => {
+          try {
+            const transactions = await getAllPendingTransactions();
+            return transactions;
+          } catch (err) {
+            return Promise.reject(err);
+          }
+        },
+      }}
+    >
+      {() => <BadgesView />}
     </Query>
   );
 };
+
 export default BadgesViewProxy;

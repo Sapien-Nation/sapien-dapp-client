@@ -27,9 +27,6 @@ import UpgradeTribeJSONLottie from '../lottie/UpgradeTribe.json';
 import UpgradeSuccessJSONLottie from '../lottie/UpgradeSuccess.json';
 import AlreadyUpgradedJSONLottie from '../lottie/ape.json';
 
-// web3
-import { createVault } from './web3';
-
 enum View {
   AlreadyUpgraded,
   BadgeContract,
@@ -114,15 +111,8 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
     setView(View.Loading);
     setVaultStatus(VaultStatus.Creating);
     try {
-      const safeAddress = await createVault({
-        owners: selectedOwners.map(({ walletAddress }) => walletAddress),
-        threshold,
-        senderAddress: me.walletAddress,
-      });
-
       setVaultStatus(VaultStatus.StoringSafeAddress);
       await storeTribeSafeAddress(tribeID, {
-        safeAddress,
         owners: selectedOwners.map(({ id, walletAddress }) => ({
           id,
           walletAddress,

@@ -1,5 +1,6 @@
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
+import Lottie from 'react-lottie-player';
 
 // api
 import { makeAllAsRead } from 'api/notifications';
@@ -14,10 +15,13 @@ import { Mention, BadgeRequest, BadgeReceived } from './items';
 import { useGlobalNotifications } from 'hooks/notifications';
 import { useToast } from 'context/toast';
 
+// assets
+import notificationJSONData from './lottie/notification.json';
+
 const Notifications = () => {
   const toast = useToast();
 
-  const { notifications } = useGlobalNotifications();
+  const { unread, notifications } = useGlobalNotifications();
 
   //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
@@ -72,6 +76,17 @@ const Notifications = () => {
         </div>
       </div>
       <div className="px-4">
+        {notifications.length === 0 ? (
+          <div className="flex flex-col items-center pb-8 space-y-3">
+            <Lottie
+              animationData={notificationJSONData}
+              play
+              loop
+              className="w-28 rotate-12"
+            />
+            <h2 className="text-lg text-gray-300">You are all caught up!</h2>
+          </div>
+        ) : null}
         {notifications.map((notification) => (
           <div key={notification.id}>{renderNotification(notification)}</div>
         ))}

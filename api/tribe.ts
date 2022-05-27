@@ -13,7 +13,6 @@ export interface CreateTribeBody {
 }
 
 export interface UpgradeTribeBody {
-  safeAddress: string;
   threshold: number;
   owners: Array<{ id: string; walletAddress: string }>;
 }

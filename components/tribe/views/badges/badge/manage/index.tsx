@@ -143,16 +143,4 @@ const ManageBadgeView = ({ badge, onCancel }: Props) => {
   );
 };
 
-const ManageBadgeViewProxy = ({ badge, onCancel }: Props) => {
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => <ManageBadgeView badge={badge} onCancel={onCancel} />}
-    </Query>
-  );
-};
-
 export default ManageBadgeView;

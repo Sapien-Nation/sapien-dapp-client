@@ -48,10 +48,6 @@ const Home = ({ handleBack }: Props) => {
     handleGetTransactions();
   }, [handleGetTransactions, walletAPI]);
 
-  const renderTransaction = (transaction: Transaction) => {
-    return <DefaultTransaction transaction={transaction} />;
-  };
-
   const renderView = () => {
     if (isFetching) {
       return (
@@ -156,7 +152,7 @@ const Home = ({ handleBack }: Props) => {
                         : ''
                     } flex flex-col items-end py-1 `}
                   >
-                    {renderTransaction(tx)}
+                    <DefaultTransaction transaction={tx} />
                   </li>
                 ))}
               </ul>

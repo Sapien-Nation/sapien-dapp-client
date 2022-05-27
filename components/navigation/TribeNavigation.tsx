@@ -432,7 +432,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
-                      {/* <button
+                      <button
                         className="px-2 hidden group-hover:block"
                         onClick={() => {
                           setSelectedRoom(id);
@@ -440,7 +440,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         }}
                       >
                         <XIcon className="w-4 h-4 text-gray-400" />
-                      </button> */}
+                      </button>
                     </div>
                   </li>
                 );

@@ -9,9 +9,6 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
-// constants
-import { NotificationsType } from 'tools/constants/notifications';
-
 // components
 import { UserAvatar, Query } from 'components/common';
 import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
@@ -21,14 +18,6 @@ const Wallet = dynamic(() => import('wallet/Wallet'));
 
 // types
 import type { Token } from 'wallet/types';
-
-// mocks
-import {
-  mockNotification,
-  mockNotificationReceiver,
-  mockNotificationSender,
-} from 'tools/mocks/notifications';
-import { mockProfileTribe } from 'tools/mocks/tribe';
 
 enum Dialog {
   DeclarationDialog,
@@ -53,44 +42,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
           {/* Wallet dropdown */}
           <Menu as="div">
             {({ open }) => (
-              <Query
-                api="/core-api/notification/all"
-                options={{
-                  fetcher: () => ({
-                    notifications: [
-                      mockNotification({
-                        type: NotificationsType.BadgeRequest,
-                        by: mockNotificationSender({ username: 'ethaanpump' }),
-                        to: mockNotificationReceiver({
-                          username: 'robgiometti',
-                        }),
-                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                        extra: {
-                          tribe: mockProfileTribe({
-                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                            name: 'TibiaGameplay',
-                          }),
-                        },
-                      }),
-                      mockNotification({
-                        type: NotificationsType.BadgeReceived,
-                        by: mockNotificationSender({ username: 'ethaanpump' }),
-                        to: mockNotificationReceiver({
-                          username: 'carlosgzl',
-                        }),
-                        tribeId: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                        extra: {
-                          tribe: mockProfileTribe({
-                            id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                            name: 'Sapien',
-                          }),
-                        },
-                      }),
-                    ],
-                    unread: 2,
-                  }),
-                }}
-              >
+              <Query api="/core-api/notification">
                 {() => (
                   <>
                     <div>
