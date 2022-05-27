@@ -190,8 +190,12 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         <div className="px-1 py-1">
                           {tribe.isUpgraded === true && (
                             <Menu.Item>
-                              <div>
-                                <SparklesIcon className="w-5 mr-1" />
+                              <div className="flex w-full items-center rounded-sm px-1 py-2 text-sm text-primary-200">
+                                <Lottie
+                                  animationData={starJSONLottie}
+                                  play
+                                  className="w-6 h-6 mr-1"
+                                />
                                 Tribe Upgraded
                               </div>
                             </Menu.Item>
