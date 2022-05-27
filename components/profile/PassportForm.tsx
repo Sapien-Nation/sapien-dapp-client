@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 // components
-import { Disclosure } from '@headlessui/react';
+import { Disclosure, Transition } from '@headlessui/react';
 import { TextareaInput, TextInput } from 'components/common';
 import TribeNotificationHeader from 'components/notifications/items/TribeNotificationHeader';
 
@@ -31,7 +31,7 @@ interface Props {
 }
 
 const PassportForm = ({ setShowPassport }: Props) => {
-  const [view, setView] = useState(View.Passport);
+  const [view, setView] = useState<View | null>(View.Passport);
 
   const passport = usePassport();
   const { query } = useRouter();
@@ -51,7 +51,16 @@ const PassportForm = ({ setShowPassport }: Props) => {
       <form onSubmit={() => setShowPassport(false)} id={'update-profile-form'}>
         <PolygonFilter />
         <div className="flex flex-col w-[580px]">
-          {view === View.Passport && (
+          <Transition
+            show={view === View.Passport}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+            afterLeave={() => setView(View.Badges)}
+          >
             <>
               <div className="flex gap-5 flex-wrap sm:flex-nowrap">
                 <div className="text-center pt-4 flex flex-col justify-between">
@@ -136,7 +145,10 @@ const PassportForm = ({ setShowPassport }: Props) => {
                       className="appearance-none min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
                       defaultValue={''}
                       name="type"
-                      onChange={() => setView(View.Badges)}
+                      onChange={(e) => {
+                        e.preventDefault();
+                        setView(null);
+                      }}
                     >
                       {['', 'Badge 1', 'Badge 2', 'Badge 3'].map((val) => {
                         return (
@@ -181,13 +193,27 @@ const PassportForm = ({ setShowPassport }: Props) => {
                 />
               </div>
             </>
-          )}
-          {view === View.Badges && (
+          </Transition>
+          <Transition
+            show={view === View.Badges}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+            afterLeave={() => setView(View.Passport)}
+          >
             <>
               <div className="flex flex-col gap-3">
                 <ul className="flex items-center justify-between text-xs text-left">
                   <li>
-                    <button onClick={() => setView(View.Passport)}>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setView(null);
+                      }}
+                    >
                       <ArrowLeftIcon className="h-5 w-5" />
                     </button>
                   </li>
@@ -305,7 +331,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
                 </div>
               </div>
             </>
-          )}
+          </Transition>
         </div>
       </form>
     </FormProvider>
