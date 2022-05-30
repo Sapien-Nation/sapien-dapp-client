@@ -323,54 +323,65 @@ const Upgrade = () => {
           </div>
         );
       case View.Tokens:
-      case View.DeclarationOfSovereignty:
-      case View.ConfirmSign:
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
-                Confirm Sign
+              {isFetchingTokens ? (
+                <RefreshIcon className="w-12 animate-spin" />
+              ) : null}
+              <h1
+                className={
+                  isFetchingTokens
+                    ? 'text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100'
+                    : 'text-xl lg:text-3xl text-white font-bold tracking-wide text-center'
+                }
+              >
+                {isFetchingTokens ? 'Loading Tokens...' : 'Sapien Wallet'}
               </h1>
             </div>
-            <div className="flex flex-col gap-5 pt-5">
-              <span>
-                <p>
-                  Please confirm the signing of your Sapien Nation Passport.
-                  This will make your passport untradeable and unlock a host of
-                  benefits on the Sapien Platform.
-                </p>
-                <br />
-                <p>
-                  <b className="text-rose-500">
-                    This action is irreversible. Once a passport is signed it
-                    can not leave your Sapien wallet.{' '}
-                  </b>
-                </p>
-              </span>
+            <div className="mt-6">
+              <div className="text-gray-300 mb-3">
+                <p>Please select one of the tokens listed below:</p>
+              </div>
+              {isFetchingTokens ? (
+                <h1>TODO loader</h1>
+              ) : (
+                <>
+                  {tokens.length === 0 ? (
+                    <h1>TODO user have no tokens left to sign AKA cant sign</h1>
+                  ) : (
+                    <ol className="flex flex-wrap gap-5">
+                      {tokens.map((token) => (
+                        <li
+                          key={token.name}
+                          onClick={() => {
+                            if (token.id) {
+                              setSelectedToken(token);
+                              setView(View.DeclarationOfSovereignty);
+                            }
+                          }}
+                        >
+                          <>
+                            {token.id === null ? (
+                              <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
+                            ) : (
+                              <img
+                                className="rounded-full w-16 h-16 cursor-pointer object-cover"
+                                src={token.image}
+                                alt=""
+                              />
+                            )}
+                          </>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </>
+              )}
             </div>
-            <div className="mb-4 mt-6 flex gap-10 justify-center">
-              <button
-                type="button"
-                onClick={() => setView(View.DeclarationOfSovereignty)}
-                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Back
-              </button>
-              <button
-                type="button"
-                onClick={() => setView(View.Success)}
-                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Confirm
-              </button>
-            </div>
-            {error && (
-              <span className="text-sm text-sapien-red-700 text-center items-center block">
-                {(error as Error)?.message || error}
-              </span>
-            )}
           </div>
         );
+      case View.DeclarationOfSovereignty:
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
@@ -514,52 +525,51 @@ const Upgrade = () => {
             </div>
           </div>
         );
+      case View.ConfirmSign:
         return (
           <div>
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
-              {isFetchingTokens ? (
-                <RefreshIcon className="w-12 animate-spin" />
-              ) : null}
-              <h1
-                className={
-                  isFetchingTokens
-                    ? 'text-xl animate-pulse lg:text-3xl italic text-white font-bold tracking-wide text-center bg-clip-text text-transparent bg-gradient-to-r to-primary-100 from-sapien-neutral-100'
-                    : 'text-xl lg:text-3xl text-white font-bold tracking-wide text-center'
-                }
-              >
-                {isFetchingTokens ? 'Loading Tokens...' : 'Sapien Wallet'}
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
+                Confirm Sign
               </h1>
             </div>
-            <div className="mt-6">
-              <div className="text-gray-300 mb-3">
-                <p>Please select one of the tokens listed below:</p>
-              </div>
-              <ol className="flex flex-wrap gap-5">
-                {tokens.map((token) => (
-                  <li
-                    key={token.name}
-                    onClick={() => {
-                      if (token.id) {
-                        setSelectedToken(token);
-                        setView(View.DeclarationOfSovereignty);
-                      }
-                    }}
-                  >
-                    <>
-                      {token.id === null ? (
-                        <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
-                      ) : (
-                        <img
-                          className="rounded-full w-16 h-16 cursor-pointer object-cover"
-                          src={token.image}
-                          alt=""
-                        />
-                      )}
-                    </>
-                  </li>
-                ))}
-              </ol>
+            <div className="flex flex-col gap-5 pt-5">
+              <span>
+                <p>
+                  Please confirm the signing of your Sapien Nation Passport.
+                  This will make your passport untradeable and unlock a host of
+                  benefits on the Sapien Platform.
+                </p>
+                <br />
+                <p>
+                  <b className="text-rose-500">
+                    This action is irreversible. Once a passport is signed it
+                    can not leave your Sapien wallet.{' '}
+                  </b>
+                </p>
+              </span>
             </div>
+            <div className="mb-4 mt-6 flex gap-10 justify-center">
+              <button
+                type="button"
+                onClick={() => setView(View.DeclarationOfSovereignty)}
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                onClick={() => setView(View.Success)}
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Confirm
+              </button>
+            </div>
+            {error && (
+              <span className="text-sm text-sapien-red-700 text-center items-center block">
+                {(error as Error)?.message || error}
+              </span>
+            )}
           </div>
         );
       case View.Owners:
