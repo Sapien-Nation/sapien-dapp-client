@@ -361,7 +361,7 @@ const Upgrade = () => {
                           className="w-96"
                         />
                         <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
-                          User have no tokens left to sign
+                          No signable tokens found
                         </h1>
                       </div>
                     </div>
