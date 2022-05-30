@@ -90,7 +90,7 @@ const PassportForm = () => {
                         Issue Date
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {formatDate(passport.issueDate, 'LLLL d y')}
+                        {/* formatDate(passport.issueDate, 'LLLL d y') */}
                       </span>
                     </li>
                     <li>
@@ -146,7 +146,12 @@ const PassportForm = () => {
                         setView(null);
                       }}
                     >
-                      {['', 'Badge 1', 'Badge 2', 'Badge 3'].map((val) => {
+                      {[
+                        'Founding Member of the Sapien Nation',
+                        'Badge 1',
+                        'Badge 2',
+                        'Badge 3',
+                      ].map((val) => {
                         return (
                           <option className="bg-gray-800" key={val} value={val}>
                             {val}
@@ -201,7 +206,7 @@ const PassportForm = () => {
             afterLeave={() => setView(View.Passport)}
           >
             <>
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 mt-2">
                 <ul className="flex items-center justify-between text-xs text-left">
                   <li>
                     <button
@@ -285,7 +290,7 @@ const PassportForm = () => {
                 <span className="text-sm">Badge Access (20 Tribes)</span>
                 {/* TODO: Remove mock data once we can integrate API */}
                 {/* TODO: Fix tribe prop */}
-                <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-52 overflow-y-auto">
+                <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
                   {Array(10)
                     .fill('Tribe')
                     .map((tribe, index) => (
