@@ -63,7 +63,7 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
       return View.BadgeContract;
     }
 
-    return View.AlreadyUpgraded;
+    return View.Home;
   });
   const [threshold, setThreshold] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState('');
