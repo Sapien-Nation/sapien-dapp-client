@@ -8,17 +8,17 @@ import { matchSorter } from 'match-sorter';
 import { CheckIcon, XIcon } from '@heroicons/react/outline';
 
 // api
-import { finishTribeUpgrade, storeTribeSafeAddress } from 'api/tribe';
+import { upgradeTribe } from 'api/tribe';
 
 // components
-import { ProgressBar, Query } from 'components/common';
+import { ProgressBar } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // hooks
-import { useTribeMembers } from 'hooks/tribe';
+import { useTribe, useTribeMembers } from 'hooks/tribe';
 
 // assets
 import AssignOwnersJSONLottie from '../lottie/AssignOwners.json';
@@ -29,7 +29,6 @@ import AlreadyUpgradedJSONLottie from '../lottie/ape.json';
 
 enum View {
   AlreadyUpgraded,
-  BadgeContract,
   Confirm,
   Home,
   Loading,
@@ -46,24 +45,22 @@ enum VaultStatus {
 }
 
 interface Props {
-  multisig: boolean;
-  badgeContract: boolean;
-  upgraded: boolean;
+  tokenID?: number;
 }
 
-const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
+const UpgradeView = ({ tokenID }: Props) => {
   const { me } = useAuth();
+  const { push, query } = useRouter();
 
+  const tribeID = query.tribeID as string;
+  const tribe = useTribe(tribeID);
+  //----------------------------------------------------------------
   const [view, setView] = useState(() => {
-    if (upgraded === true) {
+    if (tribe.isUpgraded === true) {
       return View.AlreadyUpgraded;
     }
 
-    if (multisig === true && badgeContract === false) {
-      return View.BadgeContract;
-    }
-
-    return View.Home;
+    return tokenID ? View.Owners : View.Home;
   });
   const [threshold, setThreshold] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState('');
@@ -79,40 +76,16 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
   ]);
 
   const toast = useToast();
-  const { push, query } = useRouter();
-
-  const tribeID = query.tribeID as string;
   const tribeMembers = useTribeMembers(tribeID).filter(
     ({ id }) => id !== me.id
   );
-
-  const handleFinishUpgrade = async () => {
-    setView(View.Loading);
-    setVaultStatus(VaultStatus.MultiSign);
-    try {
-      setVaultStatus(VaultStatus.MultiSign);
-      await finishTribeUpgrade(tribeID);
-
-      setVaultStatus(VaultStatus.Success);
-
-      await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
-      setView(View.Success);
-      setVaultStatus(null);
-    } catch (err) {
-      toast({
-        message: err.message,
-      });
-      setView(View.BadgeContract);
-      Sentry.captureMessage(err);
-    }
-  };
 
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
     setVaultStatus(VaultStatus.Creating);
     try {
       setVaultStatus(VaultStatus.StoringSafeAddress);
-      await storeTribeSafeAddress(tribeID, {
+      await upgradeTribe(tribeID, {
         owners: selectedOwners.map(({ id, walletAddress }) => ({
           id,
           walletAddress,
@@ -120,12 +93,9 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
         threshold,
       });
 
-      setVaultStatus(VaultStatus.MultiSign);
-      await finishTribeUpgrade(tribeID);
-
       setVaultStatus(VaultStatus.Success);
-
       await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
+
       setView(View.Success);
       setVaultStatus(null);
     } catch (err) {
@@ -194,37 +164,6 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
                   </a>
                 </Link>
               </div>
-            </div>
-          </div>
-        );
-      case View.BadgeContract:
-        return (
-          <div>
-            <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
-              <Lottie
-                animationData={CreateVaultJSONLottie}
-                play
-                className="w-52 h-52"
-              />
-              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
-                Complete Upgrade.
-              </h1>
-            </div>
-            <div>
-              <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
-                Remember that Vault transactions must be approved by owners, how
-                many approvals do you want to require? This can also be updated
-                later.
-              </p>
-            </div>
-            <div className="mb-4 mt-6 flex gap-10 justify-center">
-              <button
-                type="button"
-                onClick={handleFinishUpgrade}
-                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Finish Upgrade
-              </button>
             </div>
           </div>
         );
@@ -580,34 +519,4 @@ const UpgradeView = ({ multisig, badgeContract, upgraded }: Props) => {
   return <div className="max-w-2xl mx-auto">{renderView()}</div>;
 };
 
-const UpgradeViewProxy = () => {
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => (
-        <Query api={`/core-api/tribe/${tribeID}/upgrade-status`}>
-          {({
-            multisig,
-            badgeContract,
-            upgraded,
-          }: {
-            multisig: boolean;
-            badgeContract: boolean;
-            upgraded: boolean;
-          }) => (
-            <UpgradeView
-              multisig={multisig}
-              badgeContract={badgeContract}
-              upgraded={upgraded}
-            />
-          )}
-        </Query>
-      )}
-    </Query>
-  );
-};
-
-export default UpgradeViewProxy;
+export default UpgradeView;

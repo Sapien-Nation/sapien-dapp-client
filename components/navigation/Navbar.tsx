@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { Menu } from '@headlessui/react';
 import { CreditCardIcon, CogIcon, BellIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
@@ -11,28 +9,16 @@ import { usePassport } from 'hooks/passport';
 
 // components
 import { UserAvatar, Query } from 'components/common';
-import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
 const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-
-// types
-import type { Token } from 'wallet/types';
-
-enum Dialog {
-  DeclarationDialog,
-}
 
 interface Props {
   setShowProfileOverlay: () => void;
 }
 
 const Navbar = ({ setShowProfileOverlay }: Props) => {
-  const [dialog, setDialog] = useState<Dialog | null>(null);
-  const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
-
   const { me } = useAuth();
-  const { query } = useRouter();
   const passport = usePassport();
 
   return (
@@ -73,12 +59,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet
-                      setTokenToSign={setTokenToSign}
-                      showDeclarationDialog={() =>
-                        setDialog(Dialog.DeclarationDialog)
-                      }
-                    />
+                    <Wallet />
                   </Menu.Items>
                 </div>
 
@@ -202,14 +183,6 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               </>
             )}
           </Menu>
-
-          {/* dialogs */}
-          {dialog === Dialog.DeclarationDialog && (
-            <DeclarationOfSovereigntyDialog
-              onClose={() => setDialog(null)}
-              token={tokenToSign}
-            />
-          )}
         </div>
       </div>
     </div>

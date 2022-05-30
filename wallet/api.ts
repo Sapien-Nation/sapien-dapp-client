@@ -52,9 +52,17 @@ export const getGasPrice = (fallbackGasPrice = 7500) =>
     .get(gasStationUrl)
     .then((response) => {
       if (response?.data?.fast) {
+        // mumbai
         if (_isObject(response.data.fast)) {
           return response.data.fast.maxFee;
         }
+
+        // rinkeby
+        if (_isObject(response.data.result)) {
+          return response.data.result.SafeGasPrice;
+        }
+
+        // polygon
         return response.data.fast;
       }
       return fallbackGasPrice;

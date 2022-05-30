@@ -1,40 +1,12 @@
-import Link from 'next/link';
-
 // components
-import { NotFound, Query, SEO } from 'components/common';
-import { UpgradeView, WalletView } from './views';
-
-// constants
-import { Role } from 'tools/constants/tribe';
+import { Query, SEO } from 'components/common';
+import { UpgradeView as UpgradeViewComponent, WalletView } from './views';
 
 // providers
 import { Web3Provider } from 'wallet/providers';
 
-// hooks
-import { useTribe } from 'hooks/tribe';
-import { useRouter } from 'next/router';
-
-const UpgradeViewPage = () => {
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-  const { role } = useTribe(tribeID);
-
-  if (role === Role.Member) {
-    return <NotFound message="You dont have access to see this content" />;
-  }
-
-  return (
-    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-      <SEO title="Upgrade" />
-      <h1 className="sr-only">Tribe Upgrade View</h1>
-      <UpgradeView />
-    </div>
-  );
-};
-
 const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
-const UpgradeViewProxy = () => {
+const UpgradeView = () => {
   return (
     <Query api="/core-api/passport/signed" loader={null}>
       {({
@@ -94,10 +66,16 @@ const UpgradeViewProxy = () => {
           );
         }
 
-        return <UpgradeViewPage />;
+        return (
+          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+            <SEO title="Upgrade" />
+            <h1 className="sr-only">Tribe Upgrade View</h1>
+            <UpgradeViewComponent />
+          </div>
+        );
       }}
     </Query>
   );
 };
 
-export default UpgradeViewProxy;
+export default UpgradeView;
