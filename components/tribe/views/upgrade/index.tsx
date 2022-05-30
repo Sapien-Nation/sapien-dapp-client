@@ -73,7 +73,7 @@ const Upgrade = () => {
     displayName: me.displayName,
     walletAddress: me.walletAddress,
   };
-  const [view, setView] = useState(View.Tokens);
+  const [view, setView] = useState(View.Home);
   const [error, setError] = useState<string | Error | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [threshold, setThreshold] = useState<number>(1);
