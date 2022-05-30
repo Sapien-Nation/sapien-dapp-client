@@ -21,6 +21,8 @@ import CreateVaultJSONLottie from './lottie/CreateVault.json';
 import UpgradeTribeJSONLottie from './lottie/UpgradeTribe.json';
 import UpgradeSuccessJSONLottie from './lottie/UpgradeSuccess.json';
 import AlreadyUpgradedJSONLottie from './lottie/ape.json';
+import NoTokens from './lottie/NoTokens.json';
+import LoadingJSONData from './lottie/Loading.json';
 
 // context
 import { useAuth } from 'context/user';
@@ -71,7 +73,7 @@ const Upgrade = () => {
     displayName: me.displayName,
     walletAddress: me.walletAddress,
   };
-  const [view, setView] = useState(View.Home);
+  const [view, setView] = useState(View.Tokens);
   const [error, setError] = useState<string | Error | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [threshold, setThreshold] = useState<number>(1);
@@ -340,41 +342,60 @@ const Upgrade = () => {
               </h1>
             </div>
             <div className="mt-6">
-              <div className="text-gray-300 mb-3">
-                <p>Please select one of the tokens listed below:</p>
-              </div>
               {isFetchingTokens ? (
-                <h1>TODO loader</h1>
+                <Lottie
+                  animationData={LoadingJSONData}
+                  play
+                  loop
+                  className="m-auto absolute w-60 h-60 inset-0"
+                />
               ) : (
                 <>
                   {tokens.length === 0 ? (
-                    <h1>TODO user have no tokens left to sign AKA cant sign</h1>
+                    <div>
+                      <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+                        <Lottie
+                          animationData={NoTokens}
+                          play
+                          loop={false}
+                          className="w-96"
+                        />
+                        <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                          User have no tokens left to sign
+                        </h1>
+                      </div>
+                    </div>
                   ) : (
-                    <ol className="flex flex-wrap gap-5">
-                      {tokens.map((token) => (
-                        <li
-                          key={token.name}
-                          onClick={() => {
-                            if (token.id) {
-                              setSelectedToken(token);
-                              setView(View.DeclarationOfSovereignty);
-                            }
-                          }}
-                        >
-                          <>
-                            {token.id === null ? (
-                              <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
-                            ) : (
-                              <img
-                                className="rounded-full w-16 h-16 cursor-pointer object-cover"
-                                src={token.image}
-                                alt=""
-                              />
-                            )}
-                          </>
-                        </li>
-                      ))}
-                    </ol>
+                    <>
+                      <div className="text-gray-300 mb-3">
+                        <p>Please select one of the tokens listed below:</p>
+                      </div>
+                      <ol className="flex flex-wrap gap-5">
+                        {tokens.map((token) => (
+                          <li
+                            key={token.name}
+                            onClick={() => {
+                              if (token.id) {
+                                setSelectedToken(token);
+                                setView(View.DeclarationOfSovereignty);
+                              }
+                            }}
+                          >
+                            <>
+                              {token.id === null ? (
+                                <PhotographIcon className="rounded-full w-16 h-16 cursor-pointer object-cover bg-sapien-neutral-300 p-3" />
+                              ) : (
+                                <img
+                                  className="rounded-full w-16 h-16 cursor-pointer object-cover"
+                                  src={token.image}
+                                  alt=""
+                                />
+                              )}
+                            </>
+                          </li>
+                        ))}
+                      </ol>
+                    </>
                   )}
                 </>
               )}
