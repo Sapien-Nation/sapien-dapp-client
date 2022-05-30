@@ -22,7 +22,7 @@ import {
 import { useGetCurrentView, useTribe } from 'hooks/tribe';
 
 // providers
-import { GnosisProvider } from 'wallet/providers/Gnosis';
+import { GnosisProvider, Web3Provider } from 'wallet/providers';
 
 // types
 import type { NextPage } from 'next';
@@ -112,7 +112,11 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
         return (
           <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
-            {() => <UpgradeView />}
+            {() => (
+              <Web3Provider>
+                <UpgradeView />
+              </Web3Provider>
+            )}
           </Query>
         );
       }
