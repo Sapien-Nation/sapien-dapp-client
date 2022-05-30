@@ -27,12 +27,7 @@ enum View {
   History,
 }
 
-interface Props {
-  setTokenToSign: (token: Token) => void;
-  showDeclarationDialog: () => void;
-}
-
-const Wallet = ({ setTokenToSign, showDeclarationDialog }: Props) => {
+const Wallet = () => {
   const [view, setView] = useState(View.Home);
   const [token, setToken] = useState<Token | null>(null);
 
@@ -112,10 +107,6 @@ const Wallet = ({ setTokenToSign, showDeclarationDialog }: Props) => {
             }}
             onWithdraw={() => {
               setView(View.Withdraw);
-            }}
-            showDeclarationDialog={() => {
-              setTokenToSign(token);
-              showDeclarationDialog();
             }}
           />
         );

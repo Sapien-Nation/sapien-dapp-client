@@ -61,18 +61,3 @@ export const upgradeTribe = (tribeID: string, body: UpgradeTribeBody) =>
     .post(`/core-api/tribe/${tribeID}/upgrade`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
-
-export const storeTribeSafeAddress = (
-  tribeID: string,
-  body: UpgradeTribeBody
-) =>
-  axios
-    .post(`/core-api/tribe/${tribeID}/vault`, body)
-    .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
-
-export const finishTribeUpgrade = (tribeID: string) =>
-  axios
-    .post(`/core-api/tribe/${tribeID}/upgrade`)
-    .then(({ data }) => data)
-    .catch(({ response }) => Promise.reject(response.data.message));
