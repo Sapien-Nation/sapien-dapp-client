@@ -38,9 +38,7 @@ enum View {
 
 enum VaultStatus {
   Idle,
-  Creating,
-  StoringSafeAddress,
-  MultiSign,
+  Upgrading,
   Success,
 }
 
@@ -82,9 +80,8 @@ const UpgradeView = ({ tokenID }: Props) => {
 
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
-    setVaultStatus(VaultStatus.Creating);
     try {
-      setVaultStatus(VaultStatus.StoringSafeAddress);
+      setVaultStatus(VaultStatus.Upgrading);
       await upgradeTribe(tribeID, {
         owners: selectedOwners.map(({ id, walletAddress }) => ({
           id,
@@ -489,12 +486,8 @@ const UpgradeView = ({ tokenID }: Props) => {
       case View.Loading: {
         const renderProgressBar = () => {
           switch (vaultStatus) {
-            case VaultStatus.Creating:
-              return <ProgressBar value={25} text="Creating Vault." />;
-            case VaultStatus.StoringSafeAddress:
-              return <ProgressBar value={50} text="Storing Address." />;
-            case VaultStatus.MultiSign:
-              return <ProgressBar value={75} text="Multisign." />;
+            case VaultStatus.Upgrading:
+              return <ProgressBar value={45} text="Upgrading." />;
             case VaultStatus.Success:
               return <ProgressBar value={99} text="Finalazing." />;
             default:
