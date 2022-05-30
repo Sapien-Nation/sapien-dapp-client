@@ -26,11 +26,7 @@ enum View {
   Badges,
 }
 
-interface Props {
-  setShowPassport: (showPassport: boolean) => void;
-}
-
-const PassportForm = ({ setShowPassport }: Props) => {
+const PassportForm = () => {
   const [view, setView] = useState<View | null>(View.Passport);
 
   const passport = usePassport();
@@ -48,7 +44,7 @@ const PassportForm = ({ setShowPassport }: Props) => {
   // TODO: We can move Passport and Badges into separate files (views)
   return (
     <FormProvider {...methods}>
-      <form onSubmit={() => setShowPassport(false)} id={'update-profile-form'}>
+      <form onSubmit={() => {}} id={'update-profile-form'}>
         <PolygonFilter />
         <div className="flex flex-col w-[580px]">
           <Transition
