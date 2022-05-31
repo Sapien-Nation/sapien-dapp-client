@@ -11,6 +11,9 @@ import BadgeView from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
 
+// context
+import { useAuth } from 'context/user';
+
 // hooks
 import { useTribe } from 'hooks/tribe';
 
@@ -31,6 +34,7 @@ const BadgesView = () => {
   const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
   const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
 
+  const { me } = useAuth();
   const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -44,7 +48,7 @@ const BadgesView = () => {
       description: 'This is a draft badge, please edit this description.',
       name: 'new badge',
       color: '#fff',
-      owners: [],
+      owners: [me.walletAddress],
     };
 
     setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);

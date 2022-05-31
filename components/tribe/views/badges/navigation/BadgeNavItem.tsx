@@ -38,7 +38,7 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
       ) : (
         <div
           className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
-          style={{ borderColor: badge.color || '#6200ea' }}
+          style={{ borderColor: badge.color }}
         >
           {tribe.name[0].toUpperCase()}
         </div>

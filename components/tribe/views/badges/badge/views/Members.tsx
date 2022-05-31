@@ -10,7 +10,11 @@ import { useAuth } from 'context/user';
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
 
-const MembersForm = () => {
+interface Props {
+  isOwner: boolean;
+}
+
+const MembersForm = ({ isOwner }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const { me } = useAuth();
@@ -93,13 +97,15 @@ const MembersForm = () => {
                       : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
                   }
                   onClick={() => {
-                    if (isSelected) {
-                      setValue(
-                        'owners',
-                        owners.filter(({ id }) => id !== member.id)
-                      );
-                    } else {
-                      setValue('owners', [...owners, member.walletAddress]);
+                    if (isOwner === false) {
+                      if (isSelected) {
+                        setValue(
+                          'owners',
+                          owners.filter(({ id }) => id !== member.id)
+                        );
+                      } else {
+                        setValue('owners', [...owners, member.walletAddress]);
+                      }
                     }
                   }}
                 >

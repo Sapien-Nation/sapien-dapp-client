@@ -7,7 +7,11 @@ import { useFormContext } from 'react-hook-form';
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 
-const PermissionsForm = () => {
+interface Props {
+  isOwner: boolean;
+}
+
+const PermissionsForm = ({ isOwner }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const { query } = useRouter();
@@ -81,13 +85,15 @@ const PermissionsForm = () => {
                       : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
                   }
                   onClick={() => {
-                    if (isSelected) {
-                      setValue(
-                        'permissions',
-                        permissions.filter(({ id }) => id !== room.id)
-                      );
-                    } else {
-                      setValue('permissions', [...permissions, room.id]);
+                    if (isOwner === false) {
+                      if (isSelected) {
+                        setValue(
+                          'permissions',
+                          permissions.filter(({ id }) => id !== room.id)
+                        );
+                      } else {
+                        setValue('permissions', [...permissions, room.id]);
+                      }
                     }
                   }}
                 >
