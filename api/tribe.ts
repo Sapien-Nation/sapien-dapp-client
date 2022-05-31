@@ -15,7 +15,7 @@ export interface CreateTribeBody {
 export interface UpgradeTribeBody {
   threshold: number;
   owners: Array<{ id: string; walletAddress: string }>;
-  tokenID: number;
+  passportTokenId: number;
 }
 
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>

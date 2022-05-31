@@ -118,7 +118,7 @@ const Upgrade = () => {
           walletAddress,
         })),
         threshold,
-        tokenID: selectedToken.id,
+        passportTokenId: selectedToken.id,
       });
 
       setVaultStatus(VaultStatus.Success);
