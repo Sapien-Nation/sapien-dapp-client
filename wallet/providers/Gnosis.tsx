@@ -42,6 +42,8 @@ const provider = new ethers.providers.JsonRpcProvider(
   process.env.NEXT_PUBLIC_RPC_PROVIDER
 );
 const txServiceUrl = process.env.NEXT_PUBLIC_SAFESERVICE_URL;
+console.log({ some: process.env.NEXT_PUBLIC_RPC_PROVIDER });
+console.log({ txServiceUrl });
 const GnosisProvider = ({ children }: GnosisProviderProps) => {
   const [error, setError] = useState<Error | null>(null);
   const [safeService, setSafeService] = useState<SafeServiceClient | null>(
