@@ -11,14 +11,11 @@ import { useMainTribe, useTribe } from 'hooks/tribe';
 import DefaultBadgesJSON from './DefaultBadges.json';
 
 // types
-import type { TribeDiscoveryBadge } from 'tools/types/tribe';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import type { TribeBadge } from 'tools/types/tribe';
+import type { DraftBadge } from '../types';
 
 interface Props {
-  onSelect: (badge: TribeDiscoveryBadge) => void;
+  onSelect: (badge: DraftBadge) => void;
 }
 
 const Search = ({ onSelect }: Props) => {
@@ -27,12 +24,13 @@ const Search = ({ onSelect }: Props) => {
   const { tribeID: sapienTribeID } = useMainTribe();
   const sapienTribe = useTribe(sapienTribeID);
 
-  const defaultBadges: Array<TribeDiscoveryBadge> =
-    DefaultBadgesJSON.badges.map((badge) => ({
+  const defaultBadges: Array<TribeBadge> = DefaultBadgesJSON.badges.map(
+    (badge) => ({
       ...badge,
       avatar: sapienTribe.avatar,
       tribeName: sapienTribe.name,
-    }));
+    })
+  );
 
   return (
     <div>
@@ -44,7 +42,7 @@ const Search = ({ onSelect }: Props) => {
           }).map((badge) => (
             <BadgeCard
               badge={badge}
-              onClick={() => onSelect(badge)}
+              onClick={() => onSelect(badge as DraftBadge)}
               key={badge.id}
             />
           ))}

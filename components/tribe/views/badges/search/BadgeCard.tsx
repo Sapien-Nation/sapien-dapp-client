@@ -2,10 +2,10 @@
 import { ContributorBadge } from 'assets';
 
 // types
-import type { TribeDiscoveryBadge } from 'tools/types/tribe';
+import type { TribeBadge } from 'tools/types/tribe';
 
 interface Props {
-  badge: TribeDiscoveryBadge;
+  badge: TribeBadge;
   onClick: () => void;
 }
 

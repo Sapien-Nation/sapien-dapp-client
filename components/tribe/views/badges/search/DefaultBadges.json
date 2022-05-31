@@ -2,11 +2,6 @@
   "badges": [{
     "id": "1",
     "name": "Community Manager",
-    "tribe": {
-      "id": "",
-      "name": "",
-      "avatar": ""
-    },
     "description": "This badge is granted to qualified community managers that meet the standards of the Sapien Nation.",
     "color": "#e75555",
     "owners": [],
@@ -15,11 +10,6 @@
   }, {
     "id": "2",
     "name": "Conversation Host",
-    "tribe": {
-      "id": "",
-      "name": "",
-      "avatar": ""
-    },
     "description": "An exclusive NFT badge granted to the most active users on the Airtime app. Unlocks ability to create new rooms and manage conversations.",
     "color": "#a9e185",
     "owners": [],
@@ -28,11 +18,6 @@
   },{
     "id": "3",
     "name": "Event Host",
-    "tribe": {
-      "id": "",
-      "name": "",
-      "avatar": ""
-    },
     "description": "Limited edition badge by the Bored Ape Yacht Club that lets access events hosted by the community.",
     "color": "#6cdcdf",
     "owners": [],
@@ -54,11 +39,6 @@
   },{
     "id": "5",
     "name": "Certified Investor",
-    "tribe": {
-      "id": "",
-      "name": "",
-      "avatar": ""
-    },
     "description": "Badge granted to all investors across all the investment clubs on the SyndicateDAO protocol.",
     "color": "#6cdcdf",
     "owners": [],

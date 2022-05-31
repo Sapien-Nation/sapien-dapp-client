@@ -7,9 +7,12 @@ import Lottie from 'react-lottie-player';
 
 // components
 import { Overlay } from 'components/common';
-import BadgeView from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
+import { CreateBadgeView, OwnerBadgeView } from './badge';
+
+// assets
+import daoJSONData from './lottie/dao.json';
 
 // context
 import { useAuth } from 'context/user';
@@ -18,10 +21,8 @@ import { useAuth } from 'context/user';
 import { useTribe } from 'hooks/tribe';
 
 // types
+import type { DraftBadge } from './types';
 import type { TribeBadge } from 'tools/types/tribe';
-
-// assets
-import daoJSONData from './lottie/dao.json';
 
 enum View {
   Home,
@@ -31,8 +32,10 @@ enum View {
 const BadgesView = () => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
-  const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
-  const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
+  const [draftBadges, setDraftBadges] = useState<Array<DraftBadge>>([]);
+  const [selectedBadge, setSelectedBadge] = useState<
+    DraftBadge | TribeBadge | null
+  >(null);
 
   const { me } = useAuth();
   const { back, query } = useRouter();
@@ -43,12 +46,17 @@ const BadgesView = () => {
   const handleAddDraftBadge = () => {
     const badge = {
       id: nanoid(),
-      image: avatar,
       avatar,
       description: 'This is a draft badge, please edit this description.',
-      name: 'new badge',
+      name: '[DRAFT] new badge',
       color: '#fff',
-      owners: [me.walletAddress],
+      members: [
+        {
+          id: me.id,
+          walletAddress: me.walletAddress,
+        },
+      ],
+      permissions: [],
     };
 
     setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
@@ -57,22 +65,31 @@ const BadgesView = () => {
 
   const renderView = () => {
     if (selectedBadge) {
-      return (
-        <BadgeView
-          badge={selectedBadge}
-          onCancel={() => {
-            if (selectedBadge.name === 'new badge') {
-              setDraftBadges((currentDraftBadges) =>
-                currentDraftBadges.filter(
-                  (badge) => badge.id !== selectedBadge.id
-                )
-              );
-            }
-            setSelectedBadge(null);
-            setView(View.Home);
-          }}
-        />
+      if (selectedBadge.name === 'Owner') {
+        return <OwnerBadgeView />;
+      }
+
+      const isDraft = draftBadges.find(
+        (draftBadge) => draftBadge.id === selectedBadge.id
       );
+      if (isDraft) {
+        return (
+          <CreateBadgeView
+            badge={selectedBadge as DraftBadge}
+            onCancel={() => {
+              if (isDraft) {
+                setDraftBadges((currentDraftBadges) =>
+                  currentDraftBadges.filter(
+                    (badge) => badge.id !== selectedBadge.id
+                  )
+                );
+              }
+              setSelectedBadge(null);
+              setView(View.Home);
+            }}
+          />
+        );
+      }
     }
 
     switch (view) {
@@ -127,6 +144,7 @@ const BadgesView = () => {
         return (
           <SearchView
             onSelect={(badge) => {
+              console.log(badge);
               setDraftBadges((currentDraftBadges) => [
                 ...currentDraftBadges,
                 badge,
@@ -147,7 +165,10 @@ const BadgesView = () => {
             draftBadges={draftBadges}
             setSelectedBadge={setSelectedBadge}
             selectedBadge={selectedBadge}
-            showSearch={() => setView(View.Search)}
+            showSearch={() => {
+              setSelectedBadge(null);
+              setView(View.Search);
+            }}
           />
         </div>
         <div className="flex-1 overflow-auto">

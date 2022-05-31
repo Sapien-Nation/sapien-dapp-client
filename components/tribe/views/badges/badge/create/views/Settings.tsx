@@ -10,20 +10,19 @@ import { useFormContext } from 'react-hook-form';
 // hooks
 import { useTribe } from 'hooks/tribe';
 
+// types
+import type { DraftBadge } from '../../../types';
+
 interface Props {
-  isOwner: boolean;
+  badge: DraftBadge;
 }
 
-const SettingsForm = ({ isOwner }: Props) => {
+const SettingsForm = ({ badge }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const popover = useRef();
   const { query } = useRouter();
   const { setValue, watch } = useFormContext();
-
-  const tribeID = query.tribeID as string;
-  const { avatar, name } = useTribe(tribeID);
-
   useClickAway(popover, () => setIsOpen(!isOpen));
 
   const [badgeColor] = watch(['color']);
@@ -32,29 +31,25 @@ const SettingsForm = ({ isOwner }: Props) => {
     <div className="flex flex-col p-3">
       <TextInputLabel label="Badge Icon" name="icon" error="" />
       <div className="relative">
-        {avatar ? (
+        {badge.avatar ? (
           <img
-            src={avatar}
-            alt="Tribe Avatar"
+            src={badge.avatar}
+            alt=""
             className={`border-2 w-8 h-8 object-cover rounded-full cursor-pointer`}
             onClick={() => {
-              if (isOwner === false) {
-                setIsOpen(!isOpen);
-              }
+              setIsOpen(!isOpen);
             }}
             style={{ borderColor: badgeColor }}
           />
         ) : (
           <div
             onClick={() => {
-              if (isOwner === false) {
-                setIsOpen(!isOpen);
-              }
+              setIsOpen(!isOpen);
             }}
             className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
             style={{ borderColor: badgeColor }}
           >
-            {name[0].toUpperCase()}
+            D
           </div>
         )}
         {isOpen && (
@@ -62,22 +57,18 @@ const SettingsForm = ({ isOwner }: Props) => {
             <HexColorPicker
               className="absolute top-5"
               color={badgeColor}
-              onChange={(color) => setValue('color', color)}
+              onChange={(color) => {
+                console.log(color);
+                setValue('color', color);
+              }}
             />
           </div>
         )}
       </div>
       <TextInputLabel label="Badge Name" name="name" error="" />
-      <TextInput
-        name="name"
-        aria-label="name"
-        readOnly={isOwner}
-        disabled={isOwner}
-      />
+      <TextInput name="name" aria-label="name" />
       <TextInputLabel label="Badge Description" name="description" error="" />
       <TextareaInput
-        readOnly={isOwner}
-        disabled={isOwner}
         name="description"
         aria-label="description"
         maxLength={4000}

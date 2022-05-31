@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router';
 import { PlusIcon } from '@heroicons/react/outline';
 
+// assets
+import { ContributorBadge } from 'assets';
+
 // components
 import BadgeNavItem from './BadgeNavItem';
 
@@ -9,17 +12,15 @@ import { useTribe } from 'hooks/tribe';
 import { useTribeBadges } from 'hooks/tribe/badge';
 
 // types
+import type { DraftBadge } from '../types';
 import type { TribeBadge } from 'tools/types/tribe';
 
-// assets
-import { ContributorBadge } from 'assets';
-
 interface Props {
-  draftBadges: Array<TribeBadge>;
+  draftBadges: Array<DraftBadge>;
   handleAddDraftBadge: () => void;
   showSearch: () => void;
   selectedBadge: TribeBadge | null;
-  setSelectedBadge: (badge: TribeBadge) => void;
+  setSelectedBadge: (badge: DraftBadge | TribeBadge) => void;
 }
 
 const Sidebar = ({
@@ -73,7 +74,12 @@ const Sidebar = ({
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
-                    onSelect={() => setSelectedBadge(badge)}
+                    onSelect={() => {
+                      setSelectedBadge(null);
+                      queueMicrotask(() => {
+                        setSelectedBadge(badge);
+                      });
+                    }}
                   />
                 </li>
               );
@@ -82,10 +88,13 @@ const Sidebar = ({
               return (
                 <li key={badge.id} className="flex flex-col gap-2">
                   <BadgeNavItem
-                    badge={badge}
+                    badge={badge as DraftBadge}
                     isSelected={badge.id === selectedBadge?.id}
                     onSelect={() => {
-                      setSelectedBadge(badge);
+                      setSelectedBadge(null);
+                      queueMicrotask(() => {
+                        setSelectedBadge(badge);
+                      });
                     }}
                   />
                 </li>

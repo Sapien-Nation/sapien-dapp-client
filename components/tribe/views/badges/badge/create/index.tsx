@@ -1,19 +1,26 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
+
+// api
+import { createTribeBadge } from 'api/tribe';
 
 // context
 import { useToast } from 'context/toast';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // components
-import { Query } from 'components/common';
 import { Members, Permissions, Settings } from './views';
 
 // types
+import type { DraftBadge } from '../../types';
 import type { TribeBadge } from 'tools/types/tribe';
 
 interface Props {
-  badge: TribeBadge;
+  badge: DraftBadge;
   onCancel: () => void;
 }
 
@@ -21,8 +28,8 @@ interface BadgeFormValues {
   color: string;
   description: string;
   name: string;
-  owners: Array<string>;
-  permissions: Array<string>;
+  rooms: Array<string>;
+  members: Array<{ id: string; walletAddress: string }>;
 }
 
 enum View {
@@ -41,24 +48,37 @@ const BadgeView = ({ badge, onCancel }: Props) => {
       color: badge.color,
       description: badge.description,
       name: badge.name,
-      owners: badge.owners,
-      permissions: [],
+      members: badge.members,
+      rooms: badge.permissions,
     },
   });
-
+  const { mutate } = useSWRConfig();
   const {
     formState: { isSubmitting },
     handleSubmit,
     watch,
   } = methods;
 
-  //-----------------------------------------------------------------
   const tribeID = query.tribeID as string;
   const isOwnerBadge = badge.name === 'Owner';
-  //-----------------------------------------------------------------
-  const onSubmit = async () => {
+
+  const onSubmit = async (values: BadgeFormValues) => {
     try {
-      // TODO api call to generate badge
+      const newBadge = {
+        tribeId: tribeID,
+        ...values,
+      };
+      await createTribeBadge(newBadge);
+
+      mutate(
+        `/core-api/tribe/${tribeID}/badges`,
+        (badges: Array<TribeBadge>) => [...badges, newBadge]
+      );
+
+      toast({
+        message: 'Badge Created Succefully',
+        type: ToastType.Success,
+      });
     } catch (error) {
       toast({
         message: error,
@@ -75,15 +95,11 @@ const BadgeView = ({ badge, onCancel }: Props) => {
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        return (
-          <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
-            {() => <Members isOwner={isOwnerBadge} />}
-          </Query>
-        );
+        return <Members />;
       case View.Permissions:
-        return <Permissions isOwner={isOwnerBadge} />;
+        return <Permissions />;
       case View.Settings:
-        return <Settings isOwner={isOwnerBadge} />;
+        return <Settings badge={badge} />;
     }
   };
 

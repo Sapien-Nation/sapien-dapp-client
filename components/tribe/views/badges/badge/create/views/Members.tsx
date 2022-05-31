@@ -7,14 +7,13 @@ import { useFormContext } from 'react-hook-form';
 // context
 import { useAuth } from 'context/user';
 
+// components
+import { Query } from 'components/common';
+
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
 
-interface Props {
-  isOwner: boolean;
-}
-
-const MembersForm = ({ isOwner }: Props) => {
+const MembersForm = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const { me } = useAuth();
@@ -25,17 +24,16 @@ const MembersForm = ({ isOwner }: Props) => {
 
   const tribeMembers = useTribeMembers(tribeID);
 
-  const [owners] = watch(['owners']);
-
+  const [members] = watch(['members']);
   return (
     <div className="w-full">
       <div className="flex flex-col items-center relative">
         <div className="w-full">
           <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
             <div className="flex flex-auto flex-wrap">
-              {owners.map((address) => {
+              {members.map((member) => {
                 const owner = tribeMembers.find(
-                  ({ walletAddress }) => walletAddress === address
+                  (tribeMember) => tribeMember.id === member.id
                 );
                 return (
                   <div
@@ -45,15 +43,13 @@ const MembersForm = ({ isOwner }: Props) => {
                     <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
                       {owner.displayName}
                     </div>
-                    {address !== me.walletAddress && (
+                    {member.walletAddress !== me.walletAddress && (
                       <div className="flex flex-auto flex-row-reverse text-white ml-1">
                         <button
                           onClick={() => {
                             setValue(
-                              'owners',
-                              owners.filter(
-                                ({ id }) => id !== owner.walletAddress
-                              )
+                              'members',
+                              members.filter(({ id }) => id !== owner.id)
                             );
                           }}
                         >
@@ -84,46 +80,52 @@ const MembersForm = ({ isOwner }: Props) => {
               {
                 keys: ['displayName'],
               }
-            ).map((member) => {
-              const isSelected = owners.find(
-                (address) => address === member.walletAddress
+            ).map((tribeMember) => {
+              const isSelected = members.find(
+                (badgeMember) => badgeMember.id === tribeMember.id
               );
               return (
                 <div
-                  key={member.id}
+                  key={tribeMember.id}
                   className={
                     isSelected
                       ? 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2 border-sapien'
                       : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
                   }
                   onClick={() => {
-                    if (isOwner === false) {
-                      if (isSelected) {
-                        setValue(
-                          'owners',
-                          owners.filter(({ id }) => id !== member.id)
-                        );
-                      } else {
-                        setValue('owners', [...owners, member.walletAddress]);
-                      }
+                    if (isSelected) {
+                      setValue(
+                        'members',
+                        members.filter(
+                          (badgeMember) => badgeMember.id !== tribeMember.id
+                        )
+                      );
+                    } else {
+                      setValue('members', [
+                        ...members,
+                        {
+                          id: tribeMember.id,
+                          walletAddress: tribeMember.walletAddress,
+                        },
+                      ]);
                     }
                   }}
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
-                      {member.avatar && (
+                      {tribeMember.avatar && (
                         <img
                           className="w-5 h-5 rounded-full flex-shrink-0"
-                          src={member.avatar}
-                          alt={member.displayName}
+                          src={tribeMember.avatar}
+                          alt={tribeMember.displayName}
                         />
                       )}
-                      {!member.avatar && member.displayName && (
+                      {!tribeMember.avatar && tribeMember.displayName && (
                         <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                          {member.displayName[0].toUpperCase()}
+                          {tribeMember.displayName[0].toUpperCase()}
                         </div>
                       )}
-                      {member.displayName}
+                      {tribeMember.displayName}
                     </div>
                   </div>
                 </div>
@@ -136,4 +138,16 @@ const MembersForm = ({ isOwner }: Props) => {
   );
 };
 
-export default MembersForm;
+const MembersFormProxy = () => {
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+
+  return (
+    <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
+      {() => <MembersForm />}
+    </Query>
+  );
+};
+
+export default MembersFormProxy;

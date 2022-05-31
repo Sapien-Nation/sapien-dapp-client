@@ -7,11 +7,7 @@ import { useFormContext } from 'react-hook-form';
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 
-interface Props {
-  isOwner: boolean;
-}
-
-const PermissionsForm = ({ isOwner }: Props) => {
+const PermissionsForm = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const { query } = useRouter();
@@ -19,9 +15,9 @@ const PermissionsForm = ({ isOwner }: Props) => {
 
   const tribeID = query.tribeID as string;
 
-  const rooms = useTribeRooms(tribeID);
+  const tribeRooms = useTribeRooms(tribeID);
 
-  const [permissions] = watch(['permissions']);
+  const [rooms] = watch(['rooms']);
 
   return (
     <div className="w-full">
@@ -29,8 +25,8 @@ const PermissionsForm = ({ isOwner }: Props) => {
         <div className="w-full">
           <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
             <div className="flex flex-auto flex-wrap">
-              {permissions.map((permission) => {
-                const room = rooms.find(({ id }) => id === permission);
+              {rooms.map((permission) => {
+                const room = tribeRooms.find(({ id }) => id === permission);
                 return (
                   <div
                     key={room.id}
@@ -44,8 +40,8 @@ const PermissionsForm = ({ isOwner }: Props) => {
                         <button
                           onClick={() => {
                             setValue(
-                              'permissions',
-                              permissions.filter(({ id }) => id !== permission)
+                              'rooms',
+                              rooms.filter(({ id }) => id !== permission)
                             );
                           }}
                         >
@@ -70,10 +66,10 @@ const PermissionsForm = ({ isOwner }: Props) => {
         </div>
         <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
           <div className="flex flex-col w-full">
-            {matchSorter(rooms, searchTerm, {
+            {matchSorter(tribeRooms, searchTerm, {
               keys: ['name'],
             }).map((room) => {
-              const isSelected = permissions.find(
+              const isSelected = rooms.find(
                 (permission) => permission === room.id
               );
               return (
@@ -85,15 +81,13 @@ const PermissionsForm = ({ isOwner }: Props) => {
                       : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
                   }
                   onClick={() => {
-                    if (isOwner === false) {
-                      if (isSelected) {
-                        setValue(
-                          'permissions',
-                          permissions.filter(({ id }) => id !== room.id)
-                        );
-                      } else {
-                        setValue('permissions', [...permissions, room.id]);
-                      }
+                    if (isSelected) {
+                      setValue(
+                        'rooms',
+                        rooms.filter(({ id }) => id !== room.id)
+                      );
+                    } else {
+                      setValue('rooms', [...rooms, room.id]);
                     }
                   }}
                 >
@@ -109,5 +103,9 @@ const PermissionsForm = ({ isOwner }: Props) => {
     </div>
   );
 };
+
+interface Props {
+  isOwner: boolean;
+}
 
 export default PermissionsForm;
