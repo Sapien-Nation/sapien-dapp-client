@@ -8,15 +8,22 @@ import { useToast } from 'context/toast';
 
 // components
 import { Query } from 'components/common';
-import { Members, Permissions, Settings } from '../forms';
+import { Members, Owner, Permissions, Settings } from './views';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
-import type { BadgeFormValues } from '../types';
 
 interface Props {
   badge: TribeBadge;
   onCancel: () => void;
+}
+
+interface BadgeFormValues {
+  color: string;
+  description: string;
+  name: string;
+  owners: Array<string>;
+  permissions: Array<string>;
 }
 
 enum View {
@@ -146,15 +153,11 @@ const BadgeView = ({ badge, onCancel }: Props) => {
 };
 
 const BadgeViewProxy = ({ badge, onCancel }: Props) => {
-  const { query } = useRouter();
+  if (badge.name === 'Owner') {
+    return <Owner badge={badge} onCancel={onCancel} />;
+  }
 
-  const tribeID = query.tribeID as string;
-
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/members`}>
-      {() => <BadgeView badge={badge} onCancel={onCancel} />}
-    </Query>
-  );
+  return <BadgeView badge={badge} onCancel={onCancel} />;
 };
 
-export default BadgeView;
+export default BadgeViewProxy;

@@ -4,9 +4,6 @@ import { matchSorter } from 'match-sorter';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-// context
-import { useAuth } from 'context/user';
-
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 

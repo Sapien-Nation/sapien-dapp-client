@@ -5,23 +5,14 @@ import { useRouter } from 'next/router';
 import { XIcon } from '@heroicons/react/outline';
 import Lottie from 'react-lottie-player';
 
-// assets
-import ErrorJSONData from './lottie/Error.json';
-import LoadingJSONData from './lottie/Loading.json';
-
-// constants
-import { BadgeTypes } from 'tools/constants/tribe';
-
 // components
-import { Overlay, Query } from 'components/common';
-import { BadgeCreationView, BadgeManageView, ReadonlyBadgeView } from './badge';
+import { Overlay } from 'components/common';
+import BadgeView from './badge';
 import Sidebar from './navigation';
 import SearchView from './search';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
-import { useGnosis } from 'wallet/providers/Gnosis';
-import { useGnosisPendingTransactions } from 'hooks/tribe/transactions';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
@@ -30,12 +21,8 @@ import type { TribeBadge } from 'tools/types/tribe';
 import daoJSONData from './lottie/dao.json';
 
 enum View {
-  BadgeManage,
-  BadgeCreation,
   Home,
   Search,
-  Placeholder,
-  OwnerBadge,
 }
 
 const BadgesView = () => {
@@ -47,34 +34,43 @@ const BadgesView = () => {
   const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;
-
   const { avatar } = useTribe(tribeID);
-  const gnosisPendingTransactions = useGnosisPendingTransactions();
 
   const handleAddDraftBadge = () => {
-    const badgeID = nanoid();
-
     const badge = {
-      id: badgeID,
+      id: nanoid(),
       image: avatar,
       avatar,
       description: 'This is a draft badge, please edit this description.',
       name: 'new badge',
       color: '#fff',
-      type: BadgeTypes.Draft,
+      owners: [],
     };
 
-    setView(View.Placeholder);
-
-    setTimeout(() => {
-      setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
-      setSelectedBadge(badge);
-
-      setView(View.BadgeCreation);
-    }, 0);
+    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
+    setSelectedBadge(badge);
   };
 
   const renderView = () => {
+    if (selectedBadge) {
+      return (
+        <BadgeView
+          badge={selectedBadge}
+          onCancel={() => {
+            if (selectedBadge.name === 'new badge') {
+              setDraftBadges((currentDraftBadges) =>
+                currentDraftBadges.filter(
+                  (badge) => badge.id !== selectedBadge.id
+                )
+              );
+            }
+            setSelectedBadge(null);
+            setView(View.Home);
+          }}
+        />
+      );
+    }
+
     switch (view) {
       case View.Home: {
         return (
@@ -123,46 +119,15 @@ const BadgesView = () => {
           </div>
         );
       }
-      case View.OwnerBadge:
-        return <ReadonlyBadgeView badge={selectedBadge!} />;
-      case View.Placeholder:
-        // dirty hack to re-render form
-        return <></>;
-      case View.BadgeManage: {
-        return (
-          <BadgeManageView
-            badge={selectedBadge!}
-            onCancel={() => setView(View.Home)}
-          />
-        );
-      }
-      case View.BadgeCreation:
-        return (
-          <BadgeCreationView
-            badge={selectedBadge}
-            onCancel={() => {
-              setView(View.Home);
-              setDraftBadges((currentDraftBadges) =>
-                currentDraftBadges.filter((badge) => badge !== selectedBadge)
-              );
-            }}
-          />
-        );
       case View.Search:
         return (
           <SearchView
             onSelect={(badge) => {
-              setView(View.Placeholder);
-
-              setTimeout(() => {
-                setDraftBadges((currentDraftBadges) => [
-                  ...currentDraftBadges,
-                  badge,
-                ]);
-                setSelectedBadge(badge);
-
-                setView(View.BadgeCreation);
-              }, 0);
+              setDraftBadges((currentDraftBadges) => [
+                ...currentDraftBadges,
+                badge,
+              ]);
+              setSelectedBadge(badge);
             }}
           />
         );
@@ -176,25 +141,7 @@ const BadgesView = () => {
           <Sidebar
             handleAddDraftBadge={handleAddDraftBadge}
             draftBadges={draftBadges}
-            setSelectedBadge={(badge) => {
-              setView(View.Placeholder);
-
-              setTimeout(() => {
-                setSelectedBadge(badge);
-                if (badge == null) return setView(View.Home);
-                switch (badge.type) {
-                  case BadgeTypes.Draft:
-                    setView(View.BadgeCreation);
-                    break;
-                  case BadgeTypes.Normal:
-                    setView(View.BadgeManage);
-                    break;
-                  case BadgeTypes.Owner:
-                    setView(View.OwnerBadge);
-                    break;
-                }
-              }, 0);
-            }}
+            setSelectedBadge={setSelectedBadge}
             selectedBadge={selectedBadge}
             showSearch={() => setView(View.Search)}
           />
@@ -218,12 +165,7 @@ const BadgesView = () => {
 };
 
 const BadgesViewProxy = () => {
-  const { back, query } = useRouter();
-  const {
-    gnosisAPI: { getAllPendingTransactions },
-    error,
-    connecting,
-  } = useGnosis();
+  const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
   const { isUpgraded } = useTribe(tribeID);
@@ -253,86 +195,7 @@ const BadgesViewProxy = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Overlay onClose={back} isOpen>
-        <div className="flex h-full">
-          <div className="flex-1 overflow-auto">
-            <button
-              type="button"
-              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5"
-              onClick={back}
-            >
-              <span className="sr-only">Close Badges Managment</span>
-              <XIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-            <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
-              <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
-                <Lottie
-                  animationData={ErrorJSONData}
-                  play
-                  className="w-52 h-52"
-                />
-                <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
-                  There was an Error while loading the Badges Managment
-                </h1>
-
-                <p className="mt-5 text-sm text-gray-300 text-center">
-                  Please retry in a few seconds
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Overlay>
-    );
-  }
-
-  if (connecting === true) {
-    return (
-      <Overlay onClose={back} isOpen>
-        <div className="flex h-full">
-          <div className="flex-1 overflow-auto">
-            <button
-              type="button"
-              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5"
-              onClick={back}
-            >
-              <span className="sr-only">Close Badges Managment</span>
-              <XIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-            <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
-              <Lottie
-                animationData={LoadingJSONData}
-                play
-                loop
-                className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
-              />
-            </div>
-          </div>
-        </div>
-      </Overlay>
-    );
-  }
-
-  return (
-    <Query
-      api={`/core-api/tribe/${tribeID}/pending/transactions`}
-      loader={null}
-      options={{
-        fetcher: async () => {
-          try {
-            const transactions = await getAllPendingTransactions();
-            return transactions;
-          } catch (err) {
-            return Promise.reject(err);
-          }
-        },
-      }}
-    >
-      {() => <BadgesView />}
-    </Query>
-  );
+  return <BadgesView />;
 };
 
 export default BadgesViewProxy;

@@ -1,16 +1,10 @@
 import { useRouter } from 'next/router';
 
-// constants
-import { BadgeTypes } from 'tools/constants/tribe';
-
 // hooks
 import { useTribe } from 'hooks/tribe';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
-
-// assets
-import { ContributorBadge } from 'assets';
 
 interface Props {
   badge: TribeBadge;
@@ -24,19 +18,9 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
   const tribeID = query.tribeID as string;
   const tribe = useTribe(tribeID);
 
-  const getBadgeLabel = (type: BadgeTypes) => {
-    if (type === BadgeTypes.Draft) {
-      return '(DRAFT)';
-    } else if (type === BadgeTypes.Normal) {
-      return '';
-    } else {
-      return '(Default)';
-    }
-  };
-
   return (
     <button
-      onClick={() => onSelect()}
+      onClick={onSelect}
       aria-label="Select tribe"
       className={
         isSelected
@@ -52,12 +36,19 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
           className="w-8 h-8 object-cover rounded-full border-2"
         />
       ) : (
-        <ContributorBadge className="w-8 h-8" />
+        <div
+          className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
+          style={{ borderColor: badge.color || '#6200ea' }}
+        >
+          {tribe.name[0].toUpperCase()}
+        </div>
       )}
       <span className="text-ellipsis truncate flex-1 text-left">
         {badge.name}
       </span>
-      <span className="text-gray-500 text-xs">{getBadgeLabel(badge.type)}</span>
+      <span className="text-gray-500 text-xs">
+        {badge.name === 'Owner' ? '(Default)' : ''}
+      </span>
     </button>
   );
 };
