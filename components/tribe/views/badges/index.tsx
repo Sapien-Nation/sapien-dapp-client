@@ -144,7 +144,6 @@ const BadgesView = () => {
         return (
           <SearchView
             onSelect={(badge) => {
-              console.log(badge);
               setDraftBadges((currentDraftBadges) => [
                 ...currentDraftBadges,
                 badge,

@@ -58,7 +58,6 @@ const SettingsForm = ({ badge }: Props) => {
               className="absolute top-5"
               color={badgeColor}
               onChange={(color) => {
-                console.log(color);
                 setValue('color', color);
               }}
             />

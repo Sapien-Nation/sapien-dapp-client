@@ -85,7 +85,6 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
       );
       onClose();
     } catch (error) {
-      console.log(error);
       toast({
         message: error,
       });

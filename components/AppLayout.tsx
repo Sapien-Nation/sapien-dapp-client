@@ -53,7 +53,7 @@ const Page = ({ children }: Props) => {
   const isLoadingPassport = passport === undefined && !passportError;
 
   const isLoadingData = isLoadingTribes === true || isLoadingPassport === true;
-  console.log(isLoadingData);
+
   const renderNavigation = () => {
     let children = null;
 

@@ -101,7 +101,6 @@ const Upgrade = () => {
       setTokens(tokens);
       setError(null);
     } catch (err) {
-      console.log(error);
       setError(err);
     }
     setIsFetchingTokens(false);

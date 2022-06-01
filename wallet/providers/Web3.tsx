@@ -293,17 +293,16 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
               rawTransaction: signedTx.rawTransaction,
               signatureType: biconomy.EIP712_SIGN,
             })
-            .on('transactionHash', (hash: string) =>
-              console.log('Transaction hash: ', hash)
-            )
             .on('receipt', (rec: TransactionReceipt) =>
               resolve({ data: rec, type: ErrorTypes.Success })
             )
             .on('error', (err) => {
               // If the transaction was rejected by the network with a receipt, the receipt will be available as a property on the error object.
-              if (err.receipt)
-                resolve({ data: err.receipt, type: ErrorTypes.Fail });
-              reject(err);
+              if (err.receipt) {
+                return resolve({ data: err.receipt, type: ErrorTypes.Fail });
+              } else {
+                return reject(err);
+              }
             });
         });
 
