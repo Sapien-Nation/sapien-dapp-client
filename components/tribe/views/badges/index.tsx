@@ -56,12 +56,7 @@ const BadgesView = () => {
       description: '',
       name: '',
       color: '#6200ea',
-      members: [
-        {
-          id: me.id,
-          walletAddress: me.walletAddress,
-        },
-      ],
+      members: [],
       permissions: [],
     };
 

@@ -104,8 +104,4 @@ const PermissionsForm = () => {
   );
 };
 
-interface Props {
-  isOwner: boolean;
-}
-
 export default PermissionsForm;
