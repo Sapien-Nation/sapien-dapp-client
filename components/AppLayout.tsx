@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import { useState, useCallback } from 'react';
 import useSWR from 'swr';
 
@@ -20,7 +21,9 @@ import ProfileOverlay from './profile';
 import { useAuth } from 'context/user';
 
 // providers
-import { Web3Provider } from 'wallet/providers';
+const Web3Provider = dynamic(() =>
+  import('wallet/providers').then((mod) => mod.Web3Provider)
+);
 
 interface Props {
   children: React.ReactElement;
