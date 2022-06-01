@@ -225,7 +225,7 @@ const Upgrade = () => {
       case View.AlreadyUpgraded:
         return (
           <div>
-            <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+            <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
               <Lottie
                 animationData={AlreadyUpgradedJSONLottie}
                 play
@@ -325,7 +325,7 @@ const Upgrade = () => {
         );
       case View.Tokens:
         return (
-          <div>
+          <div className="flex flex-col h-full">
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
               {isFetchingTokens ? (
                 <RefreshIcon className="w-12 animate-spin" />
@@ -340,7 +340,7 @@ const Upgrade = () => {
                 {isFetchingTokens ? 'Loading Tokens...' : 'Sapien Wallet'}
               </h1>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex-1 flex flex-col justify-center">
               {isFetchingTokens ? (
                 <Lottie
                   animationData={LoadingJSONData}
@@ -352,14 +352,14 @@ const Upgrade = () => {
                 <>
                   {tokens.length === 0 ? (
                     <div>
-                      <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+                      <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
                         <Lottie
                           animationData={NoTokens}
                           play
                           loop={false}
                           className="w-96"
                         />
-                        <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                        <h1 className="text-xl py-6 lg:text-3xl font-bold tracking-wide text-center text-gray-400">
                           No signable tokens found
                         </h1>
                       </div>
@@ -868,8 +868,8 @@ const Upgrade = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">{renderView()}</div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+      <div className="max-w-3xl mx-auto h-full">{renderView()}</div>
     </div>
   );
 };
@@ -916,7 +916,7 @@ const UpgradeView = () => {
           );
 
         return (
-          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
             <SEO title="Upgrade" />
             <h1 className="sr-only">Tribe Upgrade View</h1>
             <Upgrade />
