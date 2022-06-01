@@ -6,9 +6,10 @@ import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   tribe: ProfileTribe;
+  roomCount?: number;
 }
 
-function TribeNotificationHeader({ tribe }: Props) {
+function TribeNotificationHeader({ tribe, roomCount }: Props) {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -39,7 +40,9 @@ function TribeNotificationHeader({ tribe }: Props) {
         <h1 className="text-m text-left sm:text-left font-semibold">
           {tribe.name}
         </h1>
-        <h2 className="text-xs text-gray-500 mb-4 sm:mb-0">123 members</h2>
+        <h2 className="text-xs text-gray-500 mb-4 sm:mb-0">
+          {roomCount ? `${roomCount} rooms` : '123 members'}
+        </h2>
       </div>
     </div>
   );

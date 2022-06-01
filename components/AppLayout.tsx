@@ -194,7 +194,7 @@ const Page = ({ children }: Props) => {
             <span className="sr-only">Close Profile Passport</span>
             <XIcon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <ProfileOverlay />
+          <ProfileOverlay setShowProfileOverlay={setShowProfileOverlay} />
         </>
       </Overlay>
     </>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
@@ -20,14 +21,190 @@ import { PolygonFilter } from 'assets';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import type { ISOString } from 'tools/types/common';
+import { Description } from '@headlessui/react/dist/components/description/description';
+
+//TODO: move this to the right spot
+export interface PassportBadge {
+  id: string;
+  name: string;
+  color: string;
+  username: string;
+  image: string;
+  tribes: PassportBadgeTribe[];
+  description: string;
+  issueDate: ISOString;
+  numberIssued: number;
+  issuingAuthority: string;
+}
+
+interface RoomDetail {
+  id: string;
+  url?: string;
+  name: string;
+  members: number;
+}
+
+interface App {
+  name: string;
+  image: string;
+}
+
+export interface PassportBadgeTribe {
+  id: string;
+  name: string;
+  apps?: App[];
+  rooms: RoomDetail[];
+  avatar?: string;
+}
+
+export const mockPassportBadge = ({
+  id = '1000',
+  ...rest
+}: Partial<PassportBadge> = {}): PassportBadge => ({
+  id,
+  color: '#6200EA',
+  name: `Badge ${id}`,
+  username: 'TribalRage',
+  image: '',
+  tribes: [],
+  description: '',
+  issueDate: '4/20/2022',
+  numberIssued: 100,
+  issuingAuthority: 'Sapien Nation',
+  ...rest,
+});
+
+const mockRoom = ({
+  id = '1000',
+  ...rest
+}: Partial<RoomDetail> = {}): RoomDetail => ({
+  id,
+  url: '',
+  name: '',
+  members: 132,
+  ...rest,
+});
+
+const mockBadges = [
+  mockPassportBadge({
+    id: '1',
+    name: 'Founding Member of the Sapien Nation',
+  }),
+  mockPassportBadge({
+    id: '2',
+    name: 'JournoDAO Press Badge',
+    image:
+      'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/421b0f1c-362e-490e-af87-f2f1bd8cf338-110x110.jpg',
+    description: 'This badge is issued by JournoDAO to qualified journalists',
+    issuingAuthority: 'Journo DAO',
+    tribes: [
+      {
+        id: '1',
+        name: 'Sapien Nation',
+        avatar:
+          'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/909556d6-d8b3-4344-9379-d5e07e46bcb2-110x110.webp',
+        rooms: [
+          {
+            id: '1',
+            url: '/tribes/69f9e695-90f3-4e30-95f1-d5dafef8a190/16e6b70a-98ca-4cb2-9b4e-9c365131cee0',
+            name: 'press room',
+            members: 55,
+          },
+        ],
+      },
+      {
+        id: '2',
+        name: 'Journo DAO',
+        avatar:
+          'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/421b0f1c-362e-490e-af87-f2f1bd8cf338-110x110.jpg',
+        rooms: [
+          {
+            id: '1',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/3881a7c1-e7f5-4479-86ba-5602f2b72059',
+            name: 'general',
+            members: 130,
+          },
+          {
+            id: '2',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/110679c5-74ac-4594-8ad9-f9dcef2fd32f',
+            name: 'introductions',
+            members: 130,
+          },
+          {
+            id: '3',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/a3f364e8-1e37-4acc-83cd-412512fb42bb',
+            name: 'drafts',
+            members: 130,
+          },
+          {
+            id: '4',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/43d4f8f3-fffc-4009-b04f-659201ab6827',
+            name: 'news',
+            members: 130,
+          },
+          {
+            id: '5',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/d339fb3a-8295-433a-ac90-c8492226e28a',
+            name: 'writers room',
+            members: 130,
+          },
+          {
+            id: '6',
+            url: '/tribes/c10276b1-3417-47dd-974b-59922e0707e8/a7ac37ec-da9a-40d8-83d9-efca5abf822f',
+            name: 'community',
+            members: 130,
+          },
+        ],
+      },
+      {
+        id: '3',
+        name: 'PubDAO',
+        avatar:
+          'https://d151dmflpumpzp.cloudfront.net/thumbnails/tribes/avatar/fff84272-ab01-4f65-9d1c-605edc6d285e-110x110.png',
+        apps: [
+          {
+            name: 'Google Drive',
+            image:
+              'https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Drive.max-1100x1100.png',
+          },
+        ],
+        rooms: [
+          {
+            id: '1',
+            url: '/tribes/3f563794-11f7-4a3a-b4f1-f769c54891e7/1fcaab13-1abb-4bcb-9fbf-bb66bc7fe89b',
+            name: 'JournoDAO collab',
+            members: 55,
+          },
+        ],
+      },
+    ],
+  }),
+];
+
+let mockBadgesById = {};
+
+const initBadges = () => {
+  for (let i = 0; i < mockBadges.length; i++) {
+    let badge = mockBadges[i];
+    mockBadgesById[badge.id] = badge;
+  }
+};
 
 enum View {
   Passport,
   Badges,
 }
 
-const PassportForm = () => {
-  const [view, setView] = useState<View | null>(View.Badges);
+interface Props {
+  setShowProfileOverlay: any;
+}
+
+const PassportForm = ({ setShowProfileOverlay }: Props) => {
+  const [view, setView] = useState<View | null>(View.Passport);
+  const [selectedBadge, setSelectedBadge] = useState<PassportBadge | null>(
+    null
+  );
 
   const passport = usePassport();
   const { query } = useRouter();
@@ -40,6 +217,8 @@ const PassportForm = () => {
       title: 'Founding Member of the Sapien Nation',
     },
   });
+
+  initBadges();
 
   // TODO: We can move Passport and Badges into separate files (views)
   return (
@@ -144,28 +323,23 @@ const PassportForm = () => {
                       className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                     >
                       <select
-                        disabled
                         className="appearance-none px-4 min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
                         defaultValue={''}
                         name="type"
                         onChange={(e) => {
                           e.preventDefault();
+                          setSelectedBadge(mockBadgesById[e.target.value]);
                           setView(null);
                         }}
                       >
-                        {[
-                          'Founding Member of the Sapien Nation',
-                          'Badge 1',
-                          'Badge 2',
-                          'Badge 3',
-                        ].map((val) => {
+                        {mockBadges.map((val) => {
                           return (
                             <option
                               className="bg-gray-800"
-                              key={val}
-                              value={val}
+                              key={val.id}
+                              value={val.id}
                             >
-                              {val}
+                              {val.name}
                             </option>
                           );
                         })}
@@ -217,123 +391,126 @@ const PassportForm = () => {
             leaveTo="transform opacity-0 scale-95"
             afterLeave={() => setView(View.Passport)}
           >
-            <>
-              <div className="flex flex-col gap-2 mt-2">
-                <ul className="flex items-center justify-between text-xs text-left">
-                  <li>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setView(null);
-                      }}
-                    >
-                      <ArrowLeftIcon className="h-5 w-5" />
-                    </button>
-                  </li>
-                  <li>
-                    <span className="block font-bold text-gray-400 mb-1">
-                      Number
-                    </span>
-                    <span className="text-gray-300 font-semibold">
-                      1 of 350
-                    </span>
-                  </li>
-                  <li>
-                    <span className="block font-bold text-gray-400 mb-1">
-                      Issue Date
-                    </span>
-                    <span className="text-gray-300 font-semibold">
-                      4/20/2022
-                    </span>
-                  </li>
-                  <li>
-                    <span className="block font-bold text-gray-400 mb-1">
-                      Issuing Authority
-                    </span>
-                    <span className="text-gray-300 font-semibold">
-                      Sapien Nation
-                    </span>
-                  </li>
-                  <li>
-                    <img
-                      alt=""
-                      className="h-10 w-10 rounded-full"
-                      src="https://ui-avatars.com/api/?name=A"
-                    />
-                  </li>
-                </ul>
-                <div className="flex justify-between gap-5">
-                  <div className="flex flex-col block w-full">
-                    <span className="block font-bold text-gray-400 mb-1 text-xs">
-                      Username
-                    </span>
-                    <TextInput
-                      aria-label="user"
-                      autoComplete="user"
-                      className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      name="userName"
-                      disabled
-                      placeholder="Username"
-                      style={{
-                        background: 'transparent',
-                      }}
-                      value="TribalRage"
-                    />
+            {selectedBadge && (
+              <>
+                <div className="flex flex-col gap-2 mt-2">
+                  <ul className="flex mt-2 items-center justify-between text-xs text-left">
+                    <li>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setView(null);
+                        }}
+                      >
+                        <ArrowLeftIcon className="h-5 w-5" />
+                      </button>
+                    </li>
+                    <li>
+                      <span className="block font-bold text-gray-400 mb-1">
+                        Number
+                      </span>
+                      <span className="text-gray-300 font-semibold">
+                        {selectedBadge.id} of {selectedBadge.numberIssued}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="block font-bold text-gray-400 mb-1">
+                        Issue Date
+                      </span>
+                      <span className="text-gray-300 font-semibold">
+                        {selectedBadge.issueDate}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="block font-bold text-gray-400 mb-1">
+                        Issuing Authority
+                      </span>
+                      <span className="text-gray-300 font-semibold">
+                        {selectedBadge.issuingAuthority}
+                      </span>
+                    </li>
+                    <li>
+                      <img
+                        alt=""
+                        className="h-10 w-10 rounded-full object-cover border-2"
+                        src={selectedBadge.image}
+                        style={{ borderColor: selectedBadge.color }}
+                      />
+                    </li>
+                  </ul>
+                  <div className="flex justify-between gap-5">
+                    <div className="flex flex-col block w-full">
+                      <span className="block font-bold text-gray-400 mb-1 text-xs">
+                        Username
+                      </span>
+                      <TextInput
+                        aria-label="user"
+                        autoComplete="user"
+                        className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                        name="userName"
+                        disabled
+                        placeholder="Username"
+                        style={{
+                          background: 'transparent',
+                        }}
+                        value={selectedBadge.username}
+                      />
+                    </div>
+                    <div className="flex flex-col block w-full">
+                      <span className="block font-bold text-gray-400 mb-1 text-xs">
+                        Badge Name
+                      </span>
+                      <TextInput
+                        aria-label="badge-name"
+                        autoComplete="badge-name"
+                        className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                        name="badgeName"
+                        disabled
+                        placeholder="Badge Name"
+                        style={{
+                          background: 'transparent',
+                        }}
+                        value={selectedBadge.name}
+                      />
+                    </div>
                   </div>
                   <div className="flex flex-col block w-full">
                     <span className="block font-bold text-gray-400 mb-1 text-xs">
-                      Badge Name
+                      Description
                     </span>
-                    <TextInput
-                      aria-label="badge-name"
-                      autoComplete="badge-name"
-                      className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      name="badgeName"
+                    <TextareaInput
+                      maxLength={1000}
+                      aria-label="description"
+                      autoComplete="description"
+                      className="border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      name="description"
                       disabled
-                      placeholder="Badge Name"
+                      placeholder="Description"
+                      rows={2}
                       style={{
                         background: 'transparent',
                       }}
-                      value="JournoDAO Press Badge"
+                      value={selectedBadge.description}
                     />
                   </div>
-                </div>
-                <div className="flex flex-col block w-full">
-                  <span className="block font-bold text-gray-400 mb-1 text-xs">
-                    Description
+                  <span className="text-sm">
+                    Badge Access ({selectedBadge.tribes.length} Tribes)
                   </span>
-                  <TextareaInput
-                    maxLength={1000}
-                    aria-label="description"
-                    autoComplete="description"
-                    className="border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    name="description"
-                    disabled
-                    placeholder="Description"
-                    rows={2}
-                    style={{
-                      background: 'transparent',
-                    }}
-                    value="This badge is issued by JournoDAO to qualified journalists"
-                  />
-                </div>
-                <span className="text-sm">Badge Access (20 Tribes)</span>
-                {/* TODO: Remove mock data once we can integrate API */}
-                {/* TODO: Fix tribe prop */}
-                <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
-                  {Array(10)
-                    .fill('Tribe')
-                    .map((tribe, index) => (
-                      <Disclosure key={`${tribe}-${index}`}>
+                  {/* TODO: Remove mock data once we can integrate API */}
+                  {/* TODO: Fix tribe prop */}
+                  <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
+                    {selectedBadge.tribes.map((tribe) => (
+                      <Disclosure key={tribe.id}>
                         {({ open }) => (
                           <>
                             <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                               <TribeNotificationHeader
+                                roomCount={tribe.rooms.length}
                                 tribe={
                                   {
                                     id: '69f9e695-90f3-4e30-95f1-d5dafef8a190',
-                                    avatar: '',
-                                    name: `${tribe} ${index}`,
+                                    avatar: tribe.avatar,
+                                    name: tribe.name,
                                   } as ProfileTribe
                                 }
                               />
@@ -343,25 +520,51 @@ const PassportForm = () => {
                                 } h-5 w-5 text-purple-500`}
                               />
                             </Disclosure.Button>
-                            <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                            <Disclosure.Panel className="px-4 pt-1 pb-2 text-sm text-gray-500">
                               <ul>
-                                {Array(10)
-                                  .fill('Room')
-                                  .map((room, index) => (
+                                {tribe.apps &&
+                                  tribe.apps.map((app) => (
                                     <li
-                                      className="text-md p-2 hover:bg-purple-200 rounded-md"
-                                      key={`${room}-${index}`}
-                                    >{`${room} ${index}`}</li>
+                                      className="flex text-md p-2 hover:bg-purple-200 rounded-md items-center"
+                                      key={app.name}
+                                    >
+                                      <img
+                                        className="w-8 h-8 mr-2 rounded-lg text-gray-400 bg-white group-hover:text-gray-500"
+                                        alt={''}
+                                        src={app.image}
+                                      />
+                                      <span>{app.name}</span>
+                                    </li>
                                   ))}
+                                {tribe.rooms.map((room) => (
+                                  <li
+                                    className="text-md p-2 hover:bg-purple-200 rounded-md"
+                                    key={room.id}
+                                  >
+                                    <Link href={room.url} passHref>
+                                      <a
+                                        className="flex px-2 py-1 items-center gap-2 flex-1"
+                                        onClick={() =>
+                                          setShowProfileOverlay(false)
+                                        }
+                                      >
+                                        <div className="flex gap-1">
+                                          # {room.name}
+                                        </div>
+                                      </a>
+                                    </Link>
+                                  </li>
+                                ))}
                               </ul>
                             </Disclosure.Panel>
                           </>
                         )}
                       </Disclosure>
                     ))}
+                  </div>
                 </div>
-              </div>
-            </>
+              </>
+            )}
           </Transition>
         </div>
       </form>
