@@ -103,7 +103,7 @@ const PassportForm = () => {
                     </li>
                   </ul>
                   <div className="mt-1 justify-between gap-5">
-                    <span className="block font-bold text-gray-400 mb-1 text-sm">
+                    <span className="block font-bold text-gray-400 mb-2 text-xs">
                       Username
                     </span>
                     <div
@@ -133,7 +133,7 @@ const PassportForm = () => {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <span className="block font-bold text-gray-400 mb-1 text-sm">
+                    <span className="block font-bold text-gray-400 mb-2 text-xs">
                       Badges
                     </span>
                     <div
