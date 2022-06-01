@@ -27,7 +27,7 @@ enum View {
 }
 
 const PassportForm = () => {
-  const [view, setView] = useState<View | null>(View.Passport);
+  const [view, setView] = useState<View | null>(View.Badges);
 
   const passport = usePassport();
   const { query } = useRouter();
@@ -218,7 +218,7 @@ const PassportForm = () => {
             afterLeave={() => setView(View.Passport)}
           >
             <>
-              <div className="flex flex-col gap-3 mt-2">
+              <div className="flex flex-col gap-2 mt-2">
                 <ul className="flex items-center justify-between text-xs text-left">
                   <li>
                     <button
@@ -263,42 +263,60 @@ const PassportForm = () => {
                   </li>
                 </ul>
                 <div className="flex justify-between gap-5">
-                  <TextInput
-                    aria-label="user"
-                    autoComplete="user"
-                    className="appearance-none  border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    name="userName"
-                    placeholder="Username"
+                  <div className="flex flex-col block w-full">
+                    <span className="block font-bold text-gray-400 mb-1 text-xs">
+                      Username
+                    </span>
+                    <TextInput
+                      aria-label="user"
+                      autoComplete="user"
+                      className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      name="userName"
+                      disabled
+                      placeholder="Username"
+                      style={{
+                        background: 'transparent',
+                      }}
+                      value="TribalRage"
+                    />
+                  </div>
+                  <div className="flex flex-col block w-full">
+                    <span className="block font-bold text-gray-400 mb-1 text-xs">
+                      Badge Name
+                    </span>
+                    <TextInput
+                      aria-label="badge-name"
+                      autoComplete="badge-name"
+                      className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      name="badgeName"
+                      disabled
+                      placeholder="Badge Name"
+                      style={{
+                        background: 'transparent',
+                      }}
+                      value="JournoDAO Press Badge"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col block w-full">
+                  <span className="block font-bold text-gray-400 mb-1 text-xs">
+                    Description
+                  </span>
+                  <TextareaInput
+                    maxLength={1000}
+                    aria-label="description"
+                    autoComplete="description"
+                    className="border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                    name="description"
+                    disabled
+                    placeholder="Description"
+                    rows={2}
                     style={{
                       background: 'transparent',
                     }}
-                    value="TribalRage"
-                  />
-                  <TextInput
-                    aria-label="badge-name"
-                    autoComplete="badge-name"
-                    className="appearance-none  border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                    name="badgeName"
-                    placeholder="Badge Name"
-                    style={{
-                      background: 'transparent',
-                    }}
-                    value="JournoDAO Press Badge"
+                    value="This badge is issued by JournoDAO to qualified journalists"
                   />
                 </div>
-                <TextareaInput
-                  maxLength={1000}
-                  aria-label="description"
-                  autoComplete="description"
-                  className="border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                  name="description"
-                  placeholder="Description"
-                  rows={3}
-                  style={{
-                    background: 'transparent',
-                  }}
-                  value="This badge is issued by JournoDAO to qualified journalists"
-                />
                 <span className="text-sm">Badge Access (20 Tribes)</span>
                 {/* TODO: Remove mock data once we can integrate API */}
                 {/* TODO: Fix tribe prop */}
