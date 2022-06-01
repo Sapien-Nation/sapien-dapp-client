@@ -47,9 +47,9 @@ const BadgesView = () => {
     const badge = {
       id: nanoid(),
       avatar,
-      description: 'This is a draft badge, please edit this description.',
-      name: '[DRAFT] new badge',
-      color: '#fff',
+      description: '',
+      name: '',
+      color: '#6200ea',
       members: [
         {
           id: me.id,
