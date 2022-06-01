@@ -123,11 +123,15 @@ const BadgeView = ({ badge, onCancel }: Props) => {
           Cancel
         </button>
         <button
-          className="mx-1 p-2 rounded-md bg-primary hover:bg-sapien-80 hover:cursor-pointer"
+          className={
+            isSubmitting
+              ? 'mx-1 p-2 rounded-md bg-primary hover:bg-sapien-80 cursor-not-allowed disabled:opacity-75'
+              : 'mx-1 p-2 rounded-md bg-primary hover:bg-sapien-80 hover:cursor-pointer'
+          }
           disabled={disableConfirm}
           type="submit"
         >
-          Confirm
+          {isSubmitting ? 'Creating...' : 'Confirm'}
         </button>
       </div>
     );
