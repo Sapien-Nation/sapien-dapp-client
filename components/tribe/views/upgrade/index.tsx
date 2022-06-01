@@ -383,7 +383,7 @@ const Upgrade = () => {
                       </div>
                     </div>
                   ) : (
-                    <>
+                    <div className="h-full">
                       <div className="text-gray-300 mb-3">
                         <p>Please select one of the tokens listed below:</p>
                       </div>
@@ -412,7 +412,7 @@ const Upgrade = () => {
                           </li>
                         ))}
                       </ol>
-                    </>
+                    </div>
                   )}
                 </>
               )}

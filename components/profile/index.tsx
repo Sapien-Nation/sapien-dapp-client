@@ -6,7 +6,7 @@ enum View {
 }
 
 interface Props {
-  setShowProfileOverlay: any;
+  setShowProfileOverlay?: (showProfileOverlay: boolean) => void;
 }
 
 const ProfileOverlay = ({ setShowProfileOverlay }: Props) => {
