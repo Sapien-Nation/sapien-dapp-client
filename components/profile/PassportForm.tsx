@@ -197,7 +197,7 @@ enum View {
 }
 
 interface Props {
-  setShowProfileOverlay: any;
+  setShowProfileOverlay?: (showProfileOverlay: boolean) => void;
 }
 
 const PassportForm = ({ setShowProfileOverlay }: Props) => {
