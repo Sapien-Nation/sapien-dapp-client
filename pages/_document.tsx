@@ -3,7 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 class MyDocument extends Document {
   render() {
     return (
-      <Html className="h-full">
+      <Html className="h-full" style={{ backgroundColor: '#23213b' }}>
         <Head>
           <link
             href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
