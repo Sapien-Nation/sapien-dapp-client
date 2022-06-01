@@ -1,9 +1,12 @@
-import { useRouter } from 'next/router';
-import { useState, useCallback } from 'react';
+import { Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
+import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import { useState, useCallback } from 'react';
+import useSWR from 'swr';
 
 // components
-import { SEO, Redirect, Overlay, Query } from 'components/common';
+import { SEO, Redirect, Overlay } from 'components/common';
 import {
   Navbar,
   MobileNavbar,
@@ -18,73 +21,49 @@ import ProfileOverlay from './profile';
 import { useAuth } from 'context/user';
 
 // providers
-import { Web3Provider } from 'wallet/providers';
-
-// types
-import type { ProfileTribe } from 'tools/types/tribe';
+const Web3Provider = dynamic(() =>
+  import('wallet/providers').then((mod) => mod.Web3Provider)
+);
 
 interface Props {
   children: React.ReactElement;
 }
 
-const AppLayout = ({ children }: Props) => {
+const Page = ({ children }: Props) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
-  const { me } = useAuth();
   const { pathname } = useRouter();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
   }, [mobileMenuOpen]);
 
-  // Auth Pages
-  if (
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/register') ||
-    pathname.startsWith('/logout') ||
-    pathname.startsWith('/forgot') ||
-    pathname.startsWith('/change-password')
-  ) {
-    return children;
-  }
-
-  // Passport View
-  if (pathname.startsWith('/passport')) return children;
-
-  // Mint View
-  if (pathname.startsWith('/mint')) return children;
-
-  // Logout View
-  if (pathname.startsWith('/logout')) return children;
-
-  // Invite View
-  if (pathname.startsWith('/join')) return children;
-
-  if (me === undefined)
-    return (
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div>
-            <div className="flex flex-col justify-center items-center"></div>
-          </div>
-        </div>
-      </div>
-    );
-
-  if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path="/login" />
-      </>
-    );
-  }
+  const {
+    data: tribes,
+    error: tribesError,
+    ...rest
+  } = useSWR('/core-api/profile/tribes');
+  const { data: passport, error: passportError } = useSWR(
+    '/core-api/me/passport'
+  );
 
   const isHomePage = pathname === '/';
+  const isLoadingTribes = !tribes && !tribesError;
+  const isLoadingPassport = passport === undefined && !passportError;
 
+  const isLoadingData = isLoadingTribes === true || isLoadingPassport === true;
+  console.log(isLoadingData);
   const renderNavigation = () => {
     let children = null;
+
+    if (isLoadingData) {
+      return (
+        <div className="block flex-shrink-0 bg-sapien-neutral-600">
+          <div className="h-full px-2 py-6 relative flex flex-col w-64 overflow-y-auto overflow-x-hidden"></div>
+        </div>
+      );
+    }
 
     if (pathname.includes('/discovery')) children = <DiscoveryNavigation />;
     else if (pathname.includes('/profile')) children = <ProfileNavigation />;
@@ -101,99 +80,106 @@ const AppLayout = ({ children }: Props) => {
 
   return (
     <>
-      <div className="relative h-full bg-sapien-neutral-600">
-        <Query
-          api="/core-api/profile/tribes"
-          loader={
-            <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24 h-full">
-              <div className="mx-auto w-full max-w-sm lg:w-96">
-                <div>
-                  <div className="flex flex-col justify-center items-center">
-                    <img
-                      className="pr-1 w-16 animate-bounce"
-                      src="/images/logooutlined.svg"
-                      alt="sapien"
-                    />
-                    <span className="text-white text-sm text-center">
-                      Did you know that on October 18, 2021, our giant bronze
-                      statue of Harambe stared down the Bull of Wall Street?{' '}
-                    </span>
-                  </div>
-                </div>
+      {isLoadingData && (
+        <Transition
+          appear
+          show={isLoadingData}
+          className="h-full w-full flex justify-center items-center"
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <div className="mx-auto w-full max-w-sm lg:w-96">
+            <div>
+              <div className="flex flex-col justify-center items-center">
+                <img
+                  className="pr-1 w-16 animate-bounce"
+                  src="/images/logooutlined.svg"
+                  alt="sapien"
+                />
+                <span className="text-white text-sm text-center">
+                  Did you know that on October 18, 2021, our giant bronze statue
+                  of Harambe stared down the Bull of Wall Street?{' '}
+                </span>
               </div>
             </div>
-          }
-        >
-          {(tribes: Array<ProfileTribe>) => (
-            <main className="h-full flex">
-              <nav
-                className={
-                  mobileMenuOpen
-                    ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                    : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
-                }
-              >
-                <div className="flex-1 flex min-h-0 lg:h-auto h-full">
-                  <div
-                    className={`${
-                      mobileMenuOpen ? '-right-10' : 'right-0'
-                    } absolute top-0 bg-sapien-red-700 lg:hidden`}
+          </div>
+        </Transition>
+      )}
+
+      <Transition
+        appear
+        show={isLoadingData === false}
+        className="relative h-full bg-sapien-neutral-600"
+        enter="transition ease-out duration-100"
+        enterFrom="transform opacity-0 scale-95"
+        enterTo="transform opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="transform opacity-100 scale-100"
+        leaveTo="transform opacity-0 scale-95"
+      >
+        <main className="h-full flex">
+          <>
+            <nav
+              className={
+                mobileMenuOpen
+                  ? 'left-0 flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+                  : '-left-full flex-col transition-all duration-300 fixed lg:static h-full z-10 lg:flex'
+              }
+            >
+              <div className="flex-1 flex min-h-0 lg:h-auto h-full">
+                <div
+                  className={`${
+                    mobileMenuOpen ? '-right-10' : 'right-0'
+                  } absolute top-0 bg-sapien-red-700 lg:hidden`}
+                >
+                  <button
+                    type="button"
+                    className="flex items-center justify-center h-10 w-10 focus:outline-none"
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    <button
-                      type="button"
-                      className="flex items-center justify-center h-10 w-10 focus:outline-none"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <span className="sr-only">Close sidebar</span>
-                      <XIcon
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </div>
-                  <TribeBar
-                    tribes={tribes}
-                    mobileMenuOpen={mobileMenuOpen}
-                    handleMobileMenu={handleMobileMenu}
-                  />
-                  {isHomePage === false && <>{renderNavigation()}</>}
+                    <span className="sr-only">Close sidebar</span>
+                    <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                  </button>
                 </div>
-              </nav>
-              <Query api="/core-api/me/passport" allowNullable>
-                {() => (
-                  <div className="flex-1 min-w-0 flex flex-col">
-                    <Web3Provider>
-                      <div className="lg:hidden">
-                        <MobileNavbar
-                          setMobileMenuOpen={setMobileMenuOpen}
-                          setShowProfileOverlay={() =>
-                            setShowProfileOverlay(true)
-                          }
-                        />
-                      </div>
-                      <div className="hidden lg:block">
-                        <Navbar
-                          setShowProfileOverlay={() =>
-                            setShowProfileOverlay(true)
-                          }
-                        />
-                      </div>
-                    </Web3Provider>
-                    <div className="flex-1 flex overflow-hidden">
-                      <section
-                        aria-labelledby="primary-heading"
-                        className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
-                      >
-                        {children}
-                      </section>
-                    </div>
-                  </div>
-                )}
-              </Query>
-            </main>
-          )}
-        </Query>
-      </div>
+                <TribeBar
+                  tribes={isLoadingData ? [] : tribes}
+                  mobileMenuOpen={mobileMenuOpen}
+                  handleMobileMenu={handleMobileMenu}
+                />
+                {isHomePage === false && <>{renderNavigation()}</>}
+              </div>
+            </nav>
+            <div className="flex-1 min-w-0 flex flex-col">
+              <Web3Provider>
+                <div className="lg:hidden">
+                  <MobileNavbar
+                    setMobileMenuOpen={setMobileMenuOpen}
+                    setShowProfileOverlay={() => setShowProfileOverlay(true)}
+                  />
+                </div>
+                <div className="hidden lg:block">
+                  <Navbar
+                    setShowProfileOverlay={() => setShowProfileOverlay(true)}
+                  />
+                </div>
+              </Web3Provider>
+              <div className="flex-1 flex overflow-hidden">
+                <section
+                  aria-labelledby="primary-heading"
+                  className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
+                >
+                  {children}
+                </section>
+              </div>
+            </div>
+          </>
+        </main>
+      </Transition>
+
       <Overlay
         blur
         isOpen={showProfileOverlay}
@@ -213,6 +199,41 @@ const AppLayout = ({ children }: Props) => {
       </Overlay>
     </>
   );
+};
+
+const AppLayout = ({ children }: Props) => {
+  const { me } = useAuth();
+  const { pathname } = useRouter();
+
+  const authPages = [
+    '/login',
+    '/register',
+    '/logout',
+    '/forgot',
+    '/change-password',
+  ];
+  const otherPages = ['/passport', '/mint', '/logout', '/join'];
+
+  if (authPages.some((page) => pathname.startsWith(page))) {
+    return children;
+  }
+
+  if (otherPages.some((page) => pathname.startsWith(page))) {
+    return children;
+  }
+
+  if (me === undefined) return null;
+
+  if (me === null) {
+    return (
+      <>
+        <SEO title="" />
+        <Redirect path="/login" />
+      </>
+    );
+  }
+
+  return <Page>{children}</Page>;
 };
 
 export default AppLayout;
