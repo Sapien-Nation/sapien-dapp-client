@@ -33,17 +33,16 @@ const Page = ({ children }: Props) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
+  const { me } = useAuth();
   const { pathname } = useRouter();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
   }, [mobileMenuOpen]);
 
-  const {
-    data: tribes,
-    error: tribesError,
-    ...rest
-  } = useSWR('/core-api/profile/tribes');
+  const { data: tribes, error: tribesError } = useSWR(
+    '/core-api/profile/tribes'
+  );
   const { data: passport, error: passportError } = useSWR(
     '/core-api/me/passport'
   );
@@ -52,7 +51,8 @@ const Page = ({ children }: Props) => {
   const isLoadingTribes = !tribes && !tribesError;
   const isLoadingPassport = passport === undefined && !passportError;
 
-  const isLoadingData = isLoadingTribes === true || isLoadingPassport === true;
+  const isLoadingData =
+    isLoadingTribes === true || isLoadingPassport === true || me === undefined;
 
   const renderNavigation = () => {
     let children = null;
@@ -77,6 +77,15 @@ const Page = ({ children }: Props) => {
       </div>
     );
   };
+
+  if (me === null) {
+    return (
+      <>
+        <SEO title="" />
+        <Redirect path="/login" />
+      </>
+    );
+  }
 
   return (
     <>
@@ -202,35 +211,25 @@ const Page = ({ children }: Props) => {
 };
 
 const AppLayout = ({ children }: Props) => {
-  const { me } = useAuth();
   const { pathname } = useRouter();
 
-  const authPages = [
+  const noLayoutPages = [
+    // Auth pages
     '/login',
     '/register',
     '/logout',
     '/forgot',
     '/change-password',
+
+    // misc
+    '/passport',
+    '/mint',
+    '/logout',
+    '/join',
   ];
-  const otherPages = ['/passport', '/mint', '/logout', '/join'];
 
-  if (authPages.some((page) => pathname.startsWith(page))) {
+  if (noLayoutPages.some((page) => pathname.startsWith(page))) {
     return children;
-  }
-
-  if (otherPages.some((page) => pathname.startsWith(page))) {
-    return children;
-  }
-
-  if (me === undefined) return null;
-
-  if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path="/login" />
-      </>
-    );
   }
 
   return <Page>{children}</Page>;
