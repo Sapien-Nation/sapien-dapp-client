@@ -261,7 +261,7 @@ const PassportForm = ({ setShowProfileOverlay }: Props) => {
                         Passport Number
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {formatTokenID(Number(query.tokenID))}
+                        {formatTokenID(Number(passport.tokenId))}
                       </span>
                     </li>
                     <li>
@@ -269,7 +269,7 @@ const PassportForm = ({ setShowProfileOverlay }: Props) => {
                         Issue Date
                       </span>
                       <span className="text-gray-300 font-semibold">
-                        {/* formatDate(passport.issueDate, 'LLLL d y') */}
+                        {formatDate(passport.issueDate, 'LLLL d y')}
                       </span>
                     </li>
                     <li>
