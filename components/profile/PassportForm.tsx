@@ -36,7 +36,7 @@ const PassportForm = () => {
     defaultValues: {
       displayName: passport.username, // TODO remove displayName
       username: passport.username,
-      bio: 'Coming soon!',
+      bio: 'Bio',
       title: 'Founding Member of the Sapien Nation',
     },
   });
@@ -58,7 +58,7 @@ const PassportForm = () => {
             afterLeave={() => setView(View.Badges)}
           >
             <>
-              <div className="flex gap-5 flex-wrap sm:flex-nowrap">
+              <div className="flex mt-4 gap-5 flex-wrap sm:flex-nowrap">
                 <div className="text-center pt-4 flex flex-col justify-between">
                   <div className="block h-36 w-40 rotate-90 p-1px hexagon-container">
                     <div className="bg-black h-full w-full hexagon flex items-center justify-center">
@@ -76,7 +76,7 @@ const PassportForm = () => {
                   </span>
                 </div>
                 <div className="w-full">
-                  <ul className="flex justify-between text-xs text-left">
+                  <ul className="flex mr-4 justify-between text-xs text-left">
                     <li>
                       <span className="block font-bold text-gray-400 mb-1">
                         Passport Number
@@ -102,18 +102,21 @@ const PassportForm = () => {
                       </span>
                     </li>
                   </ul>
-                  <div className="mt-1 flex justify-between gap-5">
+                  <div className="mt-1 justify-between gap-5">
+                    <span className="block font-bold text-gray-400 mb-1 text-sm">
+                      Username
+                    </span>
                     <div
                       style={{
                         clipPath:
                           'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                       }}
-                      className="mt-3 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+                      className="mt-1 mr-4 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                     >
                       <TextInput
                         aria-label="username"
                         autoComplete="username"
-                        className="appearance-none min-h-64px border-sapien-80 block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                        className="appearance-none min-h-64px border-sapien-80 block w-full px-4 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 text-lg sm:text-lg"
                         name="username"
                         placeholder="Username"
                         readOnly
@@ -129,36 +132,45 @@ const PassportForm = () => {
                       />
                     </div>
                   </div>
-                  <div
-                    style={{
-                      clipPath:
-                        'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
-                    }}
-                    className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
-                  >
-                    <select
-                      disabled
-                      className="appearance-none min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
-                      defaultValue={''}
-                      name="type"
-                      onChange={(e) => {
-                        e.preventDefault();
-                        setView(null);
+                  <div className="mt-2">
+                    <span className="block font-bold text-gray-400 mb-1 text-sm">
+                      Badges
+                    </span>
+                    <div
+                      style={{
+                        clipPath:
+                          'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                       }}
+                      className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
                     >
-                      {[
-                        'Founding Member of the Sapien Nation',
-                        'Badge 1',
-                        'Badge 2',
-                        'Badge 3',
-                      ].map((val) => {
-                        return (
-                          <option className="bg-gray-800" key={val} value={val}>
-                            {val}
-                          </option>
-                        );
-                      })}
-                    </select>
+                      <select
+                        disabled
+                        className="appearance-none px-4 min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
+                        defaultValue={''}
+                        name="type"
+                        onChange={(e) => {
+                          e.preventDefault();
+                          setView(null);
+                        }}
+                      >
+                        {[
+                          'Founding Member of the Sapien Nation',
+                          'Badge 1',
+                          'Badge 2',
+                          'Badge 3',
+                        ].map((val) => {
+                          return (
+                            <option
+                              className="bg-gray-800"
+                              key={val}
+                              value={val}
+                            >
+                              {val}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -167,13 +179,13 @@ const PassportForm = () => {
                   clipPath:
                     'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
                 }}
-                className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+                className="mt-3 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
               >
                 <TextareaInput
                   name="bio"
                   maxLength={1000}
                   placeholder="Bio"
-                  className="!border-[1px] !border-sapien-80"
+                  className="!border-[1px] !border-sapien-80 text-lg sm:text-lg pl-4 pt-4 text-gray-300"
                   readOnly
                   rules={{
                     validate: {
