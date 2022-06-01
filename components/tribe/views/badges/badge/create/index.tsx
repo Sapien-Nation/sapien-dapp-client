@@ -22,6 +22,7 @@ import type { TribeBadge } from 'tools/types/tribe';
 interface Props {
   badge: DraftBadge;
   onCancel: () => void;
+  onCreate: () => void;
 }
 
 interface BadgeFormValues {
@@ -38,7 +39,7 @@ enum View {
   Permissions,
 }
 
-const BadgeView = ({ badge, onCancel }: Props) => {
+const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
   const [view, setView] = useState(View.Settings);
 
   const toast = useToast();
@@ -67,13 +68,15 @@ const BadgeView = ({ badge, onCancel }: Props) => {
         tribeId: tribeID,
         ...values,
       };
-      await createTribeBadge(newBadge);
+      // await createTribeBadge(newBadge);
 
       mutate(
         `/core-api/tribe/${tribeID}/badges`,
-        (badges: Array<TribeBadge>) => [...badges, newBadge]
+        (badges: Array<TribeBadge>) => [...badges, newBadge],
+        false
       );
 
+      onCreate();
       toast({
         message: 'Badge Created Succefully',
         type: ToastType.Success,

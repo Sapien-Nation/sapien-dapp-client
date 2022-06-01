@@ -99,6 +99,12 @@ const BadgesView = () => {
               setSelectedBadge(null);
               setView(View.Home);
             }}
+            onCreate={() => {
+              setView(View.Home);
+
+              setDraftBadges([]);
+              setSelectedBadge(null);
+            }}
           />
         );
       }

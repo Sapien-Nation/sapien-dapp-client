@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import Lottie from 'react-lottie-player';
 import Link from 'next/link';
 import _range from 'lodash/range';
+import { useSWRConfig } from 'swr';
 
 // api
 import { upgradeTribe } from 'api/tribe';
@@ -33,10 +34,11 @@ import { ProgressBar, SEO, Query } from 'components/common';
 
 // hooks
 import { useWeb3 } from 'wallet/providers';
-import { useTribe, useTribeMembers } from 'hooks/tribe';
+import { useTribeMembers } from 'hooks/tribe';
 
 // types
 import type { Token } from 'wallet/types';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 enum View {
   // -1 Routes, this are not part of the flow, but "fallbacks"
@@ -84,7 +86,8 @@ const Upgrade = () => {
   const [isFetchingTokens, setIsFetchingTokens] = useState(true);
 
   const toast = useToast();
-  const { back, push, query } = useRouter();
+  const { mutate } = useSWRConfig();
+  const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
   const tribeMembers = useTribeMembers(tribeID).filter(
@@ -120,6 +123,21 @@ const Upgrade = () => {
         passportTokenId: selectedToken.id,
       });
 
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((cacheTribe) => {
+            if (cacheTribe.id === tribeID) {
+              return {
+                ...cacheTribe,
+                isUpgraded: true,
+              };
+            }
+
+            return cacheTribe;
+          }),
+        false
+      );
       setVaultStatus(VaultStatus.Success);
       await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
 

@@ -10,8 +10,6 @@ interface Props {
 }
 
 const SettingsForm = ({ badge }: Props) => {
-  const { watch } = useFormContext();
-
   return (
     <div className="flex flex-col p-3">
       <TextInputLabel label="Badge Icon" name="icon" error="" />
@@ -28,7 +26,7 @@ const SettingsForm = ({ badge }: Props) => {
             className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
             style={{ borderColor: badge.color }}
           >
-            {name[0].toUpperCase()}
+            {badge.name[0].toUpperCase()}
           </div>
         )}
       </div>
