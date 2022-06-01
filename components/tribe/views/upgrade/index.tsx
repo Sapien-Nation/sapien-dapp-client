@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import Lottie from 'react-lottie-player';
 import Link from 'next/link';
 import _range from 'lodash/range';
+import { useSWRConfig } from 'swr';
 
 // api
 import { upgradeTribe } from 'api/tribe';
@@ -33,10 +34,11 @@ import { ProgressBar, SEO, Query } from 'components/common';
 
 // hooks
 import { useWeb3 } from 'wallet/providers';
-import { useTribe, useTribeMembers } from 'hooks/tribe';
+import { useTribeMembers } from 'hooks/tribe';
 
 // types
 import type { Token } from 'wallet/types';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 enum View {
   // -1 Routes, this are not part of the flow, but "fallbacks"
@@ -84,7 +86,8 @@ const Upgrade = () => {
   const [isFetchingTokens, setIsFetchingTokens] = useState(true);
 
   const toast = useToast();
-  const { back, push, query } = useRouter();
+  const { mutate } = useSWRConfig();
+  const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
   const tribeMembers = useTribeMembers(tribeID).filter(
@@ -101,7 +104,6 @@ const Upgrade = () => {
       setTokens(tokens);
       setError(null);
     } catch (err) {
-      console.log(error);
       setError(err);
     }
     setIsFetchingTokens(false);
@@ -121,6 +123,21 @@ const Upgrade = () => {
         passportTokenId: selectedToken.id,
       });
 
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((cacheTribe) => {
+            if (cacheTribe.id === tribeID) {
+              return {
+                ...cacheTribe,
+                isUpgraded: true,
+              };
+            }
+
+            return cacheTribe;
+          }),
+        false
+      );
       setVaultStatus(VaultStatus.Success);
       await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
 
@@ -226,7 +243,7 @@ const Upgrade = () => {
       case View.AlreadyUpgraded:
         return (
           <div>
-            <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+            <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
               <Lottie
                 animationData={AlreadyUpgradedJSONLottie}
                 play
@@ -326,7 +343,7 @@ const Upgrade = () => {
         );
       case View.Tokens:
         return (
-          <div>
+          <div className="flex flex-col h-full">
             <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
               {isFetchingTokens ? (
                 <RefreshIcon className="w-12 animate-spin" />
@@ -341,7 +358,7 @@ const Upgrade = () => {
                 {isFetchingTokens ? 'Loading Tokens...' : 'Sapien Wallet'}
               </h1>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex-1 flex flex-col justify-center">
               {isFetchingTokens ? (
                 <Lottie
                   animationData={LoadingJSONData}
@@ -353,14 +370,14 @@ const Upgrade = () => {
                 <>
                   {tokens.length === 0 ? (
                     <div>
-                      <div className="px-10 py-[8rem] sm:px-6 flex flex-col items-center gap-3">
+                      <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
                         <Lottie
                           animationData={NoTokens}
                           play
                           loop={false}
                           className="w-96"
                         />
-                        <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                        <h1 className="text-xl py-6 lg:text-3xl font-bold tracking-wide text-center text-gray-400">
                           No signable tokens found
                         </h1>
                       </div>
@@ -580,7 +597,7 @@ const Upgrade = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setView(View.Success)}
+                onClick={() => setView(View.Owners)}
                 className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Confirm
@@ -869,8 +886,8 @@ const Upgrade = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">{renderView()}</div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+      <div className="max-w-3xl mx-auto h-full">{renderView()}</div>
     </div>
   );
 };
@@ -917,7 +934,7 @@ const UpgradeView = () => {
           );
 
         return (
-          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+          <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
             <SEO title="Upgrade" />
             <h1 className="sr-only">Tribe Upgrade View</h1>
             <Upgrade />

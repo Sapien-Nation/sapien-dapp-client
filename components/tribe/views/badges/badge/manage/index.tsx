@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 
 // components
-import { Settings, Members, Permissions } from './views';
+import { Members, Settings } from './views';
 
-// hooks
-import { useTribeBadges } from 'hooks/tribe/badge';
+// types
+import type { DraftBadge } from '../../types';
+
+interface Props {
+  badge: DraftBadge;
+}
 
 enum View {
   Settings,
@@ -13,31 +16,28 @@ enum View {
   Permissions,
 }
 
-const BadgeView = () => {
+const ManageBadgeView = ({ badge }: Props) => {
   const [view, setView] = useState(View.Settings);
 
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  const tribeBadges = useTribeBadges(tribeID);
-
-  const badge = tribeBadges.find((tribeBadge) => tribeBadge.name === 'Owner');
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        return <Members badge={badge} />;
+        return <Members />;
       case View.Permissions:
-        return <Permissions />;
+        return (
+          <div className="flex flex-col p-8">
+            <h1>Coming Soon!</h1>
+          </div>
+        );
       case View.Settings:
         return <Settings badge={badge} />;
     }
   };
 
   return (
-    <div>
+    <>
       <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
-        Owner Badge
+        Manage Badge
       </h1>
       <div className="flex flex-col gap-3 mt-5">
         <div className="flex justify-around border border-gray-800 rounded-md p-3">
@@ -71,8 +71,8 @@ const BadgeView = () => {
         </div>
         <div className="border border-gray-800 rounded-md">{renderForm()}</div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default BadgeView;
+export default ManageBadgeView;

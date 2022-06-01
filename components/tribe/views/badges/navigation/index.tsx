@@ -21,6 +21,7 @@ interface Props {
   showSearch: () => void;
   selectedBadge: TribeBadge | null;
   setSelectedBadge: (badge: DraftBadge | TribeBadge) => void;
+  handleClickHome: () => void;
 }
 
 const Sidebar = ({
@@ -29,6 +30,7 @@ const Sidebar = ({
   selectedBadge,
   setSelectedBadge,
   handleAddDraftBadge,
+  handleClickHome,
 }: Props) => {
   const { query } = useRouter();
 
@@ -47,7 +49,7 @@ const Sidebar = ({
                 ? 'gap-1 mb-3 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2'
                 : 'gap-1 mb-3 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 hover:bg-sapien-neutral-800'
             }
-            onClick={() => setSelectedBadge(null)}
+            onClick={handleClickHome}
           >
             <img
               src="/images/sapien_nation.png"

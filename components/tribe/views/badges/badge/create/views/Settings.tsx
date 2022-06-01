@@ -58,7 +58,6 @@ const SettingsForm = ({ badge }: Props) => {
               className="absolute top-5"
               color={badgeColor}
               onChange={(color) => {
-                console.log(color);
                 setValue('color', color);
               }}
             />
@@ -66,12 +65,13 @@ const SettingsForm = ({ badge }: Props) => {
         )}
       </div>
       <TextInputLabel label="Badge Name" name="name" error="" />
-      <TextInput name="name" aria-label="name" />
+      <TextInput name="name" aria-label="name" placeholder="Badge Name" />
       <TextInputLabel label="Badge Description" name="description" error="" />
       <TextareaInput
         name="description"
         aria-label="description"
         maxLength={4000}
+        placeholder="Badge Description"
       />
     </div>
   );

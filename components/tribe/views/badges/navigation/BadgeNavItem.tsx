@@ -35,7 +35,7 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
         </div>
       )}
       <span className="text-ellipsis truncate flex-1 text-left">
-        {badge.name}
+        {badge.name || '[DRAFT]'}
       </span>
       <span className="text-gray-500 text-xs">
         {badge.name === 'Owner' ? '(Default)' : ''}

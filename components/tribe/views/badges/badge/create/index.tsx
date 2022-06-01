@@ -22,6 +22,7 @@ import type { TribeBadge } from 'tools/types/tribe';
 interface Props {
   badge: DraftBadge;
   onCancel: () => void;
+  onCreate: () => void;
 }
 
 interface BadgeFormValues {
@@ -38,7 +39,7 @@ enum View {
   Permissions,
 }
 
-const BadgeView = ({ badge, onCancel }: Props) => {
+const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
   const [view, setView] = useState(View.Settings);
 
   const toast = useToast();
@@ -60,7 +61,6 @@ const BadgeView = ({ badge, onCancel }: Props) => {
   } = methods;
 
   const tribeID = query.tribeID as string;
-  const isOwnerBadge = badge.name === 'Owner';
 
   const onSubmit = async (values: BadgeFormValues) => {
     try {
@@ -68,13 +68,15 @@ const BadgeView = ({ badge, onCancel }: Props) => {
         tribeId: tribeID,
         ...values,
       };
-      await createTribeBadge(newBadge);
+      // await createTribeBadge(newBadge);
 
       mutate(
         `/core-api/tribe/${tribeID}/badges`,
-        (badges: Array<TribeBadge>) => [...badges, newBadge]
+        (badges: Array<TribeBadge>) => [...badges, newBadge],
+        false
       );
 
+      onCreate();
       toast({
         message: 'Badge Created Succefully',
         type: ToastType.Success,
@@ -104,8 +106,6 @@ const BadgeView = ({ badge, onCancel }: Props) => {
   };
 
   const renderActions = () => {
-    if (isOwnerBadge) return null;
-
     const disableConfirm = (() => {
       if (isSubmitting === true) return true;
 
@@ -141,7 +141,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
-          {isOwnerBadge ? 'Owner Badge' : 'Edit Badge'}
+          Create Badge
         </h1>
         <div className="flex flex-col gap-3 mt-5">
           <div className="flex justify-around border border-gray-800 rounded-md p-3">

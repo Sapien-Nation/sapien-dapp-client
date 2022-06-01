@@ -9,7 +9,7 @@ import Lottie from 'react-lottie-player';
 import { Overlay } from 'components/common';
 import Sidebar from './navigation';
 import SearchView from './search';
-import { CreateBadgeView, OwnerBadgeView } from './badge';
+import { CreateBadgeView, ManageBadgeView, OwnerBadgeView } from './badge';
 
 // assets
 import daoJSONData from './lottie/dao.json';
@@ -27,6 +27,7 @@ import type { TribeBadge } from 'tools/types/tribe';
 enum View {
   Home,
   Search,
+  Dummy,
 }
 
 const BadgesView = () => {
@@ -43,24 +44,40 @@ const BadgesView = () => {
   const tribeID = query.tribeID as string;
   const { avatar } = useTribe(tribeID);
 
+  const isCurrentBadgeADraft = () =>
+    Boolean(
+      draftBadges.find((draftBadge) => draftBadge.id === selectedBadge.id)
+    );
+
   const handleAddDraftBadge = () => {
     const badge = {
       id: nanoid(),
       avatar,
-      description: 'This is a draft badge, please edit this description.',
-      name: '[DRAFT] new badge',
-      color: '#fff',
-      members: [
-        {
-          id: me.id,
-          walletAddress: me.walletAddress,
-        },
-      ],
+      description: '',
+      name: '',
+      color: '#6200ea',
+      members: [],
       permissions: [],
     };
 
+    const prevSelectedBadge = { ...selectedBadge };
+    setView(View.Dummy);
+    setSelectedBadge(null);
+    if (
+      Boolean(
+        draftBadges.find((draftBadge) => draftBadge.id === prevSelectedBadge.id)
+      )
+    ) {
+      setDraftBadges((currentDraftBadges) =>
+        currentDraftBadges.filter((badge) => badge.id !== prevSelectedBadge.id)
+      );
+    }
+
     setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
-    setSelectedBadge(badge);
+
+    queueMicrotask(() => {
+      setSelectedBadge(badge);
+    });
   };
 
   const renderView = () => {
@@ -69,27 +86,30 @@ const BadgesView = () => {
         return <OwnerBadgeView />;
       }
 
-      const isDraft = draftBadges.find(
-        (draftBadge) => draftBadge.id === selectedBadge.id
-      );
-      if (isDraft) {
+      if (isCurrentBadgeADraft()) {
         return (
           <CreateBadgeView
             badge={selectedBadge as DraftBadge}
             onCancel={() => {
-              if (isDraft) {
-                setDraftBadges((currentDraftBadges) =>
-                  currentDraftBadges.filter(
-                    (badge) => badge.id !== selectedBadge.id
-                  )
-                );
-              }
+              setDraftBadges((currentDraftBadges) =>
+                currentDraftBadges.filter(
+                  (badge) => badge.id !== selectedBadge.id
+                )
+              );
               setSelectedBadge(null);
               setView(View.Home);
+            }}
+            onCreate={() => {
+              setView(View.Home);
+
+              setDraftBadges([]);
+              setSelectedBadge(null);
             }}
           />
         );
       }
+
+      return <ManageBadgeView badge={selectedBadge as DraftBadge} />;
     }
 
     switch (view) {
@@ -140,11 +160,12 @@ const BadgesView = () => {
           </div>
         );
       }
+      case View.Dummy:
+        return <div></div>;
       case View.Search:
         return (
           <SearchView
             onSelect={(badge) => {
-              console.log(badge);
               setDraftBadges((currentDraftBadges) => [
                 ...currentDraftBadges,
                 badge,
@@ -166,8 +187,28 @@ const BadgesView = () => {
             setSelectedBadge={setSelectedBadge}
             selectedBadge={selectedBadge}
             showSearch={() => {
-              setSelectedBadge(null);
               setView(View.Search);
+              if (isCurrentBadgeADraft()) {
+                setDraftBadges((currentDraftBadges) =>
+                  currentDraftBadges.filter(
+                    (badge) => badge.id !== selectedBadge.id
+                  )
+                );
+              }
+
+              setSelectedBadge(null);
+            }}
+            handleClickHome={() => {
+              setView(View.Home);
+              if (isCurrentBadgeADraft()) {
+                setDraftBadges((currentDraftBadges) =>
+                  currentDraftBadges.filter(
+                    (badge) => badge.id !== selectedBadge.id
+                  )
+                );
+              }
+
+              setSelectedBadge(null);
             }}
           />
         </div>
