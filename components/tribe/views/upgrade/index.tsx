@@ -38,7 +38,8 @@ import { useTribe, useTribeMembers } from 'hooks/tribe';
 
 // types
 import type { Token } from 'wallet/types';
-import type { ProfileTribe } from 'tools/types/tribe';
+import type { ProfileTribe, TribeMember } from 'tools/types/tribe';
+import type { User } from 'tools/types/user';
 
 enum View {
   // Wallet Views
@@ -62,16 +63,11 @@ enum VaultStatus {
   Success,
 }
 
-const Upgrade = () => {
-  const { me } = useAuth();
+interface Props {
+  meAsMember: TribeMember; // We do this because me.displayName comes empty backend to take a look into this
+}
 
-  const defaultOwner = {
-    avatar: me.avatar,
-    id: me.id,
-    username: me.username,
-    displayName: me.displayName,
-    walletAddress: me.walletAddress,
-  };
+const Upgrade = ({ meAsMember }: Props) => {
   const [view, setView] = useState(View.Home);
   const [error, setError] = useState<string | Error | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
@@ -79,9 +75,10 @@ const Upgrade = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [vaultStatus, setVaultStatus] = useState<VaultStatus>(VaultStatus.Idle);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
-  const [selectedOwners, setSelectedOwners] = useState([defaultOwner]);
+  const [selectedOwners, setSelectedOwners] = useState([meAsMember]);
   const [isFetchingTokens, setIsFetchingTokens] = useState(true);
 
+  const { me } = useAuth();
   const toast = useToast();
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
@@ -708,7 +705,7 @@ const Upgrade = () => {
                   setView(View.Tokens);
 
                   queueMicrotask(() => {
-                    setSelectedOwners([defaultOwner]);
+                    setSelectedOwners([meAsMember]);
                     setSelectedToken(null);
                   });
                 }}
@@ -869,6 +866,8 @@ const UpgradeView = () => {
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
+  const { me } = useAuth();
+  const tribeMembers = useTribeMembers(tribeID);
 
   if (tribe.isUpgraded === true) {
     return (
@@ -949,7 +948,7 @@ const UpgradeView = () => {
           <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
             <SEO title="Upgrade" />
             <h1 className="sr-only">Tribe Upgrade View</h1>
-            <Upgrade />
+            <Upgrade meAsMember={tribeMembers.find(({ id }) => id === me.id)} />
           </div>
         );
       }}
