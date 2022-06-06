@@ -34,16 +34,13 @@ import { ProgressBar, SEO, Query } from 'components/common';
 
 // hooks
 import { useWeb3 } from 'wallet/providers';
-import { useTribeMembers } from 'hooks/tribe';
+import { useTribe, useTribeMembers } from 'hooks/tribe';
 
 // types
 import type { Token } from 'wallet/types';
 import type { ProfileTribe } from 'tools/types/tribe';
 
 enum View {
-  // -1 Routes, this are not part of the flow, but "fallbacks"
-  AlreadyUpgraded,
-
   // Wallet Views
   Home,
   Tokens,
@@ -240,32 +237,6 @@ const Upgrade = () => {
     }
 
     switch (view) {
-      case View.AlreadyUpgraded:
-        return (
-          <div>
-            <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
-              <Lottie
-                animationData={AlreadyUpgradedJSONLottie}
-                play
-                className="w-52 h-52"
-              />
-              <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
-                Your Tribe is already upgraded!
-              </h1>
-
-              <p className="mt-5 text-sm text-gray-300 text-center">
-                Click the button below to manage your badges.
-              </p>
-              <div className="py-4 flex justify-center">
-                <Link href={`/tribes/${tribeID}/badges`} passHref>
-                  <a className="py-2 px-4 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                    Manage Badges
-                  </a>
-                </Link>
-              </div>
-            </div>
-          </div>
-        );
       case View.Home:
         return (
           <div>
@@ -894,6 +865,47 @@ const Upgrade = () => {
 
 const distributionURL = process.env.NEXT_PUBLIC_DISTRIBUTION_URL;
 const UpgradeView = () => {
+  const { query } = useRouter();
+  const tribeID = query.tribeID as string;
+
+  const tribe = useTribe(tribeID);
+
+  if (tribe.isUpgraded === true) {
+    return (
+      <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
+        <SEO title="Upgrade" />
+        <h1 className="sr-only">Already Upgraded</h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="max-w-3xl mx-auto h-full">
+            <div>
+              <div className="px-10 sm:px-6 flex flex-col items-center gap-3">
+                <Lottie
+                  animationData={AlreadyUpgradedJSONLottie}
+                  play
+                  className="w-52 h-52"
+                />
+                <h1 className="text-xl py-6 lg:text-3xl text-white font-bold tracking-wide text-center">
+                  Your Tribe is already upgraded!
+                </h1>
+
+                <p className="mt-5 text-sm text-gray-300 text-center">
+                  Click the button below to manage your badges.
+                </p>
+                <div className="py-4 flex justify-center">
+                  <Link href={`/tribes/${tribeID}/badges`} passHref>
+                    <a className="py-2 px-4 justify-center items-center gap-4 border-2 border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                      Manage Badges
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Query api="/core-api/passport/signed" loader={null}>
       {({ hasPassport }: { hasPassport: boolean }) => {

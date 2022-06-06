@@ -100,7 +100,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   useEffect(() => {
     const initWeb3WithBiconomy = async () => {
       try {
-        // await createVault(['0x29eB8e014D182dDAFB14602A8d297680D6584859', '0xf432638B93336D2537bBe07fF8BCdA541d244bc2', '0xD4a1453D1E9a6De301A85495227f8E74d51A3094'], 2);
         const biconomy = new Biconomy(
           new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
           {
