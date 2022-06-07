@@ -61,41 +61,7 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         }
 
         return (
-          <Query
-            api={`/core-api/tribe/${tribeID}/badges`}
-            loader={null}
-            options={{
-              fetcher: () => [
-                {
-                  id: '207361f6-fb07-4724-abab-f8d285e4952e',
-                  name: 'Owner',
-                  description:
-                    'This badge represents that the holder is an owner in the tribename Tribe',
-                  avatar:
-                    'https://d151dmflpumpzp.cloudfront.net/images/tribes/avatar/909556d6-d8b3-4344-9379-d5e07e46bcb2.webp',
-                  color: null,
-                  owners: [
-                    {
-                      id: '8b76eac7-e9e3-43a7-b31d-5487601084e1',
-                      username: 'yuyu',
-                      avatar:
-                        'https://d151dmflpumpzp.cloudfront.net/thumbnails/profiles/avatar/2049279c-6739-4ea3-974d-e6f4d0091910-40x40.jpeg',
-                      walletAddress:
-                        '0x83C8BE8970c4fF7Db775Ed7DBB4E967019652884',
-                    },
-                    {
-                      id: 'df98f5dc-4fae-4287-81f0-52520c7932c4',
-                      username: 'yogi',
-                      avatar:
-                        'https://d151dmflpumpzp.cloudfront.net/thumbnails/profiles/avatar/17abd424-ac48-4460-9ea5-28665a7ebb15-40x40.jpeg',
-                      walletAddress:
-                        '0xF874Cf1BcE2D471c640D1b466946184843da1E78',
-                    },
-                  ],
-                },
-              ],
-            }}
-          >
+          <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
             {() => (
               <GnosisProvider>
                 <BadgesView />
