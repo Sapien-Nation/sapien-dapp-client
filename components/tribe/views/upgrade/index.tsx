@@ -24,6 +24,7 @@ import UpgradeSuccessJSONLottie from './lottie/UpgradeSuccess.json';
 import AlreadyUpgradedJSONLottie from './lottie/ape.json';
 import NoTokens from './lottie/NoTokens.json';
 import LoadingJSONData from './lottie/Loading.json';
+import ProgressClockJSONData from './lottie/ProgressClock.json';
 
 // context
 import { useAuth } from 'context/user';
@@ -798,25 +799,47 @@ const Upgrade = ({ meAsMember }: Props) => {
           </div>
         );
       case View.Loading: {
-        const renderProgressBar = () => {
+        const renderProgressContent = () => {
           switch (vaultStatus) {
             case VaultStatus.Upgrading:
-              return <ProgressBar value={45} text="Upgrading." />;
+              return (
+                <div className="flex gap-2 justify-center font-semibold items-center">
+                  <p className="text-lg">Upgrading</p>
+                  <span className="text-sapien-green text-xl">45%</span>
+                </div>
+              );
             case VaultStatus.Success:
-              return <ProgressBar value={99} text="Finalazing." />;
+              return (
+                <div className="flex gap-2 justify-center font-semibold items-center">
+                  <p className="text-lg">Finalazing</p>
+                  <span className="text-sapien-green text-xl">99%</span>
+                </div>
+              );
             default:
-              return <ProgressBar value={0} text="Starting." />;
+              return (
+                <div className="flex gap-2 justify-center font-semibold items-center">
+                  <p className="text-lg">Starting</p>
+                  <span className="text-sapien-green text-xl">0%</span>
+                </div>
+              );
           }
         };
 
         return (
           <div>
             <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
-              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center decoration-double decoration-gray-500 decoration-2">
-                Please dont close this window
+              <h1 className="text-xl lg:text-3xl tracking-wide text-center decoration-double decoration-gray-500 decoration-2 text-sapien-red-700 mt-6">
+                Please dont close this window!
               </h1>
             </div>
-            <div className="mt-12">{renderProgressBar()}</div>
+
+            <Lottie
+              animationData={ProgressClockJSONData}
+              play
+              loop
+              className="m-auto mt-8 w-60 h-60 inset-0"
+            />
+            <div>{renderProgressContent()}</div>
           </div>
         );
       }
