@@ -37,7 +37,7 @@ const Sidebar = ({
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
-  const tribeBadges = useTribeBadges(tribeID);
+  const tribeBadges = useTribeBadges();
 
   return (
     <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">

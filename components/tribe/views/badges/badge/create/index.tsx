@@ -68,7 +68,8 @@ const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
         tribeId: tribeID,
         ...values,
       };
-      // await createTribeBadge(newBadge);
+
+      await createTribeBadge(newBadge);
 
       mutate(
         `/core-api/tribe/${tribeID}/badges`,

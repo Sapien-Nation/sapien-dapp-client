@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 
 // components
 import { Settings, Members, Permissions } from './views';
@@ -16,11 +15,7 @@ enum View {
 const BadgeView = () => {
   const [view, setView] = useState(View.Settings);
 
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  const tribeBadges = useTribeBadges(tribeID);
+  const tribeBadges = useTribeBadges();
 
   const badge = tribeBadges.find((tribeBadge) => tribeBadge.name === 'Owner');
   const renderForm = () => {

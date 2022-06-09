@@ -1,21 +1,14 @@
 import { XIcon } from '@heroicons/react/solid';
-import { useRouter } from 'next/router';
 import { matchSorter } from 'match-sorter';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-// hooks
-import { useTribeRooms } from 'hooks/tribe';
-
 const PermissionsForm = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { query } = useRouter();
   const { setValue, watch } = useFormContext();
 
-  const tribeID = query.tribeID as string;
-
-  const tribeRooms = useTribeRooms(tribeID);
+  const tribeAvailablesPrivateRooms = [];
 
   const [rooms] = watch(['rooms']);
 
@@ -26,7 +19,9 @@ const PermissionsForm = () => {
           <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
             <div className="flex flex-auto flex-wrap">
               {rooms.map((permission) => {
-                const room = tribeRooms.find(({ id }) => id === permission);
+                const room = tribeAvailablesPrivateRooms.find(
+                  ({ id }) => id === permission
+                );
                 return (
                   <div
                     key={room.id}
@@ -66,7 +61,7 @@ const PermissionsForm = () => {
         </div>
         <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
           <div className="flex flex-col w-full">
-            {matchSorter(tribeRooms, searchTerm, {
+            {matchSorter(tribeAvailablesPrivateRooms, searchTerm, {
               keys: ['name'],
             }).map((room) => {
               const isSelected = rooms.find(

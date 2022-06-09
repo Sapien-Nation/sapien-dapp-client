@@ -22,7 +22,7 @@ const ManageBadgeView = ({ badge }: Props) => {
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        return <Members />;
+        return <Members badge={badge} />;
       case View.Permissions:
         return (
           <div className="flex flex-col p-8">

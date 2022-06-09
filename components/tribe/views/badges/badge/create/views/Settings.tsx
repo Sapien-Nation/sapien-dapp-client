@@ -1,14 +1,11 @@
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { useClickAway } from 'react-use';
 import { HexColorPicker } from 'react-colorful';
 
 // components
 import { TextareaInput, TextInput, TextInputLabel } from 'components/common';
-import { useFormContext } from 'react-hook-form';
-
-// hooks
-import { useTribe } from 'hooks/tribe';
 
 // types
 import type { DraftBadge } from '../../../types';
