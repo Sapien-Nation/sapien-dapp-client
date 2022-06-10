@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useState } from 'react';
+import { XIcon } from '@heroicons/react/outline';
 
 // api
 import { createRoom } from 'api/room';
@@ -98,26 +99,53 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
       case View.Badges:
         return (
           <div>
-            <ul>
+            <div className="flex justify-between p-3 my-3">
+              <span>Who can access this room?</span>
+              <button
+                type="button"
+                onClick={() => console.log('TODO: Add Badge')}
+              >
+                Add Badge
+              </button>
+            </div>
+            <ul className="">
               {tribeBadges.map((badge) => {
                 // TODO investigate if https://react-hook-form.com/api/usefieldarray/ is a good fit to hold badges
                 return (
                   <li
+                    className="w-full flex justify-between items-center border rounded-md p-3 mb-3"
                     onClick={() => {
                       console.log('TODO add badge to badges calling setValue');
                     }}
                     key={badge.id}
                   >
+                    {badge.avatar ? (
+                      <img
+                        src={badge.avatar}
+                        alt={badge.name}
+                        style={{ borderColor: badge.color }}
+                        className="w-8 h-8 object-cover rounded-full border-2"
+                      />
+                    ) : (
+                      <div
+                        className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
+                        style={{ borderColor: badge.color }}
+                      />
+                    )}
                     {badge.name}
                     {badges.includes(badge.id) && (
                       <button
-                        onClick={() => {
+                        type="button"
+                        className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
+                        onClick={(e) => {
+                          e.stopPropagation();
                           console.log(
                             'TODO remove badge from badges calling setValue'
                           );
                         }}
                       >
-                        Remove
+                        <span className="sr-only">Close</span>
+                        <XIcon className="h-6 w-6" aria-hidden="true" />
                       </button>
                     )}
                   </li>
@@ -158,12 +186,12 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
               <div>
                 <Switch.Group
                   as="div"
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between mt-1"
                 >
                   <span className="flex-grow flex flex-col">
                     <Switch.Label
                       as="span"
-                      className="text-sm font-medium text-gray-900"
+                      className="text-sm font-medium text-gray-500"
                       passive
                     >
                       Private Room
