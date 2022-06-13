@@ -194,3 +194,12 @@ export const useGetCurrentView = (
     id: 'not_found',
   };
 };
+
+export const useTribePrivateRooms = () => {
+  const { query } = useRouter();
+  const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
+
+  return cache.get(`/core-api/tribe/${tribeID}/rooms?type=PRIVATE`);
+};

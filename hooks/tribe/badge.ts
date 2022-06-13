@@ -2,12 +2,7 @@ import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
 
 // types
-import type { TribeBadge } from 'tools/types/tribe';
-
-interface Transaction {
-  // TODO move to tools when we got the full data type
-  id: string;
-}
+import type { TribeBadge, BadgeTransaction } from 'tools/types/tribe';
 
 export const useTribeBadges = (): Array<TribeBadge> => {
   const { query } = useRouter();
@@ -18,11 +13,13 @@ export const useTribeBadges = (): Array<TribeBadge> => {
   return cache.get(`/core-api/tribe/${tribeID}/badges`);
 };
 
-export const useBadgeTransactions = (badgeID: string): Array<Transaction> => {
+export const useBadgeTransactions = (
+  badgeID: string
+): Array<BadgeTransaction> => {
   const { query } = useRouter();
   const { cache } = useSWRConfig();
 
   const tribeID = query.tribeID as string;
 
-  return cache.get(`/core-api/tribe/${tribeID}/safe/transactions`);
+  return cache.get(`/core-api/tribe/${tribeID}/safe/transactions/${badgeID}`);
 };
