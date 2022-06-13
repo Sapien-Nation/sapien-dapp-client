@@ -7,7 +7,6 @@ import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 // components
 import { Disclosure, Transition } from '@headlessui/react';
 import { TextareaInput, TextInput } from 'components/common';
-import TribeNotificationHeader from 'components/notifications/items/TribeNotificationHeader';
 
 // hooks
 import { usePassport } from 'hooks/passport';
@@ -504,7 +503,7 @@ const PassportForm = ({ setShowProfileOverlay }: Props) => {
                         {({ open }) => (
                           <>
                             <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-                              <TribeNotificationHeader
+                              {/* <TribeNotificationHeader
                                 roomCount={tribe.rooms.length}
                                 tribe={
                                   {
@@ -513,7 +512,7 @@ const PassportForm = ({ setShowProfileOverlay }: Props) => {
                                     name: tribe.name,
                                   } as ProfileTribe
                                 }
-                              />
+                              /> */}
                               <ChevronDownIcon
                                 className={`${
                                   open ? 'rotate-180 transform' : ''

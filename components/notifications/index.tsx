@@ -9,7 +9,7 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { Mention, BadgeRequest, BadgeReceived } from './items';
+import { BadgeGrant } from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -37,12 +37,9 @@ const Notifications = () => {
   //------------------------------------------------------------------------
   const renderNotification = (notification) => {
     switch (notification.type) {
-      case NotificationsType.Mention:
-        return <Mention notification={notification} />;
-      case NotificationsType.BadgeRequest:
-        return <BadgeRequest notification={notification} />;
-      case NotificationsType.BadgeReceived:
-        return <BadgeReceived notification={notification} />;
+      case NotificationsType.BadgeGrant:
+      case NotificationsType.BadgeGrantOwner:
+        return <BadgeGrant notification={notification} />;
     }
   };
 
@@ -50,7 +47,7 @@ const Notifications = () => {
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="flex gap-1 items-center justify-between p-3">
         <span>Notifications</span>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
               <DotsVerticalIcon className="w-5 text-gray-400" />
@@ -73,7 +70,7 @@ const Notifications = () => {
               </Menu.Items>
             </Transition>
           </Menu>
-        </div>
+        </div> */}
       </div>
       <div className="px-4">
         {notifications.length === 0 ? (
