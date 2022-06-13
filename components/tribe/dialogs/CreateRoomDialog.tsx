@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 import { useState } from 'react';
-import { XIcon } from '@heroicons/react/outline';
+import { MinusIcon } from '@heroicons/react/outline';
 
 // api
 import { createRoom } from 'api/room';
@@ -56,10 +56,15 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
   const {
     formState: { errors },
     handleSubmit,
+    setError,
+    setValue,
     watch,
   } = methods;
 
-  const onSubmit = async ({ name }: FormValues) => {
+  const onSubmit = async ({ badges, name }: FormValues) => {
+    // TODO: Update endpoint + payload
+    console.log({ badges, name, type: isPrivate ? 'PRIVATE' : 'PUBLIC' });
+    return;
     try {
       const response = await createRoom({
         aboutObject,
@@ -93,29 +98,49 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
     }
   };
 
-  const [badges] = watch(['badges']);
+  const [badges, name] = watch(['badges', 'name']);
   const renderView = () => {
     switch (view) {
       case View.Badges:
         return (
           <div>
-            <div className="flex justify-between p-3 my-3">
+            <div className="flex justify-between items-center p-3 my-3">
               <span>Who can access this room?</span>
-              <button
-                type="button"
-                onClick={() => console.log('TODO: Add Badge')}
-              >
-                Add Badge
-              </button>
+              <span className="text-sm font-medium text-gray-500">
+                {badges.length === 0 ? (
+                  'Please select at least 1 badge'
+                ) : (
+                  <>
+                    ({badges.length} {badges.length === 1 ? 'badge' : 'badges'}{' '}
+                    selected)
+                  </>
+                )}
+              </span>
             </div>
-            <ul className="">
+
+            <ul>
               {tribeBadges.map((badge) => {
-                // TODO investigate if https://react-hook-form.com/api/usefieldarray/ is a good fit to hold badges
+                const isBadgeSelected = badges.includes(badge.id);
                 return (
                   <li
-                    className="w-full flex justify-between items-center border rounded-md p-3 mb-3"
+                    className={`border ${
+                      isBadgeSelected ? 'border-sapien-80' : 'border-gray-800'
+                    }
+                    ${
+                      isBadgeSelected
+                        ? 'hover:border-sapien-80'
+                        : 'hover:border-gray-700'
+                    }
+                    w-full flex justify-between items-center rounded-md p-3 mb-3 hover:cursor-pointer`}
                     onClick={() => {
-                      console.log('TODO add badge to badges calling setValue');
+                      if (isBadgeSelected) {
+                        setValue(
+                          'badges',
+                          badges.filter((b) => b !== badge.id)
+                        );
+                      } else {
+                        setValue('badges', [...badges, badge.id]);
+                      }
                     }}
                     key={badge.id}
                   >
@@ -133,21 +158,22 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                       />
                     )}
                     {badge.name}
-                    {badges.includes(badge.id) && (
-                      <button
-                        type="button"
-                        className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          console.log(
-                            'TODO remove badge from badges calling setValue'
-                          );
-                        }}
-                      >
-                        <span className="sr-only">Close</span>
-                        <XIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      className={`${
+                        isBadgeSelected ? 'visible' : 'invisible'
+                      } rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setValue(
+                          'badges',
+                          badges.filter((b) => b !== badge.id)
+                        );
+                      }}
+                    >
+                      <span className="sr-only">Remove</span>
+                      <MinusIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
                   </li>
                 );
               })}
@@ -235,11 +261,27 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
       case View.Home:
         return {
           confirmLabel: isPrivate ? 'Next' : 'Confirm',
-          onConfirm: isPrivate ? () => setView(View.Badges) : undefined,
+          onConfirm: isPrivate
+            ? () => {
+                if (name === '') {
+                  setError('name', {
+                    message: 'is required',
+                  });
+                  return;
+                }
+                setView(View.Badges);
+              }
+            : undefined,
         };
       case View.Badges:
         return {
           onCancel: () => setView(View.Home),
+          onConfirm: () => {
+            if (badges?.length === 0) {
+              return;
+            }
+            onSubmit({ badges, name });
+          },
           cancelLabel: 'Back',
           confirmLabel: 'Create',
         };
