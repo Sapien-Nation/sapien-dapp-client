@@ -2,15 +2,31 @@ import { XIcon } from '@heroicons/react/solid';
 import { matchSorter } from 'match-sorter';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useRouter } from 'next/router';
+
+// components
+import { Query } from 'components/common';
+
+// hooks
+import { useTribePrivateRooms } from 'hooks/tribe';
+
+enum Dialog {
+  CreatePrivateRoom,
+}
 
 const PermissionsForm = () => {
+  const [dialog, setDialog] = useState<Dialog | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
   const { setValue, watch } = useFormContext();
 
-  const tribeAvailablesPrivateRooms = [];
+  const tribeAvailablesPrivateRooms = useTribePrivateRooms();
 
   const [rooms] = watch(['rooms']);
+
+  if (tribeAvailablesPrivateRooms.length === 0) {
+    return <h1></h1>;
+  }
 
   return (
     <div className="w-full">
@@ -99,4 +115,16 @@ const PermissionsForm = () => {
   );
 };
 
-export default PermissionsForm;
+const PermissionsFormProxy = () => {
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+
+  return (
+    <Query api={`/core-api/tribe/${tribeID}/rooms?type=PRIVATE`} loader={null}>
+      {() => <PermissionsForm />}
+    </Query>
+  );
+};
+
+export default PermissionsFormProxy;

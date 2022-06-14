@@ -6,7 +6,11 @@ import { View } from 'constants/tribe';
 import { ContentMimeType, ContentType } from 'tools/constants/content';
 
 // types
-import type { ProfileTribe, TribeMember } from 'tools/types/tribe';
+import type {
+  ProfileTribe,
+  ProfileTribeRoom,
+  TribeMember,
+} from 'tools/types/tribe';
 import type { Content } from 'tools/types/content';
 
 interface CurrentView {
@@ -195,7 +199,7 @@ export const useGetCurrentView = (
   };
 };
 
-export const useTribePrivateRooms = () => {
+export const useTribePrivateRooms = (): Array<ProfileTribeRoom> => {
   const { query } = useRouter();
   const { cache } = useSWRConfig();
 
