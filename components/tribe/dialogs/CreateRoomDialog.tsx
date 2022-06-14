@@ -8,6 +8,9 @@ import { MinusIcon } from '@heroicons/react/outline';
 // api
 import { createRoom } from 'api/room';
 
+// constants
+import { RoomType } from 'tools/constants/rooms';
+
 // components
 import { Dialog, Query, TextInput, TextInputLabel } from 'components/common';
 
@@ -24,7 +27,7 @@ interface Props {
   onClose: () => void;
 }
 interface FormValues {
-  badges: Array<String>;
+  badges: Array<string>;
   name: string;
 }
 
@@ -51,7 +54,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
-  const tribeBadges = useTribeBadges(tribeID);
+  const tribeBadges = useTribeBadges();
 
   const {
     formState: { errors },
@@ -62,15 +65,14 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
   } = methods;
 
   const onSubmit = async ({ badges, name }: FormValues) => {
-    // TODO: Update endpoint + payload
-    console.log({ badges, name, type: isPrivate ? 'PRIVATE' : 'PUBLIC' });
-    return;
     try {
       const response = await createRoom({
         aboutObject,
         aboutObjectId,
         name,
         tribeId: tribeID as string,
+        type: isPrivate ? RoomType.Private : RoomType.Public,
+        badges,
       });
 
       mutate(
