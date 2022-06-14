@@ -19,16 +19,21 @@ interface Props {
   badge: TribeBadge;
 }
 
-const PermissionsForm = ({ badge }: Props) => {
-  const privateRooms = useTribePrivateRooms();
+const PermissionsForm = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const privateRooms = useTribePrivateRooms();
 
   if (privateRooms.length === 0) {
     return (
       <>
-        <div className="flex flex-col items-center gap-5 px-3 py-4">
+        <div className="flex flex-col items-center gap-3 px-3 py-4">
           <span className="text-lg text-gray-300">
-            No private rooms found for this badge
+            You dont have any private Room
+          </span>
+          <span className="text-sm text-gray-300/40">
+            You need at least 1 private room so you can explore the power of
+            Badge Permissions
           </span>
           <Lottie
             animationData={NoPrivateRoomsJSONLottie}
@@ -41,14 +46,11 @@ const PermissionsForm = ({ badge }: Props) => {
             type="button"
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           >
-            Create Private Room
+            Create First private room
           </button>
         </div>
         {isDialogOpen && (
-          <CreatePrivateRoomDialog
-            badgeID={badge.id}
-            onClose={() => setIsDialogOpen(false)}
-          />
+          <CreatePrivateRoomDialog onClose={() => setIsDialogOpen(false)} />
         )}
       </>
     );
@@ -102,10 +104,7 @@ const PermissionsForm = ({ badge }: Props) => {
         </div>
       </div>
       {isDialogOpen && (
-        <CreatePrivateRoomDialog
-          badgeID={badge.id}
-          onClose={() => setIsDialogOpen(false)}
-        />
+        <CreatePrivateRoomDialog onClose={() => setIsDialogOpen(false)} />
       )}
     </>
   );

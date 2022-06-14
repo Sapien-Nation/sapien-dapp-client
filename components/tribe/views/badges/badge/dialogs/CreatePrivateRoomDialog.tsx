@@ -15,17 +15,15 @@ import { useToast } from 'context/toast';
 import { useState } from 'react';
 
 interface FormValues {
-  badges: Array<string>;
   name: string;
 }
 
 interface Props {
-  badgeID: string;
   onClose: () => void;
 }
 
 const form = 'create-private-room';
-const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
+const CreatePrivateRoomDialog = ({ onClose }: Props) => {
   const toast = useToast();
   const { query } = useRouter();
   const { mutate } = useSWRConfig();
@@ -35,7 +33,6 @@ const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
 
   const methods = useForm<FormValues>({
     defaultValues: {
-      badges: [badgeID],
       name: '',
     },
   });
@@ -45,7 +42,7 @@ const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
     handleSubmit,
   } = methods;
 
-  const onSubmit = async ({ badges, name }: FormValues) => {
+  const onSubmit = async ({ name }: FormValues) => {
     setIsSubmitting(true);
     try {
       const response = await createRoom({
@@ -54,7 +51,7 @@ const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
         name,
         tribeId: tribeID,
         type: RoomType.Private,
-        badges,
+        badges: [],
       });
 
       mutate(

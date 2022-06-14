@@ -242,8 +242,8 @@ const MembersView = ({ badge }: Props) => {
 
   return (
     <>
-      <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
-        {badgeTransactions.length > 0 ? (
+      {badgeTransactions.length > 0 ? (
+        <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
           <div>
             <h2 className="text-lg text-gray-300 text-center">Transactions</h2>
             <ol>
@@ -285,168 +285,162 @@ const MembersView = ({ badge }: Props) => {
               ))}
             </ol>
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
-      <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
-        {badge.owners.length > 0 ? (
-          <div>
-            <h2 className="text-lg text-gray-300 text-center">
-              Current Badge Owners
-            </h2>
-            <ol className="space-y-4 mt-4">
-              {badge.owners.map((owner) => {
-                return (
-                  <li key={owner.id} className="flex gap-3 items-center">
-                    <img
-                      className="h-8 w-8 rounded-full ring-2 ring-white"
-                      src={owner.avatar}
-                      alt=""
-                    />
-                    <span>{owner.username}</span>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
-        ) : null}
-      </div>
+      {badge.owners.length > 0 ? (
+        <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
+          <h2 className="text-lg text-gray-300 text-center">
+            Current Badge Owners
+          </h2>
+          <ol className="space-y-4 mt-4">
+            {badge.owners.map((owner) => {
+              return (
+                <li key={owner.id} className="flex gap-3 items-center">
+                  <img
+                    className="h-8 w-8 rounded-full ring-2 ring-white"
+                    src={owner.avatar}
+                    alt=""
+                  />
+                  <span>{owner.username}</span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      ) : null}
 
-      <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
-        {availableOwnersToPropose.length > 0 ? (
-          <div>
-            <h2 className="text-lg text-gray-300 text-center">
-              Propose new badge owners
-            </h2>
-            <div className="flex flex-col items-center relative mt-4">
-              <div className="w-full">
-                <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
-                  <div className="flex flex-auto flex-wrap">
-                    {newOwners.map((newOwner) => {
-                      const owner = tribeMembers.find(
-                        (tribeMember) => tribeMember.id === newOwner.id
-                      );
-                      return (
-                        <div
-                          key={owner.id}
-                          className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
-                        >
-                          <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
-                            {owner.displayName}
-                          </div>
-                          <div className="flex flex-auto flex-row-reverse text-white ml-1">
-                            <button
-                              onClick={() => {
-                                setNewOwners(
-                                  newOwners.filter(({ id }) => id !== owner.id)
-                                );
-                              }}
-                            >
-                              <XIcon className="w-5" />
-                            </button>
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    <div className="flex-1">
-                      <input
-                        autoFocus
-                        placeholder="Search members"
-                        className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200"
-                        onChange={(event) => setSearchTerm(event.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
-                <div className="flex flex-col w-full">
-                  {matchSorter(availableOwnersToPropose, searchTerm, {
-                    keys: ['displayName'],
-                  }).map((tribeMember) => {
-                    const isSelected = newOwners.find(
-                      (newOwner) => newOwner.id === tribeMember.id
+      {availableOwnersToPropose.length > 0 ? (
+        <div className="border border-gray-800 rounded-md flex flex-col gap-9 px-3 py-4">
+          <h2 className="text-lg text-gray-300 text-center">
+            Propose new badge owners
+          </h2>
+          <div className="flex flex-col items-center relative mt-4">
+            <div className="w-full">
+              <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
+                <div className="flex flex-auto flex-wrap">
+                  {newOwners.map((newOwner) => {
+                    const owner = tribeMembers.find(
+                      (tribeMember) => tribeMember.id === newOwner.id
                     );
                     return (
                       <div
-                        key={tribeMember.id}
-                        className={
-                          isSelected
-                            ? 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2 border-sapien'
-                            : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
-                        }
-                        onClick={() => {
-                          if (isSelected) {
-                            setNewOwners(
-                              newOwners.filter(
-                                ({ id }) => id !== tribeMember.id
-                              )
-                            );
-                          } else {
-                            setNewOwners([
-                              ...newOwners,
-                              {
-                                id: tribeMember.id,
-                                walletAddress: tribeMember.walletAddress,
-                              },
-                            ]);
-                          }
-                        }}
+                        key={owner.id}
+                        className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
                       >
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            {tribeMember.avatar && (
-                              <img
-                                className="w-5 h-5 rounded-full flex-shrink-0"
-                                src={tribeMember.avatar}
-                                alt={tribeMember.displayName}
-                              />
-                            )}
-                            {!tribeMember.avatar && tribeMember.displayName && (
-                              <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                                {tribeMember.displayName[0].toUpperCase()}
-                              </div>
-                            )}
-                            {tribeMember.displayName}
-                          </div>
+                        <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
+                          {owner.displayName}
+                        </div>
+                        <div className="flex flex-auto flex-row-reverse text-white ml-1">
+                          <button
+                            onClick={() => {
+                              setNewOwners(
+                                newOwners.filter(({ id }) => id !== owner.id)
+                              );
+                            }}
+                          >
+                            <XIcon className="w-5" />
+                          </button>
                         </div>
                       </div>
                     );
                   })}
+
+                  <div className="flex-1">
+                    <input
+                      autoFocus
+                      placeholder="Search members"
+                      className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200"
+                      onChange={(event) => setSearchTerm(event.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="mt-4">
-              <button
-                onClick={handleProposeTransaction}
-                type="button"
-                className={
-                  isProposing || newOwners.length === 0
-                    ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
-                    : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
-                }
-                disabled={isProposing || newOwners.length === 0}
-              >
-                {isProposing && (
-                  <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
-                )}
-                {isProposing ? 'Submitting...' : `Propose Transaction`}
-              </button>
-              {newOwners.length === 0 ? (
-                <span className="mt-1 block text-sm text-gray-400">
-                  Select at least 1 tribe member to propose a new transaction
-                </span>
-              ) : (
-                <span className="mt-1 block text-sm text-gray-400">
-                  {newOwners.length} will be proposed to receive the{' '}
-                  {badge.name} badge
-                </span>
-              )}
+            <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
+              <div className="flex flex-col w-full">
+                {matchSorter(availableOwnersToPropose, searchTerm, {
+                  keys: ['displayName'],
+                }).map((tribeMember) => {
+                  const isSelected = newOwners.find(
+                    (newOwner) => newOwner.id === tribeMember.id
+                  );
+                  return (
+                    <div
+                      key={tribeMember.id}
+                      className={
+                        isSelected
+                          ? 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2 border-sapien'
+                          : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
+                      }
+                      onClick={() => {
+                        if (isSelected) {
+                          setNewOwners(
+                            newOwners.filter(({ id }) => id !== tribeMember.id)
+                          );
+                        } else {
+                          setNewOwners([
+                            ...newOwners,
+                            {
+                              id: tribeMember.id,
+                              walletAddress: tribeMember.walletAddress,
+                            },
+                          ]);
+                        }
+                      }}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          {tribeMember.avatar && (
+                            <img
+                              className="w-5 h-5 rounded-full flex-shrink-0"
+                              src={tribeMember.avatar}
+                              alt={tribeMember.displayName}
+                            />
+                          )}
+                          {!tribeMember.avatar && tribeMember.displayName && (
+                            <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
+                              {tribeMember.displayName[0].toUpperCase()}
+                            </div>
+                          )}
+                          {tribeMember.displayName}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
-        ) : null}
-      </div>
+          <div className="mt-4">
+            <button
+              onClick={handleProposeTransaction}
+              type="button"
+              className={
+                isProposing || newOwners.length === 0
+                  ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+                  : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+              }
+              disabled={isProposing || newOwners.length === 0}
+            >
+              {isProposing && (
+                <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+              )}
+              {isProposing ? 'Submitting...' : `Propose Transaction`}
+            </button>
+            {newOwners.length === 0 ? (
+              <span className="mt-1 block text-sm text-gray-400">
+                Select at least 1 tribe member to propose a new transaction
+              </span>
+            ) : (
+              <span className="mt-1 block text-sm text-gray-400">
+                {newOwners.length} will be proposed to receive the {badge.name}{' '}
+                badge
+              </span>
+            )}
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };

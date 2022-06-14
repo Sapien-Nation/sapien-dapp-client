@@ -1,7 +1,8 @@
 import { XIcon } from '@heroicons/react/solid';
+import { Disclosure } from '@headlessui/react';
 import { matchSorter } from 'match-sorter';
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
 // components
@@ -18,11 +19,16 @@ const PermissionsForm = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { setValue, watch } = useFormContext();
+  const { control, register } = useFormContext();
 
   const tribeAvailablesPrivateRooms = useTribePrivateRooms();
 
-  const [rooms] = watch(['rooms']);
+  // https://github.com/react-hook-form/react-hook-form/issues/5054
+  const {
+    append,
+    fields: fieldsRooms,
+    remove,
+  } = useFieldArray({ control, name: 'rooms' });
 
   if (tribeAvailablesPrivateRooms.length === 0) {
     return <h1></h1>;
@@ -34,32 +40,29 @@ const PermissionsForm = () => {
         <div className="w-full">
           <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
             <div className="flex flex-auto flex-wrap">
-              {rooms.map((permission) => {
-                const room = tribeAvailablesPrivateRooms.find(
-                  ({ id }) => id === permission
-                );
+              {fieldsRooms.map((fieldRoom) => {
                 return (
                   <div
-                    key={room.id}
+                    key={fieldRoom.id}
                     className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
                   >
                     <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
-                      {room.name}
+                      {fieldRoom.name}
                     </div>
-                    {room.id !== permission && (
-                      <div className="flex flex-auto flex-row-reverse text-white ml-1">
-                        <button
-                          onClick={() => {
-                            setValue(
-                              'rooms',
-                              rooms.filter(({ id }) => id !== permission)
-                            );
-                          }}
-                        >
-                          <XIcon className="w-5" />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex flex-auto flex-row-reverse text-white ml-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          remove(
+                            tribeAvailablesPrivateRooms.findIndex(
+                              (room) => room.id === fieldRoom.roomID
+                            )
+                          );
+                        }}
+                      >
+                        <XIcon className="w-5" />
+                      </button>
+                    </div>
                   </div>
                 );
               })}
@@ -80,9 +83,10 @@ const PermissionsForm = () => {
             {matchSorter(tribeAvailablesPrivateRooms, searchTerm, {
               keys: ['name'],
             }).map((room) => {
-              const isSelected = rooms.find(
-                (permission) => permission === room.id
+              const selectedFieldRoomIndex = fieldsRooms.findIndex(
+                (fieldRoom) => fieldRoom.roomID === room.id
               );
+              const isSelected = selectedFieldRoomIndex >= 0;
               return (
                 <div
                   key={room.id}
@@ -93,12 +97,12 @@ const PermissionsForm = () => {
                   }
                   onClick={() => {
                     if (isSelected) {
-                      setValue(
-                        'rooms',
-                        rooms.filter(({ id }) => id !== room.id)
-                      );
+                      remove(selectedFieldRoomIndex);
                     } else {
-                      setValue('rooms', [...rooms, room.id]);
+                      append({
+                        ...room,
+                        roomID: room.id,
+                      });
                     }
                   }}
                 >
@@ -111,6 +115,55 @@ const PermissionsForm = () => {
           </div>
         </div>
       </div>
+
+      <ol>
+        {fieldsRooms.map((fieldRoom, index) => (
+          <li key={fieldRoom.id}>
+            <fieldset className="space-y-5">
+              <legend className="sr-only">Permissions</legend>
+              <div className="relative flex items-start">
+                <div className="flex items-center h-5">
+                  <input
+                    id="read"
+                    aria-describedby="permissions-read"
+                    type="checkbox"
+                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                    {...register(`rooms.${index}.data.read`)}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="read" className="font-medium text-gray-700">
+                    Read
+                  </label>
+                  <p id="permissions-read" className="text-gray-500">
+                    This permissions gives the owner of the badge read access
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative flex items-start">
+                <div className="flex items-center h-5">
+                  <input
+                    id="write"
+                    aria-describedby="permissions-write"
+                    type="checkbox"
+                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                    {...register(`rooms.${index}.data.write`)}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="offers" className="font-medium text-gray-700">
+                    Write
+                  </label>
+                  <p id="offers-description" className="text-gray-500">
+                    This permissions gives the owner of the badge write access
+                  </p>
+                </div>
+              </div>
+            </fieldset>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 };

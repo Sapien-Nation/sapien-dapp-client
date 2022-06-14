@@ -50,7 +50,6 @@ const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
       description: badge.description,
       name: badge.name,
       members: badge.members,
-      rooms: badge.permissions,
     },
   });
   const { mutate } = useSWRConfig();
