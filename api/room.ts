@@ -1,11 +1,16 @@
 // api
 import axios from '.';
 
+// constants
+import { RoomType } from 'tools/constants/rooms';
+
 export interface CreateRoomBody {
   aboutObject: string;
   aboutObjectId: string;
+  badges: Array<string>;
   name: string;
   tribeId: string;
+  type: RoomType;
 }
 
 export interface CreateRoomMessage {
