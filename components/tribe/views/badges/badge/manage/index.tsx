@@ -69,7 +69,13 @@ const ManageBadgeView = ({ badge }: Props) => {
             Permissions
           </button>
         </div>
-        <div className="border border-gray-800 rounded-md">{renderForm()}</div>
+        {view === View.Members ? (
+          <>{renderForm()}</>
+        ) : (
+          <div className="border border-gray-800 rounded-md">
+            {renderForm()}
+          </div>
+        )}
       </div>
     </>
   );
