@@ -97,7 +97,7 @@ const PermissionsForm = () => {
                           type="button"
                           onClick={() => {
                             remove(
-                              tribeAvailablePrivateRooms.findIndex(
+                              fieldsRooms.findIndex(
                                 (room) => room.id === fieldRoom.roomID
                               )
                             );
@@ -159,51 +159,57 @@ const PermissionsForm = () => {
           </div>
         </div>
 
-        <ol>
+        <ol className="p-3 space-y-3">
+          <h2 className="text-gray-400 my-3 font-semibold text-lg">
+            Permissions
+          </h2>
           {fieldsRooms.map((fieldRoom, index) => (
             <li key={fieldRoom.id}>
-              <fieldset className="space-y-5">
+              <h3 className="text-gray-300">{fieldRoom.name}</h3>
+              <fieldset className="space-y-3">
                 <legend className="sr-only">Permissions</legend>
-                <div className="relative flex items-start">
+                <div className="relative flex items-center">
                   <div className="flex items-center h-5">
                     <input
                       id="read"
                       aria-describedby="permissions-read"
                       type="checkbox"
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                      className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
                       {...register(`rooms.${index}.data.read`)}
                     />
                   </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="read" className="font-medium text-gray-700">
-                      Read
+                  <div className="ml-3 text-base">
+                    <label htmlFor="read" className="font-medium text-gray-500">
+                      Read{' '}
+                      <span className="text-sm">
+                        (This permissions gives the owner of the badge read
+                        access)
+                      </span>
                     </label>
-                    <p id="permissions-read" className="text-gray-500">
-                      This permissions gives the owner of the badge read access
-                    </p>
                   </div>
                 </div>
 
-                <div className="relative flex items-start">
+                <div className="relative flex items-center">
                   <div className="flex items-center h-5">
                     <input
                       id="write"
                       aria-describedby="permissions-write"
                       type="checkbox"
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                      className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
                       {...register(`rooms.${index}.data.write`)}
                     />
                   </div>
-                  <div className="ml-3 text-sm">
+                  <div className="ml-3 text-base">
                     <label
-                      htmlFor="offers"
-                      className="font-medium text-gray-700"
+                      htmlFor="write"
+                      className="font-medium text-gray-500"
                     >
-                      Write
+                      Write{' '}
+                      <span className="text-sm">
+                        (This permissions gives the owner of the badge write
+                        access)
+                      </span>
                     </label>
-                    <p id="offers-description" className="text-gray-500">
-                      This permissions gives the owner of the badge write access
-                    </p>
                   </div>
                 </div>
               </fieldset>
