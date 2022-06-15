@@ -24,7 +24,11 @@ const ManageBadgeView = ({ badge }: Props) => {
       case View.Members:
         return <Members badge={badge} />;
       case View.Permissions:
-        return <Permission badge={badge} />;
+        return (
+          <div className="flex flex-col p-8">
+            <h1>Coming Soon!</h1>
+          </div>
+        );
       case View.Settings:
         return <Settings badge={badge} />;
     }
