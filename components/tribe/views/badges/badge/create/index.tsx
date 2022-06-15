@@ -29,7 +29,7 @@ interface BadgeFormValues {
   color: string;
   description: string;
   name: string;
-  rooms: Array<string>;
+  rooms: Array<{ roomID: string; data: { read: boolean; write: boolean } }>;
   members: Array<{ id: string; walletAddress: string }>;
 }
 
@@ -50,7 +50,7 @@ const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
       description: badge.description,
       name: badge.name,
       members: badge.members,
-      rooms: badge.permissions,
+      rooms: [],
     },
   });
   const { mutate } = useSWRConfig();
@@ -67,8 +67,10 @@ const BadgeView = ({ badge, onCancel, onCreate }: Props) => {
       const newBadge = {
         tribeId: tribeID,
         ...values,
-        members: [],
-        rooms: [],
+        rooms: values.rooms.map(({ roomID, data }) => ({
+          roomID,
+          data,
+        })),
       };
 
       await createTribeBadge(newBadge);

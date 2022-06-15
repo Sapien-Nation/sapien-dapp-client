@@ -68,7 +68,7 @@ export const createTribeBadge = (body: {
   name: string;
   description: string;
   color: string;
-  rooms: Array<string>;
+  rooms: Array<{ roomID: string; data: { read: boolean; write: boolean } }>;
   members: Array<{ id: string; walletAddress: string }>;
 }) =>
   axios

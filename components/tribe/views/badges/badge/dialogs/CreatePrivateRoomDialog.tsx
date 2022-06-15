@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
 
 // api
@@ -7,35 +7,43 @@ import { createRoom } from 'api/room';
 
 // constants
 import { AboutObject, RoomType } from 'tools/constants/rooms';
+import { Dialog, TextInput, TextInputLabel } from 'components/common';
 import { ProfileTribe } from 'tools/types/tribe';
 
 // context
 import { useToast } from 'context/toast';
+import { useState } from 'react';
 
 interface FormValues {
-  badges: Array<string>;
   name: string;
 }
 
 interface Props {
-  badgeID: string;
   onClose: () => void;
 }
 
-const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
+const form = 'create-private-room';
+const CreatePrivateRoomDialog = ({ onClose }: Props) => {
+  const toast = useToast();
   const { query } = useRouter();
+  const { mutate } = useSWRConfig();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const tribeID = query.tribeID as string;
 
-  const toast = useToast();
-  const { mutate } = useSWRConfig();
   const methods = useForm<FormValues>({
     defaultValues: {
-      badges: [badgeID],
       name: '',
     },
   });
-  const onSubmit = async ({ badges, name }: FormValues) => {
+
+  const {
+    formState: { errors },
+    handleSubmit,
+  } = methods;
+
+  const onSubmit = async ({ name }: FormValues) => {
+    setIsSubmitting(true);
     try {
       const response = await createRoom({
         aboutObject: AboutObject.Party,
@@ -43,7 +51,7 @@ const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
         name,
         tribeId: tribeID,
         type: RoomType.Private,
-        badges,
+        badges: [],
       });
 
       mutate(
@@ -76,9 +84,49 @@ const CreatePrivateRoomDialog = ({ badgeID, onClose }: Props) => {
         message: error || 'Service unavailable',
       });
     }
+    setIsSubmitting(false);
   };
 
-  return null;
+  return (
+    <Dialog
+      show
+      isFetching={isSubmitting}
+      onClose={onClose}
+      title="Create Private Room"
+      form={form}
+      confirmLabel="Create"
+    >
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)} id={form}>
+          <div className="flex flex-col gap-3">
+            <TextInputLabel
+              label="Name"
+              name="name"
+              error={errors.name?.message}
+            />
+            <TextInput
+              name="name"
+              aria-label="name"
+              placeholder="The Sapien Tribe"
+              maxLength={50}
+              pattern={/^[a-zA-Z\s]$/}
+              rules={{
+                validate: {
+                  required: (value) => value.length > 0 || 'is required',
+                  minLength: (value) =>
+                    value?.length > 2 ||
+                    'Must be Between 2 and 50 characters long',
+                  maxLength: (value) =>
+                    value?.length <= 51 ||
+                    'Must be Between 2 and 50 characters long',
+                },
+              }}
+            />
+          </div>
+        </form>
+      </FormProvider>
+    </Dialog>
+  );
 };
 
 export default CreatePrivateRoomDialog;

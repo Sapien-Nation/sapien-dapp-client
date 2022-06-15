@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // components
-import { Members, Settings } from './views';
+import { Members, Permission, Settings } from './views';
 
 // types
 import type { DraftBadge } from '../../types';
