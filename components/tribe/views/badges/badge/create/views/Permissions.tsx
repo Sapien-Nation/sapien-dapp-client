@@ -28,7 +28,6 @@ const PermissionsForm = () => {
 
   const tribeAvailablePrivateRooms = useTribePrivateRooms();
 
-  // https://github.com/react-hook-form/react-hook-form/issues/5054
   const {
     append,
     fields: fieldsRooms,
@@ -90,6 +89,7 @@ const PermissionsForm = () => {
                       className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
                     >
                       <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
+                        {/* @ts-ignore */}
                         {fieldRoom.name}
                       </div>
                       <div className="flex flex-auto flex-row-reverse text-white ml-1">
@@ -98,6 +98,7 @@ const PermissionsForm = () => {
                           onClick={() => {
                             remove(
                               fieldsRooms.findIndex(
+                                // @ts-ignore
                                 (room) => room.id === fieldRoom.roomID
                               )
                             );
@@ -127,6 +128,7 @@ const PermissionsForm = () => {
                 keys: ['name'],
               }).map((room) => {
                 const selectedFieldRoomIndex = fieldsRooms.findIndex(
+                  // @ts-ignore
                   (fieldRoom) => fieldRoom.roomID === room.id
                 );
                 const isSelected = selectedFieldRoomIndex >= 0;
@@ -145,6 +147,10 @@ const PermissionsForm = () => {
                         append({
                           ...room,
                           roomID: room.id,
+                          data: {
+                            read: true,
+                            write: true,
+                          },
                         });
                       }
                     }}
@@ -159,63 +165,81 @@ const PermissionsForm = () => {
           </div>
         </div>
 
-        <ol className="p-3 space-y-3">
-          <h2 className="text-gray-400 my-3 font-semibold text-lg">
-            Permissions
-          </h2>
-          {fieldsRooms.map((fieldRoom, index) => (
-            <li key={fieldRoom.id}>
-              <h3 className="text-gray-300">{fieldRoom.name}</h3>
-              <fieldset className="space-y-3">
-                <legend className="sr-only">Permissions</legend>
-                <div className="relative flex items-center">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="read"
-                      aria-describedby="permissions-read"
-                      type="checkbox"
-                      className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
-                      {...register(`rooms.${index}.data.read`)}
-                    />
+        {fieldsRooms.length > 0 ? (
+          <ol className="p-3 space-y-3">
+            <h2 className="text-gray-400 my-3 font-semibold text-lg">
+              Assign Permissions
+            </h2>
+            {fieldsRooms.map((fieldRoom, index) => (
+              <li
+                key={fieldRoom.id}
+                className="border border-gray-800 rounded-md px-3"
+              >
+                <h3 className="text-gray-300">
+                  {/* @ts-ignore */}
+                  <span className="underline">{fieldRoom.name}</span> Room
+                  Permissions
+                </h3>
+                <fieldset className="space-y-3">
+                  <legend className="sr-only">Permissions</legend>
+                  <input
+                    id="roomID"
+                    type="text"
+                    className="hidden"
+                    {...register(`rooms.${index}.roomID`)}
+                  />
+                  <div className="relative flex items-center">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="read"
+                        aria-describedby="permissions-read"
+                        type="checkbox"
+                        className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
+                        {...register(`rooms.${index}.data.read`)}
+                      />
+                    </div>
+                    <div className="ml-3 text-base">
+                      <label
+                        htmlFor="read"
+                        className="font-medium text-gray-500"
+                      >
+                        Read{' '}
+                        <span className="text-sm">
+                          (This permissions gives the owner of the badge read
+                          access to the room)
+                        </span>
+                      </label>
+                    </div>
                   </div>
-                  <div className="ml-3 text-base">
-                    <label htmlFor="read" className="font-medium text-gray-500">
-                      Read{' '}
-                      <span className="text-sm">
-                        (This permissions gives the owner of the badge read
-                        access)
-                      </span>
-                    </label>
-                  </div>
-                </div>
 
-                <div className="relative flex items-center">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="write"
-                      aria-describedby="permissions-write"
-                      type="checkbox"
-                      className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
-                      {...register(`rooms.${index}.data.write`)}
-                    />
+                  <div className="relative flex items-center">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="write"
+                        aria-describedby="permissions-write"
+                        type="checkbox"
+                        className="focus:ring-sapien-80 h-4 w-4 text-primary border-gray-300 rounded"
+                        {...register(`rooms.${index}.data.write` as const)}
+                      />
+                    </div>
+                    <div className="ml-3 text-base">
+                      <label
+                        htmlFor="write"
+                        className="font-medium text-gray-500"
+                      >
+                        Write{' '}
+                        <span className="text-sm">
+                          (This permissions gives the owner of the badge write
+                          access to the room)
+                        </span>
+                      </label>
+                    </div>
                   </div>
-                  <div className="ml-3 text-base">
-                    <label
-                      htmlFor="write"
-                      className="font-medium text-gray-500"
-                    >
-                      Write{' '}
-                      <span className="text-sm">
-                        (This permissions gives the owner of the badge write
-                        access)
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </fieldset>
-            </li>
-          ))}
-        </ol>
+                </fieldset>
+              </li>
+            ))}
+          </ol>
+        ) : null}
       </div>
       {dialog === Dialog.CreatePrivateRoom && (
         <CreatePrivateRoomDialog onClose={() => setDialog(null)} />
