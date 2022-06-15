@@ -18,7 +18,7 @@ const ProfileOverlay = ({ setShowProfileOverlay }: Props) => {
           className="absolute w-[690px] cover -z-10"
           src="/images/passport_background_transparent.png"
         />
-        <PassportForm setShowProfileOverlay={setShowProfileOverlay} />
+        <PassportForm />
       </div>
     </div>
   );

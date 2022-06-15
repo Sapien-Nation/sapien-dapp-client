@@ -16,10 +16,10 @@ import { Dialog, Query, TextInput, TextInputLabel } from 'components/common';
 
 // hooks
 import { useToast } from 'context/toast';
-import { useTribeBadges } from 'hooks/tribe/badge';
+import { useTribeUserBadges } from 'hooks/tribe/badge';
 
 // types
-import type { ProfileTribe, TribeBadge } from 'tools/types/tribe';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   aboutObject: string;
@@ -54,7 +54,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
-  const tribeBadges = useTribeBadges();
+  const tribeBadges = useTribeUserBadges();
 
   const {
     formState: { errors },
@@ -63,6 +63,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
     setValue,
     watch,
   } = methods;
+  const [badges, name] = watch(['badges', 'name']);
 
   const onSubmit = async ({ badges, name }: FormValues) => {
     try {
@@ -100,7 +101,6 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
     }
   };
 
-  const [badges, name] = watch(['badges', 'name']);
   const renderView = () => {
     switch (view) {
       case View.Badges:
@@ -122,7 +122,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 
             <ul>
               {tribeBadges.map((badge) => {
-                const isBadgeSelected = badges.includes(badge.id);
+                const isBadgeSelected = badges.includes(badge.parentId);
                 return (
                   <li
                     className={`border ${
@@ -138,13 +138,13 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                       if (isBadgeSelected) {
                         setValue(
                           'badges',
-                          badges.filter((b) => b !== badge.id)
+                          badges.filter((b) => b !== badge.parentId)
                         );
                       } else {
-                        setValue('badges', [...badges, badge.id]);
+                        setValue('badges', [...badges, badge.parentId]);
                       }
                     }}
-                    key={badge.id}
+                    key={badge.parentId}
                   >
                     {badge.avatar ? (
                       <img
@@ -169,7 +169,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                         e.stopPropagation();
                         setValue(
                           'badges',
-                          badges.filter((b) => b !== badge.id)
+                          badges.filter((b) => b !== badge.parentId)
                         );
                       }}
                     >
@@ -316,7 +316,7 @@ const CreateRoomDialogProxy = (props: Props) => {
   const tribeID = query.tribeID as string;
 
   return (
-    <Query api={`/core-api/tribe/${tribeID}/badges`}>
+    <Query api={`/core-api/user/badges?tribeId=${tribeID}`}>
       {() => <CreateRoomDialog {...props} />}
     </Query>
   );
