@@ -47,11 +47,16 @@ const MembersView = ({ badge }: Props) => {
   const tribeMembers = useTribeMembers(tribeID);
   const badgeTransactions = useBadgeTransactions(badge.id);
 
-  const badgeOwnersIDs = badge.owners.map(({ id }) => id);
+  const badgeOwnersIDs = [
+    ...badge.owners.map(({ id }) => id),
+    ...badgeTransactions
+      .map(({ grantToUsers }) => grantToUsers.map(({ id }) => id))
+      .flat(),
+  ];
+
   const availableOwnersToPropose = tribeMembers.filter(
     ({ id }) => !badgeOwnersIDs.includes(id)
   );
-
   //------------------------------------------------------------------------------------------------------------
   const handleExecuteTransaction = async (safeTxHash: string, grantToUsers) => {
     setIsFetching(true);
