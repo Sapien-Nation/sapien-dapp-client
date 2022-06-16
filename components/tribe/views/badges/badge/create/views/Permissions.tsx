@@ -165,7 +165,7 @@ const PermissionsForm = () => {
           </div>
         </div>
 
-        {fieldsRooms.length > 0 ? (
+        {/* {fieldsRooms.length > 0 ? (
           <ol className="p-3 space-y-3">
             <h2 className="text-gray-400 my-3 font-semibold text-lg">
               Assign Permissions
@@ -176,7 +176,6 @@ const PermissionsForm = () => {
                 className="border border-gray-800 rounded-md px-3"
               >
                 <h3 className="text-gray-300">
-                  {/* @ts-ignore */}
                   <span className="underline">{fieldRoom.name}</span> Room
                   Permissions
                 </h3>
@@ -239,7 +238,7 @@ const PermissionsForm = () => {
               </li>
             ))}
           </ol>
-        ) : null}
+        ) : null} */}
       </div>
       {dialog === Dialog.CreatePrivateRoom && (
         <CreatePrivateRoomDialog onClose={() => setDialog(null)} />

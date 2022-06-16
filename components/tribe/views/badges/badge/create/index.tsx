@@ -66,10 +66,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
       const newBadge = {
         tribeId: tribeID,
         ...values,
-        rooms: values.rooms.map(({ roomID, data }) => ({
-          roomID,
-          data,
-        })),
+        rooms: values.rooms.map(({ roomID }) => roomID),
       };
 
       await createTribeBadge(newBadge);
