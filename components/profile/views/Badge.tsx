@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 // hooks
-import { useUserBadge } from 'hooks/user';
+import { useUserBadge, useUserBadges } from 'hooks/user';
 
 interface Props {
   badgeID: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Badge = ({ badgeID, onBack }: Props) => {
-  const badge = useUserBadge(badgeID);
+  const badge = useUserBadges().find(({ id }) => id === badgeID);
 
   return (
     <Transition
@@ -45,9 +45,7 @@ const Badge = ({ badgeID, onBack }: Props) => {
             <span className="block font-bold text-gray-400 mb-1">
               Issuing Authority
             </span>
-            <span className="text-gray-300 font-semibold">
-              {/* {selectedBadge.issuingAuthority} */}
-            </span>
+            <span className="text-gray-300 font-semibold">Sapien Nation</span>
           </li>
           {/* <li>
             <img

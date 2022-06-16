@@ -13,6 +13,7 @@ enum View {
 }
 
 const PassportForm = () => {
+  const { me } = useAuth();
   const [view, setView] = useState<View | null>(View.Passport);
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
@@ -23,15 +24,14 @@ const PassportForm = () => {
           <PassportView
             selectBadge={(badgeID) => {
               setSelectedBadge(badgeID);
-              // setView(View.Badge);
+              setView(View.Badge);
             }}
           />
         );
       case View.Badge:
-        // TODO backend need to do this API
         return (
           <Query
-            api={`/core-api/user/badges/${selectedBadge}`}
+            api={`/core-api/user/${me.id}/badges`}
             options={{
               fetcher: () => ({
                 id: selectedBadge,
