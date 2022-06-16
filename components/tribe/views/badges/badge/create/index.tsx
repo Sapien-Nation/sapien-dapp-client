@@ -61,20 +61,35 @@ const BadgeView = ({ badge, onCancel }: Props) => {
 
   const tribeID = query.tribeID as string;
 
-  const onSubmit = async (values: BadgeFormValues) => {
+  const onSubmit = async ({
+    name,
+    description,
+    color,
+    members,
+    rooms: roomsWithPermissions,
+  }: BadgeFormValues) => {
     try {
       const newBadge = {
         tribeId: tribeID,
-        ...values,
-        rooms: values.rooms.map(({ roomID }) => roomID),
+        name,
+        description,
+        color,
+        members,
+        rooms: roomsWithPermissions.map(({ roomID }) => roomID),
       };
 
-      await createTribeBadge(newBadge);
+      const response = await createTribeBadge(newBadge);
 
       onCancel();
       mutate(
         `/core-api/tribe/${tribeID}/badges`,
-        (badges: Array<TribeBadge>) => [...badges, newBadge],
+        (badges: Array<TribeBadge>) => [
+          ...badges,
+          {
+            id: response,
+            newBadge,
+          },
+        ],
         false
       );
 
