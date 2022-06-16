@@ -437,7 +437,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           onClick={handleMobileMenu}
                         >
                           <div className="flex gap-2">
-                            {roomIcon} {name}{' '}
+                            {roomIcon} {room.name}{' '}
                             <RedDot count={room.unreadMentions} />
                           </div>
                         </a>
