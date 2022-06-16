@@ -30,14 +30,7 @@ const PassportForm = () => {
         );
       case View.Badge:
         return (
-          <Query
-            api={`/core-api/user/${me.id}/badges`}
-            options={{
-              fetcher: () => ({
-                id: selectedBadge,
-              }),
-            }}
-          >
+          <Query api={`/core-api/badge/${selectedBadge}`}>
             {() => (
               <BadgeView
                 badgeID={selectedBadge}

@@ -22,5 +22,5 @@ export const useUserBadge = (badgeID: string): UserBadge => {
   const { me } = useAuth();
   const { cache } = useSWRConfig();
 
-  return cache.get(`/core-api/user/badges/${badgeID}`);
+  return cache.get(`/core-api/badge/${badgeID}`);
 };

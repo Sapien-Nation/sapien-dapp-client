@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
 
 // hooks
-import { useUserBadge, useUserBadges } from 'hooks/user';
+import { useUserBadge } from 'hooks/user';
 
 interface Props {
   badgeID: string;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Badge = ({ badgeID, onBack }: Props) => {
-  const badge = useUserBadges().find(({ id }) => id === badgeID);
+  const badge = useUserBadge(badgeID)[0];
 
   return (
     <Transition
