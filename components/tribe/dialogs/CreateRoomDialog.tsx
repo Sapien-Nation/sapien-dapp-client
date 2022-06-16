@@ -86,7 +86,14 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
             if (tribe.id === tribeID) {
               return {
                 ...tribe,
-                rooms: [...tribe.rooms, { id: response.id, name }],
+                rooms: [
+                  ...tribe.rooms,
+                  {
+                    id: response.id,
+                    name,
+                    type: isPrivate ? RoomType.Private : RoomType.Public,
+                  },
+                ],
               };
             }
 
