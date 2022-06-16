@@ -11,6 +11,9 @@ import { createRoom } from 'api/room';
 // constants
 import { RoomType } from 'tools/constants/rooms';
 
+// context
+import { useAuth } from 'context/user';
+
 // components
 import { Dialog, Query, TextInput, TextInputLabel } from 'components/common';
 
@@ -311,12 +314,13 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 };
 
 const CreateRoomDialogProxy = (props: Props) => {
+  const { me } = useAuth();
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
   return (
-    <Query api={`/core-api/user/badges?tribeId=${tribeID}`}>
+    <Query api={`/core-api/user/${me.id}/badges?tribeId=${tribeID}`}>
       {() => <CreateRoomDialog {...props} />}
     </Query>
   );

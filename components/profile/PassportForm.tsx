@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+// context
+import { useAuth } from 'context/user';
+
 // components
 import { Query } from 'components/common';
 import { BadgeView, PassportView } from './views';
@@ -53,7 +56,13 @@ const PassportForm = () => {
 };
 
 const PassportFormProxy = () => {
-  return <Query api="/core-api/user/badges">{() => <PassportForm />}</Query>;
+  const { me } = useAuth();
+
+  return (
+    <Query api={`/core-api/user/${me.id}/badges`}>
+      {() => <PassportForm />}
+    </Query>
+  );
 };
 
 export default PassportFormProxy;
