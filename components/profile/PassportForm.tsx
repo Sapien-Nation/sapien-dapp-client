@@ -23,7 +23,7 @@ const PassportForm = () => {
           <PassportView
             selectBadge={(badgeID) => {
               setSelectedBadge(badgeID);
-              setView(View.Badge);
+              // setView(View.Badge);
             }}
           />
         );
