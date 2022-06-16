@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { SparklesIcon, PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, XIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon, LockClosedIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -411,31 +411,41 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </button>
             )}
             <ul className="pl-1 py-2 cursor-pointer -mr-2">
-              {rooms.map(({ id, name, unreadMentions, hasUnread }) => {
+              {rooms.map((room) => {
+                const roomIcon = (
+                  <span className="flex items-center w-3">
+                    {room.private ? (
+                      <LockClosedIcon className="w-[10px]" />
+                    ) : (
+                      '#'
+                    )}
+                  </span>
+                );
                 return (
                   <li
                     className={getRoomListItemClassName({
-                      id,
-                      unreadMentions,
-                      hasUnread,
+                      id: room.id,
+                      unreadMentions: room.unreadMentions,
+                      hasUnread: room.hasUnread,
                     })}
-                    key={id}
+                    key={room.id}
                   >
                     <div className="flex my-1 group">
-                      <Link href={`/tribes/${tribeID}/${id}`} passHref>
+                      <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
                         <a
                           className="flex px-2 py-1 items-center gap-2 flex-1"
                           onClick={handleMobileMenu}
                         >
-                          <div className="flex gap-1">
-                            # {name} <RedDot count={unreadMentions} />
+                          <div className="flex gap-2">
+                            {roomIcon} {name}{' '}
+                            <RedDot count={room.unreadMentions} />
                           </div>
                         </a>
                       </Link>
                       <button
                         className="px-2 hidden group-hover:block"
                         onClick={() => {
-                          setSelectedRoom(id);
+                          setSelectedRoom(room.id);
                           setDialog(Dialog.DeleteRoom);
                         }}
                       >

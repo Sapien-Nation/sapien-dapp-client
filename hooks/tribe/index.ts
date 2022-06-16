@@ -142,12 +142,13 @@ export const useTribeRooms = (tribeID: string) => {
     .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  return tribe?.rooms?.map(({ name, id, unreadMentions, hasUnread }) => ({
+  return tribe?.rooms?.map((room) => ({
     type: View.Room,
-    name,
-    id,
-    unreadMentions,
-    hasUnread,
+    name: room.name,
+    id: room.id,
+    unreadMentions: room.unreadMentions,
+    hasUnread: room.hasUnread,
+    private: room.private,
   }));
 };
 
