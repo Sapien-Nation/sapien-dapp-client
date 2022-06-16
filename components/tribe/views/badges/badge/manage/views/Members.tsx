@@ -146,6 +146,7 @@ const MembersView = ({ badge }: Props) => {
               return {
                 ...transaction,
                 signedBy: [...transaction.signedBy, me.id],
+                approvals: transaction.approvals + 1,
               };
             }
 
