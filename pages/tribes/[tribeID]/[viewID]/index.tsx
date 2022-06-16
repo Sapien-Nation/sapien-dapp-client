@@ -71,8 +71,12 @@ const TribePage = ({ tribeID, viewID }: Props) => {
       case View.Room: {
         return (
           <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
-            {({ message, name }) => (
-              <RoomView isMember={Boolean(message) === false} name={name} />
+            {({ message, name, type }) => (
+              <RoomView
+                isMember={Boolean(message) === false}
+                name={name}
+                type={type}
+              />
             )}
           </Query>
         );
