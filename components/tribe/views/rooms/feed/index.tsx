@@ -1,4 +1,4 @@
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
+import { UsersIcon } from '@heroicons/react/outline';
 import * as Sentry from '@sentry/nextjs';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
@@ -8,6 +8,7 @@ import { useSWRConfig } from 'swr';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { XIcon } from '@heroicons/react/outline';
+import Lottie from 'react-lottie-player';
 
 // api
 import { sendMessage, readRoom } from 'api/room';
@@ -49,6 +50,9 @@ import type {
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
 
+// assets
+import PrivacyJSONData from './lottie/Privary.json';
+
 interface Props {
   apiKey: string;
   data: Array<RoomMessage>;
@@ -67,7 +71,7 @@ const Feed = ({
   hasMoreData,
 }: Props) => {
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [showMobileDetails, setShowMobileDetails] = useState(false);
+  const [showDetails, setshowDetails] = useState(false);
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const toast = useToast();
@@ -324,8 +328,8 @@ const Feed = ({
     }
   };
 
-  const hanleMobileSidebar = useCallback(() => {
-    setShowMobileDetails(false);
+  const hanleSidebar = useCallback(() => {
+    setshowDetails(false);
   }, []);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -378,13 +382,19 @@ const Feed = ({
               </button>
             )}
 
-            <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
+            <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
+              <button
+                aria-label="Open Permissions"
+                className="flex px-1 h-full items-center"
+              >
+                <Lottie animationData={PrivacyJSONData} play className="w-5" />
+              </button>
               <button
                 aria-label="Toggle Details"
-                className="flex"
-                onClick={() => setShowMobileDetails(!showMobileDetails)}
+                className="flex px-1 h-full items-center"
+                onClick={() => setshowDetails(!showDetails)}
               >
-                <DotsHorizontalIcon className="w-5 ml-2" />
+                <UsersIcon className="w-5" />
               </button>
             </div>
             <div
@@ -412,7 +422,7 @@ const Feed = ({
                             <time
                               className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-48 before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-48 after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
                               dateTime={timestamp}
-                              data-testid="timestamp-divider"
+                              data-showDetailstestid="timestamp-divider"
                             >
                               {timestamp}
                             </time>
@@ -460,10 +470,10 @@ const Feed = ({
           {/* Room Details */}
           <div
             className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl ${
-              showMobileDetails ? 'right-0' : '-right-full'
+              showDetails ? 'right-0 lg:hidden' : '-right-full'
             }`}
           >
-            <Details handleSidebar={hanleMobileSidebar} />
+            <Details handleSidebar={hanleSidebar} />
           </div>
         </>
       </div>
