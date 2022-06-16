@@ -32,11 +32,17 @@ const MembersView = ({ badge }: Props) => {
   const [newOwners, setNewOwners] = useState<
     Array<{ id: string; walletAddress: string }>
   >([]);
-  const [isSigning, setIsSigning] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isFetching, setIsFetching] = useState(false);
   const [isProposing, setIsProposing] = useState(false);
-  const [isRejecting, setIsRejecting] = useState(false);
+  const [transactionSigned, setTransactionSigned] = useState<string | null>(
+    null
+  );
+  const [transactionRejected, setTransactionRejected] = useState<string | null>(
+    null
+  );
+  const [transactionExecuted, setTransactionExecuted] = useState<string | null>(
+    null
+  );
 
   const { me } = useAuth();
   const toast = useToast();
@@ -59,105 +65,49 @@ const MembersView = ({ badge }: Props) => {
   );
   //------------------------------------------------------------------------------------------------------------
   const handleExecuteTransaction = async (safeTxHash: string, grantToUsers) => {
-    setIsFetching(true);
+    setTransactionExecuted(safeTxHash);
     try {
       await executeTransaction(badge.id, {
         safeTxHash,
         tribeId: tribeID,
       });
 
-      mutate(
-        `/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`,
-        (transactions) =>
-          transactions.filter(
-            (transaction) => transaction.safeTxHash !== safeTxHash
-          ),
-        false
-      );
-      mutate(
-        `/core-api/tribe/${tribeID}/badges`,
-        (badges: Array<TribeBadge>) =>
-          badges.map((badgeFromCache) => {
-            if (badgeFromCache.id === badge.id) {
-              return {
-                ...badge,
-                owners: [
-                  ...badge.owners,
-                  ...grantToUsers.map((grantToUser) => ({
-                    ...grantToUser,
-                    walletAddress: '',
-                  })),
-                ],
-              };
-            }
-
-            return badge;
-          }),
-        false
-      );
+      mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
+      mutate(`/core-api/tribe/${tribeID}/badges`);
     } catch (err) {
       toast({ message: err.message });
     }
-    setIsFetching(false);
+    setTransactionExecuted(null);
   };
 
   const handleRejectTransaction = async (safeTxHash: string) => {
-    setIsRejecting(true);
+    setTransactionRejected(safeTxHash);
     try {
       await rejectTransaction(badge.id, {
         safeTxHash,
         tribeId: tribeID,
       });
 
-      mutate(
-        `/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`,
-        (transactions) =>
-          transactions.map((transaction) => {
-            if (transaction.safeTxHash === safeTxHash) {
-              return {
-                ...transaction,
-                rejectedBy: [...transaction.rejectedBy, me.id],
-              };
-            }
-
-            return transaction;
-          }),
-        false
-      );
+      mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
     } catch (err) {
       toast({ message: err.message });
     }
-    setIsRejecting(false);
+    setTransactionRejected(null);
   };
 
   const handleSignTransaction = async (safeTxHash: string) => {
-    setIsSigning(true);
+    setTransactionSigned(safeTxHash);
     try {
       await signTransaction(badge.id, {
         safeTxHash,
         tribeId: tribeID,
       });
 
-      mutate(
-        `/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`,
-        (transactions) =>
-          transactions.map((transaction) => {
-            if (transaction.safeTxHash === safeTxHash) {
-              return {
-                ...transaction,
-                signedBy: [...transaction.signedBy, me.id],
-                approvals: transaction.approvals + 1,
-              };
-            }
-
-            return transaction;
-          }),
-        false
-      );
+      mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
     } catch (err) {
       toast({ message: err.message });
     }
-    setIsSigning(false);
+    setTransactionSigned(safeTxHash);
   };
 
   const handleProposeTransaction = async () => {
@@ -168,11 +118,7 @@ const MembersView = ({ badge }: Props) => {
         tribeId: tribeID,
       });
 
-      mutate(
-        `/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`,
-        (transactions) => [...transactions, transaction],
-        false
-      );
+      mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
 
       setNewOwners([]);
     } catch (err) {
@@ -198,14 +144,18 @@ const MembersView = ({ badge }: Props) => {
           }
           type="button"
           className={
-            isFetching
+            transactionExecuted === transaction.safeTxHash
               ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
               : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
           }
-          disabled={isFetching}
+          disabled={transactionExecuted !== null}
         >
-          {isFetching && <RefreshIcon className="animate-spin h-5 w-5 mr-3" />}
-          {isFetching ? 'Signing...' : `Execute Transaction`}
+          {transactionExecuted === transaction.safeTxHash && (
+            <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+          )}
+          {transactionExecuted === transaction.safeTxHash
+            ? 'Executing...'
+            : 'Execute Transaction'}
         </button>
       );
     }
@@ -220,27 +170,35 @@ const MembersView = ({ badge }: Props) => {
           onClick={() => handleRejectTransaction(transaction.safeTxHash)}
           type="button"
           className={
-            isRejecting
+            transactionRejected === transaction.safeTxHash
               ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-sapien-red-700 over:bg-sapien-red-700/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
               : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-semibold text-white bg-sapien-red-700 hover:bg-sapien-red-700/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
           }
-          disabled={isRejecting}
+          disabled={transactionRejected !== null}
         >
-          {isRejecting && <RefreshIcon className="animate-spin h-5 w-5 mr-3" />}
-          {isRejecting ? 'Rejecting...' : 'Reject Transaction'}
+          {transactionRejected === transaction.safeTxHash && (
+            <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+          )}
+          {transactionRejected === transaction.safeTxHash
+            ? 'Rejecting...'
+            : 'Reject Transaction'}
         </button>
         <button
           onClick={() => handleSignTransaction(transaction.safeTxHash)}
           type="button"
           className={
-            isSigning
+            transactionSigned === transaction.safeTxHash
               ? 'cursor-not-allowed w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
               : 'w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
           }
-          disabled={isSigning}
+          disabled={transactionSigned !== null}
         >
-          {isSigning && <RefreshIcon className="animate-spin h-5 w-5 mr-3" />}
-          {isSigning ? 'Signing...' : 'Sign Transaction'}
+          {transactionSigned === transaction.safeTxHash && (
+            <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+          )}
+          {transactionSigned === transaction.safeTxHash
+            ? 'Signing...'
+            : 'Sign Transaction'}
         </button>
       </div>
     );

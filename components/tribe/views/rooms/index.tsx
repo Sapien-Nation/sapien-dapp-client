@@ -14,6 +14,7 @@ import { Query, SEO } from 'components/common';
 import Feed from './feed';
 import { JoinRoom, Skeleton } from './views';
 import { RoomType } from 'tools/constants/rooms';
+import { useTribeRoom } from 'hooks/tribe';
 
 interface RoomProps {
   apiKey: string;
@@ -73,14 +74,15 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
 interface RoomProxyProps {
   isMember: boolean;
   name: string;
-  type: RoomType;
+  roomID: string;
+  tribeID: string;
 }
 
-const RoomProxy = ({ isMember, name, type }: RoomProxyProps) => {
-  const { query } = useRouter();
+const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
+  const room = useTribeRoom(tribeID, roomID);
 
   if (isMember === false) {
-    if (type === RoomType.Private) {
+    if (room.type === RoomType.Private) {
       return (
         <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
           <div className="absolute inset-0">
@@ -100,9 +102,6 @@ const RoomProxy = ({ isMember, name, type }: RoomProxyProps) => {
     return <JoinRoom />;
   }
 
-  if (_isEmpty(query)) return null;
-
-  const roomID = query.viewID as string;
   const apiKey = `/core-api/room/${roomID}/messages`;
 
   return (

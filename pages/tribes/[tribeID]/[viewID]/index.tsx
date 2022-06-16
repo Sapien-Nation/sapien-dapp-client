@@ -22,7 +22,7 @@ import {
 import { useGetCurrentView, useTribe } from 'hooks/tribe';
 
 // providers
-import { GnosisProvider, Web3Provider } from 'wallet/providers';
+import { Web3Provider } from 'wallet/providers';
 
 // types
 import type { NextPage } from 'next';
@@ -71,11 +71,12 @@ const TribePage = ({ tribeID, viewID }: Props) => {
       case View.Room: {
         return (
           <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
-            {({ message, name, type }) => (
+            {({ message, name }) => (
               <RoomView
                 isMember={Boolean(message) === false}
                 name={name}
-                type={type}
+                roomID={viewID}
+                tribeID={tribeID}
               />
             )}
           </Query>
