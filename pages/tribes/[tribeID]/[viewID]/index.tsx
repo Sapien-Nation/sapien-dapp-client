@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 
 // constants
 import { View } from 'constants/tribe';
+import { Role } from 'tools/constants/tribe';
 
 // components
 import { SEO, ErrorView, NotFound, Query } from 'components/common';
@@ -16,12 +17,12 @@ import {
   RoomView,
   UpgradeView,
 } from 'components/tribe';
-const PassportView = dynamic(() =>
-  import('components/tribe').then((views) => views.PassportView)
-);
 
 // hooks
-import { useGetCurrentView } from 'hooks/tribe';
+import { useGetCurrentView, useTribe } from 'hooks/tribe';
+
+// providers
+import { Web3Provider } from 'wallet/providers';
 
 // types
 import type { NextPage } from 'next';
@@ -34,19 +35,49 @@ interface Props {
 const TribePage = ({ tribeID, viewID }: Props) => {
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
+  const { role } = useTribe(tribeID as string);
+
   const renderView = () => {
     switch (view.type) {
-      case View.Badges:
-        return <BadgesView />;
-      case View.Passport:
-        return <PassportView />;
+      case View.Badges: {
+        const isTribeOwnerOrTribeAdmin =
+          role === Role.Owner || role === Role.Admin;
+        if (isTribeOwnerOrTribeAdmin === false) {
+          return (
+            <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+              <div className="absolute inset-0">
+                <img
+                  className="h-full w-full object-cover"
+                  src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+                  alt="People working on laptops"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+              </div>
+              <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
+                <p>You don&apos;t have access to see this view </p>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
+            {() => <BadgesView />}
+          </Query>
+        );
+      }
       case View.Content:
         return <ContentView />;
       case View.Room: {
         return (
           <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
             {({ message, name }) => (
-              <RoomView isMember={Boolean(message) === false} name={name} />
+              <RoomView
+                isMember={Boolean(message) === false}
+                name={name}
+                roomID={viewID}
+                tribeID={tribeID}
+              />
             )}
           </Query>
         );
@@ -55,8 +86,37 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         return <Channel />;
       case View.MainChannel:
         return <MainChannel />;
-      case View.Upgrade:
-        return <UpgradeView />;
+      case View.Upgrade: {
+        const isTribeOwnerOrTribeAdmin =
+          role === Role.Owner || role === Role.Admin;
+        if (isTribeOwnerOrTribeAdmin === false) {
+          return (
+            <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+              <div className="absolute inset-0">
+                <img
+                  className="h-full w-full object-cover"
+                  src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+                  alt="People working on laptops"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+              </div>
+              <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
+                <p>You don&apos;t have access to see this view </p>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
+            {() => (
+              <Web3Provider>
+                <UpgradeView />
+              </Web3Provider>
+            )}
+          </Query>
+        );
+      }
       case View.NotFound:
         return <NotFound message="You dont have access to see this content" />;
       default:

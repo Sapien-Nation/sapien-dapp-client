@@ -1,4 +1,4 @@
-import { DotsHorizontalIcon } from '@heroicons/react/outline';
+import { UsersIcon } from '@heroicons/react/outline';
 import * as Sentry from '@sentry/nextjs';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
@@ -7,6 +7,8 @@ import { nanoid } from 'nanoid';
 import { useSWRConfig } from 'swr';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { XIcon } from '@heroicons/react/outline';
+import Lottie from 'react-lottie-player';
 
 // api
 import { sendMessage, readRoom } from 'api/room';
@@ -19,11 +21,13 @@ import { useToast } from 'context/toast';
 import { MessageType, WSEvents } from 'tools/constants/rooms';
 
 // components
+import { Overlay } from 'components/common';
 import { RoomEditor } from 'slatejs';
 import Details from './Details';
 import Message from './Message';
 import JoinARoomMessage from './JoinARoomMessage';
 import WelcomeMessage from './WelcomeMessage';
+import ProfileOverlay from 'components/profile';
 
 // helpers
 import { formatDate } from 'utils/date';
@@ -46,6 +50,9 @@ import type {
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
 
+// assets
+import PrivacyJSONData from './lottie/Privary.json';
+
 interface Props {
   apiKey: string;
   data: Array<RoomMessage>;
@@ -64,7 +71,8 @@ const Feed = ({
   hasMoreData,
 }: Props) => {
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [showMobileDetails, setShowMobileDetails] = useState(false);
+  const [showDetails, setshowDetails] = useState(false);
+  const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const toast = useToast();
   const { me } = useAuth();
@@ -116,6 +124,7 @@ const Feed = ({
                   avatar: (data as RoomNewMessage).by.avatar,
                   id: (data as RoomNewMessage).by.id,
                   username: (data as RoomNewMessage).by.username,
+                  badge: null,
                 },
                 type: MessageType.Text,
                 mentions: getMentionsArrayFromCacheForOptimistic(
@@ -296,6 +305,7 @@ const Feed = ({
           avatar: me.avatar || passport?.image,
           id: me.id,
           username: me.username,
+          badge: null,
         },
         type: MessageType.Optimistic,
         status: 'A',
@@ -318,8 +328,8 @@ const Feed = ({
     }
   };
 
-  const hanleMobileSidebar = useCallback(() => {
-    setShowMobileDetails(false);
+  const hanleSidebar = useCallback(() => {
+    setshowDetails(false);
   }, []);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -346,119 +356,145 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
-    <div className="bg-sapien-neutral-800 h-full flex flex-1 flex-row p-0 lg:rounded-tl-3xl overflow-x-hidden">
-      <>
-        <div className="flex flex-col h-full flex-1 overflow-hidden relative">
-          {unreadMessages > 0 && (
-            <button
-              onClick={() => handleScrollToBottom('smooth')}
-              className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 items-center"
-            >
-              You have {unreadMessages} new messages
+    <>
+      <div className="bg-sapien-neutral-800 h-full flex flex-1 flex-row p-0 lg:rounded-tl-3xl overflow-x-hidden">
+        <>
+          <div className="flex flex-col h-full flex-1 overflow-hidden relative">
+            {unreadMessages > 0 && (
               <button
-                onClick={(event) => {
-                  event.stopPropagation();
-                  event.preventDefault();
-
-                  handleReadMessagesUnblock();
-                  setUnreadMessages(0);
-                  handleUnreadReadMessagesOnTribeNavigation(room.id, false);
-                }}
-                className="font-semibold"
+                onClick={() => handleScrollToBottom('smooth')}
+                className="absolute z-50 w-full h-6 bg-sapien-80 flex justify-between px-8 text-xs top-0 items-center"
               >
-                Mark as Read
-              </button>
-            </button>
-          )}
+                You have {unreadMessages} new messages
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    event.preventDefault();
 
-          <div className="text-gray-200 lg:hidden flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center">
-            <button
-              aria-label="Toggle Details"
-              className="flex"
-              onClick={() => setShowMobileDetails(!showMobileDetails)}
+                    handleReadMessagesUnblock();
+                    setUnreadMessages(0);
+                    handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+                  }}
+                  className="font-semibold"
+                >
+                  Mark as Read
+                </button>
+              </button>
+            )}
+
+            <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
+              <button
+                aria-label="Open Permissions"
+                className="flex px-1 h-full items-center"
+              >
+                <Lottie animationData={PrivacyJSONData} play className="w-5" />
+              </button>
+              <button
+                aria-label="Toggle Details"
+                className="flex px-1 h-full items-center"
+                onClick={() => setshowDetails(!showDetails)}
+              >
+                <UsersIcon className="w-5" />
+              </button>
+            </div>
+            <div
+              className="relative flex-1 overflow-auto"
+              style={{ overflowAnchor: 'none' }}
             >
-              <DotsHorizontalIcon className="w-5 ml-2" />
-            </button>
-          </div>
-          <div
-            className="relative flex-1 overflow-auto"
-            style={{ overflowAnchor: 'none' }}
-          >
-            <InfiniteScroll
-              pageStart={0}
-              loadMore={onScrollTop}
-              hasMore={hasMoreData}
-              loader={null}
-              useWindow={false}
-              isReverse
-              initialLoad={false}
-              threshold={450}
-            >
-              <ul role="list" className="p-5 flex flex-col mb-2">
-                <>
-                  <WelcomeMessage />
-                  {Object.keys(messagesData).map((timestamp) => {
-                    const timestampMessages = messagesData[timestamp];
-                    return (
-                      <>
-                        <li key={timestamp}>
-                          <time
-                            className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-48 before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-48 after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                            dateTime={timestamp}
-                            data-testid="timestamp-divider"
-                          >
-                            {timestamp}
-                          </time>
-                        </li>
-                        {timestampMessages.map((message, index) => {
-                          if (message.type === MessageType.Join) {
+              <InfiniteScroll
+                pageStart={0}
+                loadMore={onScrollTop}
+                hasMore={hasMoreData}
+                loader={null}
+                useWindow={false}
+                isReverse
+                initialLoad={false}
+                threshold={450}
+              >
+                <ul role="list" className="p-5 flex flex-col mb-2">
+                  <>
+                    <WelcomeMessage />
+                    {Object.keys(messagesData).map((timestamp) => {
+                      const timestampMessages = messagesData[timestamp];
+                      return (
+                        <>
+                          <li key={timestamp}>
+                            <time
+                              className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-48 before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-48 after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                              dateTime={timestamp}
+                              data-showDetailstestid="timestamp-divider"
+                            >
+                              {timestamp}
+                            </time>
+                          </li>
+                          {timestampMessages.map((message, index) => {
+                            if (message.type === MessageType.Join) {
+                              return (
+                                <JoinARoomMessage
+                                  createdAt={message.createdAt}
+                                  username={message.sender.username}
+                                  key={message.id}
+                                />
+                              );
+                            }
+
                             return (
-                              <JoinARoomMessage
-                                createdAt={message.createdAt}
-                                username={message.sender.username}
+                              <Message
+                                removeMessageFromFeed={
+                                  handleRemoveMessageMutation
+                                }
                                 key={message.id}
+                                message={message}
+                                isAMessageContinuation={isAMessageContinuation(
+                                  timestampMessages[index - 1] || null,
+                                  message.sender.id
+                                )}
+                                setShowProfileOverlay={setShowProfileOverlay}
                               />
                             );
-                          }
-
-                          return (
-                            <Message
-                              removeMessageFromFeed={
-                                handleRemoveMessageMutation
-                              }
-                              key={message.id}
-                              message={message}
-                              isAMessageContinuation={isAMessageContinuation(
-                                timestampMessages[index - 1] || null,
-                                message.sender.id
-                              )}
-                            />
-                          );
-                        })}
-                      </>
-                    );
-                  })}
-                </>
-              </ul>
-            </InfiniteScroll>
-            <div ref={scrollToBottom} className="block" />
+                          })}
+                        </>
+                      );
+                    })}
+                  </>
+                </ul>
+              </InfiniteScroll>
+              <div ref={scrollToBottom} className="block" />
+            </div>
+            <div className="px-0 sm:px-5">
+              {/* @ts-ignore */}
+              <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
+            </div>
           </div>
-          <div className="px-0 sm:px-5">
-            {/* @ts-ignore */}
-            <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
-          </div>
-        </div>
 
-        {/* Room Details */}
-        <div
-          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl ${
-            showMobileDetails ? 'right-0' : '-right-full'
-          }`}
-        >
-          <Details handleSidebar={hanleMobileSidebar} />
-        </div>
-      </>
-    </div>
+          {/* Room Details */}
+          <div
+            className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl ${
+              showDetails ? 'right-0 lg:hidden' : '-right-full'
+            }`}
+          >
+            <Details handleSidebar={hanleSidebar} />
+          </div>
+        </>
+      </div>
+      <Overlay
+        blur
+        isOpen={showProfileOverlay}
+        onClose={() => setShowProfileOverlay(false)}
+      >
+        <>
+          <button
+            type="button"
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-5 top-5"
+            onClick={() => setShowProfileOverlay(false)}
+          >
+            <span className="sr-only">Close Profile Passport</span>
+            <XIcon className="h-6 w-6" aria-hidden="true" />
+          </button>
+          <ProfileOverlay />
+        </>
+      </Overlay>
+    </>
   );
 };
 

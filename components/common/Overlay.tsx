@@ -2,16 +2,17 @@ import { Fragment } from 'react';
 import { Transition } from '@headlessui/react';
 
 interface Props {
+  blur?: boolean;
   children: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const Overlay = ({ children, isOpen, onClose }: Props) => {
+const Overlay = ({ blur = false, children, isOpen, onClose }: Props) => {
   return (
     <Transition.Root appear={true} show={isOpen} as={Fragment}>
       <div
-        className="relative z-10"
+        className="z-10 fixed inset-0"
         aria-labelledby="slide-over-title"
         role="dialog"
         aria-modal="true"
@@ -26,10 +27,12 @@ const Overlay = ({ children, isOpen, onClose }: Props) => {
           leaveTo="transform opacity-0 scale-95"
           afterLeave={() => onClose()}
         >
-          <div className="fixed inset-0 overflow-hidden">
-            <div className="absolute inset-0 overflow-hidden">
-              <div className="w-full h-full bg-white">{children}</div>
-            </div>
+          <div
+            className={`h-full overflow-hidden ${
+              blur ? 'backdrop-blur-md bg-black/30' : 'bg-sapien-neutral-800'
+            }`}
+          >
+            {children}
           </div>
         </Transition.Child>
       </div>

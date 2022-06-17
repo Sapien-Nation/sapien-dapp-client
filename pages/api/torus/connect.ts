@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as Sentry from '@sentry/nextjs';
 import { createDecipheriv } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -28,8 +27,7 @@ const connectWallet = async (headers) =>
     )
     .then(({ data }) => data)
     .catch((error) => {
-      Sentry.captureException(error);
-      return Promise.reject(error?.response?.data?.message ?? 'Error');
+      return Promise.reject(error);
     });
 
 export default async function handler(

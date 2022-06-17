@@ -13,9 +13,9 @@ export interface CreateTribeBody {
 }
 
 export interface UpgradeTribeBody {
-  safeAddress: string;
   threshold: number;
   owners: Array<{ id: string; walletAddress: string }>;
+  passportTokenId: number;
 }
 
 export const createTribe = (body: CreateTribeBody): Promise<ProfileTribe> =>
@@ -60,5 +60,66 @@ export const readAllTribeNotifications = (tribeID: string) =>
 export const upgradeTribe = (tribeID: string, body: UpgradeTribeBody) =>
   axios
     .post(`/core-api/tribe/${tribeID}/upgrade`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const createTribeBadge = (body: {
+  tribeId: string;
+  name: string;
+  description: string;
+  color: string;
+  rooms: Array<string>;
+  members: Array<{ id: string; walletAddress: string }>;
+}) =>
+  axios
+    .post(`/core-api/badge`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const proposeBadgeGrant = (
+  badgeID: string,
+  body: {
+    tribeId: string;
+    members: Array<{ id: string; walletAddress: string }>;
+  }
+) =>
+  axios
+    .post(`/core-api/badge/${badgeID}/propose-grant`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const rejectTransaction = (
+  badgeID: string,
+  body: {
+    tribeId: string;
+    safeTxHash: string;
+  }
+) =>
+  axios
+    .post(`/core-api/badge/${badgeID}/reject`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const signTransaction = (
+  badgeID: string,
+  body: {
+    tribeId: string;
+    safeTxHash: string;
+  }
+) =>
+  axios
+    .post(`/core-api/badge/${badgeID}/sign`, body)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const executeTransaction = (
+  badgeID: string,
+  body: {
+    safeTxHash: string;
+    tribeId: string;
+  }
+) =>
+  axios
+    .post(`/core-api/badge/${badgeID}/grant`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

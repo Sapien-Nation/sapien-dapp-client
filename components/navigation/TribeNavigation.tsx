@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { SparklesIcon, PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon, LockClosedIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -21,7 +21,7 @@ import {
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
 import { MenuLink, Query, RedDot } from 'components/common';
-import { EditTribeDialog } from 'components/tribe/dialogs';
+import { DeleteRoomDialog, EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
 import {
@@ -33,7 +33,7 @@ import {
 
 // assets
 import starJSONLottie from 'components/navigation/lottie/star.json';
-import { VaultIcon } from 'assets';
+import { ManageIcon } from 'assets';
 
 // types
 import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
@@ -45,12 +45,14 @@ interface Props {
 enum Dialog {
   CreateChannel,
   CreateRoom,
+  DeleteRoom,
   EditTribe,
 }
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
 
   const { mutate } = useSWRConfig();
   const { asPath, query } = useRouter();
@@ -184,12 +186,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute z-10 right-0 mt-2 w-60 origin-top-right divide-y divide-gray-700 rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {false && (
+                      {isTribeOwnerOrTribeAdmin && (
                         <div className="px-1 py-1">
                           {tribe.isUpgraded === true && (
                             <Menu.Item>
-                              <div>
-                                <SparklesIcon className="w-5 mr-1" />
+                              <div className="flex w-full items-center rounded-sm px-1 py-2 text-sm text-primary-200">
+                                <Lottie
+                                  animationData={starJSONLottie}
+                                  play
+                                  className="w-6 h-6 mr-1"
+                                />
                                 Tribe Upgraded
                               </div>
                             </Menu.Item>
@@ -277,8 +283,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
 
-            {/* TODO remove this for development */}
-            {false && (
+            {isTribeOwnerOrTribeAdmin && tribe.isUpgraded === true && (
               <Link
                 aria-label="Tribe Badges"
                 href={`/tribes/${tribeID}/badges`}
@@ -290,7 +295,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       : 'px-4 gap-2 py-2 mt-4 text-sm w-full flex items-center text-gray-300 cursor-pointer'
                   }
                 >
-                  <VaultIcon className="w-3.5" />
+                  <ManageIcon className="w-4" fillColor="fill-white" />
                   Manage Badges
                 </a>
               </Link>
@@ -351,6 +356,46 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           </nav>
         </div>
 
+        {/* <button
+          aria-label="Create Room"
+          className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+          onClick={() => {}}
+        >
+          APPS <PlusIcon className="text-sapien-neutral-200 w-4" />
+        </button>
+
+        <ul className="pl-2 cursor-pointer -mr-2">
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Snapshot</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Github</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Notion</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Airtime</div>
+            </a>
+          </li>
+
+          <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
+            <a className="flex px-2 py-1 my-1 items-center gap-2">
+              <div className="flex gap-1">Syndicate</div>
+            </a>
+          </li>
+        </ul> */}
+
         <div>
           <nav>
             {canAddRoom === true && (
@@ -366,26 +411,47 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </button>
             )}
             <ul className="pl-1 py-2 cursor-pointer -mr-2">
-              {rooms.map(({ id, name, unreadMentions, hasUnread }) => {
+              {rooms.map((room) => {
+                const roomIcon = (
+                  <span className="flex items-center w-3">
+                    {room.private ? (
+                      <LockClosedIcon className="w-[10px]" />
+                    ) : (
+                      '#'
+                    )}
+                  </span>
+                );
                 return (
                   <li
                     className={getRoomListItemClassName({
-                      id,
-                      unreadMentions,
-                      hasUnread,
+                      id: room.id,
+                      unreadMentions: room.unreadMentions,
+                      hasUnread: room.hasUnread,
                     })}
-                    key={id}
+                    key={room.id}
                   >
-                    <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                      <a
-                        className="flex px-2 py-1 my-1 items-center gap-2"
-                        onClick={handleMobileMenu}
+                    <div className="flex my-1 group">
+                      <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
+                        <a
+                          className="flex px-2 py-1 items-center gap-2 flex-1"
+                          onClick={handleMobileMenu}
+                        >
+                          <div className="flex gap-2">
+                            {roomIcon} {room.name}{' '}
+                            <RedDot count={room.unreadMentions} />
+                          </div>
+                        </a>
+                      </Link>
+                      <button
+                        className="px-2 hidden group-hover:block"
+                        onClick={() => {
+                          setSelectedRoom(room.id);
+                          setDialog(Dialog.DeleteRoom);
+                        }}
                       >
-                        <div className="flex gap-1">
-                          # {name} <RedDot count={unreadMentions} />
-                        </div>
-                      </a>
-                    </Link>
+                        <XIcon className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
                   </li>
                 );
               })}
@@ -393,7 +459,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           </nav>
         </div>
 
-        {/* Modals */}
+        {/* Dialogs */}
         {dialog === Dialog.CreateRoom && (
           <CreateRoomDialog
             aboutObject={AboutObject.Party}
@@ -401,9 +467,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             onClose={() => setDialog(null)}
           />
         )}
+
         {dialog === Dialog.CreateChannel && (
           <CreateChannelDialog onClose={() => setDialog(null)} />
         )}
+
+        {dialog === Dialog.DeleteRoom && (
+          <DeleteRoomDialog
+            onClose={() => setDialog(null)}
+            roomID={selectedRoom}
+          />
+        )}
+
         {dialog === Dialog.EditTribe && (
           <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
             {(tribeInfo: MainFeedTribe) => (

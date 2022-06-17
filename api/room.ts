@@ -1,11 +1,16 @@
 // api
 import axios from '.';
 
+// constants
+import { RoomType } from 'tools/constants/rooms';
+
 export interface CreateRoomBody {
   aboutObject: string;
   aboutObjectId: string;
+  badges: Array<string>;
   name: string;
   tribeId: string;
+  type: RoomType;
 }
 
 export interface CreateRoomMessage {
@@ -39,5 +44,11 @@ export const deleteMessage = (roomID: string, messageID: string) =>
 export const readRoom = (roomID: string) =>
   axios
     .post(`/core-api/room/${roomID}/read/`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
+export const deleteRoom = (roomID: string) =>
+  axios
+    .delete(`/core-api/room/${roomID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));

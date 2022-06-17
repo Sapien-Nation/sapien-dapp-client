@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { nanoid } from 'nanoid';
-import { PlusIcon, SearchIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 
-// constants
-import { BadgeTypes } from 'tools/constants/tribe';
+// assets
+import { ContributorBadge } from 'assets';
 
 // components
 import BadgeNavItem from './BadgeNavItem';
@@ -14,94 +12,109 @@ import { useTribe } from 'hooks/tribe';
 import { useTribeBadges } from 'hooks/tribe/badge';
 
 // types
+import type { DraftBadge } from '../types';
 import type { TribeBadge } from 'tools/types/tribe';
 
 interface Props {
+  draftBadges: Array<DraftBadge>;
+  handleAddDraftBadge: () => void;
   showSearch: () => void;
-  setSelectedBadge: (badge: TribeBadge) => void;
+  selectedBadge: TribeBadge | null;
+  setSelectedBadge: (badge: DraftBadge | TribeBadge) => void;
+  handleClickHome: () => void;
 }
 
-const Sidebar = ({ showSearch, setSelectedBadge }: Props) => {
-  const [draftBadges, setDraftBadges] = useState<Array<TribeBadge>>([]);
-
+const Sidebar = ({
+  draftBadges,
+  showSearch,
+  selectedBadge,
+  setSelectedBadge,
+  handleAddDraftBadge,
+  handleClickHome,
+}: Props) => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
-  const tribeBadges = useTribeBadges(tribeID);
-
-  //---------------------------------------------------------------------
-  const handleAddLocalTribe = () => {
-    const badgeID = nanoid();
-
-    const badge = {
-      id: badgeID,
-      description: '',
-      name: badgeID,
-      color: '',
-      type: BadgeTypes.Draft,
-    };
-
-    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
-
-    return badge;
-  };
+  const tribeBadges = useTribeBadges();
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
-      <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-        <div className="flex items-center flex-shrink-0 px-4">
-          <h1>Badges</h1>
-        </div>
-        <div className="flex items-center flex-shrink-0 px-4">
-          <h1>{tribe.name}</h1>
-        </div>
-
-        <nav className="mt-5 flex-1 px-2 space-y-1">
-          <button
-            onClick={() => {
-              const newBadge = handleAddLocalTribe();
-              setSelectedBadge(newBadge);
-            }}
-            type="button"
-            className="w-full group p-3 mb-5 cursor-pointer rounded-lg flex items-center justify-between text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+    <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
+      <div className="flex-1 flex flex-col pt-5 pb-4 px-4">
+        <div>
+          <h2
+            className={
+              selectedBadge === null
+                ? 'gap-1 mb-3 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2'
+                : 'gap-1 mb-3 h-10 font-bold relative w-full cursor-pointer tracking-wide items-center uppercase text-sm flex rounded-lg focus:outline-none px-2 py-2 hover:bg-sapien-neutral-800'
+            }
+            onClick={handleClickHome}
           >
-            Create a badge <PlusIcon className="h-5 w-5" />
+            <img
+              src="/images/sapien_nation.png"
+              alt="Sapien Nation"
+              className="w-6 pt-0.5"
+            />
+            {tribe.name}
+          </h2>
+          <h1 className="font-semibold mt-6 p-1">Manage Badges</h1>
+        </div>
+        <div className="mt-2 flex-1">
+          <button
+            onClick={handleAddDraftBadge}
+            type="button"
+            className="py-2 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+          >
+            MY BADGES <PlusIcon className="text-sapien-neutral-200 w-4" />
             <span className="sr-only">Click here to add a new local badge</span>
           </button>
-          {tribeBadges.map((badge) => {
-            return (
-              <div key={badge.id} className="flex flex-col gap-2">
-                <BadgeNavItem
-                  badge={badge}
-                  onSelect={() => setSelectedBadge(badge)}
-                />
-              </div>
-            );
-          })}
-          {draftBadges.map((badge) => {
-            return (
-              <div key={badge.id} className="flex flex-col gap-2">
-                <BadgeNavItem
-                  badge={badge}
-                  onSelect={() => setSelectedBadge(badge)}
-                />
-              </div>
-            );
-          })}
+          <ul className="space-y-1.5 mt-2">
+            {tribeBadges.map((badge) => {
+              return (
+                <li key={badge.id} className="flex flex-col gap-2">
+                  <BadgeNavItem
+                    badge={badge}
+                    isSelected={badge.id === selectedBadge?.id}
+                    onSelect={() => {
+                      setSelectedBadge(null);
+                      queueMicrotask(() => {
+                        setSelectedBadge(badge);
+                      });
+                    }}
+                  />
+                </li>
+              );
+            })}
+            {draftBadges.map((badge) => {
+              return (
+                <li key={badge.id} className="flex flex-col gap-2">
+                  <BadgeNavItem
+                    badge={badge as DraftBadge}
+                    isSelected={badge.id === selectedBadge?.id}
+                    onSelect={() => {
+                      setSelectedBadge(null);
+                      queueMicrotask(() => {
+                        setSelectedBadge(badge);
+                      });
+                    }}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
-          <button
-            onClick={showSearch}
-            type="button"
-            className="w-full group p-3 mb-5 cursor-pointer rounded-lg flex items-center justify-between text-base font-medium text-gray-50 bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
-          >
-            Search Badges <SearchIcon className="h-5 w-5" />
-            <span className="sr-only">Browse Existing Badges</span>
-          </button>
-        </nav>
+        {/* <button
+          onClick={showSearch}
+          type="button"
+          className="w-full text-gray-300 group px-3 py-2 mb-5 cursor-pointer rounded-lg flex items-center justify-between text-base font-medium bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
+        >
+          Explore Badges <ContributorBadge className="w-8 h-8" />
+          <span className="sr-only">Browse Existing Badges</span>
+        </button> */}
       </div>
-    </div>
+    </nav>
   );
 };
 

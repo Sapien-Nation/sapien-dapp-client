@@ -1,4 +1,5 @@
 import { ArrowLeftIcon, BadgeCheckIcon } from '@heroicons/react/outline';
+import Lottie from 'react-lottie-player';
 
 // components
 import { Query } from 'components/common';
@@ -6,19 +7,16 @@ import { Query } from 'components/common';
 // types
 import type { Token } from '../../types';
 
+// assets
+import checkJSONLottie from './lottie/check.json';
+
 interface Props {
   handleBack: () => void;
   token: Token;
   onWithdraw: (token: Token) => void;
-  showDeclarationDialog?: () => void;
 }
 
-const TokenView = ({
-  handleBack,
-  token,
-  onWithdraw,
-  showDeclarationDialog,
-}: Props) => {
+const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
   return (
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
       <div className="w-72 flex flex-col gap-4">
@@ -38,14 +36,7 @@ const TokenView = ({
           alt=""
         />
         <div className="text-center grid gap-6">
-          <button
-            type="button"
-            onClick={() => onWithdraw(token)}
-            className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-          >
-            Withdraw
-          </button>
-          {/* <Query
+          <Query
             api={`/core-api/passport/${token.id}/signed`}
             loader={
               <button
@@ -64,21 +55,30 @@ const TokenView = ({
                     {signed
                       ? 'Passport Signed.'
                       : 'You already have a passport signed in your wallet'}{' '}
-                    <BadgeCheckIcon className="h-5 w-5" aria-hidden="true" />
+                    <Lottie
+                      animationData={checkJSONLottie}
+                      play
+                      loop={false}
+                      className="w-5 h-5"
+                    />
                   </span>
                 );
 
               return (
-                <button
-                  type="button"
-                  onClick={showDeclarationDialog}
-                  className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                >
-                  Sign Passport
-                </button>
+                <>
+                  {signed === false ? (
+                    <button
+                      type="button"
+                      onClick={() => onWithdraw(token)}
+                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                    >
+                      Withdraw
+                    </button>
+                  ) : null}
+                </>
               );
             }}
-          </Query> */}
+          </Query>
         </div>
       </div>
     </div>

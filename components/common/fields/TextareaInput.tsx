@@ -3,6 +3,7 @@ import { InputHTMLAttributes } from 'react';
 interface Props extends InputHTMLAttributes<HTMLTextAreaElement> {
   rules?: any;
   maxLength: number;
+  rows?: number;
 }
 
 const Textarea = ({
@@ -10,13 +11,14 @@ const Textarea = ({
   className,
   rules = {},
   maxLength,
+  rows = 5,
   ...rest
 }: Props) => {
   const { register } = useFormContext();
 
   return (
     <textarea
-      rows={5}
+      rows={rows}
       className={`appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm resize-none ${className}`}
       {...register(name, {
         ...rules,

@@ -9,5 +9,5 @@ export const useGlobalNotifications = (): {
 } => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/core-api/notification/all');
+  return cache.get('/core-api/notification');
 };

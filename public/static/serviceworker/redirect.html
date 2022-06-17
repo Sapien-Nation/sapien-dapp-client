@@ -233,11 +233,6 @@
               error: error,
             }).then(function () {
               bc.close();
-              console.log("posted", {
-                queryParams,
-                instanceParams,
-                hashParams,
-              });
               setTimeout(function () {
                 window.close();
                 showCloseText();
@@ -245,7 +240,6 @@
             });
           }
         } catch (err) {
-          console.error(err, "service worker error in redirect");
           bc && bc.close();
           window.close();
           showCloseText();

@@ -31,6 +31,7 @@ import { hooks as metaMaskHooks } from '../connectors/metaMask';
 import type { Token } from '../types';
 import type { AbiItem } from 'web3-utils';
 import type { Transaction } from 'tools/types/web3';
+import { TransactionReceipt } from 'web3-core';
 
 // web3
 import Web3Library from 'web3';
@@ -54,6 +55,11 @@ interface Web3 {
 
 interface Web3ProviderProps {
   children: React.ReactNode;
+}
+
+interface TxResult {
+  data: TransactionReceipt;
+  type: ErrorTypes;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -94,7 +100,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   useEffect(() => {
     const initWeb3WithBiconomy = async () => {
       try {
-        // await createVault(['0x29eB8e014D182dDAFB14602A8d297680D6584859', '0xf432638B93336D2537bBe07fF8BCdA541d244bc2', '0xD4a1453D1E9a6De301A85495227f8E74d51A3094'], 2);
         const biconomy = new Biconomy(
           new Web3Library.providers.HttpProvider(config.RPC_PROVIDER),
           {
@@ -279,24 +284,29 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         );
 
         // Get the transaction Hash using the Event Emitter returned
-        const data = await WalletAPIRef.current.eth.sendSignedTransaction({
-          signature: signature,
-          forwardRequest: forwardData.request,
-          rawTransaction: signedTx.rawTransaction,
-          signatureType: biconomy.EIP712_SIGN,
+        const result: TxResult = await new Promise(async (resolve, reject) => {
+          WalletAPIRef.current.eth
+            .sendSignedTransaction({
+              signature: signature,
+              forwardRequest: forwardData.request,
+              rawTransaction: signedTx.rawTransaction,
+              signatureType: biconomy.EIP712_SIGN,
+            })
+            .on('receipt', (rec: TransactionReceipt) =>
+              resolve({ data: rec, type: ErrorTypes.Success })
+            )
+            .on('error', (err) => {
+              // If the transaction was rejected by the network with a receipt, the receipt will be available as a property on the error object.
+              if (err.receipt) {
+                return resolve({ data: err.receipt, type: ErrorTypes.Fail });
+              } else {
+                return reject(err);
+              }
+            });
         });
 
-        if (data === null) {
-          // @see https://web3js.readthedocs.io/en/v1.2.11/web3-eth.html#eth-gettransactionreceipt-return 'null if no receipt was found:'
-          return Promise.reject('Receipt Address was found.');
-        }
-
-        if (data.error) {
-          return { hash: data.transactionHash, type: ErrorTypes.Fail };
-        }
-
         await withdraw(tokenId);
-        return { hash: data.transactionHash, type: ErrorTypes.Success };
+        return { hash: result.data.transactionHash, type: result.type };
       }
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
@@ -335,7 +345,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
-  const getUserTransactions = async (page = 1): Promise<Array<Transaction>> => {
+  const getUserTransactions = async (): Promise<Array<Transaction>> => {
     try {
       const sentHistory = await getSentTxHistory(me.walletAddress);
       const receivedHistory = await getReceivedTxHistory(me.walletAddress);

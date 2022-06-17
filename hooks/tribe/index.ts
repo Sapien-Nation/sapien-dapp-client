@@ -6,7 +6,11 @@ import { View } from 'constants/tribe';
 import { ContentMimeType, ContentType } from 'tools/constants/content';
 
 // types
-import type { ProfileTribe, TribeMember } from 'tools/types/tribe';
+import type {
+  ProfileTribe,
+  ProfileTribeRoom,
+  TribeMember,
+} from 'tools/types/tribe';
 import type { Content } from 'tools/types/content';
 
 interface CurrentView {
@@ -123,18 +127,28 @@ export const useTribeChannels = (tribeID: string) => {
     : [];
 };
 
+export const useTribeRoom = (tribeID: string, roomID: string) => {
+  const { cache } = useSWRConfig();
+  const tribe: ProfileTribe = cache
+    .get('/core-api/profile/tribes')
+    .find(({ id }) => id === tribeID);
+
+  return tribe?.rooms?.find((room) => room.id === roomID);
+};
+
 export const useTribeRooms = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
     .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  return tribe?.rooms?.map(({ name, id, unreadMentions, hasUnread }) => ({
+  return tribe?.rooms?.map((room) => ({
     type: View.Room,
-    name,
-    id,
-    unreadMentions,
-    hasUnread,
+    name: room.name,
+    id: room.id,
+    unreadMentions: room.unreadMentions,
+    hasUnread: room.hasUnread,
+    private: room.private,
   }));
 };
 
@@ -162,11 +176,6 @@ export const useGetCurrentView = (
       id: 'content',
     },
     {
-      type: View.Passport,
-      name: 'passport',
-      id: 'passport',
-    },
-    {
       type: View.Badges,
       name: 'badges',
       id: 'badges',
@@ -189,4 +198,13 @@ export const useGetCurrentView = (
     name: 'not_found',
     id: 'not_found',
   };
+};
+
+export const useTribePrivateRooms = (): Array<ProfileTribeRoom> => {
+  const { query } = useRouter();
+  const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
+
+  return cache.get(`/core-api/tribe/${tribeID}/rooms?type=PRIVATE`);
 };

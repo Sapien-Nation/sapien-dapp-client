@@ -1,33 +1,24 @@
-import { useState } from 'react';
 import { Menu } from '@headlessui/react';
-import { CreditCardIcon, CogIcon } from '@heroicons/react/outline';
+import { CreditCardIcon, CogIcon, BellIcon } from '@heroicons/react/outline';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
 // components
-import { UserAvatar } from 'components/common';
-import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
+import { UserAvatar, Query } from 'components/common';
+const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 
-// types
-import type { Token } from 'wallet/types';
-
-enum Dialog {
-  DeclarationDialog,
+interface Props {
+  setShowProfileOverlay: () => void;
 }
 
-const Navbar = () => {
-  const [dialog, setDialog] = useState<Dialog | null>(null);
-  const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
-
+const Navbar = ({ setShowProfileOverlay }: Props) => {
   const { me } = useAuth();
-  const { query } = useRouter();
   const passport = usePassport();
 
   return (
@@ -35,13 +26,13 @@ const Navbar = () => {
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
           {/* Wallet dropdown */}
-          {/* <Menu as="div">
+          <Menu as="div">
             {({ open }) => (
-              <Query api="/core-api/notification/all">
-                {({ unread }: { unread: number }) => (
+              <Query api="/core-api/notification">
+                {() => (
                   <>
                     <div>
-                      <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Notifications />
                       </Menu.Items>
                     </div>
@@ -55,26 +46,20 @@ const Navbar = () => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
-                        <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
                   </>
                 )}
               </Query>
             )}
-          </Menu> */}
+          </Menu>
           {/* Wallet dropdown */}
           <Menu as="div">
             {({ open }) => (
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet
-                      setTokenToSign={setTokenToSign}
-                      showDeclarationDialog={() =>
-                        setDialog(Dialog.DeclarationDialog)
-                      }
-                    />
+                    <Wallet />
                   </Menu.Items>
                 </div>
 
@@ -108,15 +93,12 @@ const Navbar = () => {
                     </div>
                   </div>
                   {passport?.tokenId ? (
-                    <Link
-                      href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
-                      passHref
-                      prefetch={false}
+                    <button
+                      className="font-medium text-sm text-white mt-2"
+                      onClick={setShowProfileOverlay}
                     >
-                      <a className="font-medium text-sm text-white mt-2">
-                        View Passport
-                      </a>
-                    </Link>
+                      View Passport
+                    </button>
                   ) : null}
                   <div className="mt-4 text-left">
                     <Link href="/logout">
@@ -201,14 +183,6 @@ const Navbar = () => {
               </>
             )}
           </Menu>
-
-          {/* dialogs */}
-          {dialog === Dialog.DeclarationDialog && (
-            <DeclarationOfSovereigntyDialog
-              onClose={() => setDialog(null)}
-              token={tokenToSign}
-            />
-          )}
         </div>
       </div>
     </div>

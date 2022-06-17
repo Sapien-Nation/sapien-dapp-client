@@ -1,40 +1,29 @@
 import { BellIcon, CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { LogoutIcon, CogIcon } from '@heroicons/react/solid';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 
 // context
 import { useAuth } from 'context/user';
 
 // components
-import { UserAvatar } from 'components/common';
+import { Query, UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-import { DeclarationOfSovereigntyDialog } from 'wallet/views/dialogs';
+const Notifications = dynamic(() => import('components/notifications'));
 
 // hooks
 import { usePassport } from 'hooks/passport';
 
-// types
-import type { Token } from 'wallet/types';
-
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
+  setShowProfileOverlay: () => void;
 }
 
-enum Dialog {
-  DeclarationDialog,
-}
-
-const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
-  const [dialog, setDialog] = useState<Dialog | null>(null);
-  const [tokenToSign, setTokenToSign] = useState<Token | null>(null);
-
+const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
   const { me } = useAuth();
-  const { query } = useRouter();
   const passport = usePassport();
 
   return (
@@ -51,13 +40,13 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
         {/* Wallet dropdown */}
         <div className="flex relative gap-2">
           {/* Wallet dropdown */}
-          {/* <Menu as="div">
+          <Menu as="div">
             {({ open }) => (
-              <Query api="/core-api/notification/all">
-                {({ unread }: { unread: number }) => (
+              <Query api="/core-api/notification">
+                {() => (
                   <>
                     <div>
-                      <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <Notifications />
                       </Menu.Items>
                     </div>
@@ -71,25 +60,19 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
-                        <RedDot count={unread} animate />
                       </div>
                     </Menu.Button>
                   </>
                 )}
               </Query>
             )}
-          </Menu> */}
+          </Menu>
           <Menu as="div">
             {({ open }) => (
               <>
                 <div>
                   <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-80 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet
-                      setTokenToSign={setTokenToSign}
-                      showDeclarationDialog={() =>
-                        setDialog(Dialog.DeclarationDialog)
-                      }
-                    />
+                    <Wallet />
                   </Menu.Items>
                 </div>
 
@@ -131,15 +114,12 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
                       </div>
                     </div>
                     {passport?.tokenId ? (
-                      <Link
-                        href={`/tribes/${query.tribeID}/passport?tokenID=${passport.tokenId}`}
-                        passHref
-                        prefetch={false}
+                      <button
+                        onClick={setShowProfileOverlay}
+                        className="font-medium text-sm text-white mt-4"
                       >
-                        <a className="font-medium text-sm text-white mt-4">
-                          View Passport
-                        </a>
-                      </Link>
+                        View Passport
+                      </button>
                     ) : null}
                     <div className="mt-4 text-left">
                       <Link href="/logout">
@@ -229,14 +209,6 @@ const MobileNavbar = ({ setMobileMenuOpen }: Props) => {
           </Menu>
         </div>
       </div>
-
-      {/* Dialogs */}
-      {dialog === Dialog.DeclarationDialog && (
-        <DeclarationOfSovereigntyDialog
-          onClose={() => setDialog(null)}
-          token={tokenToSign}
-        />
-      )}
     </>
   );
 };

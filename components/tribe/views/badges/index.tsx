@@ -1,115 +1,222 @@
+import { nanoid } from 'nanoid';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-
-// constants
-import { Role } from 'tools/constants/tribe';
+import { XIcon } from '@heroicons/react/outline';
+import Lottie from 'react-lottie-player';
 
 // components
-import BadgeView from './badge';
+import { Overlay } from 'components/common';
 import Sidebar from './navigation';
-import { Overlay, Query } from 'components/common';
+import SearchView from './search';
+import { CreateBadgeView, ManageBadgeView, OwnerBadgeView } from './badge';
+
+// assets
+import daoJSONData from './lottie/dao.json';
+
+// context
+import { useAuth } from 'context/user';
 
 // hooks
 import { useTribe } from 'hooks/tribe';
 
 // types
+import type { DraftBadge } from './types';
 import type { TribeBadge } from 'tools/types/tribe';
 
 enum View {
-  Badge,
   Home,
   Search,
+  Dummy,
 }
 
 const BadgesView = () => {
   const [view, setView] = useState(View.Home);
   const [isOpen, setIsOpen] = useState(true);
-  const [selectedBadge, setSelectedBadge] = useState<TribeBadge | null>(null);
+  const [draftBadges, setDraftBadges] = useState<Array<DraftBadge>>([]);
+  const [selectedBadge, setSelectedBadge] = useState<
+    DraftBadge | TribeBadge | null
+  >(null);
 
-  const { query } = useRouter();
+  const { me } = useAuth();
+  const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;
+  const { avatar } = useTribe(tribeID);
 
-  const { back } = useRouter();
+  const isCurrentBadgeADraft = () =>
+    Boolean(
+      draftBadges.find((draftBadge) => draftBadge.id === selectedBadge.id)
+    );
+
+  const handleAddDraftBadge = () => {
+    const badge = {
+      id: nanoid(),
+      avatar,
+      description: '',
+      name: '',
+      color: '#6200ea',
+      members: [],
+      permissions: [],
+    };
+
+    const prevSelectedBadge = { ...selectedBadge };
+    setView(View.Dummy);
+    setSelectedBadge(null);
+    if (
+      Boolean(
+        draftBadges.find((draftBadge) => draftBadge.id === prevSelectedBadge.id)
+      )
+    ) {
+      setDraftBadges((currentDraftBadges) =>
+        currentDraftBadges.filter((badge) => badge.id !== prevSelectedBadge.id)
+      );
+    }
+
+    setDraftBadges((currentDraftBadges) => [...currentDraftBadges, badge]);
+
+    queueMicrotask(() => {
+      setSelectedBadge(badge);
+    });
+  };
 
   const renderView = () => {
+    if (selectedBadge) {
+      if (selectedBadge.name === 'Owner') {
+        return <OwnerBadgeView />;
+      }
+
+      if (isCurrentBadgeADraft()) {
+        return (
+          <CreateBadgeView
+            badge={selectedBadge as DraftBadge}
+            onCancel={() => {
+              setDraftBadges((currentDraftBadges) =>
+                currentDraftBadges.filter(
+                  (badge) => badge.id !== selectedBadge.id
+                )
+              );
+              setSelectedBadge(null);
+              setView(View.Home);
+            }}
+          />
+        );
+      }
+
+      return <ManageBadgeView badge={selectedBadge as DraftBadge} />;
+    }
+
     switch (view) {
       case View.Home: {
         return (
           <div>
-            Tribe Badges Home View nice to have an explanation and a welcome
-            screen
+            <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-8 font-semibold text-lg lg:text-2xl rounded-md">
+              <h1>Decentralize, automate, and grow your tribe</h1>
+            </div>
+            <div>
+              <Lottie
+                animationData={daoJSONData}
+                play
+                loop
+                className="max-w-1100px m-auto pt-6 h-[15rem]"
+              />
+            </div>
+            <div className="whitespace-pre-line text-gray-300 space-y-2 pt-3 text-justify">
+              <h2 className="text-2xl text-white"> Overview </h2>
+              <p>
+                Badges are tokens that build a shared social ledger on Sapien.
+              </p>
+              <p>
+                Badges may grant special privileges within communities on the
+                platform. For example, your tribe can use a badge to represent
+                membership, a credential, or a flag. You may also choose to use
+                another tribe’s badges in your community.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Owner Badge </h2>
+              <p>
+                Tribe members with the owner badge are able to access the vault
+                and issue new badges.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Moderator Badge </h2>
+              <p>
+                Tribe members with the moderator badge are able to manage rooms
+                and channels.
+              </p>
+
+              <h2 className="text-lg text-white pt-3"> Custom Badges </h2>
+              <p>
+                As an issuing authority, feel free to create your own badges -
+                the possibilities are limitless!
+              </p>
+            </div>
           </div>
         );
       }
-      case View.Badge:
-        return (
-          <BadgeView
-            badge={selectedBadge}
-            onCancel={() => setView(View.Home)}
-          />
-        );
+      case View.Dummy:
+        return <div></div>;
       case View.Search:
         return (
-          <div>
-            <h1>TODO Search View</h1>
-          </div>
+          <SearchView
+            onSelect={(badge) => {
+              setDraftBadges((currentDraftBadges) => [
+                ...currentDraftBadges,
+                badge,
+              ]);
+              setSelectedBadge(badge);
+            }}
+          />
         );
     }
   };
 
   return (
     <Overlay onClose={back} isOpen={isOpen}>
-      <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <Sidebar
-          setSelectedBadge={(badge) => {
-            console.log(badge);
-            setSelectedBadge(badge);
-            setView(View.Badge);
-          }}
-          showSearch={() => setView(View.Search)}
-        />
-      </div>
-      <div className="md:pl-64 flex flex-col flex-1 text-black">
-        <div className="sticky top-0 z-10 md:hidden pl-1 pt-1 sm:pl-3 sm:pt-3 bg-gray-100">
+      <div className="flex h-full">
+        <div className="hidden md:flex md:w-64 md:flex-col md:inset-y-0">
+          <Sidebar
+            handleAddDraftBadge={handleAddDraftBadge}
+            draftBadges={draftBadges}
+            setSelectedBadge={setSelectedBadge}
+            selectedBadge={selectedBadge}
+            showSearch={() => {
+              setView(View.Search);
+              if (isCurrentBadgeADraft()) {
+                setDraftBadges((currentDraftBadges) =>
+                  currentDraftBadges.filter(
+                    (badge) => badge.id !== selectedBadge.id
+                  )
+                );
+              }
+
+              setSelectedBadge(null);
+            }}
+            handleClickHome={() => {
+              setView(View.Home);
+              if (isCurrentBadgeADraft()) {
+                setDraftBadges((currentDraftBadges) =>
+                  currentDraftBadges.filter(
+                    (badge) => badge.id !== selectedBadge.id
+                  )
+                );
+              }
+
+              setSelectedBadge(null);
+            }}
+          />
+        </div>
+        <div className="flex-1 overflow-auto">
           <button
             type="button"
-            className="-ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-            onClick={() => null}
+            className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5 z-10"
+            onClick={() => setIsOpen(false)}
           >
-            <span className="sr-only">Close Badges Managment</span>X
+            <span className="sr-only">Close Badges Managment</span>
+            <XIcon className="h-8 w-8" aria-hidden="true" />
           </button>
-        </div>
-        <div className="flex-1">
-          <div className="py-6">
-            <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                <span className="sr-only">Close pannel</span>
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="2"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <div className="py-4">{renderView()}</div>
-            </div>
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 md:px-8 relative">
+            <div className="py-8">{renderView()}</div>
           </div>
         </div>
       </div>
@@ -121,11 +228,9 @@ const BadgesViewProxy = () => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
+  const { isUpgraded } = useTribe(tribeID);
 
-  const { role, isUpgraded } = useTribe(tribeID);
-  const isTribeOwnerOrTribeAdmin = role === Role.Owner || role === Role.Admin;
-
-  if (false) {
+  if (isUpgraded === false) {
     return (
       <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
         <div className="absolute inset-0">
@@ -137,29 +242,20 @@ const BadgesViewProxy = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
         </div>
         <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
-          {isTribeOwnerOrTribeAdmin === true ? (
-            <>
-              <p>You need to Upgrade this tribe in order to Manage Badges</p>
-              <div className="flex justify-between gap-4">
-                <Link passHref href={`/tribes/${tribeID}/upgrade`}>
-                  <a className="flex justify-center h-12 items-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
-                    Upgrade Tribe
-                  </a>
-                </Link>
-              </div>
-            </>
-          ) : (
-            <p>You don&apos;t have access to see this view </p>
-          )}
+          <p>You need to Upgrade this tribe in order to Manage Badges</p>
+          <div className="flex justify-between gap-4">
+            <Link passHref href={`/tribes/${tribeID}/upgrade`}>
+              <a className="flex justify-center h-12 items-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2">
+                Upgrade Tribe
+              </a>
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
-      {() => <BadgesView />}
-    </Query>
-  );
+  return <BadgesView />;
 };
+
 export default BadgesViewProxy;

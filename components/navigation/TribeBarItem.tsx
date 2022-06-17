@@ -104,35 +104,42 @@ function TribeBarItem({
       <div className="relative">
         <Link href={`/tribes/${tribe.id}/home`} key={tribe.id}>
           <a
-            className={`h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 border-2 border-white/10 hover:border-gray-400 hover:text-gray-900 ${
+            className={`h-12 w-12 group p-1 cursor-pointer rounded-xl flex items-center text-base font-medium text-gray-600 hover:text-gray-900 ${
               tribeID === tribe.id && 'border-white hover:border-white'
-            }`}
+            } border-2 border-white/10 hover:border-gray-400`}
             onClick={(event) => {
-              if (event.type === 'contextmenu') {
-                event.preventDefault();
-                if (tribe.isMain === false) {
-                  setContextMenuPosition({
-                    left: event.clientX,
-                    top: event.clientY,
-                  });
-                  onRightClick(tribe);
+              if (setContextMenuPosition) {
+                if (event.type === 'contextmenu') {
+                  event.preventDefault();
+                  if (tribe.isMain === false) {
+                    setContextMenuPosition({
+                      left: event.clientX,
+                      top: event.clientY,
+                    });
+                    onRightClick(tribe);
+                  }
                 }
               }
-              handleMobileMenu();
+
+              if (handleMobileMenu) {
+                handleMobileMenu();
+              }
             }}
             onContextMenu={(event) => {
               if (event.type === 'contextmenu') {
                 event.preventDefault();
-                if (tribe.isMain === false) {
-                  setContextMenuPosition({
-                    left: event.clientX,
-                    top: event.clientY,
-                  });
-                  onRightClick(tribe);
+                if (setContextMenuPosition) {
+                  if (tribe.isMain === false) {
+                    setContextMenuPosition({
+                      left: event.clientX,
+                      top: event.clientY,
+                    });
+                    onRightClick(tribe);
+                  }
                 }
               }
             }}
-            ref={tooltipRef.current?.setTriggerRef}
+            ref={tooltipRef ? tooltipRef.current?.setTriggerRef : null}
           >
             {tribe.avatar ? (
               <img
@@ -148,7 +155,6 @@ function TribeBarItem({
             <span className="sr-only">Go to {tribe.name}</span>
           </a>
         </Link>
-
         {isContextMenuOpen?.id === tribe.id && (
           <div
             style={{
