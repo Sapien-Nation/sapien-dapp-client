@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 // components
 import { TextareaInput, TextInput } from 'components/common';
 
@@ -21,12 +19,7 @@ interface Props {
 const Passport = ({ selectBadge }: Props) => {
   const badges = useUserBadges();
   const passport = usePassport();
-  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    setShow(true);
-  }, []);
-  console.log(passport);
   return (
     <>
       <PolygonFilter />
