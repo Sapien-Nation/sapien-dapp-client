@@ -1,8 +1,14 @@
-import { Transition } from '@headlessui/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Disclosure, Transition } from '@headlessui/react';
 import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
+
+// components
+import { TextareaInput, TextInput } from 'components/common';
 
 // hooks
 import { useUserBadge } from 'hooks/user';
+import { usePassport } from 'hooks/passport';
 
 interface Props {
   badgeID: string;
@@ -10,11 +16,17 @@ interface Props {
 }
 
 const Badge = ({ badgeID, onBack }: Props) => {
-  const badge = useUserBadge(badgeID)[0];
+  const badge = useUserBadge(badgeID);
+  const passport = usePassport();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setShow(true);
+  }, []);
 
   return (
     <Transition
-      show
+      show={show}
       enter="transition ease-out duration-100"
       enterFrom="transform opacity-0 scale-95"
       enterTo="transform opacity-100 scale-100"
@@ -31,15 +43,15 @@ const Badge = ({ badgeID, onBack }: Props) => {
           </li>
           <li>
             <span className="block font-bold text-gray-400 mb-1">Number</span>
-            <span className="text-gray-300 font-semibold">{badge.id} of 9</span>
+            <span className="text-gray-300 font-semibold">
+              {badge.id.slice(0, 8) + '...'}
+            </span>
           </li>
           <li>
             <span className="block font-bold text-gray-400 mb-1">
               Issue Date
             </span>
-            <span className="text-gray-300 font-semibold">
-              {/* {selectedBadge.issueDate} */}
-            </span>
+            <span className="text-gray-300 font-semibold">--/--/----</span>
           </li>
           <li>
             <span className="block font-bold text-gray-400 mb-1">
@@ -47,56 +59,56 @@ const Badge = ({ badgeID, onBack }: Props) => {
             </span>
             <span className="text-gray-300 font-semibold">Sapien Nation</span>
           </li>
-          {/* <li>
+          <li>
             <img
               alt=""
               className="h-10 w-10 rounded-full object-cover border-2"
-              src={selectedBadge.image}
-              style={{ borderColor: selectedBadge.color }}
+              src={badge.avatar}
+              style={{ borderColor: badge.color }}
             />
-          </li> */}
+          </li>
         </ul>
         <div className="flex justify-between gap-5">
-          <div className="flex flex-col block w-full">
+          <div className="flex flex-col w-full">
             <span className="block font-bold text-gray-400 mb-1 text-xs">
               Username
             </span>
-            {/* <TextInput
+            <TextInput
               aria-label="user"
               autoComplete="user"
-              className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+              className="appearance-none border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
               name="userName"
               disabled
               placeholder="Username"
               style={{
                 background: 'transparent',
               }}
-              value={selectedBadge.username}
-            /> */}
+              value={passport.username}
+            />
           </div>
-          <div className="flex flex-col block w-full">
+          <div className="flex flex-col w-full">
             <span className="block font-bold text-gray-400 mb-1 text-xs">
               Badge Name
             </span>
-            {/* <TextInput
+            <TextInput
               aria-label="badge-name"
               autoComplete="badge-name"
-              className="appearance-none  border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+              className="appearance-none border-sapien-80 px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
               name="badgeName"
               disabled
               placeholder="Badge Name"
               style={{
                 background: 'transparent',
               }}
-              value={selectedBadge.name}
-            /> */}
+              value={badge.name}
+            />
           </div>
         </div>
-        <div className="flex flex-col block w-full">
+        <div className="flex flex-col w-full">
           <span className="block font-bold text-gray-400 mb-1 text-xs">
             Description
           </span>
-          {/* <TextareaInput
+          <TextareaInput
             maxLength={1000}
             aria-label="description"
             autoComplete="description"
@@ -108,16 +120,14 @@ const Badge = ({ badgeID, onBack }: Props) => {
             style={{
               background: 'transparent',
             }}
-            value={selectedBadge.description}
-          /> */}
+            value={badge.description}
+          />
         </div>
         <span className="text-sm">
-          {/* Badge Access ({selectedBadge.tribes.length} Tribes) */}
+          Badge Access ({badge.tribes.length} Tribes)
         </span>
-        {/* TODO: Remove mock data once we can integrate API */}
-        {/* TODO: Fix tribe prop */}
-        {/* <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
-          {selectedBadge.tribes.map((tribe) => (
+        <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
+          {badge.tribes.map((tribe) => (
             <Disclosure key={tribe.id}>
               {({ open }) => (
                 <>
@@ -152,7 +162,7 @@ const Badge = ({ badgeID, onBack }: Props) => {
                           <Link href={room.url} passHref>
                             <a
                               className="flex px-2 py-1 items-center gap-2 flex-1"
-                              onClick={() => setShowProfileOverlay(false)}
+                              onClick={() => onBack()}
                             >
                               <div className="flex gap-1"># {room.name}</div>
                             </a>
@@ -165,7 +175,7 @@ const Badge = ({ badgeID, onBack }: Props) => {
               )}
             </Disclosure>
           ))}
-        </div> */}
+        </div>
       </div>
     </Transition>
   );
