@@ -22,8 +22,9 @@ interface UserBadge {
   parentId: string;
   tribes: Array<{
     id: string;
-    apps: Array<{ name: string; image: string }>;
-    rooms: Array<{ id: string; name: string; url: string }>;
+    name: string;
+    avatar: string;
+    rooms: Array<{ id: string; name: string; private: boolean }>;
   }>;
 }
 

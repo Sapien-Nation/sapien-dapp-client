@@ -1,6 +1,9 @@
-import Link from 'next/link';
 import { Disclosure } from '@headlessui/react';
-import { ArrowLeftIcon, ChevronDownIcon } from '@heroicons/react/outline';
+import {
+  ArrowLeftIcon,
+  ChevronDownIcon,
+  LockClosedIcon,
+} from '@heroicons/react/outline';
 
 // components
 import { TextareaInput, TextInput } from 'components/common';
@@ -107,60 +110,62 @@ const Badge = ({ badgeID, onBack }: Props) => {
         />
       </div>
       <span className="text-sm block mt-2 text-gray-300 font-semibold">
-        Badge Access ({badge.tribes?.length || 0} Tribes)
+        Badge Access ({badge.tribes.length || 0} Tribes)
       </span>
-      {badge.tribes?.length > 0 ? (
-        <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
-          {badge.tribes?.map((tribe) => (
-            <Disclosure key={tribe.id}>
-              {({ open }) => (
-                <>
-                  <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-                    <ChevronDownIcon
-                      className={`${
-                        open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-purple-500`}
-                    />
-                  </Disclosure.Button>
-                  <Disclosure.Panel className="px-4 pt-1 pb-2 text-sm text-gray-500">
-                    <ul>
-                      {tribe.apps &&
-                        tribe.apps.map((app) => (
-                          <li
-                            className="flex text-md p-2 hover:bg-purple-200 rounded-md items-center"
-                            key={app.name}
-                          >
-                            <img
-                              className="w-8 h-8 mr-2 rounded-lg text-gray-400 bg-white group-hover:text-gray-500"
-                              alt={''}
-                              src={app.image}
-                            />
-                            <span>{app.name}</span>
-                          </li>
-                        ))}
-                      {tribe.rooms.map((room) => (
-                        <li
-                          className="text-md p-2 hover:bg-purple-200 rounded-md"
-                          key={room.id}
-                        >
-                          <Link href={room.url} passHref>
-                            <a
-                              className="flex px-2 py-1 items-center gap-2 flex-1"
-                              onClick={() => onBack()}
-                            >
-                              <div className="flex gap-1"># {room.name}</div>
-                            </a>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </Disclosure.Panel>
-                </>
-              )}
-            </Disclosure>
-          ))}
-        </div>
-      ) : null}
+      <div className="flex flex-col border rounded-md border-sapien-80 bg-purple-100 h-48 overflow-y-auto">
+        {badge.tribes.map((tribe) => (
+          <Disclosure key={tribe.id}>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between items-center bg-purple-100 px-4 py-2 text-left text-sm font-medium text-purple-900 hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                  <div className="flex justify-center items-center gap-2">
+                    {tribe.avatar ? (
+                      <img
+                        className="w-10 h-10 rounded-full flex-shrink-0 object-cover"
+                        src={tribe.avatar}
+                        alt=""
+                      />
+                    ) : (
+                      <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                        {tribe.name[0].toUpperCase()}
+                      </div>
+                    )}
+                    <span>{tribe.name}</span>
+                  </div>
+                  <ChevronDownIcon
+                    className={`${
+                      open ? 'rotate-180 transform' : ''
+                    } h-5 w-5 text-purple-500`}
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pt-1 pb-2 text-sm text-gray-500">
+                  <ul>
+                    {tribe.rooms.map((room) => (
+                      <li
+                        className="text-md p-2 hover:bg-purple-200 rounded-md"
+                        key={room.id}
+                      >
+                        <div className="flex px-2 py-1 items-center gap-2 flex-1">
+                          <div className="flex gap-1">
+                            <span className="flex items-center w-3">
+                              {room.private ? (
+                                <LockClosedIcon className="w-[10px]" />
+                              ) : (
+                                '#'
+                              )}
+                            </span>{' '}
+                            {room.name}
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        ))}
+      </div>
     </div>
   );
 };

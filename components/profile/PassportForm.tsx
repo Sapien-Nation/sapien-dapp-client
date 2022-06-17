@@ -1,3 +1,4 @@
+import { Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -67,13 +68,23 @@ const PassportFormProxy = () => {
   return (
     <Query api={`/core-api/user/${me.id}/badges`}>
       {() => (
-        <FormProvider {...methods}>
-          <form onSubmit={() => {}} id="update-profile-form">
-            <div className="flex flex-col w-[580px]">
-              <PassportForm />
-            </div>
-          </form>
-        </FormProvider>
+        <Transition
+          show
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
+        >
+          <FormProvider {...methods}>
+            <form onSubmit={() => {}} id="update-profile-form">
+              <div className="flex flex-col w-[580px]">
+                <PassportForm />
+              </div>
+            </form>
+          </FormProvider>
+        </Transition>
       )}
     </Query>
   );
