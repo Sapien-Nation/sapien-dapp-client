@@ -91,7 +91,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                   {
                     id: response.id,
                     name,
-                    type: isPrivate ? RoomType.Private : RoomType.Public,
+                    private: isPrivate,
                   },
                 ],
               };

@@ -63,7 +63,7 @@ const CreatePrivateRoomDialog = ({ onClose }: Props) => {
                 ...tribe,
                 rooms: [
                   ...tribe.rooms,
-                  { id: response.id, name, type: RoomType.Private },
+                  { id: response.id, name, private: true },
                 ],
               };
             }

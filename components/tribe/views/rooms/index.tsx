@@ -82,7 +82,7 @@ const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
   const room = useTribeRoom(tribeID, roomID);
 
   if (isMember === false) {
-    if (room.type === RoomType.Private) {
+    if (room.private) {
       return (
         <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
           <div className="absolute inset-0">
