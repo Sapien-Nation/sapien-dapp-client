@@ -43,20 +43,18 @@ const MembersForm = () => {
                     <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
                       {owner.displayName}
                     </div>
-                    {member.walletAddress !== me.walletAddress && (
-                      <div className="flex flex-auto flex-row-reverse text-white ml-1">
-                        <button
-                          onClick={() => {
-                            setValue(
-                              'members',
-                              members.filter(({ id }) => id !== owner.id)
-                            );
-                          }}
-                        >
-                          <XIcon className="w-5" />
-                        </button>
-                      </div>
-                    )}
+                    <div className="flex flex-auto flex-row-reverse text-white ml-1">
+                      <button
+                        onClick={() => {
+                          setValue(
+                            'members',
+                            members.filter(({ id }) => id !== owner.id)
+                          );
+                        }}
+                      >
+                        <XIcon className="w-5" />
+                      </button>
+                    </div>
                   </div>
                 );
               })}
