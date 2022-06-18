@@ -4,7 +4,7 @@ import { useSWRConfig } from 'swr';
 import { useAuth } from 'context/user';
 
 // types
-import type { ProfileTribe, TribeBadge } from 'tools/types/tribe';
+import type { TribeBadge } from 'tools/types/tribe';
 
 // TODO move to tools
 interface UserBadge {
