@@ -111,7 +111,7 @@ const Mint = ({ avatar }: { avatar: string }) => {
     setIsFetching(true);
     try {
       const data = await mintPassport(me.walletAddress);
-      push(`/tribes/${id}/passport?tokenID=${data.tokenId}`);
+      push(`/tribes/${id}/home`);
     } catch (err) {
       toast({ message: err });
     }
