@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
-import { SparklesIcon, PlusIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, LockClosedIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
@@ -21,7 +21,7 @@ import {
   CreateRoomDialog,
 } from 'components/tribe/dialogs';
 import { MenuLink, Query, RedDot } from 'components/common';
-import { DeleteRoomDialog, EditTribeDialog } from 'components/tribe/dialogs';
+import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
 import {
@@ -45,7 +45,6 @@ interface Props {
 enum Dialog {
   CreateChannel,
   CreateRoom,
-  DeleteRoom,
   EditTribe,
 }
 
@@ -442,15 +441,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
-                      <button
-                        className="px-2 hidden group-hover:block"
-                        onClick={() => {
-                          setSelectedRoom(room.id);
-                          setDialog(Dialog.DeleteRoom);
-                        }}
-                      >
-                        <XIcon className="w-4 h-4 text-gray-400" />
-                      </button>
                     </div>
                   </li>
                 );
@@ -470,13 +460,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
         {dialog === Dialog.CreateChannel && (
           <CreateChannelDialog onClose={() => setDialog(null)} />
-        )}
-
-        {dialog === Dialog.DeleteRoom && (
-          <DeleteRoomDialog
-            onClose={() => setDialog(null)}
-            roomID={selectedRoom}
-          />
         )}
 
         {dialog === Dialog.EditTribe && (

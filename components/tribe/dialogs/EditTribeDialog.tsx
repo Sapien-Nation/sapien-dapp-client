@@ -29,18 +29,11 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
 
   const { mutate } = useSWRConfig();
 
-  const onSubmit = async ({
-    avatar,
-    cover,
-    description,
-    identifier,
-    name,
-  }: FormValues) => {
+  const onSubmit = async ({ avatar, cover, description, name }: FormValues) => {
     setIsSubmitting(true);
     try {
       const body: CreateTribeBody = {
         description,
-        identifier,
         name,
       };
 
@@ -111,7 +104,6 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
             ? { url: tribe.cover, key: mediaDefaultKey }
             : null,
           description: tribe.description,
-          identifier: tribe.identifier,
           name: tribe.name,
         }}
         onSubmit={onSubmit}

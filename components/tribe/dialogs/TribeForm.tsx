@@ -25,7 +25,6 @@ export interface FormValues {
   avatar: null | Media;
   cover: null | Media;
   description: string;
-  identifier: string;
   name: string;
 }
 
@@ -213,34 +212,6 @@ const TribeForm = ({
                         }}
                       />
                     </div>
-                  </div>
-                  <div>
-                    <TextInputLabel
-                      label="Tribe ID"
-                      name="identifier"
-                      error={errors.identifier?.message}
-                    />
-                    <TextInput
-                      name="identifier"
-                      aria-label="identifier"
-                      placeholder="TheSapienTribe"
-                      maxLength={20}
-                      rules={{
-                        validate: {
-                          required: (value) =>
-                            value.length > 0 || 'is required',
-                          minLength: (value) =>
-                            value?.length > 2 ||
-                            'Must be Between 2 and 20 characters long',
-                          maxLength: (value) =>
-                            value?.length <= 21 ||
-                            'Must be Between 2 and 51 characters long',
-                        },
-                      }}
-                      pattern={/^[a-zA-Z0-9]$/}
-                      readOnly={isEdit}
-                      disabled={isEdit}
-                    />
                   </div>
                   <div>
                     <TextInputLabel

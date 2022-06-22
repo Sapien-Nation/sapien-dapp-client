@@ -8,7 +8,6 @@ export interface CreateTribeBody {
   avatar?: string;
   cover?: string;
   description: string;
-  identifier: string;
   name: string;
 }
 
