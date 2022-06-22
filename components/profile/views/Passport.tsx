@@ -102,47 +102,53 @@ const Passport = ({ selectBadge }: Props) => {
                 Badges
               </span>
             </div>
-            <div
-              style={{
-                clipPath:
-                  'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
-              }}
-              className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
-            >
-              {badges.length === 1 ? (
-                <button
-                  onClick={() => selectBadge(badges[0].id)}
-                  className="appearance-none border relative flex items-center min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500"
-                >
-                  <span className="bg-gray-800 ml-4">{badges[0].name}</span>
-                  <span className="font-bold text-gray-400 text-xs right-0 bottom-0 absolute mr-4 mb-1">
-                    Click here to View Badge Details
-                  </span>
-                </button>
-              ) : (
-                <select
-                  className="appearance-none px-4 min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
-                  defaultValue={''}
-                  name="type"
-                  onChange={(event) => {
-                    event.preventDefault();
-                    selectBadge(event.target.value);
-                  }}
-                >
-                  {badges.map((badge) => {
-                    return (
-                      <option
-                        className="bg-gray-800"
-                        key={badge.id}
-                        value={badge.id}
-                      >
-                        {badge.name}
-                      </option>
-                    );
-                  })}
-                </select>
-              )}
-            </div>
+            {badges.length === 0 ? (
+              <div className="flex items-center min-h-64px text-gray-400">
+                No badges available
+              </div>
+            ) : (
+              <div
+                style={{
+                  clipPath:
+                    'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
+                }}
+                className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+              >
+                {badges.length === 1 ? (
+                  <button
+                    onClick={() => selectBadge(badges[0].id)}
+                    className="appearance-none border relative flex items-center min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500"
+                  >
+                    <span className="bg-gray-800 ml-4">{badges[0].name}</span>
+                    <span className="font-bold text-gray-400 text-xs right-0 bottom-0 absolute mr-4 mb-1">
+                      Click here to View Badge Details
+                    </span>
+                  </button>
+                ) : (
+                  <select
+                    className="appearance-none px-4 min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
+                    defaultValue={''}
+                    name="type"
+                    onChange={(event) => {
+                      event.preventDefault();
+                      selectBadge(event.target.value);
+                    }}
+                  >
+                    {badges.map((badge) => {
+                      return (
+                        <option
+                          className="bg-gray-800"
+                          key={badge.id}
+                          value={badge.id}
+                        >
+                          {badge.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
