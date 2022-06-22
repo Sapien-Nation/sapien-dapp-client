@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
-import { SparklesIcon, PlusIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, LockClosedIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';

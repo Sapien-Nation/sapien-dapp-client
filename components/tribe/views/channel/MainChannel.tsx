@@ -60,7 +60,7 @@ const MainChannel = () => {
               <MainChannelHeader tribe={tribeInfo} />
               <div className="mt-4 min-h-400">
                 <ul>
-                  {tribeInfo.identifier === 'sapien' ? (
+                  {tribeInfo.name === 'Sapien' ? (
                     <li>
                       <ContentItemMainChannel
                         content={welcomeMessage}

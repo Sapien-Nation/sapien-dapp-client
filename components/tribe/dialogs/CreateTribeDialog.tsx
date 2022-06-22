@@ -28,17 +28,11 @@ const CreateTribeDialog = ({ onClose }: Props) => {
   const { mutate } = useSWRConfig();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = async ({
-    description,
-    identifier,
-    name,
-    ...rest
-  }: FormValues) => {
+  const onSubmit = async ({ description, name, ...rest }: FormValues) => {
     setIsSubmitting(true);
     try {
       const body: CreateTribeBody = {
         description,
-        identifier,
         name,
       };
 
@@ -60,7 +54,13 @@ const CreateTribeDialog = ({ onClose }: Props) => {
         '/core-api/profile/tribes',
         (tribes: Array<ProfileTribe>) => [
           tribes[0],
-          response,
+          {
+            ...response,
+            permissions: {
+              canAddChannel: true,
+              canAddSquare: true,
+            },
+          },
           ...tribes.slice(1),
         ],
         false
@@ -91,7 +91,6 @@ const CreateTribeDialog = ({ onClose }: Props) => {
           avatar: null,
           cover: null,
           description: '',
-          identifier: '',
           name: '',
         }}
         onSubmit={onSubmit}
