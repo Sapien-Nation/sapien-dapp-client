@@ -35,6 +35,7 @@ const Notifications = () => {
         (data) => ({
           ...data,
           unread: 0,
+          notifications: [],
         }),
         false
       );

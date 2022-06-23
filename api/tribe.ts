@@ -62,6 +62,12 @@ export const upgradeTribe = (tribeID: string, body: UpgradeTribeBody) =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+export const upgradeTribeOwners = (tribeID: string) =>
+  axios
+    .post(`/core-api/tribe/${tribeID}/upgrade-owners`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const createTribeBadge = (body: {
   tribeId: string;
   name: string;
