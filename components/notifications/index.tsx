@@ -9,7 +9,7 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { BadgeGrant } from './items';
+import { BadgeGrant, BadgeGrantPropose } from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -17,16 +17,27 @@ import { useToast } from 'context/toast';
 
 // assets
 import notificationJSONData from './lottie/notification.json';
+import { useSWRConfig } from 'swr';
 
 const Notifications = () => {
   const toast = useToast();
 
-  const { unread, notifications } = useGlobalNotifications();
+  const { mutate } = useSWRConfig();
+  const { notifications } = useGlobalNotifications();
 
   //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
     try {
       await makeAllAsRead();
+
+      mutate(
+        '/core-api/notification',
+        (data) => ({
+          ...data,
+          unread: 0,
+        }),
+        false
+      );
     } catch (err) {
       toast({
         message: err,
@@ -40,6 +51,8 @@ const Notifications = () => {
       case NotificationsType.BadgeGrant:
       case NotificationsType.BadgeGrantOwner:
         return <BadgeGrant notification={notification} />;
+      case NotificationsType.BadgeGrantPropose:
+        return <BadgeGrantPropose notification={notification} />;
     }
   };
 
@@ -47,7 +60,7 @@ const Notifications = () => {
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="flex gap-1 items-center justify-between p-3">
         <span>Notifications</span>
-        {/* <div className="flex justify-end">
+        <div className="flex justify-end">
           <Menu as="div">
             <Menu.Button>
               <DotsVerticalIcon className="w-5 text-gray-400" />
@@ -70,7 +83,7 @@ const Notifications = () => {
               </Menu.Items>
             </Transition>
           </Menu>
-        </div> */}
+        </div>
       </div>
       <div className="px-4">
         {notifications.length === 0 ? (

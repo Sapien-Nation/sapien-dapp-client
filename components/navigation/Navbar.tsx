@@ -8,7 +8,7 @@ import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
 
 // components
-import { UserAvatar, Query } from 'components/common';
+import { UserAvatar, Query, RedDot } from 'components/common';
 const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
@@ -29,7 +29,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
           <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification">
-                {() => (
+                {({ unread }: { unread: number }) => (
                   <>
                     <div>
                       <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -46,6 +46,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       <div className="relative">
                         <span className="sr-only">View notifications</span>
                         <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
+                        <RedDot count={unread} />
                       </div>
                     </Menu.Button>
                   </>
