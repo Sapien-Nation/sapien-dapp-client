@@ -23,7 +23,7 @@ const Notifications = () => {
   const toast = useToast();
 
   const { mutate } = useSWRConfig();
-  const { notifications } = useGlobalNotifications();
+  const { notifications, unread } = useGlobalNotifications();
 
   //------------------------------------------------------------------------
   const handleMarkAllAsRead = async () => {
@@ -87,7 +87,7 @@ const Notifications = () => {
         </div>
       </div>
       <div className="px-4">
-        {notifications.length === 0 ? (
+        {notifications.length === 0 || unread === 0 ? (
           <div className="flex flex-col items-center pb-8 space-y-3">
             <Lottie
               animationData={notificationJSONData}
@@ -98,9 +98,11 @@ const Notifications = () => {
             <h2 className="text-lg text-gray-300">You are all caught up!</h2>
           </div>
         ) : null}
-        {notifications.map((notification) => (
-          <div key={notification.id}>{renderNotification(notification)}</div>
-        ))}
+        {notifications
+          .filter((notification) => !notification.to.seen)
+          .map((notification) => (
+            <div key={notification.id}>{renderNotification(notification)}</div>
+          ))}
       </div>
     </div>
   );
