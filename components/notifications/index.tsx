@@ -9,7 +9,7 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { BadgeGrant, BadgeGrantPropose, NewRoomMessage } from './items';
+import { BadgeGrant, BadgeGrantPropose, DefaultNotification } from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -54,8 +54,8 @@ const Notifications = () => {
         return <BadgeGrant notification={notification} />;
       case NotificationsType.BadgeGrantPropose:
         return <BadgeGrantPropose notification={notification} />;
-      case NotificationsType.RoomNewMessage:
-        return <NewRoomMessage notification={notification} />;
+      default:
+        return <DefaultNotification notification={notification} />;
     }
   };
 
@@ -63,7 +63,9 @@ const Notifications = () => {
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="flex gap-1 items-center justify-between p-3">
         <span>Notifications</span>
-        <div className="flex justify-end">
+        <div
+          className={`${unread > 0 ? 'visible' : 'invisible'} flex justify-end`}
+        >
           <Menu as="div">
             <Menu.Button>
               <DotsVerticalIcon className="w-5 text-gray-400" />
@@ -88,7 +90,7 @@ const Notifications = () => {
         </div>
       </div>
       <div className="px-4">
-        {notifications.length === 0 || unread === 0 ? (
+        {unread === 0 ? (
           <div className="flex flex-col items-center pb-8 space-y-3">
             <Lottie
               animationData={notificationJSONData}
@@ -98,12 +100,15 @@ const Notifications = () => {
             />
             <h2 className="text-lg text-gray-300">You are all caught up!</h2>
           </div>
-        ) : null}
-        {notifications
-          .filter((notification) => !notification.to.seen)
-          .map((notification) => (
-            <div key={notification.id}>{renderNotification(notification)}</div>
-          ))}
+        ) : (
+          notifications
+            .filter((notification) => !notification.to.seen)
+            .map((notification) => (
+              <div key={notification.id}>
+                {renderNotification(notification)}
+              </div>
+            ))
+        )}
       </div>
     </div>
   );
