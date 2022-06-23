@@ -104,7 +104,7 @@ const Passport = ({ selectBadge }: Props) => {
             </div>
             {badges.length === 0 ? (
               <div className="flex items-center min-h-64px text-gray-400">
-                No badges available
+                No badges received
               </div>
             ) : (
               <div

@@ -9,7 +9,7 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { BadgeGrant, BadgeGrantPropose } from './items';
+import { BadgeGrant, BadgeGrantPropose, NewRoomMessage } from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -53,6 +53,8 @@ const Notifications = () => {
         return <BadgeGrant notification={notification} />;
       case NotificationsType.BadgeGrantPropose:
         return <BadgeGrantPropose notification={notification} />;
+      case NotificationsType.RoomNewMessage:
+        return <NewRoomMessage notification={notification} />;
     }
   };
 
@@ -71,7 +73,6 @@ const Notifications = () => {
                   {({ active }) => (
                     <button
                       onClick={handleMarkAllAsRead}
-                      disabled={true}
                       className={`${
                         active ? 'bg-gray-800' : ''
                       } flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}

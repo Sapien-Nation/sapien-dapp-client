@@ -41,11 +41,11 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       type="button"
                       className={`${
                         open ? 'bg-gray-800' : ''
-                      } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                      } group px-5 py-3 w-full flex flex-col justify-center items-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
                     >
-                      <div className="relative">
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
+                      <span className="sr-only">View notifications</span>
+                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <div className="absolute bottom-0">
                         <RedDot count={unread} />
                       </div>
                     </Menu.Button>
