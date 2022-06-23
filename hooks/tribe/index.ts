@@ -208,3 +208,12 @@ export const useTribePrivateRooms = (): Array<ProfileTribeRoom> => {
 
   return cache.get(`/core-api/tribe/${tribeID}/rooms?type=PRIVATE`);
 };
+
+export const useUpgradeStatus = (): { contractTransferred: boolean } => {
+  const { query } = useRouter();
+  const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
+
+  return cache.get(`/core-api/tribe/${tribeID}/upgrade-status`);
+};

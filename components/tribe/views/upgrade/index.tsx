@@ -14,7 +14,7 @@ import _range from 'lodash/range';
 import { useSWRConfig } from 'swr';
 
 // api
-import { upgradeTribe } from 'api/tribe';
+import { upgradeTribe, upgradeTribeOwners } from 'api/tribe';
 
 // assets
 import AssignOwnersJSONLottie from './lottie/AssignOwners.json';
@@ -31,16 +31,15 @@ import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // components
-import { ProgressBar, SEO, Query } from 'components/common';
+import { SEO, Query } from 'components/common';
 
 // hooks
 import { useWeb3 } from 'wallet/providers';
-import { useTribe, useTribeMembers } from 'hooks/tribe';
+import { useTribe, useTribeMembers, useUpgradeStatus } from 'hooks/tribe';
 
 // types
 import type { Token } from 'wallet/types';
 import type { ProfileTribe, TribeMember } from 'tools/types/tribe';
-import type { User } from 'tools/types/user';
 
 enum View {
   // Wallet Views
@@ -56,6 +55,8 @@ enum View {
   Loading,
 
   Success,
+
+  CompleteUpgrade,
 }
 
 enum VaultStatus {
@@ -66,10 +67,13 @@ enum VaultStatus {
 
 interface Props {
   meAsMember: TribeMember; // We do this because me.displayName comes empty backend to take a look into this
+  contractTransferred: boolean;
 }
 
-const Upgrade = ({ meAsMember }: Props) => {
-  const [view, setView] = useState(View.Home);
+const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
+  const [view, setView] = useState(
+    contractTransferred === true ? View.CompleteUpgrade : View.Home
+  );
   const [error, setError] = useState<string | Error | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
   const [threshold, setThreshold] = useState<number>(1);
@@ -105,6 +109,42 @@ const Upgrade = ({ meAsMember }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAPI]);
 
+  const handleCompleteUpgradeTribe = async () => {
+    setView(View.Loading);
+    try {
+      setVaultStatus(VaultStatus.Upgrading);
+
+      await upgradeTribeOwners(tribeID);
+
+      mutate(
+        '/core-api/profile/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((cacheTribe) => {
+            if (cacheTribe.id === tribeID) {
+              return {
+                ...cacheTribe,
+                isUpgraded: true,
+              };
+            }
+
+            return cacheTribe;
+          }),
+        false
+      );
+      setVaultStatus(VaultStatus.Success);
+      await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
+
+      setView(View.Success);
+      setVaultStatus(null);
+    } catch (err) {
+      toast({
+        message: err,
+      });
+      setView(View.Confirm);
+      Sentry.captureMessage(err);
+    }
+  };
+
   const handleUpgradeTribe = async () => {
     setView(View.Loading);
     try {
@@ -117,6 +157,8 @@ const Upgrade = ({ meAsMember }: Props) => {
         threshold,
         passportTokenId: selectedToken.id,
       });
+
+      await upgradeTribeOwners(tribeID);
 
       mutate(
         '/core-api/profile/tribes',
@@ -873,6 +915,41 @@ const Upgrade = ({ meAsMember }: Props) => {
             </div>
           </div>
         );
+      case View.CompleteUpgrade:
+        return (
+          <div>
+            <div className="px-4 py-5 sm:px-6 flex flex-col items-center gap-3">
+              <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center">
+                Complete Upgrade
+              </h1>
+            </div>
+            <div className="flex flex-col gap-5 pt-5">
+              <span>
+                <p>
+                  Please confirm the signing of your Sapien Nation Passport.
+                  This will make your passport untradeable and unlock a host of
+                  benefits on the Sapien Platform.
+                </p>
+                <br />
+                <p>
+                  <b className="text-rose-500">
+                    This action is irreversible. Once a passport is signed it
+                    can not leave your Sapien wallet.{' '}
+                  </b>
+                </p>
+              </span>
+            </div>
+            <div className="mb-4 mt-6 flex gap-10 justify-center">
+              <button
+                type="button"
+                onClick={handleCompleteUpgradeTribe}
+                className="py-2 px-4 flex-1 justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-primary hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Complete
+              </button>
+            </div>
+          </div>
+        );
     }
   };
 
@@ -891,6 +968,7 @@ const UpgradeView = () => {
   const tribe = useTribe(tribeID);
   const { me } = useAuth();
   const tribeMembers = useTribeMembers(tribeID);
+  const { contractTransferred } = useUpgradeStatus();
 
   if (tribe.isUpgraded === true) {
     return (
@@ -971,7 +1049,10 @@ const UpgradeView = () => {
           <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
             <SEO title="Upgrade" />
             <h1 className="sr-only">Tribe Upgrade View</h1>
-            <Upgrade meAsMember={tribeMembers.find(({ id }) => id === me.id)} />
+            <Upgrade
+              meAsMember={tribeMembers.find(({ id }) => id === me.id)}
+              contractTransferred={contractTransferred}
+            />
           </div>
         );
       }}
