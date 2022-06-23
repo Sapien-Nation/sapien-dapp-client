@@ -215,5 +215,5 @@ export const useUpgradeStatus = (): { contractTransferred: boolean } => {
 
   const tribeID = query.tribeID as string;
 
-  return cache.get(`/core-api/tribe/${tribeID}/update-status`);
+  return cache.get(`/core-api/tribe/${tribeID}/upgrade-status`);
 };

@@ -112,7 +112,7 @@ const TribePage = ({ tribeID, viewID }: Props) => {
             {() => (
               <Web3Provider>
                 <Query
-                  api={`/core-api/tribe/${tribeID}/update-status`}
+                  api={`/core-api/tribe/${tribeID}/upgrade-status`}
                   loader={null}
                 >
                   {() => <UpgradeView />}
