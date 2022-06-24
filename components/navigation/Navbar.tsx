@@ -91,7 +91,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      <div className="absolute bottom-0">
+                      <div className="absolute top-3 left-10">
                         <RedDot count={unread} />
                       </div>
                     </Menu.Button>
