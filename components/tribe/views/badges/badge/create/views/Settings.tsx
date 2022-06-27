@@ -18,8 +18,12 @@ const SettingsForm = ({ badge }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const popover = useRef();
-  const { query } = useRouter();
-  const { setValue, watch } = useFormContext();
+  const {
+    formState: { errors },
+    setValue,
+    watch,
+  } = useFormContext();
+
   useClickAway(popover, () => setIsOpen(!isOpen));
 
   const [badgeColor] = watch(['color']);
@@ -61,9 +65,17 @@ const SettingsForm = ({ badge }: Props) => {
           </div>
         )}
       </div>
-      <TextInputLabel label="Badge Name" name="name" error="" />
+      <TextInputLabel
+        label="Badge Name"
+        name="name"
+        error={errors.name?.message}
+      />
       <TextInput name="name" aria-label="name" placeholder="Badge Name" />
-      <TextInputLabel label="Badge Description" name="description" error="" />
+      <TextInputLabel
+        label="Badge Description"
+        name="description"
+        error={errors.description?.message}
+      />
       <TextareaInput
         name="description"
         aria-label="description"

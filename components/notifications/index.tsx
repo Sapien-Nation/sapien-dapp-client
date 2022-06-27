@@ -9,7 +9,12 @@ import { makeAllAsRead } from 'api/notifications';
 import { NotificationsType } from 'tools/constants/notifications';
 
 // components
-import { BadgeGrant, BadgeGrantPropose, DefaultNotification } from './items';
+import {
+  BadgeGrandProposeReady,
+  BadgeGrant,
+  BadgeGrantPropose,
+  DefaultNotification,
+} from './items';
 
 // hooks
 import { useGlobalNotifications } from 'hooks/notifications';
@@ -48,12 +53,15 @@ const Notifications = () => {
 
   //------------------------------------------------------------------------
   const renderNotification = (notification) => {
+    console.log(notification);
     switch (notification.type) {
       case NotificationsType.BadgeGrant:
       case NotificationsType.BadgeGrantOwner:
         return <BadgeGrant notification={notification} />;
       case NotificationsType.BadgeGrantPropose:
         return <BadgeGrantPropose notification={notification} />;
+      case NotificationsType.BadgeGrandProposeReady:
+        return <BadgeGrandProposeReady notification={notification} />;
       default:
         return <DefaultNotification notification={notification} />;
     }

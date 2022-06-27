@@ -1,5 +1,4 @@
 import { XIcon } from '@heroicons/react/solid';
-import { Disclosure } from '@headlessui/react';
 import { matchSorter } from 'match-sorter';
 import { useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
@@ -24,7 +23,7 @@ const PermissionsForm = () => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { control, register } = useFormContext();
+  const { control } = useFormContext();
 
   const tribeAvailablePrivateRooms = useTribePrivateRooms();
 
