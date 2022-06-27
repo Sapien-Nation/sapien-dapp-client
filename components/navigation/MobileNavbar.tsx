@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import { useAuth } from 'context/user';
 
 // components
-import { Query, UserAvatar } from 'components/common';
+import { Query, RedDot, UserAvatar } from 'components/common';
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 const Notifications = dynamic(() => import('components/notifications'));
@@ -43,7 +43,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
           <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification">
-                {() => (
+                {({ unread }: { unread: number }) => (
                   <>
                     <div>
                       <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
@@ -57,9 +57,10 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                         open ? 'bg-gray-800' : ''
                       } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
                     >
-                      <div className="relative">
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6 mr-1" aria-hidden="true" />
+                      <span className="sr-only">View notifications</span>
+                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <div className="absolute top-3 left-10">
+                        <RedDot count={unread} />
                       </div>
                     </Menu.Button>
                   </>

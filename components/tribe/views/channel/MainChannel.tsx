@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { useEffect, useRef } from 'react';
 
 // components
 import { SEO, Query } from 'components/common';
@@ -14,35 +13,17 @@ import { useTribe, useWelcomeMessage } from 'hooks/tribe';
 // types
 import type { MainFeedTribe } from 'tools/types/tribe';
 
-enum Dialog {
-  Profile,
-}
-
 const MainChannel = () => {
-  const [dialog, setDialog] = useState<Dialog | null>(null);
-
-  const { asPath, push, query } = useRouter();
+  const { query } = useRouter();
   const { tribeID } = query;
 
   const tribe = useTribe(tribeID as string);
   const welcomeMessage = useWelcomeMessage(tribe);
   const belowEditorRef = useRef(null);
 
-  const checkIfCommingFromMintedPage = () => {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-
-    return window.location.hash === '#minted';
-  };
-
   useEffect(() => {
     if (belowEditorRef.current) {
       belowEditorRef.current.scrollIntoView();
-    }
-
-    if (checkIfCommingFromMintedPage()) {
-      setDialog(Dialog.Profile);
     }
   }, []);
 
@@ -60,7 +41,9 @@ const MainChannel = () => {
               <MainChannelHeader tribe={tribeInfo} />
               <div className="mt-4 min-h-400">
                 <ul>
-                  {tribeInfo.name === 'Sapien' ? (
+                  {['Sapien', 'sapien', 'Sapien Nation'].includes(
+                    tribeInfo.name
+                  ) ? (
                     <li>
                       <ContentItemMainChannel
                         content={welcomeMessage}

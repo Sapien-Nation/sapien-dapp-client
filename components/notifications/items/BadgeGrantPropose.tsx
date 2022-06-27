@@ -17,7 +17,7 @@ const BadgeGrantPropose = ({ notification }: Props) => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full">
-      <div className="bg-sapien-neutral-800 text-sm p-3 rounded-xl mb-4 w-full">
+      <div className="bg-sapien-neutral-800 text-sm p-3 rounded-xl mb-4 w-full break-words">
         {notification.payload}{' '}
         <Link href={`/tribes/${tribe.id}/badges`} passHref>
           <a className="underline">{tribe.name}</a>

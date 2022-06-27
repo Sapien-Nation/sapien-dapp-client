@@ -1,11 +1,16 @@
 import { Menu } from '@headlessui/react';
 import { CreditCardIcon, CogIcon, BellIcon } from '@heroicons/react/outline';
+import * as Sentry from '@sentry/nextjs';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useSWRConfig } from 'swr';
 
 // context
 import { useAuth } from 'context/user';
 import { usePassport } from 'hooks/passport';
+
+// constants
+import { NotificationsType as WSEvents } from 'tools/constants/notifications';
 
 // components
 import { UserAvatar, Query, RedDot } from 'components/common';
@@ -13,13 +18,54 @@ const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
 
+// hooks
+import { useSocketEvent } from 'hooks/socket';
+
 interface Props {
   setShowProfileOverlay: () => void;
 }
 
 const Navbar = ({ setShowProfileOverlay }: Props) => {
   const { me } = useAuth();
+  const { mutate } = useSWRConfig();
   const passport = usePassport();
+
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Websockets events
+  useSocketEvent(
+    [
+      WSEvents.BadgeGrandProposeReady,
+      WSEvents.BadgeGrant,
+      WSEvents.BadgeGrantOwner,
+      WSEvents.BadgeGrantPropose,
+      WSEvents.RoomNewMessage,
+    ],
+    async (type: WSEvents, data: any) => {
+      try {
+        console.log({ data, type });
+        switch (type) {
+          case WSEvents.BadgeGrandProposeReady:
+          case WSEvents.BadgeGrant:
+          case WSEvents.BadgeGrantOwner:
+          case WSEvents.BadgeGrantPropose:
+          case WSEvents.RoomNewMessage:
+            mutate('/core-api/notification', (data) => ({
+              ...data,
+              unread: data.unread + 1,
+              count: data.count + 1,
+            }));
+            break;
+
+          default:
+            console.info(`No handler for eventType: ${type}`);
+            Sentry.captureMessage(`No handler for eventType: ${type}`);
+            break;
+        }
+      } catch (err) {
+        Sentry.captureMessage(err);
+      }
+    }
+  );
 
   return (
     <div className="shadow">
@@ -45,7 +91,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                     >
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      <div className="absolute bottom-0">
+                      <div className="absolute top-3 left-10">
                         <RedDot count={unread} />
                       </div>
                     </Menu.Button>
