@@ -109,7 +109,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAPI]);
 
-  const handleCompleteUpgradeTribe = async () => {
+  const handleCompleteUpgradeTribe = async (_, currentCount = 1) => {
     setView(View.Loading);
     try {
       setVaultStatus(VaultStatus.Upgrading);
@@ -137,15 +137,30 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
       setView(View.Success);
       setVaultStatus(null);
     } catch (err) {
+      if (err === 'Tribe has already been upgraded') {
+        setVaultStatus(VaultStatus.Success);
+        await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
+
+        setView(View.Success);
+        setVaultStatus(null);
+        return;
+      }
+
+      if (err === '') {
+        if (currentCount < 3) {
+          return handleCompleteUpgradeTribe(null, currentCount + 1);
+        }
+      }
+
       toast({
         message: err,
       });
-      setView(View.Confirm);
+      setView(View.CompleteUpgrade);
       Sentry.captureMessage(err);
     }
   };
 
-  const handleUpgradeTribe = async () => {
+  const handleUpgradeTribe = async (_, currentCount = 1) => {
     setView(View.Loading);
     try {
       setVaultStatus(VaultStatus.Upgrading);
@@ -175,12 +190,24 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
           }),
         false
       );
-      setVaultStatus(VaultStatus.Success);
-      await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
 
+      setVaultStatus(VaultStatus.Success);
       setView(View.Success);
       setVaultStatus(null);
     } catch (err) {
+      if (err === 'Tribe has already been upgraded') {
+        setVaultStatus(VaultStatus.Success);
+        await new Promise((r) => setTimeout(r, 2000)); // dramatic 2 seconds delay
+
+        setView(View.Success);
+        return;
+      }
+
+      if (err === '') {
+        if (currentCount < 3) {
+          return handleCompleteUpgradeTribe(null, currentCount + 1);
+        }
+      }
       toast({
         message: err,
       });
