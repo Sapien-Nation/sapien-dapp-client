@@ -1,10 +1,10 @@
 stages:
- - build
- - cleanupImages
+  - build
+  - cleanupImages
 
 variables:
   # this variable can be overriden by pipeline run variable
-  ENV: "sandbox"
+  ENV: 'sandbox'
 
 .sandbox_triggers: &sandbox_triggers
   refs:
@@ -17,7 +17,6 @@ variables:
 .poc_triggers: &poc_triggers
   refs:
     - poc
-
 
 build-sandbox:
   stage: build
@@ -49,7 +48,7 @@ build-sandbox:
   environment:
     name: sandbox
     url: https://front-sandbox.sapien.network
-  
+
   only:
     <<: *sandbox_triggers
 
@@ -60,7 +59,7 @@ cleanup-sandbox:
   script:
     - docker images -q | xargs -l docker rmi -f
   only:
-    <<: *sandbox_triggers  
+    <<: *sandbox_triggers
 
 build-qat:
   stage: build
@@ -89,7 +88,7 @@ build-qat:
     - kubectl apply -f front-dep.yml
   environment:
     name: qat
-    url: https://front-qat.sapien.network  
+    url: https://front-qat.sapien.network
   only:
     <<: *qat_triggers
 
@@ -101,8 +100,7 @@ cleanup-qat:
     - docker images -q | xargs -l docker rmi -f
   when: manual
   only:
-    <<: *qat_triggers  
-
+    <<: *qat_triggers
 
 build-poc:
   stage: build
@@ -111,10 +109,10 @@ build-poc:
   script:
     - rm -rf tools
     - git clone https://$USER:$CI_TOKEN@gitlab.tooling-sapien.network/group-tools/tools.git
-    - cd tools && git checkout feature/tools-fix-develop && cd ..
-    #- git submodule init   &&  git submodule update --remote
-    #- cd ..
-    ##- git pull --recurse-submodule
+    # cd tools && git checkout feature/tools-fix-develop && cd ..
+    - git submodule init   &&  git submodule update --remote
+    - cd ..
+    - git pull --recurse-submodule
     - export KUBECONFIG=~/.kube/kubeconfig_sapien-poc-cluster
     - export AWS_PROFILE=sapien-poc
     - export AWS_REGION=us-east-2
@@ -134,7 +132,7 @@ build-poc:
     - kubectl apply -f front-dep.yml
   environment:
     name: poc
-    url: https://app.sapien.network  
+    url: https://app.sapien.network
   only:
     <<: *poc_triggers
 
@@ -146,4 +144,4 @@ cleanup-poc:
     - docker images -q | xargs -l docker rmi -f
   when: manual
   only:
-    <<: *poc_triggers   
+    <<: *poc_triggers
