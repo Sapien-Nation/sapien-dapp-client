@@ -20,7 +20,7 @@ const BadgeGrantPropose = ({ notification }: Props) => {
   const transactionID = payloadList[6];
   return (
     <div className="flex flex-col justify-center items-center w-full">
-      <div className="bg-blue-300 text-black text-sm p-3 rounded-xl mb-4 w-full break-words">
+      <div className="bg-sapien-neutral-500 text-sm p-3 rounded-xl mb-4 w-full break-words">
         New badge transaction proposed by {payloadList[3]}{' '}
         <a
           target="_blank"
