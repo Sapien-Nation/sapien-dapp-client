@@ -14,7 +14,7 @@ const BadgeGrandProposeReady = ({ notification }: Props) => {
   const transactionID = notification.payload.split(' ')[2];
 
   return (
-    <div className="bg-sapien-neutral-800 p-3 rounded-xl mb-4 w-full">
+    <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 w-full">
       <p>
         Transaction{' '}
         <a
