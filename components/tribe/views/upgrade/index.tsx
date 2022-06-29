@@ -339,7 +339,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
               <div className="bg-gradient-to-r to-[#6200ea] from-black px-4 py-2 font-semibold text-lg mt-3 rounded-t-md">
                 Benefits
               </div>
-              <ol className="text-gray-300 bg-black p-4 space-y-1.5 rounded-b-md">
+              <ol className="text-gray-300 bg-black p-4 mb-2 rounded-b-md">
                 <li className="flex items-center gap-1">
                   <CheckIcon className="text-sapien-green w-6" /> Create a Vault
                 </li>
