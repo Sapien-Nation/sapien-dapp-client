@@ -163,7 +163,7 @@ const Passport = ({ selectBadge }: Props) => {
           name="bio"
           maxLength={1000}
           placeholder="Bio"
-          className="!border-[1px] !border-sapien-80 text-lg sm:text-lg pl-4 pt-4 text-gray-300"
+          className="border-[1px] border-sapien-80 text-lg sm:text-lg pl-4 pt-4 text-gray-300"
           readOnly
           rules={{
             validate: {
