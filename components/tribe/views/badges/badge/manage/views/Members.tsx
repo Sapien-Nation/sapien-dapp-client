@@ -316,6 +316,7 @@ const MembersView = ({ badge }: Props) => {
                       placeholder="Search members"
                       className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200"
                       onChange={(event) => setSearchTerm(event.target.value)}
+                      value={searchTerm}
                     />
                   </div>
                 </div>
@@ -338,6 +339,8 @@ const MembersView = ({ badge }: Props) => {
                           : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
                       }
                       onClick={() => {
+                        setSearchTerm('');
+
                         if (isSelected) {
                           setNewOwners(
                             newOwners.filter(({ id }) => id !== tribeMember.id)

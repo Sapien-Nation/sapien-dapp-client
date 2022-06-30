@@ -69,10 +69,10 @@ const Sidebar = ({
             MY BADGES <PlusIcon className="text-sapien-neutral-200 w-4" />
             <span className="sr-only">Click here to add a new local badge</span>
           </button>
-          <ul className="space-y-1.5 mt-2">
+          <ul className="mt-2">
             {tribeBadges.map((badge) => {
               return (
-                <li key={badge.id} className="flex flex-col gap-2">
+                <li key={badge.id} className="flex flex-col gap-2 mb-2">
                   <BadgeNavItem
                     badge={badge}
                     isSelected={badge.id === selectedBadge?.id}
@@ -88,7 +88,7 @@ const Sidebar = ({
             })}
             {draftBadges.map((badge) => {
               return (
-                <li key={badge.id} className="flex flex-col gap-2">
+                <li key={badge.id} className="flex flex-col gap-2 mb-2">
                   <BadgeNavItem
                     badge={badge as DraftBadge}
                     isSelected={badge.id === selectedBadge?.id}

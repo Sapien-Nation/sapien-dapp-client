@@ -15,8 +15,8 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
       aria-label="Select tribe"
       className={
         isSelected
-          ? 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 bg-gray-800 font-semibold'
-          : 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 hover:bg-gray-800'
+          ? 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-2 text-gray-300 bg-gray-800 font-semibold'
+          : 'border border-sapien-neutral-200 py-2 px-3 rounded-lg flex items-center gap-2 text-gray-300 hover:bg-gray-800'
       }
     >
       {badge.avatar ? (
