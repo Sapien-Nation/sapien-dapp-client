@@ -14,6 +14,7 @@ import {
   BadgeGrant,
   BadgeGrantPropose,
   DefaultNotification,
+  NotificationCard,
 } from './items';
 
 // hooks
@@ -53,11 +54,17 @@ const Notifications = () => {
 
   //------------------------------------------------------------------------
   const renderNotification = (notification) => {
-    console.log(notification);
     switch (notification.type) {
       case NotificationsType.BadgeGrant:
       case NotificationsType.BadgeGrantOwner:
-        return <BadgeGrant notification={notification} />;
+        return (
+          <NotificationCard
+            tribe={notification.extra.tribe}
+            roomId={notification.extra.roomId}
+          >
+            <BadgeGrant notification={notification} />
+          </NotificationCard>
+        );
       case NotificationsType.BadgeGrantPropose:
         return <BadgeGrantPropose notification={notification} />;
       case NotificationsType.BadgeGrandProposeReady:
