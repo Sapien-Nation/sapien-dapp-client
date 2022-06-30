@@ -14,6 +14,7 @@ import {
   BadgeGrant,
   BadgeGrantPropose,
   DefaultNotification,
+  RoomNewMessage,
   NotificationCard,
 } from './items';
 
@@ -69,6 +70,8 @@ const Notifications = () => {
         return <BadgeGrantPropose notification={notification} />;
       case NotificationsType.BadgeGrandProposeReady:
         return <BadgeGrandProposeReady notification={notification} />;
+      case NotificationsType.RoomNewMessage:
+        return <RoomNewMessage notification={notification} />;
       default:
         return <DefaultNotification notification={notification} />;
     }

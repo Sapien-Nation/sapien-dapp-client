@@ -72,6 +72,7 @@ const Message = ({
     createdAt,
     content,
     type,
+    mentions,
   } = message;
 
   const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
@@ -169,7 +170,12 @@ const Message = ({
             },
           }}
         >
-          {renderContent(content, roomMembers, tribeRooms, tribeID)}
+          {renderContent(
+            content,
+            mentions.length === 0 ? roomMembers : mentions,
+            tribeRooms,
+            tribeID
+          )}
         </Linkify>
       </p>
     );
