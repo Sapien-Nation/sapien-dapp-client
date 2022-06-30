@@ -1,6 +1,9 @@
 import _last from 'lodash/last';
 import Link from 'next/link';
 
+// components
+import NotificationCard from './NotificationCard';
+
 // types
 import type { Notification } from 'tools/types/notifications';
 
@@ -18,25 +21,31 @@ const BadgeGrantPropose = ({ notification }: Props) => {
 
   const payloadList = notification.payload.split(' ');
   const transactionID = payloadList[6];
+
   return (
-    <div className="flex flex-col justify-center items-center w-full">
-      <div className="bg-sapien-neutral-500 text-sm p-3 rounded-xl mb-4 w-full break-words">
-        New badge transaction proposed by {payloadList[3]}{' '}
-        <a
-          target="_blank"
-          className="underline text-sm"
-          rel="noreferrer"
-          href={`${explorerURL}${transactionID}`}
-        >
-          ({transactionID.slice(0, 4)}...{transactionID.slice(-4)})
-        </a>{' '}
-        for the tribe{' '}
-        <Link href={`/tribes/${tribe.id}/badges`} passHref>
-          <a className="underline">{tribe.name}</a>
-        </Link>{' '}
-        is ready to be approved.
+    <NotificationCard
+      tribe={notification.extra.tribe}
+      roomId={notification.extra.roomId}
+    >
+      <div className="flex flex-col justify-center items-center w-full">
+        <div className="bg-sapien-neutral-500 text-sm p-3 rounded-xl mb-4 w-full break-words">
+          New badge transaction proposed by {payloadList[3]}{' '}
+          <a
+            target="_blank"
+            className="underline text-sm"
+            rel="noreferrer"
+            href={`${explorerURL}${transactionID}`}
+          >
+            ({transactionID.slice(0, 4)}...{transactionID.slice(-4)})
+          </a>{' '}
+          for the tribe{' '}
+          <Link href={`/tribes/${tribe.id}/badges`} passHref>
+            <a className="underline">{tribe.name}</a>
+          </Link>{' '}
+          is ready to be approved.
+        </div>
       </div>
-    </div>
+    </NotificationCard>
   );
 };
 

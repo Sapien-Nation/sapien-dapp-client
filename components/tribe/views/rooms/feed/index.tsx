@@ -161,7 +161,7 @@ const Feed = ({
       } else {
         switch (type) {
           case WSEvents.NewMessage: {
-            if ((data as RoomNewMessage).extra.mentions.includes(me.id)) {
+            if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
               handleUnreadReadMessagesOnTribeNavigation(
                 data.extra.roomId,
                 true,

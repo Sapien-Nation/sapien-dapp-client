@@ -1,5 +1,5 @@
+import { renderContent } from 'components/tribe/views/rooms/helpers';
 import _last from 'lodash/last';
-import Link from 'next/link';
 
 // components
 import NotificationCard from './NotificationCard';
@@ -11,7 +11,7 @@ interface Props {
   notification: Notification;
 }
 
-const BadgeGrant = ({ notification }: Props) => {
+const RoomNewMessage = ({ notification }: Props) => {
   const tribe = {
     avatar: '',
     id: notification.tribeId,
@@ -25,14 +25,16 @@ const BadgeGrant = ({ notification }: Props) => {
     >
       <div className="flex flex-col justify-center items-center w-full">
         <div className="bg-sapien-neutral-400 text-sm p-3 rounded-xl mb-4 w-full break-words">
-          {notification.payload.split(' ').slice(0, -1).join(' ')}{' '}
-          <Link href={`/tribes/${tribe.id}/home`} passHref>
-            <a className="underline">{tribe.name}</a>
-          </Link>
+          {renderContent(
+            notification.payload,
+            notification.extra?.mentions,
+            [],
+            notification.tribeId
+          )}
         </div>
       </div>
     </NotificationCard>
   );
 };
 
-export default BadgeGrant;
+export default RoomNewMessage;
