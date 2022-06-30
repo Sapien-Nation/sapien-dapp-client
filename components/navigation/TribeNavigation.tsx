@@ -1,7 +1,12 @@
 import * as Sentry from '@sentry/nextjs';
 import { PlusIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, LockClosedIcon, XIcon } from '@heroicons/react/solid';
+import {
+  ChevronDownIcon,
+  LockClosedIcon,
+  XIcon,
+  CogIcon,
+} from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Fragment, useState } from 'react';
@@ -441,6 +446,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
+                      <button
+                        className="px-2 hidden group-hover:block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        <CogIcon className="w-4 h-4 text-gray-400" />
+                      </button>
                     </div>
                   </li>
                 );
