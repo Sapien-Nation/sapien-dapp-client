@@ -15,7 +15,6 @@ import {
   BadgeGrantPropose,
   DefaultNotification,
   RoomNewMessage,
-  NotificationCard,
 } from './items';
 
 // hooks
@@ -58,14 +57,7 @@ const Notifications = () => {
     switch (notification.type) {
       case NotificationsType.BadgeGrant:
       case NotificationsType.BadgeGrantOwner:
-        return (
-          <NotificationCard
-            tribe={notification.extra.tribe}
-            roomId={notification.extra.roomId}
-          >
-            <BadgeGrant notification={notification} />
-          </NotificationCard>
-        );
+        return <BadgeGrant notification={notification} />;
       case NotificationsType.BadgeGrantPropose:
         return <BadgeGrantPropose notification={notification} />;
       case NotificationsType.BadgeGrandProposeReady:

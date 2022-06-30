@@ -1,6 +1,8 @@
 import { renderContent } from 'components/tribe/views/rooms/helpers';
 import _last from 'lodash/last';
-import Link from 'next/link';
+
+// components
+import NotificationCard from './NotificationCard';
 
 // types
 import type { Notification } from 'tools/types/notifications';
@@ -17,16 +19,21 @@ const RoomNewMessage = ({ notification }: Props) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full">
-      <div className="bg-sapien-neutral-400 text-sm p-3 rounded-xl mb-4 w-full break-words">
-        {renderContent(
-          notification.payload,
-          notification.extra?.mentions,
-          [],
-          notification.tribeId
-        )}
+    <NotificationCard
+      tribe={notification.extra.tribe}
+      roomId={notification.extra.roomId}
+    >
+      <div className="flex flex-col justify-center items-center w-full">
+        <div className="bg-sapien-neutral-400 text-sm p-3 rounded-xl mb-4 w-full break-words">
+          {renderContent(
+            notification.payload,
+            notification.extra?.mentions,
+            [],
+            notification.tribeId
+          )}
+        </div>
       </div>
-    </div>
+    </NotificationCard>
   );
 };
 
