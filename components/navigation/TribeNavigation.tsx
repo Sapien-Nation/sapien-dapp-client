@@ -42,6 +42,10 @@ import { ManageIcon } from 'assets';
 
 // types
 import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
+import { RoomBadge } from 'tools/types/room';
+
+// mocks
+import { mockRoomBadge } from 'tools/mocks/room';
 
 interface Props {
   handleMobileMenu: () => void;
@@ -141,14 +145,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (unreadMentions > 0)
-        return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
-      return 'text-sm bg-sapien-neutral-800 rounded-l-md';
+        return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm mr-2 bg-sapien-neutral-800 rounded-md';
     }
 
     if (unreadMentions > 0 || hasUnread === true)
-      return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
+      return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md';
+    return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
   return (
