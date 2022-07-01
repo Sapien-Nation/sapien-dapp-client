@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 // components
 import { TextareaInput, TextInput } from 'components/common';
 
@@ -11,14 +13,20 @@ import { formatAvatarName, formatTokenID } from 'utils/passport';
 
 // assets
 import { PolygonFilter } from 'assets';
+import { useFormContext } from 'react-hook-form';
 
 interface Props {
   selectBadge: (badgeID: string) => void;
 }
 
 const Passport = ({ selectBadge }: Props) => {
+  const [isEditing, setIsEditing] = useState(false);
+
   const badges = useUserBadges();
   const passport = usePassport();
+  const {
+    formState: { isSubmitting },
+  } = useFormContext();
 
   return (
     <>
@@ -163,8 +171,11 @@ const Passport = ({ selectBadge }: Props) => {
           name="bio"
           maxLength={1000}
           placeholder="Bio"
-          className="border-[1px] border-sapien-80 text-lg sm:text-lg pl-4 pt-4 text-gray-300"
-          readOnly
+          className={`${
+            isEditing ? 'cursor-auto' : 'cursor-default'
+          } border-[1px] border-sapien-80 text-lg sm:text-lg pl-4 pt-4 text-gray-300`}
+          readOnly={!isEditing}
+          rows={4}
           rules={{
             validate: {
               maxLength: (value) => {
@@ -181,6 +192,25 @@ const Passport = ({ selectBadge }: Props) => {
             background: 'transparent',
           }}
         />
+      </div>
+      <div className="flex justify-end mt-2 mr-3 gap-3">
+        <button
+          disabled={isSubmitting}
+          className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]"
+          type="button"
+          onClick={() => setIsEditing(!isEditing)}
+        >
+          {isEditing ? 'Cancel' : 'Edit Bio'}
+        </button>
+        <button
+          disabled={isSubmitting}
+          className={`${
+            isEditing ? 'visible' : 'hidden'
+          } border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]`}
+          type="submit"
+        >
+          Save
+        </button>
       </div>
     </>
   );
