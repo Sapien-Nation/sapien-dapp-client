@@ -95,11 +95,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
                 Enter your destination wallet to withdraw your token.
               </p>
 
-              <form
-                onSubmit={handleSubmit(({ address }: WithdrawFormValues) => {
-                  setAddress(address);
-                })}
-              >
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-1">
                   <input
                     id="address"

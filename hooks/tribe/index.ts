@@ -116,7 +116,7 @@ export const useTribeChannels = (tribeID: string) => {
     .get('/core-api/profile/tribes')
     .find(({ id }) => id === tribeID);
 
-  return tribe
+  return tribe && tribe.channels
     ? tribe.channels.map(({ avatar, membersCount, name, id }) => ({
         avatar,
         type: View.Channel,
