@@ -1,9 +1,14 @@
 import { Transition } from '@headlessui/react';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useSWRConfig } from 'swr';
+
+// api
+import { updateProfile } from 'api/profile';
 
 // context
 import { useAuth } from 'context/user';
+import { useToast } from 'context/toast';
 
 // components
 import { Query } from 'components/common';
@@ -11,6 +16,9 @@ import { BadgeView, PassportView } from './views';
 
 // hooks
 import { usePassport } from 'hooks/passport';
+
+// types
+import type { UserPassport } from 'tools/types/user';
 
 enum View {
   Passport,
@@ -52,11 +60,20 @@ const PassportForm = () => {
   return <div>{renderView()}</div>;
 };
 
+interface FormValues {
+  displayName: string;
+  username: string;
+  bio: string;
+  title: string;
+}
+
 const PassportFormProxy = () => {
   const { me } = useAuth();
   const passport = usePassport();
 
-  const methods = useForm({
+  const toast = useToast();
+  const { mutate } = useSWRConfig();
+  const methods = useForm<FormValues>({
     defaultValues: {
       displayName: passport.username,
       username: passport.username,
@@ -64,6 +81,25 @@ const PassportFormProxy = () => {
       title: 'Founding Member of the Sapien Nation',
     },
   });
+  const { handleSubmit } = methods;
+
+  const onSubmit = async (values: FormValues) => {
+    try {
+      await updateProfile({ bio: values.bio });
+
+      mutate(
+        '/core-api/me/passport',
+        (passport: UserPassport) => ({
+          ...passport,
+          bio: values.bio,
+        }),
+        false
+      );
+      // TODO close dialog
+    } catch (err) {
+      toast({ message: err });
+    }
+  };
 
   return (
     <Query api={`/core-api/user/${me.id}/badges`}>
@@ -78,7 +114,7 @@ const PassportFormProxy = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <FormProvider {...methods}>
-            <form onSubmit={() => {}} id="update-profile-form">
+            <form onSubmit={handleSubmit(onSubmit)} id="update-profile-form">
               <div className="flex flex-col w-[580px]">
                 <PassportForm />
               </div>
