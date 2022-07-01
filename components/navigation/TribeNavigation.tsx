@@ -24,6 +24,7 @@ import { AboutObject } from 'tools/constants/rooms';
 import {
   CreateChannelDialog,
   CreateRoomDialog,
+  ManageRoomDialog,
 } from 'components/tribe/dialogs';
 import { MenuLink, Query, RedDot } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
@@ -55,6 +56,7 @@ enum Dialog {
   CreateChannel,
   CreateRoom,
   EditTribe,
+  ManageRooms,
 }
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
@@ -454,6 +456,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         className="px-2 hidden group-hover:block"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setSelectedRoom(room.id);
+                          setDialog(Dialog.ManageRooms);
                         }}
                       >
                         <CogIcon className="w-4 h-4 text-gray-400" />
@@ -484,6 +488,19 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             {(tribeInfo: MainFeedTribe) => (
               <EditTribeDialog
                 tribe={tribeInfo}
+                onClose={() => setDialog(null)}
+              />
+            )}
+          </Query>
+        )}
+
+        {dialog === Dialog.ManageRooms && (
+          // TODO: Do we have an API to get room badges?
+          <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
+            {(tribeInfo: MainFeedTribe) => (
+              <ManageRoomDialog
+                roomID={selectedRoom}
+                badges={[]}
                 onClose={() => setDialog(null)}
               />
             )}
