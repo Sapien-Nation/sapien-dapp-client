@@ -20,7 +20,7 @@ const BadgeGrandProposeReady = ({ notification }: Props) => {
       tribe={notification.extra.tribe}
       roomId={notification.extra.roomId}
     >
-      <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 w-full">
+      <div className="p-3 rounded-xl mb-4 w-full">
         <p>
           Transaction{' '}
           <a

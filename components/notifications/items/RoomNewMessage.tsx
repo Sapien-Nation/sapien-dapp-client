@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { renderContent } from 'components/tribe/views/rooms/helpers';
 import _last from 'lodash/last';
 
@@ -12,19 +13,24 @@ interface Props {
 }
 
 const RoomNewMessage = ({ notification }: Props) => {
-  const tribe = {
-    avatar: '',
-    id: notification.tribeId,
-    name: _last(notification.payload.split(' ')),
-  };
+  const { push } = useRouter();
+
+  const tribeId = notification.extra?.tribe.id;
+  const roomId = notification.extra?.roomId;
 
   return (
-    <NotificationCard
-      tribe={notification.extra.tribe}
-      roomId={notification.extra.roomId}
-    >
+    <NotificationCard tribe={notification.extra.tribe} roomId={roomId}>
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="bg-sapien-neutral-400 text-sm p-3 rounded-xl mb-4 w-full break-words">
+        <div
+          className={`${
+            tribeId && roomId ? 'hover:cursor-pointer hover:bg-slate-100/5' : ''
+          } text-sm p-3 rounded-xl mb-4 w-full break-words`}
+          onClick={() => {
+            if (tribeId && roomId) {
+              push(`/tribes/${tribeId}/${roomId}`);
+            }
+          }}
+        >
           {renderContent(
             notification.payload,
             notification.extra?.mentions,

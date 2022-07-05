@@ -24,7 +24,7 @@ const BadgeGrant = ({ notification }: Props) => {
       roomId={notification.extra.roomId}
     >
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="bg-sapien-neutral-400 text-sm p-3 rounded-xl mb-4 w-full break-words">
+        <div className="text-sm p-3 rounded-xl mb-4 w-full break-words">
           {notification.payload.split(' ').slice(0, -1).join(' ')}{' '}
           <Link href={`/tribes/${tribe.id}/home`} passHref>
             <a className="underline">{tribe.name}</a>

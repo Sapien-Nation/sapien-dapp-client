@@ -28,7 +28,7 @@ const BadgeGrantPropose = ({ notification }: Props) => {
       roomId={notification.extra.roomId}
     >
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="bg-sapien-neutral-500 text-sm p-3 rounded-xl mb-4 w-full break-words">
+        <div className="text-sm p-3 rounded-xl mb-4 w-full break-words">
           New badge transaction proposed by {payloadList[3]}{' '}
           <a
             target="_blank"
