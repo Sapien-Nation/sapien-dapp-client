@@ -25,7 +25,11 @@ enum View {
   Badge,
 }
 
-const PassportForm = () => {
+interface Props {
+  closeOverlay: () => void;
+}
+
+const PassportForm = ({ closeOverlay }: Props) => {
   const [view, setView] = useState<View | null>(View.Passport);
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
@@ -46,6 +50,7 @@ const PassportForm = () => {
             {() => (
               <BadgeView
                 badgeID={selectedBadge}
+                closeOverlay={closeOverlay}
                 onBack={() => {
                   setView(View.Passport);
                   setSelectedBadge(null);
@@ -67,7 +72,7 @@ interface FormValues {
   title: string;
 }
 
-const PassportFormProxy = () => {
+const PassportFormProxy = ({ closeOverlay }: Props) => {
   const { me } = useAuth();
   const passport = usePassport();
 
@@ -108,7 +113,7 @@ const PassportFormProxy = () => {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} id="update-profile-form">
             <div className="flex flex-col w-[580px]">
-              <PassportForm />
+              <PassportForm closeOverlay={closeOverlay} />
             </div>
           </form>
         </FormProvider>

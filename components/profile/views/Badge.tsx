@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Disclosure } from '@headlessui/react';
 import {
   ArrowLeftIcon,
@@ -14,10 +15,11 @@ import { usePassport } from 'hooks/passport';
 
 interface Props {
   badgeID: string;
+  closeOverlay: () => void;
   onBack: () => void;
 }
 
-const Badge = ({ badgeID, onBack }: Props) => {
+const Badge = ({ badgeID, closeOverlay, onBack }: Props) => {
   const badge = useUserBadge(badgeID);
   const passport = usePassport();
 
@@ -140,25 +142,36 @@ const Badge = ({ badgeID, onBack }: Props) => {
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pt-1 pb-2 text-sm text-gray-500">
                   <ul>
-                    {tribe.rooms.map((room) => (
-                      <li
-                        className="text-md p-2 hover:bg-purple-200 rounded-md"
-                        key={room.id}
-                      >
-                        <div className="flex px-2 py-1 items-center gap-2 flex-1">
-                          <div className="flex gap-1">
-                            <span className="flex items-center w-3">
-                              {room.private ? (
-                                <LockClosedIcon className="w-[10px]" />
-                              ) : (
-                                '#'
-                              )}
-                            </span>{' '}
-                            {room.name}
+                    {tribe.rooms.map((room) => {
+                      const roomIcon = (
+                        <span className="flex items-center w-3">
+                          {room.private ? (
+                            <LockClosedIcon className="w-[10px]" />
+                          ) : (
+                            '#'
+                          )}
+                        </span>
+                      );
+                      return (
+                        <li
+                          className="text-md p-2 hover:bg-purple-200 rounded-md"
+                          key={room.id}
+                        >
+                          <div className="flex px-2 py-1 items-center">
+                            <Link href={`/tribes/${tribe.id}/${room.id}`}>
+                              <a
+                                className="w-full"
+                                onClick={() => closeOverlay()}
+                              >
+                                <div className="flex gap-1">
+                                  {roomIcon} {room.name}
+                                </div>
+                              </a>
+                            </Link>
                           </div>
-                        </div>
-                      </li>
-                    ))}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </Disclosure.Panel>
               </>
