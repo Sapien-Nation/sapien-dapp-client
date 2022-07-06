@@ -63,19 +63,15 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const { mutate } = useSWRConfig();
   const { asPath, query } = useRouter();
 
-  const { tribeID, viewID } = query;
+  const tribeID = query.tribeID as string;
+  const viewID = query.viewID as string;
 
-  const tribe = useTribe(tribeID as string);
-  const rooms = useTribeRooms(tribeID as string);
-  const [canAddRoom, canLeave, canEdit] = useTribePermission(
-    tribeID as string,
-    ['canAddRoom', 'canLeave', 'canEdit']
-  );
+  const tribe = useTribe(tribeID);
+  const rooms = useTribeRooms(tribeID);
+  const [canAddRoom] = useTribePermission(tribeID, ['canCreateRoom']);
   const { redirectToMainTribeChannel } = useMainTribe();
 
-  if (!tribe || !rooms) {
-    return;
-  }
+  const canLeave = false;
 
   const { name, role } = tribe;
 
@@ -153,6 +149,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
     return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
+  console.log({ canAddRoom });
   return (
     <>
       <div className="w-full">
@@ -231,7 +228,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       )}
 
                       <div className="px-1 py-1">
-                        {canEdit === true && (
+                        {false && (
                           <Menu.Item>
                             {({ active }) => (
                               <button
@@ -493,15 +490,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
         )}
 
         {dialog === Dialog.ManageRooms && (
-          <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
-            {() => (
-              <ManageRoomDialog
-                roomID={selectedRoom}
-                badges={[]}
-                onClose={() => setDialog(null)}
-              />
-            )}
-          </Query>
+          <ManageRoomDialog
+            roomID={selectedRoom}
+            onClose={() => setDialog(null)}
+          />
         )}
       </div>
     </>

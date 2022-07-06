@@ -6,6 +6,7 @@ import { useAuth } from 'context/user';
 
 // types
 import type { TribeBadge, BadgeTransaction } from 'tools/types/tribe';
+import type { RoomBadge } from 'tools/types/room';
 
 export const useTribeBadges = (): Array<TribeBadge> => {
   const { query } = useRouter();
@@ -35,4 +36,10 @@ export const useBadgeTransactions = (
   const tribeID = query.tribeID as string;
 
   return cache.get(`/core-api/tribe/${tribeID}/safe/transactions/${badgeID}`);
+};
+
+export const useRoomBadges = (roomID: string): Array<RoomBadge> => {
+  const { cache } = useSWRConfig();
+
+  return cache.get(`/core-api/room/${roomID}/badges`);
 };

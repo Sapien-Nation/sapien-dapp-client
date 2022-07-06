@@ -13,7 +13,6 @@ export { default as InputField } from './fields/TextInput';
 export { default as Redirect } from './Redirect';
 export { default as Overlay } from './Overlay';
 export { default as Tooltip } from './Tooltip';
-export { default as Search } from './Search';
 export { default as Page } from './Page';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Query } from './Query';
