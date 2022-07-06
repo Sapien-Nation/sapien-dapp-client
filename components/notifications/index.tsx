@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react';
 import Lottie from 'react-lottie-player';
 
 // api
-import { makeAllAsRead } from 'api/notifications';
+import { makeAllAsRead, markAsRead } from 'api/notifications';
 
 // constants
 import { NotificationsType } from 'tools/constants/notifications';
@@ -45,6 +45,27 @@ const Notifications = () => {
         }),
         false
       );
+    } catch (err) {
+      toast({
+        message: err,
+      });
+    }
+  };
+
+  const handleReadNotification = async (notificationID: string) => {
+    try {
+      mutate(
+        '/core-api/notification',
+        (data) => ({
+          ...data,
+          unread: data.unread === 1 ? 0 : data.unread - 1,
+          notifications: data.notifications.filter(
+            (notification) => notification.id !== notificationID
+          ),
+        }),
+        false
+      );
+      await markAsRead(notificationID);
     } catch (err) {
       toast({
         message: err,
@@ -114,7 +135,11 @@ const Notifications = () => {
           notifications
             .filter((notification) => !notification.to.seen)
             .map((notification) => (
-              <div key={notification.id}>
+              <div
+                key={notification.id}
+                onClick={() => handleReadNotification(notification.id)}
+                className="cursor-pointer"
+              >
                 {renderNotification(notification)}
               </div>
             ))

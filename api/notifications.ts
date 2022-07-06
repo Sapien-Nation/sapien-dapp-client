@@ -6,3 +6,9 @@ export const makeAllAsRead = async () =>
     .put('/core-api/notification/read')
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const markAsRead = async (notificationID: string) =>
+  axios
+    .put(`/core-api/notification/${notificationID}`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
