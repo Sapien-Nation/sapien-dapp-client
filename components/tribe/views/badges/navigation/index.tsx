@@ -105,14 +105,14 @@ const Sidebar = ({
           </ul>
         </div>
 
-        {/* <button
+        <button
           onClick={showSearch}
           type="button"
           className="w-full text-gray-300 group px-3 py-2 mb-5 cursor-pointer rounded-lg flex items-center justify-between text-base font-medium bg-gray-700 hover:bg-gray-50 hover:text-gray-900"
         >
           Explore Badges <ContributorBadge className="w-8 h-8" />
           <span className="sr-only">Browse Existing Badges</span>
-        </button> */}
+        </button>
       </div>
     </nav>
   );
