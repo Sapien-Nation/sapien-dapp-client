@@ -24,6 +24,7 @@ import { AboutObject } from 'tools/constants/rooms';
 import {
   CreateChannelDialog,
   CreateRoomDialog,
+  ManageRoomDialog,
 } from 'components/tribe/dialogs';
 import { MenuLink, Query, RedDot } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
@@ -51,6 +52,7 @@ enum Dialog {
   CreateChannel,
   CreateRoom,
   EditTribe,
+  ManageRooms,
 }
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
@@ -141,14 +143,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (unreadMentions > 0)
-        return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
-      return 'text-sm bg-sapien-neutral-800 rounded-l-md';
+        return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm mr-2 bg-sapien-neutral-800 rounded-md';
     }
 
     if (unreadMentions > 0 || hasUnread === true)
-      return 'text-sm bg-sapien-white font-bold rounded-l-md hover:bg-sapien-neutral-800';
+      return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md';
+    return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
   return (
@@ -446,14 +448,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
-                      <button
-                        className="px-2 hidden group-hover:block"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        <CogIcon className="w-4 h-4 text-gray-400" />
-                      </button>
+                      {false && (
+                        <button
+                          className="px-2 hidden group-hover:block"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedRoom(room.id);
+                            setDialog(Dialog.ManageRooms);
+                          }}
+                        >
+                          <CogIcon className="w-4 h-4 text-gray-400" />
+                        </button>
+                      )}
                     </div>
                   </li>
                 );
@@ -480,6 +486,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             {(tribeInfo: MainFeedTribe) => (
               <EditTribeDialog
                 tribe={tribeInfo}
+                onClose={() => setDialog(null)}
+              />
+            )}
+          </Query>
+        )}
+
+        {dialog === Dialog.ManageRooms && (
+          <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
+            {() => (
+              <ManageRoomDialog
+                roomID={selectedRoom}
+                badges={[]}
                 onClose={() => setDialog(null)}
               />
             )}

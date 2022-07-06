@@ -34,7 +34,7 @@ const Passport = ({ animationData }: Props) => {
         />
         {showPassport && (
           <div className="px-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <PassportForm />
+            <PassportForm closeOverlay={() => setShowPassport(false)} />
           </div>
         )}
       </div>
