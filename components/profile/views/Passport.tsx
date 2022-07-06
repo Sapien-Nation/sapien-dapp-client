@@ -16,14 +16,18 @@ import { PolygonFilter } from 'assets';
 import { useFormContext } from 'react-hook-form';
 
 interface Props {
-  selectBadge: (badgeID: string) => void;
+  badgeID: string;
+  viewBadgeDetails: (badgeID: string) => void;
 }
 
-const Passport = ({ selectBadge }: Props) => {
+const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const badges = useUserBadges();
   const passport = usePassport();
+
+  const [selectedBadge, setSelectedBadge] = useState(badgeID ?? badges[0]?.id);
+
   const {
     formState: { isSubmitting },
   } = useFormContext();
@@ -32,7 +36,7 @@ const Passport = ({ selectBadge }: Props) => {
     <>
       <PolygonFilter />
       <div className="flex mt-4 gap-5 flex-wrap sm:flex-nowrap">
-        <div className="text-center pt-4 flex flex-col justify-between">
+        <div className="text-center pt-4 flex flex-col justify-start">
           <div className="block h-36 w-40 rotate-90 p-1px hexagon-container">
             <div className="bg-black h-full w-full hexagon flex items-center justify-center">
               <img
@@ -89,7 +93,7 @@ const Passport = ({ selectBadge }: Props) => {
               <TextInput
                 aria-label="username"
                 autoComplete="username"
-                className="appearance-none min-h-64px border-sapien-80 block w-full px-4 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 text-lg sm:text-lg"
+                className="appearance-none h-14 border-sapien-80 block w-full px-4 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 text-lg sm:text-lg"
                 name="username"
                 placeholder="Username"
                 readOnly
@@ -115,31 +119,20 @@ const Passport = ({ selectBadge }: Props) => {
                 No badges received
               </div>
             ) : (
-              <div
-                style={{
-                  clipPath:
-                    'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
-                }}
-                className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
-              >
-                {badges.length === 1 ? (
-                  <button
-                    onClick={() => selectBadge(badges[0].id)}
-                    className="appearance-none border relative flex items-center min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500"
-                  >
-                    <span className="bg-gray-800 ml-4">{badges[0].name}</span>
-                    <span className="font-bold text-gray-400 text-xs right-0 bottom-0 absolute mr-4 mb-1">
-                      Click here to View Badge Details
-                    </span>
-                  </button>
-                ) : (
+              <>
+                <div
+                  style={{
+                    clipPath:
+                      'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
+                  }}
+                  className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+                >
                   <select
-                    className="appearance-none px-4 min-h-64px bg-transparent border-sapien-80 w-full focus:outline-none  focus:border-purple-500"
-                    defaultValue={''}
+                    className="appearance-none px-4 h-14 bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500 rounded-md"
                     name="type"
                     onChange={(event) => {
                       event.preventDefault();
-                      selectBadge(event.target.value);
+                      setSelectedBadge(event.target.value);
                     }}
                   >
                     {badges.map((badge) => {
@@ -154,8 +147,18 @@ const Passport = ({ selectBadge }: Props) => {
                       );
                     })}
                   </select>
-                )}
-              </div>
+                </div>
+                <div className="flex justify-end mt-2 mr-3">
+                  <button
+                    disabled={isSubmitting}
+                    className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1"
+                    type="button"
+                    onClick={() => viewBadgeDetails(selectedBadge)}
+                  >
+                    See Badge Details
+                  </button>
+                </div>
+              </>
             )}
           </div>
         </div>
