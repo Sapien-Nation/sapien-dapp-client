@@ -18,16 +18,9 @@ import { useToast } from 'context/toast';
 // hooks
 import { useTribeRoom } from 'hooks/tribe';
 
-// types
-import type { ProfileTribe } from 'tools/types/tribe';
-
 // assets
 import { ContributorBadge } from 'assets';
 
-// mocks
-// import { mockRoomBadge } from 'tools/mocks/room';
-
-import { BadgeTypes } from 'tools/constants/tribe';
 import { Media } from 'tools/types/common';
 
 export interface RoomBadge {
@@ -35,7 +28,7 @@ export interface RoomBadge {
   id: string;
   description: string;
   name: string;
-  type: BadgeTypes;
+  type: any;
   owners: Array<string>;
   permissions: Array<string>;
   tribe: {
@@ -46,37 +39,13 @@ export interface RoomBadge {
   numberIssued: number;
 }
 
-export const mockRoomBadge = ({
-  id = '1000',
-  ...rest
-}: Partial<RoomBadge> = {}): RoomBadge => ({
-  id,
-  color: '#6200EA',
-  name: `Badge ${id}`,
-  description: '',
-  tribe: {
-    id: '1000',
-    name: 'Test Tribe',
-    avatar: null,
-  },
-  numberIssued: 0,
-  type: BadgeTypes.Normal,
-  owners: [],
-  permissions: [],
-  ...rest,
-});
-
 interface Props {
   badges: Array<RoomBadge>;
   onClose: () => void;
   roomID: string;
 }
 
-const mockSearchBadges = [
-  mockRoomBadge({ id: '4' }),
-  mockRoomBadge({ id: '5' }),
-  mockRoomBadge({ id: '6' }),
-];
+const mockSearchBadges = [];
 
 const SearchBadges = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -130,7 +99,6 @@ const SearchBadges = (props) => {
 
 const ManageRoomDialog = ({ onClose, badges, roomID }: Props) => {
   const [roomBadges, setRoomBadges] = useState<RoomBadge[] | null>(badges);
-  //const [isAddingRoom, setIsAddingRoom] = useState<boolean>(false);
 
   const toast = useToast();
   const { query } = useRouter();

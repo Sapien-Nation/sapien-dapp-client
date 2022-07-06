@@ -43,10 +43,6 @@ import { ManageIcon } from 'assets';
 
 // types
 import type { MainFeedTribe, ProfileTribe } from 'tools/types/tribe';
-import { RoomBadge } from 'tools/types/room';
-
-// mocks
-import { mockRoomBadge } from 'tools/mocks/room';
 
 interface Props {
   handleMobileMenu: () => void;
@@ -452,16 +448,18 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                           </div>
                         </a>
                       </Link>
-                      <button
-                        className="px-2 hidden group-hover:block"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedRoom(room.id);
-                          setDialog(Dialog.ManageRooms);
-                        }}
-                      >
-                        <CogIcon className="w-4 h-4 text-gray-400" />
-                      </button>
+                      {false && (
+                        <button
+                          className="px-2 hidden group-hover:block"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedRoom(room.id);
+                            setDialog(Dialog.ManageRooms);
+                          }}
+                        >
+                          <CogIcon className="w-4 h-4 text-gray-400" />
+                        </button>
+                      )}
                     </div>
                   </li>
                 );
@@ -495,9 +493,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
         )}
 
         {dialog === Dialog.ManageRooms && (
-          // TODO: Do we have an API to get room badges?
           <Query api={`/core-api/tribe/${tribe.id}`} loader={null}>
-            {(tribeInfo: MainFeedTribe) => (
+            {() => (
               <ManageRoomDialog
                 roomID={selectedRoom}
                 badges={[]}
