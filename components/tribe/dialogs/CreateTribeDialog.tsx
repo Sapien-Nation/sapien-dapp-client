@@ -51,7 +51,7 @@ const CreateTribeDialog = ({ onClose }: Props) => {
       const response = await createTribe(body);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) => [
           tribes[0],
           {

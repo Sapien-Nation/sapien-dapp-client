@@ -121,7 +121,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
       setVaultStatus(VaultStatus.AlmostThere);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((cacheTribe) => {
             if (cacheTribe.id === tribeID) {
@@ -182,7 +182,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
 
       setVaultStatus(VaultStatus.Owners);
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((cacheTribe) => {
             if (cacheTribe.id === tribeID) {

@@ -32,7 +32,7 @@ const DeleteRoomDialog = ({ onClose, roomID }: Props) => {
   const handleDeleteRoom = async () => {
     try {
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((cacheTribe) =>
             cacheTribe.id === tribeID

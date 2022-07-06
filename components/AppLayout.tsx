@@ -40,9 +40,7 @@ const Page = ({ children }: Props) => {
     setMobileMenuOpen(!mobileMenuOpen);
   }, [mobileMenuOpen]);
 
-  const { data: tribes, error: tribesError } = useSWR(
-    '/core-api/profile/tribes'
-  );
+  const { data: tribes, error: tribesError } = useSWR('/core-api/user/tribes');
   const { data: passport, error: passportError } = useSWR(
     '/core-api/me/passport'
   );

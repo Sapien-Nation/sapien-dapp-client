@@ -73,7 +73,7 @@ function TribeBarItem({
     try {
       if (isLeavingTheCurrentTribe === false) {
         mutate(
-          '/core-api/profile/tribes',
+          '/core-api/user/tribes',
           (tribes: Array<ProfileTribe>) =>
             tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
           false
@@ -88,7 +88,7 @@ function TribeBarItem({
 
       if (isLeavingTheCurrentTribe === true) {
         mutate(
-          '/core-api/profile/tribes',
+          '/core-api/user/tribes',
           (tribes: Array<ProfileTribe>) =>
             tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
           false

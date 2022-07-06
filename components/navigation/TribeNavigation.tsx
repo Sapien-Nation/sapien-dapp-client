@@ -87,7 +87,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
       await readAllTribeNotifications(tribeID as string);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((cacheTribe) =>
             cacheTribe.id === tribeID
@@ -116,7 +116,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
       await leaveTribe(tribeID as string);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.filter((tribeCache) => tribeCache.id !== tribe.id),
         false

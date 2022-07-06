@@ -28,7 +28,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
       const response = await joinTribe(tribe.id);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) => [
           tribes[0],
           response,

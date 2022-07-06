@@ -91,7 +91,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       const response = await createChannel(body);
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) => {
           return tribes.map((tribe) => ({
             ...tribe,

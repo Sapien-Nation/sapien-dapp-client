@@ -134,7 +134,7 @@ export const setUser = (user = mockUser()) => {
 };
 
 export const setAllTribes = (tribes = []) =>
-  cache.set('/core-api/profile/tribes', tribes);
+  cache.set('/core-api/user/tribes', tribes);
 
 export const setLoggedOutUser = (user = mockUser()) =>
   cache.set('/user-api/me', null);

@@ -192,7 +192,7 @@ const Feed = ({
     hasUnread = false
   ) => {
     mutate(
-      '/core-api/profile/tribes',
+      '/core-api/user/tribes',
       (tribes: Array<ProfileTribe>) =>
         tribes.map((tribe) =>
           tribe.id === tribeID

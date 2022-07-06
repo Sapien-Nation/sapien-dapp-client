@@ -55,7 +55,7 @@ const CreatePrivateRoomDialog = ({ onClose }: Props) => {
       });
 
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((tribe) => {
             if (tribe.id === tribeID) {

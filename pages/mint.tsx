@@ -119,7 +119,7 @@ const Mint = ({ avatar }: { avatar: string }) => {
   };
 
   return (
-    <Query api="/core-api/profile/tribes">
+    <Query api="/core-api/user/tribes">
       {(tribes: Array<ProfileTribe>) => {
         return (
           <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">

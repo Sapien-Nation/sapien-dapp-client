@@ -61,7 +61,7 @@ const EditTribeDialog = ({ onClose, tribe }: Props) => {
 
       mutate(`/core-api/tribe/${tribe.id}`, () => response, true);
       mutate(
-        '/core-api/profile/tribes',
+        '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>
           tribes.map((cacheTribe) => {
             if (cacheTribe.id === tribe.id) {

@@ -61,7 +61,7 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
 export const useSapienTribe = (): ProfileTribe => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/core-api/profile/tribes')[0];
+  return cache.get('/core-api/user/tribes')[0];
 };
 
 export const useTribePermission = (
@@ -71,7 +71,7 @@ export const useTribePermission = (
   const { cache } = useSWRConfig();
 
   const tribe = cache
-    .get('/core-api/profile/tribes')
+    .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
 
   if (tribe?.permissions) {
@@ -84,7 +84,7 @@ export const useTribePermission = (
 export const useTribe = (tribeID: string): ProfileTribe => {
   const { cache } = useSWRConfig();
 
-  return cache.get('/core-api/profile/tribes').find(({ id }) => id === tribeID);
+  return cache.get('/core-api/user/tribes').find(({ id }) => id === tribeID);
 };
 
 export const useTribeMembers = (tribeID: string): Array<TribeMember> => {
@@ -100,7 +100,7 @@ export const useMainTribe = (): {
   const { push } = useRouter();
   const { cache } = useSWRConfig();
 
-  const tribe: ProfileTribe = cache.get('/core-api/profile/tribes')[0];
+  const tribe: ProfileTribe = cache.get('/core-api/user/tribes')[0];
 
   return {
     tribeID: tribe.id,
@@ -113,7 +113,7 @@ export const useMainTribe = (): {
 export const useTribeChannels = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
-    .get('/core-api/profile/tribes')
+    .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
 
   return tribe && tribe.channels
@@ -130,7 +130,7 @@ export const useTribeChannels = (tribeID: string) => {
 export const useTribeRoom = (tribeID: string, roomID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
-    .get('/core-api/profile/tribes')
+    .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
 
   return tribe?.rooms?.find((room) => room.id === roomID);
@@ -139,7 +139,7 @@ export const useTribeRoom = (tribeID: string, roomID: string) => {
 export const useTribeRooms = (tribeID: string) => {
   const { cache } = useSWRConfig();
   const tribe: ProfileTribe = cache
-    .get('/core-api/profile/tribes')
+    .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
 
   return tribe?.rooms?.map((room) => ({
@@ -159,7 +159,7 @@ export const useGetCurrentView = (
   const { cache } = useSWRConfig();
 
   const tribe: ProfileTribe = cache
-    .get('/core-api/profile/tribes')
+    .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
   const rooms = useTribeRooms(tribe.id);
   const channels = useTribeChannels(tribe.id);
