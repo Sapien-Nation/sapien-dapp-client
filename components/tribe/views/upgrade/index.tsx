@@ -62,6 +62,8 @@ enum View {
 enum VaultStatus {
   Idle,
   Upgrading,
+  AlmostThere,
+  Owners,
   Success,
 }
 
@@ -115,6 +117,8 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
       setVaultStatus(VaultStatus.Upgrading);
 
       await upgradeTribeOwners(tribeID);
+
+      setVaultStatus(VaultStatus.AlmostThere);
 
       mutate(
         '/core-api/profile/tribes',
@@ -173,8 +177,10 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
         passportTokenId: selectedToken.id,
       });
 
+      setVaultStatus(VaultStatus.AlmostThere);
       await upgradeTribeOwners(tribeID);
 
+      setVaultStatus(VaultStatus.Owners);
       mutate(
         '/core-api/profile/tribes',
         (tribes: Array<ProfileTribe>) =>
@@ -874,7 +880,21 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
               return (
                 <div className="flex gap-2 justify-center font-semibold items-center">
                   <p className="text-lg">Upgrading</p>
-                  <span className="text-sapien-green text-xl">45%</span>
+                  <span className="text-sapien-green text-xl">35%</span>
+                </div>
+              );
+            case VaultStatus.Owners:
+              return (
+                <div className="flex gap-2 justify-center font-semibold items-center">
+                  <p className="text-lg">Upgrading</p>
+                  <span className="text-sapien-green text-xl">75%</span>
+                </div>
+              );
+            case VaultStatus.AlmostThere:
+              return (
+                <div className="flex gap-2 justify-center font-semibold items-center">
+                  <p className="text-lg">Upgrading</p>
+                  <span className="text-sapien-green text-xl">55%</span>
                 </div>
               );
             case VaultStatus.Success:
