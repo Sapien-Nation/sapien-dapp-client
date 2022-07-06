@@ -324,58 +324,63 @@ const MembersView = ({ badge }: Props) => {
             </div>
             <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
               <div className="flex flex-col w-full">
-                {matchSorter(availableOwnersToPropose, searchTerm, {
-                  keys: ['displayName'],
-                }).map((tribeMember) => {
-                  const isSelected = newOwners.find(
-                    (newOwner) => newOwner.id === tribeMember.id
-                  );
-                  return (
-                    <div
-                      key={tribeMember.id}
-                      className={
-                        isSelected
-                          ? 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2 border-sapien'
-                          : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
-                      }
-                      onClick={() => {
-                        setSearchTerm('');
+                {searchTerm === ''
+                  ? []
+                  : matchSorter(availableOwnersToPropose, searchTerm, {
+                      keys: ['displayName'],
+                    }).map((tribeMember) => {
+                      const isSelected = newOwners.find(
+                        (newOwner) => newOwner.id === tribeMember.id
+                      );
+                      return (
+                        <div
+                          key={tribeMember.id}
+                          className={
+                            isSelected
+                              ? 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2 border-sapien'
+                              : 'py-2 px-3 cursor-pointer bg-gray-900 hover:bg-gray-800 border-transparent border-l-2'
+                          }
+                          onClick={() => {
+                            setSearchTerm('');
 
-                        if (isSelected) {
-                          setNewOwners(
-                            newOwners.filter(({ id }) => id !== tribeMember.id)
-                          );
-                        } else {
-                          setNewOwners([
-                            ...newOwners,
-                            {
-                              id: tribeMember.id,
-                              walletAddress: tribeMember.walletAddress,
-                            },
-                          ]);
-                        }
-                      }}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                          {tribeMember.avatar && (
-                            <img
-                              className="w-5 h-5 rounded-full flex-shrink-0"
-                              src={tribeMember.avatar}
-                              alt={tribeMember.displayName}
-                            />
-                          )}
-                          {!tribeMember.avatar && tribeMember.displayName && (
-                            <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                              {tribeMember.displayName[0].toUpperCase()}
+                            if (isSelected) {
+                              setNewOwners(
+                                newOwners.filter(
+                                  ({ id }) => id !== tribeMember.id
+                                )
+                              );
+                            } else {
+                              setNewOwners([
+                                ...newOwners,
+                                {
+                                  id: tribeMember.id,
+                                  walletAddress: tribeMember.walletAddress,
+                                },
+                              ]);
+                            }
+                          }}
+                        >
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                              {tribeMember.avatar && (
+                                <img
+                                  className="w-5 h-5 rounded-full flex-shrink-0"
+                                  src={tribeMember.avatar}
+                                  alt={tribeMember.displayName}
+                                />
+                              )}
+                              {!tribeMember.avatar &&
+                                tribeMember.displayName && (
+                                  <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
+                                    {tribeMember.displayName[0].toUpperCase()}
+                                  </div>
+                                )}
+                              {tribeMember.displayName || tribeMember.username}
                             </div>
-                          )}
-                          {tribeMember.displayName}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                      );
+                    })}
               </div>
             </div>
           </div>

@@ -87,6 +87,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
           ...badges,
           {
             id: response,
+            owners: [],
             ...newBadge,
           },
         ],
