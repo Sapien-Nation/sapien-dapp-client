@@ -8,7 +8,6 @@ import { useSWRConfig } from 'swr';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { XIcon } from '@heroicons/react/outline';
-import Lottie from 'react-lottie-player';
 
 // api
 import { sendMessage, readRoom } from 'api/room';
@@ -49,9 +48,6 @@ import type {
   RoomNewMessage,
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
-
-// assets
-import PrivacyJSONData from './lottie/Privary.json';
 
 interface Props {
   apiKey: string;
@@ -383,12 +379,6 @@ const Feed = ({
             )}
 
             <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
-              <button
-                aria-label="Open Permissions"
-                className="flex px-1 h-full items-center"
-              >
-                <Lottie animationData={PrivacyJSONData} play className="w-5" />
-              </button>
               <button
                 aria-label="Toggle Details"
                 className="flex px-1 h-full items-center"
