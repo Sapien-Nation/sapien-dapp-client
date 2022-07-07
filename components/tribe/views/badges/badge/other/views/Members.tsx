@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-
 // hooks
 import { useTribeBadge } from 'hooks/tribe/badge';
 
@@ -8,9 +6,11 @@ interface Props {
 }
 
 const MembersForm = ({ badgeID }: Props) => {
-  const { query } = useRouter();
-
   const badge = useTribeBadge(badgeID);
+
+  if (badge.owners.length === 0) {
+    return <h1>This badge has no members associated yet</h1>;
+  }
 
   return (
     <div className="w-full">

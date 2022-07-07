@@ -2,15 +2,13 @@ import { useState } from 'react';
 
 // components
 import { Query } from 'components/common';
-import { SettingsView } from './views';
+import { MembersView, PermissionsView, SettingsView } from './views';
 
 // types
 import type { TribeBadge } from 'tools/types/tribe';
 
 interface Props {
-  badgeName: string;
   badgeID: string;
-  tribeName: string;
 }
 
 enum View {
@@ -19,23 +17,15 @@ enum View {
   Permissions,
 }
 
-const ManageBadgeView = ({ badgeName, badgeID, tribeName }: Props) => {
+const ManageBadgeView = ({ badgeID }: Props) => {
   const [view, setView] = useState(View.Settings);
 
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        return (
-          <div className="flex flex-col p-8">
-            <h1>Coming Soon!</h1>
-          </div>
-        );
+        return <MembersView badgeID={badgeID} />;
       case View.Permissions:
-        return (
-          <div className="flex flex-col p-8">
-            <h1>Coming Soon!</h1>
-          </div>
-        );
+        return <PermissionsView badgeID={badgeID} />;
       case View.Settings:
         return <SettingsView badgeID={badgeID} />;
     }
@@ -44,7 +34,7 @@ const ManageBadgeView = ({ badgeName, badgeID, tribeName }: Props) => {
   return (
     <>
       <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
-        Manage Badge ({badgeName} - {tribeName})
+        Manage Badge
       </h1>
       <div className="flex flex-col gap-3 mt-5">
         <div className="flex justify-around border border-gray-800 rounded-md p-3">
@@ -76,28 +66,16 @@ const ManageBadgeView = ({ badgeName, badgeID, tribeName }: Props) => {
             Permissions
           </button>
         </div>
-        {view === View.Members ? (
-          <>{renderForm()}</>
-        ) : (
-          <div className="border border-gray-800 rounded-md">
-            {renderForm()}
-          </div>
-        )}
+        <div className="border border-gray-800 rounded-md">{renderForm()}</div>
       </div>
     </>
   );
 };
 
-const ManageBadgeViewProxy = ({ badge }: { badge: TribeBadge }) => {
+const ManageBadgeViewProxy = ({ badgeID }: { badgeID: string }) => {
   return (
-    <Query api={`/core-api/badge/${badge.id}`}>
-      {() => (
-        <ManageBadgeView
-          badgeID={badge.id}
-          tribeName={badge.tribeName}
-          badgeName={badge.name}
-        />
-      )}
+    <Query api={`/core-api/badge/${badgeID}`}>
+      {() => <ManageBadgeView badgeID={badgeID} />}
     </Query>
   );
 };

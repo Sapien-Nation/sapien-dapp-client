@@ -5,10 +5,7 @@ import { Members, Settings } from './views';
 
 // types
 import type { DraftBadge } from '../../types';
-
-interface Props {
-  badge: DraftBadge;
-}
+import { Query } from 'components/common';
 
 enum View {
   Settings,
@@ -16,14 +13,13 @@ enum View {
   Permissions,
 }
 
-const ManageBadgeView = ({ badge }: Props) => {
+const ManageBadgeView = ({ badgeID }: { badgeID: string }) => {
   const [view, setView] = useState(View.Settings);
 
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        // @ts-ignore
-        return <Members badge={badge} />;
+        return <Members badgeID={badgeID} />;
       case View.Permissions:
         return (
           <div className="flex flex-col p-8">
@@ -31,7 +27,7 @@ const ManageBadgeView = ({ badge }: Props) => {
           </div>
         );
       case View.Settings:
-        return <Settings badge={badge} />;
+        return <Settings badgeID={badgeID} />;
     }
   };
 
@@ -82,4 +78,12 @@ const ManageBadgeView = ({ badge }: Props) => {
   );
 };
 
-export default ManageBadgeView;
+const ManageBadgeViewProxy = ({ badgeID }: { badgeID: string }) => {
+  return (
+    <Query api={`/core-api/badge/${badgeID}`}>
+      {() => <ManageBadgeView badgeID={badgeID} />}
+    </Query>
+  );
+};
+
+export default ManageBadgeViewProxy;

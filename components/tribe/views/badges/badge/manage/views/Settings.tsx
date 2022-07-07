@@ -1,14 +1,16 @@
 // components
 import { TextInputLabel } from 'components/common';
 
-// types
-import type { DraftBadge } from '../../../types';
+// hooks
+import { useTribeBadge } from 'hooks/tribe/badge';
 
 interface Props {
-  badge: DraftBadge;
+  badgeID: string;
 }
 
-const SettingsForm = ({ badge }: Props) => {
+const SettingsForm = ({ badgeID }: Props) => {
+  const badge = useTribeBadge(badgeID);
+
   return (
     <div className="flex flex-col p-3">
       <TextInputLabel label="Badge Icon" name="icon" error="" />

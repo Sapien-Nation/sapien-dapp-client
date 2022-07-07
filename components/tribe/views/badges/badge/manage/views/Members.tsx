@@ -19,16 +19,16 @@ import { useToast } from 'context/toast';
 
 // hooks
 import { useTribeMembers } from 'hooks/tribe';
-import { useBadgeTransactions } from 'hooks/tribe/badge';
+import { useBadgeTransactions, useTribeBadge } from 'hooks/tribe/badge';
 
 // types
-import type { BadgeTransaction, TribeBadge } from 'tools/types/tribe';
+import type { BadgeTransaction } from 'tools/types/tribe';
 
 interface Props {
-  badge: TribeBadge;
+  badgeID: string;
 }
 
-const MembersView = ({ badge }: Props) => {
+const MembersView = ({ badgeID }: Props) => {
   const [newOwners, setNewOwners] = useState<
     Array<{ id: string; walletAddress: string }>
   >([]);
@@ -46,6 +46,7 @@ const MembersView = ({ badge }: Props) => {
 
   const { me } = useAuth();
   const toast = useToast();
+  const badge = useTribeBadge(badgeID);
   const { query } = useRouter();
   const { mutate } = useSWRConfig();
   const tribeID = query.tribeID as string;
@@ -418,7 +419,7 @@ const MembersView = ({ badge }: Props) => {
   );
 };
 
-const MembersFormProxy = ({ badge }: Props) => {
+const MembersFormProxy = ({ badgeID }: { badgeID: string }) => {
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
@@ -431,10 +432,10 @@ const MembersFormProxy = ({ badge }: Props) => {
 
   return (
     <Query
-      api={`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`}
+      api={`/core-api/tribe/${tribeID}/safe/transactions/${badgeID}`}
       loader={<Loader />}
     >
-      {() => <MembersView badge={badge} />}
+      {() => <MembersView badgeID={badgeID} />}
     </Query>
   );
 };
