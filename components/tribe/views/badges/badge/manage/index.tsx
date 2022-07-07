@@ -22,6 +22,7 @@ const ManageBadgeView = ({ badge }: Props) => {
   const renderForm = () => {
     switch (view) {
       case View.Members:
+        // @ts-ignore
         return <Members badge={badge} />;
       case View.Permissions:
         return (
