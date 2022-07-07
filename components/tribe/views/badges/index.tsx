@@ -9,7 +9,12 @@ import Lottie from 'react-lottie-player';
 import { Overlay, Query } from 'components/common';
 import Sidebar from './navigation';
 import SearchView from './search';
-import { CreateBadgeView, ManageBadgeView, OwnerBadgeView } from './badge';
+import {
+  CreateBadgeView,
+  ManageBadgeView,
+  OwnerBadgeView,
+  OtherBadgeView,
+} from './badge';
 
 // assets
 import daoJSONData from './lottie/dao.json';
@@ -81,6 +86,10 @@ const BadgesView = () => {
 
   const renderView = () => {
     if (selectedBadge) {
+      if (false) {
+        return <OtherBadgeView badge={selectedBadge as TribeBadge} />;
+      }
+
       if (selectedBadge.name === 'Owner') {
         return <OwnerBadgeView />;
       }

@@ -6,9 +6,15 @@ interface Props {
   badge: TribeBadge | DraftBadge;
   onSelect: () => void;
   isSelected: boolean;
+  isOther?: boolean;
 }
 
-const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
+const BadgeNavItem = ({
+  badge,
+  isSelected,
+  onSelect,
+  isOther = false,
+}: Props) => {
   return (
     <button
       onClick={onSelect}
@@ -34,12 +40,25 @@ const BadgeNavItem = ({ badge, isSelected, onSelect }: Props) => {
           D
         </div>
       )}
-      <span className="text-ellipsis truncate flex-1 text-left">
-        {badge.name || '[DRAFT]'}
-      </span>
-      <span className="text-gray-500 text-xs">
-        {badge.name === 'Owner' ? '(Default)' : ''}
-      </span>
+      {isOther === true ? (
+        <>
+          <span className="text-ellipsis truncate flex-1 text-left">
+            {badge.name}
+          </span>
+          <span className="text-gray-500 text-xs">
+            {(badge as TribeBadge).tribeName}
+          </span>
+        </>
+      ) : (
+        <>
+          <span className="text-ellipsis truncate flex-1 text-left">
+            {badge.name || '[DRAFT]'}
+          </span>
+          <span className="text-gray-500 text-xs">
+            {badge.name === 'Owner' ? 'Owner Badge' : ''}
+          </span>
+        </>
+      )}
     </button>
   );
 };

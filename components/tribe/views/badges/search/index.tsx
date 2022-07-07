@@ -4,6 +4,7 @@ import { Fragment, useState } from 'react';
 import Lottie from 'react-lottie-player';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { useSWRConfig } from 'swr';
 
 // api
 import { addTribeFromDiscovery } from 'api/tribe';
@@ -24,7 +25,6 @@ import { useUpgradedTribes } from 'hooks/tribe';
 
 // types
 import type { DiscoverBadge } from 'tools/types/tribe';
-import { mutate } from 'swr';
 
 interface Props {
   onAdd: (badge: any) => void;
@@ -40,20 +40,30 @@ const Search = ({ onAdd }: Props) => {
 
   const toast = useToast();
   const { query } = useRouter();
+  const { mutate } = useSWRConfig();
 
   const tribeID = query.tribeID as string;
 
-  const handleAddBadge = async (badgeID: string) => {
-    setSelectedBadgeID(badgeID);
+  const handleAddBadge = async (badge) => {
+    setSelectedBadgeID(badge.id);
     try {
-      const badge = await addTribeFromDiscovery(tribeID, badgeID);
+      await addTribeFromDiscovery(tribeID, badge.id);
 
       mutate(
         `/core-api/tribe/${tribeID}/badges`,
-        (data) => ({
-          ...data,
-          otherBadges: [...data.otherBadges, badge],
-        }),
+        (data) => {
+          return {
+            ...data,
+            otherBadges: [
+              ...data.otherBadges,
+              {
+                ...badge,
+                tribeId: selected.id,
+                parentId: badge.id,
+              },
+            ],
+          };
+        },
         false
       );
 
@@ -61,7 +71,7 @@ const Search = ({ onAdd }: Props) => {
     } catch (err) {
       toast({ message: err });
     }
-    setSelectedBadgeID(badgeID);
+    setSelectedBadgeID(null);
   };
 
   return (
@@ -233,7 +243,7 @@ const Search = ({ onAdd }: Props) => {
                         <button
                           disabled={selectedBadgeID !== null}
                           className="bg-gray-800 text-gray-300 px-5 py-2 rounded-md"
-                          onClick={() => handleAddBadge(badge.id)}
+                          onClick={() => handleAddBadge(badge)}
                         >
                           {selectedBadgeID === badge.id
                             ? 'Adding...'

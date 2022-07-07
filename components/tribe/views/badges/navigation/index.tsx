@@ -127,6 +127,7 @@ const Sidebar = ({
                           setSelectedBadge(badge);
                         });
                       }}
+                      isOther
                     />
                   </li>
                 );
