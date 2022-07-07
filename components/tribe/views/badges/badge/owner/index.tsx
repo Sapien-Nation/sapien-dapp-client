@@ -15,9 +15,11 @@ enum View {
 const BadgeView = () => {
   const [view, setView] = useState(View.Settings);
 
-  const tribeBadges = useTribeBadges();
+  const { myBadges, otherBadges } = useTribeBadges();
 
-  const badge = tribeBadges.find((tribeBadge) => tribeBadge.name === 'Owner');
+  const badge = [...myBadges, ...otherBadges].find(
+    (tribeBadge) => tribeBadge.name === 'Owner'
+  );
   const renderForm = () => {
     switch (view) {
       case View.Members:

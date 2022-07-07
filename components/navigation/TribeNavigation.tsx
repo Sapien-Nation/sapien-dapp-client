@@ -149,7 +149,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
     return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
-  console.log({ canAddRoom });
   return (
     <>
       <div className="w-full">

@@ -139,16 +139,4 @@ const MembersForm = () => {
   );
 };
 
-const MembersFormProxy = () => {
-  const { query } = useRouter();
-
-  const tribeID = query.tribeID as string;
-
-  return (
-    <Query api={`/core-api/tribe/${tribeID}/members`} loader={null}>
-      {() => <MembersForm />}
-    </Query>
-  );
-};
-
-export default MembersFormProxy;
+export default MembersForm;

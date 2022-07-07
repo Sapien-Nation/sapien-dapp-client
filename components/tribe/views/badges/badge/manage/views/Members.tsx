@@ -113,7 +113,7 @@ const MembersView = ({ badge }: Props) => {
   const handleProposeTransaction = async () => {
     setIsProposing(true);
     try {
-      const transaction = await proposeBadgeGrant(badge.id, {
+      await proposeBadgeGrant(badge.id, {
         members: newOwners,
         tribeId: tribeID,
       });
@@ -428,16 +428,13 @@ const MembersFormProxy = ({ badge }: Props) => {
       <div className="w-full h-72 border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded-md"></div>
     );
   };
+
   return (
-    <Query api={`/core-api/tribe/${tribeID}/members`} loader={<Loader />}>
-      {() => (
-        <Query
-          api={`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`}
-          loader={<Loader />}
-        >
-          {() => <MembersView badge={badge} />}
-        </Query>
-      )}
+    <Query
+      api={`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`}
+      loader={<Loader />}
+    >
+      {() => <MembersView badge={badge} />}
     </Query>
   );
 };

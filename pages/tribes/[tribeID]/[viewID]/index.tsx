@@ -62,7 +62,11 @@ const TribePage = ({ tribeID, viewID }: Props) => {
 
         return (
           <Query api={`/core-api/tribe/${tribeID}/badges`} loader={null}>
-            {() => <BadgesView />}
+            {() => (
+              <Query api={`/core-api/tribe/${tribeID}/members`}>
+                {() => <BadgesView />}
+              </Query>
+            )}
           </Query>
         );
       }

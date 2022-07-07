@@ -37,7 +37,14 @@ const Sidebar = ({
   const tribeID = query.tribeID as string;
 
   const tribe = useTribe(tribeID);
-  const tribeBadges = useTribeBadges();
+  const { myBadges, otherBadges } = useTribeBadges();
+
+  const ownerBadge = myBadges.find(({ name }) => name === 'Owner');
+  const badges = [
+    ownerBadge,
+    ...myBadges.filter(({ name }) => name !== 'Owner'),
+    ...otherBadges,
+  ];
 
   return (
     <nav className="flex-1 flex flex-col min-h-0 bg-sapien-neutral-600">
@@ -70,7 +77,7 @@ const Sidebar = ({
             <span className="sr-only">Click here to add a new local badge</span>
           </button>
           <ul className="mt-2">
-            {tribeBadges.map((badge) => {
+            {badges.map((badge) => {
               return (
                 <li key={badge.id} className="flex flex-col gap-2 mb-2">
                   <BadgeNavItem

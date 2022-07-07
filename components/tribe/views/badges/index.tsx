@@ -38,7 +38,6 @@ const BadgesView = () => {
     DraftBadge | TribeBadge | null
   >(null);
 
-  const { me } = useAuth();
   const { back, query } = useRouter();
 
   const tribeID = query.tribeID as string;

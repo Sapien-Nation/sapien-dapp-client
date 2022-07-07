@@ -8,7 +8,10 @@ import { useAuth } from 'context/user';
 import type { TribeBadge, BadgeTransaction } from 'tools/types/tribe';
 import type { RoomBadge } from 'tools/types/room';
 
-export const useTribeBadges = (): Array<TribeBadge> => {
+export const useTribeBadges = (): {
+  myBadges: Array<TribeBadge>;
+  otherBadges: Array<TribeBadge>;
+} => {
   const { query } = useRouter();
   const { cache } = useSWRConfig();
 

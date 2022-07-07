@@ -42,7 +42,6 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
     ],
     async (type: WSEvents, data: any) => {
       try {
-        console.log({ data, type });
         switch (type) {
           case WSEvents.BadgeGrandProposeReady:
           case WSEvents.BadgeGrant:

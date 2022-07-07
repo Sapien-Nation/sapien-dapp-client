@@ -130,11 +130,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
                   </span>
                   <button
                     className="px-2 hidden group-hover:block"
-                    onClick={() => {
-                      console.log(
-                        badges.filter((badge) => badge.id !== badge.id)
-                      );
-                    }}
+                    onClick={() => {}}
                   >
                     <XIcon className="w-6 h-6 text-gray-400" />
                   </button>
