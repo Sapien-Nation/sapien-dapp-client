@@ -194,7 +194,7 @@ const Deposit = ({ handleBack }: Props) => {
           return (
             <>
               <InformationCircleIcon className="h-5 w-5" aria-hidden="true" />
-              You will be requesed to connect your wallet
+              You will be requested to connect your wallet
             </>
           );
         };
