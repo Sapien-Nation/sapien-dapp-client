@@ -187,6 +187,7 @@ const BadgesView = () => {
             handleAddDraftBadge={handleAddDraftBadge}
             draftBadges={draftBadges}
             setSelectedBadge={setSelectedBadge}
+            // @ts-ignore
             selectedBadge={selectedBadge}
             showSearch={() => {
               setView(View.Search);
