@@ -325,8 +325,8 @@ const Deposit = ({ handleBack }: Props) => {
               </p>
             ) : (
               <p className="text-sm text-white">
-                To deposit SPN tokens to the platform, install Metamask and
-                complete the transaction
+                To deposit, you must have a Sapien Nation NFT passport in your
+                Metamask wallet
               </p>
             )}
 
