@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router';
-
 // hooks
 import { useTribeBadge } from 'hooks/tribe/badge';
 
@@ -8,31 +6,15 @@ interface Props {
 }
 
 const MembersForm = ({ badgeID }: Props) => {
-  const { query } = useRouter();
-
   const badge = useTribeBadge(badgeID);
+
+  if (badge.owners.length === 0) {
+    return <h1>This badge has no members associated yet</h1>;
+  }
 
   return (
     <div className="w-full">
       <div className="flex flex-col items-center relative">
-        <div className="w-full">
-          <div className="p-1 flex border border-sapien-neutral-400 bg-sapien-neutral-500 placeholder-sapien-neutral-200 rounded">
-            <div className="flex flex-auto flex-wrap">
-              {badge.owners.map((badgeOwner) => {
-                return (
-                  <div
-                    key={badgeOwner.id}
-                    className="flex justify-center items-center m-1 font-medium py-1 px-4  rounded-full text-primary-700 bg-[#6200ea] border border-primary-300 "
-                  >
-                    <div className="text-xs text-white font-semibold mr-2 leading-none max-w-full flex-initial">
-                      {badgeOwner.username}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
         <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
           <div className="flex flex-col w-full">
             {badge.owners.map((badgeOwner) => {

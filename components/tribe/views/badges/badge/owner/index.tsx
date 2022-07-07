@@ -22,7 +22,7 @@ const BadgeView = ({ badgeID }: Props) => {
       case View.Members:
         return <Members badgeID={badgeID} />;
       case View.Permissions:
-        return <Permissions />;
+        return <Permissions badgeID={badgeID} />;
       case View.Settings:
         return <Settings badgeID={badgeID} />;
     }

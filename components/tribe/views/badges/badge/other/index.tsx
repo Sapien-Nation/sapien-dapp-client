@@ -4,9 +4,6 @@ import { useState } from 'react';
 import { Query } from 'components/common';
 import { MembersView, PermissionsView, SettingsView } from './views';
 
-// types
-import type { TribeBadge } from 'tools/types/tribe';
-
 interface Props {
   badgeID: string;
 }
