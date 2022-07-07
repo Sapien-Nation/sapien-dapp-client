@@ -36,7 +36,7 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
     <>
       <PolygonFilter />
       <div className="flex mt-4 gap-5 flex-wrap sm:flex-nowrap">
-        <div className="text-center pt-4 flex flex-col justify-start">
+        <div className="text-center pt-4 flex flex-col">
           <div className="block h-36 w-40 rotate-90 p-1px hexagon-container">
             <div className="bg-black h-full w-full hexagon flex items-center justify-center">
               <img
@@ -46,11 +46,13 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
               />
             </div>
           </div>
-          <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5 truncate">
-            <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
-              {formatAvatarName(passport.title) || 'Avatar Name'}
+          <div className="-mt-2">
+            <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5 truncate">
+              <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
+                {formatAvatarName(passport.title) || 'Avatar Name'}
+              </span>
             </span>
-          </span>
+          </div>
         </div>
         <div className="w-full">
           <ul className="flex mr-4 justify-between text-xs text-left">
@@ -114,52 +116,54 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
                 Badges
               </span>
             </div>
-            {badges.length === 0 ? (
-              <div className="flex items-center min-h-64px text-gray-400">
-                No badges received
-              </div>
-            ) : (
-              <>
+
+            <div
+              style={{
+                clipPath:
+                  'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
+              }}
+              className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+            >
+              {badges.length === 0 ? (
                 <div
-                  style={{
-                    clipPath:
-                      'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
-                  }}
-                  className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+                  className="h-14 flex items-center border-sapien-80 focus:border-purple-500 focus:outline-none px-4 border rounded-md shadow-sm text-lg sm:text-lg"
+                  tabIndex={0}
                 >
-                  <select
-                    className="appearance-none px-4 h-14 bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500 rounded-md"
-                    name="type"
-                    onChange={(event) => {
-                      event.preventDefault();
-                      setSelectedBadge(event.target.value);
-                    }}
-                  >
-                    {badges.map((badge) => {
-                      return (
-                        <option
-                          className="bg-gray-800"
-                          key={badge.id}
-                          value={badge.id}
-                        >
-                          {badge.name}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  No badges received
                 </div>
-                <div className="flex justify-end mt-2 mr-3">
-                  <button
-                    disabled={isSubmitting}
-                    className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1"
-                    type="button"
-                    onClick={() => viewBadgeDetails(selectedBadge)}
-                  >
-                    See Badge Details
-                  </button>
-                </div>
-              </>
-            )}
+              ) : (
+                <select
+                  className="appearance-none px-4 h-14 bg-transparent border-sapien-80 w-full focus:outline-none focus:border-purple-500 rounded-md"
+                  name="type"
+                  onChange={(event) => {
+                    event.preventDefault();
+                    setSelectedBadge(event.target.value);
+                  }}
+                >
+                  {badges.map((badge) => {
+                    return (
+                      <option
+                        className="bg-gray-800"
+                        key={badge.id}
+                        value={badge.id}
+                      >
+                        {badge.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
+            </div>
+            <div className="flex justify-end mt-2 mr-3">
+              <button
+                disabled={isSubmitting}
+                className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1"
+                type="button"
+                onClick={() => viewBadgeDetails(selectedBadge)}
+              >
+                See Badge Details
+              </button>
+            </div>
           </div>
         </div>
       </div>
