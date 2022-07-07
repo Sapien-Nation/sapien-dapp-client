@@ -60,6 +60,7 @@ const Search = ({ onAdd }: Props) => {
                 ...badge,
                 tribeId: selected.id,
                 parentId: badge.id,
+                tribeName: selected.name,
               },
             ],
           };
