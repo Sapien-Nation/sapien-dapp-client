@@ -24,6 +24,7 @@ import { useUpgradedTribes } from 'hooks/tribe';
 
 // types
 import type { DiscoverBadge } from 'tools/types/tribe';
+import { mutate } from 'swr';
 
 interface Props {
   onAdd: (badge: any) => void;
@@ -45,7 +46,16 @@ const Search = ({ onAdd }: Props) => {
   const handleAddBadge = async (badgeID: string) => {
     setSelectedBadgeID(badgeID);
     try {
-      const badge = await addTribeFromDiscovery(selected.id, badgeID);
+      const badge = await addTribeFromDiscovery(tribeID, badgeID);
+
+      mutate(
+        `/core-api/tribe/${tribeID}/badges`,
+        (data) => ({
+          ...data,
+          otherBadges: [...data.otherBadges, badge],
+        }),
+        false
+      );
 
       onAdd(badge);
     } catch (err) {

@@ -43,7 +43,6 @@ const Sidebar = ({
   const badges = [
     ownerBadge,
     ...myBadges.filter(({ name }) => name !== 'Owner'),
-    ...otherBadges,
   ];
 
   return (
@@ -110,6 +109,30 @@ const Sidebar = ({
               );
             })}
           </ul>
+
+          <div className="mt-2 flex-1">
+            <div className="py-2 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold">
+              Badges from other tribes
+            </div>
+            <ul className="mt-2">
+              {otherBadges.map((badge) => {
+                return (
+                  <li key={badge.id} className="flex flex-col gap-2 mb-2">
+                    <BadgeNavItem
+                      badge={badge}
+                      isSelected={badge.id === selectedBadge?.id}
+                      onSelect={() => {
+                        setSelectedBadge(null);
+                        queueMicrotask(() => {
+                          setSelectedBadge(badge);
+                        });
+                      }}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
 
         <button
