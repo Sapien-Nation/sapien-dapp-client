@@ -76,7 +76,15 @@ const Search = ({ onAdd }: Props) => {
             onChange={(event) => setBadgesSearchTerm(event.target.value)}
           />
         </div>
-        <Listbox value={selected} onChange={setSelected}>
+        <Listbox
+          value={selected}
+          onChange={(tribe) => {
+            setTribeSearchTerm('');
+            setBadgesSearchTerm('');
+
+            setSelected(tribe);
+          }}
+        >
           {({ open }) => (
             <>
               <div className="relative w-64">
