@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // components
-import { Members, Settings } from './views';
+import { Members, Permission, Settings } from './views';
 
 // types
 import type { DraftBadge } from '../../types';
@@ -21,11 +21,7 @@ const ManageBadgeView = ({ badgeID }: { badgeID: string }) => {
       case View.Members:
         return <Members badgeID={badgeID} />;
       case View.Permissions:
-        return (
-          <div className="flex flex-col p-8">
-            <h1>Coming Soon!</h1>
-          </div>
-        );
+        return <Permission badgeID={badgeID} />;
       case View.Settings:
         return <Settings badgeID={badgeID} />;
     }

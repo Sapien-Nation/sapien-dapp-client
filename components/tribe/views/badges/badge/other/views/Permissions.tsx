@@ -22,24 +22,33 @@ const Permissions = ({ badgeID }: Props) => {
 
   return (
     <div className="w-full">
-      <ul>
-        {rooms.map((room) => {
-          const roomIcon = (
-            <span className="flex items-center w-3">
-              {room.private ? <LockClosedIcon className="w-[10px]" /> : '#'}
-            </span>
-          );
-          return (
-            <li className="text-md p-2 rounded-md bg-gray-400" key={room.id}>
-              <div className="flex px-2 py-1 items-center">
-                <span className="w-full flex gap-1">
-                  {roomIcon} {room.name}
+      <div className="flex flex-col items-center relative">
+        <div className="shadow z-40 w-full lef-0 rounded max-h-select overflow-y-auto">
+          <div className="flex flex-col w-full">
+            {rooms.map((room) => {
+              const roomIcon = (
+                <span className="flex items-center w-3">
+                  {room.private ? <LockClosedIcon className="w-[10px]" /> : '#'}
                 </span>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+              );
+              return (
+                <div
+                  key={room.id}
+                  className="py-2 px-3 cursor-pointer bg-gray-900  border-transparent border-l-2 border-sapien"
+                >
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      {roomIcon}
+
+                      {room.name}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
