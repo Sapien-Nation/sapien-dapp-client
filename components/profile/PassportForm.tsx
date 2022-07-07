@@ -5,6 +5,9 @@ import { useSWRConfig } from 'swr';
 // api
 import { updateProfile } from 'api/profile';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
@@ -18,7 +21,6 @@ import { usePassport } from 'hooks/passport';
 
 // types
 import type { UserPassport } from 'tools/types/user';
-import { ToastType } from 'constants/toast';
 
 enum View {
   Passport,
@@ -33,6 +35,8 @@ const PassportForm = ({ closeOverlay }: Props) => {
   const [view, setView] = useState<View | null>(View.Passport);
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
+  const { me } = useAuth();
+
   const renderView = () => {
     switch (view) {
       case View.Passport:
@@ -46,7 +50,7 @@ const PassportForm = ({ closeOverlay }: Props) => {
         );
       case View.Badge:
         return (
-          <Query api={`/core-api/badge/${selectedBadge}`}>
+          <Query api={`/core-api/user/${me.id}/badge/${selectedBadge}`}>
             {() => (
               <BadgeView
                 badgeID={selectedBadge}

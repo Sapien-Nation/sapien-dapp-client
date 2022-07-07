@@ -19,7 +19,7 @@ import { Dialog, Query, TextInput, TextInputLabel } from 'components/common';
 
 // hooks
 import { useToast } from 'context/toast';
-import { useTribeUserBadges } from 'hooks/tribe/badge';
+import { useTribeBadges, useTribeUserBadges } from 'hooks/tribe/badge';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -57,7 +57,8 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 
   const { push } = useRouter();
   const { mutate } = useSWRConfig();
-  const tribeBadges = useTribeUserBadges();
+  const { myBadges, otherBadges } = useTribeBadges();
+  const tribeBadges = [...myBadges, ...otherBadges];
 
   const {
     formState: { errors },
@@ -321,13 +322,12 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
 };
 
 const CreateRoomDialogProxy = (props: Props) => {
-  const { me } = useAuth();
   const { query } = useRouter();
 
   const tribeID = query.tribeID as string;
 
   return (
-    <Query api={`/core-api/user/${me.id}/badges?tribeId=${tribeID}`}>
+    <Query api={`/core-api/tribe/${tribeID}/badges`}>
       {() => <CreateRoomDialog {...props} />}
     </Query>
   );
