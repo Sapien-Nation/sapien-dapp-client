@@ -4,7 +4,7 @@ stages:
 
 variables:
   # this variable can be overriden by pipeline run variable
-  ENV: 'sandbox'
+  ENV: "sandbox"
 
 .sandbox_triggers: &sandbox_triggers
   refs:
