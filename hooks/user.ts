@@ -36,7 +36,8 @@ export const useUserBadges = (): Array<TribeBadge> => {
 };
 
 export const useUserBadge = (badgeID: string): UserBadge => {
+  const { me } = useAuth();
   const { cache } = useSWRConfig();
 
-  return cache.get(`/core-api/badge/${badgeID}`);
+  return cache.get(`/core-api/user/${me.id}/badge/${badgeID}`);
 };
