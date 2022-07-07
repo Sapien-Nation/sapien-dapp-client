@@ -1,6 +1,5 @@
 // components
 import { TextInputLabel } from 'components/common';
-import { useFormContext } from 'react-hook-form';
 
 // types
 import type { DraftBadge } from '../../../types';

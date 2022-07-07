@@ -46,3 +46,9 @@ export const useRoomBadges = (roomID: string): Array<RoomBadge> => {
 
   return cache.get(`/core-api/room/${roomID}/badges`);
 };
+
+export const useTribeBadge = (badgeID: string): TribeBadge => {
+  const { cache } = useSWRConfig();
+
+  return cache.get(`/core-api/badge/${badgeID}`);
+};

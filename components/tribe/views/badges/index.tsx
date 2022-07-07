@@ -86,7 +86,7 @@ const BadgesView = () => {
 
   const renderView = () => {
     if (selectedBadge) {
-      if (false) {
+      if ((selectedBadge as TribeBadge).tribeId !== tribeID) {
         return <OtherBadgeView badge={selectedBadge as TribeBadge} />;
       }
 
