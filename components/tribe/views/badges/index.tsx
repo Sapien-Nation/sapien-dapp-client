@@ -6,7 +6,7 @@ import { XIcon } from '@heroicons/react/outline';
 import Lottie from 'react-lottie-player';
 
 // components
-import { Overlay } from 'components/common';
+import { Overlay, Query } from 'components/common';
 import Sidebar from './navigation';
 import SearchView from './search';
 import { CreateBadgeView, ManageBadgeView, OwnerBadgeView } from './badge';
@@ -157,15 +157,15 @@ const BadgesView = () => {
         return <div></div>;
       case View.Search:
         return (
-          <SearchView
-            onSelect={(badge) => {
-              setDraftBadges((currentDraftBadges) => [
-                ...currentDraftBadges,
-                badge,
-              ]);
-              setSelectedBadge(badge);
-            }}
-          />
+          <Query api={`/core-api/tribe/list/upgraded?tribeId=${tribeID}`}>
+            {() => (
+              <SearchView
+                onAdd={(badge) => {
+                  setSelectedBadge(badge);
+                }}
+              />
+            )}
+          </Query>
         );
     }
   };

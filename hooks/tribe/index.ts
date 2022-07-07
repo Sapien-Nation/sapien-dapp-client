@@ -217,3 +217,16 @@ export const useUpgradeStatus = (): { contractTransferred: boolean } => {
 
   return cache.get(`/core-api/tribe/${tribeID}/upgrade-status`);
 };
+
+export const useUpgradedTribes = (): Array<{
+  name: string;
+  avatar: string;
+  id: string;
+}> => {
+  const { query } = useRouter();
+  const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
+
+  return cache.get(`/core-api/tribe/list/upgraded?tribeId=${tribeID}`);
+};

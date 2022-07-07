@@ -4,7 +4,6 @@ import { Menu, Transition } from '@headlessui/react';
 import {
   ChevronDownIcon,
   LockClosedIcon,
-  XIcon,
   CogIcon,
 } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';

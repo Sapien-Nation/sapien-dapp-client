@@ -128,3 +128,9 @@ export const executeTransaction = (
     .post(`/core-api/badge/${badgeID}/grant`, body)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const addTribeFromDiscovery = (tribeID: string, badgeID: string) =>
+  axios
+    .post(`/core-api/tribe/${tribeID}/badge/${badgeID}`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
