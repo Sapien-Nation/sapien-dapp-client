@@ -243,14 +243,20 @@ const TribeForm = ({
                     <label className="block text-sm font-medium mt-4 mb-2">
                       Cover photo
                     </label>
-                    <div className="mt-1 relative min-h-8-75 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div
+                      className={`${
+                        Boolean(cover) ? 'cursor-auto' : 'hover:cursor-pointer'
+                      } mt-1 relative min-h-8-75 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md`}
+                      onClick={() => coverFileInput.current?.click()}
+                    >
                       {Boolean(cover) ? (
                         <span className="relative">
                           <button
                             type="button"
                             aria-label="Remove Selected Cover"
                             className="absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.stopPropagation();
                               setValue('cover', null);
                             }}
                           >
@@ -305,26 +311,23 @@ const TribeForm = ({
                                 />
                               </svg>
                               <div className="text-sm text-gray-600">
-                                <label
-                                  htmlFor="cover-upload"
-                                  className="relative cursor-pointer rounded-md font-medium text-white hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                                >
-                                  <span>Upload a file</span>
-                                  <input
-                                    ref={coverFileInput}
-                                    id="cover-upload"
-                                    type="file"
-                                    disabled={isUploading}
-                                    aria-labelledby="Upload Cover"
-                                    className="sr-only"
-                                    onChange={(event) => {
-                                      handleUploadImage(
-                                        event.target.files[0],
-                                        MediaTypeUpload.Cover
-                                      );
-                                    }}
-                                  />
-                                </label>
+                                <span className="font-medium text-white hover:text-indigo-500">
+                                  Upload a file
+                                </span>
+                                <input
+                                  ref={coverFileInput}
+                                  id="cover-upload"
+                                  type="file"
+                                  disabled={isUploading}
+                                  aria-labelledby="Upload Cover"
+                                  className="sr-only"
+                                  onChange={(event) => {
+                                    handleUploadImage(
+                                      event.target.files[0],
+                                      MediaTypeUpload.Cover
+                                    );
+                                  }}
+                                />
                               </div>
                               <p className="text-xs text-gray-500">
                                 PNG, JPG, GIF up to 40MB
