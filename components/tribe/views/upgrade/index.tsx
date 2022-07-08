@@ -232,12 +232,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
     if (selectedOwners.length === 0) return null;
 
     if (selectedOwners.length === tribeMembers.length) {
-      return (
-        <>
-          All tribe members will receive an{' '}
-          <span className="underline">Owner</span> badge
-        </>
-      );
+      return <>One owner will receive a badge when one owner selected</>;
     }
 
     return (
