@@ -819,9 +819,8 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
             </div>
             <div>
               <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
-                Vault transactions must be approved by owners, how many
-                approvals do you want to require? This can also be updated
-                later.
+                Please specify the signing threshold to approve transactions on
+                your Gnosis Safe. This can also be updated later.
               </p>
             </div>
             <div>
