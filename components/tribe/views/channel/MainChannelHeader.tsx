@@ -103,21 +103,19 @@ const MainChannelHeader = ({ tribe }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between mt-8">
-          <p className="ml-8 text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
+        <div className="flex flex-col sm:flex-row justify-between mt-8 mx-8">
+          <p className="text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
             {tribe.description}
           </p>
-          <div>
-            {canEdit === true && (
-              <button
-                className="flex justify-end text-sapien-neutral-200 px-8 py-5"
-                onClick={() => {
-                  setDialog(Dialog.EditTribe);
-                }}
-              >
-                <PencilIcon className="h-6 w-6" />
-              </button>
-            )}
+          <div
+            className={`${canEdit ? 'visible' : 'hidden'} flex items-center`}
+          >
+            <button
+              className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]"
+              onClick={() => setDialog(Dialog.EditTribe)}
+            >
+              Edit Tribe
+            </button>
           </div>
         </div>
       </div>

@@ -86,14 +86,6 @@ const BadgesView = () => {
 
   const renderView = () => {
     if (selectedBadge) {
-      if ((selectedBadge as TribeBadge).tribeId !== tribeID) {
-        return <OtherBadgeView badgeID={selectedBadge.id} />;
-      }
-
-      if (selectedBadge.name === 'Owner') {
-        return <OwnerBadgeView badgeID={selectedBadge.id} />;
-      }
-
       if (isCurrentBadgeADraft()) {
         return (
           <CreateBadgeView
@@ -109,6 +101,14 @@ const BadgesView = () => {
             }}
           />
         );
+      }
+
+      if ((selectedBadge as TribeBadge).tribeId !== tribeID) {
+        return <OtherBadgeView badgeID={selectedBadge.id} />;
+      }
+
+      if (selectedBadge.name === 'Owner') {
+        return <OwnerBadgeView badgeID={selectedBadge.id} />;
       }
 
       return <ManageBadgeView badgeID={selectedBadge.id} />;
