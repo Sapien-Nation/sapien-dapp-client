@@ -918,7 +918,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
           <div>
             <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
               <h1 className="text-xl lg:text-3xl tracking-wide text-center decoration-double decoration-gray-500 decoration-2 text-sapien-red-700 mt-6">
-                Please dont close this window!
+                Please don&apos;t close this window!
               </h1>
             </div>
 

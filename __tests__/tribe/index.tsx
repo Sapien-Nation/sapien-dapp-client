@@ -82,6 +82,6 @@ test('NotFound', () => {
   );
 
   expect(
-    screen.getByText('You dont have access to see this content')
+    screen.getByText("You don't have access to see this content")
   ).toBeInTheDocument();
 });

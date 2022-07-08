@@ -127,9 +127,9 @@ const TribePage = ({ tribeID, viewID }: Props) => {
         );
       }
       case View.NotFound:
-        return <NotFound message="You dont have access to see this content" />;
+        return <NotFound message="You don't have access to see this content" />;
       default:
-        return <NotFound message="You dont have access to see this content" />;
+        return <NotFound message="You don't have access to see this content" />;
     }
   };
 
