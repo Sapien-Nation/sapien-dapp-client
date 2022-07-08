@@ -84,7 +84,7 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
       case View.Form: {
         return (
           <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
-            <div className="w-72 h-96 flex flex-col gap-4">
+            <div className="w-72 flex flex-col gap-4">
               <h5 className="text-xl text-white font-bold tracking-wide flex items-left gap-2">
                 <button onClick={() => setView(View.Home)}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -147,37 +147,39 @@ const WithdrawView = ({ handleBack, handleGoHome, token }: Props) => {
       }
       case View.WithdrawError:
         return (
-          <>
-            <div className="flex justify-between items-center">
-              <h5 className="text-xl text-red-400 font-bold tracking-wide flex items-center gap-2">
-                Deposit Error
-                <XCircleIcon className="h-5 w-5" aria-hidden="true" />
-              </h5>
-            </div>
-            <a
-              className="underline  text-sm flex flex-row items-center gap-2"
-              href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${withdrawTXErrorHash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              See Transaction Error Details{' '}
-              <ExternalLinkIcon className="w-5 h-5" />
-            </a>
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setView(View.Form)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
+            <div className="w-72 flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <h5 className="text-xl text-red-400 font-bold tracking-wide flex items-center gap-2">
+                  Deposit Error
+                  <XCircleIcon className="h-5 w-5" aria-hidden="true" />
+                </h5>
+              </div>
+              <a
+                className="underline  text-sm flex flex-row items-center gap-2"
+                href={`${process.env.NEXT_PUBLIC_EXPLORER_BASE_URL}${withdrawTXErrorHash}`}
+                target="_blank"
+                rel="noreferrer"
               >
-                Try Again
-              </button>
+                See Transaction Error Details{' '}
+                <ExternalLinkIcon className="w-5 h-5" />
+              </a>
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setView(View.Form)}
+                  className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Try Again
+                </button>
+              </div>
             </div>
-          </>
+          </div>
         );
       case View.Success:
         return (
           <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto py-6 px-4">
-            <div className="w-72 h-96 flex flex-col gap-4">
+            <div className="w-72 flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <h5 className="text-xl text-green-400 font-bold tracking-wide flex items-center gap-2">
                   Withdraw Succeeded
