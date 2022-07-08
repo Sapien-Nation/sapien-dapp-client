@@ -669,7 +669,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
             </div>
             <div>
               <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
-                To create a vault, you must add owners. Executing Transactions
+                To create a vault, you must add owners. Executing transactions
                 from your vault will require approval from owners. You may add
                 additional owners later.
               </p>
