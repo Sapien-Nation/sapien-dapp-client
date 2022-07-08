@@ -13,7 +13,7 @@ const ErrorView = ({
   code,
   message,
   onRetry,
-  subtitle = `Sapiens... &quot;🍌&quot; we have a problem, but dont worry our
+  subtitle = `Sapiens... &quot;🍌&quot; we have a problem, but don't worry our
 engineering team has been already notified and will be working on
 fixing this PRONTO`,
 }: Props) => {

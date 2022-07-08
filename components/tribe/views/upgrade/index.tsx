@@ -232,12 +232,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
     if (selectedOwners.length === 0) return null;
 
     if (selectedOwners.length === tribeMembers.length) {
-      return (
-        <>
-          All tribe members will receive an{' '}
-          <span className="underline">Owner</span> badge
-        </>
-      );
+      return <>One owner will receive a badge when one owner selected</>;
     }
 
     return (
@@ -669,7 +664,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
             </div>
             <div>
               <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
-                To create a vault, you must add owners. Executing Transactions
+                To create a vault, you must add owners. Executing transactions
                 from your vault will require approval from owners. You may add
                 additional owners later.
               </p>
@@ -819,9 +814,8 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
             </div>
             <div>
               <p className="text-lg text-gray-400 justify-center mt-2 mb-6">
-                Vault transactions must be approved by owners, how many
-                approvals do you want to require? This can also be updated
-                later.
+                Please specify the signing threshold to approve transactions on
+                your Gnosis Safe. This can also be updated later.
               </p>
             </div>
             <div>
@@ -918,7 +912,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
           <div>
             <div className="px-4 sm:px-6 flex flex-col items-center gap-3">
               <h1 className="text-xl lg:text-3xl tracking-wide text-center decoration-double decoration-gray-500 decoration-2 text-sapien-red-700 mt-6">
-                Please dont close this window!
+                Please don&apos;t close this window!
               </h1>
             </div>
 

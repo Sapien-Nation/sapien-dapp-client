@@ -91,7 +91,7 @@ test('can register', async () => {
     })
   );
 
-  // on password dont match
+  // on password don't match
   await user.click(getSignupButton());
 
   const matchErrors = await screen.findAllByText(/Passwords must match/i);

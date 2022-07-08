@@ -250,7 +250,7 @@ const Home = ({
             <li
               className={
                 token.id
-                  ? 'bg-gray-700 hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center'
+                  ? 'bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center'
                   : 'bg-gray-700 w-14 h-14 cursor-not-allowed rounded-full flex justify-center items-center'
               }
               key={token.name}

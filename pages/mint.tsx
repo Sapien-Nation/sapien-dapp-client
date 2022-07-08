@@ -131,7 +131,7 @@ const Mint = ({ avatar }: { avatar: string }) => {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
             </div>
-            <div className="relative flex justify-center items-center mb-5 flex-col h-full w-full gap-4">
+            <div className="relative flex justify-center items-center mb-5 flex-col h-full w-full gap-7">
               <h4 className="text-3xl sm:text-5xl font-bold">
                 Find your tribe and ignite the new renaissance!
               </h4>
@@ -149,8 +149,8 @@ const Mint = ({ avatar }: { avatar: string }) => {
                 onClick={() => handleMint(tribes[0])}
                 className={
                   isFetching
-                    ? 'animate-bounce cursor-not-allowed mt-5 flex h-12 items-center justify-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
-                    : 'flex justify-center h-12 items-center mt-5 py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                    ? 'animate-bounce cursor-not-allowed flex h-12 items-center justify-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 '
+                    : 'flex justify-center h-12 items-center py-2 px-4 border-2 rounded-md shadow-sm text-md font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 '
                 }
                 disabled={isFetching}
               >

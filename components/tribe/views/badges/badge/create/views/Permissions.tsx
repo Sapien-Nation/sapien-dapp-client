@@ -38,7 +38,7 @@ const PermissionsForm = () => {
       <>
         <div className="flex flex-col items-center gap-3 px-3 py-4">
           <span className="text-lg text-gray-300">
-            You dont have any private Room
+            You don&apos;t have any private Room
           </span>
           <span className="text-sm text-gray-300/40">
             You need at least 1 private room so you can explore the power of

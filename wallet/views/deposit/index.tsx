@@ -194,7 +194,7 @@ const Deposit = ({ handleBack }: Props) => {
           return (
             <>
               <InformationCircleIcon className="h-5 w-5" aria-hidden="true" />
-              You will be requesed to connect your wallet
+              You will be requested to connect your wallet
             </>
           );
         };
@@ -325,8 +325,8 @@ const Deposit = ({ handleBack }: Props) => {
               </p>
             ) : (
               <p className="text-sm text-white">
-                To deposit SPN tokens to the platform, install Metamask and
-                complete the transaction
+                To deposit, you must have a Sapien Nation NFT passport in your
+                Metamask wallet
               </p>
             )}
 

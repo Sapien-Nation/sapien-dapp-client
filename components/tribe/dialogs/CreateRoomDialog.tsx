@@ -207,7 +207,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                 aria-label="name"
                 placeholder="The Sapien Tribe"
                 maxLength={50}
-                pattern={/^[a-zA-Z\s]$/}
+                pattern={/^[a-zA-Z0-9-_\s]$/}
                 rules={{
                   validate: {
                     required: (value) => value.length > 0 || 'is required',

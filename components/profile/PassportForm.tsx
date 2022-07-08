@@ -33,6 +33,7 @@ interface Props {
 
 const PassportForm = ({ closeOverlay }: Props) => {
   const [view, setView] = useState<View | null>(View.Passport);
+  // TODO: Default to 'user flair badge id' once API is ready
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
   const { me } = useAuth();
@@ -42,7 +43,8 @@ const PassportForm = ({ closeOverlay }: Props) => {
       case View.Passport:
         return (
           <PassportView
-            selectBadge={(badgeID) => {
+            badgeID={selectedBadge}
+            viewBadgeDetails={(badgeID) => {
               setSelectedBadge(badgeID);
               setView(View.Badge);
             }}

@@ -26,10 +26,6 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
           </button>
           {token.name}
         </h5>
-        <p>
-          This is your token inside the Sapien Wallet, below you can find a few
-          options to manipulate your transfer
-        </p>
         <img
           className="rounded-full px-1 py-1 w-20 h-20 self-center object-cover"
           src={token.image}
