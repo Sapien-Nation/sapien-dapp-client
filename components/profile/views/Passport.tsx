@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+// api
+import { updateFlairBadge } from 'api/profile';
+
 // components
 import { TextareaInput, TextInput } from 'components/common';
 
@@ -14,6 +17,9 @@ import { formatAvatarName, formatTokenID } from 'utils/passport';
 // assets
 import { PolygonFilter } from 'assets';
 import { useFormContext } from 'react-hook-form';
+
+// context
+import { useToast } from 'context/toast';
 
 interface Props {
   badgeID: string;
@@ -33,9 +39,20 @@ const Passport = ({
 
   const [selectedBadge, setSelectedBadge] = useState(badgeID ?? badges[0]?.id);
 
+  const toast = useToast();
   const {
     formState: { isSubmitting },
   } = useFormContext();
+
+  const handleUpdateBadgeView = async (badgeID) => {
+    try {
+      setSelectedBadge(badgeID);
+
+      await updateFlairBadge([badgeID]);
+    } catch (error) {
+      toast({ message: error });
+    }
+  };
 
   return (
     <>
@@ -142,7 +159,7 @@ const Passport = ({
                   name="type"
                   onChange={(event) => {
                     event.preventDefault();
-                    setSelectedBadge(event.target.value);
+                    handleUpdateBadgeView(event.target.value);
                   }}
                 >
                   {badges.map((badge) => {

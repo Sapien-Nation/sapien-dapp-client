@@ -10,7 +10,6 @@ import { ToastType } from 'constants/toast';
 
 // context
 import { useAuth } from 'context/user';
-import { useToast } from 'context/toast';
 
 // components
 import { Query } from 'components/common';
@@ -86,9 +85,8 @@ const PassportFormProxy = ({ closeOverlay }: Props) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const { me } = useAuth();
-  const toast = useToast();
-  const { mutate } = useSWRConfig();
   const passport = usePassport();
+  const { mutate } = useSWRConfig();
 
   const methods = useForm<FormValues>({
     defaultValues: {
