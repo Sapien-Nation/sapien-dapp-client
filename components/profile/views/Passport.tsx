@@ -18,11 +18,16 @@ import { useFormContext } from 'react-hook-form';
 interface Props {
   badgeID: string;
   viewBadgeDetails: (badgeID: string) => void;
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void;
 }
 
-const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
-
+const Passport = ({
+  badgeID,
+  viewBadgeDetails,
+  isEditing,
+  setIsEditing,
+}: Props) => {
   const badges = useUserBadges();
   const passport = usePassport();
 
@@ -209,15 +214,15 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
         >
           {isEditing ? 'Cancel' : 'Edit Bio'}
         </button>
-        <button
-          disabled={isSubmitting}
-          className={`${
-            isEditing ? 'visible' : 'hidden'
-          } border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]`}
-          type="submit"
-        >
-          Save
-        </button>
+        {isEditing && (
+          <button
+            disabled={isSubmitting}
+            className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]"
+            type="submit"
+          >
+            Save
+          </button>
+        )}
       </div>
     </>
   );
