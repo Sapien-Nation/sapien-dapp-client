@@ -105,13 +105,13 @@ export const getReceivedTxHistory = (address) =>
 
 export const deposit = (tokenId): Promise<Token> =>
   instance
-    .post(`/api/v3/wallet/deposit/${tokenId}`)
+    .post(`/core-api/deposit/${tokenId}`)
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
 export const withdraw = (tokenId): Promise<Token> =>
   instance
-    .post(`/api/v3/wallet/withdraw/${tokenId}`)
+    .post(`/core-api/withdraw/${tokenId}`)
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
