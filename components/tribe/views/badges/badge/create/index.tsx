@@ -83,19 +83,27 @@ const BadgeView = ({ badge, onCancel }: Props) => {
       onCancel();
       mutate(
         `/core-api/tribe/${tribeID}/badges`,
-        (badges: Array<TribeBadge>) => [
-          ...badges,
-          {
-            id: response,
-            owners: [],
-            ...newBadge,
-          },
-        ],
+        (data: {
+          myBadges: Array<TribeBadge>;
+          otherBadges: Array<TribeBadge>;
+        }) => {
+          return {
+            myBadges: [
+              ...data.myBadges,
+              {
+                id: response.badgeId,
+                owners: [],
+                ...newBadge,
+              },
+            ],
+            otherBadges: data.otherBadges,
+          };
+        },
         false
       );
 
       toast({
-        message: 'Badge Created Succefully',
+        message: 'Badge Created Successfully',
         type: ToastType.Success,
       });
     } catch (error) {
