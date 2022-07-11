@@ -1,24 +1,21 @@
-import { SearchIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
-import { matchSorter } from 'match-sorter';
-import { useState } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { useSWRConfig } from 'swr';
+
+// api
+import { deleteRoom } from 'api/room';
 
 // components
-import { Dialog, Query } from 'components/common';
+import { Dialog, Query, TextInput } from 'components/common';
 
 // context
 import { useToast } from 'context/toast';
 
 // hooks
-import { useTribeRoom } from 'hooks/tribe';
-
-// assets
-import { ContributorBadge } from 'assets';
-
-import { useRoomBadges } from 'hooks/tribe/badge';
+import { useTribeRoom, useTribePermission } from 'hooks/tribe';
 
 // types
-import { RoomBadge } from 'tools/types/room';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   onClose: () => void;
@@ -26,15 +23,58 @@ interface Props {
 }
 
 const ManageRoomDialog = ({ onClose, roomID }: Props) => {
-  const roomBadges = useRoomBadges(roomID);
-  const [badges, setBadges] = useState<Array<RoomBadge>>(roomBadges);
-  const [searchTerm, setSearchTerm] = useState('');
-
   const toast = useToast();
-  const { query } = useRouter();
+  const { mutate } = useSWRConfig();
+  const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
+  const viewID = query.viewID as string;
   const room = useTribeRoom(tribeID, roomID);
+  const [canDeleteRoom] = useTribePermission(tribeID, ['canDeleteRoom']);
+
+  const methods = useForm<{ name: string }>({
+    defaultValues: {
+      name: '',
+    },
+  });
+
+  const {
+    formState: { errors, isSubmitting },
+    handleSubmit,
+    watch,
+  } = methods;
+
+  const onSubmit = async () => {
+    try {
+      await deleteRoom(roomID);
+
+      mutate(
+        '/core-api/user/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((tribe) => {
+            if (tribe.id === tribeID) {
+              return {
+                ...tribe,
+                rooms: tribe.rooms.filter((room) => room.id !== roomID),
+              };
+            }
+
+            return tribe;
+          }),
+        false
+      );
+
+      if (viewID === roomID) {
+        push(`/tribes/${tribeID}/home`);
+      }
+
+      onClose();
+    } catch (error) {
+      toast({
+        message: error || 'Service unavailable',
+      });
+    }
+  };
 
   const handleUpdateRoom = async () => {
     try {
@@ -46,100 +86,65 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
     }
   };
 
+  const [name] = watch(['name']);
   return (
     <Dialog
       show
       isFetching={false}
       onClose={onClose}
-      title="Manage Room"
+      title={`Manage Room ${room.name}`}
       onConfirm={handleUpdateRoom}
       confirmLabel="Confirm"
+      showCancel={false}
+      showConfirm={false}
     >
-      <div className="flex flex-col">
-        <div className="flex flex-row py-2 gap-4">
-          <p className="flex flex-1 pl-1 text-center text-gray-400">
-            Who can access #{room.name}?
-          </p>
-        </div>
-        <div>
-          <div className="w-full pl-2">
-            <label htmlFor="search" className="sr-only">
-              Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <SearchIcon className="h-5 w-5" aria-hidden="true" />
-              </div>
-              <input
-                id="search"
-                name="search"
-                type="search"
-                autoComplete="off"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search Badges"
-                className="block w-full pl-10 pr-3 py-2 mt-2 border border-sapien-neutral-200 text-white bg-gray-800 leading-5 placeholder-sapien-neutral-200 rounded-full grow focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-            </div>
-          </div>
-          <div className="absolute w-full cursor-pointer z-10 bg-gray-800 mt-3 border-b border-sapien-neutral-200">
-            {matchSorter(searchTerm ? badges : [], searchTerm, {
-              keys: ['name'],
-            }).map((badge) => (
-              <div
-                key={badge.id}
-                className="border-t border-l border-r border-sapien-neutral-200 py-2 px-3 flex w-full items-center gap-1.5 text-gray-300 hover:bg-gray-700"
-                onClick={() => {
-                  setSearchTerm('');
-                }}
-              >
-                {badge.avatar ? (
-                  <img
-                    src={badge.avatar}
-                    alt={badge.name}
-                    style={{ borderColor: badge.color }}
-                    className="w-8 h-8 object-cover rounded-full border-2"
-                  />
+      {canDeleteRoom && (
+        <div className="flex flex-col">
+          <h1 className="font-bold text-red-500 tracking-widest">
+            DANGER ZONE
+          </h1>
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)} id="confirm-delete">
+              <div className="flex-1 py-4">
+                <TextInput
+                  name="name"
+                  aria-label="name"
+                  placeholder={room.name}
+                  required
+                  pattern={/^[a-zA-Z0-9-_\s]$/}
+                  rules={{
+                    validate: {
+                      required: (value) => value === room.name || 'is required',
+                    },
+                  }}
+                />
+                {errors?.name ? (
+                  <p className="text-red-400 tracking-normal text-sm">
+                    Room Name should be equal
+                  </p>
                 ) : (
-                  <ContributorBadge className="w-8 h-8" />
+                  <p className="text-gray-500 tracking-normal text-sm">
+                    Enter room name to confirm the deletion of this room.
+                  </p>
                 )}
-                <span className="ml-2 text-ellipsis truncate flex-1 text-left">
-                  {badge.name} - {badge.name}
-                </span>
               </div>
-            ))}
-          </div>
+              <div className="flex flex-row-reverse">
+                <button
+                  type="submit"
+                  className={
+                    isSubmitting
+                      ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                      : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                  }
+                  disabled={isSubmitting}
+                >
+                  Delete
+                </button>
+              </div>
+            </form>
+          </FormProvider>
         </div>
-        <ul className="pl-1 py-2 cursor-pointer -mr-2">
-          {badges.map((badge) => {
-            return (
-              <li key={badge.id}>
-                <div className="group border border-sapien-neutral-200 mt-4 py-2 px-3 rounded-lg flex items-center gap-1.5 text-gray-300 hover:bg-gray-800">
-                  {badge.avatar ? (
-                    <img
-                      src={badge.avatar}
-                      alt={badge.name}
-                      style={{ borderColor: badge.color }}
-                      className="w-8 h-8 object-cover rounded-full border-2"
-                    />
-                  ) : (
-                    <ContributorBadge className="w-8 h-8" />
-                  )}
-                  <span className="ml-2 text-ellipsis truncate flex-1 text-left">
-                    {badge.name} - {badge.name}
-                  </span>
-                  <button
-                    className="px-2 hidden group-hover:block"
-                    onClick={() => {}}
-                  >
-                    <XIcon className="w-6 h-6 text-gray-400" />
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      )}
     </Dialog>
   );
 };
@@ -152,4 +157,4 @@ const ManageRoomDialogProxy = ({ roomID, onClose }: Props) => {
   );
 };
 
-export default ManageRoomDialogProxy;
+export default ManageRoomDialog;

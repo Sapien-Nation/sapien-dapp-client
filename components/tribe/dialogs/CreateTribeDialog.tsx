@@ -57,10 +57,8 @@ const CreateTribeDialog = ({ onClose }: Props) => {
           {
             ...response,
             permissions: {
-              canAddChannel: false,
-              canAddRoom: true,
-              canLeave: false,
-              canEdit: true,
+              canCreateRoom: true,
+              canDeleteRoom: true,
             },
           },
           ...tribes.slice(1),

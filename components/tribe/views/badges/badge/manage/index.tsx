@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 // components
 import { Members, Permission, Settings } from './views';
+import { Query } from 'components/common';
 
 // types
-import type { DraftBadge } from '../../types';
-import { Query } from 'components/common';
+import type { TribeBadge } from 'tools/types/tribe';
 
 enum View {
   Settings,
@@ -13,24 +13,24 @@ enum View {
   Permissions,
 }
 
-const ManageBadgeView = ({ badgeID }: { badgeID: string }) => {
+const ManageBadgeView = ({ badge }: { badge: TribeBadge }) => {
   const [view, setView] = useState(View.Settings);
 
   const renderForm = () => {
     switch (view) {
       case View.Members:
-        return <Members badgeID={badgeID} />;
+        return <Members badgeID={badge.id} />;
       case View.Permissions:
-        return <Permission badgeID={badgeID} />;
+        return <Permission badgeID={badge.id} />;
       case View.Settings:
-        return <Settings badgeID={badgeID} />;
+        return <Settings badgeID={badge.id} />;
     }
   };
 
   return (
     <>
       <h1 className="flex text-lg flex-1 text-sapien-neutral-100">
-        Manage Badge
+        Manage &quot;{badge.name}&quot; Badge
       </h1>
       <div className="flex flex-col gap-3 mt-5">
         <div className="flex justify-around border border-gray-800 rounded-md p-3">
@@ -77,7 +77,7 @@ const ManageBadgeView = ({ badgeID }: { badgeID: string }) => {
 const ManageBadgeViewProxy = ({ badgeID }: { badgeID: string }) => {
   return (
     <Query api={`/core-api/badge/${badgeID}`}>
-      {() => <ManageBadgeView badgeID={badgeID} />}
+      {(badge) => <ManageBadgeView badge={badge} />}
     </Query>
   );
 };
