@@ -11,15 +11,12 @@ import { createRoom } from 'api/room';
 // constants
 import { RoomType } from 'tools/constants/rooms';
 
-// context
-import { useAuth } from 'context/user';
-
 // components
 import { Dialog, Query, TextInput, TextInputLabel } from 'components/common';
 
 // hooks
 import { useToast } from 'context/toast';
-import { useTribeBadges, useTribeUserBadges } from 'hooks/tribe/badge';
+import { useTribeBadges } from 'hooks/tribe/badge';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
