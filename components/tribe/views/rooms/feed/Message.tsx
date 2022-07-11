@@ -41,7 +41,6 @@ interface Props {
   isAMessageContinuation: boolean;
   message: RoomMessage;
   removeMessageFromFeed: (messageID: string) => void;
-  setShowProfileOverlay: (showProfile: boolean) => void;
 }
 
 enum Dialog {
@@ -52,7 +51,6 @@ const Message = ({
   isAMessageContinuation,
   message,
   removeMessageFromFeed,
-  setShowProfileOverlay,
 }: Props) => {
   const [dialog, setDialog] = useState(null);
   const [messageFocused, setMessageFocused] = useState(false);
@@ -68,7 +66,7 @@ const Message = ({
   const tribeRooms = useTribeRooms(tribeID);
   const roomMembers = useRoomMembers(roomID);
   const {
-    sender: { id: messageOwnerID, avatar, username, badge },
+    sender: { id: messageOwnerID, avatar, username, badges },
     createdAt,
     content,
     type,
@@ -216,7 +214,17 @@ const Message = ({
             {isAMessageContinuation && (
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold">{username}</h3>
+                  <h3 className="text-sm font-bold flex gap-2 items-center">
+                    {username}{' '}
+                    {badges.length > 0 && (
+                      <img
+                        src={badges[0].avatar}
+                        alt="badge"
+                        style={{ borderColor: badges[0].color }}
+                        className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
+                      />
+                    )}
+                  </h3>
                   <time
                     data-testid="message-timestamp"
                     className="text-xs text-white"
@@ -224,23 +232,6 @@ const Message = ({
                     {formatDateRelative(createdAt)}
                   </time>
                 </div>
-                {badge && (
-                  <div className="flex gap-2 items-center">
-                    <img
-                      src={badge.image}
-                      alt="badge"
-                      style={{ borderColor: badge.color }}
-                      className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
-                      onClick={() => setShowProfileOverlay(true)}
-                    />
-                    <h3
-                      className="text-xs font-semibold hover:cursor-pointer"
-                      onClick={() => setShowProfileOverlay(true)}
-                    >
-                      {badge.name}
-                    </h3>
-                  </div>
-                )}
               </div>
             )}
             {renderBody()}
