@@ -74,8 +74,7 @@ interface Props {
 
 const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
   const [view, setView] = useState(
-    // contractTransferred === true ? View.CompleteUpgrade : View.Home
-    View.Success
+    contractTransferred === true ? View.CompleteUpgrade : View.Home
   );
   const [error, setError] = useState<string | Error | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
