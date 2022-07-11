@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
+
+// api
+import { updateFlairBadge } from 'api/profile';
 
 // components
 import { TextareaInput, TextInput } from 'components/common';
@@ -15,22 +19,48 @@ import { formatAvatarName, formatTokenID } from 'utils/passport';
 import { PolygonFilter } from 'assets';
 import { useFormContext } from 'react-hook-form';
 
+// context
+import { useToast } from 'context/toast';
+import { useAuth } from 'context/user';
+
 interface Props {
   badgeID: string;
   viewBadgeDetails: (badgeID: string) => void;
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void;
 }
 
-const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
-  const [isEditing, setIsEditing] = useState(false);
-
+const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
+  const { me } = useAuth();
   const badges = useUserBadges();
   const passport = usePassport();
+  const { mutate } = useSWRConfig();
 
-  const [selectedBadge, setSelectedBadge] = useState(badgeID ?? badges[0]?.id);
+  const getInitialBadgeValue = () => {
+    if (me.flairBadges.length === 0) {
+      return badges[0].id;
+    }
 
+    return me.flairBadges[0].badgeid;
+  };
+  const [selectedBadge, setSelectedBadge] = useState(getInitialBadgeValue());
+
+  const toast = useToast();
   const {
     formState: { isSubmitting },
   } = useFormContext();
+
+  const handleUpdateBadgeView = async (badgeID) => {
+    try {
+      setSelectedBadge(badgeID);
+
+      await updateFlairBadge([badgeID]);
+
+      await mutate('/user-api/me');
+    } catch (error) {
+      toast({ message: error });
+    }
+  };
 
   return (
     <>
@@ -137,8 +167,9 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
                   name="type"
                   onChange={(event) => {
                     event.preventDefault();
-                    setSelectedBadge(event.target.value);
+                    handleUpdateBadgeView(event.target.value);
                   }}
+                  value={selectedBadge}
                 >
                   {badges.map((badge) => {
                     return (
@@ -209,15 +240,15 @@ const Passport = ({ badgeID, viewBadgeDetails }: Props) => {
         >
           {isEditing ? 'Cancel' : 'Edit Bio'}
         </button>
-        <button
-          disabled={isSubmitting}
-          className={`${
-            isEditing ? 'visible' : 'hidden'
-          } border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]`}
-          type="submit"
-        >
-          Save
-        </button>
+        {isEditing && (
+          <button
+            disabled={isSubmitting}
+            className="border border-gray-400 hover:border-gray-100 rounded-md font-semibold text-xs text-gray-400 p-1 min-w-[70px]"
+            type="submit"
+          >
+            Save
+          </button>
+        )}
       </div>
     </>
   );

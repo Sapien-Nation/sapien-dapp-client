@@ -29,9 +29,11 @@ enum View {
 
 interface Props {
   closeOverlay: () => void;
+  isEditing?: boolean;
+  setIsEditing?: (isEditing: boolean) => void;
 }
 
-const PassportForm = ({ closeOverlay }: Props) => {
+const PassportForm = ({ closeOverlay, isEditing, setIsEditing }: Props) => {
   const [view, setView] = useState<View | null>(View.Passport);
   // TODO: Default to 'user flair badge id' once API is ready
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
@@ -48,6 +50,8 @@ const PassportForm = ({ closeOverlay }: Props) => {
               setSelectedBadge(badgeID);
               setView(View.Badge);
             }}
+            setIsEditing={setIsEditing}
+            isEditing={isEditing}
           />
         );
       case View.Badge:
@@ -79,16 +83,18 @@ interface FormValues {
 }
 
 const PassportFormProxy = ({ closeOverlay }: Props) => {
-  const { me } = useAuth();
-  const passport = usePassport();
+  const [isEditing, setIsEditing] = useState(false);
 
+  const { me } = useAuth();
   const toast = useToast();
+  const passport = usePassport();
   const { mutate } = useSWRConfig();
+
   const methods = useForm<FormValues>({
     defaultValues: {
       displayName: passport.username,
       username: passport.username,
-      bio: 'Bio',
+      bio: passport.bio,
       title: 'Founding Member of the Sapien Nation',
     },
   });
@@ -96,8 +102,6 @@ const PassportFormProxy = ({ closeOverlay }: Props) => {
 
   const onSubmit = async (values: FormValues) => {
     try {
-      await updateProfile({ bio: values.bio });
-
       mutate(
         '/core-api/me/passport',
         (passport: UserPassport) => ({
@@ -106,11 +110,13 @@ const PassportFormProxy = ({ closeOverlay }: Props) => {
         }),
         false
       );
+      await updateProfile({ bio: values.bio });
 
       toast({ message: 'Bio updated successfully', type: ToastType.Success });
     } catch (err) {
       toast({ message: err });
     }
+    setIsEditing(false);
   };
 
   return (
@@ -119,7 +125,11 @@ const PassportFormProxy = ({ closeOverlay }: Props) => {
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} id="update-profile-form">
             <div className="flex flex-col w-[580px]">
-              <PassportForm closeOverlay={closeOverlay} />
+              <PassportForm
+                closeOverlay={closeOverlay}
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+              />
             </div>
           </form>
         </FormProvider>
