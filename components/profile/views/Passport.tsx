@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSWRConfig } from 'swr';
 
 // api
 import { updateFlairBadge } from 'api/profile';
@@ -20,6 +21,7 @@ import { useFormContext } from 'react-hook-form';
 
 // context
 import { useToast } from 'context/toast';
+import { useAuth } from 'context/user';
 
 interface Props {
   badgeID: string;
@@ -28,16 +30,20 @@ interface Props {
   setIsEditing: (isEditing: boolean) => void;
 }
 
-const Passport = ({
-  badgeID,
-  viewBadgeDetails,
-  isEditing,
-  setIsEditing,
-}: Props) => {
+const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
+  const { me } = useAuth();
   const badges = useUserBadges();
   const passport = usePassport();
+  const { mutate } = useSWRConfig();
 
-  const [selectedBadge, setSelectedBadge] = useState(badgeID ?? badges[0]?.id);
+  const getInitialBadgeValue = () => {
+    if (me.flairBadges.length === 0) {
+      return badges[0].id;
+    }
+
+    return me.flairBadges[0].badgeid;
+  };
+  const [selectedBadge, setSelectedBadge] = useState(getInitialBadgeValue());
 
   const toast = useToast();
   const {
@@ -49,6 +55,8 @@ const Passport = ({
       setSelectedBadge(badgeID);
 
       await updateFlairBadge([badgeID]);
+
+      await mutate('/user-api/me');
     } catch (error) {
       toast({ message: error });
     }
@@ -161,6 +169,7 @@ const Passport = ({
                     event.preventDefault();
                     handleUpdateBadgeView(event.target.value);
                   }}
+                  value={selectedBadge}
                 >
                   {badges.map((badge) => {
                     return (
