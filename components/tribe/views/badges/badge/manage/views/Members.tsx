@@ -318,7 +318,7 @@ const MembersView = ({ badgeID }: Props) => {
                       className="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-white placeholder-sapien-neutral-200"
                       onChange={(event) => setSearchTerm(event.target.value)}
                       value={searchTerm}
-                      onBlur={() => setSearchTerm('')}
+                      onBlur={() => setTimeout(() => setSearchTerm(''), 100)}
                     />
                   </div>
                 </div>

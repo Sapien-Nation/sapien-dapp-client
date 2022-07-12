@@ -91,6 +91,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
   const { push, query } = useRouter();
 
   const tribeID = query.tribeID as string;
+  const tribe = useTribe(tribeID);
   const tribeMembers = useTribeMembers(tribeID).filter(
     ({ id }) => id !== me.id
   );
@@ -659,7 +660,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
                 className="w-52 h-52"
               />
               <h1 className="text-xl lg:text-3xl text-white font-bold tracking-wide text-center ">
-                Assign Owners
+                Assign Owners for {tribe.name}
               </h1>
             </div>
             <div>

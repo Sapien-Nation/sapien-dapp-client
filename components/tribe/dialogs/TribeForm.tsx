@@ -171,7 +171,7 @@ const TribeForm = ({
 
                         <input
                           ref={avatarFileInput}
-                          accept="image/*"
+                          accept=".png, .jpg, .jpeg"
                           className="sr-only"
                           id="avatar-upload"
                           onChange={(event) =>
@@ -318,6 +318,7 @@ const TribeForm = ({
                                   ref={coverFileInput}
                                   id="cover-upload"
                                   type="file"
+                                  accept=".png, .jpg, .jpeg"
                                   disabled={isUploading}
                                   aria-labelledby="Upload Cover"
                                   className="sr-only"
