@@ -99,12 +99,16 @@ const MembersView = ({ badgeID }: Props) => {
   const handleSignTransaction = async (safeTxHash: string) => {
     setTransactionSigned(safeTxHash);
     try {
-      await signTransaction(badge.id, {
+      const response = await signTransaction(badge.id, {
         safeTxHash,
         tribeId: tribeID,
       });
 
-      mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
+      if (response.executed === true) {
+        await mutate(`/core-api/badge/${badgeID}`);
+      }
+
+      await mutate(`/core-api/tribe/${tribeID}/safe/transactions/${badge.id}`);
     } catch (err) {
       toast({ message: err.message });
     }
