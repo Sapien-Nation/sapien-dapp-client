@@ -311,7 +311,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return Promise.reject('Token does not belong to this wallet.');
     } catch (err) {
       Sentry.captureMessage(err);
-      return Promise.reject(err.message);
+      return Promise.reject(err);
     }
   };
 
