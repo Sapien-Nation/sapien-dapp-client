@@ -1,4 +1,8 @@
-import { ClipboardCopyIcon } from '@heroicons/react/solid';
+import {
+  ClipboardCopyIcon,
+  ClipboardIcon,
+  ShareIcon,
+} from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
@@ -17,11 +21,12 @@ import { useToast } from 'context/toast';
 import { ToastType } from 'constants/toast';
 
 // hooks
-import { useTribeRoom } from 'hooks/tribe';
+import { useSapienTribe, useTribeRoom } from 'hooks/tribe';
 import { useRoomPermissions } from 'hooks/room';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
+import { CheckIcon } from '@heroicons/react/outline';
 
 interface Props {
   onClose: () => void;
@@ -32,7 +37,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
   const toast = useToast();
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
-  const [_, copyToClipboard] = useCopyToClipboard();
+  const [state, copyToClipboard] = useCopyToClipboard();
 
   const tribeID = query.tribeID as string;
   const viewID = query.viewID as string;
@@ -48,7 +53,6 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
   const {
     formState: { errors, isSubmitting },
     handleSubmit,
-    watch,
   } = methods;
 
   const onSubmit = async () => {
@@ -93,7 +97,8 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
     }
   };
 
-  const [name] = watch(['name']);
+  const copiedToClipboardSucced = state.value && state.value !== 'IGNORE';
+
   return (
     <Dialog
       show
@@ -106,6 +111,61 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
       showConfirm={false}
     >
       <div className="grid gap-5">
+        <div className="flex flex-col">
+          <h1 className="font-bold text-white tracking-widest">General</h1>
+          <div className="mt-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-white"
+            >
+              Share room with friends, invite them to join the tribe and start a
+              conversation
+            </label>
+            <div className="mt-1 flex rounded-md shadow-sm">
+              <div className="relative flex items-stretch flex-grow focus-within:z-10">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <span className="text-gray-500 sm:text-sm">
+                    sapien.network/
+                  </span>
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  value={`tribes/.../${roomID}`}
+                  style={{ paddingLeft: 107 }}
+                  className="appearance-none block w-full px-3 py-2 border bg-gray-800 border-gray-600 shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  copyToClipboard(
+                    `${window.location.host}/tribes/${tribeID}/${roomID}`
+                  );
+                  setTimeout(() => {
+                    copyToClipboard('IGNORE');
+                  }, 1000);
+                }}
+                className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-600 text-sm font-medium rounded-r-md text-white bg-black hover:bg-white hover:text-black focus:outline-none focus:ring-1 "
+              >
+                {copiedToClipboardSucced ? (
+                  <CheckIcon
+                    className="h-5 w-5 text-green-600"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ClipboardIcon className="h-5 w-5 " aria-hidden="true" />
+                )}
+                <span>
+                  {copiedToClipboardSucced
+                    ? 'Copied to clipboard'
+                    : 'Copy to clipboard'}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
         {canDeleteRoom && room.name.toLocaleLowerCase() !== 'general' ? (
           <div className="flex flex-col">
             <h1 className="font-bold text-red-500 tracking-widest">
@@ -153,12 +213,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
               </form>
             </FormProvider>
           </div>
-        ) : (
-          <span>
-            Comming Soon more options, as today you can only delete rooms and it
-            seems like you don&lsquo;t have permissions to delete this room
-          </span>
-        )}
+        ) : null}
       </div>
     </Dialog>
   );
