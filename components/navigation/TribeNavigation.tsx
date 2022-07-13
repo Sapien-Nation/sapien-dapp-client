@@ -435,7 +435,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         </div>
                       </a>
                     </Link>
-                    {false && (
+                    {true && (
                       <button
                         className="px-2 hidden group-hover:block"
                         onClick={(e) => {
