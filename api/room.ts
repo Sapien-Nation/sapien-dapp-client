@@ -43,7 +43,7 @@ export const deleteMessage = (roomID: string, messageID: string) =>
 
 export const readRoom = (roomID: string) =>
   axios
-    .put(`/core-api/room/${roomID}/read/`)
+    .put(`/core-api/notification/room/${roomID}/read/`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
