@@ -1,6 +1,8 @@
+import { ClipboardCopyIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
+import { useCopyToClipboard } from 'react-use';
 
 // api
 import { deleteRoom } from 'api/room';
@@ -11,8 +13,12 @@ import { Dialog, Query, TextInput } from 'components/common';
 // context
 import { useToast } from 'context/toast';
 
+// constants
+import { ToastType } from 'constants/toast';
+
 // hooks
-import { useTribeRoom, useTribePermission } from 'hooks/tribe';
+import { useTribeRoom } from 'hooks/tribe';
+import { useRoomPermissions } from 'hooks/room';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -26,11 +32,12 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
   const toast = useToast();
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
+  const [_, copyToClipboard] = useCopyToClipboard();
 
   const tribeID = query.tribeID as string;
   const viewID = query.viewID as string;
   const room = useTribeRoom(tribeID, roomID);
-  const [canDeleteRoom] = useTribePermission(tribeID, ['canDeleteRoom']);
+  const [canDeleteRoom] = useRoomPermissions(roomID, ['canDeleteRoom']);
 
   const methods = useForm<{ name: string }>({
     defaultValues: {
@@ -98,63 +105,71 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
       showCancel={false}
       showConfirm={false}
     >
-      {canDeleteRoom && (
-        <div className="flex flex-col">
-          <h1 className="font-bold text-red-500 tracking-widest">
-            DANGER ZONE
-          </h1>
-          <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} id="confirm-delete">
-              <div className="flex-1 py-4">
-                <TextInput
-                  name="name"
-                  aria-label="name"
-                  placeholder={room.name}
-                  required
-                  pattern={/^[a-zA-Z0-9-_\s]$/}
-                  rules={{
-                    validate: {
-                      required: (value) => value === room.name || 'is required',
-                    },
-                  }}
-                />
-                {errors?.name ? (
-                  <p className="text-red-400 tracking-normal text-sm">
-                    Room Name should be equal
-                  </p>
-                ) : (
-                  <p className="text-gray-500 tracking-normal text-sm">
-                    Enter room name to confirm the deletion of this room.
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-row-reverse">
-                <button
-                  type="submit"
-                  className={
-                    isSubmitting
-                      ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
-                      : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
-                  }
-                  disabled={isSubmitting}
-                >
-                  Delete
-                </button>
-              </div>
-            </form>
-          </FormProvider>
-        </div>
-      )}
+      <div className="grid gap-5">
+        {canDeleteRoom && room.name.toLocaleLowerCase() !== 'general' ? (
+          <div className="flex flex-col">
+            <h1 className="font-bold text-red-500 tracking-widest">
+              DANGER ZONE
+            </h1>
+            <FormProvider {...methods}>
+              <form onSubmit={handleSubmit(onSubmit)} id="confirm-delete">
+                <div className="flex-1 py-4">
+                  <TextInput
+                    name="name"
+                    aria-label="name"
+                    placeholder={room.name}
+                    required
+                    pattern={/^[a-zA-Z0-9-_\s]$/}
+                    rules={{
+                      validate: {
+                        required: (value) =>
+                          value === room.name || 'is required',
+                      },
+                    }}
+                  />
+                  {errors?.name ? (
+                    <p className="text-red-400 tracking-normal text-sm">
+                      Room Name should be equal
+                    </p>
+                  ) : (
+                    <p className="text-gray-500 tracking-normal text-sm">
+                      Enter room name to confirm the deletion of this room.
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-row-reverse">
+                  <button
+                    type="submit"
+                    className={
+                      isSubmitting
+                        ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                        : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
+                    }
+                    disabled={isSubmitting}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </form>
+            </FormProvider>
+          </div>
+        ) : (
+          <span>
+            Comming Soon more options, as today you can only delete rooms and it
+            seems like you don&lsquo;t have permissions to delete this room
+          </span>
+        )}
+      </div>
     </Dialog>
   );
 };
 
 const ManageRoomDialogProxy = ({ roomID, onClose }: Props) => {
   return (
-    <Query api={`/core-api/room/${roomID}/badges`}>
+    <Query api={`/core-api/room/${roomID}/permissions`}>
       {() => <ManageRoomDialog roomID={roomID} onClose={onClose} />}
     </Query>
   );
 };
 
-export default ManageRoomDialog;
+export default ManageRoomDialogProxy;

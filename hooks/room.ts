@@ -12,3 +12,14 @@ export const useRoomMembers = (roomID: string): Array<RoomDetailMember> => {
   const { cache } = useSWRConfig();
   return cache.get(`/core-api/room/${roomID}/members`);
 };
+
+export const useRoomPermissions = (
+  roomID: string,
+  permissionList: Array<string>
+): Array<boolean> => {
+  const { cache } = useSWRConfig();
+
+  const roomPermissions = cache.get(`/core-api/room/${roomID}/permissions`);
+
+  return permissionList.map((permission) => roomPermissions[permission]);
+};
