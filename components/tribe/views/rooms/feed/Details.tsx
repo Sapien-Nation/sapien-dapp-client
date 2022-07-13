@@ -100,6 +100,7 @@ const Details = ({ handleSidebar }) => {
                     displayName,
                     username,
                     userType,
+                    // @ts-ignore
                     badges,
                   } = membersList[index];
                   return (
