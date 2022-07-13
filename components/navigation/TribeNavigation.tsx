@@ -32,6 +32,7 @@ import { EditTribeDialog } from 'components/tribe/dialogs';
 import {
   useMainTribe,
   useTribe,
+  useTribeChannels,
   useTribePermission,
   useTribeRooms,
 } from 'hooks/tribe';
@@ -66,11 +67,15 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const viewID = query.viewID as string;
 
   const tribe = useTribe(tribeID);
-  const rooms = useTribeRooms(tribeID);
-  const [canAddRoom, canEditTribe, canLeaveTribe] = useTribePermission(
-    tribeID,
-    ['canCreateRoom', 'canEditTribe', 'canLeaveTribe']
-  );
+  const rooms = useTribeRooms();
+  const channels = useTribeChannels();
+  const [canCreateRoom, canEditTribe, canLeaveTribe, canCreateChannel] =
+    useTribePermission(tribeID, [
+      'canAddRoom',
+      'canEditTribe',
+      'canLeaveTribe',
+      'canCreateChannel',
+    ]);
   const { redirectToMainTribeChannel } = useMainTribe();
 
   const { name, role } = tribe;
@@ -298,105 +303,69 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
           )}
-          {/* <button
-          aria-label="Create Channel"
-          className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-          onClick={() => {
-            setDialog(Dialog.CreateChannel);
-            handleMobileMenu();
-          }}
-        >
-          Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
-        </button>
-        <ul className="px-2 py-2 cursor-pointer">
-          {channels.map(({ avatar, id, membersCount, name }) => {
-            return (
-              <li
-                className={`${
-                  id === viewID
-                    ? 'text-sm bg-primary-200 rounded-md'
-                    : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                }`}
-                key={id}
-              >
-                <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                  <a
-                    className="flex items-center p-2 my-1"
-                    onClick={handleMobileMenu}
+          {canCreateChannel && (
+            <button
+              aria-label="Create Channel"
+              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+              onClick={() => {
+                setDialog(Dialog.CreateChannel);
+                handleMobileMenu();
+              }}
+            >
+              Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
+            </button>
+          )}
+          <ul className="px-2 py-2 cursor-pointer">
+            {channels
+              .filter(({ name }) => name !== 'Home Feed')
+              .map(({ avatar, id, membersCount, name }) => {
+                return (
+                  <li
+                    className={`${
+                      id === viewID
+                        ? 'text-sm bg-primary-200 rounded-md'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
+                    }`}
+                    key={id}
                   >
-                    {avatar ? (
-                      <img
-                        alt="channel-image"
-                        className="object-cover h-10 w-10 rounded-md"
-                        src={avatar}
-                      />
-                    ) : (
-                      <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">
-                        {name[0].toUpperCase()}
-                      </div>
-                    )}
-                    <div className="ml-2">
-                      <p className="block">{name}</p>
-                      <p
-                        className={`${
-                          id === viewID ? '' : 'text-sapien-neutral-200'
-                        } font-extralight text-xs`}
+                    <Link href={`/tribes/${tribeID}/${id}`} passHref>
+                      <a
+                        className="flex items-center p-2 my-1"
+                        onClick={handleMobileMenu}
                       >
-                        {membersCount} members
-                      </p>
-                    </div>
-                  </a>
-                </Link>
-              </li>
-            );
-          })}
-        </ul> */}
+                        {avatar ? (
+                          <img
+                            alt="channel-image"
+                            className="object-cover h-10 w-10 rounded-md"
+                            src={avatar}
+                          />
+                        ) : (
+                          <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">
+                            {name[0].toUpperCase()}
+                          </div>
+                        )}
+                        <div className="ml-2">
+                          <p className="block">{name}</p>
+                          <p
+                            className={`${
+                              id === viewID ? '' : 'text-sapien-neutral-200'
+                            } font-extralight text-xs`}
+                          >
+                            {membersCount} members
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
+          </ul>
         </nav>
       </div>
 
-      {/* <button
-      aria-label="Create Room"
-      className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-      onClick={() => {}}
-    >
-      APPS <PlusIcon className="text-sapien-neutral-200 w-4" />
-    </button>
-
-    <ul className="pl-2 cursor-pointer -mr-2">
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Snapshot</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Github</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Notion</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Airtime</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Syndicate</div>
-        </a>
-      </li>
-    </ul> */}
-
       <div>
         <nav>
-          {canAddRoom === true && (
+          {canCreateRoom && (
             <button
               aria-label="Create Room"
               className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"

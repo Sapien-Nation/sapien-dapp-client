@@ -1,10 +1,14 @@
 // @refresh reset
 import _pipe from 'lodash/fp/pipe';
 import { Popover, Transition } from '@headlessui/react';
-import { EmojiHappyIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
+import {
+  EmojiHappyIcon,
+  PaperAirplaneIcon,
+  PhotographIcon,
+} from '@heroicons/react/outline';
 import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Editor, createEditor, Transforms, Range } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
@@ -43,7 +47,7 @@ import type { EditableProps } from 'slate-react/dist/components/editable';
 
 interface Props {
   name: string;
-  onSubmit: (text: string) => void;
+  onSubmit: (text: string, attachemnts: Array<File>) => void;
   slateProps?: EditableProps;
 }
 
@@ -63,6 +67,8 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [attachments, setAttachments] = useState<Array<File>>([]);
   const [floatMenu, setFloatMenu] = useState<FloatMenu | null>(null);
 
+  const fileRef = useRef(null);
+
   const { query } = useRouter();
   const editor = useMemo(
     () =>
@@ -72,10 +78,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     []
   );
 
-  const tribeID = query.tribeID as string;
   const roomID = query.viewID as string;
 
-  const tribeRooms = useTribeRooms(tribeID);
+  const tribeRooms = useTribeRooms();
   const roomMembers = useRoomMembers(roomID);
   const roomMembersList = useMemo(
     () =>
@@ -128,7 +133,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       const text = serialize(value);
       if (!text?.trim()) return;
 
-      onSubmit(text);
+      onSubmit(text, attachments);
 
       // cleanup
       const point = { path: [0, 0], offset: 0 };
@@ -143,8 +148,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         },
       ];
       setValue(defaultValue);
+      setAttachments([]);
     },
-    [editor, onSubmit, value]
+    [attachments, editor, onSubmit, value]
   );
 
   const onKeyDown = useCallback(
@@ -481,6 +487,32 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             </Slate>
 
             <div className="flex justify-end items-end gap-1">
+              {/* File Upload */}
+              <button
+                className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-lime-600 focus:text-green-700"
+                onClick={(event) => {
+                  event.preventDefault();
+                  fileRef.current.click();
+                }}
+              >
+                <PhotographIcon className="h-6 w-6" />
+              </button>
+              <input
+                ref={fileRef}
+                accept=".png, .jpg, .jpeg"
+                className="sr-only"
+                onChange={(event) => {
+                  if (event.target.files && event.target.files.length > 0) {
+                    setAttachments([
+                      ...attachments,
+                      ...Array.from(event.target.files),
+                    ]);
+                  }
+                }}
+                multiple
+                type="file"
+              />
+
               {/* Emoji */}
               <Popover className="relative">
                 {() => (

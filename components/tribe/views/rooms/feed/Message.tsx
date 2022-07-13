@@ -1,10 +1,12 @@
-import { Transition } from '@headlessui/react';
+import { DocumentIcon, EmojiHappyIcon } from '@heroicons/react/outline';
+import { Popover, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Fragment } from 'react';
 import Linkify from 'linkify-react';
+import { Picker } from 'emoji-mart';
 
 // api
-import { deleteMessage } from 'api/room';
+import { deleteMessage, reactToMessage } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -62,7 +64,7 @@ const Message = ({
 
   const roomID = query.viewID as string;
   const tribeID = query.tribeID as string;
-  const tribeRooms = useTribeRooms(tribeID);
+  const tribeRooms = useTribeRooms();
   const roomMembers = useRoomMembers(roomID);
   const {
     sender: { id: messageOwnerID, avatar, username, badges },
@@ -110,7 +112,20 @@ const Message = ({
 
   const renderBody = () => {
     if (type === MessageType.OptimisticWithAttachment)
-      return <span>TODO handle UI for Optimistic Attachments</span>;
+      return (
+        <div
+          className="h-16  bg-sapien-neutral-600 rounded flex items-center"
+          style={{ width: 500 }}
+        >
+          <div className="px-4">
+            <DocumentIcon className="w-12 h-12" />
+          </div>
+          <div>
+            <p className="text-sm  animate-pulse">Uploading Files</p>
+            <span className="text-xs text-gray-300">Wait a second...</span>
+          </div>
+        </div>
+      );
 
     if (type === MessageType.Optimistic) {
       return (
@@ -238,6 +253,56 @@ const Message = ({
         </div>
 
         {/* Menus */}
+        {/* <Popover
+          className={
+            messageFocused
+              ? 'absolute leading-[0] group-hover:block right-0 w-8 h-8 mr-8 top-0 block'
+              : 'absolute leading-[0] group-hover:block right-0 w-8 h-8 mr-8 top-0 hidden'
+          }
+          as="div"
+        >
+          <>
+            <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
+              <EmojiHappyIcon className="w-5" />
+            </Popover.Button>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-1"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-1"
+            >
+              <Popover.Panel className="absolute z-10 right-0 w-56 -top-1 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
+                <Picker
+                  onSelect={(event) => {
+                    console.log({
+                      roomID,
+                      messageOD: message.id,
+                      emojiID: event.native,
+                    });
+                    // reactToMessage(roomID, message.id, event.id)
+                    setMessageFocused(false);
+                  }}
+                  perLine={6}
+                  style={{
+                    width: '430px',
+                    position: 'absolute',
+                    marginLeft: -240,
+                  }}
+                  theme="dark"
+                  disableAutoFocus={true}
+                  groupNames={{ smileys_people: 'PEOPLE' }}
+                  native
+                  showPreview={false}
+                  title=""
+                />
+              </Popover.Panel>
+            </Transition>
+          </>
+        </Popover> */}
+
         {messageOwnerID === me.id && (
           <MessageOwnerMenu
             isFocused={messageFocused}

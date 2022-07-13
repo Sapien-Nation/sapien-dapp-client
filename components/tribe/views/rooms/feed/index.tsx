@@ -74,7 +74,7 @@ const Feed = ({
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
 
-  const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
+  const room = useTribeRooms().find(({ id }) => id === roomID);
   const roomMembers = useRoomMembers(roomID);
   const { socketMessages, handleReadMessage } = useSocket();
   const reachBottom = useOnScreen(scrollToBottom);
@@ -235,7 +235,10 @@ const Feed = ({
     ]
   );
 
-  const handleMessageSubmit = async (content: string) => {
+  const handleMessageSubmit = async (
+    content: string,
+    attachments: Array<File>
+  ) => {
     try {
       const optimisticMessage = {
         content,
@@ -257,7 +260,10 @@ const Feed = ({
                 ]
               : [],
         },
-        type: MessageType.Optimistic,
+        type:
+          attachments.length === 0
+            ? MessageType.Optimistic
+            : MessageType.OptimisticWithAttachment,
         status: 'A',
         mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
       };

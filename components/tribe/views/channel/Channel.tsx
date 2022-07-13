@@ -28,16 +28,15 @@ const Channel = () => {
   const [isPublishing, setPublishing] = useState(false);
 
   const { push, query } = useRouter();
-  const { tribeID, viewID } = query;
+
+  const tribeID = query.tribeID as string;
+  const channeID = query.viewID as string;
 
   const endDivRef = useRef(null);
   const editorRef = useRef(null);
   const belowEditorRef = useRef(null);
 
-  const channel = useTribeChannels(tribeID as string).find(
-    ({ id }) => id === viewID
-  );
-  const { data } = useSWR(`/core-api/channel/${channel.id}/feed`);
+  const channel = useTribeChannels().find(({ id }) => id === channeID);
 
   const toast = useToast();
 
@@ -53,7 +52,7 @@ const Channel = () => {
 
   useEffect(() => {
     setShowEditor(false);
-  }, [viewID]);
+  }, [channeID]);
 
   const handleSubmit = async () => {
     try {
@@ -86,7 +85,7 @@ const Channel = () => {
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
         <h1 className="sr-only">{channel.name}</h1>
         <Query
-          api={`/core-api/channel/${viewID}`}
+          api={`/core-api/channel/${channeID}`}
           loader={<ChannelHeaderPlaceholder />}
         >
           {(channel: ChannelType) => (
@@ -100,7 +99,7 @@ const Channel = () => {
         {!showEditor && (
           <div className="mt-4">
             <ul>
-              {data.map((content) => (
+              {[].map((content) => (
                 <li key={content.id}>
                   <ContentItemChannel
                     content={content}

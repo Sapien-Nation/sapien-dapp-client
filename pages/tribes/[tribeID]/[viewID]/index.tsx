@@ -23,17 +23,13 @@ import { useGetCurrentView, useTribe } from 'hooks/tribe';
 // providers
 import { Web3Provider } from 'wallet/providers';
 
-// types
-import type { NextPage } from 'next';
-import { useEffect } from 'react';
-
 const TribePage = () => {
   const { query } = useRouter();
 
   const viewID = query.viewID as string;
   const tribeID = query.tribeID as string;
 
-  const view = useGetCurrentView(tribeID as string, viewID as string);
+  const view = useGetCurrentView();
 
   const { role } = useTribe(tribeID as string);
 

@@ -68,7 +68,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
             </h2>
           </div>
           <div className="flex items-center sm:mr-5">
-            <button
+            {/* <button
               onClick={handleCopyToClipboard}
               type="button"
               className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none font-semibold"
@@ -81,7 +81,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
               className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
             >
               <DocumentDuplicateIcon className="w-6" />
-            </button>
+            </button> */}
             <button
               onClick={handleWriteAnArticle}
               type="button"
