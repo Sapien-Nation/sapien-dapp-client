@@ -94,8 +94,14 @@ const Details = ({ handleSidebar }) => {
                 width={width}
               >
                 {({ index, style }) => {
-                  const { id, avatar, displayName, username, userType } =
-                    membersList[index];
+                  const {
+                    id,
+                    avatar,
+                    displayName,
+                    username,
+                    userType,
+                    badges,
+                  } = membersList[index];
                   return (
                     <li
                       data-testid="room-detail-member"
@@ -111,11 +117,19 @@ const Details = ({ handleSidebar }) => {
                         <>
                           {username && renderMemberAvatar(avatar, username)}
                           <div className="truncate leading-none">
-                            <span className="block truncate">
-                              {displayName === ' ' ? '[hidden]' : displayName}
+                            <span className="truncate flex gap-1 items-center">
+                              {displayName === ' ' ? '[hidden]' : displayName}{' '}
+                              {badges.length > 0 && (
+                                <img
+                                  src={badges[0].avatar}
+                                  alt="badge"
+                                  style={{ borderColor: badges[0].color }}
+                                  className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
+                                />
+                              )}
                             </span>
                             <span className="truncate text-xs text-gray-400">
-                              @{username}
+                              @{username}{' '}
                             </span>
                           </div>
                         </>
