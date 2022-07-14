@@ -33,7 +33,7 @@ const Web3Provider = dynamic(() =>
 
 // types
 import type { RoomDeleteMessage, RoomNewMessage } from 'tools/types/room';
-import { ProfileTribe } from 'tools/types/tribe';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   children: React.ReactElement;
@@ -125,7 +125,7 @@ const Page = ({ children }: Props) => {
   useSocketEvent(
     [WSEvents.NewMessage, WSEvents.DeleteMessage],
     async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
-      if (data.extra.tribeId === tribeID) {
+      if (data.extra.tribe.id === tribeID) {
         if (data.extra.roomId !== viewID) {
           switch (type) {
             case WSEvents.NewMessage: {
