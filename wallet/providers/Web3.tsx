@@ -19,6 +19,9 @@ import {
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
 import { default as PlatformContractAbi } from '../contracts/Platform.json';
+import { default as WethContractAbi } from '../contracts/WETH.json';
+import { default as ERC20ContractAbi } from '../contracts/ERC20.json';
+import ERC20List from '../contracts/ERC20List';
 
 // constants
 import { ErrorTypes } from '../constants';
@@ -28,7 +31,7 @@ import { useAuth } from 'context/user';
 import { hooks as metaMaskHooks } from '../connectors/metaMask';
 
 // types
-import type { Token } from '../types';
+import type { Token, FTBalance } from '../types';
 import type { AbiItem } from 'web3-utils';
 import type { Transaction } from 'tools/types/web3';
 import { TransactionReceipt } from 'web3-core';
@@ -49,6 +52,7 @@ interface Web3 {
     getPassportBalance: (address: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
+    getWalletFTTokenBalance: () => Promise<FTBalance>;
   } | null;
   error: any | null;
 }
@@ -91,6 +95,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     SPN_TOKEN_ADDRESS: process.env.NEXT_PUBLIC_SPN_TOKEN_ADDRESS,
     PASSPORT_CONTRACT_ADDRESS:
       process.env.NEXT_PUBLIC_PASSPORT_CONTRACT_ADDRESS,
+    WETH_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_WETH_ADDRESS,
     BICONOMY_API_KEY: process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY,
     EXPLORER_BASE_URL: process.env.NEXT_PUBLIC_EXPLORER_BASE_URL,
     GAS_STATION_URL: process.env.NEXT_PUBLIC_GAS_STATION_URL,
@@ -143,6 +148,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
                 '0'
               )}`,
             },
+            wethContract: new biconomyWeb3.eth.Contract(
+              WethContractAbi as Array<AbiItem>,
+              config.WETH_CONTRACT_ADDRESS
+            ),
           });
 
           setError(null);
@@ -171,6 +180,35 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       const balance = await contracts.platformSPNContract.methods
         .balanceOf(me.walletAddress)
         .call();
+
+      return Number(balance);
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
+  const getWethBalance = async () => {
+    try {
+      const balance = await contracts.wethContract.methods
+        .balanceOf(me.walletAddress)
+        .call();
+
+      return Number(balance);
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
+  const getERC20Balance = async (token: string) => {
+    try {
+      const contract = new WalletAPIRef.current.eth.Contract(
+        ERC20ContractAbi as Array<AbiItem>,
+        ERC20List[token]
+      );
+
+      const balance = await contract.methods.balanceOf(me.walletAddress).call();
 
       return Number(balance);
     } catch (err) {
@@ -362,6 +400,21 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  // get all fungible tokens(matic, eth, erc20) balance
+  const getWalletFTTokenBalance = async (): Promise<FTBalance> => {
+    try {
+      const eth: number = await getWethBalance();
+      const spn: number = await getWalletBalanceSPN();
+      const matic: string = await WalletAPIRef.current.eth.getBalance(
+        me.walletAddress
+      );
+      return { eth, spn, matic: Number(Web3Library.utils.fromWei(matic)) };
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
   return (
     <Web3Context.Provider
       value={{
@@ -374,6 +427,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           getWalletTokens,
           getUserTransactions,
           getPassportBalance,
+          getWalletFTTokenBalance,
         },
       }}
     >

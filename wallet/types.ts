@@ -3,3 +3,9 @@ export interface Token {
   name: string;
   image: string | null;
 }
+
+export interface FTBalance {
+  eth: number;
+  matic: number;
+  spn: number;
+}
