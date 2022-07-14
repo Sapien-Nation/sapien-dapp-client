@@ -67,10 +67,11 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
   const tribe = useTribe(tribeID);
   const rooms = useTribeRooms(tribeID);
-  const [canAddRoom] = useTribePermission(tribeID, ['canCreateRoom']);
+  const [canAddRoom, canEditTribe, canLeaveTribe] = useTribePermission(
+    tribeID,
+    ['canCreateRoom', 'canEditTribe', 'canLeaveTribe']
+  );
   const { redirectToMainTribeChannel } = useMainTribe();
-
-  const canLeave = false;
 
   const { name, role } = tribe;
 
@@ -225,7 +226,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     )}
 
                     <div className="px-1 py-1">
-                      {false && (
+                      {canEditTribe && (
                         <Menu.Item>
                           {({ active }) => (
                             <button
@@ -261,7 +262,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       </Menu.Item>
                     </div>
 
-                    {canLeave && (
+                    {canLeaveTribe && (
                       <div className="px-1 py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -435,18 +436,16 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                         </div>
                       </a>
                     </Link>
-                    {true && (
-                      <button
-                        className="px-2 hidden group-hover:block"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedRoom(room.id);
-                          setDialog(Dialog.ManageRooms);
-                        }}
-                      >
-                        <CogIcon className="w-4 h-4 text-gray-400" />
-                      </button>
-                    )}
+                    <button
+                      className="px-2 hidden group-hover:block"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRoom(room.id);
+                        setDialog(Dialog.ManageRooms);
+                      }}
+                    >
+                      <CogIcon className="w-4 h-4 text-gray-400" />
+                    </button>
                   </div>
                 </li>
               );
