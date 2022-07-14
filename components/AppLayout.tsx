@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
 // components
@@ -20,11 +20,11 @@ import ProfileOverlay from './profile';
 // context
 import { useAuth } from 'context/user';
 
-// hooks
-import { useSocketEvent } from 'hooks/socket';
-
 // constants
 import { WSEvents } from 'tools/constants/rooms';
+
+// hooks
+import { useSocket } from 'context/socket';
 
 // providers
 const Web3Provider = dynamic(() =>
@@ -32,7 +32,7 @@ const Web3Provider = dynamic(() =>
 );
 
 // types
-import type { RoomDeleteMessage, RoomNewMessage } from 'tools/types/room';
+import type { RoomNewMessage } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
@@ -46,6 +46,7 @@ const Page = ({ children }: Props) => {
   const { me } = useAuth();
   const { mutate } = useSWRConfig();
   const { pathname, query } = useRouter();
+  const { socketMessages, handleReadMessage } = useSocket();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -62,7 +63,6 @@ const Page = ({ children }: Props) => {
 
   const isLoadingData =
     isLoadingTribes === true || isLoadingPassport === true || me === undefined;
-  const viewID = query.viewID as string;
   const tribeID = query.tribeID as string;
 
   const renderNavigation = () => {
@@ -89,83 +89,40 @@ const Page = ({ children }: Props) => {
     );
   };
 
-  const handleUnreadReadMessagesOnTribeNavigation = (
-    roomID,
-    shouldIncrement = false,
-    hasUnread = false
-  ) => {
-    mutate(
-      '/core-api/user/tribes',
-      (tribes: Array<ProfileTribe>) =>
-        tribes.map((tribe) =>
-          tribe.id === tribeID
-            ? {
-                ...tribe,
-                rooms: tribe.rooms.map((tribeRoom) => {
-                  if (tribeRoom.id === roomID) {
-                    return {
-                      ...tribeRoom,
-                      unreadMentions: shouldIncrement
-                        ? tribeRoom.unreadMentions + 1
-                        : 0,
-                      hasUnread,
-                    };
-                  }
+  useEffect(() => {
+    socketMessages
+      .filter(({ type }) => type === WSEvents.NewMessage)
+      .forEach(({ data, id: messageID }) => {
+        if (data.extra.tribe.id !== tribeID) {
+          if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+            mutate(
+              '/core-api/user/tribes',
+              (tribes: Array<ProfileTribe>) =>
+                tribes.map((tribe) =>
+                  tribe.id === data.extra.tribe.id
+                    ? {
+                        ...tribe,
+                        rooms: tribe.rooms.map((tribeRoom) => {
+                          if (tribeRoom.id === data.extra.tribe.id) {
+                            return {
+                              ...tribeRoom,
+                              unreadMentions: tribeRoom.unreadMentions + 1,
+                              hasUnread: true,
+                            };
+                          }
 
-                  return tribeRoom;
-                }),
-              }
-            : tribe
-        ),
-      false
-    );
-  };
-
-  //----------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Websockets events
-  useSocketEvent(
-    [WSEvents.NewMessage, WSEvents.DeleteMessage],
-    async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
-      console.info('New Message on App Layout listener');
-      console.log({ type, data });
-      console.log({ tribeID, dataExtraTribeID: data.extra.tribe.id });
-      if (data.extra.tribe.id !== tribeID) {
-        switch (type) {
-          case WSEvents.NewMessage: {
-            if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-              mutate(
-                '/core-api/user/tribes',
-                (tribes: Array<ProfileTribe>) =>
-                  tribes.map((tribe) =>
-                    tribe.id === data.extra.tribe.id
-                      ? {
-                          ...tribe,
-                          rooms: tribe.rooms.map((tribeRoom) => {
-                            if (tribeRoom.id === data.extra.tribe.id) {
-                              return {
-                                ...tribeRoom,
-                                unreadMentions: tribeRoom.unreadMentions + 1,
-                                hasUnread: true,
-                              };
-                            }
-
-                            return tribeRoom;
-                          }),
-                        }
-                      : tribe
-                  ),
-                false
-              );
-            }
-            break;
+                          return tribeRoom;
+                        }),
+                      }
+                    : tribe
+                ),
+              false
+            );
+            handleReadMessage(messageID);
           }
-          default:
-            console.info(`No handler for eventType: ${type}`);
-            break;
         }
-      }
-    }
-  );
+      });
+  }, [tribeID, socketMessages, me?.id, mutate, handleReadMessage]);
 
   return (
     <>
