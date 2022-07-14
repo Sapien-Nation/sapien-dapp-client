@@ -103,15 +103,15 @@ export const getReceivedTxHistory = (address) =>
     .then((response) => response)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const deposit = (tokenId): Promise<Token> =>
+export const deposit = ({ tokenId, txHash }): Promise<Token> =>
   instance
-    .post(`/core-api/deposit/${tokenId}`)
+    .post(`/core-api/wallet/deposit/${tokenId}`, { txHash })
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const withdraw = (tokenId): Promise<Token> =>
+export const withdraw = ({ tokenId, txHash }): Promise<Token> =>
   instance
-    .post(`/core-api/withdraw/${tokenId}`)
+    .post(`/core-api/wallet/withdraw/${tokenId}`, { txHash })
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 

@@ -305,7 +305,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             });
         });
 
-        await withdraw(tokenId);
+        await withdraw({ tokenId, txHash: result.data.transactionHash });
         return { hash: result.data.transactionHash, type: result.type };
       }
       return Promise.reject('Token does not belong to this wallet.');
@@ -337,7 +337,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       if (data === null || data === undefined)
         return Promise.reject('Unknow error');
 
-      await deposit(tokenId);
+      await deposit({ tokenId, txHash: data?.transactionHash });
       return data.transactionHash;
     } catch (err) {
       Sentry.captureMessage(err);
