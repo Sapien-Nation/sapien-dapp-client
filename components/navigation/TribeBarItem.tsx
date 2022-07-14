@@ -99,12 +99,9 @@ function TribeBarItem({
     }
   };
 
-  const unreadMentions =
-    tribeID === tribe.id
-      ? 0
-      : tribe.rooms
-          .map(({ unreadMentions }) => unreadMentions)
-          .reduce((accumulator, current) => accumulator + current, 0);
+  const unreadMentions = tribe.rooms
+    .map(({ unreadMentions }) => unreadMentions)
+    .reduce((accumulator, current) => accumulator + current, 0);
 
   return (
     <>

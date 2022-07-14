@@ -31,7 +31,10 @@ const DiscoveryCard = ({ tribe }: Props) => {
         '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) => [
           tribes[0],
-          response,
+          {
+            ...response,
+            rooms: [],
+          },
           ...tribes.slice(1),
         ],
         false
