@@ -104,51 +104,76 @@ const Feed = ({
   useSocketEvent(
     [WSEvents.NewMessage, WSEvents.DeleteMessage],
     async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
-      if (data.extra.roomId === roomID) {
-        try {
-          switch (type) {
-            case WSEvents.NewMessage:
-              await handleAddMessageMutation({
-                content: (data as RoomNewMessage).payload,
-                createdAt: (data as RoomNewMessage).createdAt,
-                id: (data as RoomNewMessage).extra.messageId,
-                sender: {
-                  avatar: (data as RoomNewMessage).by.avatar,
-                  id: (data as RoomNewMessage).by.id,
-                  username: (data as RoomNewMessage).by.username,
-                  badges: [],
-                },
-                type: MessageType.Text,
-                mentions: getMentionsArrayFromCacheForOptimistic(
-                  roomMembers,
-                  (data as RoomNewMessage).payload
-                ),
-              });
+      if (data.extra.tribe.id === tribeID) {
+        if (data.extra.roomId === roomID) {
+          try {
+            switch (type) {
+              case WSEvents.NewMessage:
+                await handleAddMessageMutation({
+                  content: (data as RoomNewMessage).payload,
+                  createdAt: (data as RoomNewMessage).createdAt,
+                  id: (data as RoomNewMessage).extra.messageId,
+                  sender: {
+                    avatar: (data as RoomNewMessage).by.avatar,
+                    id: (data as RoomNewMessage).by.id,
+                    username: (data as RoomNewMessage).by.username,
+                    badges: [],
+                  },
+                  type: MessageType.Text,
+                  mentions: getMentionsArrayFromCacheForOptimistic(
+                    roomMembers,
+                    (data as RoomNewMessage).payload
+                  ),
+                });
 
-              if (
-                window.pageYOffset + window.innerHeight >=
-                scrollToBottom.current.offsetTop
-              ) {
-                handleScrollToBottom();
+                if (
+                  window.pageYOffset + window.innerHeight >=
+                  scrollToBottom.current.offsetTop
+                ) {
+                  handleScrollToBottom();
+                } else {
+                  setUnreadMessages(
+                    (currentUnreadMessages) => currentUnreadMessages + 1
+                  );
+                }
+
+                break;
+              case WSEvents.DeleteMessage:
+                await handleRemoveMessageMutation(
+                  (data as RoomDeleteMessage).extra.messageId
+                );
+                break;
+              default:
+                console.info(`No handler for eventType: ${type}`);
+                Sentry.captureMessage(`No handler for eventType: ${type}`);
+                break;
+            }
+          } catch (err) {
+            Sentry.captureMessage(err);
+          }
+        } else {
+          switch (type) {
+            case WSEvents.NewMessage: {
+              if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+                handleUnreadReadMessagesOnTribeNavigation(
+                  data.extra.roomId,
+                  true,
+                  true
+                );
               } else {
-                setUnreadMessages(
-                  (currentUnreadMessages) => currentUnreadMessages + 1
+                handleUnreadReadMessagesOnTribeNavigation(
+                  data.extra.roomId,
+                  false,
+                  true
                 );
               }
-
               break;
-            case WSEvents.DeleteMessage:
-              await handleRemoveMessageMutation(
-                (data as RoomDeleteMessage).extra.messageId
-              );
-              break;
+            }
             default:
               console.info(`No handler for eventType: ${type}`);
               Sentry.captureMessage(`No handler for eventType: ${type}`);
               break;
           }
-        } catch (err) {
-          Sentry.captureMessage(err);
         }
       }
     }

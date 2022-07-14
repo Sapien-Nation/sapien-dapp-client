@@ -120,6 +120,7 @@ const Page = ({ children }: Props) => {
       false
     );
   };
+
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
   useSocketEvent(
@@ -150,23 +151,39 @@ const Page = ({ children }: Props) => {
           }
         }
       } else {
-        // console.info(`Increment counter on tribebar for ${data.extra.tribeId}`);
-        // if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-        //   mutate(
-        //     '/core-api/user/tribes',
-        //     (tribes: Array<ProfileTribe>) =>
-        //       tribes.map((tribe) => {
-        //         if (tribe.id === data.extra.tribeId) {
-        //           return {
-        //             ...tribe,
-        //             unreadCount: tribe.unreadCount + 1,
-        //           };
-        //         }
-        //         return tribe;
-        //       }),
-        //     false
-        //   );
-        // }
+        switch (type) {
+          case WSEvents.NewMessage: {
+            if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+              mutate(
+                '/core-api/user/tribes',
+                (tribes: Array<ProfileTribe>) =>
+                  tribes.map((tribe) =>
+                    tribe.id === data.extra.tribe.id
+                      ? {
+                          ...tribe,
+                          rooms: tribe.rooms.map((tribeRoom) => {
+                            if (tribeRoom.id === data.extra.tribe.id) {
+                              return {
+                                ...tribeRoom,
+                                unreadMentions: tribeRoom.unreadMentions + 1,
+                                hasUnread: true,
+                              };
+                            }
+
+                            return tribeRoom;
+                          }),
+                        }
+                      : tribe
+                  ),
+                false
+              );
+            }
+            break;
+          }
+          default:
+            console.info(`No handler for eventType: ${type}`);
+            break;
+        }
       }
     }
   );
