@@ -3,7 +3,7 @@ import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { useState, useCallback } from 'react';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 
 // components
 import { SEO, Redirect, Overlay } from 'components/common';
@@ -20,10 +20,20 @@ import ProfileOverlay from './profile';
 // context
 import { useAuth } from 'context/user';
 
+// hooks
+import { useSocketEvent } from 'hooks/socket';
+
+// constants
+import { WSEvents } from 'tools/constants/rooms';
+
 // providers
 const Web3Provider = dynamic(() =>
   import('wallet/providers').then((mod) => mod.Web3Provider)
 );
+
+// types
+import type { RoomDeleteMessage, RoomNewMessage } from 'tools/types/room';
+import { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   children: React.ReactElement;
@@ -34,7 +44,8 @@ const Page = ({ children }: Props) => {
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const { me } = useAuth();
-  const { pathname } = useRouter();
+  const { mutate } = useSWRConfig();
+  const { pathname, query } = useRouter();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -51,6 +62,8 @@ const Page = ({ children }: Props) => {
 
   const isLoadingData =
     isLoadingTribes === true || isLoadingPassport === true || me === undefined;
+  const viewID = query.viewID as string;
+  const tribeID = query.tribeID as string;
 
   const renderNavigation = () => {
     let children = null;
@@ -76,14 +89,87 @@ const Page = ({ children }: Props) => {
     );
   };
 
-  if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path="/login" />
-      </>
+  const handleUnreadReadMessagesOnTribeNavigation = (
+    roomID,
+    shouldIncrement = false,
+    hasUnread = false
+  ) => {
+    mutate(
+      '/core-api/user/tribes',
+      (tribes: Array<ProfileTribe>) =>
+        tribes.map((tribe) =>
+          tribe.id === tribeID
+            ? {
+                ...tribe,
+                rooms: tribe.rooms.map((tribeRoom) => {
+                  if (tribeRoom.id === roomID) {
+                    return {
+                      ...tribeRoom,
+                      unreadMentions: shouldIncrement
+                        ? tribeRoom.unreadMentions + 1
+                        : 0,
+                      hasUnread,
+                    };
+                  }
+
+                  return tribeRoom;
+                }),
+              }
+            : tribe
+        ),
+      false
     );
-  }
+  };
+  //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Websockets events
+  useSocketEvent(
+    [WSEvents.NewMessage, WSEvents.DeleteMessage],
+    async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
+      if (data.extra.tribeId === tribeID) {
+        if (data.extra.roomId !== viewID) {
+          switch (type) {
+            case WSEvents.NewMessage: {
+              if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+                handleUnreadReadMessagesOnTribeNavigation(
+                  data.extra.roomId,
+                  true,
+                  true
+                );
+              } else {
+                handleUnreadReadMessagesOnTribeNavigation(
+                  data.extra.roomId,
+                  false,
+                  true
+                );
+              }
+              break;
+            }
+            default:
+              console.info(`No handler for eventType: ${type}`);
+              break;
+          }
+        }
+      } else {
+        // console.info(`Increment counter on tribebar for ${data.extra.tribeId}`);
+        // if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+        //   mutate(
+        //     '/core-api/user/tribes',
+        //     (tribes: Array<ProfileTribe>) =>
+        //       tribes.map((tribe) => {
+        //         if (tribe.id === data.extra.tribeId) {
+        //           return {
+        //             ...tribe,
+        //             unreadCount: tribe.unreadCount + 1,
+        //           };
+        //         }
+        //         return tribe;
+        //       }),
+        //     false
+        //   );
+        // }
+      }
+    }
+  );
 
   return (
     <>
@@ -209,6 +295,7 @@ const Page = ({ children }: Props) => {
 };
 
 const AppLayout = ({ children }: Props) => {
+  const { me } = useAuth();
   const { pathname } = useRouter();
 
   const noLayoutPages = [
@@ -228,6 +315,15 @@ const AppLayout = ({ children }: Props) => {
 
   if (noLayoutPages.some((page) => pathname.startsWith(page))) {
     return children;
+  }
+
+  if (me === null) {
+    return (
+      <>
+        <SEO title="" />
+        <Redirect path="/login" />
+      </>
+    );
   }
 
   return <Page>{children}</Page>;
