@@ -150,29 +150,6 @@ const Feed = ({
         } catch (err) {
           Sentry.captureMessage(err);
         }
-      } else {
-        switch (type) {
-          case WSEvents.NewMessage: {
-            if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-              handleUnreadReadMessagesOnTribeNavigation(
-                data.extra.roomId,
-                true,
-                true
-              );
-            } else {
-              handleUnreadReadMessagesOnTribeNavigation(
-                data.extra.roomId,
-                false,
-                true
-              );
-            }
-            break;
-          }
-          default:
-            console.info(`No handler for eventType: ${type}`);
-            Sentry.captureMessage(`No handler for eventType: ${type}`);
-            break;
-        }
       }
     }
   );

@@ -1,7 +1,6 @@
 import _isEmpty from 'lodash/isEmpty';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 // constants
 import { View } from 'constants/tribe';
@@ -26,6 +25,7 @@ import { Web3Provider } from 'wallet/providers';
 
 // types
 import type { NextPage } from 'next';
+import { useEffect } from 'react';
 
 interface Props {
   tribeID: string;
@@ -144,6 +144,35 @@ const TribePageProxy: NextPage = () => {
   const { query } = useRouter();
   const { tribeID, viewID } = query;
 
+  // const tribe = useTribe();
+  // useEffect(() => {
+  //   const handleVisit = async () => {
+  //     try {
+  //       // await readNotifications();
+  //       mutate(
+  //         '/core-api/user/tribes',
+  //         (tribes: Array<ProfileTribe>) =>
+  //           tribes.map((tribe) => {
+  //             if (tribe.id === tribeID) {
+  //               return {
+  //                 ...tribe,
+  //                 unreadCount: 0,
+  //               };
+  //             }
+
+  //             return tribe;
+  //           }),
+  //         false
+  //       );
+  //     } catch (err) {
+  //       // err
+  //     }
+  //   }
+
+  //   if (tribe.undreadCont > 0) {
+  //     handleVisit();
+  //   }
+  // }, [])
   return (
     <>
       <SEO title="Sapien" />
