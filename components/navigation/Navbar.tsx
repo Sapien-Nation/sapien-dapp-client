@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSWRConfig } from 'swr';
+import { useEffect } from 'react';
 
 // context
 import { useAuth } from 'context/user';
@@ -12,14 +13,14 @@ import { usePassport } from 'hooks/passport';
 // constants
 import { NotificationsType as WSEvents } from 'tools/constants/notifications';
 
+// context
+import { useSocket } from 'context/socket';
+
 // components
 import { UserAvatar, Query, RedDot } from 'components/common';
 const Notifications = dynamic(() => import('components/notifications'));
 // @ts-ignore
 const Wallet = dynamic(() => import('wallet/Wallet'));
-
-// hooks
-import { useSocketEvent } from 'hooks/socket';
 
 interface Props {
   setShowProfileOverlay: () => void;
@@ -29,42 +30,37 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
   const { me } = useAuth();
   const { mutate } = useSWRConfig();
   const passport = usePassport();
+  const { socketMessages, handleReadMessage } = useSocket();
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Websockets events
-  useSocketEvent(
-    [
-      WSEvents.BadgeGrandProposeReady,
-      WSEvents.BadgeGrant,
-      WSEvents.BadgeGrantOwner,
-      WSEvents.BadgeGrantPropose,
-      WSEvents.RoomNewMessage,
-    ],
-    async (type: WSEvents, data: any) => {
-      try {
-        switch (type) {
-          case WSEvents.BadgeGrandProposeReady:
-          case WSEvents.BadgeGrant:
-          case WSEvents.BadgeGrantOwner:
-          case WSEvents.BadgeGrantPropose:
-          case WSEvents.RoomNewMessage:
-            mutate('/core-api/notification', (data) => ({
-              ...data,
-              unread: data.unread + 1,
-              count: data.count + 1,
-            }));
-            break;
 
-          default:
-            console.info(`No handler for eventType: ${type}`);
-            Sentry.captureMessage(`No handler for eventType: ${type}`);
-            break;
-        }
-      } catch (err) {
-        Sentry.captureMessage(err);
-      }
-    }
-  );
+  useEffect(() => {
+    socketMessages
+      .filter(({ type }) =>
+        [
+          WSEvents.BadgeGrandProposeReady,
+          WSEvents.BadgeGrant,
+          WSEvents.BadgeGrantOwner,
+          WSEvents.BadgeGrantPropose,
+          WSEvents.RoomNewMessage,
+        ].includes(type)
+      )
+      .forEach(({ data: newNotification, id: messageID }) => {
+        mutate(
+          '/core-api/notification',
+          (data) => ({
+            ...data,
+            notifications: [...data.notifications, newNotification],
+            unread: data.unread + 1,
+            count: data.count + 1,
+          }),
+          false
+        );
+
+        handleReadMessage(messageID);
+      });
+  }, [socketMessages, me.id, mutate, handleReadMessage]);
 
   return (
     <div className="shadow">

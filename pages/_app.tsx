@@ -16,7 +16,7 @@ import { ToastProvider } from 'context/toast';
 
 // providers
 import { AuthenticationProvider } from 'context/user';
-import SocketProvider from 'context/socket';
+import { SocketProvider } from 'context/socket';
 
 // types
 import type { AppProps } from 'next/app';

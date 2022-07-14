@@ -12,7 +12,7 @@ import { AuthenticationProvider } from 'context/user';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { ToastProvider } from 'context/toast';
 import { ToastContainer } from 'components/common';
-import SocketProvider, { SocketContext } from 'context/socket';
+import { SocketContext } from 'context/socket';
 
 // mocks
 import { mockUser } from 'tools/mocks/user';
@@ -80,11 +80,7 @@ const AllTheProviders = ({
     >
       <RouterContext.Provider value={mockRouter(route)}>
         <ToastProvider>
-          <AuthenticationProvider>
-            <SocketContext.Provider value={{ socket }}>
-              {children}
-            </SocketContext.Provider>
-          </AuthenticationProvider>
+          <AuthenticationProvider>{children}</AuthenticationProvider>
           <ToastContainer />
         </ToastProvider>
       </RouterContext.Provider>
