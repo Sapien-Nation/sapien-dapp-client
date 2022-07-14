@@ -104,6 +104,9 @@ const Feed = ({
   useSocketEvent(
     [WSEvents.NewMessage, WSEvents.DeleteMessage],
     async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
+      console.info('New Message on Feed listener');
+      console.log({ type, data });
+      console.log({ tribeID, dataExtraTribeID: data.extra.tribe.id });
       if (data.extra.tribe.id === tribeID) {
         if (data.extra.roomId === roomID) {
           try {

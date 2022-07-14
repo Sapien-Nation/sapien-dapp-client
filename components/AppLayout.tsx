@@ -126,31 +126,10 @@ const Page = ({ children }: Props) => {
   useSocketEvent(
     [WSEvents.NewMessage, WSEvents.DeleteMessage],
     async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
-      if (data.extra.tribe.id === tribeID) {
-        if (data.extra.roomId !== viewID) {
-          switch (type) {
-            case WSEvents.NewMessage: {
-              if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-                handleUnreadReadMessagesOnTribeNavigation(
-                  data.extra.roomId,
-                  true,
-                  true
-                );
-              } else {
-                handleUnreadReadMessagesOnTribeNavigation(
-                  data.extra.roomId,
-                  false,
-                  true
-                );
-              }
-              break;
-            }
-            default:
-              console.info(`No handler for eventType: ${type}`);
-              break;
-          }
-        }
-      } else {
+      console.info('New Message on App Layout listener');
+      console.log({ type, data });
+      console.log({ tribeID, dataExtraTribeID: data.extra.tribe.id });
+      if (data.extra.tribe.id !== tribeID) {
         switch (type) {
           case WSEvents.NewMessage: {
             if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
