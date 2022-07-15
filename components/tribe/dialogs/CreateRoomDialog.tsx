@@ -200,6 +200,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                 error={errors.name?.message}
               />
               <TextInput
+                autoFocus
                 name="name"
                 aria-label="name"
                 placeholder="The Sapien Tribe"

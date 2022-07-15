@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, useEffect } from 'react';
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'pattern'>;
 interface Props extends InputProps {
@@ -8,6 +8,7 @@ interface Props extends InputProps {
   maxLength?: number;
   replaceWhiteSpace?: boolean;
   rules?: any;
+  ref?: any;
   valueModifier?: (val: string) => string | null;
 }
 
@@ -20,9 +21,17 @@ const TextInput = ({
   inputMode,
   disabled,
   valueModifier,
+  ref,
+  autoFocus,
   ...rest
 }: Props) => {
-  const { register } = useFormContext();
+  const { register, setFocus } = useFormContext();
+
+  useEffect(() => {
+    if (autoFocus) {
+      setFocus(name);
+    }
+  });
 
   return (
     <input
@@ -69,6 +78,7 @@ const TextInput = ({
           event.target.value = valueModifier ? valueModifier(value) : value;
         },
       })}
+      autoFocus
     />
   );
 };

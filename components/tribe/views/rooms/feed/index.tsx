@@ -17,7 +17,7 @@ import { useToast } from 'context/toast';
 import { useSocket } from 'context/socket';
 
 // constants
-import { MessageType, WSEvents } from 'tools/constants/rooms';
+import { MessageType, RoomMemberType, WSEvents } from 'tools/constants/rooms';
 
 // components
 import { RoomEditor } from 'slatejs';
@@ -300,14 +300,30 @@ const Feed = ({
         ({ type }) =>
           type === WSEvents.NewMessage ||
           WSEvents.DeleteMessage ||
-          WSEvents.RoomMention
+          WSEvents.RoomMention ||
+          WSEvents.RoomNewMemberJoin
       )
       .forEach(({ data, id: messageID, type }) => {
         if (data.extra?.tribe?.id === tribeID) {
-          console.log({ data });
           if (data.extra.roomId === roomID) {
             try {
               switch (type) {
+                case WSEvents.RoomNewMemberJoin:
+                  mutate(
+                    `/core-api/room/${roomID}/members`,
+                    (members) => [
+                      ...members,
+                      {
+                        id: data.by.id,
+                        avatar: data.by.avatar,
+                        displayName: data.by.username, // TODO we need displayName
+                        userType: RoomMemberType.Participant,
+                        username: data.by.username,
+                      },
+                    ],
+                    false
+                  );
+                  return;
                 case WSEvents.RoomMention:
                   mutate(
                     '/core-api/user/tribes',
@@ -336,6 +352,26 @@ const Feed = ({
                   play();
                   break;
                 case WSEvents.NewMessage:
+                  const isJoin = (data as RoomNewMessage).payload.includes(
+                    'joined the room'
+                  );
+                  if (isJoin) {
+                    mutate(
+                      `/core-api/room/${roomID}/members`,
+                      (members) => [
+                        ...members,
+                        {
+                          id: data.by.id,
+                          avatar: data.by.avatar,
+                          displayName: data.by.username, // TODO we need displayName
+                          userType: RoomMemberType.Participant,
+                          username: data.by.username,
+                          badges: [],
+                        },
+                      ],
+                      true
+                    );
+                  }
                   handleAddMessageMutation({
                     content: (data as RoomNewMessage).payload,
                     createdAt: (data as RoomNewMessage).createdAt,
@@ -346,7 +382,7 @@ const Feed = ({
                       username: (data as RoomNewMessage).by.username,
                       badges: [],
                     },
-                    type: MessageType.Text,
+                    type: isJoin ? MessageType.Join : MessageType.Text,
                     mentions: getMentionsArrayFromCacheForOptimistic(
                       roomMembers,
                       (data as RoomNewMessage).payload
@@ -354,7 +390,7 @@ const Feed = ({
                   }).then(() => {
                     if (
                       window.pageYOffset + window.innerHeight >=
-                      scrollToBottom.current.offsetTop
+                      scrollToBottom.current?.offsetTop
                     ) {
                       handleScrollToBottom();
                     } else {
