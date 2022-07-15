@@ -2,6 +2,7 @@ import { Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
 import Linkify from 'linkify-react';
+import ReactMarkdown from 'react-markdown';
 
 // api
 import { deleteMessage } from 'api/room';
@@ -131,8 +132,8 @@ const Message = ({
       <p
         className={
           isAMessageContinuation
-            ? 'text-sm text-white/80 group whitespace-pre-line break-words'
-            : 'pl-52 text-sm text-white/80 whitespace-pre-line break-words'
+            ? 'text-md text-white/80 group whitespace-pre-line break-words'
+            : 'pl-52 text-md text-white/80 whitespace-pre-line break-words'
         }
         style={{ wordBreak: 'break-word' }}
       >
