@@ -325,6 +325,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                     />
                     <TextInput
                       name="name"
+                      autoFocus
                       aria-label="name"
                       placeholder="Channel Name"
                       maxLength={50}

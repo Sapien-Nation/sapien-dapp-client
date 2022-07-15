@@ -71,7 +71,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const channels = useTribeChannels();
   const [canCreateRoom, canEditTribe, canLeaveTribe, canCreateChannel] =
     useTribePermission(tribeID, [
-      'canAddRoom',
+      'canCreateRoom',
       'canEditTribe',
       'canLeaveTribe',
       'canCreateChannel',
