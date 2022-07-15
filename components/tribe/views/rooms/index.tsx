@@ -17,6 +17,9 @@ import { JoinRoom, Skeleton } from './views';
 // hooks
 import { useTribeRoom } from 'hooks/tribe';
 
+// mocks
+import { mockFeed } from 'tools/mocks/feed';
+
 interface RoomProps {
   apiKey: string;
   roomID: string;
@@ -61,7 +64,7 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
       apiKey={mutateFetchAPI}
       roomID={roomID}
       tribeID={tribeID as string}
-      data={swrData?.data ?? []}
+      data={[...swrData?.data, ...mockFeed().data] ?? []}
       onScrollTop={() => {
         if (swrData?.nextCursor !== null && !isLoading) {
           handleFetchMore(swrData?.nextCursor);

@@ -73,6 +73,7 @@ const Message = ({
     content,
     type,
     mentions,
+    reactions,
   } = message;
 
   const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
@@ -249,7 +250,23 @@ const Message = ({
                 </div>
               </div>
             )}
-            {renderBody()}
+            <div className="flex flex-col gap-1 items-start">
+              {renderBody()}
+              <div className={isAMessageContinuation ? '' : 'ml-[50px]'}>
+                {reactions?.map(({ count, emoji, me }) => (
+                  <span
+                    key={emoji.name}
+                    className={`${
+                      me
+                        ? 'border border-sapien-60/50 bg-sapien-80/20'
+                        : 'border border-gray-700 bg-gray-900'
+                    } rounded-md py-0.5 px-1 cursor-pointer text-xs`}
+                  >
+                    {emoji.name} {count}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
