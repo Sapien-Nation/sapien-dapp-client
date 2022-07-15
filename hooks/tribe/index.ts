@@ -64,6 +64,21 @@ export const useSapienTribe = (): ProfileTribe => {
   return cache.get('/core-api/user/tribes')[0];
 };
 
+export const useAppSEO = (): { unreadMentions: number } => {
+  const { cache } = useSWRConfig();
+
+  const tribes: Array<ProfileTribe> = cache.get('/core-api/user/tribes') ?? [];
+
+  return {
+    unreadMentions: tribes
+      .flatMap((tribe) => tribe.rooms)
+      .reduce(
+        (accumulator, { unreadMentions }) => accumulator + unreadMentions,
+        0
+      ),
+  };
+};
+
 export const useTribePermission = (
   tribeID: string,
   permissionList: Array<string>

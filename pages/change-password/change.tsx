@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 
 // components
 import { Layout, ChangePasswordForm } from 'components/auth';
-import { SEO } from 'components/common';
 
 // types
 import type { NextPage } from 'next';
@@ -12,12 +11,9 @@ interface Props {
 }
 
 const ChangePassword = ({ token }: Props) => (
-  <>
-    <SEO title="Change Password" />
-    <Layout title="Change Password">
-      <ChangePasswordForm token={token} />
-    </Layout>
-  </>
+  <Layout title="Change Password">
+    <ChangePasswordForm token={token} />
+  </Layout>
 );
 
 const ChangePasswordPage: NextPage = () => {

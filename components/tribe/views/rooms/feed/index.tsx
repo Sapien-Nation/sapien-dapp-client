@@ -31,6 +31,7 @@ import { formatDate } from 'utils/date';
 
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
+import { useSound } from 'hooks/useSound';
 import { useTribeRooms } from 'hooks/tribe';
 import { useRoomMembers } from 'hooks/room';
 import { usePassport } from 'hooks/passport';
@@ -68,6 +69,7 @@ const Feed = ({
 
   const toast = useToast();
   const { me } = useAuth();
+  const { play } = useSound();
   const passport = usePassport();
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
@@ -293,6 +295,7 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
+    let playSound = false;
     socketMessages
       .filter(
         ({ type }) => type === WSEvents.NewMessage || WSEvents.DeleteMessage
@@ -329,6 +332,7 @@ const Feed = ({
                         (currentUnreadMessages) => currentUnreadMessages + 1
                       );
                     }
+                    playSound = true;
                   });
 
                   break;
@@ -371,6 +375,10 @@ const Feed = ({
           handleReadMessage(messageID);
         }
       });
+
+    if (playSound) {
+      play();
+    }
   }, [
     tribeID,
     socketMessages,
@@ -383,6 +391,7 @@ const Feed = ({
     handleRemoveMessageMutation,
     handleScrollToBottom,
     handleUnreadReadMessagesOnTribeNavigation,
+    play,
   ]);
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-1 flex-row p-0 lg:rounded-tl-3xl overflow-x-hidden">

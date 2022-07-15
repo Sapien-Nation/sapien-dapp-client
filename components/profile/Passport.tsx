@@ -5,7 +5,7 @@ import Lottie from 'react-lottie-player';
 import LoadingJSONData from './lottie/Loading.json';
 
 // components
-import { Query, SEO } from 'components/common';
+import { Query } from 'components/common';
 import PassportForm from './PassportForm';
 
 interface Props {
@@ -44,38 +44,35 @@ const Passport = ({ animationData }: Props) => {
 
 const ProfilePassport = () => {
   return (
-    <>
-      <SEO title="Sapien Nation Passport" />
-      <Query
-        loader={
-          <Lottie
-            animationData={LoadingJSONData}
-            play
-            loop
-            className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
-          />
-        }
-        api="https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json"
-        options={{
-          fetcher: async () => {
-            try {
-              const request = await fetch(
-                'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
-              );
-              const data = await request.json();
+    <Query
+      loader={
+        <Lottie
+          animationData={LoadingJSONData}
+          play
+          loop
+          className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
+        />
+      }
+      api="https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json"
+      options={{
+        fetcher: async () => {
+          try {
+            const request = await fetch(
+              'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
+            );
+            const data = await request.json();
 
-              return data;
-            } catch (err) {
-              return Promise.reject(err);
-            }
-          },
-        }}
-      >
-        {(animationData: object) => {
-          return <Passport animationData={animationData} />;
-        }}
-      </Query>
-    </>
+            return data;
+          } catch (err) {
+            return Promise.reject(err);
+          }
+        },
+      }}
+    >
+      {(animationData: object) => {
+        return <Passport animationData={animationData} />;
+      }}
+    </Query>
   );
 };
 
