@@ -1,5 +1,5 @@
 import _groupBy from 'lodash/groupBy';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { FixedSizeList as List } from 'react-window';
