@@ -295,16 +295,19 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
-    let playSound = false;
     socketMessages
       .filter(
-        ({ type }) => type === WSEvents.NewMessage || WSEvents.DeleteMessage
+        ({ type }) =>
+          type === WSEvents.NewMessage ||
+          WSEvents.DeleteMessage ||
+          WSEvents.RoomMention
       )
       .forEach(({ data, id: messageID, type }) => {
         if (data.extra?.tribe?.id === tribeID) {
           if (data.extra.roomId === roomID) {
             try {
               switch (type) {
+                case WSEvents.RoomMention:
                 case WSEvents.NewMessage:
                   handleAddMessageMutation({
                     content: (data as RoomNewMessage).payload,
@@ -332,7 +335,9 @@ const Feed = ({
                         (currentUnreadMessages) => currentUnreadMessages + 1
                       );
                     }
-                    playSound = true;
+                    if (type === WSEvents.RoomMention) {
+                      play();
+                    }
                   });
 
                   break;
@@ -375,10 +380,6 @@ const Feed = ({
           handleReadMessage(messageID);
         }
       });
-
-    if (playSound) {
-      play();
-    }
   }, [
     tribeID,
     socketMessages,

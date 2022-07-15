@@ -96,43 +96,37 @@ const Page = ({ children }: Props) => {
   useEffect(() => {
     let playSound = false;
     socketMessages
-      .filter(({ type }) => type === WSEvents.NewMessage)
+      .filter(({ type }) => type === WSEvents.RoomMention)
       .forEach(({ data, id: messageID }) => {
         if (data.extra.tribe.id !== tribeID) {
-          if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-            playSound = true;
+          mutate(
+            '/core-api/user/tribes',
+            (tribes: Array<ProfileTribe>) =>
+              tribes.map((tribe) =>
+                tribe.id === data.extra.tribe.id
+                  ? {
+                      ...tribe,
+                      rooms: tribe.rooms.map((tribeRoom) => {
+                        if (tribeRoom.id === data.extra.roomId) {
+                          return {
+                            ...tribeRoom,
+                            unreadMentions: tribeRoom.unreadMentions + 1,
+                            hasUnread: true,
+                          };
+                        }
 
-            mutate(
-              '/core-api/user/tribes',
-              (tribes: Array<ProfileTribe>) =>
-                tribes.map((tribe) =>
-                  tribe.id === data.extra.tribe.id
-                    ? {
-                        ...tribe,
-                        rooms: tribe.rooms.map((tribeRoom) => {
-                          if (tribeRoom.id === data.extra.tribe.id) {
-                            return {
-                              ...tribeRoom,
-                              unreadMentions: tribeRoom.unreadMentions + 1,
-                              hasUnread: true,
-                            };
-                          }
+                        return tribeRoom;
+                      }),
+                    }
+                  : tribe
+              ),
+            false
+          );
 
-                          return tribeRoom;
-                        }),
-                      }
-                    : tribe
-                ),
-              false
-            );
-
-            handleReadMessage(messageID);
-          }
+          play();
+          handleReadMessage(messageID);
         }
       });
-    if (playSound) {
-      play();
-    }
   }, [tribeID, socketMessages, me?.id, mutate, handleReadMessage, play]);
 
   return (
