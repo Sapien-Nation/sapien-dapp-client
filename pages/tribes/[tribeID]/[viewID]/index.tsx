@@ -1,14 +1,13 @@
 import _isEmpty from 'lodash/isEmpty';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 
 // constants
 import { View } from 'constants/tribe';
 import { Role } from 'tools/constants/tribe';
 
 // components
-import { SEO, ErrorView, NotFound, Query } from 'components/common';
+import { ErrorView, NotFound, Query } from 'components/common';
 import {
   BadgesView,
   Channel,
@@ -26,13 +25,14 @@ import { Web3Provider } from 'wallet/providers';
 
 // types
 import type { NextPage } from 'next';
+import { useEffect } from 'react';
 
-interface Props {
-  tribeID: string;
-  viewID: string;
-}
+const TribePage = () => {
+  const { query } = useRouter();
 
-const TribePage = ({ tribeID, viewID }: Props) => {
+  const viewID = query.viewID as string;
+  const tribeID = query.tribeID as string;
+
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
   const { role } = useTribe(tribeID as string);
@@ -140,16 +140,4 @@ const TribePage = ({ tribeID, viewID }: Props) => {
   );
 };
 
-const TribePageProxy: NextPage = () => {
-  const { query } = useRouter();
-  const { tribeID, viewID } = query;
-
-  return (
-    <>
-      <SEO title="Sapien" />
-      <TribePage tribeID={tribeID as string} viewID={viewID as string} />
-    </>
-  );
-};
-
-export default TribePageProxy;
+export default TribePage;

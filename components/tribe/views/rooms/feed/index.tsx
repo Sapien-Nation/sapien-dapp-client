@@ -14,6 +14,7 @@ import { sendMessage, readRoom } from 'api/room';
 // context
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
+import { useSocket } from 'context/socket';
 
 // constants
 import { MessageType, WSEvents } from 'tools/constants/rooms';
@@ -30,8 +31,8 @@ import { formatDate } from 'utils/date';
 
 // hooks
 import useOnScreen from 'hooks/useOnScreen';
+import { useSound } from 'hooks/useSound';
 import { useTribeRooms } from 'hooks/tribe';
-import { useSocketEvent } from 'hooks/socket';
 import { useRoomMembers } from 'hooks/room';
 import { usePassport } from 'hooks/passport';
 
@@ -68,13 +69,14 @@ const Feed = ({
 
   const toast = useToast();
   const { me } = useAuth();
+  const { play } = useSound();
   const passport = usePassport();
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
 
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
   const roomMembers = useRoomMembers(roomID);
-
+  const { socketMessages, handleReadMessage } = useSocket();
   const reachBottom = useOnScreen(scrollToBottom);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -99,146 +101,74 @@ const Feed = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reachBottom]);
-  //----------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Websockets events
-  useSocketEvent(
-    [WSEvents.NewMessage, WSEvents.DeleteMessage],
-    async (type: WSEvents, data: RoomNewMessage | RoomDeleteMessage) => {
-      if (data.extra.roomId === roomID) {
-        try {
-          switch (type) {
-            case WSEvents.NewMessage:
-              await handleAddMessageMutation({
-                content: (data as RoomNewMessage).payload,
-                createdAt: (data as RoomNewMessage).createdAt,
-                id: (data as RoomNewMessage).extra.messageId,
-                sender: {
-                  avatar: (data as RoomNewMessage).by.avatar,
-                  id: (data as RoomNewMessage).by.id,
-                  username: (data as RoomNewMessage).by.username,
-                  badges: [],
-                },
-                type: MessageType.Text,
-                mentions: getMentionsArrayFromCacheForOptimistic(
-                  roomMembers,
-                  (data as RoomNewMessage).payload
-                ),
-              });
-
-              if (
-                window.pageYOffset + window.innerHeight >=
-                scrollToBottom.current.offsetTop
-              ) {
-                handleScrollToBottom();
-              } else {
-                setUnreadMessages(
-                  (currentUnreadMessages) => currentUnreadMessages + 1
-                );
-              }
-
-              break;
-            case WSEvents.DeleteMessage:
-              await handleRemoveMessageMutation(
-                (data as RoomDeleteMessage).extra.messageId
-              );
-              break;
-            default:
-              console.info(`No handler for eventType: ${type}`);
-              Sentry.captureMessage(`No handler for eventType: ${type}`);
-              break;
-          }
-        } catch (err) {
-          Sentry.captureMessage(err);
-        }
-      } else {
-        switch (type) {
-          case WSEvents.NewMessage: {
-            if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-              handleUnreadReadMessagesOnTribeNavigation(
-                data.extra.roomId,
-                true,
-                true
-              );
-            } else {
-              handleUnreadReadMessagesOnTribeNavigation(
-                data.extra.roomId,
-                false,
-                true
-              );
-            }
-            break;
-          }
-          default:
-            console.info(`No handler for eventType: ${type}`);
-            Sentry.captureMessage(`No handler for eventType: ${type}`);
-            break;
-        }
-      }
-    }
-  );
 
   //---------------------------------------------------------------------------------------------------------------------------------------------------------
   // Mutations
 
   // This function is to set read/unread value on the passed RoomID
   // to update the TribeNavigation read status
-  const handleUnreadReadMessagesOnTribeNavigation = (
-    roomID,
-    shouldIncrement = false,
-    hasUnread = false
-  ) => {
-    mutate(
-      '/core-api/user/tribes',
-      (tribes: Array<ProfileTribe>) =>
-        tribes.map((tribe) =>
-          tribe.id === tribeID
-            ? {
-                ...tribe,
-                rooms: tribe.rooms.map((tribeRoom) => {
-                  if (tribeRoom.id === roomID) {
-                    return {
-                      ...tribeRoom,
-                      unreadMentions: shouldIncrement
-                        ? tribeRoom.unreadMentions + 1
-                        : 0,
-                      hasUnread,
-                    };
-                  }
+  const handleUnreadReadMessagesOnTribeNavigation = useCallback(
+    (roomID, shouldIncrement = false, hasUnread = false) => {
+      mutate(
+        '/core-api/user/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((tribe) =>
+            tribe.id === tribeID
+              ? {
+                  ...tribe,
+                  rooms: tribe.rooms.map((tribeRoom) => {
+                    if (tribeRoom.id === roomID) {
+                      return {
+                        ...tribeRoom,
+                        unreadMentions: shouldIncrement
+                          ? tribeRoom.unreadMentions + 1
+                          : 0,
+                        hasUnread,
+                      };
+                    }
 
-                  return tribeRoom;
-                }),
-              }
-            : tribe
-        ),
-      false
-    );
-  };
+                    return tribeRoom;
+                  }),
+                }
+              : tribe
+          ),
+        false
+      );
+    },
+    [mutate, tribeID]
+  );
 
-  const handleAddMessageMutation = async (message: RoomMessage) => {
-    await mutate(
-      apiKey,
-      ({ data, nextCursor }) => {
-        return {
-          data: [...data, message],
-          nextCursor: nextCursor,
-        };
-      },
-      false
-    );
-  };
+  const handleAddMessageMutation = useCallback(
+    async (message: RoomMessage) => {
+      await mutate(
+        apiKey,
+        ({ data, nextCursor }) => {
+          return {
+            data: [...data, message],
+            nextCursor: nextCursor,
+          };
+        },
+        false
+      );
+    },
+    [apiKey, mutate]
+  );
 
-  const handleRemoveMessageMutation = async (messageID: string) => {
-    await mutate(
-      apiKey,
-      ({ data, nextCursor }) => {
-        return {
-          data: data.filter(({ id }) => id !== messageID),
-          nextCursor: nextCursor,
-        };
-      },
-      false
-    );
-  };
+  const handleRemoveMessageMutation = useCallback(
+    async (messageID: string) => {
+      await mutate(
+        apiKey,
+        ({ data, nextCursor }) => {
+          return {
+            data: data.filter(({ id }) => id !== messageID),
+            nextCursor: nextCursor,
+          };
+        },
+        false
+      );
+    },
+    [apiKey, mutate]
+  );
 
   const handleUpdateMesssageMutation = async (
     newMessage: RoomMessage,
@@ -263,7 +193,7 @@ const Feed = ({
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   // Handlers
-  const handleReadMessagesUnblock = async () => {
+  const handleReadMessagesUnblock = useCallback(async () => {
     try {
       if (room.unreadMentions > 0) {
         await readRoom(roomID);
@@ -271,21 +201,28 @@ const Feed = ({
     } catch (err) {
       Sentry.captureMessage(err);
     }
-  };
+  }, [room.unreadMentions, roomID]);
 
-  const handleScrollToBottom = (behavior: 'auto' | 'smooth' = 'auto') => {
-    if (scrollToBottom?.current) {
-      scrollToBottom.current.scrollIntoView({
-        block: 'nearest',
-        inline: 'start',
-        behavior,
-      });
-    }
+  const handleScrollToBottom = useCallback(
+    (behavior: 'auto' | 'smooth' = 'auto') => {
+      if (scrollToBottom?.current) {
+        scrollToBottom.current.scrollIntoView({
+          block: 'nearest',
+          inline: 'start',
+          behavior,
+        });
+      }
 
-    handleReadMessagesUnblock();
-    setUnreadMessages(0);
-    handleUnreadReadMessagesOnTribeNavigation(room.id, false);
-  };
+      handleReadMessagesUnblock();
+      setUnreadMessages(0);
+      handleUnreadReadMessagesOnTribeNavigation(room.id, false);
+    },
+    [
+      handleReadMessagesUnblock,
+      handleUnreadReadMessagesOnTribeNavigation,
+      room.id,
+    ]
+  );
 
   const handleMessageSubmit = async (content: string) => {
     try {
@@ -357,6 +294,141 @@ const Feed = ({
   };
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    socketMessages
+      .filter(
+        ({ type }) =>
+          type === WSEvents.NewMessage ||
+          WSEvents.DeleteMessage ||
+          WSEvents.RoomMention
+      )
+      .forEach(({ data, id: messageID, type }) => {
+        if (data.extra?.tribe?.id === tribeID) {
+          console.log({ data });
+          if (data.extra.roomId === roomID) {
+            try {
+              switch (type) {
+                case WSEvents.RoomMention:
+                  mutate(
+                    '/core-api/user/tribes',
+                    (tribes: Array<ProfileTribe>) =>
+                      tribes.map((tribe) =>
+                        tribe.id === data.extra.tribe.id
+                          ? {
+                              ...tribe,
+                              rooms: tribe.rooms.map((tribeRoom) => {
+                                if (tribeRoom.id === data.extra.roomId) {
+                                  return {
+                                    ...tribeRoom,
+                                    unreadMentions:
+                                      tribeRoom.unreadMentions + 1,
+                                    hasUnread: true,
+                                  };
+                                }
+
+                                return tribeRoom;
+                              }),
+                            }
+                          : tribe
+                      ),
+                    false
+                  );
+                  play();
+                  break;
+                case WSEvents.NewMessage:
+                  handleAddMessageMutation({
+                    content: (data as RoomNewMessage).payload,
+                    createdAt: (data as RoomNewMessage).createdAt,
+                    id: (data as RoomNewMessage).extra.messageId,
+                    sender: {
+                      avatar: (data as RoomNewMessage).by.avatar,
+                      id: (data as RoomNewMessage).by.id,
+                      username: (data as RoomNewMessage).by.username,
+                      badges: [],
+                    },
+                    type: MessageType.Text,
+                    mentions: getMentionsArrayFromCacheForOptimistic(
+                      roomMembers,
+                      (data as RoomNewMessage).payload
+                    ),
+                  }).then(() => {
+                    if (
+                      window.pageYOffset + window.innerHeight >=
+                      scrollToBottom.current.offsetTop
+                    ) {
+                      handleScrollToBottom();
+                    } else {
+                      setUnreadMessages(
+                        (currentUnreadMessages) => currentUnreadMessages + 1
+                      );
+                    }
+                  });
+
+                  break;
+                case WSEvents.DeleteMessage:
+                  handleRemoveMessageMutation(
+                    (data as RoomDeleteMessage).extra.messageId
+                  );
+                  break;
+                default:
+                  console.info(`No handler for eventType: ${type}`);
+                  break;
+              }
+            } catch (err) {
+              Sentry.captureMessage(err);
+            }
+          } else {
+            switch (type) {
+              case WSEvents.RoomMention:
+                mutate(
+                  '/core-api/user/tribes',
+                  (tribes: Array<ProfileTribe>) =>
+                    tribes.map((tribe) =>
+                      tribe.id === data.extra.tribe.id
+                        ? {
+                            ...tribe,
+                            rooms: tribe.rooms.map((tribeRoom) => {
+                              if (tribeRoom.id === data.extra.roomId) {
+                                return {
+                                  ...tribeRoom,
+                                  unreadMentions: tribeRoom.unreadMentions + 1,
+                                  hasUnread: true,
+                                };
+                              }
+
+                              return tribeRoom;
+                            }),
+                          }
+                        : tribe
+                    ),
+                  false
+                );
+                play();
+                break;
+
+              default:
+                console.info(`No handler for eventType: ${type}`);
+                Sentry.captureMessage(`No handler for eventType: ${type}`);
+                break;
+            }
+          }
+          handleReadMessage(messageID);
+        }
+      });
+  }, [
+    tribeID,
+    socketMessages,
+    me.id,
+    mutate,
+    handleReadMessage,
+    roomID,
+    handleAddMessageMutation,
+    roomMembers,
+    handleRemoveMessageMutation,
+    handleScrollToBottom,
+    handleUnreadReadMessagesOnTribeNavigation,
+    play,
+  ]);
   return (
     <div className="bg-sapien-neutral-800 h-full flex flex-1 flex-row p-0 lg:rounded-tl-3xl overflow-x-hidden">
       <>

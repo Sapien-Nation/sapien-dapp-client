@@ -11,7 +11,7 @@ import { useSWRConfig } from 'swr';
 import { leaveTribe } from 'api/tribe';
 
 // components
-import { Query, Tooltip } from 'components/common';
+import { Query, RedDot, Tooltip } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // constants
@@ -98,6 +98,10 @@ function TribeBarItem({
       Sentry.captureMessage(err);
     }
   };
+
+  const unreadMentions = tribe.rooms
+    .map(({ unreadMentions }) => unreadMentions)
+    .reduce((accumulator, current) => accumulator + current, 0);
 
   return (
     <>
@@ -202,6 +206,9 @@ function TribeBarItem({
           text={tribe.name}
           forceHidden={Boolean(isContextMenuOpen)}
         />
+        <div className="absolute top-0 right-0 inset-x-8">
+          <RedDot count={unreadMentions} />
+        </div>
       </div>
 
       {dialog === Dialog.EditTribe && (

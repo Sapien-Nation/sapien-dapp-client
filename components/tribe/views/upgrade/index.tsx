@@ -31,7 +31,7 @@ import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // components
-import { SEO, Query } from 'components/common';
+import { Query } from 'components/common';
 
 // hooks
 import { useWeb3 } from 'wallet/providers';
@@ -1015,7 +1015,6 @@ const UpgradeView = () => {
   if (tribe.isUpgraded === true) {
     return (
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
-        <SEO title="Upgrade" />
         <h1 className="sr-only">Already Upgraded</h1>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
           <div className="max-w-3xl mx-auto h-full">
@@ -1089,7 +1088,6 @@ const UpgradeView = () => {
 
         return (
           <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 flex-1">
-            <SEO title="Upgrade" />
             <h1 className="sr-only">Tribe Upgrade View</h1>
             <Upgrade
               meAsMember={tribeMembers.find(({ id }) => id === me.id)}

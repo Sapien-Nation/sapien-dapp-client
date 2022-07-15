@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef } from 'react';
 
 // components
-import { SEO, Query } from 'components/common';
+import { Query } from 'components/common';
 import { ContentItemMainChannel } from 'components/content';
 import MainChannelHeader from './MainChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
@@ -28,36 +28,34 @@ const MainChannel = () => {
   }, []);
 
   return (
-    <>
-      <SEO title={tribe.name} />
+    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
-      <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-        <Query
-          api={`/core-api/tribe/${tribeID}`}
-          loader={<ChannelHeaderPlaceholder />}
-        >
-          {(tribeInfo: MainFeedTribe) => (
-            <>
-              <MainChannelHeader tribe={tribeInfo} />
-              <div className="mt-4 min-h-400">
-                <ul>
-                  {['Sapien', 'sapien', 'Sapien Nation'].includes(
-                    tribeInfo.name
-                  ) ? (
-                    <li>
-                      <ContentItemMainChannel
-                        content={welcomeMessage}
-                        tribeID={tribeID as string}
-                      />
-                    </li>
-                  ) : null}
-                </ul>
-              </div>
-            </>
-          )}
-        </Query>
-      </div>
-    </>
+
+      <Query
+        api={`/core-api/tribe/${tribeID}`}
+        loader={<ChannelHeaderPlaceholder />}
+      >
+        {(tribeInfo: MainFeedTribe) => (
+          <>
+            <MainChannelHeader tribe={tribeInfo} />
+            <div className="mt-4 min-h-400">
+              <ul>
+                {['Sapien', 'sapien', 'Sapien Nation'].includes(
+                  tribeInfo.name
+                ) ? (
+                  <li>
+                    <ContentItemMainChannel
+                      content={welcomeMessage}
+                      tribeID={tribeID as string}
+                    />
+                  </li>
+                ) : null}
+              </ul>
+            </div>
+          </>
+        )}
+      </Query>
+    </div>
   );
 };
 

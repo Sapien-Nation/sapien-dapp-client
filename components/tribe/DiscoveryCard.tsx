@@ -25,17 +25,9 @@ const DiscoveryCard = ({ tribe }: Props) => {
   const handleJoinTribe = async () => {
     setIsFetching(true);
     try {
-      const response = await joinTribe(tribe.id);
+      await joinTribe(tribe.id);
 
-      mutate(
-        '/core-api/user/tribes',
-        (tribes: Array<ProfileTribe>) => [
-          tribes[0],
-          response,
-          ...tribes.slice(1),
-        ],
-        false
-      );
+      await mutate('/core-api/user/tribes');
 
       push(`/tribes/${tribe.id}/home`);
     } catch (error) {

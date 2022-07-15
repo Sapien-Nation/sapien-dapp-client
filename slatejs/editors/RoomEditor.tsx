@@ -9,6 +9,8 @@ import { Editor, createEditor, Transforms, Range } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { useRouter } from 'next/router';
+import data from '@emoji-mart/data';
+import { matchSorter } from 'match-sorter';
 
 // components
 import { UserAvatar } from 'components/common';
@@ -48,6 +50,7 @@ interface Props {
 enum FloatMenu {
   Channels,
   Members,
+  Emoji,
 }
 
 const editorID = 'slatejs-editor';
@@ -77,7 +80,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     () =>
       getMentionsArrayFromCacheForUI(roomMembers)
         .filter(({ label }) => {
-          return label.toLowerCase().startsWith(search.toLowerCase());
+          return search
+            ? label.toLowerCase().startsWith(search.toLowerCase())
+            : true;
         })
         .map(({ id, avatar, label }) => ({
           id,
@@ -87,6 +92,12 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         })),
     [roomMembers, search]
   );
+  const emojiList = useMemo(() => {
+    return matchSorter(Object.values(data.emojis), search, {
+      keys: ['keywords', 'name'],
+    });
+  }, [search]);
+
   const tribeRoomsList = useMemo(
     () =>
       tribeRooms
@@ -150,6 +161,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               const prevIndex =
                 index >= tribeRoomsList.length - 1 ? 0 : index + 1;
               setIndex(prevIndex);
+            } else if (floatMenu === FloatMenu.Emoji) {
+              const prevIndex = index >= emojiList.length - 1 ? 0 : index + 1;
+              setIndex(prevIndex);
             }
             break;
           case 'ArrowUp':
@@ -161,6 +175,9 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             } else if (floatMenu === FloatMenu.Channels) {
               const nextIndex =
                 index <= 0 ? tribeRoomsList.length - 1 : index - 1;
+              setIndex(nextIndex);
+            } else if (floatMenu === FloatMenu.Emoji) {
+              const nextIndex = index <= 0 ? emojiList.length - 1 : index - 1;
               setIndex(nextIndex);
             }
 
@@ -174,6 +191,8 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               insertUserMention(editor, roomMembersList[index]);
             } else if (floatMenu === FloatMenu.Channels) {
               insertRoomMention(editor, tribeRoomsList[index]);
+            } else if (floatMenu === FloatMenu.Emoji) {
+              insertEmoji(editor, { native: emojiList[index].skins[0].native });
             }
 
             setFloatMenu(null);
@@ -199,6 +218,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       index,
       roomMembersList,
       tribeRoomsList,
+      emojiList,
       handleSubmit,
     ]
   );
@@ -234,6 +254,53 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                     }}
                   >
                     <div className="flex items-center gap-2">{label}</div>
+                  </div>
+                </>
+              ))}
+              <div className="w-full divide-solid " />
+            </div>
+          );
+        }
+      }
+
+      case FloatMenu.Emoji: {
+        if (target && emojiList.length > 0) {
+          return (
+            <div
+              className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
+              style={{ bottom: '6.6rem' }}
+            >
+              <h3 className="text-sm uppercase text-gray-200">Emojies</h3>
+              {emojiList.map(({ id, skins, name }, emojiIndex) => (
+                <>
+                  <div
+                    key={id}
+                    className={`${
+                      emojiIndex === index ? 'bg-gray-900' : ''
+                    } mt-3 py-2 px-3 rounded-md cursor-pointer`}
+                    onClick={() => {
+                      setIndex(emojiIndex);
+                      Transforms.select(editor, target);
+                      insertEmoji(editor, { native: '' });
+
+                      setFloatMenu(null);
+                      setTarget(null);
+                    }}
+                    onMouseEnter={() => {
+                      setIndex(emojiIndex);
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="emoji"
+                        role="img"
+                        aria-label={name ? name : ''}
+                        aria-hidden={name ? 'false' : 'true'}
+                      >
+                        {skins[0].native}
+                      </span>
+                      {id}
+                    </div>
                   </div>
                 </>
               ))}
@@ -352,6 +419,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                   const wordBefore = Editor.before(editor, start, {
                     unit: 'word',
                   });
+
                   const before =
                     wordBefore && Editor.before(editor, wordBefore);
                   const beforeRange =
@@ -367,22 +435,31 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                   const afterText = Editor.string(editor, afterRange);
                   const afterMatch = afterText.match(/^(\s|$)/);
 
-                  if (beforeMatchAt && afterMatch) {
+                  if (beforeText?.startsWith(':') && beforeText?.length >= 2) {
                     setTarget(beforeRange);
-                    setSearch(beforeMatchAt[1]);
+                    setSearch(beforeText.replace(':', ''));
                     setIndex(0);
 
-                    setFloatMenu(FloatMenu.Members);
+                    setFloatMenu(FloatMenu.Emoji);
                     return;
-                  }
+                  } else {
+                    if (beforeMatchAt && afterMatch) {
+                      setTarget(beforeRange);
+                      setSearch(beforeMatchAt[1]);
+                      setIndex(0);
 
-                  if (beforeMatchHash && afterMatch) {
-                    setTarget(beforeRange);
-                    setSearch(beforeMatchHash[1]);
-                    setIndex(0);
+                      setFloatMenu(FloatMenu.Members);
+                      return;
+                    }
 
-                    setFloatMenu(FloatMenu.Channels);
-                    return;
+                    if (beforeMatchHash && afterMatch) {
+                      setTarget(beforeRange);
+                      setSearch(beforeMatchHash[1]);
+                      setIndex(0);
+
+                      setFloatMenu(FloatMenu.Channels);
+                      return;
+                    }
                   }
                 }
 

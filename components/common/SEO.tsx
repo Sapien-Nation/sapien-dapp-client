@@ -9,6 +9,7 @@ interface Props {
 
 const Head = ({ title, image, description }: Props) => {
   const { pathname } = useRouter();
+
   return (
     <NextSeo
       title={title}

@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { mintPassport } from 'api/passport';
 
 // components
-import { Query, Redirect, SEO } from 'components/common';
+import { Query, Redirect } from 'components/common';
 
 // context
 import { useAuth } from 'context/user';
@@ -190,13 +190,7 @@ const MintPage: NextPage = () => {
 
   if (isLoggingIn) return null;
 
-  if (me === null)
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path={`/login?redirect=${asPath}`} />
-      </>
-    );
+  if (me === null) return <Redirect path={`/login?redirect=${asPath}`} />;
 
   const renderView = ({ avatar, code }: MintStatus) => {
     if (code === null) return <NothingToMintview />;
@@ -209,12 +203,9 @@ const MintPage: NextPage = () => {
   };
 
   return (
-    <>
-      <SEO title="Minting" />
-      <Query api="/core-api/passport/mint-checker">
-        {(response: MintStatus) => renderView(response)}
-      </Query>
-    </>
+    <Query api="/core-api/passport/mint-checker">
+      {(response: MintStatus) => renderView(response)}
+    </Query>
   );
 };
 

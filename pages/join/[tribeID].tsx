@@ -9,14 +9,10 @@ import { joinTribe } from 'api/tribe';
 import { useAuth } from 'context/user';
 
 // components
-import { SEO, Query, Redirect } from 'components/common';
+import { Query, Redirect } from 'components/common';
 
 // types
 import type { TribeInvite } from 'tools/types/tribe';
-
-// mocks
-// TODO remove
-import { mockTribeInvite } from 'tools/mocks/tribe';
 
 enum View {
   Error,
@@ -115,23 +111,15 @@ const JoinProxy = () => {
   const { asPath, query } = useRouter();
 
   if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path={`/login?redirect=${asPath}`} />
-      </>
-    );
+    return <Redirect path={`/login?redirect=${asPath}`} />;
   }
 
   if (!query.tribeID) return null;
 
   return (
-    <>
-      <SEO title="Accept invite" />
-      <Query api={`/core-api/tribe/${query.tribeID as string}/invite`}>
-        {(tribe: TribeInvite) => <Join tribe={tribe} />}
-      </Query>
-    </>
+    <Query api={`/core-api/tribe/${query.tribeID as string}/invite`}>
+      {(tribe: TribeInvite) => <Join tribe={tribe} />}
+    </Query>
   );
 };
 export default JoinProxy;

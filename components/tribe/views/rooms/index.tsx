@@ -10,10 +10,11 @@ import { useState } from 'react';
 import axios from 'api';
 
 // components
-import { Query, SEO } from 'components/common';
+import { Query } from 'components/common';
 import Feed from './feed';
 import { JoinRoom, Skeleton } from './views';
-import { RoomType } from 'tools/constants/rooms';
+
+// hooks
 import { useTribeRoom } from 'hooks/tribe';
 
 interface RoomProps {
@@ -105,18 +106,19 @@ const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
   const apiKey = `/core-api/room/${roomID}/messages`;
 
   return (
-    <>
-      <SEO title={name} />
-      <h1 className="sr-only">Room View for {name}</h1>
+    <Query api={apiKey} loader={<Skeleton />}>
+      {() => (
+        <Query api={`/core-api/room/${roomID}/members`}>
+          {() => (
+            <>
+              <h1 className="sr-only">Room View for {name}</h1>
 
-      <Query api={apiKey} loader={<Skeleton />}>
-        {() => (
-          <Query api={`/core-api/room/${roomID}/members`}>
-            {() => <Room roomID={roomID} apiKey={apiKey} />}
-          </Query>
-        )}
-      </Query>
-    </>
+              <Room roomID={roomID} apiKey={apiKey} />
+            </>
+          )}
+        </Query>
+      )}
+    </Query>
   );
 };
 

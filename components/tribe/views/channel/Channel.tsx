@@ -8,9 +8,8 @@ import { createContent } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { SEO, Query } from 'components/common';
+import { Query } from 'components/common';
 import ChannelEditor from 'tinymc';
-import EmptyFeed from './EmptyFeed';
 import ChannelHeader from './ChannelHeader';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 
@@ -85,7 +84,6 @@ const Channel = () => {
   return (
     <>
       <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-        <SEO title={channel.name} />
         <h1 className="sr-only">{channel.name}</h1>
         <Query
           api={`/core-api/channel/${viewID}`}

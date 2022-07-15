@@ -2,8 +2,8 @@ import { Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { useState, useCallback } from 'react';
-import useSWR from 'swr';
+import { useState, useCallback, useEffect } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 
 // components
 import { SEO, Redirect, Overlay } from 'components/common';
@@ -20,10 +20,22 @@ import ProfileOverlay from './profile';
 // context
 import { useAuth } from 'context/user';
 
+// constants
+import { WSEvents } from 'tools/constants/rooms';
+
+// hooks
+import { useSocket } from 'context/socket';
+import { useSound } from 'hooks/useSound';
+import { useAppSEO } from 'hooks/tribe';
+
 // providers
 const Web3Provider = dynamic(() =>
   import('wallet/providers').then((mod) => mod.Web3Provider)
 );
+
+// types
+import type { RoomNewMessage } from 'tools/types/room';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   children: React.ReactElement;
@@ -34,7 +46,11 @@ const Page = ({ children }: Props) => {
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const { me } = useAuth();
-  const { pathname } = useRouter();
+  const { play } = useSound();
+  const { mutate } = useSWRConfig();
+  const { pathname, query } = useRouter();
+  const { socketMessages, handleReadMessage } = useSocket();
+  const { unreadMentions } = useAppSEO();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -51,6 +67,7 @@ const Page = ({ children }: Props) => {
 
   const isLoadingData =
     isLoadingTribes === true || isLoadingPassport === true || me === undefined;
+  const tribeID = query.tribeID as string;
 
   const renderNavigation = () => {
     let children = null;
@@ -76,17 +93,47 @@ const Page = ({ children }: Props) => {
     );
   };
 
-  if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path="/login" />
-      </>
-    );
-  }
+  useEffect(() => {
+    let playSound = false;
+    socketMessages
+      .filter(({ type }) => type === WSEvents.RoomMention)
+      .forEach(({ data, id: messageID }) => {
+        if (data.extra.tribe.id !== tribeID) {
+          mutate(
+            '/core-api/user/tribes',
+            (tribes: Array<ProfileTribe>) =>
+              tribes.map((tribe) =>
+                tribe.id === data.extra.tribe.id
+                  ? {
+                      ...tribe,
+                      rooms: tribe.rooms.map((tribeRoom) => {
+                        if (tribeRoom.id === data.extra.roomId) {
+                          return {
+                            ...tribeRoom,
+                            unreadMentions: tribeRoom.unreadMentions + 1,
+                            hasUnread: true,
+                          };
+                        }
+
+                        return tribeRoom;
+                      }),
+                    }
+                  : tribe
+              ),
+            false
+          );
+
+          play();
+          handleReadMessage(messageID);
+        }
+      });
+  }, [tribeID, socketMessages, me?.id, mutate, handleReadMessage, play]);
 
   return (
     <>
+      <SEO
+        title={unreadMentions === 0 ? 'Sapien' : `Sapien (${unreadMentions})`}
+      />
       {isLoadingData && (
         <Transition
           appear
@@ -209,6 +256,7 @@ const Page = ({ children }: Props) => {
 };
 
 const AppLayout = ({ children }: Props) => {
+  const { me } = useAuth();
   const { pathname } = useRouter();
 
   const noLayoutPages = [
@@ -228,6 +276,10 @@ const AppLayout = ({ children }: Props) => {
 
   if (noLayoutPages.some((page) => pathname.startsWith(page))) {
     return children;
+  }
+
+  if (me === null) {
+    return <Redirect path="/login" />;
   }
 
   return <Page>{children}</Page>;
