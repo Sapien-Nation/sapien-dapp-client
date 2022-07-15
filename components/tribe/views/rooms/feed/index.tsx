@@ -304,10 +304,37 @@ const Feed = ({
       )
       .forEach(({ data, id: messageID, type }) => {
         if (data.extra?.tribe?.id === tribeID) {
+          console.log({ data });
           if (data.extra.roomId === roomID) {
             try {
               switch (type) {
                 case WSEvents.RoomMention:
+                  mutate(
+                    '/core-api/user/tribes',
+                    (tribes: Array<ProfileTribe>) =>
+                      tribes.map((tribe) =>
+                        tribe.id === data.extra.tribe.id
+                          ? {
+                              ...tribe,
+                              rooms: tribe.rooms.map((tribeRoom) => {
+                                if (tribeRoom.id === data.extra.roomId) {
+                                  return {
+                                    ...tribeRoom,
+                                    unreadMentions:
+                                      tribeRoom.unreadMentions + 1,
+                                    hasUnread: true,
+                                  };
+                                }
+
+                                return tribeRoom;
+                              }),
+                            }
+                          : tribe
+                      ),
+                    false
+                  );
+                  play();
+                  break;
                 case WSEvents.NewMessage:
                   handleAddMessageMutation({
                     content: (data as RoomNewMessage).payload,
@@ -335,9 +362,6 @@ const Feed = ({
                         (currentUnreadMessages) => currentUnreadMessages + 1
                       );
                     }
-                    if (type === WSEvents.RoomMention) {
-                      play();
-                    }
                   });
 
                   break;
@@ -355,22 +379,33 @@ const Feed = ({
             }
           } else {
             switch (type) {
-              case WSEvents.NewMessage: {
-                if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
-                  handleUnreadReadMessagesOnTribeNavigation(
-                    data.extra.roomId,
-                    true,
-                    true
-                  );
-                } else {
-                  handleUnreadReadMessagesOnTribeNavigation(
-                    data.extra.roomId,
-                    false,
-                    true
-                  );
-                }
+              case WSEvents.RoomMention:
+                mutate(
+                  '/core-api/user/tribes',
+                  (tribes: Array<ProfileTribe>) =>
+                    tribes.map((tribe) =>
+                      tribe.id === data.extra.tribe.id
+                        ? {
+                            ...tribe,
+                            rooms: tribe.rooms.map((tribeRoom) => {
+                              if (tribeRoom.id === data.extra.roomId) {
+                                return {
+                                  ...tribeRoom,
+                                  unreadMentions: tribeRoom.unreadMentions + 1,
+                                  hasUnread: true,
+                                };
+                              }
+
+                              return tribeRoom;
+                            }),
+                          }
+                        : tribe
+                    ),
+                  false
+                );
+                play();
                 break;
-              }
+
               default:
                 console.info(`No handler for eventType: ${type}`);
                 Sentry.captureMessage(`No handler for eventType: ${type}`);
