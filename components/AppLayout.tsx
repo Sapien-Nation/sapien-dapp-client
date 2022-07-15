@@ -25,6 +25,7 @@ import { WSEvents } from 'tools/constants/rooms';
 
 // hooks
 import { useSocket } from 'context/socket';
+import { useSound } from 'hooks/useSound';
 
 // providers
 const Web3Provider = dynamic(() =>
@@ -44,6 +45,7 @@ const Page = ({ children }: Props) => {
   const [showProfileOverlay, setShowProfileOverlay] = useState(false);
 
   const { me } = useAuth();
+  const { play } = useSound();
   const { mutate } = useSWRConfig();
   const { pathname, query } = useRouter();
   const { socketMessages, handleReadMessage } = useSocket();
@@ -90,11 +92,14 @@ const Page = ({ children }: Props) => {
   };
 
   useEffect(() => {
+    let playSound = false;
     socketMessages
       .filter(({ type }) => type === WSEvents.NewMessage)
       .forEach(({ data, id: messageID }) => {
         if (data.extra.tribe.id !== tribeID) {
           if ((data as RoomNewMessage).extra?.mentions?.includes(me.id)) {
+            playSound = true;
+
             mutate(
               '/core-api/user/tribes',
               (tribes: Array<ProfileTribe>) =>
@@ -118,11 +123,15 @@ const Page = ({ children }: Props) => {
                 ),
               false
             );
+
             handleReadMessage(messageID);
           }
         }
       });
-  }, [tribeID, socketMessages, me?.id, mutate, handleReadMessage]);
+    if (playSound) {
+      play();
+    }
+  }, [tribeID, socketMessages, me?.id, mutate, handleReadMessage, play]);
 
   return (
     <>
