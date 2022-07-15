@@ -48,6 +48,10 @@ interface Web3 {
       tokenId: number
     ) => Promise<{ type: ErrorTypes; hash: string }>;
     handleDeposit: () => Promise<string>;
+    handleFTDeposit: (
+      token: string,
+      amount: number
+    ) => Promise<{ type: ErrorTypes; hash: string }>;
     getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
@@ -562,6 +566,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         walletAPI: {
           handleWithdraw,
           handleDeposit,
+          handleFTDeposit,
           getWalletBalanceSPN,
           getWalletTokens,
           getUserTransactions,
