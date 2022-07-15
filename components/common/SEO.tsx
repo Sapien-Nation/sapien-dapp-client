@@ -1,9 +1,6 @@
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 
-// hooks
-import { useAppSEO } from 'hooks/tribe';
-
 interface Props {
   title: string;
   image?: string;
@@ -12,11 +9,10 @@ interface Props {
 
 const Head = ({ title, image, description }: Props) => {
   const { pathname } = useRouter();
-  const { unreadMentions } = useAppSEO();
 
   return (
     <NextSeo
-      title={`${title} (${unreadMentions})`}
+      title={title}
       description={
         description
           ? description

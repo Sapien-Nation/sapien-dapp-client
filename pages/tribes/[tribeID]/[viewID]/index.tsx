@@ -7,7 +7,7 @@ import { View } from 'constants/tribe';
 import { Role } from 'tools/constants/tribe';
 
 // components
-import { SEO, ErrorView, NotFound, Query } from 'components/common';
+import { ErrorView, NotFound, Query } from 'components/common';
 import {
   BadgesView,
   Channel,
@@ -27,12 +27,12 @@ import { Web3Provider } from 'wallet/providers';
 import type { NextPage } from 'next';
 import { useEffect } from 'react';
 
-interface Props {
-  tribeID: string;
-  viewID: string;
-}
+const TribePage = () => {
+  const { query } = useRouter();
 
-const TribePage = ({ tribeID, viewID }: Props) => {
+  const viewID = query.viewID as string;
+  const tribeID = query.tribeID as string;
+
   const view = useGetCurrentView(tribeID as string, viewID as string);
 
   const { role } = useTribe(tribeID as string);
@@ -140,45 +140,4 @@ const TribePage = ({ tribeID, viewID }: Props) => {
   );
 };
 
-const TribePageProxy: NextPage = () => {
-  const { query } = useRouter();
-  const { tribeID, viewID } = query;
-
-  // const tribe = useTribe();
-  // useEffect(() => {
-  //   const handleVisit = async () => {
-  //     try {
-  //       // await readNotifications();
-  //       mutate(
-  //         '/core-api/user/tribes',
-  //         (tribes: Array<ProfileTribe>) =>
-  //           tribes.map((tribe) => {
-  //             if (tribe.id === tribeID) {
-  //               return {
-  //                 ...tribe,
-  //                 unreadCount: 0,
-  //               };
-  //             }
-
-  //             return tribe;
-  //           }),
-  //         false
-  //       );
-  //     } catch (err) {
-  //       // err
-  //     }
-  //   }
-
-  //   if (tribe.undreadCont > 0) {
-  //     handleVisit();
-  //   }
-  // }, [])
-  return (
-    <>
-      <SEO title="Sapien" />
-      <TribePage tribeID={tribeID as string} viewID={viewID as string} />
-    </>
-  );
-};
-
-export default TribePageProxy;
+export default TribePage;

@@ -67,7 +67,7 @@ export const useSapienTribe = (): ProfileTribe => {
 export const useAppSEO = (): { unreadMentions: number } => {
   const { cache } = useSWRConfig();
 
-  const tribes: Array<ProfileTribe> = cache.get('/core-api/user/tribes');
+  const tribes: Array<ProfileTribe> = cache.get('/core-api/user/tribes') ?? [];
 
   return {
     unreadMentions: tribes

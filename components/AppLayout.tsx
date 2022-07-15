@@ -26,6 +26,7 @@ import { WSEvents } from 'tools/constants/rooms';
 // hooks
 import { useSocket } from 'context/socket';
 import { useSound } from 'hooks/useSound';
+import { useAppSEO } from 'hooks/tribe';
 
 // providers
 const Web3Provider = dynamic(() =>
@@ -49,6 +50,7 @@ const Page = ({ children }: Props) => {
   const { mutate } = useSWRConfig();
   const { pathname, query } = useRouter();
   const { socketMessages, handleReadMessage } = useSocket();
+  const { unreadMentions } = useAppSEO();
 
   const handleMobileMenu = useCallback(() => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -135,6 +137,9 @@ const Page = ({ children }: Props) => {
 
   return (
     <>
+      <SEO
+        title={unreadMentions === 0 ? 'Sapien' : `Sapien (${unreadMentions})`}
+      />
       {isLoadingData && (
         <Transition
           appear
@@ -280,12 +285,7 @@ const AppLayout = ({ children }: Props) => {
   }
 
   if (me === null) {
-    return (
-      <>
-        <SEO title="" />
-        <Redirect path="/login" />
-      </>
-    );
+    return <Redirect path="/login" />;
   }
 
   return <Page>{children}</Page>;
