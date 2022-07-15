@@ -197,11 +197,22 @@ const Feed = ({
     try {
       if (room.unreadMentions > 0) {
         await readRoom(roomID);
+        await mutate(
+          '/core-api/notification',
+          (data) => ({
+            ...data,
+            unread:
+              data.unread === room.unreadMentions
+                ? 0
+                : data.unread - room.unreadMentions,
+          }),
+          true
+        );
       }
     } catch (err) {
       Sentry.captureMessage(err);
     }
-  }, [room.unreadMentions, roomID]);
+  }, [mutate, room.unreadMentions, roomID]);
 
   const handleScrollToBottom = useCallback(
     (behavior: 'auto' | 'smooth' = 'auto') => {
