@@ -1,5 +1,6 @@
 import { DotsVerticalIcon } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
+import { useSWRConfig } from 'swr';
 import Lottie from 'react-lottie-player';
 
 // api
@@ -23,7 +24,10 @@ import { useToast } from 'context/toast';
 
 // assets
 import notificationJSONData from './lottie/notification.json';
-import { useSWRConfig } from 'swr';
+
+// types
+import type { Notification } from 'tools/types/notifications';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 const Notifications = () => {
   const toast = useToast();
@@ -52,20 +56,48 @@ const Notifications = () => {
     }
   };
 
-  const handleReadNotification = async (notificationID: string) => {
+  const handleReadNotification = async (notification: Notification) => {
     try {
+      console.log({ notification });
+      mutate(
+        '/core-api/user/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((tribe) =>
+            tribe.id === notification.extra.tribe.id
+              ? {
+                  ...tribe,
+                  rooms: tribe.rooms.map((tribeRoom) => {
+                    if (tribeRoom.id === notification.extra.roomId) {
+                      return {
+                        ...tribeRoom,
+                        unreadMentions:
+                          tribeRoom.unreadMentions === 1
+                            ? 0
+                            : tribeRoom.unreadMentions - 1,
+                        hasUnread:
+                          tribeRoom.unreadMentions === 1 ? false : true,
+                      };
+                    }
+
+                    return tribeRoom;
+                  }),
+                }
+              : tribe
+          ),
+        false
+      );
       mutate(
         '/core-api/notification',
         (data) => ({
           ...data,
           unread: data.unread === 1 ? 0 : data.unread - 1,
           notifications: data.notifications.filter(
-            (notification) => notification.id !== notificationID
+            (notification) => notification.id !== notification.id
           ),
         }),
         false
       );
-      await markAsRead(notificationID);
+      await markAsRead(notification.id);
     } catch (err) {
       toast({
         message: err,
@@ -137,7 +169,7 @@ const Notifications = () => {
             .map((notification) => (
               <div
                 key={notification.id}
-                onClick={() => handleReadNotification(notification.id)}
+                onClick={() => handleReadNotification(notification)}
                 className="cursor-pointer"
               >
                 {renderNotification(notification)}

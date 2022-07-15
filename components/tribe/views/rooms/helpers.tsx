@@ -80,7 +80,6 @@ export const renderContent = (
           );
         }
 
-        console.log({ singleNode });
         if (singleNode.startsWith('~~') && singleNode.endsWith('~~')) {
           return (
             <>
@@ -111,7 +110,6 @@ export const renderContent = (
           );
         }
 
-        console.log({ singleNode });
         return ` ${singleNode} `;
       })
       .concat(index === elements.length - 1 ? '' : '\n\n');
