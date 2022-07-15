@@ -46,12 +46,18 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
           WSEvents.RoomNewMessage,
         ].includes(type)
       )
-      .forEach(({ data: newNotification, id: messageID }) => {
+      .forEach(({ data: newNotification, id: messageID, type }) => {
         mutate(
           '/core-api/notification',
           (data) => ({
             ...data,
-            notifications: [...data.notifications, newNotification],
+            notifications: [
+              ...data.notifications,
+              {
+                ...newNotification,
+                type,
+              },
+            ],
             unread: data.unread + 1,
             count: data.count + 1,
           }),
