@@ -12,6 +12,7 @@ import {
   connectWallet,
   deposit,
   withdraw,
+  transferFT,
   getSentTxHistory,
   getReceivedTxHistory,
 } from '../api';
@@ -49,6 +50,11 @@ interface Web3 {
     ) => Promise<{ type: ErrorTypes; hash: string }>;
     handleDeposit: () => Promise<string>;
     handleFTDeposit: (
+      token: string,
+      amount: number
+    ) => Promise<{ type: ErrorTypes; hash: string }>;
+    handleFTWithdraw: (
+      to: string,
       token: string,
       amount: number
     ) => Promise<{ type: ErrorTypes; hash: string }>;
@@ -526,6 +532,21 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  // Transfer fungible tokens from torus wallet to another address
+  const handleFTWithdraw = async (
+    to: string,
+    token: string,
+    amount: number
+  ): Promise<{ type: ErrorTypes; hash: string }> => {
+    try {
+      const result: TxResult = await transferFT({ to, token, amount });
+      return { hash: result.data.transactionHash, type: result.type };
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
   const getUserTransactions = async (): Promise<Array<Transaction>> => {
     try {
       const sentHistory = await getSentTxHistory(me.walletAddress);
@@ -567,6 +588,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           handleWithdraw,
           handleDeposit,
           handleFTDeposit,
+          handleFTWithdraw,
           getWalletBalanceSPN,
           getWalletTokens,
           getUserTransactions,

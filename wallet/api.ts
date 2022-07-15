@@ -115,6 +115,12 @@ export const withdraw = ({ tokenId, txHash }): Promise<Token> =>
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+export const transferFT = ({ to, token, amount }) =>
+  instance
+    .post(`/core-api/wallet/transferFT`, { to, token, amount })
+    .then((response) => response.data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const signPassport = (tokenId): Promise<Token> =>
   instance
     .post(`/core-api/passport/${tokenId}/sign`)
