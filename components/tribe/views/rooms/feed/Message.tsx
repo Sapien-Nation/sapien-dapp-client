@@ -55,6 +55,7 @@ const Message = ({
 }: Props) => {
   const [dialog, setDialog] = useState(null);
   const [messageFocused, setMessageFocused] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const messageRef = useRef(null);
 
@@ -253,55 +254,59 @@ const Message = ({
         </div>
 
         {/* Menus */}
-        {/* <Popover
-          className={
-            messageFocused
-              ? 'absolute leading-[0] group-hover:block right-0 w-8 h-8 mr-8 top-0 block'
-              : 'absolute leading-[0] group-hover:block right-0 w-8 h-8 mr-8 top-0 hidden'
-          }
+        <Popover
+          className={`${
+            isPickerOpen ? 'visible' : 'hidden group-hover:block'
+          } absolute leading-[0] right-0 w-8 h-8 mr-8 top-0`}
           as="div"
         >
-          <>
-            <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
-              <EmojiHappyIcon className="w-5" />
-            </Popover.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel className="absolute z-10 right-0 w-56 -top-1 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
-                <Picker
-                  onSelect={(event) => {
-                    console.log({
-                      roomID,
-                      messageOD: message.id,
-                      emojiID: event.native,
-                    });
-                    // reactToMessage(roomID, message.id, event.id)
-                    setMessageFocused(false);
-                  }}
-                  perLine={6}
-                  style={{
-                    width: '430px',
-                    position: 'absolute',
-                    marginLeft: -240,
-                  }}
-                  theme="dark"
-                  disableAutoFocus={true}
-                  groupNames={{ smileys_people: 'PEOPLE' }}
-                  native
-                  showPreview={false}
-                  title=""
-                />
-              </Popover.Panel>
-            </Transition>
-          </>
-        </Popover> */}
+          {({ open }) => {
+            setIsPickerOpen(open);
+
+            return (
+              <>
+                <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
+                  <EmojiHappyIcon className="w-5" />
+                </Popover.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute z-10 right-0 w-56 -top-1 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
+                    <Picker
+                      onSelect={(event) => {
+                        console.log({
+                          roomID,
+                          messageOD: message.id,
+                          emojiID: event.native,
+                        });
+                        // reactToMessage(roomID, message.id, event.id)
+                        setMessageFocused(false);
+                      }}
+                      perLine={6}
+                      style={{
+                        width: '430px',
+                        position: 'absolute',
+                        marginLeft: -240,
+                      }}
+                      theme="dark"
+                      disableAutoFocus={true}
+                      groupNames={{ smileys_people: 'PEOPLE' }}
+                      native
+                      showPreview={false}
+                      title=""
+                    />
+                  </Popover.Panel>
+                </Transition>
+              </>
+            );
+          }}
+        </Popover>
 
         {messageOwnerID === me.id && (
           <MessageOwnerMenu
