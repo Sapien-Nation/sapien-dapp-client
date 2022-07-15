@@ -25,7 +25,7 @@ export const renderContent = (
           if (user) {
             return (
               <>
-                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
                   {' '}
                   @{user.username}
                 </span>{' '}
@@ -34,7 +34,7 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
                   {' '}
                   @{userID.replaceAll('-', '')}
                 </span>{' '}
@@ -50,7 +50,7 @@ export const renderContent = (
             return (
               <>
                 <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                  <a className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
+                  <a className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
                     {' '}
                     # {room.name}
                   </a>
@@ -60,7 +60,7 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-xs cursor-pointer">
+                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
                   {' '}
                   # deleted_room
                 </span>{' '}
@@ -69,6 +69,49 @@ export const renderContent = (
           }
         }
 
+        if (singleNode.startsWith('**') && singleNode.endsWith('**')) {
+          return (
+            <>
+              <strong className="prose prose-xl">
+                {' '}
+                {singleNode.replaceAll('**', '')}
+              </strong>{' '}
+            </>
+          );
+        }
+
+        console.log({ singleNode });
+        if (singleNode.startsWith('~~') && singleNode.endsWith('~~')) {
+          return (
+            <>
+              <span className="line-through">
+                {' '}
+                {singleNode.replaceAll('~~', '')}
+              </span>{' '}
+            </>
+          );
+        }
+
+        if (singleNode.startsWith('_') && singleNode.endsWith('_')) {
+          return (
+            <>
+              <em className="underline"> {singleNode.replaceAll('_', '')}</em>{' '}
+            </>
+          );
+        }
+
+        if (singleNode.startsWith('`') && singleNode.endsWith('`')) {
+          return (
+            <>
+              <code className=" bg-sapien-neutral-400 px-1 py-1">
+                {' '}
+                {singleNode.replaceAll('`', '')}
+              </code>{' '}
+            </>
+          );
+        }
+
+        console.log({ singleNode });
         return ` ${singleNode} `;
       })
       .concat(index === elements.length - 1 ? '' : '\n\n');
