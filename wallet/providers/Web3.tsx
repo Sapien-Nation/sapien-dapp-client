@@ -383,6 +383,145 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     }
   };
 
+  // Deposit fungible tokens to torus wallet via metamask
+  const handleFTDeposit = async (
+    token: string,
+    amount: number
+  ): Promise<{ type: ErrorTypes; hash: string }> => {
+    try {
+      const metamaskAddress = getMetamaskAddress();
+      const gasPrice = await getGasPrice();
+      const object = {
+        from: metamaskAddress,
+        signatureType: biconomy.EIP712_SIGN,
+        gasPrice: Web3Library.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
+        gasLimit: config.GAS_LIMIT,
+      };
+      if (token === 'SPN') {
+        const spnBal: number = await getWalletBalanceSPN();
+        if (amount < spnBal) {
+          const result: TxResult = await new Promise(
+            async (resolve, reject) => {
+              contracts.platformSPNContract.methods
+                .transferFrom(metamaskAddress, me.walletAddress, amount)
+                .send(object)
+                .on('receipt', (rec: TransactionReceipt) =>
+                  resolve({ data: rec, type: ErrorTypes.Success })
+                )
+                .on('error', (err) => {
+                  if (err.receipt) {
+                    return resolve({
+                      data: err.receipt,
+                      type: ErrorTypes.Fail,
+                    });
+                  } else {
+                    return reject(err);
+                  }
+                });
+            }
+          );
+          return { hash: result.data.transactionHash, type: result.type };
+        }
+        return Promise.reject('Insufficient SPN Balance');
+      } else if (token === 'WETH') {
+        const ethBal: number = await getWethBalance();
+        if (amount < ethBal) {
+          const result: TxResult = await new Promise(
+            async (resolve, reject) => {
+              contracts.wethContract.methods
+                .transferFrom(metamaskAddress, me.walletAddress, amount)
+                .send(object)
+                .on('receipt', (rec: TransactionReceipt) =>
+                  resolve({ data: rec, type: ErrorTypes.Success })
+                )
+                .on('error', (err) => {
+                  if (err.receipt) {
+                    return resolve({
+                      data: err.receipt,
+                      type: ErrorTypes.Fail,
+                    });
+                  } else {
+                    return reject(err);
+                  }
+                });
+            }
+          );
+          return { hash: result.data.transactionHash, type: result.type };
+        }
+        return Promise.reject('Insufficient ETH Balance');
+      } else if (token === 'MATIC') {
+        const matic: string = await WalletAPIRef.current.eth.getBalance(
+          me.walletAddress
+        );
+        const gas = Number(
+          Web3Library.utils.fromWei(
+            (Number(gasPrice) * config.GAS_LIMIT).toString()
+          )
+        );
+        if (amount + gas < Number(Web3Library.utils.fromWei(matic))) {
+          const result: TxResult = await new Promise(
+            async (resolve, reject) => {
+              WalletAPIRef.current.eth
+                .sendTransaction({
+                  ...object,
+                  to: me.walletAddress,
+                  value: Web3Library.utils.toWei(amount.toString(), 'ether'),
+                })
+                .on('receipt', (rec: TransactionReceipt) =>
+                  resolve({ data: rec, type: ErrorTypes.Success })
+                )
+                .on('error', (err) => {
+                  if (err.receipt) {
+                    return resolve({
+                      data: err.receipt,
+                      type: ErrorTypes.Fail,
+                    });
+                  } else {
+                    return reject(err);
+                  }
+                });
+            }
+          );
+          return { hash: result.data.transactionHash, type: result.type };
+        }
+        return Promise.reject('Insufficient Matic Balance');
+      } else {
+        const erc20Bal: number = await getERC20Balance(token);
+        const contract = new WalletAPIRef.current.eth.Contract(
+          ERC20ContractAbi as Array<AbiItem>,
+          ERC20List[token]
+        );
+        if (amount < erc20Bal) {
+          const result: TxResult = await new Promise(
+            async (resolve, reject) => {
+              contract.methods
+                .transferFrom(metamaskAddress, me.walletAddress, amount)
+                .send(object)
+                .on('receipt', (rec: TransactionReceipt) =>
+                  resolve({ data: rec, type: ErrorTypes.Success })
+                )
+                .on('error', (err) => {
+                  if (err.receipt) {
+                    return resolve({
+                      data: err.receipt,
+                      type: ErrorTypes.Fail,
+                    });
+                  } else {
+                    return reject(err);
+                  }
+                });
+            }
+          );
+          return { hash: result.data.transactionHash, type: result.type };
+        }
+        return Promise.reject(`Insufficient ERC20(${token}) Balance`);
+      }
+    } catch (err) {
+      Sentry.captureMessage(err);
+      return Promise.reject(err);
+    }
+  };
+
   const getUserTransactions = async (): Promise<Array<Transaction>> => {
     try {
       const sentHistory = await getSentTxHistory(me.walletAddress);
