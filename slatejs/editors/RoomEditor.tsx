@@ -53,6 +53,7 @@ enum FloatMenu {
   Emoji,
 }
 
+const emojiesList = Object.values(data.emojis);
 const editorID = 'slatejs-editor';
 const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
@@ -93,7 +94,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
     [roomMembers, search]
   );
   const emojiList = useMemo(() => {
-    return matchSorter(Object.values(data.emojis), search, {
+    return matchSorter(emojiesList, search, {
       keys: ['keywords', 'name'],
     });
   }, [search]);
@@ -270,14 +271,16 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
               style={{ bottom: '6.6rem' }}
             >
-              <h3 className="text-sm uppercase text-gray-200">Emojies</h3>
-              {emojiList.map(({ id, skins, name }, emojiIndex) => (
+              <h3 className="text-sm uppercase text-gray-200 mb-3">
+                List of emojies for <strong>{search}</strong>
+              </h3>
+              {emojiList.slice(0, 6).map(({ id, skins, name }, emojiIndex) => (
                 <>
                   <div
                     key={id}
                     className={`${
                       emojiIndex === index ? 'bg-gray-900' : ''
-                    } mt-3 py-2 px-3 rounded-md cursor-pointer`}
+                    } py-2 px-3 rounded-md cursor-pointer`}
                     onClick={() => {
                       setIndex(emojiIndex);
                       Transforms.select(editor, target);
