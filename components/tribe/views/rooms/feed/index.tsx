@@ -64,10 +64,9 @@ const Feed = ({
   onScrollTop,
   hasMoreData,
 }: Props) => {
-  const [unreadMessages, setUnreadMessages] = useState(0);
   const [showDetails, setshowDetails] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
-  const toast = useToast();
   const { me } = useAuth();
   const { play } = useSound();
   const passport = usePassport();
@@ -235,38 +234,32 @@ const Feed = ({
     ]
   );
 
-  const handleMessageSubmit = async (
-    content: string,
-    attachments: Array<File>
-  ) => {
+  const handleMessageSubmit = async (content: string) => {
+    const optimisticMessage = {
+      content,
+      createdAt: new Date().toISOString(),
+      id: nanoid(),
+      sender: {
+        avatar: me.avatar || passport?.image,
+        id: me.id,
+        username: me.username,
+        badges:
+          me.flairBadges.length > 0
+            ? [
+                {
+                  id: me.flairBadges[0].badgeid,
+                  avatar: me.flairBadges[0].avatar,
+                  color: me.flairBadges[0].color,
+                  name: me.flairBadges[0].name,
+                },
+              ]
+            : [],
+      },
+      type: MessageType.Optimistic,
+      status: 'A',
+      mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
+    };
     try {
-      const optimisticMessage = {
-        content,
-        createdAt: new Date().toISOString(),
-        id: nanoid(),
-        sender: {
-          avatar: me.avatar || passport?.image,
-          id: me.id,
-          username: me.username,
-          badges:
-            me.flairBadges.length > 0
-              ? [
-                  {
-                    id: me.flairBadges[0].badgeid,
-                    avatar: me.flairBadges[0].avatar,
-                    color: me.flairBadges[0].color,
-                    name: me.flairBadges[0].name,
-                  },
-                ]
-              : [],
-        },
-        type:
-          attachments.length === 0
-            ? MessageType.Optimistic
-            : MessageType.OptimisticWithAttachment,
-        status: 'A',
-        mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
-      };
       await handleAddMessageMutation(optimisticMessage);
 
       handleScrollToBottom();
@@ -280,7 +273,13 @@ const Feed = ({
         optimisticMessage.id
       );
     } catch (err) {
-      toast({ message: err.message || err });
+      await handleUpdateMesssageMutation(
+        {
+          ...optimisticMessage,
+          type: MessageType.OptimisticWithError,
+        },
+        optimisticMessage.id
+      );
     }
   };
 
@@ -569,6 +568,7 @@ const Feed = ({
                                 timestampMessages[index - 1] || null,
                                 message.sender.id
                               )}
+                              addMessageManually={handleMessageSubmit}
                             />
                           );
                         })}

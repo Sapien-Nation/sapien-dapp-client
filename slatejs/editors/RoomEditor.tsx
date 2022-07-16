@@ -10,7 +10,7 @@ import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Editor, createEditor, Transforms, Range } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { useRouter } from 'next/router';
 import data from '@emoji-mart/data';
@@ -480,8 +480,12 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
                 renderElement={renderElement}
                 onKeyDown={onKeyDown}
                 placeholder={`Leave a message in ${name}`}
-                className="max-w-250 w-full py-2 break-all"
+                className="max-w-250 w-full py-2 break-all text-md"
                 style={{ cursor: 'text' }}
+                autoFocus
+                onBlur={() => {
+                  ReactEditor.focus(editor);
+                }}
                 {...slateProps}
               />
             </Slate>

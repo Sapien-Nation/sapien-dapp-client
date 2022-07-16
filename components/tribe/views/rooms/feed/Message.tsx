@@ -1,12 +1,13 @@
 import { DocumentIcon, EmojiHappyIcon } from '@heroicons/react/outline';
 import { Popover, Transition } from '@headlessui/react';
+import { RefreshIcon, TrashIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef, Fragment } from 'react';
 import Linkify from 'linkify-react';
 import { Picker } from 'emoji-mart';
 
 // api
-import { deleteMessage, reactToMessage } from 'api/room';
+import { deleteMessage } from 'api/room';
 
 // context
 import { useAuth } from 'context/user';
@@ -39,6 +40,7 @@ const isSameOriginURL = (url): URL | null => {
 };
 
 interface Props {
+  addMessageManually: (content: string) => void;
   isAMessageContinuation: boolean;
   message: RoomMessage;
   removeMessageFromFeed: (messageID: string) => void;
@@ -49,6 +51,7 @@ enum Dialog {
 }
 
 const Message = ({
+  addMessageManually,
   isAMessageContinuation,
   message,
   removeMessageFromFeed,
@@ -91,6 +94,10 @@ const Message = ({
   }, []);
 
   const getMessageClassName = () => {
+    if (message.type === MessageType.OptimisticWithError) {
+      return 'py-2 border-l-4 border-l-red-400 flex justify-between items-start group bg-red-500/50 px-10 -mx-5 relative';
+    }
+
     if (messageFocused) {
       return 'py-2 bg-gray-800 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
     }
@@ -102,11 +109,30 @@ const Message = ({
     return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
   };
 
-  const handleRemoveMessage = async (messageID) => {
+  const handleRemoveFailedMessage = async () => {
     try {
-      await removeMessageFromFeed(messageID);
+      await removeMessageFromFeed(message.id);
+    } catch (err) {
+      toast({ message: err });
+    }
+  };
 
-      await deleteMessage(roomID, messageID);
+  const handleRetryFailedMessage = async () => {
+    try {
+      const messageContent = message.content;
+      await removeMessageFromFeed(message.id);
+
+      await addMessageManually(messageContent);
+    } catch (err) {
+      console.error({ message: err });
+    }
+  };
+
+  const handleRemoveMessage = async () => {
+    try {
+      await removeMessageFromFeed(message.id);
+
+      await deleteMessage(roomID, message.id);
     } catch (err) {
       toast({ message: err });
     }
@@ -129,13 +155,28 @@ const Message = ({
         </div>
       );
 
+    if (type === MessageType.OptimisticWithError) {
+      return (
+        <p
+          className={
+            isAMessageContinuation
+              ? 'text-md text-white whitespace-pre-line break-words'
+              : 'pl-52 text-md text-white whitespace-pre-line break-words'
+          }
+          style={{ wordBreak: 'break-word' }}
+        >
+          {renderContent(content, roomMembers, tribeRooms, tribeID)}
+        </p>
+      );
+    }
+
     if (type === MessageType.Optimistic) {
       return (
         <p
           className={
             isAMessageContinuation
-              ? 'text-sm text-white/30 whitespace-pre-line break-words'
-              : 'pl-52 text-sm text-white/30 whitespace-pre-line break-words'
+              ? 'text-md text-white/30 whitespace-pre-line break-words'
+              : 'pl-52 text-md text-white/30 whitespace-pre-line break-words'
           }
           style={{ wordBreak: 'break-word' }}
         >
@@ -148,8 +189,8 @@ const Message = ({
       <p
         className={
           isAMessageContinuation
-            ? 'text-md text-white/80 group whitespace-pre-line break-words'
-            : 'pl-52 text-md text-white/80 whitespace-pre-line break-words'
+            ? 'text-md text-white group whitespace-pre-line break-words'
+            : 'pl-52 text-md text-white whitespace-pre-line break-words'
         }
         style={{ wordBreak: 'break-word' }}
       >
@@ -325,7 +366,18 @@ const Message = ({
           }}
         </Popover>
 
-        {messageOwnerID === me.id && (
+        {type === MessageType.OptimisticWithError && (
+          <div className="flex gap-2">
+            <button onClick={handleRetryFailedMessage}>
+              <RefreshIcon className="w-5 text-white" />
+            </button>
+            <button onClick={handleRemoveFailedMessage}>
+              <TrashIcon className="w-5 text-white" />
+            </button>
+          </div>
+        )}
+
+        {messageOwnerID === me.id && type !== MessageType.OptimisticWithError && (
           <MessageOwnerMenu
             isFocused={messageFocused}
             setIsFocused={setMessageFocused}
@@ -347,7 +399,7 @@ const Message = ({
             setDialog(null);
 
             setTimeout(() => {
-              handleRemoveMessage(message.id);
+              handleRemoveMessage();
             }, 500);
           }}
           message={message}
