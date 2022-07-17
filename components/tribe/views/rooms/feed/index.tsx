@@ -47,6 +47,7 @@ import type {
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
 import { Query } from 'components/common';
+import { RoomProvider, useRoomCtx } from '../context';
 
 interface Props {
   apiKey: string;
@@ -76,8 +77,9 @@ const Feed = ({
 
   const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
   const roomMembers = useRoomMembers(roomID);
-  const { socketMessages, handleReadMessage } = useSocket();
   const reachBottom = useOnScreen(scrollToBottom);
+  const { selectedMessageToEdit } = useRoomCtx();
+  const { socketMessages, handleReadMessage } = useSocket();
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -508,83 +510,91 @@ const Feed = ({
             </button>
           )}
 
-          <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
-            <button
-              aria-label="Toggle Details"
-              className="flex px-1 h-full items-center"
-              onClick={() => setshowDetails(!showDetails)}
-            >
-              <UsersIcon className="w-5" />
-            </button>
-          </div>
-          <div
-            className="relative flex-1 overflow-auto"
-            style={{ overflowAnchor: 'none' }}
-          >
-            <InfiniteScroll
-              className="scroll-auto"
-              pageStart={0}
-              loadMore={onScrollTop}
-              hasMore={hasMoreData}
-              loader={null}
-              useWindow={false}
-              isReverse
-              initialLoad={false}
-              threshold={450}
-            >
-              <ul role="list" className="p-5 flex flex-col mb-2">
-                <>
-                  <WelcomeMessage />
-                  {Object.keys(messagesData).map((timestamp) => {
-                    const timestampMessages = messagesData[timestamp];
-                    return (
-                      <>
-                        <li key={timestamp}>
-                          <time
-                            className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-48 before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-48 after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
-                            dateTime={timestamp}
-                            data-showDetailstestid="timestamp-divider"
-                          >
-                            {timestamp}
-                          </time>
-                        </li>
-                        {timestampMessages.map((message, index) => {
-                          if (message.type === MessageType.Join) {
-                            return (
-                              <JoinARoomMessage
-                                createdAt={message.createdAt}
-                                username={message.sender.username}
-                                key={message.id}
-                              />
-                            );
-                          }
-
-                          return (
-                            <Message
-                              removeMessageFromFeed={
-                                handleRemoveMessageMutation
+          <RoomProvider>
+            <>
+              <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
+                <button
+                  aria-label="Toggle Details"
+                  className="flex px-1 h-full items-center"
+                  onClick={() => setshowDetails(!showDetails)}
+                >
+                  <UsersIcon className="w-5" />
+                </button>
+              </div>
+              <div
+                className="relative flex-1 overflow-auto"
+                style={{ overflowAnchor: 'none' }}
+              >
+                <InfiniteScroll
+                  className="scroll-auto"
+                  pageStart={0}
+                  loadMore={onScrollTop}
+                  hasMore={hasMoreData}
+                  loader={null}
+                  useWindow={false}
+                  isReverse
+                  initialLoad={false}
+                  threshold={450}
+                >
+                  <ul role="list" className="p-5 flex flex-col mb-2">
+                    <>
+                      <WelcomeMessage />
+                      {Object.keys(messagesData).map((timestamp) => {
+                        const timestampMessages = messagesData[timestamp];
+                        return (
+                          <>
+                            <li key={timestamp}>
+                              <time
+                                className="block text-xs overflow-hidden text-gray-500 text-center w-full relative before:w-48 before:absolute before:top-2 before:h-px before:block before:bg-gray-800 before:-left-8 after:w-48 after:absolute after:top-2 after:h-px after:block after:bg-gray-800 after:-right-8"
+                                dateTime={timestamp}
+                                data-showDetailstestid="timestamp-divider"
+                              >
+                                {timestamp}
+                              </time>
+                            </li>
+                            {timestampMessages.map((message, index) => {
+                              if (message.type === MessageType.Join) {
+                                return (
+                                  <JoinARoomMessage
+                                    createdAt={message.createdAt}
+                                    username={message.sender.username}
+                                    key={message.id}
+                                  />
+                                );
                               }
-                              key={message.id}
-                              message={message}
-                              isAMessageContinuation={isAMessageContinuation(
-                                timestampMessages[index - 1] || null,
-                                message.sender.id
-                              )}
-                              addMessageManually={handleMessageSubmit}
-                            />
-                          );
-                        })}
-                      </>
-                    );
-                  })}
-                </>
-              </ul>
-            </InfiniteScroll>
-            <div ref={scrollToBottom} className="block" />
-          </div>
-          <div className="px-0 sm:px-5">
-            <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
-          </div>
+
+                              return (
+                                <Message
+                                  removeMessageFromFeed={
+                                    handleRemoveMessageMutation
+                                  }
+                                  key={message.id}
+                                  message={message}
+                                  isAMessageContinuation={isAMessageContinuation(
+                                    timestampMessages[index - 1] || null,
+                                    message.sender.id
+                                  )}
+                                  addMessageManually={handleMessageSubmit}
+                                />
+                              );
+                            })}
+                          </>
+                        );
+                      })}
+                    </>
+                  </ul>
+                </InfiniteScroll>
+                <div ref={scrollToBottom} className="block" />
+              </div>
+              <div className="px-0 sm:px-5">
+                <RoomEditor
+                  onSubmit={handleMessageSubmit}
+                  name={room.name}
+                  autoFocus={selectedMessageToEdit === null}
+                />
+              </div>
+            </>
+          </RoomProvider>
         </div>
 
         {/* Room Details */}

@@ -16,9 +16,13 @@ import { MessageType } from 'tools/constants/rooms';
 import MessageOwnerMenu from './MessageOwnerMenu';
 import DeleteMessageDialog from '../dialogs/DeleteMessageDialog';
 
+// components
+import { RoomEditor, EditorType } from 'slatejs';
+
 // hooks
 import { useTribeRooms } from 'hooks/tribe';
 import { useRoomMembers } from 'hooks/room';
+import { useRoomCtx } from '../context';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
@@ -55,13 +59,13 @@ const Message = ({
   removeMessageFromFeed,
 }: Props) => {
   const [dialog, setDialog] = useState(null);
-  const [messageFocused, setMessageFocused] = useState(false);
 
   const messageRef = useRef(null);
 
   const toast = useToast();
   const { me } = useAuth();
   const { push, query } = useRouter();
+  const { selectedMessageToEdit, setSelectedMessageToEdit } = useRoomCtx();
 
   const roomID = query.viewID as string;
   const tribeID = query.tribeID as string;
@@ -77,25 +81,9 @@ const Message = ({
 
   const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (messageRef.current && !messageRef.current.contains(event.target)) {
-        setMessageFocused(false);
-      }
-    };
-    document.addEventListener('click', handleClickOutside, true);
-    return () => {
-      document.removeEventListener('click', handleClickOutside, true);
-    };
-  }, []);
-
   const getMessageClassName = () => {
     if (message.type === MessageType.OptimisticWithError) {
       return 'py-2 border-l-4 border-l-red-400 flex justify-between items-start group bg-red-500/50 px-10 -mx-5 relative';
-    }
-
-    if (messageFocused) {
-      return 'py-2 bg-gray-800 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
     }
 
     if (isMeMention) {
@@ -230,53 +218,57 @@ const Message = ({
         data-testid="room-message"
         className={getMessageClassName()}
       >
-        <div className="flex space-x-3" ref={messageRef}>
-          {isAMessageContinuation && (
-            <>
-              {avatar ? (
-                <img
-                  className="h-10 w-10 rounded-full"
-                  src={avatar}
-                  alt=""
-                  data-testid="message-avatar"
-                />
-              ) : (
-                <div
-                  className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
-                  data-testid="message-avatar"
-                >
-                  {username[0].toUpperCase()}
+        {selectedMessageToEdit === message.id ? (
+          <RoomEditor onSubmit={() => {}} autoFocus type={EditorType.Edit} />
+        ) : (
+          <div className="flex space-x-3" ref={messageRef}>
+            {isAMessageContinuation && (
+              <>
+                {avatar ? (
+                  <img
+                    className="h-10 w-10 rounded-full"
+                    src={avatar}
+                    alt=""
+                    data-testid="message-avatar"
+                  />
+                ) : (
+                  <div
+                    className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
+                    data-testid="message-avatar"
+                  >
+                    {username[0].toUpperCase()}
+                  </div>
+                )}
+              </>
+            )}
+            <div className="flex-1 space-y-1">
+              {isAMessageContinuation && (
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-bold flex gap-2 items-center">
+                      {username}{' '}
+                      {badges.length > 0 && (
+                        <img
+                          src={badges[0].avatar}
+                          alt="badge"
+                          style={{ borderColor: badges[0].color }}
+                          className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
+                        />
+                      )}
+                    </h3>
+                    <time
+                      data-testid="message-timestamp"
+                      className="text-xs text-white"
+                    >
+                      {formatDateRelative(createdAt)}
+                    </time>
+                  </div>
                 </div>
               )}
-            </>
-          )}
-          <div className="flex-1 space-y-1">
-            {isAMessageContinuation && (
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold flex gap-2 items-center">
-                    {username}{' '}
-                    {badges.length > 0 && (
-                      <img
-                        src={badges[0].avatar}
-                        alt="badge"
-                        style={{ borderColor: badges[0].color }}
-                        className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
-                      />
-                    )}
-                  </h3>
-                  <time
-                    data-testid="message-timestamp"
-                    className="text-xs text-white"
-                  >
-                    {formatDateRelative(createdAt)}
-                  </time>
-                </div>
-              </div>
-            )}
-            {renderBody()}
+              {renderBody()}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Menus */}
         {type === MessageType.OptimisticWithError && (
@@ -291,16 +283,20 @@ const Message = ({
         )}
         {messageOwnerID === me.id && type !== MessageType.OptimisticWithError && (
           <MessageOwnerMenu
-            isFocused={messageFocused}
-            setIsFocused={setMessageFocused}
             onMenuItemClick={(type) => {
-              if (type === 'delete') {
-                setDialog(Dialog.DeleteMessage);
+              switch (type) {
+                case 'delete':
+                  setDialog(Dialog.DeleteMessage);
+                  break;
+                case 'edit':
+                  setSelectedMessageToEdit(message.id);
+                  break;
               }
             }}
           />
         )}
       </Transition>
+
       {/* Modals */}
       {dialog === Dialog.DeleteMessage && (
         <DeleteMessageDialog
