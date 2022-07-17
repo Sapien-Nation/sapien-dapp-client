@@ -77,9 +77,10 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
   const tribeRooms = useTribeRooms(tribeID);
   const roomMembers = useRoomMembers(roomID);
+
   const roomMembersList = useMemo(
     () =>
-      getMentionsArrayFromCacheForUI(roomMembers)
+      getMentionsArrayFromCacheForUI(roomMembers ?? [])
         .filter(({ label }) => {
           return search
             ? label.toLowerCase().startsWith(search.toLowerCase())
@@ -367,180 +368,177 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   };
 
   return (
-    <>
-      <div
-        className="flex items-center w-full bg-sapien-neutral-600 shadow px-6 py-6 relative cursor-default"
-        style={{ borderRadius: '0.75rem 0.75rem 0 0' }}
+    <div
+      className="flex items-center w-full bg-sapien-neutral-600 shadow px-6 py-6 relative cursor-default"
+      style={{ borderRadius: '0.75rem 0.75rem 0 0' }}
+    >
+      {renderFloatMenu()}
+
+      {/* Avatar */}
+      <div className="mr-4 w-12 hidden sm:block">
+        <UserAvatar user={me} passport={passport} />
+      </div>
+      <form
+        id="room-editor"
+        className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2"
       >
-        {renderFloatMenu()}
-
-        {/* Avatar */}
-        <div className="mr-4 w-12 hidden sm:block">
-          <UserAvatar user={me} passport={passport} />
-        </div>
-        <form
-          id="room-editor"
-          className="w-full bg-sapien-neutral-800 rounded-xl border px-4 py-2"
-        >
-          {attachments.length > 0 ? (
-            <ul className="py-3 flex flex-wrap gap-3">
-              {attachments.map((attachment, index) => (
-                <li key={index} id={editorID} className="relative mr-3">
-                  <img
-                    className="w-20 h-20 object-cover rounded"
-                    src={URL.createObjectURL(attachment)}
-                    alt={`Attachment ${index + 1}`}
-                  />
-                  <button
-                    className="absolute top-0 right-0"
-                    onClick={() => {
-                      setAttachments(
-                        attachments.filter(
-                          (_, elementIndex) => index !== elementIndex
-                        )
-                      );
-                    }}
-                  >
-                    <TrashIcon className="w-5 text-sapien-red-700" />
-                    <span className="sr-only">Remove attachment</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-
-          <div className="flex">
-            <Slate
-              editor={editor}
-              value={value}
-              onChange={(val: any) => {
-                setValue(val);
-                const { selection } = editor;
-
-                if (selection && Range.isCollapsed(selection)) {
-                  const [start] = Range.edges(selection);
-                  const wordBefore = Editor.before(editor, start, {
-                    unit: 'word',
-                  });
-
-                  const before =
-                    wordBefore && Editor.before(editor, wordBefore);
-                  const beforeRange =
-                    before && Editor.range(editor, before, start);
-                  const beforeText =
-                    beforeRange && Editor.string(editor, beforeRange);
-                  const beforeMatchAt =
-                    beforeText && beforeText.match(/^@(\w+)$/);
-                  const beforeMatchHash =
-                    beforeText && beforeText.match(/^#(\w+)$/);
-                  const after = Editor.after(editor, start);
-                  const afterRange = Editor.range(editor, start, after);
-                  const afterText = Editor.string(editor, afterRange);
-                  const afterMatch = afterText.match(/^(\s|$)/);
-
-                  if (beforeText?.startsWith(':') && beforeText?.length >= 2) {
-                    setTarget(beforeRange);
-                    setSearch(beforeText.replace(':', ''));
-                    setIndex(0);
-
-                    setFloatMenu(FloatMenu.Emoji);
-                    return;
-                  } else {
-                    if (beforeMatchAt && afterMatch) {
-                      setTarget(beforeRange);
-                      setSearch(beforeMatchAt[1]);
-                      setIndex(0);
-
-                      setFloatMenu(FloatMenu.Members);
-                      return;
-                    }
-
-                    if (beforeMatchHash && afterMatch) {
-                      setTarget(beforeRange);
-                      setSearch(beforeMatchHash[1]);
-                      setIndex(0);
-
-                      setFloatMenu(FloatMenu.Channels);
-                      return;
-                    }
-                  }
-                }
-
-                setFloatMenu(null);
-                setTarget(null);
-              }}
-            >
-              <Editable
-                renderElement={renderElement}
-                onKeyDown={onKeyDown}
-                placeholder={`Leave a message in ${name}`}
-                className="max-w-250 w-full py-2 break-all text-md"
-                style={{ cursor: 'text' }}
-                autoFocus
-                onBlur={() => {
-                  ReactEditor.focus(editor);
-                }}
-                {...slateProps}
-              />
-            </Slate>
-
-            <div className="flex justify-end items-end gap-1">
-              {/* Emoji */}
-              <Popover className="relative">
-                {() => (
-                  <>
-                    <Popover.Button
-                      disabled={slateProps?.readOnly}
-                      className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500"
-                    >
-                      <EmojiHappyIcon className="h-6 w-6" />
-                    </Popover.Button>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-200"
-                      enterFrom="opacity-0 translate-y-1"
-                      enterTo="opacity-100 translate-y-0"
-                      leave="transition ease-in duration-150"
-                      leaveFrom="opacity-100 translate-y-0"
-                      leaveTo="opacity-0 translate-y-1"
-                    >
-                      <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-500 sm:px-0">
-                        <Picker
-                          onSelect={(event) => insertEmoji(editor, event)}
-                          perLine={6}
-                          style={{
-                            position: 'absolute',
-                            bottom: 60,
-                            right: 0,
-                            width: '430px',
-                          }}
-                          theme="dark"
-                          disableAutoFocus={true}
-                          groupNames={{ smileys_people: 'PEOPLE' }}
-                          native
-                          showPreview={false}
-                          title=""
-                        />
-                      </Popover.Panel>
-                    </Transition>
-                  </>
-                )}
-              </Popover>
-              {serialize(value).length > 0 && (
+        {attachments.length > 0 ? (
+          <ul className="py-3 flex flex-wrap gap-3">
+            {attachments.map((attachment, index) => (
+              <li key={index} id={editorID} className="relative mr-3">
+                <img
+                  className="w-20 h-20 object-cover rounded"
+                  src={URL.createObjectURL(attachment)}
+                  alt={`Attachment ${index + 1}`}
+                />
                 <button
-                  className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
-                  onClick={(event) => {
-                    handleSubmit(event);
+                  className="absolute top-0 right-0"
+                  onClick={() => {
+                    setAttachments(
+                      attachments.filter(
+                        (_, elementIndex) => index !== elementIndex
+                      )
+                    );
                   }}
                 >
-                  <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
+                  <TrashIcon className="w-5 text-sapien-red-700" />
+                  <span className="sr-only">Remove attachment</span>
                 </button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <div className="flex">
+          <Slate
+            editor={editor}
+            value={value}
+            onChange={(val: any) => {
+              setValue(val);
+              const { selection } = editor;
+
+              if (selection && Range.isCollapsed(selection)) {
+                const [start] = Range.edges(selection);
+                const wordBefore = Editor.before(editor, start, {
+                  unit: 'word',
+                });
+
+                const before = wordBefore && Editor.before(editor, wordBefore);
+                const beforeRange =
+                  before && Editor.range(editor, before, start);
+                const beforeText =
+                  beforeRange && Editor.string(editor, beforeRange);
+                const beforeMatchAt =
+                  beforeText && beforeText.match(/^@(\w+)$/);
+                const beforeMatchHash =
+                  beforeText && beforeText.match(/^#(\w+)$/);
+                const after = Editor.after(editor, start);
+                const afterRange = Editor.range(editor, start, after);
+                const afterText = Editor.string(editor, afterRange);
+                const afterMatch = afterText.match(/^(\s|$)/);
+
+                if (beforeText?.startsWith(':') && beforeText?.length >= 2) {
+                  setTarget(beforeRange);
+                  setSearch(beforeText.replace(':', ''));
+                  setIndex(0);
+
+                  setFloatMenu(FloatMenu.Emoji);
+                  return;
+                } else {
+                  if (beforeMatchAt && afterMatch) {
+                    setTarget(beforeRange);
+                    setSearch(beforeMatchAt[1]);
+                    setIndex(0);
+
+                    setFloatMenu(FloatMenu.Members);
+                    return;
+                  }
+
+                  if (beforeMatchHash && afterMatch) {
+                    setTarget(beforeRange);
+                    setSearch(beforeMatchHash[1]);
+                    setIndex(0);
+
+                    setFloatMenu(FloatMenu.Channels);
+                    return;
+                  }
+                }
+              }
+
+              setFloatMenu(null);
+              setTarget(null);
+            }}
+          >
+            <Editable
+              renderElement={renderElement}
+              onKeyDown={onKeyDown}
+              placeholder={`Leave a message in ${name}`}
+              className="max-w-250 w-full py-2 break-all text-md"
+              style={{ cursor: 'text' }}
+              autoFocus
+              onBlur={() => {
+                ReactEditor.focus(editor);
+              }}
+              {...slateProps}
+            />
+          </Slate>
+
+          <div className="flex justify-end items-end gap-1">
+            {/* Emoji */}
+            <Popover className="relative">
+              {() => (
+                <>
+                  <Popover.Button
+                    disabled={slateProps?.readOnly}
+                    className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500"
+                  >
+                    <EmojiHappyIcon className="h-6 w-6" />
+                  </Popover.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-200"
+                    enterFrom="opacity-0 translate-y-1"
+                    enterTo="opacity-100 translate-y-0"
+                    leave="transition ease-in duration-150"
+                    leaveFrom="opacity-100 translate-y-0"
+                    leaveTo="opacity-0 translate-y-1"
+                  >
+                    <Popover.Panel className="absolute z-10 right-0 transform -translate-x-1/2 mt-3 px-2 w-500 sm:px-0">
+                      <Picker
+                        onSelect={(event) => insertEmoji(editor, event)}
+                        perLine={6}
+                        style={{
+                          position: 'absolute',
+                          bottom: 60,
+                          right: 0,
+                          width: '430px',
+                        }}
+                        theme="dark"
+                        disableAutoFocus={true}
+                        groupNames={{ smileys_people: 'PEOPLE' }}
+                        native
+                        showPreview={false}
+                        title=""
+                      />
+                    </Popover.Panel>
+                  </Transition>
+                </>
               )}
-            </div>
+            </Popover>
+            {serialize(value).length > 0 && (
+              <button
+                className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:bg-gray-100 focus:bg-indigo-700 focus:text-white pointer-events-auto"
+                onClick={(event) => {
+                  handleSubmit(event);
+                }}
+              >
+                <PaperAirplaneIcon className="h-6 w-6 rotate-90 text-indigo-500" />
+              </button>
+            )}
           </div>
-        </form>
-      </div>
-    </>
+        </div>
+      </form>
+    </div>
   );
 };
 
