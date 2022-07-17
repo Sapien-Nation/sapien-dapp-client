@@ -106,19 +106,12 @@ const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
   const apiKey = `/core-api/room/${roomID}/messages`;
 
   return (
-    <Query api={apiKey} loader={<Skeleton />}>
-      {() => (
-        <Query api={`/core-api/room/${roomID}/members`}>
-          {() => (
-            <>
-              <h1 className="sr-only">Room View for {name}</h1>
-
-              <Room roomID={roomID} apiKey={apiKey} />
-            </>
-          )}
-        </Query>
-      )}
-    </Query>
+    <>
+      <h1 className="sr-only">Room View for {name}</h1>;
+      <Query api={apiKey} loader={<Skeleton />}>
+        {() => <Room roomID={roomID} apiKey={apiKey} />}
+      </Query>
+    </>
   );
 };
 
