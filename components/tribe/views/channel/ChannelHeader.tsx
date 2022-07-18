@@ -1,4 +1,4 @@
-import { DocumentDuplicateIcon, UsersIcon } from '@heroicons/react/outline';
+import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
@@ -15,14 +15,9 @@ import type { Channel } from 'tools/types/channel';
 interface Props {
   channel: Channel;
   handleWriteAnArticle: () => void;
-  handleShowMembers: () => void;
 }
 
-const ChannelHeader = ({
-  channel,
-  handleWriteAnArticle,
-  handleShowMembers,
-}: Props) => {
+const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
   const toast = useToast();
   const { query } = useRouter();
   const [_, copyToClipboard] = useCopyToClipboard();
@@ -73,20 +68,13 @@ const ChannelHeader = ({
               <h2 className="text-gray-500 mb-4 sm:mb-0">
                 {channel.membersCount} members
               </h2>
-              <button
-                aria-label="Toggle Details"
-                className="flex px-1 h-full items-center"
-                onClick={() => handleShowMembers()}
-              >
-                <UsersIcon className="w-5" />
-              </button>
             </div>
           </div>
           <div className="flex items-center sm:mr-5">
             {/* <button
               onClick={handleCopyToClipboard}
               type="button"
-              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none font-semibold"
+              className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 focus:outline-none font-semibold"
             >
               Invite
             </button>
