@@ -491,7 +491,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
           <div className="flex justify-end items-end gap-1">
             {/* File Upload */}
-            <button
+            {/* <button
               className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-lime-600 focus:text-green-700"
               onClick={(event) => {
                 event.preventDefault();
@@ -514,7 +514,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               }}
               multiple
               type="file"
-            />
+            /> */}
 
             {/* Emoji */}
             <Popover className="relative">

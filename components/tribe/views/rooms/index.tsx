@@ -10,15 +10,12 @@ import { useState } from 'react';
 import axios from 'api';
 
 // components
-import { Query } from 'components/common';
 import Feed from './feed';
 import { JoinRoom, Skeleton } from './views';
+import { Query } from 'components/common';
 
 // hooks
 import { useTribeRoom } from 'hooks/tribe';
-
-// mocks
-import { mockFeed } from 'tools/mocks/feed';
 
 interface RoomProps {
   apiKey: string;
@@ -64,7 +61,7 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
       apiKey={mutateFetchAPI}
       roomID={roomID}
       tribeID={tribeID as string}
-      data={[...swrData?.data, ...mockFeed().data] ?? []}
+      data={swrData?.data ?? []}
       onScrollTop={() => {
         if (swrData?.nextCursor !== null && !isLoading) {
           handleFetchMore(swrData?.nextCursor);

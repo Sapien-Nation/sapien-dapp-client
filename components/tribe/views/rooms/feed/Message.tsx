@@ -338,11 +338,6 @@ const Message = ({
                   <Popover.Panel className="absolute z-10 right-0 w-56 -top-1 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
                     <Picker
                       onSelect={(event) => {
-                        console.log({
-                          roomID,
-                          messageOD: message.id,
-                          emojiID: event.native,
-                        });
                         // reactToMessage(roomID, message.id, event.id)
                         setMessageFocused(false);
                       }}

@@ -84,7 +84,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
   ]);
 
   const onSubmit = async ({ name, ...rest }: FormValues) => {
-    console.log('called');
     try {
       const { tribeID } = query;
 
@@ -112,7 +111,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
         (tribes: Array<ProfileTribe>) =>
           tribes.map((tribe) => {
             if (tribe.id === tribeID) {
-              console.log({ tribe });
               if (tribe.channels) {
                 return {
                   ...tribe,
@@ -430,7 +428,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
     }
   };
 
-  console.log({ tribeBadgesLength: tribeBadges.length });
   const getDialogProps = () => {
     switch (view) {
       case View.Contributors:
