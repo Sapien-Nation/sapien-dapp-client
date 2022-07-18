@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { EventHandler, Fragment, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import Lottie from 'react-lottie-player';
 
@@ -338,6 +338,11 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                             alt="channel-image"
                             className="object-cover h-10 w-10 rounded-md"
                             src={avatar}
+                            onError={(event) => {
+                              (event as any).target.onError = null;
+                              event.currentTarget.src =
+                                '/images/harambe_sapien.png';
+                            }}
                           />
                         ) : (
                           <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">

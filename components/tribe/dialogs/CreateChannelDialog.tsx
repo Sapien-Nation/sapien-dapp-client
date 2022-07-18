@@ -83,11 +83,12 @@ const CreateChannelDialog = ({ onClose }: Props) => {
     'badges',
   ]);
 
-  const onSubmit = async ({ name, ...rest }: FormValues) => {
+  const onSubmit = async ({ name, badges, ...rest }: FormValues) => {
     try {
       const { tribeID } = query;
 
       const body: CreateChannelBody = {
+        badges,
         name,
         tribeId: tribeID as string,
       };
