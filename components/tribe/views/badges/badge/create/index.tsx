@@ -69,16 +69,14 @@ const BadgeView = ({ badge, onCancel }: Props) => {
     rooms: roomsWithPermissions,
   }: BadgeFormValues) => {
     try {
-      const newBadge = {
+      const response = await createTribeBadge({
         tribeId: tribeID,
         name,
         description,
         color,
         members,
         rooms: roomsWithPermissions.map(({ roomID }) => roomID),
-      };
-
-      const response = await createTribeBadge(newBadge);
+      });
 
       onCancel();
       mutate(
@@ -88,15 +86,7 @@ const BadgeView = ({ badge, onCancel }: Props) => {
           otherBadges: Array<TribeBadge>;
         }) => {
           return {
-            myBadges: [
-              ...data.myBadges,
-              {
-                id: response.badgeId,
-                avatar: response.avatar,
-                owners: [],
-                ...newBadge,
-              },
-            ],
+            myBadges: [...data.myBadges, response],
             otherBadges: data.otherBadges,
           };
         },

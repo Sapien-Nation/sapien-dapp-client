@@ -1,4 +1,4 @@
-import { UsersIcon } from '@heroicons/react/outline';
+import { UsersIcon, XIcon } from '@heroicons/react/outline';
 import * as Sentry from '@sentry/nextjs';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
@@ -46,6 +46,7 @@ import type {
   RoomNewMessage,
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
+import { Query } from 'components/common';
 
 interface Props {
   apiKey: string;
@@ -216,7 +217,7 @@ const Feed = ({
   const handleScrollToBottom = useCallback(
     (behavior: 'auto' | 'smooth' = 'auto') => {
       if (scrollToBottom?.current) {
-        scrollToBottom.current.scrollIntoView({
+        scrollToBottom.current.scrollIntoView(true, {
           block: 'nearest',
           inline: 'start',
           behavior,
@@ -283,7 +284,7 @@ const Feed = ({
     }
   };
 
-  const hanleSidebar = useCallback(() => {
+  const handleSidebar = useCallback(() => {
     setshowDetails(false);
   }, []);
 
@@ -521,6 +522,7 @@ const Feed = ({
             style={{ overflowAnchor: 'none' }}
           >
             <InfiniteScroll
+              className="scroll-auto"
               pageStart={0}
               loadMore={onScrollTop}
               hasMore={hasMoreData}
@@ -581,7 +583,6 @@ const Feed = ({
             <div ref={scrollToBottom} className="block" />
           </div>
           <div className="px-0 sm:px-5">
-            {/* @ts-ignore */}
             <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
           </div>
         </div>
@@ -592,7 +593,78 @@ const Feed = ({
             showDetails ? 'right-0 lg:hidden' : '-right-full'
           }`}
         >
-          <Details handleSidebar={hanleSidebar} />
+          <Query
+            api={`/core-api/room/${roomID}/members`}
+            loader={
+              <aside className="w-72 h-full flex flex-col border-l border-gray-700">
+                <div className="absolute -left-10 top-0 bg-sapien-red-700 lg:hidden">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center h-10 w-10 focus:outline-none"
+                    onClick={handleSidebar}
+                  >
+                    <span className="sr-only">Close sidebar</span>
+                    <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                  </button>
+                </div>
+                <>
+                  <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
+                    <h3 className="text-md  text-gray-300 font-bold ">
+                      Loading Members...
+                    </h3>
+                  </div>
+                  <ul className="overflow-auto flex-1">
+                    <div className="List">
+                      <li className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5">
+                        <h3 className="text-sm text-gray-300">Participants</h3>
+                      </li>
+                      <li className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5">
+                        <>
+                          <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                            S
+                          </div>
+                          <div className="truncate leading-none">
+                            <span className="truncate flex gap-1 items-center bg-gray-700 "></span>
+                            <span className="truncate text-xs text-gray-400">
+                              @...
+                            </span>
+                          </div>
+                        </>
+                      </li>
+                      <li className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5">
+                        <>
+                          <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                            S
+                          </div>
+                          <div className="truncate leading-none">
+                            <span className="truncate flex gap-1 items-center bg-gray-700 "></span>
+                            <span className="truncate text-xs text-gray-400">
+                              @...
+                            </span>
+                          </div>
+                        </>
+                      </li>
+                      <li className="flex gap-2 items-center mb-4 cursor-pointer truncate px-5">
+                        <>
+                          <div className="bg-sapien-neutral-200 w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center">
+                            S
+                          </div>
+                          <div className="truncate leading-none">
+                            <span className="truncate flex gap-1 items-center bg-gray-700 "></span>
+                            <span className="truncate text-xs text-gray-400">
+                              @...
+                            </span>
+                          </div>
+                        </>
+                      </li>
+                    </div>
+                  </ul>
+                </>
+              </aside>
+            }
+          >
+            {() => <Details handleSidebar={handleSidebar} />}
+          </Query>
         </div>
       </>
     </div>
