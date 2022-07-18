@@ -25,6 +25,7 @@ import type { Channel as ChannelType } from 'tools/types/channel';
 
 const Channel = () => {
   const [showEditor, setShowEditor] = useState(false);
+  const [showMembers, setShowMembers] = useState(true);
   const [isPublishing, setPublishing] = useState(false);
 
   const { push, query } = useRouter();
@@ -82,35 +83,45 @@ const Channel = () => {
 
   return (
     <>
-      <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
-        <h1 className="sr-only">{channel.name}</h1>
-        <Query
-          api={`/core-api/channel/${channeID}`}
-          loader={<ChannelHeaderPlaceholder />}
-        >
-          {(channel: ChannelType) => (
-            <ChannelHeader
-              channel={channel}
-              handleWriteAnArticle={() => setShowEditor(true)}
-            />
+      <div className="h-full flex flex-row bg-sapien-neutral-800">
+        <div className="flex-1 lg:rounded-3xl p-5">
+          <h1 className="sr-only">{channel.name}</h1>
+          <Query
+            api={`/core-api/channel/${channeID}`}
+            loader={<ChannelHeaderPlaceholder />}
+          >
+            {(channel: ChannelType) => (
+              <ChannelHeader
+                channel={channel}
+                handleWriteAnArticle={() => setShowEditor(true)}
+                handleShowMembers={() => setShowMembers(!showMembers)}
+              />
+            )}
+          </Query>
+          <div ref={belowEditorRef} />
+          {!showEditor && (
+            <div className="mt-4">
+              <ul>
+                {[].map((content) => (
+                  <li key={content.id}>
+                    <ContentItemChannel
+                      content={content}
+                      tribeID={tribeID as string}
+                    />
+                  </li>
+                ))}
+                <div ref={endDivRef} />
+              </ul>
+            </div>
           )}
-        </Query>
-        <div ref={belowEditorRef} />
-        {!showEditor && (
-          <div className="mt-4">
-            <ul>
-              {[].map((content) => (
-                <li key={content.id}>
-                  <ContentItemChannel
-                    content={content}
-                    tribeID={tribeID as string}
-                  />
-                </li>
-              ))}
-              <div ref={endDivRef} />
-            </ul>
-          </div>
-        )}
+        </div>
+        <div
+          className={`flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5 overflow-y-auto ${
+            showMembers ? 'right-0 lg:hidden' : '-right-full'
+          }`}
+        >
+          {Array(50).fill(<p>lorem ipsum</p>)}
+        </div>
       </div>
       {/* Editor */}
       {showEditor && (
