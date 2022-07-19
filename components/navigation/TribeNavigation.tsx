@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { EventHandler, Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import Lottie from 'react-lottie-player';
 
@@ -25,7 +25,7 @@ import {
   CreateRoomDialog,
   ManageRoomDialog,
 } from 'components/tribe/dialogs';
-import { MenuLink, Query, RedDot } from 'components/common';
+import { MenuLink, Query, RedDot, Tooltip } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
@@ -54,6 +54,37 @@ enum Dialog {
   EditTribe,
   ManageRooms,
 }
+
+const mockRoomThread = ({
+  id,
+  title,
+  ...rest
+}: {
+  id: number;
+  title: string;
+}) => {
+  return {
+    id,
+    title,
+    ...rest,
+  };
+};
+
+const RoomThread = ({ thread }: { thread: any }) => {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <li
+        className="text-gray-300 text-sm hover:bg-sapien-neutral-800 px-2 py-1 truncate rounded-md ml-5"
+        ref={ref.current?.setTriggerRef}
+      >
+        {thread.title}
+      </li>
+      <Tooltip ref={ref} text={thread.title} />
+    </>
+  );
+};
 
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
@@ -144,14 +175,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (unreadMentions > 0)
-        return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
-      return 'text-sm mr-2 bg-sapien-neutral-800 rounded-md';
+        return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-neutral-800 rounded-md';
     }
 
     if (unreadMentions > 0 || hasUnread === true)
-      return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
+    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
   return (
@@ -382,46 +413,73 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-4" />
             </button>
           )}
-          <ul className="pl-1 py-2 cursor-pointer -mr-2">
+          <ul className="px-2 py-2 cursor-pointer w-full">
             {rooms.map((room) => {
               const roomIcon = (
                 <span className="flex items-center w-3">
                   {room.private ? <LockClosedIcon className="w-[10px]" /> : '#'}
                 </span>
               );
+
+              const threads = [
+                mockRoomThread({
+                  id: Math.floor(Math.random() * 9999),
+                  title:
+                    'Lorem ipsum dolor sit amet, duo ne vidisse albucius, habemus persecuti omittantur te has.',
+                }),
+                mockRoomThread({
+                  id: Math.floor(Math.random() * 9999),
+                  title:
+                    'Ad justo nihil mei. Ornatus fuisset noluisse ei est, ea quo choro accusamus, ne pro hinc saperet oporteat. ',
+                }),
+                mockRoomThread({
+                  id: Math.floor(Math.random() * 9999),
+                  title:
+                    'Eum quando oratio id. Usu ad legendos intellegam, vis et quod natum. Vis iudico repudiandae an, qui ea graeci intellegam definitiones.',
+                }),
+              ];
+
               return (
-                <li
-                  className={getRoomListItemClassName({
-                    id: room.id,
-                    unreadMentions: room.unreadMentions,
-                    hasUnread: room.hasUnread,
-                  })}
-                  key={room.id}
-                >
-                  <div className="flex my-1 group">
-                    <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                      <a
-                        className="flex px-2 py-1 items-center gap-2 flex-1"
-                        onClick={handleMobileMenu}
+                <>
+                  <li
+                    className={getRoomListItemClassName({
+                      id: room.id,
+                      unreadMentions: room.unreadMentions,
+                      hasUnread: room.hasUnread,
+                    })}
+                    key={room.id}
+                  >
+                    <div className="flex my-1 group px-2">
+                      <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
+                        <a
+                          className="flex py-1 items-center gap-2 flex-1"
+                          onClick={handleMobileMenu}
+                        >
+                          <div className="flex gap-2">
+                            {roomIcon} {room.name}{' '}
+                            <RedDot count={room.unreadMentions} />
+                          </div>
+                        </a>
+                      </Link>
+                      <button
+                        className="hidden group-hover:block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedRoom(room.id);
+                          setDialog(Dialog.ManageRooms);
+                        }}
                       >
-                        <div className="flex gap-2">
-                          {roomIcon} {room.name}{' '}
-                          <RedDot count={room.unreadMentions} />
-                        </div>
-                      </a>
-                    </Link>
-                    <button
-                      className="px-2 hidden group-hover:block"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedRoom(room.id);
-                        setDialog(Dialog.ManageRooms);
-                      }}
-                    >
-                      <CogIcon className="w-4 h-4 text-gray-400" />
-                    </button>
-                  </div>
-                </li>
+                        <CogIcon className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                  </li>
+                  <ul className="-mt-1">
+                    {threads.map((thread) => (
+                      // eslint-disable-next-line react/jsx-key
+                      <RoomThread thread={thread} />
+                    ))}
+                  </ul>
+                </>
               );
             })}
           </ul>
