@@ -125,11 +125,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
         false
       );
 
-      toast({
-        message: 'Channel created successfully',
-        type: ToastType.Success,
-      });
-
       onClose();
       push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {
