@@ -207,7 +207,7 @@ const Channel = ({ apiKey }: Props) => {
             </InfiniteScroll>
           </div>
         </div>
-        <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5  overflow-hidden -right-full">
+        <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5  overflow-hidden -right-full  rounded-tl-md">
           <Query api={`/core-api/channel/${channelID}/contributors`}>
             {(contributors: Array<ChannelContributor>) => (
               <>
