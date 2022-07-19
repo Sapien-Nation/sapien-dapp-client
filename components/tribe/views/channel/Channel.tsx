@@ -3,8 +3,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
+import InfiniteScroll from 'react-infinite-scroller';
+import useSWR, { useSWRConfig } from 'swr';
 
 // api
+import axios from 'axios';
 import { createContent } from 'api/content';
 
 // components
@@ -27,17 +30,21 @@ import type {
   ChannelContributor,
 } from 'tools/types/channel';
 
-const Channel = () => {
+interface Props {
+  apiKey: string;
+}
+
+const Channel = ({ apiKey }: Props) => {
   const [showEditor, setShowEditor] = useState(false);
-  const [showMembers, setShowMembers] = useState(true);
   const [isPublishing, setPublishing] = useState(false);
 
+  const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
+  const { data: swrData } = useSWR(apiKey);
 
   const tribeID = query.tribeID as string;
   const channelID = query.viewID as string;
 
-  const endDivRef = useRef(null);
   const editorRef = useRef(null);
   const belowEditorRef = useRef(null);
 
@@ -111,6 +118,7 @@ const Channel = () => {
     }
   };
 
+  let mutateFetchAPI = apiKey;
   return (
     <>
       <div className="h-full flex flex-row bg-sapien-neutral-800">
@@ -128,10 +136,36 @@ const Channel = () => {
             )}
           </Query>
           <div ref={belowEditorRef} />
-          {!showEditor && (
-            <div className="mt-4">
+          {showEditor === false && (
+            <InfiniteScroll
+              className="scroll-auto mt-4"
+              pageStart={0}
+              loadMore={async (cursor: string) => {
+                try {
+                  mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
+                  const response = await axios(mutateFetchAPI);
+                  mutate(
+                    apiKey,
+                    ({ data }) => {
+                      return {
+                        data: [...data, ...response?.data?.data],
+                        nextCursor: response?.data?.nextCursor,
+                      };
+                    },
+                    false
+                  );
+                } catch (err) {
+                  // err
+                }
+              }}
+              hasMore={swrData?.nextCursor !== null}
+              loader={null}
+              useWindow={false}
+              initialLoad={false}
+              threshold={450}
+            >
               <ul>
-                {[].map((content) => (
+                {swrData?.data.map((content) => (
                   <li key={content.id}>
                     <ContentItemChannel
                       content={content}
@@ -139,9 +173,8 @@ const Channel = () => {
                     />
                   </li>
                 ))}
-                <div ref={endDivRef} />
               </ul>
-            </div>
+            </InfiniteScroll>
           )}
         </div>
         <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5 overflow-y-auto -right-full">
@@ -236,4 +269,18 @@ const Channel = () => {
   );
 };
 
-export default Channel;
+const ChannelProxy = () => {
+  const { query } = useRouter();
+
+  const channelID = query.viewID as string;
+  const apiKey = `/core-api/channel/${channelID}/feed`;
+
+  return (
+    <>
+      <h1 className="sr-only">Channel View</h1>;
+      <Query api={apiKey}>{() => <Channel apiKey={apiKey} />}</Query>
+    </>
+  );
+};
+
+export default ChannelProxy;
