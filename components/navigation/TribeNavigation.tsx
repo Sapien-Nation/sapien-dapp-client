@@ -76,10 +76,10 @@ const RoomThread = ({ thread }: { thread: any }) => {
   return (
     <>
       <li
-        className="text-gray-300 text-sm hover:bg-sapien-neutral-800 px-2 py-1 truncate rounded-md ml-5"
+        className="text-gray-300 text-sm hover:bg-sapien-neutral-800 px-2 py-1 rounded-md ml-5"
         ref={ref.current?.setTriggerRef}
       >
-        {thread.title}
+        <div className="truncate">{thread.title}</div>
       </li>
       <Tooltip ref={ref} text={thread.title} />
     </>
@@ -473,7 +473,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       </button>
                     </div>
                   </li>
-                  <ul className="-mt-1">
+                  <ul className="room-thread -mt-1">
                     {threads.map((thread) => (
                       // eslint-disable-next-line react/jsx-key
                       <RoomThread thread={thread} />
