@@ -13,21 +13,23 @@ import { ToastType } from 'constants/toast';
 
 // hooks
 import { useToast } from 'context/toast';
+import { useChannelPermissions } from 'hooks/channel';
 
 // types
 import type { Channel } from 'tools/types/channel';
 
 interface Props {
   channel: Channel;
-  handleWriteAnArticle: () => void;
 }
 
-const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
+const ChannelHeader = ({ channel }: Props) => {
   const toast = useToast();
   const { query } = useRouter();
-  // TODO: Check permissions
-  const canEdit = true;
-  const canDelete = true;
+
+  const [canEdit, canDelete] = useChannelPermissions(channel.id, [
+    'canEdit',
+    'canDelete',
+  ]);
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const { tribeID } = query;
@@ -68,10 +70,8 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
           )}
         </div>
         <div className="flex flex-col md:flex-row justify-center mt-3 items-center sm:justify-between w-full">
-          <div className="flex flex-col justify-center items-center md:ml-7">
-            <h1 className="text-xl text-center sm:text-left font-semibold">
-              {channel.name}
-            </h1>
+          <div className="flex flex-col md:ml-7">
+            <h1 className="text-xl font-semibold">{channel.name}</h1>
 
             <h2 className="text-gray-500 mb-4 sm:mb-0">
               {channel.membersCount} members
@@ -84,7 +84,7 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
                 type="button"
                 className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 focus:outline-none font-semibold"
               >
-                Invite
+                Share
               </button>
               <button
                 onClick={handleCopyToClipboard}
@@ -102,29 +102,30 @@ const ChannelHeader = ({ channel, handleWriteAnArticle }: Props) => {
           {channel.description}
         </p>
         <div className="flex justify-end items-center gap-4 text-xs text-gray-400">
-          <button
-            className={`${canEdit ? 'visible' : 'hidden'} `}
-            onClick={() => null}
-          >
-            <PencilIcon className="w-5 " aria-hidden="true" />
-          </button>
-          <Menu as="div" className={`${canDelete ? 'visible' : 'hidden'} `}>
-            <Menu.Button>
-              <DotsHorizontalIcon className="w-5" />
-            </Menu.Button>
-            <Transition>
-              <Menu.Items className="absolute w-56 origin-top-right bg-sapien-neutral-900 rounded-md p-2 hover:bg-gray-800 z-10">
-                <Menu.Item>
-                  <button
-                    className="w-full text-left text-sm text-white"
-                    onClick={() => null}
-                  >
-                    Delete Channel
-                  </button>
-                </Menu.Item>
-              </Menu.Items>
-            </Transition>
-          </Menu>
+          {canEdit && (
+            <button onClick={() => null}>
+              <PencilIcon className="w-5 " aria-hidden="true" />
+            </button>
+          )}
+          {canDelete && (
+            <Menu as="div">
+              <Menu.Button>
+                <DotsHorizontalIcon className="w-5" />
+              </Menu.Button>
+              <Transition>
+                <Menu.Items className="absolute w-56 origin-top-right bg-sapien-neutral-900 rounded-md p-2 hover:bg-gray-800 z-10">
+                  <Menu.Item>
+                    <button
+                      className="w-full text-left text-sm text-white"
+                      onClick={() => null}
+                    >
+                      Delete Channel
+                    </button>
+                  </Menu.Item>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          )}
         </div>
       </div>
     </div>

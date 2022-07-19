@@ -421,24 +421,6 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                 </span>
               );
 
-              const threads = [
-                mockRoomThread({
-                  id: Math.floor(Math.random() * 9999),
-                  title:
-                    'Lorem ipsum dolor sit amet, duo ne vidisse albucius, habemus persecuti omittantur te has.',
-                }),
-                mockRoomThread({
-                  id: Math.floor(Math.random() * 9999),
-                  title:
-                    'Ad justo nihil mei. Ornatus fuisset noluisse ei est, ea quo choro accusamus, ne pro hinc saperet oporteat. ',
-                }),
-                mockRoomThread({
-                  id: Math.floor(Math.random() * 9999),
-                  title:
-                    'Eum quando oratio id. Usu ad legendos intellegam, vis et quod natum. Vis iudico repudiandae an, qui ea graeci intellegam definitiones.',
-                }),
-              ];
-
               return (
                 <>
                   <li
@@ -474,9 +456,8 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                     </div>
                   </li>
                   <ul className="room-thread -mt-1">
-                    {threads.map((thread) => (
-                      // eslint-disable-next-line react/jsx-key
-                      <RoomThread thread={thread} />
+                    {[].map((thread) => (
+                      <RoomThread key={thread.id} thread={thread} />
                     ))}
                   </ul>
                 </>

@@ -121,61 +121,59 @@ const Channel = ({ apiKey }: Props) => {
   let mutateFetchAPI = apiKey;
   return (
     <>
+      <h1 className="sr-only">{channel.name}</h1>
       <div className="h-full flex flex-row bg-sapien-neutral-800">
         <div className="flex-1 lg:rounded-3xl p-5">
-          <h1 className="sr-only">{channel.name}</h1>
-          <Query
-            api={`/core-api/channel/${channelID}`}
-            loader={<ChannelHeaderPlaceholder />}
-          >
-            {(channel: ChannelType) => (
-              <ChannelHeader
-                channel={channel}
-                handleWriteAnArticle={() => setShowEditor(true)}
-              />
-            )}
-          </Query>
-          <div ref={belowEditorRef} />
-          {showEditor === false && (
-            <InfiniteScroll
-              className="scroll-auto mt-4"
-              pageStart={0}
-              loadMore={async (cursor: string) => {
-                try {
-                  mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
-                  const response = await axios(mutateFetchAPI);
-                  mutate(
-                    apiKey,
-                    ({ data }) => {
-                      return {
-                        data: [...data, ...response?.data?.data],
-                        nextCursor: response?.data?.nextCursor,
-                      };
-                    },
-                    false
-                  );
-                } catch (err) {
-                  // err
-                }
-              }}
-              hasMore={swrData?.nextCursor !== null}
-              loader={null}
-              useWindow={false}
-              initialLoad={false}
-              threshold={450}
+          <div className="grid gap-4">
+            <Query
+              api={`/core-api/channel/${channelID}`}
+              loader={<ChannelHeaderPlaceholder />}
             >
-              <ul>
-                {swrData?.data.map((content) => (
-                  <li key={content.id}>
-                    <ContentItemChannel
-                      content={content}
-                      tribeID={tribeID as string}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </InfiniteScroll>
-          )}
+              {(channel: ChannelType) => <ChannelHeader channel={channel} />}
+            </Query>
+            <div></div>
+            <div ref={belowEditorRef} />
+            {showEditor === false && (
+              <InfiniteScroll
+                className="scroll-auto mt-4"
+                pageStart={0}
+                loadMore={async (cursor: string) => {
+                  try {
+                    mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
+                    const response = await axios(mutateFetchAPI);
+                    mutate(
+                      apiKey,
+                      ({ data }) => {
+                        return {
+                          data: [...data, ...response?.data?.data],
+                          nextCursor: response?.data?.nextCursor,
+                        };
+                      },
+                      false
+                    );
+                  } catch (err) {
+                    // err
+                  }
+                }}
+                hasMore={swrData?.nextCursor !== null}
+                loader={null}
+                useWindow={false}
+                initialLoad={false}
+                threshold={450}
+              >
+                <ul>
+                  {swrData?.data.map((content) => (
+                    <li key={content.id}>
+                      <ContentItemChannel
+                        content={content}
+                        tribeID={tribeID as string}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </InfiniteScroll>
+            )}
+          </div>
         </div>
         <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5 overflow-y-auto -right-full">
           <Query api={`/core-api/channel/${channelID}/contributors`}>
