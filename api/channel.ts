@@ -6,6 +6,7 @@ import { ProfileTribeChannel } from 'tools/types/tribe';
 
 export interface CreateChannelBody {
   avatar?: string;
+  badges: Array<string>;
   cover?: string;
   name: string;
   tribeId: string;
