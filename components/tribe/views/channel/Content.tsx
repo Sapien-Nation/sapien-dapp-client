@@ -10,7 +10,7 @@ interface Props {
 
 const ContentComponent = ({
   content: {
-    owner: { avatar, userName },
+    owner: { avatar, username },
     createdAt,
     body,
   },
@@ -19,13 +19,13 @@ const ContentComponent = ({
     <div className="flex-none py-9 pl-7">
       <img
         src={avatar}
-        alt={userName}
+        alt={username}
         className="w-10 h-10 bg-gray-100 rounded-full"
       />
     </div>
     <div className="py-5 pr-5 w-full">
       <div className="flex justify-between pr-7">
-        <h3 className="font-medium text-base text-gray-900">{userName}</h3>
+        <h3 className="font-medium text-base text-gray-900">{username}</h3>
         <p>
           <time dateTime={createdAt}>{formatDateRelative(createdAt)}</time>
         </p>
