@@ -20,6 +20,12 @@ export const createChannel = (
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+export const deleteChannel = (channelID: string) =>
+  axios
+    .delete(`/core-api/channel/${channelID}`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const uploadImage = (data: FormData) =>
   axios
     .post('/core-api/channel/image', data)

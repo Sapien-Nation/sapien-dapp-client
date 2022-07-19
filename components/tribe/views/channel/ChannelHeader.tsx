@@ -4,9 +4,12 @@ import {
   PencilIcon,
 } from '@heroicons/react/outline';
 import { Menu, Transition } from '@headlessui/react';
-
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
+import { useSWRConfig } from 'swr';
+
+// api
+import { deleteChannel } from 'api/channel';
 
 // constants
 import { ToastType } from 'constants/toast';
@@ -17,6 +20,7 @@ import { useChannelPermissions } from 'hooks/channel';
 
 // types
 import type { Channel } from 'tools/types/channel';
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   channel: Channel;
@@ -24,7 +28,8 @@ interface Props {
 
 const ChannelHeader = ({ channel }: Props) => {
   const toast = useToast();
-  const { query } = useRouter();
+  const { mutate } = useSWRConfig();
+  const { push, query } = useRouter();
 
   const [canEdit, canDelete] = useChannelPermissions(channel.id, [
     'canEdit',
@@ -40,6 +45,28 @@ const ChannelHeader = ({ channel }: Props) => {
       message: 'Copied to clipboard',
       type: ToastType.Success,
     });
+  };
+
+  const handleDeleteChannel = async () => {
+    try {
+      await deleteChannel(channel.id);
+
+      push(`/tribes/${tribeID}/home`);
+
+      mutate(
+        '/core-api/user/tribes',
+        (tribes: Array<ProfileTribe>) =>
+          tribes.map((tribe) => ({
+            ...tribe,
+            channels: tribe.channels.filter(
+              ({ id: channelID }) => channelID !== channel.id
+            ),
+          })),
+        false
+      );
+    } catch (err) {
+      toast({ message: err });
+    }
   };
 
   return (
@@ -117,7 +144,7 @@ const ChannelHeader = ({ channel }: Props) => {
                   <Menu.Item>
                     <button
                       className="w-full text-left text-sm text-white"
-                      onClick={() => null}
+                      onClick={handleDeleteChannel}
                     >
                       Delete Channel
                     </button>
