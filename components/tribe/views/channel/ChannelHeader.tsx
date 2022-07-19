@@ -43,7 +43,7 @@ const ChannelHeader = ({ channel }: Props) => {
   };
 
   return (
-    <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
+    <div className="bg-sapien-neutral-600 p-3 rounded-xl">
       {channel.cover ? (
         <div className="shadow-md rounded-lg relative w-full h-56">
           <img
