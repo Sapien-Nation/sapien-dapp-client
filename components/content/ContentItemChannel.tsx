@@ -80,10 +80,10 @@ const ContentItem = ({
               body
             )}
           </div>
-          {true && (
+          {imagePreview && (
             <img
               className="object-cover rounded-md"
-              src={imagePreview ?? 'http://via.placeholder.com/550x250'}
+              src={imagePreview}
               alt="Sapien Post Image"
             />
           )}
