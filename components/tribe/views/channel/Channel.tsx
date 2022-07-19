@@ -106,6 +106,8 @@ const Channel = ({ apiKey }: Props) => {
 
         setPublishing(false);
         push(`/tribes/${tribeID}/content?id=${response.id}`);
+
+        mutate(apiKey);
       }
     } catch (error) {
       setPublishing(false);
@@ -135,7 +137,7 @@ const Channel = ({ apiKey }: Props) => {
                 {showEditor === false && (
                   <form
                     id="editor-form"
-                    className="col-span-10 bg-sapien-neutral-200  min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
+                    className="col-span-10 bg-sapien-neutral-200 min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
                     onSubmit={handleSubmit}
                   >
                     <InlineEditor
