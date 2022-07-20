@@ -44,7 +44,7 @@ const ChannelLeftBar = ({ channelID: channelIDProps }: Props) => {
   };
 
   return (
-    <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5  overflow-hidden -right-full  rounded-tl-md">
+    <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5 overflow-hidden -right-full">
       <Query api={`/core-api/channel/${channelID}/contributors`}>
         {(contributors: Array<ChannelContributor>) => (
           <>

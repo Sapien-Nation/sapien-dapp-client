@@ -91,8 +91,8 @@ const Channel = ({ apiKey }: Props) => {
   return (
     <>
       <h1 className="sr-only">{channel.name}</h1>
-      <div className="h-full flex flex-row bg-sapien-neutral-800">
-        <div className="flex-1 lg:rounded-3xl p-5 overflow-y-auto">
+      <div className="h-full flex flex-row bg-sapien-neutral-800 lg:rounded-tl-3xl">
+        <div className="flex-1 p-5 overflow-y-auto">
           <div className="grid gap-4">
             <ChannelHeader channel={channel} />
             {canPost === true && (

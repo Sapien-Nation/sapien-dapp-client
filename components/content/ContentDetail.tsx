@@ -26,11 +26,11 @@ const ContentItem = ({
   },
 }: Props) => {
   return (
-    <div className="h-full flex flex-row bg-sapien-neutral-800">
-      <div className="flex-1 lg:rounded-3xl p-5 overflow-y-auto">
+    <div className="h-full flex flex-row bg-sapien-neutral-800 lg:rounded-3xl">
+      <div className="flex-1 p-5 overflow-y-auto">
         <div className="grid gap-4">
           <div className="max-w-2xl mx-auto w-full text-gray-300">
-            <div className="mt-4">
+            <div className="mt-4 bg-sapien-neutral-600 rounded-xl p-3">
               {mimeType === ContentMimeType.Html ? (
                 <div
                   dangerouslySetInnerHTML={{

@@ -2,8 +2,8 @@ import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 
 const ChannelHeaderPlaceholder = () => {
   return (
-    <div className="h-full flex flex-row bg-sapien-neutral-800">
-      <div className="flex-1 lg:rounded-3xl p-5 overflow-y-auto">
+    <div className="h-full flex flex-row bg-sapien-neutral-800 lg:rounded-3xl">
+      <div className="flex-1 p-5 overflow-y-auto">
         <div className="grid gap-4">
           <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
             <div className="bg-gradient-to-r bg-sapien-neutral-200 min-h-250 shadow-md rounded-lg relative flex justify-center items-center" />
