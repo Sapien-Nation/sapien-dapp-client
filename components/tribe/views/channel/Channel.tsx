@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import useSWR, { useSWRConfig } from 'swr';
+import Link from 'next/link';
 
 // api
 import axios from 'axios';
@@ -169,10 +170,17 @@ const Channel = ({ apiKey }: Props) => {
               <ul>
                 {swrData?.data.map((content) => (
                   <li key={content.id}>
-                    <ContentItemChannel
-                      content={content}
-                      tribeID={tribeID as string}
-                    />
+                    <Link
+                      href={`/tribes/${tribeID}/content?id=${content.id}`}
+                      passHref
+                    >
+                      <a>
+                        <ContentItemChannel
+                          content={content}
+                          tribeID={tribeID as string}
+                        />
+                      </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
