@@ -42,7 +42,7 @@ const ContentItem = ({
       <a>
         <div className="flex flex-col bg-sapien-neutral-600 rounded-xl p-3 mb-2 gap-1">
           <div className="flex items-center justify-between p-3">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {avatar ? (
                 <img
                   className="w-10 h-10 object-cover rounded-full"
@@ -56,15 +56,15 @@ const ContentItem = ({
               )}
               <h3 className="text-sm font-semibold text-white">{username}</h3>
               <h3 className="text-sm text-gray-500">{displayName}</h3>
+              <p className="font-bold flex items-center gap-1">
+                <GlobeIcon className="h-4 text-gray-500" />
+                {group.name}
+              </p>
+              <p className="text-sm text-sapien-40 font-semibold bg-sapien-80/40 rounded-2xl py-1 px-2 flex gap-1">
+                <UserGroupIcon className="h-4" />
+                {tribe.name}
+              </p>
             </div>
-            <p className="font-bold flex items-center gap-1">
-              <GlobeIcon className="h-4 text-gray-500" />
-              {group.name}
-            </p>
-            <p className="text-sm text-sapien-40 font-semibold bg-sapien-80/40 rounded-2xl py-1 px-2 flex gap-1">
-              <UserGroupIcon className="h-4" />
-              {tribe.name}
-            </p>
             <p className="text-sm text-gray-500">
               {formatDateRelative(createdAt)}
             </p>
@@ -87,10 +87,16 @@ const ContentItem = ({
               alt="Sapien Post Image"
             />
           )}
-          <div className="flex gap-2 text-gray-500 p-3">
-            <ChatIcon className="h-4" />
-            <SpeakerphoneIcon className="h-4" />
-            <ShareIcon className="h-4" />
+          <div className="flex items-center gap-5 text-gray-500 p-3">
+            <span className="flex items-center gap-2">
+              <ChatIcon className="h-4" />
+            </span>
+            <span className="flex items-center gap-2">
+              <SpeakerphoneIcon className="h-4" />
+            </span>
+            <span className="flex items-center gap-2">
+              <ShareIcon className="h-4" />
+            </span>
           </div>
         </div>
       </a>
