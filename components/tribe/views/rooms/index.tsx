@@ -107,7 +107,7 @@ const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
 
   return (
     <>
-      <h1 className="sr-only">Room View for {name}</h1>;
+      <h1 className="sr-only">Room View for {name}</h1>
       <Query api={apiKey} loader={<Skeleton />}>
         {() => <Room roomID={roomID} apiKey={apiKey} />}
       </Query>
