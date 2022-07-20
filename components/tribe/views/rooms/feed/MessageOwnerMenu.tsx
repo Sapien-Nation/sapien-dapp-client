@@ -18,9 +18,9 @@ const MessageOwnerMenu = ({
       as="div"
       className={`${
         isFocused ? 'block' : 'hidden'
-      } absolute leading-[0] group-hover:block right-0 w-8 h-8`}
+      } absolute leading-[0] group-hover:block right-0 w-8 h-8 top-0`}
     >
-      <Menu.Button className="inline-flex justify-center w-full text-sm font-medium rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+      <Menu.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
         <DotsVerticalIcon
           onClick={() => {
             setIsFocused(true);

@@ -49,7 +49,8 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
     type: ContentType.POST,
     owner: {
       id: '10_000_000',
-      userName: 'robgiometti',
+      username: 'robgiometti',
+      displayName: 'Robert Giometti',
       avatar:
         'https://cdn.discordapp.com/avatars/187385335725031424/ed2e737cb7906bbdf658a178ff5908d6.webp?size=128',
     },
@@ -125,8 +126,11 @@ export const useMainTribe = (): {
   };
 };
 
-export const useTribeChannels = (tribeID: string) => {
+export const useTribeChannels = () => {
+  const { query } = useRouter();
   const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
   const tribe: ProfileTribe = cache
     .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
@@ -151,8 +155,11 @@ export const useTribeRoom = (tribeID: string, roomID: string) => {
   return tribe?.rooms?.find((room) => room.id === roomID);
 };
 
-export const useTribeRooms = (tribeID: string) => {
+export const useTribeRooms = () => {
+  const { query } = useRouter();
   const { cache } = useSWRConfig();
+
+  const tribeID = query.tribeID as string;
   const tribe: ProfileTribe = cache
     .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
@@ -167,17 +174,18 @@ export const useTribeRooms = (tribeID: string) => {
   }));
 };
 
-export const useGetCurrentView = (
-  tribeID: string,
-  viewID: string
-): CurrentView => {
+export const useGetCurrentView = (): CurrentView => {
   const { cache } = useSWRConfig();
+  const { query } = useRouter();
+
+  const tribeID = query.tribeID as string;
+  const viewID = query.viewID as string;
 
   const tribe: ProfileTribe = cache
     .get('/core-api/user/tribes')
     .find(({ id }) => id === tribeID);
-  const rooms = useTribeRooms(tribe.id);
-  const channels = useTribeChannels(tribe.id);
+  const rooms = useTribeRooms();
+  const channels = useTribeChannels();
 
   const views = [
     {

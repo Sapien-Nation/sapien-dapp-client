@@ -330,4 +330,5 @@ const CreateRoomDialogProxy = (props: Props) => {
     </Query>
   );
 };
+
 export default CreateRoomDialogProxy;

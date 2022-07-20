@@ -26,7 +26,7 @@ const MessagePreview = ({
   const { query } = useRouter();
   const tribeID = query.tribeID as string;
 
-  const tribeRooms = useTribeRooms(tribeID);
+  const tribeRooms = useTribeRooms();
   const roomMembers = useRoomMembers(query.viewID as string);
 
   return (
