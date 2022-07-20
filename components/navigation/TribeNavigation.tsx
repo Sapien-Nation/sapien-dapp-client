@@ -346,7 +346,10 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
             </button>
           )}
-          <ul className="px-2 py-2 cursor-pointer" style={{ maxHeight: 500 }}>
+          <ul
+            className="px-2 py-2 cursor-pointer overflow-auto"
+            style={{ maxHeight: 500 }}
+          >
             {channels
               .filter(({ name }) => name !== 'Home Feed')
               .map(({ avatar, id, membersCount, name }) => {
