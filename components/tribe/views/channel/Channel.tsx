@@ -26,15 +26,12 @@ import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // hooks
+import { useChannel, useChannelPermissions } from 'hooks/channel';
 import { usePassport } from 'hooks/passport';
-import { useTribeChannels } from 'hooks/tribe';
 
 // types
 import type { Content } from 'tools/types/content';
-import type {
-  Channel as ChannelType,
-  ChannelContributor,
-} from 'tools/types/channel';
+import type { ChannelContributor } from 'tools/types/channel';
 
 interface Props {
   apiKey: string;
@@ -46,6 +43,7 @@ const Channel = ({ apiKey }: Props) => {
 
   const { me } = useAuth();
   const toast = useToast();
+  const channel = useChannel();
   const passport = usePassport();
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
@@ -54,9 +52,9 @@ const Channel = ({ apiKey }: Props) => {
   const tribeID = query.tribeID as string;
   const channelID = query.viewID as string;
 
-  const editorRef = useRef(null);
+  const [canPost] = useChannelPermissions(channelID, ['canPost']);
 
-  const channel = useTribeChannels().find(({ id }) => id === channelID);
+  const editorRef = useRef(null);
 
   useEffect(() => {
     setShowEditor(false);
@@ -124,51 +122,50 @@ const Channel = ({ apiKey }: Props) => {
       <div className="h-full flex flex-row bg-sapien-neutral-800">
         <div className="flex-1 lg:rounded-3xl p-5 overflow-y-auto">
           <div className="grid gap-4">
-            <Query
-              api={`/core-api/channel/${channelID}`}
-              loader={<ChannelHeaderPlaceholder />}
-            >
-              {(channel: ChannelType) => <ChannelHeader channel={channel} />}
-            </Query>
-            <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
-              <div className="flex gap-2 lg:rounded-3xl p-5">
-                <UserAvatar user={me} passport={passport} />
+            <ChannelHeader channel={channel} />
+            {canPost === true && (
+              <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
+                <div className="flex gap-2 lg:rounded-3xl p-5">
+                  <UserAvatar user={me} passport={passport} />
 
-                {showEditor === false && (
-                  <form
-                    id="editor-form"
-                    className="col-span-10 bg-sapien-neutral-200 min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
-                    onSubmit={handleSubmit}
+                  {showEditor === false && (
+                    <form
+                      id="editor-form"
+                      className="col-span-10 bg-sapien-neutral-200 min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
+                      onSubmit={handleSubmit}
+                    >
+                      <InlineEditor
+                        editorRef={editorRef}
+                        initialValue={editorRef.current?.getContent()}
+                      />
+                    </form>
+                  )}
+                  {showEditor === false && (
+                    <button type="button" onClick={() => setShowEditor(true)}>
+                      <ArrowsExpandIcon className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+                <div className="flex gap-3 flex-row-reverse">
+                  <button
+                    type="submit"
+                    form="editor-form"
+                    className={
+                      isPublishing
+                        ? 'cursor-not-allowed  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+                        : 'cursor-pointer  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+                    }
+                    onClick={handleSubmit}
+                    disabled={isPublishing}
                   >
-                    <InlineEditor
-                      editorRef={editorRef}
-                      initialValue={editorRef.current?.getContent()}
-                    />
-                  </form>
-                )}
-                {showEditor === false && (
-                  <button type="button" onClick={() => setShowEditor(true)}>
-                    <ArrowsExpandIcon className="w-4 h-4" />
+                    {isPublishing && (
+                      <RefreshIcon className="w-5 animate-spin" />
+                    )}{' '}
+                    Publish
                   </button>
-                )}
+                </div>
               </div>
-              <div className="flex gap-3 flex-row-reverse">
-                <button
-                  type="submit"
-                  form="editor-form"
-                  className={
-                    isPublishing
-                      ? 'cursor-not-allowed  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                      : 'cursor-pointer  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                  }
-                  onClick={handleSubmit}
-                  disabled={isPublishing}
-                >
-                  {isPublishing && <RefreshIcon className="w-5 animate-spin" />}{' '}
-                  Publish
-                </button>
-              </div>
-            </div>
+            )}
             <InfiniteScroll
               className="scroll-auto mt-4"
               pageStart={0}
@@ -308,12 +305,34 @@ const ChannelProxy = () => {
   const { query } = useRouter();
 
   const channelID = query.viewID as string;
+
+  const [canView] = useChannelPermissions(channelID, ['canView']);
+
+  if (canView === false) {
+    return (
+      <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
+        <div className="absolute inset-0">
+          <img
+            className="h-full w-full object-cover"
+            src="https://images.newindianexpress.com/uploads/user/imagelibrary/2021/11/27/w1200X800/Metaverse_is_Coming.jpg"
+            alt="People working on laptops"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-purple-900 mix-blend-multiply" />
+        </div>
+        <div className="px-4 py-4 flex flex-col gap-4 absolute justify-center items-center w-full text-center h-full">
+          <p>You don&apos;t have access to see this view </p>
+        </div>
+      </div>
+    );
+  }
   const apiKey = `/core-api/channel/${channelID}/feed`;
 
   return (
     <>
-      <h1 className="sr-only">Channel View</h1>;
-      <Query api={apiKey}>{() => <Channel apiKey={apiKey} />}</Query>
+      <h1 className="sr-only">Channel View</h1>
+      <Query api={apiKey} loader={<ChannelHeaderPlaceholder />}>
+        {() => <Channel apiKey={apiKey} />}
+      </Query>
     </>
   );
 };

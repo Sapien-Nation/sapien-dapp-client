@@ -11,6 +11,7 @@ import { ErrorView, NotFound, Query } from 'components/common';
 import {
   BadgesView,
   Channel,
+  ChannelHeaderPlaceholder,
   ContentView,
   MainChannel,
   RoomView,
@@ -83,7 +84,14 @@ const TribePage = () => {
         );
       }
       case View.Channel:
-        return <Channel />;
+        return (
+          <Query
+            api={`/core-api/channel/${viewID}`}
+            loader={<ChannelHeaderPlaceholder />}
+          >
+            {() => <Channel />}
+          </Query>
+        );
       case View.MainChannel:
         return <MainChannel />;
       case View.Upgrade: {
