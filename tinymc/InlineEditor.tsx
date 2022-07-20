@@ -29,6 +29,13 @@ const EditorComponent = ({ editorRef, initialValue }: Props) => {
         auto_focus: true,
         placeholder: `Whats on your mind ${me.username}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
+        content_style: `
+          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+            color: #656067;
+          }
+
+          * [contentEditable="true"]:focus { outline: 0px ; }
+        `,
       }}
     />
   );

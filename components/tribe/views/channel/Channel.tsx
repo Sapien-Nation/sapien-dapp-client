@@ -131,7 +131,8 @@ const Channel = ({ apiKey }: Props) => {
                   {showEditor === false && (
                     <form
                       id="editor-form"
-                      className="col-span-10 bg-sapien-neutral-200 min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
+                      className="col-span-10  min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
+                      style={{ backgroundColor: '#2C252F' }}
                       onSubmit={handleSubmit}
                     >
                       <InlineEditor
