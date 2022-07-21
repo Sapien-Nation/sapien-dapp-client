@@ -69,7 +69,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
   const coverFileInput = useRef(null);
 
   const [avatar, cover] = watch(['avatar', 'cover']);
-  console.log({ cover });
+
   const onSubmit = async ({ name }: FormValues) => {
     try {
       const { tribeID } = query;
@@ -78,21 +78,24 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
         name,
         tribeId: tribeID as string,
       };
-
-      if (avatar !== null) {
-        if (avatar?.key !== mediaDefaultKey) {
-          Object.assign(body, {
-            avatar: avatar.key,
-          });
-        }
+      if (avatar === null) {
+        Object.assign(body, {
+          avatar: null,
+        });
+      } else if (avatar.key !== mediaDefaultKey) {
+        Object.assign(body, {
+          avatar: avatar.key,
+        });
       }
 
-      if (cover !== null) {
-        if (cover?.key !== mediaDefaultKey) {
-          Object.assign(body, {
-            cover: cover.key,
-          });
-        }
+      if (cover === null) {
+        Object.assign(body, {
+          cover: null,
+        });
+      } else if (cover.key !== mediaDefaultKey) {
+        Object.assign(body, {
+          cover: cover.key,
+        });
       }
       const response = await updateChannel(channel.id, body);
 
