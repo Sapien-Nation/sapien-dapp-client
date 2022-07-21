@@ -1,9 +1,10 @@
 import { GlobeIcon, UserGroupIcon } from '@heroicons/react/solid';
-import {
-  ChatIcon,
-  ShareIcon,
-  SpeakerphoneIcon,
-} from '@heroicons/react/outline';
+// TODO: commented until we have data to show
+// import {
+//   ChatIcon,
+//   ShareIcon,
+//   SpeakerphoneIcon,
+// } from '@heroicons/react/outline';
 
 // constants
 import { ContentMimeType } from 'tools/constants/content';
@@ -81,7 +82,8 @@ const ContentItem = ({
           alt="Sapien Post Image"
         />
       )}
-      <div className="flex items-center gap-5 text-gray-500 p-3">
+      {/* TODO: commented until we have data to show */}
+      {/* <div className="flex items-center gap-5 text-gray-500 p-3">
         <span className="flex items-center gap-2">
           <ChatIcon className="h-4" />
         </span>
@@ -91,7 +93,7 @@ const ContentItem = ({
         <span className="flex items-center gap-2">
           <ShareIcon className="h-4" />
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };
