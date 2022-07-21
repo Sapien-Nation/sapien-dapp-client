@@ -248,15 +248,24 @@ const Channel = ({ apiKey }: Props) => {
           >
             <ArrowNarrowLeftIcon className="text-white w-5" /> Back
           </button>
+
           <button
-            className={`${
-              isPublishing ? 'cursor-not-allowed' : 'cursor-pointer'
-            } absolute flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
+            type="button"
             onClick={handleSubmit}
-            disabled={isPublishing}
+            className={
+              isPublishing
+                ? 'cursor-not-allowed flex items-center gap-2  bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+                : 'cursor-pointer flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+            }
+            disabled={isPublishing || charCount === 0}
           >
-            {isPublishing && <RefreshIcon className="w-5 animate-spin" />}{' '}
-            Publish
+            {isPublishing ? (
+              <RefreshIcon className="w-5 animate-spin" />
+            ) : (
+              <PaperAirplaneIcon
+                className={charCount === 0 ? 'w-5' : 'w-5 rotate-90'}
+              />
+            )}
           </button>
         </>
       )}
