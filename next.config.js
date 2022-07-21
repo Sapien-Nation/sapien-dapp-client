@@ -8,10 +8,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const ContentSecurityPolicy = `
   default-src 'self';
   object-src 'self';
-  script-src-elem 'self' 'unsafe-inline' data: http://localhost:3000 https://localhost:3000 https://static.cloudflareinsights.com;
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.youtube.com *.ytimg.com;
-  child-src *.youtube.com *.ytimg.com;
-  style-src 'self' 'unsafe-inline' *.googleapis.com;
+  script-src-elem 'self' 'unsafe-inline' data: http://localhost:3000 https://localhost:3000 https://static.cloudflareinsights.com https://cdn.tiny.cloud;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.youtube.com *.ytimg.com *.tiny.cloud;
+  child-src *.youtube.com *.ytimg.com *.tiny.cloud;
+  style-src 'self' 'unsafe-inline' *.googleapis.com *.tiny.cloud ;
   img-src * blob: data:;
   connect-src * 'self' blob: data:;
   font-src data: 'self' *.gstatic.com *.amazonaws.com;

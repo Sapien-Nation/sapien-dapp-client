@@ -132,7 +132,11 @@ const Page = ({ children }: Props) => {
   return (
     <>
       <SEO
-        title={unreadMentions === 0 ? 'Sapien' : `Sapien (${unreadMentions})`}
+        title={
+          unreadMentions <= 0 || isNaN(unreadMentions)
+            ? 'Sapien'
+            : `Sapien (${unreadMentions})`
+        }
       />
       {isLoadingData && (
         <Transition
@@ -224,7 +228,7 @@ const Page = ({ children }: Props) => {
               <div className="flex-1 flex overflow-hidden">
                 <section
                   aria-labelledby="primary-heading"
-                  className="min-w-0 flex-1 h-full flex flex-col overflow-y-auto lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
+                  className="min-w-0 flex-1 h-full flex flex-col  lg:order-last relative bg-sapien-neutral-800 lg:rounded-tl-3xl"
                 >
                   {children}
                 </section>

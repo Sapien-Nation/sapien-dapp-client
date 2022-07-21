@@ -58,7 +58,6 @@ const Notifications = () => {
 
   const handleReadNotification = async (notification: Notification) => {
     try {
-      console.log({ notification });
       mutate(
         '/core-api/user/tribes',
         (tribes: Array<ProfileTribe>) =>

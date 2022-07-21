@@ -6,9 +6,11 @@ import { NextPage } from 'next';
 
 const RegisterPage: NextPage = () => {
   return (
-    <Layout title="Create your Sapien account">
-      <RegisterForm />
-    </Layout>
+    <div className="text-center">
+      <Layout title="Beta access only">
+        <></>
+      </Layout>
+    </div>
   );
 };
 

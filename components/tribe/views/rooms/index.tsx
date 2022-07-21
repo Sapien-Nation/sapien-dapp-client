@@ -10,9 +10,9 @@ import { useState } from 'react';
 import axios from 'api';
 
 // components
-import { Query } from 'components/common';
 import Feed from './feed';
 import { JoinRoom, Skeleton } from './views';
+import { Query } from 'components/common';
 
 // hooks
 import { useTribeRoom } from 'hooks/tribe';
@@ -107,7 +107,7 @@ const RoomProxy = ({ isMember, name, roomID, tribeID }: RoomProxyProps) => {
 
   return (
     <>
-      <h1 className="sr-only">Room View for {name}</h1>;
+      <h1 className="sr-only">Room View for {name}</h1>
       <Query api={apiKey} loader={<Skeleton />}>
         {() => <Room roomID={roomID} apiKey={apiKey} />}
       </Query>

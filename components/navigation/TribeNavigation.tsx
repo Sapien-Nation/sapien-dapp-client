@@ -8,7 +8,7 @@ import {
 } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import Lottie from 'react-lottie-player';
 
@@ -25,13 +25,14 @@ import {
   CreateRoomDialog,
   ManageRoomDialog,
 } from 'components/tribe/dialogs';
-import { MenuLink, Query, RedDot } from 'components/common';
+import { MenuLink, Query, RedDot, Tooltip } from 'components/common';
 import { EditTribeDialog } from 'components/tribe/dialogs';
 
 // hooks
 import {
   useMainTribe,
   useTribe,
+  useTribeChannels,
   useTribePermission,
   useTribeRooms,
 } from 'hooks/tribe';
@@ -54,6 +55,37 @@ enum Dialog {
   ManageRooms,
 }
 
+const mockRoomThread = ({
+  id,
+  title,
+  ...rest
+}: {
+  id: number;
+  title: string;
+}) => {
+  return {
+    id,
+    title,
+    ...rest,
+  };
+};
+
+const RoomThread = ({ thread }: { thread: any }) => {
+  const ref = useRef(null);
+
+  return (
+    <>
+      <li
+        className="text-gray-300 text-sm hover:bg-sapien-neutral-800 px-2 py-1 rounded-md ml-5"
+        ref={ref.current?.setTriggerRef}
+      >
+        <div className="truncate">{thread.title}</div>
+      </li>
+      <Tooltip ref={ref} text={thread.title} />
+    </>
+  );
+};
+
 const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
   const [isFetching, setIsFetching] = useState(false);
@@ -66,11 +98,15 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
   const viewID = query.viewID as string;
 
   const tribe = useTribe(tribeID);
-  const rooms = useTribeRooms(tribeID);
-  const [canAddRoom, canEditTribe, canLeaveTribe] = useTribePermission(
-    tribeID,
-    ['canCreateRoom', 'canEditTribe', 'canLeaveTribe']
-  );
+  const rooms = useTribeRooms();
+  const channels = useTribeChannels();
+  const [canCreateRoom, canEditTribe, canLeaveTribe, canCreateChannel] =
+    useTribePermission(tribeID, [
+      'canCreateRoom',
+      'canEditTribe',
+      'canLeaveTribe',
+      'canCreateChannel',
+    ]);
   const { redirectToMainTribeChannel } = useMainTribe();
 
   const { name, role } = tribe;
@@ -139,14 +175,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (unreadMentions > 0)
-        return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
-      return 'text-sm mr-2 bg-sapien-neutral-800 rounded-md';
+        return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-neutral-800 rounded-md';
     }
 
     if (unreadMentions > 0 || hasUnread === true)
-      return 'text-sm mr-2 bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 mr-2 text-sm hover:bg-sapien-neutral-800 rounded-md';
+    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
   };
 
   return (
@@ -298,105 +334,77 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
           )}
-          {/* <button
-          aria-label="Create Channel"
-          className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-          onClick={() => {
-            setDialog(Dialog.CreateChannel);
-            handleMobileMenu();
-          }}
-        >
-          Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
-        </button>
-        <ul className="px-2 py-2 cursor-pointer">
-          {channels.map(({ avatar, id, membersCount, name }) => {
-            return (
-              <li
-                className={`${
-                  id === viewID
-                    ? 'text-sm bg-primary-200 rounded-md'
-                    : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                }`}
-                key={id}
-              >
-                <Link href={`/tribes/${tribeID}/${id}`} passHref>
-                  <a
-                    className="flex items-center p-2 my-1"
-                    onClick={handleMobileMenu}
+          {canCreateChannel && (
+            <button
+              aria-label="Create Channel"
+              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+              onClick={() => {
+                setDialog(Dialog.CreateChannel);
+                handleMobileMenu();
+              }}
+            >
+              Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
+            </button>
+          )}
+          <ul
+            className="px-2 py-2 cursor-pointer overflow-auto"
+            style={{ maxHeight: 500 }}
+          >
+            {channels
+              .filter(({ name }) => name !== 'Home Feed')
+              .map(({ avatar, id, membersCount, name }) => {
+                return (
+                  <li
+                    className={`${
+                      id === viewID
+                        ? 'text-sm bg-primary-200 rounded-md'
+                        : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
+                    }`}
+                    key={id}
                   >
-                    {avatar ? (
-                      <img
-                        alt="channel-image"
-                        className="object-cover h-10 w-10 rounded-md"
-                        src={avatar}
-                      />
-                    ) : (
-                      <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">
-                        {name[0].toUpperCase()}
-                      </div>
-                    )}
-                    <div className="ml-2">
-                      <p className="block">{name}</p>
-                      <p
-                        className={`${
-                          id === viewID ? '' : 'text-sapien-neutral-200'
-                        } font-extralight text-xs`}
+                    <Link href={`/tribes/${tribeID}/${id}`} passHref>
+                      <a
+                        className="flex items-center p-2 my-1"
+                        onClick={handleMobileMenu}
                       >
-                        {membersCount} members
-                      </p>
-                    </div>
-                  </a>
-                </Link>
-              </li>
-            );
-          })}
-        </ul> */}
+                        {avatar ? (
+                          <img
+                            alt="channel-image"
+                            className="object-cover h-10 w-10 rounded-md"
+                            src={avatar}
+                            onError={(event) => {
+                              (event as any).target.onError = null;
+                              event.currentTarget.src =
+                                '/images/harambe_sapien.png';
+                            }}
+                          />
+                        ) : (
+                          <div className="bg-sapien-neutral-200 h-10 w-10 rounded-md flex items-center justify-center">
+                            {name[0].toUpperCase()}
+                          </div>
+                        )}
+                        <div className="ml-2">
+                          <p className="block">{name}</p>
+                          <p
+                            className={`${
+                              id === viewID ? '' : 'text-sapien-neutral-200'
+                            } font-extralight text-xs`}
+                          >
+                            {membersCount} members
+                          </p>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
+          </ul>
         </nav>
       </div>
 
-      {/* <button
-      aria-label="Create Room"
-      className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-      onClick={() => {}}
-    >
-      APPS <PlusIcon className="text-sapien-neutral-200 w-4" />
-    </button>
-
-    <ul className="pl-2 cursor-pointer -mr-2">
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Snapshot</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Github</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Notion</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Airtime</div>
-        </a>
-      </li>
-
-      <li className="text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-l-md">
-        <a className="flex px-2 py-1 my-1 items-center gap-2">
-          <div className="flex gap-1">Syndicate</div>
-        </a>
-      </li>
-    </ul> */}
-
       <div>
         <nav>
-          {canAddRoom === true && (
+          {canCreateRoom && (
             <button
               aria-label="Create Room"
               className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
@@ -408,46 +416,54 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               ROOMS <PlusIcon className="text-sapien-neutral-200 w-4" />
             </button>
           )}
-          <ul className="pl-1 py-2 cursor-pointer -mr-2">
+          <ul className="px-2 py-2 cursor-pointer w-full">
             {rooms.map((room) => {
               const roomIcon = (
                 <span className="flex items-center w-3">
                   {room.private ? <LockClosedIcon className="w-[10px]" /> : '#'}
                 </span>
               );
+
               return (
-                <li
-                  className={getRoomListItemClassName({
-                    id: room.id,
-                    unreadMentions: room.unreadMentions,
-                    hasUnread: room.hasUnread,
-                  })}
-                  key={room.id}
-                >
-                  <div className="flex my-1 group">
-                    <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                      <a
-                        className="flex px-2 py-1 items-center gap-2 flex-1"
-                        onClick={handleMobileMenu}
+                <>
+                  <li
+                    className={getRoomListItemClassName({
+                      id: room.id,
+                      unreadMentions: room.unreadMentions,
+                      hasUnread: room.hasUnread,
+                    })}
+                    key={room.id}
+                  >
+                    <div className="flex my-1 group px-2">
+                      <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
+                        <a
+                          className="flex py-1 items-center gap-2 flex-1"
+                          onClick={handleMobileMenu}
+                        >
+                          <div className="flex gap-2">
+                            {roomIcon} {room.name}{' '}
+                            <RedDot count={room.unreadMentions} />
+                          </div>
+                        </a>
+                      </Link>
+                      <button
+                        className="hidden group-hover:block"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedRoom(room.id);
+                          setDialog(Dialog.ManageRooms);
+                        }}
                       >
-                        <div className="flex gap-2">
-                          {roomIcon} {room.name}{' '}
-                          <RedDot count={room.unreadMentions} />
-                        </div>
-                      </a>
-                    </Link>
-                    <button
-                      className="px-2 hidden group-hover:block"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedRoom(room.id);
-                        setDialog(Dialog.ManageRooms);
-                      }}
-                    >
-                      <CogIcon className="w-4 h-4 text-gray-400" />
-                    </button>
-                  </div>
-                </li>
+                        <CogIcon className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                  </li>
+                  <ul className="room-thread -mt-1">
+                    {[].map((thread) => (
+                      <RoomThread key={thread.id} thread={thread} />
+                    ))}
+                  </ul>
+                </>
               );
             })}
           </ul>

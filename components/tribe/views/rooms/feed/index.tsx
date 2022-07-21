@@ -65,7 +65,7 @@ const Feed = ({
   onScrollTop,
   hasMoreData,
 }: Props) => {
-  const [showDetails, setshowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
 
   const { me } = useAuth();
@@ -74,7 +74,7 @@ const Feed = ({
   const { mutate } = useSWRConfig();
   const scrollToBottom = useRef(null);
 
-  const room = useTribeRooms(tribeID).find(({ id }) => id === roomID);
+  const room = useTribeRooms().find(({ id }) => id === roomID);
   const roomMembers = useRoomMembers(roomID);
   const { socketMessages, handleReadMessage } = useSocket();
   const reachBottom = useOnScreen(scrollToBottom);
@@ -285,7 +285,7 @@ const Feed = ({
   };
 
   const handleSidebar = useCallback(() => {
-    setshowDetails(false);
+    setShowDetails(false);
   }, []);
 
   //----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -512,7 +512,7 @@ const Feed = ({
             <button
               aria-label="Toggle Details"
               className="flex px-1 h-full items-center"
-              onClick={() => setshowDetails(!showDetails)}
+              onClick={() => setShowDetails(!showDetails)}
             >
               <UsersIcon className="w-5" />
             </button>

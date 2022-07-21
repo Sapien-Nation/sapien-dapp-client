@@ -4,7 +4,7 @@ interface Props {
 }
 
 const RedDot = ({ animate = false, count }: Props) => {
-  if (!count) return null;
+  if (!count || count < 0 || isNaN(count)) return null;
 
   return (
     <span className="relative flex items-center">

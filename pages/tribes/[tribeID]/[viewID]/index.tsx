@@ -11,6 +11,7 @@ import { ErrorView, NotFound, Query } from 'components/common';
 import {
   BadgesView,
   Channel,
+  ChannelHeaderPlaceholder,
   ContentView,
   MainChannel,
   RoomView,
@@ -23,17 +24,13 @@ import { useGetCurrentView, useTribe } from 'hooks/tribe';
 // providers
 import { Web3Provider } from 'wallet/providers';
 
-// types
-import type { NextPage } from 'next';
-import { useEffect } from 'react';
-
 const TribePage = () => {
   const { query } = useRouter();
 
   const viewID = query.viewID as string;
   const tribeID = query.tribeID as string;
 
-  const view = useGetCurrentView(tribeID as string, viewID as string);
+  const view = useGetCurrentView();
 
   const { role } = useTribe(tribeID as string);
 
@@ -87,7 +84,14 @@ const TribePage = () => {
         );
       }
       case View.Channel:
-        return <Channel />;
+        return (
+          <Query
+            api={`/core-api/channel/${viewID}`}
+            loader={<ChannelHeaderPlaceholder />}
+          >
+            {() => <Channel />}
+          </Query>
+        );
       case View.MainChannel:
         return <MainChannel />;
       case View.Upgrade: {

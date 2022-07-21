@@ -52,3 +52,13 @@ export const deleteRoom = (roomID: string) =>
     .delete(`/core-api/room/${roomID}`)
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
+
+export const reactToMessage = (
+  roomID: string,
+  messageID: string,
+  emojiID: string
+) =>
+  axios
+    .post(`/core-api/room/${roomID}/reaction`)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));

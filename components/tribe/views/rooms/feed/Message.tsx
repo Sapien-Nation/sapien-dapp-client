@@ -1,8 +1,10 @@
-import { Transition } from '@headlessui/react';
+import { DocumentIcon, EmojiHappyIcon } from '@heroicons/react/outline';
+import { Popover, Transition } from '@headlessui/react';
 import { RefreshIcon, TrashIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Fragment } from 'react';
 import Linkify from 'linkify-react';
+import { Picker } from 'emoji-mart';
 
 // api
 import { deleteMessage } from 'api/room';
@@ -56,6 +58,7 @@ const Message = ({
 }: Props) => {
   const [dialog, setDialog] = useState(null);
   const [messageFocused, setMessageFocused] = useState(false);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
 
   const messageRef = useRef(null);
 
@@ -65,7 +68,7 @@ const Message = ({
 
   const roomID = query.viewID as string;
   const tribeID = query.tribeID as string;
-  const tribeRooms = useTribeRooms(tribeID);
+  const tribeRooms = useTribeRooms();
   const roomMembers = useRoomMembers(roomID);
   const {
     sender: { id: messageOwnerID, avatar, username, badges },
@@ -73,6 +76,7 @@ const Message = ({
     content,
     type,
     mentions,
+    reactions,
   } = message;
 
   const isMeMention = content.search(new RegExp(`<@${me.id}>`, 'g')) >= 0;
@@ -136,7 +140,20 @@ const Message = ({
 
   const renderBody = () => {
     if (type === MessageType.OptimisticWithAttachment)
-      return <span>TODO handle UI for Optimistic Attachments</span>;
+      return (
+        <div
+          className="h-16  bg-sapien-neutral-600 rounded flex items-center"
+          style={{ width: 500 }}
+        >
+          <div className="px-4">
+            <DocumentIcon className="w-12 h-12" />
+          </div>
+          <div>
+            <p className="text-sm  animate-pulse">Uploading Files</p>
+            <span className="text-xs text-gray-300">Wait a second...</span>
+          </div>
+        </div>
+      );
 
     if (type === MessageType.OptimisticWithError) {
       return (
@@ -274,11 +291,76 @@ const Message = ({
                 </div>
               </div>
             )}
-            {renderBody()}
+            <div className="flex flex-col gap-1 items-start">
+              {renderBody()}
+              <div className={isAMessageContinuation ? '' : 'ml-[50px]'}>
+                {reactions?.map(({ count, emoji, me }) => (
+                  <span
+                    key={emoji.name}
+                    className={`${
+                      me
+                        ? 'border border-sapien-60/50 bg-sapien-80/20'
+                        : 'border border-gray-700 bg-gray-900'
+                    } rounded-md py-0.5 px-1 cursor-pointer text-xs`}
+                  >
+                    {emoji.name} {count}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Menus */}
+        <Popover
+          className={`${
+            isPickerOpen ? 'visible' : 'hidden group-hover:block'
+          } absolute leading-[0] right-0 w-8 h-8 mr-8 top-0`}
+          as="div"
+        >
+          {({ open }) => {
+            setIsPickerOpen(open);
+
+            return (
+              <>
+                <Popover.Button className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-yellow-400 focus:text-yellow-500">
+                  <EmojiHappyIcon className="w-5" />
+                </Popover.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute z-10 right-0 w-56 -top-1 origin-top-right bg-black divide-y divide-gray-800 rounded-md shadow-lg ring-2 ring-black ring-opacity-5 focus:outline-none">
+                    <Picker
+                      onSelect={(event) => {
+                        // reactToMessage(roomID, message.id, event.id)
+                        setMessageFocused(false);
+                      }}
+                      perLine={6}
+                      style={{
+                        width: '430px',
+                        position: 'absolute',
+                        marginLeft: -240,
+                      }}
+                      theme="dark"
+                      disableAutoFocus={true}
+                      groupNames={{ smileys_people: 'PEOPLE' }}
+                      native
+                      showPreview={false}
+                      title=""
+                    />
+                  </Popover.Panel>
+                </Transition>
+              </>
+            );
+          }}
+        </Popover>
+
         {type === MessageType.OptimisticWithError && (
           <div className="flex gap-2">
             <button onClick={handleRetryFailedMessage}>
@@ -289,6 +371,7 @@ const Message = ({
             </button>
           </div>
         )}
+
         {messageOwnerID === me.id && type !== MessageType.OptimisticWithError && (
           <MessageOwnerMenu
             isFocused={messageFocused}
