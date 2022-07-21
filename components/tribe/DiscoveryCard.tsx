@@ -10,6 +10,7 @@ import { useToast } from 'context/toast';
 // types
 import type { DiscoveryTribe, ProfileTribe } from 'tools/types/tribe';
 import { useState } from 'react';
+import { CheckCircleIcon } from '@heroicons/react/solid';
 
 interface Props {
   tribe: DiscoveryTribe;
@@ -43,16 +44,11 @@ const DiscoveryCard = ({ tribe }: Props) => {
     <li
       aria-label={tribe.name}
       className={
-        isFetching
-          ? 'animate-pulse relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
+        tribe.isUpgraded
+          ? 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col border border-2 border-sapien-60'
           : 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
       }
     >
-      <button
-        onClick={handleJoinTribe}
-        aria-label="Join"
-        className="absolute w-full h-full"
-      />
       <div className="flex-1">
         <div className="shadow-md hover:shadow-3xl rounded-lg relative">
           {tribe.cover ? (
@@ -77,13 +73,30 @@ const DiscoveryCard = ({ tribe }: Props) => {
           )}
         </div>
         <div className="px-3 mt-2">
-          <h1 className="text-lg font-bold">{tribe.name}</h1>
-          <p className="text-gray-400 overflow-hidden h-150">
+          <h1 className="text-lg font-bold flex items-center gap-2">
+            {tribe.name}{' '}
+            {tribe.isUpgraded === true && (
+              <CheckCircleIcon className="w-5 h-5 text-sapien-80" />
+            )}
+          </h1>
+          <p
+            className="text-gray-400 overflow-hidden"
+            style={{ minHeight: 130 }}
+          >
             {tribe.description || '[No Description]'}
           </p>
-          <span className="text-xs">
-            {tribe.membersCount} {tribe.membersCount > 1 ? 'members' : 'member'}
-          </span>
+          <div className="flex justify-between items-center">
+            <span className="text-xs">
+              {tribe.membersCount}{' '}
+              {tribe.membersCount > 1 ? 'members' : 'member'}
+            </span>
+            <button
+              onClick={handleJoinTribe}
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm"
+            >
+              {isFetching ? 'Joining' : 'Join'}
+            </button>
+          </div>
         </div>
       </div>
     </li>
