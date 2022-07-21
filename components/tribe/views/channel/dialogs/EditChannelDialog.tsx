@@ -339,7 +339,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
                               </label>
                             </div>
                             <p className="text-xs text-gray-500">
-                              PNG, JPG, GIF up to 40MB
+                              PNG, JPG, GIF up to 10MB
                             </p>
                           </div>
                         )}

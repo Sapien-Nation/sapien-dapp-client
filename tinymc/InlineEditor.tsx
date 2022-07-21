@@ -7,9 +7,10 @@ import { useAuth } from 'context/user';
 interface Props {
   editorRef: any;
   initialValue: any;
+  onChange: (content: string) => void;
 }
 
-const EditorComponent = ({ editorRef, initialValue }: Props) => {
+const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
   const { me } = useAuth();
 
   const apiKey = process.env.NEXT_PUBLIC_TINYMC_API_KEY;
@@ -27,6 +28,7 @@ const EditorComponent = ({ editorRef, initialValue }: Props) => {
         menubar: false,
         toolbar: false,
         auto_focus: true,
+
         placeholder: `Whats on your mind ${me.username}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
         content_style: `
@@ -34,9 +36,20 @@ const EditorComponent = ({ editorRef, initialValue }: Props) => {
             color: #656067;
           }
 
+          .mce-content-body {
+            color: #ffffff;
+            background-color: #161527;
+            padding-right: 20px;
+          }
+
+          .mce-content-body > p {
+            padding-right: 200px
+          }
+
           * [contentEditable="true"]:focus { outline: 0px ; }
         `,
       }}
+      onEditorChange={onChange}
     />
   );
 };

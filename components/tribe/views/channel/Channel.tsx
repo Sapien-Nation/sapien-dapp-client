@@ -31,14 +31,17 @@ import { usePassport } from 'hooks/passport';
 
 // types
 import type { Content } from 'tools/types/content';
+import { PaperAirplaneIcon } from '@heroicons/react/solid';
 
 interface Props {
   apiKey: string;
 }
 
 const Channel = ({ apiKey }: Props) => {
+  const [charCount, setCharCount] = useState(0);
   const [showEditor, setShowEditor] = useState(false);
   const [isPublishing, setPublishing] = useState(false);
+  const [initialEditorValue, setInitialEditorValue] = useState('');
 
   const { me } = useAuth();
   const toast = useToast();
@@ -97,46 +100,75 @@ const Channel = ({ apiKey }: Props) => {
           <div className="grid gap-4">
             <ChannelHeader channel={channel} />
             {canPost === true && (
-              <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4">
+              <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
                 <div className="flex gap-2 lg:rounded-3xl p-5">
                   <UserAvatar user={me} passport={passport} />
 
                   {showEditor === false && (
                     <form
                       id="editor-form"
-                      className="col-span-10  min-h-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0"
-                      style={{ backgroundColor: '#2C252F' }}
+                      className="col-span-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0 relative"
+                      style={{ backgroundColor: '#161527', minHeight: 100 }}
                       onSubmit={handleSubmit}
                     >
                       <InlineEditor
                         editorRef={editorRef}
-                        initialValue={editorRef.current?.getContent()}
+                        onChange={(content) => {
+                          setCharCount(content.length);
+                        }}
+                        initialValue={initialEditorValue}
                       />
+                      <div className="absolute right-5 bottom-4 flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setInitialEditorValue(
+                              editorRef.current?.getContent()
+                            );
+                            setShowEditor(true);
+
+                            queueMicrotask(() => {
+                              setTimeout(() => {
+                                editorRef.current?.execCommand(
+                                  'SelectAll',
+                                  false
+                                );
+                              }, 500);
+                            });
+                          }}
+                        >
+                          <ArrowsExpandIcon
+                            className={
+                              charCount <= 100
+                                ? 'w-4 h-4 hidden'
+                                : 'w-4 h-4 block'
+                            }
+                          />
+                        </button>
+                        <button
+                          type="submit"
+                          form="editor-form"
+                          className={
+                            isPublishing
+                              ? 'cursor-not-allowed flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+                              : 'cursor-pointer flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
+                          }
+                          onClick={handleSubmit}
+                          disabled={isPublishing || charCount === 0}
+                        >
+                          {isPublishing ? (
+                            <RefreshIcon className="w-5 animate-spin" />
+                          ) : (
+                            <PaperAirplaneIcon
+                              className={
+                                charCount === 0 ? 'w-5' : 'w-5 rotate-90'
+                              }
+                            />
+                          )}
+                        </button>
+                      </div>
                     </form>
                   )}
-                  {showEditor === false && (
-                    <button type="button" onClick={() => setShowEditor(true)}>
-                      <ArrowsExpandIcon className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-                <div className="flex gap-3 flex-row-reverse">
-                  <button
-                    type="submit"
-                    form="editor-form"
-                    className={
-                      isPublishing
-                        ? 'cursor-not-allowed  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                        : 'cursor-pointer  flex items-center gap-2 bottom-10 right-10 rounded-full border border-transparent shadow-sm px-6 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                    }
-                    onClick={handleSubmit}
-                    disabled={isPublishing}
-                  >
-                    {isPublishing && (
-                      <RefreshIcon className="w-5 animate-spin" />
-                    )}{' '}
-                    Publish
-                  </button>
                 </div>
               </div>
             )}
@@ -193,19 +225,28 @@ const Channel = ({ apiKey }: Props) => {
       {/* Editor */}
       {showEditor && (
         <>
-          <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-white">
+          <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
             <div>
               <ExpandedEditor
                 editorRef={editorRef}
-                initialValue={editorRef.current.getContent()}
+                initialValue={initialEditorValue}
               />
             </div>
           </div>
           <button
-            className="absolute top-2 left-5 flex items-center gap-2 border border-transparent px-6 py-2 text-base font-medium text-gray-700 focus:outline-none sm:text-sm"
-            onClick={() => setShowEditor(false)}
+            className="absolute top-2 left-5 flex items-center gap-2 border border-transparent px-6 py-2 text-base font-medium text-white focus:outline-none sm:text-sm"
+            onClick={() => {
+              setInitialEditorValue(editorRef.current?.getContent());
+              setShowEditor(false);
+
+              queueMicrotask(() => {
+                setTimeout(() => {
+                  editorRef.current?.execCommand('SelectAll', false);
+                }, 500);
+              });
+            }}
           >
-            <ArrowNarrowLeftIcon className="text-gray-700 w-5" /> Back
+            <ArrowNarrowLeftIcon className="text-white w-5" /> Back
           </button>
           <button
             className={`${

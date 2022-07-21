@@ -41,6 +41,14 @@ const EditorComponent = ({ editorRef, initialValue }: Props) => {
         file_picker_types: 'image',
         file_picker_callback: filePicker,
         images_upload_handler: imageHandler,
+        content_style: `
+          .mce-content-body {
+            color: #ffffff;
+            background-color: #161527;
+          }
+
+          * [contentEditable="true"]:focus { outline: 0px ; }
+        `,
       }}
     />
   );
