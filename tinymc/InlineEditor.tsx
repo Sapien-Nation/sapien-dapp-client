@@ -29,7 +29,7 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         toolbar: false,
         auto_focus: true,
 
-        placeholder: `Whats on your mind ${me.username}?`,
+        placeholder: `What's on your mind ${me.username}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
         content_style: `
           .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
@@ -42,8 +42,12 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
             padding-right: 20px;
           }
 
+          .mce-content-body:hover {
+            cursor: text;
+          }
+
           .mce-content-body > p {
-            padding-right: 200px
+            padding-right: 100px
           }
 
           * [contentEditable="true"]:focus { outline: 0px ; }

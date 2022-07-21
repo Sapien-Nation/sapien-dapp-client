@@ -107,7 +107,7 @@ const Channel = ({ apiKey }: Props) => {
                   {showEditor === false && (
                     <form
                       id="editor-form"
-                      className="col-span-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0 relative"
+                      className="col-span-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0 relative pl-4 py-4"
                       style={{ backgroundColor: '#161527', minHeight: 100 }}
                       onSubmit={handleSubmit}
                     >
