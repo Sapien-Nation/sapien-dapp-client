@@ -432,12 +432,10 @@ const CreateChannelDialog = ({ onClose }: Props) => {
           onCancel: () => setView(View.Info),
           cancelLabel: 'Back',
           confirmLabel: 'Create',
-          title: 'Create a Channel (Contributors)',
         };
       case View.Info:
         return {
           form: tribeBadges.length === 0 ? form : '',
-          title: 'Create a Channel (Info)',
           confirmLabel: tribeBadges.length === 0 ? 'Create' : 'Next',
           onConfirm:
             tribeBadges.length === 0
@@ -464,7 +462,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       show
       isFetching={isUploading || isSubmitting}
       onClose={onClose}
-      title="Create a Channel"
+      title="Create Channel"
       {...getDialogProps()}
     >
       <div>
