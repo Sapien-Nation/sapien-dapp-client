@@ -65,7 +65,7 @@ const ContentItem = ({
         <div className="flex items-center gap-1">
           <span className="text-sm font-semibold text-white">{group.name}</span>
           <span className="text-gray-500">/</span>
-          <span className="text-sm text-gray-500">PostView</span>
+          <span className="text-sm text-gray-500">Post View</span>
         </div>
       )}
       <div className="flex flex-col bg-sapien-neutral-600 rounded-xl p-3 gap-1">
