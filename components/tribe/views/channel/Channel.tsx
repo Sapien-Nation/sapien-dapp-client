@@ -138,13 +138,7 @@ const Channel = ({ apiKey }: Props) => {
                             });
                           }}
                         >
-                          <ArrowsExpandIcon
-                            className={
-                              charCount <= 100
-                                ? 'w-4 h-4 hidden'
-                                : 'w-4 h-4 block'
-                            }
-                          />
+                          <ArrowsExpandIcon className={'w-4 h-4'} />
                         </button>
                         <button
                           type="submit"
