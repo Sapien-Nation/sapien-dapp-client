@@ -1,19 +1,24 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-// context
-import { useAuth } from 'context/user';
+// types
+import type { Channel } from 'tools/types/channel';
 
 interface Props {
+  channel: Channel;
   editorRef: any;
   initialValue: any;
   onChange: (content: string) => void;
 }
 
-const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
-  const { me } = useAuth();
-
+const EditorComponent = ({
+  channel,
+  editorRef,
+  initialValue,
+  onChange,
+}: Props) => {
   const apiKey = process.env.NEXT_PUBLIC_TINYMC_API_KEY;
+
   return (
     <Editor
       initialValue={initialValue}
@@ -29,7 +34,7 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         toolbar: false,
         auto_focus: true,
 
-        placeholder: `What's on your mind ${me.username}?`,
+        placeholder: `What do you want to share in ${channel.name}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
         content_style: `
           .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {

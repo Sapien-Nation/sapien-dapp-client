@@ -112,6 +112,7 @@ const Channel = ({ apiKey }: Props) => {
                       onSubmit={handleSubmit}
                     >
                       <InlineEditor
+                        channel={channel}
                         editorRef={editorRef}
                         onChange={(content) => {
                           setCharCount(content.length);
