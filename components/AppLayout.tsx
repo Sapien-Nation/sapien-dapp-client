@@ -132,7 +132,11 @@ const Page = ({ children }: Props) => {
   return (
     <>
       <SEO
-        title={unreadMentions === 0 ? 'Sapien' : `Sapien (${unreadMentions})`}
+        title={
+          unreadMentions <= 0 || isNaN(unreadMentions)
+            ? 'Sapien'
+            : `Sapien (${unreadMentions})`
+        }
       />
       {isLoadingData && (
         <Transition
