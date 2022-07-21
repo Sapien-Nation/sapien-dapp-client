@@ -164,7 +164,9 @@ const CreateChannelDialog = ({ onClose }: Props) => {
         return (
           <div>
             <div className="flex justify-between items-center p-3 my-3">
-              <span>Select Contributors Badges</span>
+              <span>
+                Selected badge holders will be able to post in this channel.
+              </span>
               <span className="text-sm font-medium text-gray-500">
                 {badges.length === 0 ? (
                   'Please select at least 1 badge'
