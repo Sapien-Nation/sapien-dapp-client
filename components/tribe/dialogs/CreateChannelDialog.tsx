@@ -163,11 +163,75 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       case View.Contributors:
         return (
           <div>
-            <div className="flex justify-between items-center p-3 my-3">
-              <span>
+            <div className="p-3 my-3">
+              <p>
                 Selected badge holders will be able to post in this channel.
-              </span>
-              <span className="text-sm font-medium text-gray-500">
+              </p>
+            </div>
+            <div className="h-96 max-h-full overflow-y-auto">
+              <ul>
+                {tribeBadges.map((badge) => {
+                  const isBadgeSelected = badges.includes(badge.parentId);
+                  return (
+                    <li
+                      className={`border ${
+                        isBadgeSelected ? 'border-sapien-80' : 'border-gray-800'
+                      }
+                ${
+                  isBadgeSelected
+                    ? 'hover:border-sapien-80'
+                    : 'hover:border-gray-700'
+                }
+                w-full flex justify-between items-center rounded-md p-3 mb-3 hover:cursor-pointer`}
+                      onClick={() => {
+                        if (isBadgeSelected) {
+                          setValue(
+                            'badges',
+                            badges.filter((b) => b !== badge.parentId)
+                          );
+                        } else {
+                          setValue('badges', [...badges, badge.parentId]);
+                        }
+                      }}
+                      key={badge.parentId}
+                    >
+                      {badge.avatar ? (
+                        <img
+                          src={badge.avatar}
+                          alt={badge.name}
+                          style={{ borderColor: badge.color }}
+                          className="w-8 h-8 object-cover rounded-full border-2"
+                        />
+                      ) : (
+                        <div
+                          className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
+                          style={{ borderColor: badge.color }}
+                        />
+                      )}
+                      {badge.name}
+                      <button
+                        type="button"
+                        className={`${
+                          isBadgeSelected ? 'visible' : 'invisible'
+                        } rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setValue(
+                            'badges',
+                            badges.filter((b) => b !== badge.parentId)
+                          );
+                        }}
+                      >
+                        <span className="sr-only">Remove</span>
+                        <MinusIcon className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <div className="p-3 my-3 flex justify-end">
+              <p className="text-sm text-gray-500 font-medium">
                 {badges.length === 0 ? (
                   'Please select at least 1 badge'
                 ) : (
@@ -176,69 +240,8 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                     selected)
                   </>
                 )}
-              </span>
+              </p>
             </div>
-
-            <ul>
-              {tribeBadges.map((badge) => {
-                const isBadgeSelected = badges.includes(badge.parentId);
-                return (
-                  <li
-                    className={`border ${
-                      isBadgeSelected ? 'border-sapien-80' : 'border-gray-800'
-                    }
-                ${
-                  isBadgeSelected
-                    ? 'hover:border-sapien-80'
-                    : 'hover:border-gray-700'
-                }
-                w-full flex justify-between items-center rounded-md p-3 mb-3 hover:cursor-pointer`}
-                    onClick={() => {
-                      if (isBadgeSelected) {
-                        setValue(
-                          'badges',
-                          badges.filter((b) => b !== badge.parentId)
-                        );
-                      } else {
-                        setValue('badges', [...badges, badge.parentId]);
-                      }
-                    }}
-                    key={badge.parentId}
-                  >
-                    {badge.avatar ? (
-                      <img
-                        src={badge.avatar}
-                        alt={badge.name}
-                        style={{ borderColor: badge.color }}
-                        className="w-8 h-8 object-cover rounded-full border-2"
-                      />
-                    ) : (
-                      <div
-                        className="w-8 h-8 rounded-full bg-gray-700 border-2 font-bold text-black group-hover:text-gray-500 flex items-center justify-center"
-                        style={{ borderColor: badge.color }}
-                      />
-                    )}
-                    {badge.name}
-                    <button
-                      type="button"
-                      className={`${
-                        isBadgeSelected ? 'visible' : 'invisible'
-                      } rounded-md text-gray-400 hover:text-gray-500 focus:outline-none`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setValue(
-                          'badges',
-                          badges.filter((b) => b !== badge.parentId)
-                        );
-                      }}
-                    >
-                      <span className="sr-only">Remove</span>
-                      <MinusIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
           </div>
         );
       case View.Info:
