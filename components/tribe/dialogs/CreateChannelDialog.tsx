@@ -234,7 +234,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                 })}
               </ul>
             </div>
-            <div className="p-3 my-3 flex justify-end">
+            <div className="p-3 my-3 flex justify-center">
               <p className="text-sm text-gray-500 font-medium">
                 {badges.length === 0 ? (
                   'Please select at least 1 badge'
