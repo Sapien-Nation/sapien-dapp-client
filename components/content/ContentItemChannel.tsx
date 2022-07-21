@@ -51,8 +51,8 @@ const ContentItem = ({
               {username[0].toUpperCase()}
             </div>
           )}
-          <h3 className="text-sm font-semibold text-white">{username}</h3>
-          <h3 className="text-sm text-gray-500">{displayName}</h3>
+          <h3 className="text-sm font-semibold text-white">{displayName}</h3>
+          <h3 className="text-sm text-gray-500">@{username}</h3>
           <p className="font-bold flex items-center gap-1">
             <GlobeIcon className="h-4 text-gray-500" />
             {group.name}
