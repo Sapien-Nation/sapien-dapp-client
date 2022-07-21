@@ -97,15 +97,15 @@ const ChannelHeader = ({ channel }: Props) => {
           <div className="bg-gradient-to-r bg-sapien-neutral-200 min-h-250 shadow-md rounded-lg relative flex justify-center items-center" />
         )}
         <div className="flex flex-col md:flex-row sm:mx-8">
-          <div className="relative">
+          <div className="flex-shrink-0">
             {channel.avatar ? (
               <img
-                className="w-40 h-40 mr-auto ml-auto md:mr-0 -mt-16 rounded-xl flex-shrink-0 object-cover"
+                className="w-40 h-40 mr-auto ml-auto md:mr-0 -mt-16 rounded-xl object-cover relative"
                 src={channel.avatar}
                 alt=""
               />
             ) : (
-              <div className="w-40 h-40 mr-auto ml-auto md:mr-0 -mt-16 rounded-xl flex-shrink-0 bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-bold text-xl">
+              <div className="w-40 h-40 mr-auto ml-auto md:mr-0 -mt-16 rounded-xl bg-sapien-neutral-200 shadow shadow-sapien-neutral-600 flex items-center justify-center font-bold text-xl relative">
                 {channel.name[0].toUpperCase()}
               </div>
             )}
