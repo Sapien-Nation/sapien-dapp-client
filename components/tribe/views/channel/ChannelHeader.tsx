@@ -47,10 +47,13 @@ const ChannelHeader = ({ channel }: Props) => {
   ]);
   const [_, copyToClipboard] = useCopyToClipboard();
 
-  const { tribeID } = query;
+  const channelID = query.viewID as string;
+  const tribeID = query.tribeID as string;
 
   const handleCopyToClipboard = () => {
-    copyToClipboard(`${window?.location.origin}/join/${tribeID}`);
+    copyToClipboard(
+      `${window?.location.origin}/tribes/${tribeID}/${channelID}`
+    );
     toast({
       message: 'Copied to clipboard',
       type: ToastType.Success,
