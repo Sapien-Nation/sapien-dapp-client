@@ -172,7 +172,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                 Selected badge holders will be able to post in this channel.
               </p>
             </div>
-            <div className="h-96 max-h-full overflow-y-auto">
+            <div className="h-44 max-h-full overflow-y-auto">
               <ul>
                 {tribeBadges.map((badge) => {
                   const isBadgeSelected = badges.includes(badge.parentId);
@@ -437,6 +437,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
     switch (view) {
       case View.Contributors:
         return {
+          title: 'Select Contributors',
           form,
           onCancel: () => setView(View.Info),
           cancelLabel: 'Back',
@@ -444,6 +445,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
         };
       case View.Info:
         return {
+          title: 'Create Channel',
           form: tribeBadges.length === 0 ? form : '',
           confirmLabel: tribeBadges.length === 0 ? 'Create' : 'Next',
           onConfirm:
@@ -471,7 +473,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       show
       isFetching={isUploading || isSubmitting}
       onClose={onClose}
-      title="Create Channel"
       {...getDialogProps()}
     >
       <div>
