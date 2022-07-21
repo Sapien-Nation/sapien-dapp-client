@@ -201,7 +201,7 @@ const Channel = ({ apiKey }: Props) => {
             >
               <ul>
                 {swrData?.data.map((content) => (
-                  <li key={content.id}>
+                  <li className="mb-8 last:mb-0" key={content.id}>
                     <Link
                       href={`/tribes/${tribeID}/content?id=${content.id}`}
                       passHref
