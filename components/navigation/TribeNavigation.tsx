@@ -334,18 +334,21 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               </a>
             </Link>
           )}
-          {canCreateChannel && (
-            <button
-              aria-label="Create Channel"
-              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => {
+          <button
+            aria-label="Create Channel"
+            className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+            onClick={() => {
+              if (canCreateChannel) {
                 setDialog(Dialog.CreateChannel);
                 handleMobileMenu();
-              }}
-            >
-              Channels <PlusIcon className="text-sapien-neutral-200 w-5" />
-            </button>
-          )}
+              }
+            }}
+          >
+            Channels{' '}
+            {canCreateChannel && (
+              <PlusIcon className="text-sapien-neutral-200 w-5" />
+            )}
+          </button>
           <ul
             className="px-2 py-2 cursor-pointer overflow-auto"
             style={{ maxHeight: 500 }}
@@ -404,18 +407,21 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
       <div>
         <nav>
-          {canCreateRoom && (
-            <button
-              aria-label="Create Room"
-              className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
-              onClick={() => {
+          <button
+            aria-label="Create Room"
+            className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+            onClick={() => {
+              if (canCreateRoom) {
                 setDialog(Dialog.CreateRoom);
                 handleMobileMenu();
-              }}
-            >
-              ROOMS <PlusIcon className="text-sapien-neutral-200 w-4" />
-            </button>
-          )}
+              }
+            }}
+          >
+            ROOMS{' '}
+            {canCreateRoom && (
+              <PlusIcon className="text-sapien-neutral-200 w-4" />
+            )}
+          </button>
           <ul className="px-2 py-2 cursor-pointer w-full">
             {rooms.map((room) => {
               const roomIcon = (
