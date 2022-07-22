@@ -442,6 +442,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
           onCancel: () => setView(View.Info),
           cancelLabel: 'Back',
           confirmLabel: 'Create',
+          isDisabled: badges.length === 0,
         };
       case View.Info:
         return {

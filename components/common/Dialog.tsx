@@ -9,6 +9,7 @@ export interface Props {
   cancelLabel?: string;
   confirmLabel?: string;
   children?: React.ReactElement | null;
+  isDisabled?: boolean;
   isFetching?: boolean;
   form?: string;
   onClose?: () => void;
@@ -25,6 +26,7 @@ const Dialog = ({
   bgColor = 'bg-gray-700',
   cancelLabel = 'Cancel',
   confirmLabel = 'Confirm',
+  isDisabled = false,
   isFetching = false,
   form = '',
   show,
@@ -38,13 +40,14 @@ const Dialog = ({
       {showConfirm && (
         <button
           type={form ? 'submit' : 'button'}
-          className={
-            isFetching
-              ? 'cursor-not-allowed disabled:opacity-75 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
-              : 'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm'
-          }
+          className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm
+          ${
+            isFetching || isDisabled
+              ? 'cursor-not-allowed disabled:opacity-75'
+              : ''
+          }`}
           onClick={onConfirm}
-          disabled={isFetching}
+          disabled={isFetching || isDisabled}
           form={form}
         >
           {confirmLabel}
