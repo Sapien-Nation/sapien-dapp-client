@@ -346,7 +346,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           >
             Channels{' '}
             {canCreateChannel && (
-              <PlusIcon className="text-sapien-neutral-200 w-5" />
+              <PlusIcon className="text-sapien-neutral-200 w-4" />
             )}
           </button>
           <ul
@@ -409,7 +409,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
         <nav>
           <button
             aria-label="Create Room"
-            className="pl-4 pr-2.5 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+            className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
             onClick={() => {
               if (canCreateRoom) {
                 setDialog(Dialog.CreateRoom);
