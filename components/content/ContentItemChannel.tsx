@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GlobeIcon, UserGroupIcon } from '@heroicons/react/solid';
 // TODO: commented until we have data to show
@@ -63,7 +64,9 @@ const ContentItem = ({
     <>
       {showBreadcrumbs && (
         <div className="flex items-center gap-1">
-          <span className="text-sm font-semibold text-white">{group.name}</span>
+          <Link href={`/tribes/${tribeID}/${group.id}`}>
+            <a className="text-sm font-semibold text-white">{group.name}</a>
+          </Link>
           <span className="text-gray-500">/</span>
           <span className="text-sm text-gray-500">Post View</span>
         </div>
