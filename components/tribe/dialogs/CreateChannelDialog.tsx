@@ -172,7 +172,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                 Selected badge holders will be able to post in this channel.
               </p>
             </div>
-            <div className="h-44 max-h-full overflow-y-auto">
+            <div className="h-44 max-h-full overflow-y-auto border border-gray-700 rounded-md p-3">
               <ul>
                 {tribeBadges.map((badge) => {
                   const isBadgeSelected = badges.includes(badge.parentId);
@@ -186,7 +186,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
                     ? 'hover:border-sapien-80'
                     : 'hover:border-gray-700'
                 }
-                w-full flex justify-between items-center rounded-md p-3 mb-3 hover:cursor-pointer`}
+                w-full flex justify-between items-center rounded-md p-3 mb-3 last:mb-0 hover:cursor-pointer`}
                       onClick={() => {
                         if (isBadgeSelected) {
                           setValue(
