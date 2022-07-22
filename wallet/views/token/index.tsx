@@ -32,49 +32,13 @@ const TokenView = ({ handleBack, token, onWithdraw }: Props) => {
           alt=""
         />
         <div className="text-center grid gap-6">
-          <Query
-            api={`/core-api/passport/${token.id}/signed`}
-            loader={
-              <button
-                type="button"
-                disabled
-                className="w-full animate-pulse py-2 px-4 flex justify-center items-center gap-4 border border-transparent cursor-not-allowed rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Checking...
-              </button>
-            }
+          <button
+            type="button"
+            onClick={() => onWithdraw(token)}
+            className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
           >
-            {({ canSign, signed }: { canSign: boolean; signed: boolean }) => {
-              if (canSign === false)
-                return (
-                  <span className="text-xs text-green-400 flex justify-center items-center">
-                    {signed
-                      ? 'Passport Signed.'
-                      : 'You already have a passport signed in your wallet'}{' '}
-                    <Lottie
-                      animationData={checkJSONLottie}
-                      play
-                      loop={false}
-                      className="w-5 h-5"
-                    />
-                  </span>
-                );
-
-              return (
-                <>
-                  {signed === false ? (
-                    <button
-                      type="button"
-                      onClick={() => onWithdraw(token)}
-                      className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                    >
-                      Withdraw
-                    </button>
-                  ) : null}
-                </>
-              );
-            }}
-          </Query>
+            Withdraw
+          </button>
         </div>
       </div>
     </div>
