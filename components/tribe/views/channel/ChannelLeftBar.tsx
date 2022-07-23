@@ -44,14 +44,16 @@ const ChannelLeftBar = ({ channelID: channelIDProps }: Props) => {
   };
 
   return (
-    <div className="flex flex-col h-full w-72 bg-sapien-neutral-600 text-white p-5 overflow-hidden -right-full">
+    <div className="flex flex-col h-full w-72 bg-transparent text-white overflow-hidden -right-full border-l border-gray-700">
       <Query api={`/core-api/channel/${channelID}/contributors`}>
         {(contributors: Array<ChannelContributor>) => (
           <>
-            <h3 className="text-md  text-gray-300 font-bold">
-              Contributors ({contributors.length})
-            </h3>
-            <ul className="overflow-auto flex-1">
+            <div className="border-b border-gray-700 h-10 w-full flex items-center px-5">
+              <h3 className="text-md text-gray-300 font-bold ">
+                Contributors ({contributors.length})
+              </h3>
+            </div>
+            <ul className="overflow-auto flex-1 px-5">
               <AutoSizer>
                 {({ height, width }) => (
                   <List

@@ -78,7 +78,7 @@ const Details = ({ handleSidebar }) => {
         </button>
       </div>
       <>
-        <div className="border-b border-gray-700 h-10 px-5 mb-5 w-full flex items-center">
+        <div className="border-b border-gray-700 h-10 px-5 w-full flex items-center">
           <h3 className="text-md  text-gray-300 font-bold ">
             Members ({members.length})
           </h3>
