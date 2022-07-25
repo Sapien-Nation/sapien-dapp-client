@@ -71,7 +71,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
       const response = await createRoom({
         aboutObject,
         aboutObjectId,
-        name,
+        name: name.trim(),
         tribeId: tribeID as string,
         type: isPrivate ? RoomType.Private : RoomType.Public,
         badges,
@@ -88,7 +88,7 @@ const CreateRoomDialog = ({ aboutObject, aboutObjectId, onClose }: Props) => {
                   ...tribe.rooms,
                   {
                     id: response.id,
-                    name,
+                    name: name.trim(),
                     private: isPrivate,
                   },
                 ],
