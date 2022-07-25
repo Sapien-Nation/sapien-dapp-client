@@ -366,6 +366,34 @@ const Feed = ({
                       ),
                     false
                   );
+
+                  handleAddMessageMutation({
+                    content: (data as RoomNewMessage).payload,
+                    createdAt: (data as RoomNewMessage).createdAt,
+                    id: (data as RoomNewMessage).extra.messageId,
+                    sender: {
+                      avatar: (data as RoomNewMessage).by.avatar,
+                      id: (data as RoomNewMessage).by.id,
+                      username: (data as RoomNewMessage).by.username,
+                      badges: [],
+                    },
+                    type: MessageType.Text,
+                    mentions: getMentionsArrayFromCacheForOptimistic(
+                      roomMembers,
+                      (data as RoomNewMessage).payload
+                    ),
+                  }).then(() => {
+                    if (
+                      window.pageYOffset + window.innerHeight >=
+                      scrollToBottom.current?.offsetTop
+                    ) {
+                      handleScrollToBottom();
+                    } else {
+                      setUnreadMessages(
+                        (currentUnreadMessages) => currentUnreadMessages + 1
+                      );
+                    }
+                  });
                   play();
                   break;
                 case WSEvents.NewMessage:
