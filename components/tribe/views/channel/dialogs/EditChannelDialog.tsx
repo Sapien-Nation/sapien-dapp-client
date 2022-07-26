@@ -111,6 +111,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
                     return {
                       ...cacheChannel,
                       ...response,
+                      name,
                     };
                   }
                   return cacheChannel;
@@ -160,7 +161,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
     <Dialog
       form={formID}
       show
-      confirmLabel="Edit"
+      confirmLabel="Save"
       isFetching={isUploading || isSubmitting}
       onClose={onClose}
       title="Edit Channel"

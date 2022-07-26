@@ -149,23 +149,25 @@ const ChannelHeader = ({ channel }: Props) => {
               </button>
             )}
             {canDelete && (
-              <Menu as="div">
-                <Menu.Button>
-                  <DotsHorizontalIcon className="w-5" />
-                </Menu.Button>
-                <Transition>
-                  <Menu.Items className="absolute w-56 origin-top-right bg-sapien-neutral-900 rounded-md p-2 hover:bg-gray-800 z-10">
-                    <Menu.Item>
-                      <button
-                        className="w-full text-left text-sm text-white"
-                        onClick={handleDeleteChannel}
-                      >
-                        Delete Channel
-                      </button>
-                    </Menu.Item>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
+              <div className="relative">
+                <Menu as="div">
+                  <Menu.Button>
+                    <DotsHorizontalIcon className="w-5" />
+                  </Menu.Button>
+                  <Transition>
+                    <Menu.Items className="absolute right-0 w-56 bg-sapien-neutral-900 rounded-md p-2 hover:bg-gray-800 z-10">
+                      <Menu.Item>
+                        <button
+                          className="w-full text-left text-sm text-white"
+                          onClick={handleDeleteChannel}
+                        >
+                          Delete Channel
+                        </button>
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
             )}
           </div>
         </div>

@@ -45,7 +45,7 @@ const DiscoveryCard = ({ tribe }: Props) => {
       aria-label={tribe.name}
       className={
         tribe.isUpgraded
-          ? 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col border border-2 border-sapien-60'
+          ? 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col border-2 border-sapien-60'
           : 'relative rounded-xl flex-1 h-320 bg-sapien-neutral-600 hover:bg-sapien-neutral-600/40 cursor-pointer flex flex-col'
       }
     >
@@ -73,30 +73,29 @@ const DiscoveryCard = ({ tribe }: Props) => {
           )}
         </div>
         <div className="px-3 mt-2">
-          <h1 className="text-lg font-bold flex items-center gap-2">
-            {tribe.name}{' '}
-            {tribe.isUpgraded === true && (
-              <CheckCircleIcon className="w-5 h-5 text-sapien-80" />
-            )}
-          </h1>
-          <p
-            className="text-gray-400 overflow-hidden"
-            style={{ minHeight: 130 }}
-          >
+          <div className="flex justify-between">
+            <h1 className="text-lg font-bold flex items-center gap-2">
+              {tribe.name}{' '}
+              {tribe.isUpgraded === true && (
+                <CheckCircleIcon className="w-5 h-5 text-sapien-80" />
+              )}{' '}
+              <span className="text-xs">
+                {tribe.membersCount}{' '}
+                {tribe.membersCount > 1 ? 'members' : 'member'}
+              </span>
+            </h1>
+            <div className="flex justify-between items-center">
+              <button
+                onClick={handleJoinTribe}
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                {isFetching ? 'Joining' : 'Join'}
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-400 overflow-auto truncate mt-3">
             {tribe.description || '[No Description]'}
           </p>
-          <div className="flex justify-between items-center">
-            <span className="text-xs">
-              {tribe.membersCount}{' '}
-              {tribe.membersCount > 1 ? 'members' : 'member'}
-            </span>
-            <button
-              onClick={handleJoinTribe}
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              {isFetching ? 'Joining' : 'Join'}
-            </button>
-          </div>
         </div>
       </div>
     </li>
