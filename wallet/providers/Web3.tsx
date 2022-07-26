@@ -19,9 +19,7 @@ import {
 
 // contracts
 import { default as PassportContractAbi } from '../contracts/Passport.json';
-import { default as PlatformContractAbi } from '../contracts/Platform.json';
-import { default as WethContractAbi } from '../contracts/WETH.json';
-import { default as ERC20ContractAbi } from '../contracts/ERC20.json';
+
 import ERC20List from '../contracts/ERC20List';
 
 // constants
@@ -58,8 +56,8 @@ interface Web3 {
       token: string,
       amount: number
     ) => Promise<{ type: ErrorTypes; hash: string }>;
-    getWalletBalanceSPN: (address: string) => Promise<number>;
     getPassportBalance: (address: string) => Promise<number>;
+    getERC20Balance: (token: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
     getWalletTokens: (address: string) => Promise<Array<Token>>;
     getWalletFTTokenBalance: () => Promise<FTBalance>;
@@ -105,7 +103,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     SPN_TOKEN_ADDRESS: process.env.NEXT_PUBLIC_SPN_TOKEN_ADDRESS,
     PASSPORT_CONTRACT_ADDRESS:
       process.env.NEXT_PUBLIC_PASSPORT_CONTRACT_ADDRESS,
-    WETH_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_WETH_ADDRESS,
     BICONOMY_API_KEY: process.env.NEXT_PUBLIC_WALLET_BICONOMY_API_KEY,
     EXPLORER_BASE_URL: process.env.NEXT_PUBLIC_EXPLORER_BASE_URL,
     GAS_STATION_URL: process.env.NEXT_PUBLIC_GAS_STATION_URL,
@@ -136,32 +133,6 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
               PassportContractAbi as Array<AbiItem>,
               config.PASSPORT_CONTRACT_ADDRESS
             ),
-            platformPassportDomainData: {
-              name: 'Sapien Network',
-              version: '1',
-              verifyingContract: config.PASSPORT_CONTRACT_ADDRESS,
-              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
-                64,
-                '0'
-              )}`,
-            },
-            platformSPNContract: new biconomyWeb3.eth.Contract(
-              PlatformContractAbi as AbiItem[],
-              config.SPN_TOKEN_ADDRESS
-            ),
-            platformSPNDomainData: {
-              name: 'Sapien Network',
-              version: '1',
-              verifyingContract: config.SPN_TOKEN_ADDRESS,
-              salt: `0x${config.POLY_NETWORK_ID.toString(16).padStart(
-                64,
-                '0'
-              )}`,
-            },
-            wethContract: new biconomyWeb3.eth.Contract(
-              WethContractAbi as Array<AbiItem>,
-              config.WETH_CONTRACT_ADDRESS
-            ),
           });
 
           setError(null);
@@ -185,39 +156,16 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getWalletBalanceSPN = async () => {
-    try {
-      const balance = await contracts.platformSPNContract.methods
-        .balanceOf(me.walletAddress)
-        .call();
-
-      return Number(balance);
-    } catch (err) {
-      Sentry.captureMessage(err);
-      return Promise.reject(err);
-    }
-  };
-
-  const getWethBalance = async () => {
-    try {
-      const balance = await contracts.wethContract.methods
-        .balanceOf(me.walletAddress)
-        .call();
-
-      return Number(balance);
-    } catch (err) {
-      Sentry.captureMessage(err);
-      return Promise.reject(err);
-    }
+  const getERC20Contract = (token: string) => {
+    return new WalletAPIRef.current.eth.Contract(
+      ERC20List[token].abi as Array<AbiItem>,
+      ERC20List[token].addr
+    );
   };
 
   const getERC20Balance = async (token: string) => {
     try {
-      const contract = new WalletAPIRef.current.eth.Contract(
-        ERC20ContractAbi as Array<AbiItem>,
-        ERC20List[token]
-      );
-
+      const contract = getERC20Contract(token);
       const balance = await contract.methods.balanceOf(me.walletAddress).call();
 
       return Number(balance);
@@ -407,59 +355,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         gasPrice: Web3Library.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
         gasLimit: config.GAS_LIMIT,
       };
-      if (token === 'SPN') {
-        const spnBal: number = await getWalletBalanceSPN();
-        if (amount < spnBal) {
-          const result: TxResult = await new Promise(
-            async (resolve, reject) => {
-              contracts.platformSPNContract.methods
-                .transferFrom(metamaskAddress, me.walletAddress, amount)
-                .send(object)
-                .on('receipt', (rec: TransactionReceipt) =>
-                  resolve({ data: rec, type: ErrorTypes.Success })
-                )
-                .on('error', (err) => {
-                  if (err.receipt) {
-                    return resolve({
-                      data: err.receipt,
-                      type: ErrorTypes.Fail,
-                    });
-                  } else {
-                    return reject(err);
-                  }
-                });
-            }
-          );
-          return { hash: result.data.transactionHash, type: result.type };
-        }
-        return Promise.reject('Insufficient SPN Balance');
-      } else if (token === 'WETH') {
-        const ethBal: number = await getWethBalance();
-        if (amount < ethBal) {
-          const result: TxResult = await new Promise(
-            async (resolve, reject) => {
-              contracts.wethContract.methods
-                .transferFrom(metamaskAddress, me.walletAddress, amount)
-                .send(object)
-                .on('receipt', (rec: TransactionReceipt) =>
-                  resolve({ data: rec, type: ErrorTypes.Success })
-                )
-                .on('error', (err) => {
-                  if (err.receipt) {
-                    return resolve({
-                      data: err.receipt,
-                      type: ErrorTypes.Fail,
-                    });
-                  } else {
-                    return reject(err);
-                  }
-                });
-            }
-          );
-          return { hash: result.data.transactionHash, type: result.type };
-        }
-        return Promise.reject('Insufficient ETH Balance');
-      } else if (token === 'MATIC') {
+      if (token === 'MATIC') {
         const matic: string = await WalletAPIRef.current.eth.getBalance(
           me.walletAddress
         );
@@ -496,16 +392,18 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         }
         return Promise.reject('Insufficient Matic Balance');
       } else {
-        const erc20Bal: number = await getERC20Balance(token);
-        const contract = new WalletAPIRef.current.eth.Contract(
-          ERC20ContractAbi as Array<AbiItem>,
-          ERC20List[token]
-        );
-        if (amount < erc20Bal) {
+        if (!ERC20List[token])
+          return Promise.reject(
+            `We currently doesn't provide ${token} transfer service.`
+          );
+
+        const tokenBal: number = await getERC20Balance(token);
+        if (amount < Number(Web3Library.utils.fromWei(tokenBal.toString()))) {
           const result: TxResult = await new Promise(
             async (resolve, reject) => {
+              const contract = getERC20Contract(token);
               contract.methods
-                .transferFrom(metamaskAddress, me.walletAddress, amount)
+                .transfer(metamaskAddress, me.walletAddress, amount)
                 .send(object)
                 .on('receipt', (rec: TransactionReceipt) =>
                   resolve({ data: rec, type: ErrorTypes.Success })
@@ -524,7 +422,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           );
           return { hash: result.data.transactionHash, type: result.type };
         }
-        return Promise.reject(`Insufficient ERC20(${token}) Balance`);
+        return Promise.reject(`Insufficient ${token} Balance`);
       }
     } catch (err) {
       Sentry.captureMessage(err);
@@ -539,8 +437,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     amount: number
   ): Promise<{ type: ErrorTypes; hash: string }> => {
     try {
-      const result: TxResult = await transferFT({ to, token, amount });
-      return { hash: result.data.transactionHash, type: result.type };
+      return await transferFT({ to, token, amount });
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
@@ -567,12 +464,20 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   // get all fungible tokens(matic, eth, erc20) balance
   const getWalletFTTokenBalance = async (): Promise<FTBalance> => {
     try {
-      const eth: number = await getWethBalance();
-      const spn: number = await getWalletBalanceSPN();
+      const eth: number = await getERC20Balance('WETH');
+      const spn: number = await getERC20Balance('SPN');
+      const usdt: number = await getERC20Balance('USDT');
+      const usdc: number = await getERC20Balance('USDC');
       const matic: string = await WalletAPIRef.current.eth.getBalance(
         me.walletAddress
       );
-      return { eth, spn, matic: Number(Web3Library.utils.fromWei(matic)) };
+      return {
+        eth,
+        spn,
+        usdt,
+        usdc,
+        matic: Number(Web3Library.utils.fromWei(matic)),
+      };
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
@@ -589,10 +494,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           handleDeposit,
           handleFTDeposit,
           handleFTWithdraw,
-          getWalletBalanceSPN,
           getWalletTokens,
           getUserTransactions,
           getPassportBalance,
+          getERC20Balance,
           getWalletFTTokenBalance,
         },
       }}

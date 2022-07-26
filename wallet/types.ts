@@ -8,4 +8,6 @@ export interface FTBalance {
   eth: number;
   matic: number;
   spn: number;
+  usdt: number;
+  usdc: number;
 }
