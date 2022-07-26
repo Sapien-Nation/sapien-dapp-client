@@ -37,22 +37,17 @@ const EditorComponent = ({
         placeholder: `What do you want to share in ${channel.name}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
         content_style: `
-          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
-            color: #656067;
-          }
-
-          .mce-content-body {
+        .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+          color: #656067;
+        }
+        
+        .mce-content-body {
             color: #ffffff;
             background-color: #161527;
-            padding-right: 20px;
           }
 
           .mce-content-body:hover {
             cursor: text;
-          }
-
-          .mce-content-body > p {
-            padding-right: 100px
           }
 
           * [contentEditable="true"]:focus { outline: 0px ; }

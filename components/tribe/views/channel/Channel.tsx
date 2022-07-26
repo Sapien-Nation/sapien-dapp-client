@@ -107,19 +107,20 @@ const Channel = ({ apiKey }: Props) => {
                   {showEditor === false && (
                     <form
                       id="editor-form"
-                      className="col-span-10 h-auto max-h-48 overflow-auto rounded-md flex-1 p-2 outline-0 border-none ring-0 relative pl-4 py-4"
-                      style={{ backgroundColor: '#161527', minHeight: 100 }}
+                      className="flex-col flex-1"
                       onSubmit={handleSubmit}
                     >
-                      <InlineEditor
-                        channel={channel}
-                        editorRef={editorRef}
-                        onChange={(content) => {
-                          setCharCount(content.length);
-                        }}
-                        initialValue={initialEditorValue}
-                      />
-                      <div className="absolute right-5 bottom-4 flex gap-3">
+                      <div className="h-auto min-h-[100px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
+                        <InlineEditor
+                          channel={channel}
+                          editorRef={editorRef}
+                          onChange={(content) => {
+                            setCharCount(content.length);
+                          }}
+                          initialValue={initialEditorValue}
+                        />
+                      </div>
+                      <div className="flex justify-end gap-4 pt-3">
                         <button
                           type="button"
                           onClick={() => {
