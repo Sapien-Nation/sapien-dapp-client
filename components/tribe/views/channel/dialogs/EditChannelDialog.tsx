@@ -160,7 +160,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
     <Dialog
       form={formID}
       show
-      confirmLabel="Edit"
+      confirmLabel="Save"
       isFetching={isUploading || isSubmitting}
       onClose={onClose}
       title="Edit Channel"
