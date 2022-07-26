@@ -111,6 +111,7 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
                     return {
                       ...cacheChannel,
                       ...response,
+                      name,
                     };
                   }
                   return cacheChannel;
