@@ -125,34 +125,34 @@ const Notifications = () => {
     <div className="bg-sapien-gray-700 overflow-hidden shadow rounded-lg w-auto h-auto">
       <div className="flex gap-1 items-center justify-between p-3">
         <span>Notifications</span>
-        <div
-          className={`${unread > 0 ? 'visible' : 'invisible'} flex justify-end`}
-        >
-          <Menu as="div">
-            <Menu.Button>
-              <DotsVerticalIcon className="w-5 text-gray-400" />
-            </Menu.Button>
-            <Transition>
-              <Menu.Items className="absolute right-0 w-56 z-10 origin-top-right bg-sapien-neutral-900 rounded-md p-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={handleMarkAllAsRead}
-                      className={`${
-                        active ? 'bg-gray-800' : ''
-                      } flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
-                    >
-                      Mark all as read
-                    </button>
-                  )}
-                </Menu.Item>
-              </Menu.Items>
-            </Transition>
-          </Menu>
-        </div>
+        {unread > 0 && (
+          <div className="flex justify-end">
+            <Menu as="div">
+              <Menu.Button>
+                <DotsVerticalIcon className="w-5 text-gray-400" />
+              </Menu.Button>
+              <Transition>
+                <Menu.Items className="absolute right-0 w-56 z-10 origin-top-right bg-sapien-neutral-900 rounded-md p-1">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={handleMarkAllAsRead}
+                        className={`${
+                          active ? 'bg-gray-800' : ''
+                        } flex w-full items-center rounded-sm px-2 py-2 text-sm text-white`}
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </Menu.Item>
+                </Menu.Items>
+              </Transition>
+            </Menu>
+          </div>
+        )}
       </div>
       <div className="px-4">
-        {unread === 0 ? (
+        {unread <= 0 && (
           <div className="flex flex-col items-center pb-8 space-y-3">
             <Lottie
               animationData={notificationJSONData}
@@ -162,19 +162,18 @@ const Notifications = () => {
             />
             <h2 className="text-lg text-gray-300">You are all caught up!</h2>
           </div>
-        ) : (
-          notifications
-            .filter((notification) => !notification.to.seen)
-            .map((notification) => (
-              <div
-                key={notification.id}
-                onClick={() => handleReadNotification(notification)}
-                className="cursor-pointer"
-              >
-                {renderNotification(notification)}
-              </div>
-            ))
         )}
+        {notifications
+          .filter((notification) => !notification.to.seen)
+          .map((notification) => (
+            <div
+              key={notification.id}
+              onClick={() => handleReadNotification(notification)}
+              className="cursor-pointer"
+            >
+              {renderNotification(notification)}
+            </div>
+          ))}
       </div>
     </div>
   );

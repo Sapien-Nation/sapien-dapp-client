@@ -1,8 +1,6 @@
-import {
-  ClipboardCopyIcon,
-  ClipboardIcon,
-  ShareIcon,
-} from '@heroicons/react/solid';
+import { CheckIcon } from '@heroicons/react/outline';
+import { useState } from 'react';
+import { ClipboardIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { useSWRConfig } from 'swr';
@@ -17,16 +15,12 @@ import { Dialog, Query, TextInput } from 'components/common';
 // context
 import { useToast } from 'context/toast';
 
-// constants
-import { ToastType } from 'constants/toast';
-
 // hooks
-import { useSapienTribe, useTribeRoom } from 'hooks/tribe';
+import { useTribeRoom } from 'hooks/tribe';
 import { useRoomPermissions } from 'hooks/room';
 
 // types
 import type { ProfileTribe } from 'tools/types/tribe';
-import { CheckIcon } from '@heroicons/react/outline';
 
 interface Props {
   onClose: () => void;
@@ -38,6 +32,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
   const [state, copyToClipboard] = useCopyToClipboard();
+  const [showSuccessCopy, setShowSuccessCopy] = useState(false);
 
   const tribeID = query.tribeID as string;
   const viewID = query.viewID as string;
@@ -97,8 +92,6 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
     }
   };
 
-  const copiedToClipboardSucced = state.value && state.value !== 'IGNORE';
-
   return (
     <Dialog
       show
@@ -143,13 +136,15 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
                   copyToClipboard(
                     `${window.location.host}/tribes/${tribeID}/${roomID}`
                   );
+
+                  setShowSuccessCopy(true);
                   setTimeout(() => {
-                    copyToClipboard('IGNORE');
+                    setShowSuccessCopy(false);
                   }, 1000);
                 }}
                 className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-600 text-sm font-medium rounded-r-md text-white bg-black hover:bg-white hover:text-black focus:outline-none focus:ring-1 "
               >
-                {copiedToClipboardSucced ? (
+                {copyToClipboard ? (
                   <CheckIcon
                     className="h-5 w-5 text-green-600"
                     aria-hidden="true"
@@ -158,7 +153,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
                   <ClipboardIcon className="h-5 w-5 " aria-hidden="true" />
                 )}
                 <span>
-                  {copiedToClipboardSucced
+                  {showSuccessCopy
                     ? 'Copied to clipboard'
                     : 'Copy to clipboard'}
                 </span>
