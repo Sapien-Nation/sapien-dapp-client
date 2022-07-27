@@ -1,9 +1,9 @@
 import { useSWRConfig } from 'swr';
 
 // types
-import type { UserPassport } from 'tools/types/user';
+import type { Passport } from 'tools/types/passport';
 
-export const usePassport = (): UserPassport => {
+export const usePassport = (): Passport => {
   const { cache } = useSWRConfig();
 
   return cache.get('/core-api/me/passport');
