@@ -1,6 +1,25 @@
+import { default as USDCContractAbi } from './erc20/USDC.json';
+import { default as USDTContractAbi } from './erc20/USDT.json';
+import { default as SPNContractAbi } from './Platform.json';
+import { default as WethContractAbi } from './WETH.json';
+
 const ERC20List = {
-  usdt: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619', // need to be updated with real address
-  usdc: '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619', // need to be changed with real address
+  SPN: {
+    addr: process.env.NEXT_PUBLIC_SPN_TOKEN_ADDRESS,
+    abi: SPNContractAbi,
+  },
+  WETH: {
+    addr: process.env.NEXT_PUBLIC_WETH_ADDRESS,
+    abi: WethContractAbi,
+  },
+  USDT: {
+    addr: process.env.NEXT_PUBLIC_USDT_ADDRESS,
+    abi: USDTContractAbi,
+  },
+  USDC: {
+    addr: process.env.NEXT_PUBLIC_USDC_ADDRESS,
+    abi: USDCContractAbi,
+  },
 };
 
 export default ERC20List;

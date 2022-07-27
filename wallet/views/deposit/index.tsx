@@ -68,7 +68,7 @@ const Deposit = ({ handleBack }: Props) => {
   const fetchBalance = useCallback(async () => {
     setIsFetchingBalance(true);
     try {
-      const balance = await walletAPI.getWalletBalanceSPN(me.walletAddress);
+      const balance = await walletAPI.getERC20Balance('SPN');
 
       setUserBalance(balance);
     } catch (err) {
