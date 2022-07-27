@@ -2,11 +2,12 @@
 import { useAuth } from 'context/user';
 
 // types
-import type { User, UserPassport } from 'tools/types/user';
+import type { User } from 'tools/types/user';
+import type { Passport } from 'tools/types/passport';
 
 interface Props {
   user: User;
-  passport?: UserPassport;
+  passport?: Passport;
 }
 
 const UserAvatar = ({ user, passport = null }: Props) => {
