@@ -123,7 +123,11 @@ const TribePage = () => {
                   api={`/core-api/tribe/${tribeID}/upgrade-status`}
                   loader={null}
                 >
-                  {() => <UpgradeView />}
+                  {() => (
+                    <div className="overflow-auto">
+                      <UpgradeView />
+                    </div>
+                  )}
                 </Query>
               </Web3Provider>
             )}
