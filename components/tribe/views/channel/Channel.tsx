@@ -43,6 +43,7 @@ const Channel = ({ apiKey }: Props) => {
   const [showMembers, setShowMembers] = useState(false);
   const [isPublishing, setPublishing] = useState(false);
   const [initialEditorValue, setInitialEditorValue] = useState('');
+  const isPublishDisabled = isPublishing || charCount === 0;
 
   const { me } = useAuth();
   const toast = useToast();
@@ -118,8 +119,12 @@ const Channel = ({ apiKey }: Props) => {
                         <InlineEditor
                           channel={channel}
                           editorRef={editorRef}
-                          onChange={(content) => {
-                            setCharCount(content.length);
+                          onChange={() => {
+                            const rawContent = editorRef.current.getContent({
+                              format: 'text',
+                            });
+
+                            setCharCount(rawContent.length);
                           }}
                           initialValue={initialEditorValue}
                         />
@@ -148,22 +153,19 @@ const Channel = ({ apiKey }: Props) => {
                         <button
                           type="submit"
                           form="editor-form"
-                          className={
-                            isPublishing
-                              ? 'cursor-not-allowed flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                              : 'cursor-pointer flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                          }
+                          className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                          ${
+                            isPublishDisabled
+                              ? 'cursor-not-allowed bg-primary/50'
+                              : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                          }`}
                           onClick={handleSubmit}
-                          disabled={isPublishing || charCount === 0}
+                          disabled={isPublishDisabled}
                         >
                           {isPublishing ? (
                             <RefreshIcon className="w-5 animate-spin" />
                           ) : (
-                            <PaperAirplaneIcon
-                              className={
-                                charCount === 0 ? 'w-5' : 'w-5 rotate-90'
-                              }
-                            />
+                            <PaperAirplaneIcon className="w-5 rotate-90" />
                           )}
                         </button>
                       </div>
@@ -236,6 +238,13 @@ const Channel = ({ apiKey }: Props) => {
               <ExpandedEditor
                 editorRef={editorRef}
                 initialValue={initialEditorValue}
+                onChange={() => {
+                  const rawContent = editorRef.current.getContent({
+                    format: 'text',
+                  });
+
+                  setCharCount(rawContent.length);
+                }}
               />
             </div>
           </div>
@@ -258,19 +267,18 @@ const Channel = ({ apiKey }: Props) => {
           <button
             type="button"
             onClick={handleSubmit}
-            className={
-              isPublishing
-                ? 'cursor-not-allowed flex items-center gap-2  bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-                : 'cursor-pointer flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white bg-primary hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm'
-            }
-            disabled={isPublishing || charCount === 0}
+            className={`flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+            ${
+              isPublishDisabled
+                ? 'cursor-not-allowed bg-primary/50'
+                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+            }`}
+            disabled={isPublishDisabled}
           >
             {isPublishing ? (
               <RefreshIcon className="w-5 animate-spin" />
             ) : (
-              <PaperAirplaneIcon
-                className={charCount === 0 ? 'w-5' : 'w-5 rotate-90'}
-              />
+              <PaperAirplaneIcon className="w-5 rotate-90" />
             )}
           </button>
         </>
