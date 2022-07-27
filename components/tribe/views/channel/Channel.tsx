@@ -40,6 +40,7 @@ interface Props {
 const Channel = ({ apiKey }: Props) => {
   const [charCount, setCharCount] = useState(0);
   const [showEditor, setShowEditor] = useState(false);
+  const [showMembers, setShowMembers] = useState(false);
   const [isPublishing, setPublishing] = useState(false);
   const [initialEditorValue, setInitialEditorValue] = useState('');
 
@@ -98,7 +99,10 @@ const Channel = ({ apiKey }: Props) => {
       <div className="h-full flex flex-row bg-sapien-neutral-800 lg:rounded-tl-3xl">
         <div className="flex-1 p-5 overflow-y-auto">
           <div className="grid gap-4">
-            <ChannelHeader channel={channel} />
+            <ChannelHeader
+              channel={channel}
+              showMembers={() => setShowMembers(!showMembers)}
+            />
             {canPost === true && (
               <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
                 <div className="flex gap-2 lg:rounded-3xl p-5">
@@ -215,7 +219,13 @@ const Channel = ({ apiKey }: Props) => {
             </InfiniteScroll>
           </div>
         </div>
-        <ChannelLeftBar />
+        <div
+          className={`bg-sapien-neutral-800 h-full fixed bottom-0 lg:static lg:right-0 transition-all duration-300 ${
+            showMembers ? 'right-0 lg:hidden' : '-right-full'
+          }`}
+        >
+          <ChannelLeftBar />
+        </div>
       </div>
 
       {/* Editor */}
