@@ -28,7 +28,7 @@ const MainChannel = () => {
   }, []);
 
   return (
-    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5">
+    <div className="bg-sapien-neutral-800 lg:rounded-3xl p-5 overflow-auto">
       <h1 className="sr-only">Main Channel for Tribe {tribe.name}</h1>
 
       <Query
