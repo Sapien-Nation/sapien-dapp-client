@@ -106,7 +106,7 @@ const Message = ({
       return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5 relative';
     }
 
-    return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
+    return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative overflow-hidden';
   };
 
   const handleRemoveFailedMessage = async () => {
