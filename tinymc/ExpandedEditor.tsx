@@ -5,9 +5,10 @@ import { imageHandler, filePicker } from './imageHandlers';
 interface Props {
   editorRef: any;
   initialValue: any;
+  onChange: (content: string) => void;
 }
 
-const EditorComponent = ({ editorRef, initialValue }: Props) => {
+const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
   const apiKey = process.env.NEXT_PUBLIC_TINYMC_API_KEY;
   return (
     <Editor
@@ -50,6 +51,7 @@ const EditorComponent = ({ editorRef, initialValue }: Props) => {
           * [contentEditable="true"]:focus { outline: 0px ; }
         `,
       }}
+      onEditorChange={onChange}
     />
   );
 };

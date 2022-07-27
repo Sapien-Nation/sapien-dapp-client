@@ -79,7 +79,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
           <div className="-mt-2">
             <span className="hexagon-2 bg-sapien-60 p-1px text-sm block mt-5 truncate">
               <span className="hexagon-2 bg-sapien-dark-purple block text-gray-300 p-1">
-                {formatAvatarName(passport.title) || 'Avatar Name'}
+                {formatAvatarName(passport.name) || 'Avatar Name'}
               </span>
             </span>
           </div>

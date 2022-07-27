@@ -28,13 +28,14 @@ import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   channel: Channel;
+  showMembers: () => void;
 }
 
 enum Dialog {
   Edit,
 }
 
-const ChannelHeader = ({ channel }: Props) => {
+const ChannelHeader = ({ channel, showMembers }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const toast = useToast();
@@ -115,7 +116,9 @@ const ChannelHeader = ({ channel }: Props) => {
               <h1 className="text-xl font-semibold">{channel.name}</h1>
 
               <h2 className="text-gray-500 mb-4 sm:mb-0">
-                {channel.membersCount} members
+                <button onClick={showMembers} className="hover:text-white">
+                  {channel.membersCount} members
+                </button>
               </h2>
             </div>
             <div className="flex items-center gap-2">
