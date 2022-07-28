@@ -91,7 +91,7 @@ const Notifications = () => {
           ...data,
           unread: data.unread === 1 ? 0 : data.unread - 1,
           notifications: data.notifications.filter(
-            (notification) => notification.id !== notification.id
+            ({ id }) => id !== notification.id
           ),
         }),
         false
