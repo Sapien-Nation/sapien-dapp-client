@@ -85,10 +85,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
 
   const onSubmit = async ({ name, badges, ...rest }: FormValues) => {
     try {
-      if (tribeBadges.length > 0 && badges.length === 0) {
-        return;
-      }
-
       const { tribeID } = query;
 
       const body: CreateChannelBody = {
