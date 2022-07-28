@@ -617,7 +617,7 @@ const Feed = ({
 
         {/* Room Details */}
         <div
-          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl z-20 ${
+          className={`bg-sapien-neutral-800 lg:static fixed lg:right-0 transition-all duration-300 h-full bottom-0 lg:rounded-t-3xl ${
             showDetails ? 'right-0 lg:hidden' : '-right-full'
           }`}
         >
