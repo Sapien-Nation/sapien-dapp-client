@@ -78,7 +78,7 @@ const TextInput = ({
           event.target.value = valueModifier ? valueModifier(value) : value;
         },
       })}
-      autoFocus
+      autoFocus={autoFocus}
     />
   );
 };
