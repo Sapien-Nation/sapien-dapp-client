@@ -124,7 +124,7 @@ const PassportFormProxy = ({ closeOverlay }: Props) => {
       {() => (
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} id="update-profile-form">
-            <div className="flex flex-col w-[580px]">
+            <div className="flex flex-col w-full sm:w-[580px] p-4">
               <PassportForm
                 closeOverlay={closeOverlay}
                 isEditing={isEditing}
