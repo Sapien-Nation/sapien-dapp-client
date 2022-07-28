@@ -65,7 +65,6 @@ const CreateChannelDialog = ({ onClose }: Props) => {
   });
   const {
     formState: { errors, isSubmitting },
-    getValues,
     handleSubmit,
     setError,
     setValue,
