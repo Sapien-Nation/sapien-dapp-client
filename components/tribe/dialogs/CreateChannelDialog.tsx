@@ -85,7 +85,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
 
   const onSubmit = async ({ name, badges, ...rest }: FormValues) => {
     try {
-      if (badges.length === 0) {
+      if (tribeBadges.length > 0 && badges.length === 0) {
         return;
       }
 
@@ -447,7 +447,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       case View.Info:
         return {
           title: 'Create Channel',
-          form: tribeBadges.length === 0 ? form : '',
+          form: tribeBadges.length === 0 ? form : null,
           confirmLabel: tribeBadges.length === 0 ? 'Create' : 'Next',
           onConfirm:
             tribeBadges.length === 0
@@ -479,7 +479,7 @@ const CreateChannelDialog = ({ onClose }: Props) => {
       <div>
         <div className="mt-5 md:mt-0 md:col-span-2">
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} id={form}>
+            <form onSubmit={handleSubmit(onSubmit)} id={form} noValidate>
               {renderView()}
             </form>
           </FormProvider>

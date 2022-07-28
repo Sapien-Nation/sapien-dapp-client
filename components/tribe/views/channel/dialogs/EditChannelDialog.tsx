@@ -123,6 +123,15 @@ const CreateChannelDialog = ({ onClose, channel }: Props) => {
         false
       );
 
+      mutate(
+        `/core-api/channel/${channel.id}`,
+        (channel: Channel) => ({
+          ...channel,
+          ...response,
+        }),
+        false
+      );
+
       onClose();
       push(`/tribes/${tribeID}/${response.id}`);
     } catch (error) {
