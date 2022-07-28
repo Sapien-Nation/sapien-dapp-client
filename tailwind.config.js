@@ -17,7 +17,7 @@ module.exports = {
         sans: ['Titillium Web', 'sans-serif'],
       },
       colors: {
-        'primary': '#6200EA',
+        primary: '#6200EA',
         'primary-100': '#A68CF1',
         'primary-200': '#A185F2',
         'primary-300': '#8568D9',
@@ -27,7 +27,7 @@ module.exports = {
         'primary-700': '#463773',
         'primary-800': '#36254D',
         'primary-900': '#241933',
-        'sapien': '#6200EA',
+        sapien: '#6200EA',
         'sapien-80': '#8133EE',
         'sapien-60': '#A166F2',
         'sapien-40': '#C099F7',

@@ -19,6 +19,7 @@ import { useTribe } from 'hooks/tribe';
 
 // types
 import type { Content as ContentType } from 'tools/types/content';
+import React from 'react';
 
 interface Props {
   content: ContentType;
@@ -58,11 +59,9 @@ const ContentItem = ({
   const tribe = useTribe(tribeID);
   const { query } = useRouter();
 
-  const showBreadcrumbs = query.id;
-
   return (
     <>
-      {showBreadcrumbs && (
+      {Boolean(query.id) && (
         <div className="flex items-center gap-1">
           <Link href={`/tribes/${tribeID}/${group.id}`}>
             <a className="text-sm font-semibold text-white">{group.name}</a>
@@ -104,6 +103,7 @@ const ContentItem = ({
         <div className="flex-1 p-3">
           {mimeType === ContentMimeType.Html ? (
             <div
+              className="disable-preflight"
               dangerouslySetInnerHTML={{
                 __html: body,
               }}

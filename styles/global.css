@@ -5,6 +5,27 @@
 @tailwind utilities;
 
 /* purgecss start ignore */
+.disable-preflight > p {
+  margin: 8px;
+}
+
+.disable-preflight > ul { 
+  display: block;
+  list-style: disc outside none;
+  margin: 1em 0;
+  padding: 0 0 0 40px;
+}
+
+.disable-preflight > li { 
+  display: list-item;
+}
+
+.disable-preflight > p > a { 
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+}
+
+
 .emoji-mart,
 .emoji-mart * {
   box-sizing: border-box;
