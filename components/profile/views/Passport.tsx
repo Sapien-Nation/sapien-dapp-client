@@ -85,7 +85,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
           </div>
         </div>
         <div className="w-full">
-          <ul className="flex mr-4 justify-between text-xs text-left">
+          <ul className="flex justify-between text-xs text-left">
             <li>
               <span className="block font-bold text-gray-400 mb-1">
                 Passport Number
@@ -120,7 +120,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
                 clipPath:
                   'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
               }}
-              className="mt-1 mr-4 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+              className="mt-1 flex-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
             >
               <TextInput
                 aria-label="username"
@@ -152,7 +152,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
                 clipPath:
                   'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
               }}
-              className="mt-1 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+              className="mt-1 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
             >
               {badges.length === 0 ? (
                 <div
@@ -203,7 +203,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
           clipPath:
             'polygon(15px 0%, 100% 0%, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0% 100%, 0% 15px)',
         }}
-        className="mt-3 mr-4 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
+        className="mt-3 relative before:absolute before:pointer-events-none before:h-35px before:w-1px before:bg-sapien-60 before:rotate-45deg before:-top-12px before:left-10px after:absolute after:pointer-events-none after:h-35px after:w-1px after:bg-sapien-60 after:rotate-45deg after:-bottom-[12px] after:right-[10px]"
       >
         <TextareaInput
           name="bio"
