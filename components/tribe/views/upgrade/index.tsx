@@ -757,7 +757,7 @@ const Upgrade = ({ meAsMember, contractTransferred }: Props) => {
                                   {member.displayName[0].toUpperCase()}
                                 </div>
                               )}
-                              {member.displayName}
+                              {member.displayName || member.username}
                             </div>
                           </div>
                         </div>
