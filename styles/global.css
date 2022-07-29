@@ -9,22 +9,51 @@
   margin: 8px;
 }
 
-.disable-preflight > ul { 
+.disable-preflight > ul {
   display: block;
   list-style: disc outside none;
   margin: 1em 0;
   padding: 0 0 0 40px;
 }
 
-.disable-preflight > li { 
+.disable-preflight > li {
   display: list-item;
 }
 
-.disable-preflight > p > a { 
+.disable-preflight > p > a {
   color: #3b82f6 !important;
   text-decoration: underline !important;
 }
 
+.disable-preflight > h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.disable-preflight > h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.disable-preflight > h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.disable-preflight > h4 {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.disable-preflight > h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+}
+
+.disable-preflight > h6 {
+  font-size: 0.67em;
+  font-weight: bold;
+}
 
 .emoji-mart,
 .emoji-mart * {
@@ -625,4 +654,3 @@
 .room-thread li:last-child:after {
   display: none;
 }
-
