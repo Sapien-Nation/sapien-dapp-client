@@ -49,7 +49,15 @@ const EditorComponent = ({
           .mce-content-body:hover {
             cursor: text;
           }
+          .mce-content-body > p > a {
+            color: #3b82f6;
+            text-decoration: underline;
+          }
 
+          .mce-content-body > a {
+            color: #3b82f6;
+            text-decoration: underline;
+          }
           * [contentEditable="true"]:focus { outline: 0px ; }
         `,
       }}
