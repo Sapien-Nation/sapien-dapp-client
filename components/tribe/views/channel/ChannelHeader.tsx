@@ -111,7 +111,7 @@ const ChannelHeader = ({ channel, showMembers }: Props) => {
               </div>
             )}
           </div>
-          <div className="flex flex-col md:flex-row justify-center mt-3 items-center sm:justify-between w-full">
+          <div className="flex flex-col md:flex-row justify-center mt-3 items-center sm:justify-between w-full gap-2">
             <div className="flex flex-col md:ml-7">
               <h1 className="text-xl font-semibold">{channel.name}</h1>
 
