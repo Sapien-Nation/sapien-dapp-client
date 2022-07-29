@@ -23,7 +23,9 @@ const ContentItem = ({ content }: Props) => {
           <ContentItemChannel content={content} tribeID={tribeID} />
         </div>
       </div>
-      <ChannelLeftBar channelID={content.group.id} />
+      <div className="hidden lg:flex">
+        <ChannelLeftBar channelID={content.group.id} />
+      </div>
     </div>
   );
 };
