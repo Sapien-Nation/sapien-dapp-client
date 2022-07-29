@@ -38,12 +38,12 @@ interface Props {
 }
 
 const Channel = ({ apiKey }: Props) => {
-  const [charCount, setCharCount] = useState(0);
+  const [hasContent, setHasContent] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [isPublishing, setPublishing] = useState(false);
   const [initialEditorValue, setInitialEditorValue] = useState('');
-  const isPublishDisabled = isPublishing || charCount === 0;
+  const isPublishDisabled = isPublishing || !hasContent;
 
   const { me } = useAuth();
   const toast = useToast();
@@ -93,6 +93,16 @@ const Channel = ({ apiKey }: Props) => {
     }
   };
 
+  const handleOnContentChange = (rawContent: string) => {
+    const textOnlyContent = editorRef.current.getContent({
+      format: 'text',
+    });
+
+    const isImgTag = /\<img\s+src=.*\">/.test(rawContent);
+
+    setHasContent(Boolean(textOnlyContent.trim().length) || isImgTag);
+  };
+
   let mutateFetchAPI = apiKey;
   return (
     <>
@@ -119,13 +129,7 @@ const Channel = ({ apiKey }: Props) => {
                         <InlineEditor
                           channel={channel}
                           editorRef={editorRef}
-                          onChange={() => {
-                            const rawContent = editorRef.current.getContent({
-                              format: 'text',
-                            });
-
-                            setCharCount(rawContent.length);
-                          }}
+                          onChange={handleOnContentChange}
                           initialValue={initialEditorValue}
                         />
                       </div>
@@ -238,13 +242,7 @@ const Channel = ({ apiKey }: Props) => {
               <ExpandedEditor
                 editorRef={editorRef}
                 initialValue={initialEditorValue}
-                onChange={() => {
-                  const rawContent = editorRef.current.getContent({
-                    format: 'text',
-                  });
-
-                  setCharCount(rawContent.length);
-                }}
+                onChange={handleOnContentChange}
               />
             </div>
           </div>
