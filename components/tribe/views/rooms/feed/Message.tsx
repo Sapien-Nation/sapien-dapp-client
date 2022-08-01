@@ -312,7 +312,7 @@ const Message = ({
         </div>
 
         {/* Menus */}
-        <Popover
+        {/* <Popover
           className={`${
             isPickerOpen ? 'visible' : 'hidden group-hover:block'
           } absolute leading-[0] right-0 w-8 h-8 mr-8 top-0`}
@@ -359,7 +359,7 @@ const Message = ({
               </>
             );
           }}
-        </Popover>
+        </Popover> */}
 
         {type === MessageType.OptimisticWithError && (
           <div className="flex gap-2">
