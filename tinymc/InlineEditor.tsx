@@ -36,6 +36,8 @@ const EditorComponent = ({
 
         placeholder: `What do you want to share in ${channel.name}?`,
         plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
+        extended_valid_elements: 'a[href|target=_blank]',
+        link_target_list: false,
         content_style: `
         .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
           color: #656067;
