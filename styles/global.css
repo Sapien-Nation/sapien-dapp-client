@@ -6,7 +6,7 @@
 
 /* purgecss start ignore */
 .disable-preflight > p {
-  margin: 8px;
+  margin: 8px 0;
 }
 
 .disable-preflight > ul {

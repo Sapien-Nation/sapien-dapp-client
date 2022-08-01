@@ -42,6 +42,8 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         file_picker_types: 'image',
         file_picker_callback: filePicker,
         images_upload_handler: imageHandler,
+        extended_valid_elements: 'a[href|target=_blank]',
+        link_target_list: false,
         content_style: `
           .mce-content-body {
             color: #ffffff;
