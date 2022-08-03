@@ -7,6 +7,7 @@ import { nanoid } from 'nanoid';
 import { useSWRConfig } from 'swr';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { isAndroid } from 'react-device-detect';
 
 // api
 import { sendMessage, readRoom } from 'api/room';
@@ -20,11 +21,12 @@ import { useSocket } from 'context/socket';
 import { MessageType, RoomMemberType, WSEvents } from 'tools/constants/rooms';
 
 // components
-import { RoomEditor } from 'slatejs';
+import { AndroidRoomEditor, RoomEditor } from 'slatejs';
 import Details from './Details';
 import Message from './Message';
 import JoinARoomMessage from './JoinARoomMessage';
 import WelcomeMessage from './WelcomeMessage';
+import { Query } from 'components/common';
 
 // helpers
 import { formatDate } from 'utils/date';
@@ -46,7 +48,6 @@ import type {
   RoomNewMessage,
 } from 'tools/types/room';
 import type { ProfileTribe } from 'tools/types/tribe';
-import { Query } from 'components/common';
 
 interface Props {
   apiKey: string;
@@ -611,7 +612,14 @@ const Feed = ({
             <div ref={scrollToBottom} className="block" />
           </div>
           <div className="px-0 sm:px-5">
-            <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
+            {isAndroid ? (
+              <AndroidRoomEditor
+                onSubmit={handleMessageSubmit}
+                name={room.name}
+              />
+            ) : (
+              <RoomEditor onSubmit={handleMessageSubmit} name={room.name} />
+            )}
           </div>
         </div>
 
