@@ -10,11 +10,12 @@ import { TrashIcon } from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Editor, createEditor, Transforms, Range } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { useRouter } from 'next/router';
 import data from '@emoji-mart/data';
 import { matchSorter } from 'match-sorter';
+import { useAndroidPlugin } from 'slate-android-plugin';
 
 // components
 import { UserAvatar } from 'components/common';
@@ -59,7 +60,7 @@ enum FloatMenu {
 
 const emojiesList = Object.values(data.emojis);
 const editorID = 'slatejs-editor';
-const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
+const AndroidRoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const [value, setValue] = useState<Array<any>>(defaultValue);
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
@@ -71,12 +72,14 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
   const { query } = useRouter();
 
-  const editor = useMemo(
-    () =>
-      withRoomMentions(
-        withUserMentions(withReact(withHistory(createEditor())))
-      ),
-    []
+  const editor = useAndroidPlugin(
+    useMemo(
+      () =>
+        withRoomMentions(
+          withUserMentions(withReact(withHistory(createEditor())))
+        ),
+      []
+    )
   );
 
   const roomID = query.viewID as string;
@@ -573,4 +576,4 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   );
 };
 
-export default RoomEditor;
+export default AndroidRoomEditor;

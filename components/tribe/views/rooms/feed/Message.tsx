@@ -175,8 +175,8 @@ const Message = ({
         <p
           className={
             isAMessageContinuation
-              ? 'text-md text-white/30 whitespace-pre-line break-words'
-              : 'pl-52 text-md text-white/30 whitespace-pre-line break-words'
+              ? 'text-md text-white whitespace-pre-line break-words'
+              : 'pl-52 text-md text-white whitespace-pre-line break-words'
           }
           style={{ wordBreak: 'break-word' }}
         >
