@@ -15,6 +15,8 @@ import { withHistory } from 'slate-history';
 import { useRouter } from 'next/router';
 import data from '@emoji-mart/data';
 import { matchSorter } from 'match-sorter';
+import { isAndroid } from 'react-device-detect';
+import { useAndroidPlugin } from 'slate-android-plugin';
 
 // components
 import { UserAvatar } from 'components/common';
@@ -70,13 +72,24 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const fileRef = useRef(null);
 
   const { query } = useRouter();
-  const editor = useMemo(
+  const editorWeb = useMemo(
     () =>
       withRoomMentions(
         withUserMentions(withReact(withHistory(createEditor())))
       ),
     []
   );
+  const androidEditor = useAndroidPlugin(
+    useMemo(
+      () =>
+        withRoomMentions(
+          withUserMentions(withReact(withHistory(createEditor())))
+        ),
+      []
+    )
+  );
+
+  const editor = isAndroid ? androidEditor : editorWeb;
 
   const roomID = query.viewID as string;
 
