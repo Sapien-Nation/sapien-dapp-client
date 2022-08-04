@@ -1,14 +1,7 @@
-import { ArrowLeftIcon, BadgeCheckIcon } from '@heroicons/react/outline';
-import Lottie from 'react-lottie-player';
-
-// components
-import { Query } from 'components/common';
+import { ArrowLeftIcon } from '@heroicons/react/outline';
 
 // types
 import type { Token } from '../../types';
-
-// assets
-import checkJSONLottie from './lottie/check.json';
 
 interface Props {
   handleBack: () => void;

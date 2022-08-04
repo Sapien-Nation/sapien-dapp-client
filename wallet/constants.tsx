@@ -6,19 +6,33 @@ export enum ErrorTypes {
   Success,
 }
 
+export enum Coin {
+  SPN = 'SPN',
+  MATIC = 'MATIC',
+  USDT = 'USDT',
+  USDC = 'USDC',
+}
+
+export const CoinMap = {
+  [Coin.SPN]: {
+    name: 'SPN',
+    image: '/images/SPN.svg',
+  },
+  [Coin.MATIC]: {
+    name: 'Matic',
+    image: '/images/matic.png',
+  },
+  [Coin.USDC]: {
+    name: 'USDC',
+    image: '/images/usdc.png',
+  },
+  [Coin.USDT]: {
+    name: 'USDT',
+    image: '/images/usdt.png',
+  },
+};
+
 export const notifications = [
-  // {
-  //   createdAt: '2022-05-16T18:01:17.160Z',
-  //   id: 1,
-  //   name: 'Sign Passport',
-  //   descriptionShort: 'Its time to sign your passport!',
-  //   descriptionLarge: () => (
-  //     <p>
-  //       Its time to sign your passport! inside a component, go crazy descriptive
-  //       here
-  //     </p>
-  //   ),
-  // },
   {
     createdAt: '2022-02-20T19:58:50.745Z',
     id: 2,

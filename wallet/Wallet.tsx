@@ -1,6 +1,9 @@
 import { RefreshIcon } from '@heroicons/react/outline';
 import { ExclamationIcon } from '@heroicons/react/solid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+// constants
+import { Coin } from './constants';
 
 // components
 import {
@@ -17,18 +20,23 @@ import { useWeb3 } from './providers';
 
 // types
 import type { Token } from './types';
+import CoinView from './views/token/Coin';
+import WithdrawCoinView from './views/withdraw/WithdrawCoin';
 
 enum View {
+  Coin,
   Notifications,
   Home,
   Deposit,
   Token,
   Withdraw,
   History,
+  WithdrawCoin,
 }
 
 const Wallet = () => {
   const [view, setView] = useState(View.Home);
+  const [coin, setCoin] = useState<Coin | null>(null);
   const [token, setToken] = useState<Token | null>(null);
 
   const { isReady: isWeb3Ready, error: web3Error } = useWeb3();
@@ -83,11 +91,31 @@ const Wallet = () => {
     }
 
     switch (view) {
+      case View.WithdrawCoin:
+        return (
+          <WithdrawCoinView
+            coin={coin}
+            handleBack={() => setView(View.Coin)}
+            handleGoHome={() => setView(View.Home)}
+          />
+        );
+      case View.Coin:
+        return (
+          <CoinView
+            coin={coin}
+            handleBack={() => setView(View.Home)}
+            onWithdraw={() => setView(View.WithdrawCoin)}
+          />
+        );
       case View.Notifications:
         return <NotificationsView handleBack={() => setView(View.Home)} />;
       case View.Home:
         return (
           <HomeView
+            onSelectCoin={(coin) => {
+              setCoin(coin);
+              setView(View.Coin);
+            }}
             onDeposit={() => setView(View.Deposit)}
             onSelectToken={(token) => {
               setToken(token);

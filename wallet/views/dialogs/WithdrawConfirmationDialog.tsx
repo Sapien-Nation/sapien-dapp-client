@@ -6,7 +6,7 @@ import type { Token } from '../../types';
 
 interface Props {
   address: string;
-  token: Token;
+  token: Token | { name: string };
   onClose: () => void;
   onWithdraw: ({ address }: { address: string }) => void;
 }
