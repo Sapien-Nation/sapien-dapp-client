@@ -1,6 +1,6 @@
 import { BellIcon, CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
-import { Menu, Transition } from '@headlessui/react';
-import { LogoutIcon, CogIcon } from '@heroicons/react/solid';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { LogoutIcon } from '@heroicons/react/solid';
 import { Fragment } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -16,6 +16,9 @@ const Notifications = dynamic(() => import('components/notifications'));
 
 // hooks
 import { usePassport } from 'hooks/passport';
+
+// icons
+import { ChevronDownIcon } from '@heroicons/react/outline';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
@@ -123,6 +126,59 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                         View Passport
                       </button>
                     ) : null}
+                    {/* Compliance */}
+                    <Disclosure>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex w-full justify-between items-center py-2 text-left text-sm focus:outline-none">
+                            Privacy & Safety
+                            <ChevronDownIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-purple-500`}
+                            />
+                          </Disclosure.Button>
+                          <Disclosure.Panel className="text-gray-500 w-full">
+                            <div className="h-full w-full">
+                              <div className="flex flex-col text-left gap-1">
+                                <a
+                                  href="https://common.sapien.network/terms.html"
+                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Terms of Service
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/privacy.html"
+                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Privacy Policy
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
+                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Content Policy
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/dmca.html"
+                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  DMCA
+                                </a>
+                              </div>
+                            </div>
+                          </Disclosure.Panel>
+                        </>
+                      )}
+                    </Disclosure>
                     <div className="mt-4 text-left">
                       <Link href="/logout">
                         <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
@@ -150,64 +206,6 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                 </span>
               </Menu.Button>
             </div>
-          </Menu>
-          <Menu as="div">
-            {({ open }) => (
-              <>
-                <div>
-                  <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="h-full">
-                      <div className="flex flex-col text-left gap-1 mt-2">
-                        <a
-                          href="https://common.sapien.network/terms.html"
-                          className="font-medium text-sm text-white"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Terms of Service
-                        </a>
-                        <a
-                          href="https://common.sapien.network/privacy.html"
-                          className="font-medium text-sm text-white mt-2"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Privacy Policy
-                        </a>
-                        <a
-                          href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
-                          className="font-medium text-sm text-white mt-2"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          Content Policy
-                        </a>
-                        <a
-                          href="https://common.sapien.network/dmca.html"
-                          className="font-medium text-sm text-white mt-2"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          DMCA
-                        </a>
-                      </div>
-                    </div>
-                  </Menu.Items>
-                </div>
-
-                <Menu.Button
-                  type="button"
-                  className={`${
-                    open ? 'bg-gray-800' : ''
-                  } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
-                >
-                  <>
-                    <span className="sr-only">View Policies</span>
-                    <CogIcon className="h-6 w-6" aria-hidden="true" />
-                  </>
-                </Menu.Button>
-              </>
-            )}
           </Menu>
         </div>
       </div>
