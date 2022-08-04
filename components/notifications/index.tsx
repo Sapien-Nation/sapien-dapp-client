@@ -50,9 +50,7 @@ const Notifications = () => {
         false
       );
     } catch (err) {
-      toast({
-        message: err,
-      });
+      console.error(err);
     }
   };
 
@@ -98,9 +96,7 @@ const Notifications = () => {
       );
       await markAsRead(notification.id);
     } catch (err) {
-      toast({
-        message: err,
-      });
+      console.error(err);
     }
   };
 

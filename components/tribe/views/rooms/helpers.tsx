@@ -36,7 +36,7 @@ export const renderContent = (
               <>
                 <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
                   {' '}
-                  @{userID.replaceAll('-', '')}
+                  {userID.replaceAll('-', '')}
                 </span>{' '}
               </>
             );
@@ -106,6 +106,17 @@ export const renderContent = (
                 {' '}
                 {singleNode.replaceAll('`', '')}
               </code>{' '}
+            </>
+          );
+        }
+
+        if (singleNode.startsWith('@everyone')) {
+          return (
+            <>
+              <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
+                {' '}
+                {singleNode}
+              </span>{' '}
             </>
           );
         }

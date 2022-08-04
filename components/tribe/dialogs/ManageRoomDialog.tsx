@@ -97,7 +97,7 @@ const ManageRoomDialog = ({ onClose, roomID }: Props) => {
       show
       isFetching={false}
       onClose={onClose}
-      title={`Manage Room ${room.name}`}
+      title={`Manage Room: #${room.name}`}
       onConfirm={handleUpdateRoom}
       confirmLabel="Confirm"
       showCancel={false}

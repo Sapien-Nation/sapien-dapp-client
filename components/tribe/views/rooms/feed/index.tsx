@@ -1,4 +1,5 @@
 import { UsersIcon, XIcon } from '@heroicons/react/outline';
+import { LockClosedIcon } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
 import _isEmpty from 'lodash/isEmpty';
 import _groupBy from 'lodash/groupBy';
@@ -537,7 +538,13 @@ const Feed = ({
             </button>
           )}
 
-          <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-end items-center gap-2">
+          <div className="text-gray-200 flex h-10 px-5 border-b border-gray-700 relative text-sm justify-between items-center">
+            <div className="text-base font-semibold flex items-center">
+              <span className="w-5 flex justify-center text-gray-400">
+                {room.private ? <LockClosedIcon className="w-4" /> : '#'}
+              </span>
+              {room.name}
+            </div>
             <button
               aria-label="Toggle Details"
               className="flex px-1 h-full items-center"

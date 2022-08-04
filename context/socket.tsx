@@ -50,8 +50,8 @@ const SocketProvider = ({ children }: Props) => {
 
         // TODO reading from socketMessages state is to much, instead this should "emit" and childrens can just listen to them
         // time? we have 30mins to fix this, so this hacky solution works
-        setSocketMessages([
-          ...socketMessages,
+        setSocketMessages((stateSocketMessages) => [
+          ...stateSocketMessages,
           {
             id: nanoid(),
             type: eventData.type,
