@@ -135,6 +135,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       <UserAvatar user={me} passport={passport} />
                     </div>
                     <div className="flex flex-col flex-wrap break-words">
+                      <span className="font-semibold">{me.displayName}</span>
                       <span className="text-xs truncate w-30">
                         @{me.username}
                       </span>
