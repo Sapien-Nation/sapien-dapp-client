@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/nextjs';
 import _range from 'lodash/range';
 import { BN } from 'ethereumjs-util';
 import * as sigUtil from 'eth-sig-util';
+import { ethers } from 'ethers';
 import { createContext, useContext, useRef, useEffect, useState } from 'react';
 
 // api
@@ -55,7 +56,7 @@ interface Web3 {
       to: string,
       token: string,
       amount: number
-    ) => Promise<{ type: ErrorTypes; hash: string }>;
+    ) => Promise<string>;
     getPassportBalance: (address: string) => Promise<number>;
     getERC20Balance: (token: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
@@ -107,6 +108,27 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     EXPLORER_BASE_URL: process.env.NEXT_PUBLIC_EXPLORER_BASE_URL,
     GAS_STATION_URL: process.env.NEXT_PUBLIC_GAS_STATION_URL,
     GAS_LIMIT: 300000,
+  };
+
+  const domainType = [
+    { name: 'name', type: 'string' },
+    { name: 'version', type: 'string' },
+    { name: 'verifyingContract', type: 'address' },
+    { name: 'salt', type: 'bytes32' },
+  ];
+  const metaTransactionType = [
+    { name: 'nonce', type: 'uint256' },
+    { name: 'from', type: 'address' },
+    { name: 'functionSignature', type: 'bytes' },
+  ];
+
+  const platformDomainData = {
+    name: ERC20List['SPN'].name,
+    version: '1',
+    verifyingContract: Web3Library.utils.toChecksumAddress(
+      ERC20List['SPN'].addr
+    ),
+    salt: '0x' + config.POLY_NETWORK_ID.toString(16).padStart(64, '0'),
   };
 
   useEffect(() => {
@@ -163,12 +185,19 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     );
   };
 
-  const getERC20Balance = async (token: string) => {
+  const getERC20Balance = async (token: string, addr?: string) => {
     try {
       const contract = getERC20Contract(token);
-      const balance = await contract.methods.balanceOf(me.walletAddress).call();
+      const balance = await contract.methods
+        .balanceOf(addr ?? me.walletAddress)
+        .call();
 
-      return Number(balance);
+      return (
+        Math.floor(
+          (Number(balance) * 10 ** 6) / 10 ** ERC20List[token].decimal
+        ) /
+        10 ** 6
+      ); // limit 6 digits after decimal point
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
@@ -237,6 +266,25 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
       return Promise.reject(err);
     }
   };
+
+  const getSignatureParameters = (signature: string) => {
+    if (!ethers.utils.isHexString(signature)) {
+      throw new Error(
+        'Given value "'.concat(signature, '" is not a valid hex string.')
+      );
+    }
+    const r = signature.slice(0, 66);
+    const s = '0x'.concat(signature.slice(66, 130));
+    let v: string | number = '0x'.concat(signature.slice(130, 132));
+    v = ethers.BigNumber.from(v).toNumber();
+    if (![27, 28].includes(v)) v += 27;
+    return {
+      r,
+      s,
+      v,
+    };
+  };
+
   const handleWithdraw = async (
     to: string,
     tokenId: number
@@ -347,48 +395,31 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     amount: number
   ): Promise<{ type: ErrorTypes; hash: string }> => {
     try {
-      const metamaskAddress = getMetamaskAddress();
+      const from = getMetamaskAddress();
       const gasPrice = await getGasPrice();
+      const GasPrice = Web3Library.utils
+        .toWei(new BN(gasPrice), 'gwei')
+        .toNumber();
       const object = {
-        from: metamaskAddress,
-        signatureType: biconomy.EIP712_SIGN,
-        gasPrice: Web3Library.utils.toWei(new BN(gasPrice), 'gwei').toNumber(),
+        from,
+        gasPrice: GasPrice,
         gasLimit: config.GAS_LIMIT,
       };
+      const walletProvider = new ethers.providers.Web3Provider(window.ethereum);
       if (token === 'MATIC') {
         const matic: string = await WalletAPIRef.current.eth.getBalance(
           me.walletAddress
         );
         const gas = Number(
-          Web3Library.utils.fromWei(
-            (Number(gasPrice) * config.GAS_LIMIT).toString()
-          )
+          Web3Library.utils.fromWei((GasPrice * config.GAS_LIMIT).toString())
         );
         if (amount + gas < Number(Web3Library.utils.fromWei(matic))) {
-          const result: TxResult = await new Promise(
-            async (resolve, reject) => {
-              WalletAPIRef.current.eth
-                .sendTransaction({
-                  ...object,
-                  to: me.walletAddress,
-                  value: Web3Library.utils.toWei(amount.toString(), 'ether'),
-                })
-                .on('receipt', (rec: TransactionReceipt) =>
-                  resolve({ data: rec, type: ErrorTypes.Success })
-                )
-                .on('error', (err) => {
-                  if (err.receipt) {
-                    return resolve({
-                      data: err.receipt,
-                      type: ErrorTypes.Fail,
-                    });
-                  } else {
-                    return reject(err);
-                  }
-                });
-            }
-          );
-          return { hash: result.data.transactionHash, type: result.type };
+          const result = await walletProvider.getSigner().sendTransaction({
+            ...object,
+            to: me.walletAddress,
+            value: ethers.utils.parseEther(amount.toString()),
+          });
+          return { hash: result.hash, type: ErrorTypes.Success };
         }
         return Promise.reject('Insufficient Matic Balance');
       } else {
@@ -397,13 +428,53 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
             `We currently doesn't provide ${token} transfer service.`
           );
 
-        const tokenBal: number = await getERC20Balance(token);
-        if (amount < Number(Web3Library.utils.fromWei(tokenBal.toString()))) {
+        const tokenBal: number = await getERC20Balance(token, from);
+        const decimal = 10 ** ERC20List[token].decimal;
+        if (amount < tokenBal) {
+          const contract = getERC20Contract(token);
+          const domainData = {
+            ...platformDomainData,
+            name: ERC20List[token].name,
+            verifyingContract: Web3Library.utils.toChecksumAddress(
+              ERC20List[token].addr
+            ),
+          };
+
+          let nonce: string;
+          if (token === 'USDC')
+            nonce = await contract.methods.nonces(from).call();
+          else nonce = await contract.methods.getNonce(from).call();
+          const functionSignature = contract.methods
+            .transfer(
+              me.walletAddress,
+              Web3Library.utils.toWei((amount * decimal).toString(), 'wei')
+            )
+            .encodeABI();
+          const message = {
+            nonce: parseInt(nonce),
+            from,
+            functionSignature,
+          };
+          const dataToSign = JSON.stringify({
+            types: {
+              EIP712Domain: domainType,
+              MetaTransaction: metaTransactionType,
+            },
+            domain: domainData,
+            primaryType: 'MetaTransaction',
+            message,
+          });
+
+          const signature = await walletProvider.send('eth_signTypedData_v3', [
+            from,
+            dataToSign,
+          ]);
+          const { r, s, v } = getSignatureParameters(signature);
+
           const result: TxResult = await new Promise(
             async (resolve, reject) => {
-              const contract = getERC20Contract(token);
               contract.methods
-                .transfer(metamaskAddress, me.walletAddress, amount)
+                .executeMetaTransaction(from, functionSignature, r, s, v)
                 .send(object)
                 .on('receipt', (rec: TransactionReceipt) =>
                   resolve({ data: rec, type: ErrorTypes.Success })
@@ -435,9 +506,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     to: string,
     token: string,
     amount: number
-  ): Promise<{ type: ErrorTypes; hash: string }> => {
+  ): Promise<string> => {
     try {
-      return await transferFT({ to, token, amount });
+      const response = await transferFT({ to, token, amount });
+
+      return response.hash;
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);

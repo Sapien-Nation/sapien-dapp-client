@@ -22,6 +22,9 @@ import { useUnreadNotifications } from 'wallet/hooks';
 // icons
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
+// constants
+import { Coin } from 'wallet/constants';
+
 // components
 import { Query, RedDot, Tooltip } from 'components/common';
 
@@ -39,6 +42,7 @@ interface Props {
   onSelectToken: (token: Token) => void;
   onViewHistory: () => void;
   onViewNotifications: () => void;
+  onSelectCoin: (coin: Coin) => void;
 }
 
 const Home = ({
@@ -46,6 +50,7 @@ const Home = ({
   onSelectToken,
   onViewHistory,
   onViewNotifications,
+  onSelectCoin,
 }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [tokens, setTokens] = useState<Array<Token>>([]);
@@ -53,7 +58,6 @@ const Home = ({
   const [isFetching, setIsFetching] = useState(true);
   const [isMintingPassport, setIsMintingPassport] = useState(false);
   const [copyToClipboardSuccess, setCopyToClipboardSuccess] = useState(false);
-
   const copyAddressTooltip = useRef(null);
 
   const { me } = useAuth();
@@ -246,6 +250,54 @@ const Home = ({
               <PlusIcon className="w-5 mx-auto text-white" />
             </li>
           )}
+          <li
+            className="bg-gray-50 hover:bg-gray-200 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            onClick={() => {
+              onSelectCoin(Coin.SPN);
+            }}
+          >
+            <img
+              className="rounded-full object-cover"
+              src="/images/SPN.svg"
+              alt=""
+            />
+          </li>
+          <li
+            className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            onClick={() => {
+              onSelectCoin(Coin.MATIC);
+            }}
+          >
+            <img
+              className="rounded-full object-cover"
+              src="/images/matic.png"
+              alt=""
+            />
+          </li>
+          <li
+            className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            onClick={() => {
+              onSelectCoin(Coin.USDC);
+            }}
+          >
+            <img
+              className="rounded-full object-cover"
+              src="/images/usdc.png"
+              alt=""
+            />
+          </li>
+          <li
+            className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            onClick={() => {
+              onSelectCoin(Coin.USDT);
+            }}
+          >
+            <img
+              className="rounded-full object-cover"
+              src="/images/usdt.png"
+              alt=""
+            />
+          </li>
           {tokens.map((token) => (
             <li
               className={

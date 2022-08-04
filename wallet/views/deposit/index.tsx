@@ -9,17 +9,17 @@ import {
   RefreshIcon,
 } from '@heroicons/react/solid';
 import * as Sentry from '@sentry/nextjs';
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 
 // assets
 import { Metamask } from '../../assets';
 
-// components
-import { Tooltip } from 'components/common';
+// constants
+import { Coin } from 'wallet/constants';
 
 // hooks
 import { hooks as metaMaskHooks, metaMask } from '../../connectors/metaMask';
-import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
@@ -32,6 +32,7 @@ const { useAccounts, useError, useChainId, useIsActive, useIsActivating } =
 enum View {
   DepositPassport,
   DepositError,
+  DepositCoin,
   Home,
   Success,
 }
@@ -40,19 +41,28 @@ interface Props {
   handleBack: () => void;
 }
 
+interface DepositTokenFormValues {
+  amount: number;
+  coin: Coin;
+}
+
 const Deposit = ({ handleBack }: Props) => {
   const [view, setView] = useState(View.Home);
-  const [userBalance, setUserBalance] = useState(0);
   const [depositTXHash, setDepositTXHash] = useState('');
   const [tokensToDeposit, setTokensToDeposit] = useState([]);
   const [showPolygonError, setShowPolygonError] = useState(false);
-  const [isFetchingBalance, setIsFetchingBalance] = useState(true);
   const [depositTXErrorHash, setDepositTXErrorHash] = useState('');
   const [isFetchingMetamaskTokens, setIsFetchingMetamaskTokens] =
     useState(false);
 
-  const { me } = useAuth();
   const { walletAPI } = useWeb3();
+  const {
+    formState: { isSubmitting: isSubmittingDepositTokens },
+    register,
+    handleSubmit,
+  } = useForm<DepositTokenFormValues>({
+    defaultValues: { amount: 0, coin: Coin.SPN },
+  });
 
   const error = useError();
   const account = useAccounts();
@@ -63,19 +73,6 @@ const Deposit = ({ handleBack }: Props) => {
   const getMetamaskAddress = () => account[0];
 
   const toast = useToast();
-  const depositTokensRef = useRef(null);
-
-  const fetchBalance = useCallback(async () => {
-    setIsFetchingBalance(true);
-    try {
-      const balance = await walletAPI.getERC20Balance('SPN');
-
-      setUserBalance(balance);
-    } catch (err) {
-      //
-    }
-    setIsFetchingBalance(false);
-  }, [walletAPI]);
 
   useEffect(() => {
     metaMask.connectEagerly();
@@ -100,16 +97,28 @@ const Deposit = ({ handleBack }: Props) => {
     }
   }, [isActive]);
 
-  useEffect(() => {
-    fetchBalance();
-  }, [fetchBalance]);
-
   const handleActivateMetamask = async () => {
     await metaMask.activate(chainId);
   };
 
   const handleDeactivateMetamask = async () => {
     await metaMask.deactivate();
+  };
+
+  const handleDepositCoin = async (values: DepositTokenFormValues) => {
+    try {
+      const { hash } = await walletAPI.handleFTDeposit(
+        values.coin,
+        values.amount
+      );
+
+      setDepositTXHash(hash);
+      setView(View.Success);
+    } catch (err) {
+      toast({
+        message: err?.message,
+      });
+    }
   };
 
   const handleDeposit = async () => {
@@ -133,13 +142,6 @@ const Deposit = ({ handleBack }: Props) => {
         message: err.message,
       });
     }
-  };
-
-  const renderBalance = () => {
-    if (isFetchingBalance)
-      return <span className="text-xs">(Loading Balance...)</span>;
-
-    return <span className="text-xs">({userBalance} SPN)</span>;
   };
 
   const renderView = () => {
@@ -272,7 +274,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                Deposit {renderBalance()}
+                Deposit
               </h5>
               {/* TODO there is no way to really disconnect the wallet */}
               {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
@@ -352,7 +354,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <button onClick={handleBack}>
                   <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
-                Deposit {renderBalance()}
+                Deposit
               </h5>
               {/* TODO there is no way to really disconnect the wallet */}
               {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
@@ -415,16 +417,86 @@ const Deposit = ({ handleBack }: Props) => {
 
               <button
                 type="button"
-                disabled
-                ref={depositTokensRef.current?.setTriggerRef}
-                className="w-full py-2 px-4 flex justify-center cursor-not-allowed items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                onClick={() => setView(View.DepositCoin)}
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
               >
                 Deposit Tokens
               </button>
-              <Tooltip ref={depositTokensRef} text="Cooming Soon." />
             </div>
           </>
         );
+      case View.DepositCoin: {
+        return (
+          <>
+            <div className="flex justify-between items-center">
+              <h5 className="text-xl text-white font-bold tracking-wide flex items-center gap-2">
+                <button onClick={() => setView(View.Home)}>
+                  <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+                </button>
+                Deposit Tokens
+              </h5>
+            </div>
+
+            <form
+              onSubmit={handleSubmit(handleDepositCoin)}
+              className="space-y-3"
+            >
+              <div className="mt-1">
+                <input
+                  id="amount"
+                  type="number"
+                  aria-label="Withdraw Amount"
+                  required
+                  placeholder="10"
+                  className="bg-gray-800 appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  {...register('amount')}
+                />
+              </div>
+
+              <div className="mt-1">
+                <label
+                  htmlFor="token"
+                  className="block text-sm font-medium text-white"
+                >
+                  Token Type
+                </label>
+                <select
+                  id="token"
+                  className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-white text-black"
+                  {...register('coin')}
+                >
+                  <option value={Coin.SPN}>{Coin.SPN}</option>
+                  <option value={Coin.MATIC}>{Coin.MATIC}</option>
+                  <option value={Coin.USDC}>{Coin.USDC}</option>
+                  <option value={Coin.USDT}>{Coin.USDT}</option>
+                </select>
+              </div>
+
+              <div className="text-center gap-2 flex flex-col">
+                <button
+                  type="submit"
+                  className={
+                    isSubmittingDepositTokens
+                      ? 'cursor-not-allowed w-full flex justify-center mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+                      : 'w-full flex justify-center mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sapien hover:bg-sapien-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500'
+                  }
+                  disabled={isSubmittingDepositTokens}
+                >
+                  {isSubmittingDepositTokens && (
+                    <RefreshIcon className="animate-spin h-5 w-5 mr-3" />
+                  )}
+                  Deposit with Metamask
+                </button>
+              </div>
+            </form>
+
+            <div className="text-center grid gap-6">
+              <span className="text-xs text-green-500 flex justify-center items-center"></span>
+            </div>
+          </>
+        );
+      }
+
       case View.DepositError:
         return (
           <>
