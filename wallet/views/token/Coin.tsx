@@ -57,7 +57,7 @@ const CoinView = ({ handleBack, coin, onWithdraw }: Props) => {
           {coinData.name} {getBalance()}
         </h5>
         <img
-          className="rounded-full px-1 py-1 w-20 h-20 self-center object-cover bg-gray-50"
+          className="rounded-full px-1 py-1 w-20 h-20 self-center object-cover"
           src={coinData.image}
           alt=""
         />

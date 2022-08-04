@@ -16,7 +16,7 @@ export enum Coin {
 export const CoinMap = {
   [Coin.SPN]: {
     name: 'SPN',
-    image: '/images/SPN.svg',
+    image: '/images/SPN.png',
   },
   [Coin.MATIC]: {
     name: 'Matic',
