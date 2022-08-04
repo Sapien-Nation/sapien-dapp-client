@@ -245,7 +245,7 @@ const AndroidRoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
               style={{ bottom: '6.6rem' }}
             >
-              <h3 className="text-sm uppercase text-gray-200">Tribe Rooms</h3>
+              <h3 className="text-sm uppercase text-gray-200">Rooms</h3>
               {tribeRoomsList.map(({ id, label }, channelIndex) => (
                 <>
                   <div
