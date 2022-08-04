@@ -56,7 +56,7 @@ interface Web3 {
       to: string,
       token: string,
       amount: number
-    ) => Promise<string>;
+    ) => Promise<{ hash: string; type: ErrorTypes }>;
     getPassportBalance: (address: string) => Promise<number>;
     getERC20Balance: (token: string) => Promise<number>;
     getUserTransactions: () => Promise<Array<Transaction>>;
@@ -506,11 +506,11 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
     to: string,
     token: string,
     amount: number
-  ): Promise<string> => {
+  ): Promise<{ hash: string; type: ErrorTypes }> => {
     try {
       const response = await transferFT({ to, token, amount });
 
-      return response.hash;
+      return response;
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
