@@ -12,6 +12,7 @@ import { usePassport } from 'hooks/passport';
 
 // constants
 import { NotificationsType as WSEvents } from 'tools/constants/notifications';
+import { WSEvents as RoomWSEvents } from 'tools/constants/rooms';
 
 // context
 import { useSocket } from 'context/socket';
@@ -24,6 +25,9 @@ const Wallet = dynamic(() => import('wallet/Wallet'));
 
 // icons
 import { ChevronDownIcon } from '@heroicons/react/outline';
+
+// type
+import type { ProfileTribe } from 'tools/types/tribe';
 
 interface Props {
   setShowProfileOverlay: () => void;
@@ -47,6 +51,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
           WSEvents.BadgeGrantOwner,
           WSEvents.BadgeGrantPropose,
           WSEvents.RoomNewMessage,
+          RoomWSEvents.RoomMention,
         ].includes(type)
       )
       .forEach(({ data: newNotification, id: messageID, type }) => {
@@ -67,6 +72,56 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
           false
         );
 
+        if (type === RoomWSEvents.RoomMention) {
+          mutate(
+            '/core-api/user/tribes',
+            (tribes: Array<ProfileTribe>) =>
+              tribes.map((tribe) =>
+                tribe.id === newNotification.extra.tribe.id
+                  ? {
+                      ...tribe,
+                      rooms: tribe.rooms.map((tribeRoom) => {
+                        if (tribeRoom.id === newNotification.extra.roomId) {
+                          return {
+                            ...tribeRoom,
+                            unreadMentions: tribeRoom.unreadMentions + 1,
+                            hasUnread: true,
+                          };
+                        }
+
+                        return tribeRoom;
+                      }),
+                    }
+                  : tribe
+              ),
+            false
+          );
+        }
+
+        if (type === WSEvents.RoomNewMessage) {
+          mutate(
+            '/core-api/user/tribes',
+            (tribes: Array<ProfileTribe>) =>
+              tribes.map((tribe) =>
+                tribe.id === newNotification.extra.tribe.id
+                  ? {
+                      ...tribe,
+                      rooms: tribe.rooms.map((tribeRoom) => {
+                        if (tribeRoom.id === newNotification.extra.roomId) {
+                          return {
+                            ...tribeRoom,
+                            hasUnread: true,
+                          };
+                        }
+
+                        return tribeRoom;
+                      }),
+                    }
+                  : tribe
+              ),
+            false
+          );
+        }
         handleReadMessage(messageID);
       });
   }, [socketMessages, me.id, mutate, handleReadMessage]);

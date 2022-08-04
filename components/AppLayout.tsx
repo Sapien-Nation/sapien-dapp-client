@@ -94,7 +94,6 @@ const Page = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    let playSound = false;
     socketMessages
       .filter(({ type }) => type === WSEvents.RoomMention)
       .forEach(({ data, id: messageID }) => {
