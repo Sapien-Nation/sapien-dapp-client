@@ -55,6 +55,7 @@ enum FloatMenu {
   Channels,
   Members,
   Emoji,
+  Other,
 }
 
 const emojiesList = Object.values(data.emojis);
@@ -84,22 +85,44 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
   const tribeRooms = useTribeRooms();
   const roomMembers = useRoomMembers(roomID);
 
-  const roomMembersList = useMemo(
-    () =>
-      getMentionsArrayFromCacheForUI(roomMembers ?? [])
-        .filter(({ label }) => {
-          return search
-            ? label.toLowerCase().startsWith(search.toLowerCase())
-            : true;
-        })
-        .map(({ id, avatar, label }) => ({
-          id,
-          avatar,
-          label,
-          type: MentionType.Member,
-        })),
-    [roomMembers, search]
-  );
+  const roomMembersList = useMemo(() => {
+    const memberList = getMentionsArrayFromCacheForUI(roomMembers ?? [])
+      .filter(({ label }) => {
+        return search
+          ? label.toLowerCase().startsWith(search.toLowerCase())
+          : true;
+      })
+      .map(({ id, avatar, label }) => ({
+        id,
+        avatar,
+        label,
+        type: MentionType.Member,
+      }));
+
+    // TODO replace with regex
+    const matchesForEveryone = [
+      'ev',
+      'eve',
+      'ever',
+      'every',
+      'everyo',
+      'everyon',
+      'everyone',
+    ];
+
+    if (matchesForEveryone.includes(search.toLowerCase())) {
+      return [
+        {
+          id: '@everyone',
+          label: 'eveyone',
+          subtitle: 'Notify all the members of this room',
+        },
+        ...memberList,
+      ];
+    }
+
+    return memberList;
+  }, [roomMembers, search]);
   const emojiList = useMemo(() => {
     return matchSorter(emojiesList, search, {
       keys: ['keywords', 'name'],
@@ -118,7 +141,6 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
         })),
     [tribeRooms, search]
   );
-
   //----------------------------------------------------------------------------------------------------------------
   const { me } = useAuth();
   const passport = usePassport();
@@ -322,51 +344,64 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       }
 
       case FloatMenu.Members: {
-        if (target && roomMembersList.length > 0) {
+        if (target) {
           return (
             <div
               className="bg-gray-800 rounded-md p-3 z-10 mb-1 max-h-96 overflow-auto absolute left-0 w-full"
               style={{ bottom: '6.6rem' }}
             >
-              <h3 className="text-sm uppercase text-gray-200">Members</h3>
-              {roomMembersList.map(({ id, avatar, label }, mentionIndex) => (
+              {roomMembersList.length > 0 ? (
                 <>
-                  <div
-                    key={id}
-                    className={`${
-                      mentionIndex === index ? 'bg-gray-900' : ''
-                    } mt-3 py-2 px-3 rounded-md cursor-pointer`}
-                    onClick={() => {
-                      setIndex(mentionIndex);
-                      Transforms.select(editor, target);
-                      insertUserMention(editor, roomMembersList[index]);
+                  <h3 className="text-sm uppercase text-gray-200">
+                    showing Members for {search}
+                  </h3>
+                  {roomMembersList.map(
+                    ({ id, avatar, label, type, subtitle }, mentionIndex) => (
+                      <div
+                        key={id}
+                        className={`${
+                          mentionIndex === index ? 'bg-gray-900' : ''
+                        } mt-3 py-2 px-3 rounded-md cursor-pointer flex justify-between`}
+                        onClick={() => {
+                          setIndex(mentionIndex);
+                          Transforms.select(editor, target);
+                          insertUserMention(editor, roomMembersList[index]);
 
-                      setFloatMenu(null);
-                      setTarget(null);
-                    }}
-                    onMouseEnter={() => {
-                      setIndex(mentionIndex);
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      {avatar && (
-                        <img
-                          className="w-5 h-5 rounded-full flex-shrink-0"
-                          src={avatar}
-                          alt={label}
-                        />
-                      )}
-                      {!avatar && label && (
-                        <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
-                          {label[0].toUpperCase()}
+                          setFloatMenu(null);
+                          setTarget(null);
+                        }}
+                        onMouseEnter={() => {
+                          setIndex(mentionIndex);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          {type === MentionType.Member && (
+                            <>
+                              {avatar && (
+                                <img
+                                  className="w-5 h-5 rounded-full flex-shrink-0"
+                                  src={avatar}
+                                  alt={label}
+                                />
+                              )}
+                              {!avatar && label && (
+                                <div className="bg-sapien-neutral-200 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center">
+                                  {label[0].toUpperCase()}
+                                </div>
+                              )}
+                            </>
+                          )}
+                          {label}
                         </div>
-                      )}
-                      {label}
-                    </div>
-                  </div>
+                        <span className="text-gray-400 text-sm">
+                          {subtitle}
+                        </span>
+                      </div>
+                    )
+                  )}
+                  <div className="w-full divide-solid " />
                 </>
-              ))}
-              <div className="w-full divide-solid " />
+              ) : null}
             </div>
           );
         }

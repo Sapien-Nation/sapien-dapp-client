@@ -77,9 +77,13 @@ export const getMentionsArrayFromCacheForOptimistic = (users, body) =>
     .map((node) => {
       if (isNodeUserMention(node)) {
         const userID = getUserIDFromNode(node);
-        const user = users.find(({ id }) => id === userID);
+        if (userID === '@everyone') {
+          const user = users.find(({ id }) => id === userID);
 
-        return user;
+          return user;
+        } else {
+          return userID;
+        }
       }
 
       return false;
