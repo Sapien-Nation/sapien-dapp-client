@@ -340,7 +340,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
           {showAddChannel ? (
             <button
               aria-label="Create Channel"
-              className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+              className="px-4 pt-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
               onClick={() => {
                 if (canCreateChannel) {
                   setDialog(Dialog.CreateChannel);
@@ -355,7 +355,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
             </button>
           ) : null}
           <ul
-            className="px-2 py-2 cursor-pointer overflow-auto"
+            className="px-2 pb-2 cursor-pointer overflow-auto"
             style={{ maxHeight: 500 }}
           >
             {channels
@@ -414,7 +414,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
         <nav>
           <button
             aria-label="Create Room"
-            className="px-4 py-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
+            className="px-4 pt-2 mt-4 text-xs w-full flex justify-between items-center text-sapien-neutral-200 font-bold"
             onClick={() => {
               if (canCreateRoom) {
                 setDialog(Dialog.CreateRoom);
@@ -427,7 +427,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               <PlusIcon className="text-sapien-neutral-200 w-4" />
             )}
           </button>
-          <ul className="px-2 py-2 cursor-pointer w-full">
+          <ul className="px-2 pb-2 cursor-pointer w-full">
             {rooms.map((room) => {
               const roomIcon = (
                 <span className="flex items-center w-3">
