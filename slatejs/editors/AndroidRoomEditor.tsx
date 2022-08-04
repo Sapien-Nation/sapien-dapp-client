@@ -482,7 +482,7 @@ const AndroidRoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             <Editable
               renderElement={renderElement}
               onKeyDown={onKeyDown}
-              placeholder={`Leave a message in ${name}`}
+              placeholder={`Leave a message in #${name}`}
               className="max-w-250 w-full py-2 break-all text-md"
               style={{ cursor: 'text' }}
               autoFocus
