@@ -17,8 +17,8 @@ const JoinARoomMessage = ({ createdAt, username }: Props) => {
     const hour = new Date(createdAt).getHours();
     return (
       <>
-        Hi <span className="font-bold text-yellow-500">{username}</span> welcome
-        to the room 👋{' '}
+        Hi <span className="font-bold text-yellow-500">@{username}</span>{' '}
+        welcome to the room 👋{' '}
       </>
     );
   };
