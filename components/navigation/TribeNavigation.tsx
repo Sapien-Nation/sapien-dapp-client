@@ -175,14 +175,14 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
 
     if (isOnChannelView) {
       if (unreadMentions > 0)
-        return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
-      return 'text-sm bg-sapien-neutral-800 rounded-md';
+        return 'bg-sapien-white font-bold hover:bg-sapien-neutral-800';
+      return 'bg-sapien-neutral-800';
     }
 
     if (unreadMentions > 0 || hasUnread === true)
-      return 'text-sm bg-sapien-white font-bold rounded-md hover:bg-sapien-neutral-800';
+      return 'bg-sapien-white font-bold hover:bg-sapien-neutral-800';
 
-    return 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md';
+    return 'text-gray-300 hover:bg-sapien-neutral-800';
   };
 
   const showAddChannel =
@@ -367,7 +367,7 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
                       id === viewID
                         ? 'text-sm bg-sapien-neutral-800 rounded-md'
                         : 'text-gray-300 text-sm hover:bg-sapien-neutral-800 rounded-md'
-                    }`}
+                    } font-semibold`}
                     key={id}
                   >
                     <Link href={`/tribes/${tribeID}/${id}`} passHref>
@@ -438,11 +438,11 @@ const TribeNavigation = ({ handleMobileMenu }: Props) => {
               return (
                 <>
                   <li
-                    className={getRoomListItemClassName({
+                    className={`${getRoomListItemClassName({
                       id: room.id,
                       unreadMentions: room.unreadMentions,
                       hasUnread: room.hasUnread,
-                    })}
+                    })} text-sm font-semibold rounded-md`}
                     key={room.id}
                   >
                     <div className="flex my-1 group px-2">
