@@ -251,14 +251,14 @@ const Home = ({
             </li>
           )}
           <li
-            className="bg-gray-50 hover:bg-gray-200 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
             onClick={() => {
               onSelectCoin(Coin.SPN);
             }}
           >
             <img
               className="rounded-full object-cover"
-              src="/images/SPN.svg"
+              src="/images/SPN.png"
               alt=""
             />
           </li>
