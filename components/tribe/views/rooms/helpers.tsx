@@ -25,7 +25,7 @@ export const renderContent = (
           if (user) {
             return (
               <>
-                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
+                <span className="px-1 align-baseline rounded-[.25rem] bg-sapien/60 hover:bg-sapien/100 text-white font-semibold text-md cursor-pointer">
                   {' '}
                   @{user.username}
                 </span>{' '}
@@ -34,7 +34,7 @@ export const renderContent = (
           } else {
             return (
               <>
-                <span className="px-0.5 align-baseline rounded-sm bg-sapien text-white font-semibold text-md cursor-pointer">
+                <span className="px-1 align-baseline rounded-[.25rem] bg-sapien/60 hover:bg-sapien/100 text-white font-semibold text-md cursor-pointer">
                   {' '}
                   {userID.replaceAll('-', '')}
                 </span>{' '}

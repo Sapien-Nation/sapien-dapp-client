@@ -187,11 +187,9 @@ const Message = ({
 
     return (
       <p
-        className={
-          isAMessageContinuation
-            ? 'text-md text-white group whitespace-pre-line break-words'
-            : 'pl-52 text-md text-white whitespace-pre-line break-words'
-        }
+        className={`${
+          isAMessageContinuation ? 'group' : 'pl-52'
+        } whitespace-pre-line break-words text-md text-white`}
         style={{ wordBreak: 'break-word' }}
       >
         <span className="text-[10px] hidden group-hover:block absolute left-6 text-gray-400 top-2">
