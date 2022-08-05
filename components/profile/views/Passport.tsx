@@ -134,6 +134,7 @@ const Passport = ({ viewBadgeDetails, isEditing, setIsEditing }: Props) => {
                     required: (value) => value.length > 0 || 'is required',
                   },
                 }}
+                startAdornment={'@'}
                 style={{
                   background: 'transparent',
                 }}
