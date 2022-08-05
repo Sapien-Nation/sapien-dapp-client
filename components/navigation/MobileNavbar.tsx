@@ -143,7 +143,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                               <div className="flex flex-col text-left gap-1">
                                 <a
                                   href="https://common.sapien.network/terms.html"
-                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  className="font-medium text-sm text-white py-1"
                                   target="_blank"
                                   rel="noreferrer"
                                 >
@@ -151,7 +151,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                                 </a>
                                 <a
                                   href="https://common.sapien.network/privacy.html"
-                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  className="font-medium text-sm text-white py-1"
                                   target="_blank"
                                   rel="noreferrer"
                                 >
@@ -159,7 +159,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                                 </a>
                                 <a
                                   href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
-                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  className="font-medium text-sm text-white py-1"
                                   target="_blank"
                                   rel="noreferrer"
                                 >
@@ -167,7 +167,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                                 </a>
                                 <a
                                   href="https://common.sapien.network/dmca.html"
-                                  className="font-medium text-sm text-white py-1 hover:underline hover:decoration-purple-400"
+                                  className="font-medium text-sm text-white py-1"
                                   target="_blank"
                                   rel="noreferrer"
                                 >
