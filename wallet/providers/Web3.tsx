@@ -24,7 +24,7 @@ import { default as PassportContractAbi } from '../contracts/Passport.json';
 import ERC20List from '../contracts/ERC20List';
 
 // constants
-import { ErrorTypes } from '../constants';
+import { ErrorTypes, Coin } from '../constants';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -123,10 +123,10 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   ];
 
   const platformDomainData = {
-    name: ERC20List['SPN'].name,
+    name: ERC20List[Coin.SPN].name,
     version: '1',
     verifyingContract: Web3Library.utils.toChecksumAddress(
-      ERC20List['SPN'].addr
+      ERC20List[Coin.SPN].addr
     ),
     salt: '0x' + config.POLY_NETWORK_ID.toString(16).padStart(64, '0'),
   };
@@ -187,6 +187,16 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
   const getERC20Balance = async (token: string, addr?: string) => {
     try {
+      const digitLimit = 10 ** 6; // limit 6 digits after decimal point
+      if (token === Coin.MATIC) {
+        const matic: string = await WalletAPIRef.current.eth.getBalance(
+          me.walletAddress
+        );
+        return (
+          Math.floor(Number(Web3Library.utils.fromWei(matic)) * digitLimit) /
+          digitLimit
+        );
+      }
       const contract = getERC20Contract(token);
       const balance = await contract.methods
         .balanceOf(addr ?? me.walletAddress)
@@ -194,10 +204,9 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
 
       return (
         Math.floor(
-          (Number(balance) * 10 ** 6) / 10 ** ERC20List[token].decimal
-        ) /
-        10 ** 6
-      ); // limit 6 digits after decimal point
+          (Number(balance) * digitLimit) / 10 ** ERC20List[token].decimal
+        ) / digitLimit
+      );
     } catch (err) {
       Sentry.captureMessage(err);
       return Promise.reject(err);
@@ -406,7 +415,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         gasLimit: config.GAS_LIMIT,
       };
       const walletProvider = new ethers.providers.Web3Provider(window.ethereum);
-      if (token === 'MATIC') {
+      if (token === Coin.MATIC) {
         const matic: string = await WalletAPIRef.current.eth.getBalance(
           me.walletAddress
         );
@@ -441,7 +450,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
           };
 
           let nonce: string;
-          if (token === 'USDC')
+          if (token === Coin.USDC)
             nonce = await contract.methods.nonces(from).call();
           else nonce = await contract.methods.getNonce(from).call();
           const functionSignature = contract.methods
@@ -537,19 +546,17 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
   // get all fungible tokens(matic, eth, erc20) balance
   const getWalletFTTokenBalance = async (): Promise<FTBalance> => {
     try {
-      const eth: number = await getERC20Balance('WETH');
-      const spn: number = await getERC20Balance('SPN');
-      const usdt: number = await getERC20Balance('USDT');
-      const usdc: number = await getERC20Balance('USDC');
-      const matic: string = await WalletAPIRef.current.eth.getBalance(
-        me.walletAddress
-      );
+      const eth: number = await getERC20Balance(Coin.WETH);
+      const spn: number = await getERC20Balance(Coin.SPN);
+      const usdt: number = await getERC20Balance(Coin.USDT);
+      const usdc: number = await getERC20Balance(Coin.USDC);
+      const matic: number = await getERC20Balance(Coin.MATIC);
       return {
         eth,
         spn,
         usdt,
         usdc,
-        matic: Number(Web3Library.utils.fromWei(matic)),
+        matic,
       };
     } catch (err) {
       Sentry.captureMessage(err);
