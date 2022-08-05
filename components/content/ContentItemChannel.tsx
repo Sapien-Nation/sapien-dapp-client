@@ -87,14 +87,14 @@ const ContentItem = ({
             <h3 className="text-sm font-semibold text-white">{displayName}</h3>
             <h3 className="text-sm text-gray-500">@{username}</h3>
             <RightTriangle />
-            <p className="font-bold flex items-center gap-1">
-              <GlobeIcon className="h-4 text-gray-500" />
+            <div className="font-bold flex items-center gap-1">
+              <GlobeIcon className="w-[18px] text-gray-500" />
               {group.name}
-            </p>
-            <p className="text-sm text-sapien-40 font-semibold bg-sapien-80/40 rounded-2xl py-1 px-2 flex gap-1">
-              <UserGroupIcon className="h-4" />
+            </div>
+            <div className="text-sm text-sapien-40 font-semibold bg-sapien-80/40 rounded-2xl py-1 px-2 flex items-center gap-1">
+              <img className="w-[14px] " src="/images/tribe.png" alt="sapien" />
               {tribe.name}
-            </p>
+            </div>
           </div>
           <p className="text-sm text-gray-500">
             {formatDateRelative(createdAt)}
