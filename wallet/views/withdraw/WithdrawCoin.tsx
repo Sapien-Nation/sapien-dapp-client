@@ -118,6 +118,7 @@ const WithdrawCoinView = ({ handleGoHome, coin }: Props) => {
                   <input
                     id="amount"
                     type="number"
+                    step="any"
                     aria-label="Wallet Address"
                     autoComplete="amount"
                     required
