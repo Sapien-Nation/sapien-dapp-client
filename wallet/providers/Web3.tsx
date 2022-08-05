@@ -422,6 +422,13 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         const gas = Number(
           Web3Library.utils.fromWei((GasPrice * config.GAS_LIMIT).toString())
         );
+        console.log(
+          'Debug when depositing matic: ',
+          matic,
+          gas,
+          Number(amount) + gas,
+          Number(Web3Library.utils.fromWei(matic))
+        );
         if (Number(amount) + gas < Number(Web3Library.utils.fromWei(matic))) {
           const result = await walletProvider.getSigner().sendTransaction({
             ...object,
@@ -505,6 +512,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         return Promise.reject(`Insufficient ${token} Balance`);
       }
     } catch (err) {
+      console.log('error in handleFTDeposit: ', err);
       Sentry.captureMessage(err);
       return Promise.reject(err);
     }
