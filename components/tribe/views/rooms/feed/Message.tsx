@@ -272,15 +272,16 @@ const Message = ({
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-bold flex gap-2 items-center">
-                    {username}{' '}
-                    {badges.length > 0 && (
+                    {username}
+                    {/* TODO: Hide user profile flairs (temporary until we have a modal for hover) */}
+                    {/* {badges.length > 0 && (
                       <img
                         src={badges[0].avatar}
                         alt="badge"
                         style={{ borderColor: badges[0].color }}
                         className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
                       />
-                    )}
+                    )} */}
                   </h3>
                   <time
                     data-testid="message-timestamp"
