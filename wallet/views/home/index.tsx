@@ -277,6 +277,18 @@ const Home = ({
           <li
             className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
             onClick={() => {
+              onSelectCoin(Coin.WETH);
+            }}
+          >
+            <img
+              className="rounded-full object-cover"
+              src="/images/weth.png"
+              alt=""
+            />
+          </li>
+          <li
+            className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
+            onClick={() => {
               onSelectCoin(Coin.USDC);
             }}
           >

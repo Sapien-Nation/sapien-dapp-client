@@ -9,6 +9,7 @@ export enum ErrorTypes {
 export enum Coin {
   SPN = 'SPN',
   MATIC = 'MATIC',
+  WETH = 'WETH',
   USDT = 'USDT',
   USDC = 'USDC',
 }
@@ -21,6 +22,10 @@ export const CoinMap = {
   [Coin.MATIC]: {
     name: 'Matic',
     image: '/images/matic.png',
+  },
+  [Coin.WETH]: {
+    name: 'WETH',
+    image: '/images/weth.png',
   },
   [Coin.USDC]: {
     name: 'USDC',

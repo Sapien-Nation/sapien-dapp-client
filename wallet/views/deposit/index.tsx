@@ -445,6 +445,7 @@ const Deposit = ({ handleBack }: Props) => {
                 <input
                   id="amount"
                   type="number"
+                  step="any"
                   aria-label="Withdraw Amount"
                   required
                   placeholder="10"
@@ -467,6 +468,7 @@ const Deposit = ({ handleBack }: Props) => {
                 >
                   <option value={Coin.SPN}>{Coin.SPN}</option>
                   <option value={Coin.MATIC}>{Coin.MATIC}</option>
+                  <option value={Coin.WETH}>{Coin.WETH}</option>
                   <option value={Coin.USDC}>{Coin.USDC}</option>
                   <option value={Coin.USDT}>{Coin.USDT}</option>
                 </select>
