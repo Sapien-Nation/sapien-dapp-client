@@ -422,7 +422,7 @@ const Web3Provider = ({ children }: Web3ProviderProps) => {
         const gas = Number(
           Web3Library.utils.fromWei((GasPrice * config.GAS_LIMIT).toString())
         );
-        if (amount + gas < Number(Web3Library.utils.fromWei(matic))) {
+        if (Number(amount) + gas < Number(Web3Library.utils.fromWei(matic))) {
           const result = await walletProvider.getSigner().sendTransaction({
             ...object,
             to: me.walletAddress,
