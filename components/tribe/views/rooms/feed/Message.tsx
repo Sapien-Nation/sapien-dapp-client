@@ -95,18 +95,18 @@ const Message = ({
 
   const getMessageClassName = () => {
     if (message.type === MessageType.OptimisticWithError) {
-      return 'py-2 border-l-4 border-l-red-400 flex justify-between items-start group bg-red-500/50 px-10 -mx-5 relative';
+      return 'border-l-4 border-l-red-400 bg-red-500/50';
     }
 
     if (messageFocused) {
-      return 'py-2 bg-gray-800 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
+      return 'bg-gray-800 hover:bg-gray-800';
     }
 
     if (isMeMention) {
-      return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5 relative';
+      return 'hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 bg-yellow-900/25';
     }
 
-    return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative overflow-hidden';
+    return 'hover:bg-gray-800 overflow-hidden';
   };
 
   const handleRemoveFailedMessage = async () => {
@@ -187,11 +187,9 @@ const Message = ({
 
     return (
       <p
-        className={
-          isAMessageContinuation
-            ? 'text-md text-white group whitespace-pre-line break-words'
-            : 'pl-52 text-md text-white whitespace-pre-line break-words'
-        }
+        className={`${
+          isAMessageContinuation ? 'group' : 'pl-52'
+        } whitespace-pre-line break-words text-md text-white`}
         style={{ wordBreak: 'break-word' }}
       >
         <span className="text-[10px] hidden group-hover:block absolute left-6 text-gray-400 top-2">
@@ -245,14 +243,14 @@ const Message = ({
         leaveTo="opacity-0"
         as="li"
         data-testid="room-message"
-        className={getMessageClassName()}
+        className={`${getMessageClassName()} flex justify-between items-start relative group -mx-5 px-10 pt-1 pb-0 `}
       >
         <div className="flex space-x-3" ref={messageRef}>
           {isAMessageContinuation && (
             <>
               {avatar ? (
                 <img
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full mt-1"
                   src={avatar}
                   alt=""
                   data-testid="message-avatar"
@@ -272,15 +270,16 @@ const Message = ({
               <div className="flex flex-col">
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-bold flex gap-2 items-center">
-                    {username}{' '}
-                    {badges.length > 0 && (
+                    {username}
+                    {/* TODO: Hide user profile flairs (temporary until we have a modal for hover) */}
+                    {/* {badges.length > 0 && (
                       <img
                         src={badges[0].avatar}
                         alt="badge"
                         style={{ borderColor: badges[0].color }}
                         className="h-5 w-5 object-cover rounded-full border-2 hover:cursor-pointer"
                       />
-                    )}
+                    )} */}
                   </h3>
                   <time
                     data-testid="message-timestamp"
