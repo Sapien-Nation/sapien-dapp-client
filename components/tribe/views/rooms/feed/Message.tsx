@@ -95,18 +95,18 @@ const Message = ({
 
   const getMessageClassName = () => {
     if (message.type === MessageType.OptimisticWithError) {
-      return 'py-2 border-l-4 border-l-red-400 flex justify-between items-start group bg-red-500/50 px-10 -mx-5 relative';
+      return 'border-l-4 border-l-red-400 bg-red-500/50';
     }
 
     if (messageFocused) {
-      return 'py-2 bg-gray-800 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative';
+      return 'bg-gray-800 hover:bg-gray-800';
     }
 
     if (isMeMention) {
-      return 'py-2 hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 flex justify-between items-start group bg-yellow-900/25 px-10 -mx-5 relative';
+      return 'hover:bg-yellow-900/40 border-l-4 border-l-yellow-700 bg-yellow-900/25';
     }
 
-    return 'py-2 hover:bg-gray-800 px-10 -mx-5 flex justify-between items-start group relative overflow-hidden';
+    return 'hover:bg-gray-800 overflow-hidden';
   };
 
   const handleRemoveFailedMessage = async () => {
@@ -245,14 +245,14 @@ const Message = ({
         leaveTo="opacity-0"
         as="li"
         data-testid="room-message"
-        className={getMessageClassName()}
+        className={`${getMessageClassName()} flex justify-between items-start relative group -mx-5 px-10 pt-1 pb-0 `}
       >
         <div className="flex space-x-3" ref={messageRef}>
           {isAMessageContinuation && (
             <>
               {avatar ? (
                 <img
-                  className="h-10 w-10 rounded-full"
+                  className="h-10 w-10 rounded-full mt-1"
                   src={avatar}
                   alt=""
                   data-testid="message-avatar"
