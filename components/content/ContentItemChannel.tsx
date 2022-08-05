@@ -88,11 +88,15 @@ const ContentItem = ({
             <h3 className="text-sm text-gray-500">@{username}</h3>
             <RightTriangle />
             <div className="font-bold flex items-center gap-1">
-              <GlobeIcon className="w-[18px] text-gray-500" />
+              <GlobeIcon className="w-6 pt-0.5 text-gray-500" />
               {group.name}
             </div>
             <div className="text-sm text-sapien-40 font-semibold bg-sapien-80/40 rounded-2xl py-1 px-2 flex items-center gap-1">
-              <img className="w-[14px] " src="/images/tribe.png" alt="sapien" />
+              <img
+                src="/images/sapien_nation.png"
+                alt="Tribe"
+                className="w-6 pt-0.5"
+              />
               {tribe.name}
             </div>
           </div>
