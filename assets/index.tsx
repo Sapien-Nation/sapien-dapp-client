@@ -4,3 +4,6 @@ export { default as VaultIcon } from './Vault';
 export { default as ContributorBadge } from './ContributorBadge';
 export { default as ManageIcon } from './Manage';
 export { default as PolygonFilter } from './polygolFilter';
+export { default as NotificationsIcon } from './NotificationsIcon';
+export { default as DropDownArrowIcon } from './DropDownArrowIcon';
+export { default as RightTriangleIcon } from './RightTriangleIcon';

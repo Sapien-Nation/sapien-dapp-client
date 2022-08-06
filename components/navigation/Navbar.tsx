@@ -24,6 +24,7 @@ const Notifications = dynamic(() => import('components/notifications'));
 const Wallet = dynamic(() => import('wallet/Wallet'));
 
 // icons
+import { DropDownArrowIcon, NotificationsIcon } from 'assets';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
 // type
@@ -130,36 +131,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
-          {/* Wallet dropdown */}
-          <Menu as="div">
-            {({ open }) => (
-              <Query api="/core-api/notification">
-                {({ unread }: { unread: number }) => (
-                  <>
-                    <div>
-                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Notifications />
-                      </Menu.Items>
-                    </div>
-
-                    <Menu.Button
-                      type="button"
-                      className={`${
-                        open ? 'bg-gray-800' : ''
-                      } group px-5 py-3 w-full flex flex-col justify-center items-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      <div className="absolute top-3 left-10">
-                        <RedDot count={unread} />
-                      </div>
-                    </Menu.Button>
-                  </>
-                )}
-              </Query>
-            )}
-          </Menu>
-          {/* Wallet dropdown */}
+          {/* Wallet */}
           <Menu as="div">
             {({ open }) => (
               <>
@@ -183,7 +155,36 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               </>
             )}
           </Menu>
-          {/* Profile dropdown */}
+          {/* Notifications */}
+          <Menu as="div">
+            {({ open }) => (
+              <Query api="/core-api/notification">
+                {({ unread }: { unread: number }) => (
+                  <>
+                    <div>
+                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Notifications />
+                      </Menu.Items>
+                    </div>
+
+                    <Menu.Button
+                      type="button"
+                      className={`${
+                        open ? 'bg-gray-800' : ''
+                      } group px-5 py-3 w-full flex flex-col justify-center items-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                    >
+                      <span className="sr-only">View notifications</span>
+                      <NotificationsIcon />
+                      <div className="absolute top-3 left-10">
+                        <RedDot count={unread} />
+                      </div>
+                    </Menu.Button>
+                  </>
+                )}
+              </Query>
+            )}
+          </Menu>
+          {/* Profile */}
           <Menu as="div">
             <div>
               <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
@@ -276,9 +277,10 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               >
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
-                    <div className=" px-5 py-3 ">
+                    <div className="pl-5 pr-3 py-3">
                       <UserAvatar user={me} passport={passport} />
                     </div>
+                    <DropDownArrowIcon />
                   </span>
                 </span>
               </Menu.Button>
