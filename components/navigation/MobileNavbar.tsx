@@ -54,7 +54,6 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                     <Wallet />
                   </Menu.Items>
                 </div>
-
                 <Menu.Button
                   type="button"
                   className={`${
@@ -117,7 +116,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="font-semibold">{me.displayName}</span>
-                        <span className="text-xs truncate w-30">
+                        <span className="text-xs truncate w-30 pb-1.5">
                           @{me.username}
                         </span>
                       </div>
