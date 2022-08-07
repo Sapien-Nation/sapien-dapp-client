@@ -29,14 +29,15 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         skin: window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'oxide-dark'
           : 'oxide',
-        plugins: ['autolink', 'lists', 'link', 'image', 'media', 'preview'],
+        plugins: 'autolink lists link image media preview media mediaembed',
         toolbar:
           'undo redo | blocks | ' +
           'bold italic | alignleft aligncenter ' +
           'alignright alignjustify | ' +
-          'link image',
+          'link image media',
         automatic_uploads: true,
         images_upload_credentials: true,
+        mediaembed_max_width: 450,
         image_dimensions: false,
         image_description: false,
         file_picker_types: 'image',
