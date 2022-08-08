@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { useCopyToClipboard } from 'react-use';
 import { useRouter } from 'next/router';
-import { PencilIcon } from '@heroicons/react/outline';
+import Linkify from 'linkify-react';
 
 // components
 import { EditTribeDialog } from 'components/tribe/dialogs';
@@ -17,6 +17,9 @@ import { useToast } from 'context/toast';
 import type { MainFeedTribe } from 'tools/types/tribe';
 import { useTribePermission } from 'hooks/tribe';
 
+// utils
+import { isSameOriginURL } from 'utils/url';
+
 interface Props {
   tribe: MainFeedTribe;
 }
@@ -29,7 +32,7 @@ const MainChannelHeader = ({ tribe }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const toast = useToast();
-  const { query } = useRouter();
+  const { push, query } = useRouter();
   const [_, copyToClipboard] = useCopyToClipboard();
 
   const { tribeID } = query;
@@ -104,9 +107,32 @@ const MainChannelHeader = ({ tribe }: Props) => {
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between mt-8 mx-8">
-          <p className="text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
-            {tribe.description}
-          </p>
+          <Linkify
+            tagName="p"
+            options={{
+              attributes: {
+                onClick: (event) => {
+                  const url = isSameOriginURL(event.target.href);
+                  if (url) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    push(url.pathname);
+                  }
+                },
+              },
+              className: { url: 'underline text-blue-500' },
+              target: (url) => {
+                if (isSameOriginURL(url)) return '_parent';
+
+                return '_target';
+              },
+            }}
+          >
+            <p className="text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
+              {tribe.description}
+            </p>
+          </Linkify>
           <div
             className={`${canEdit ? 'visible' : 'hidden'} flex items-center`}
           >

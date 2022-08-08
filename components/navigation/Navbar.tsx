@@ -196,7 +196,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               >
                 <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
                   <div className="h-full flex flex-col items-start">
-                    <div className="w-full flex items-center">
+                    <div className="w-full flex items-center truncate">
                       <div className="px-3 py-3">
                         <UserAvatar user={me} passport={passport} />
                       </div>

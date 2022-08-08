@@ -1,4 +1,11 @@
 import {
+  EmojiHappyIcon,
+  ExternalLinkIcon,
+  PaperAirplaneIcon,
+  PencilAltIcon,
+  PhotographIcon,
+} from '@heroicons/react/solid';
+import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
@@ -8,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import useSWR, { useSWRConfig } from 'swr';
 import Link from 'next/link';
+import { twMerge } from 'tailwind-merge';
 
 // api
 import axios from 'axios';
@@ -25,19 +33,22 @@ import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
+// constants
+import { ContentType } from 'tools/constants/content';
+
 // hooks
 import { useChannel, useChannelPermissions } from 'hooks/channel';
 import { usePassport } from 'hooks/passport';
 
 // types
 import type { Content } from 'tools/types/content';
-import { PaperAirplaneIcon } from '@heroicons/react/solid';
 
 interface Props {
   apiKey: string;
 }
 
 const Channel = ({ apiKey }: Props) => {
+  const [postType, setPostType] = useState<ContentType>(ContentType.POST);
   const [hasContent, setHasContent] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
@@ -116,6 +127,24 @@ const Channel = ({ apiKey }: Props) => {
             />
             {canPost === true && (
               <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
+                <div className="flex justify-end">
+                  <button
+                    className="grid-cols-1 flex justify-end"
+                    type="button"
+                    onClick={() => {
+                      setInitialEditorValue(editorRef.current?.getContent());
+                      setShowEditor(true);
+
+                      queueMicrotask(() => {
+                        setTimeout(() => {
+                          editorRef.current?.execCommand('SelectAll', false);
+                        }, 500);
+                      });
+                    }}
+                  >
+                    <ArrowsExpandIcon className={'w-4 h-4'} />
+                  </button>
+                </div>
                 <div className="flex gap-2 lg:rounded-3xl p-5">
                   <UserAvatar user={me} passport={passport} />
 
@@ -127,51 +156,72 @@ const Channel = ({ apiKey }: Props) => {
                     >
                       <div className="h-auto min-h-[100px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
                         <InlineEditor
-                          channel={channel}
                           editorRef={editorRef}
                           onChange={handleOnContentChange}
                           initialValue={initialEditorValue}
                         />
-                      </div>
-                      <div className="flex justify-end gap-4 pt-3">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setInitialEditorValue(
-                              editorRef.current?.getContent()
-                            );
-                            setShowEditor(true);
-
-                            queueMicrotask(() => {
-                              setTimeout(() => {
-                                editorRef.current?.execCommand(
-                                  'SelectAll',
-                                  false
-                                );
-                              }, 500);
-                            });
-                          }}
-                        >
-                          <ArrowsExpandIcon className={'w-4 h-4'} />
-                        </button>
-                        <button
-                          type="submit"
-                          form="editor-form"
-                          className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                        <div className="flex gap-24 mt-7 justify-between">
+                          <div className="flex gap-3 justify-center flex-1">
+                            <button
+                              className="flex gap-3 items-center"
+                              type="button"
+                              onClick={() =>
+                                editorRef.current.execCommand('mceEmoticons')
+                              }
+                            >
+                              <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
+                              Emotion
+                            </button>
+                            <button
+                              className="flex gap-3 items-center"
+                              type="button"
+                              onClick={() =>
+                                editorRef.current.execCommand('mceImage')
+                              }
+                            >
+                              <PhotographIcon className="w-5 h-5 text-green-400" />
+                              Photo/Video/Audio
+                            </button>
+                            <button
+                              className="flex gap-3 items-center"
+                              type="button"
+                              onClick={() =>
+                                editorRef.current.execCommand('mceMedia')
+                              }
+                            >
+                              <PhotographIcon className="w-5 h-5 text-blue-400" />
+                              Embed
+                            </button>
+                            <button
+                              className="flex gap-3 items-center"
+                              type="button"
+                              onClick={() =>
+                                editorRef.current.execCommand('mceLink')
+                              }
+                            >
+                              <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
+                              Link
+                            </button>
+                          </div>
+                          <button
+                            type="submit"
+                            form="editor-form"
+                            className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                           ${
                             isPublishDisabled
                               ? 'cursor-not-allowed bg-primary/50'
                               : 'cursor-pointer bg-primary hover:bg-sapien-80'
                           }`}
-                          onClick={handleSubmit}
-                          disabled={isPublishDisabled}
-                        >
-                          {isPublishing ? (
-                            <RefreshIcon className="w-5 animate-spin" />
-                          ) : (
-                            <PaperAirplaneIcon className="w-5 rotate-90" />
-                          )}
-                        </button>
+                            onClick={handleSubmit}
+                            disabled={isPublishDisabled}
+                          >
+                            {isPublishing ? (
+                              <RefreshIcon className="w-5 animate-spin" />
+                            ) : (
+                              <PaperAirplaneIcon className="w-5 rotate-90" />
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </form>
                   )}
