@@ -1,10 +1,9 @@
-import { Disclosure, Menu } from '@headlessui/react';
-import { CreditCardIcon, BellIcon } from '@heroicons/react/outline';
+import { Fragment, useEffect } from 'react';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 import * as Sentry from '@sentry/nextjs';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useSWRConfig } from 'swr';
-import { useEffect } from 'react';
 
 // context
 import { useAuth } from 'context/user';
@@ -24,7 +23,8 @@ const Notifications = dynamic(() => import('components/notifications'));
 const Wallet = dynamic(() => import('wallet/Wallet'));
 
 // icons
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { DropDownArrowIcon, NotificationsIcon } from 'assets';
+import { ChevronDownIcon, CreditCardIcon } from '@heroicons/react/outline';
 
 // type
 import type { ProfileTribe } from 'tools/types/tribe';
@@ -130,7 +130,30 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
         <div className="flex-shrink-0 hidden lg:flex relative">
-          {/* Wallet dropdown */}
+          {/* Wallet */}
+          <Menu as="div">
+            {({ open }) => (
+              <>
+                <div>
+                  <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Wallet />
+                  </Menu.Items>
+                </div>
+                <Menu.Button
+                  type="button"
+                  className={`${
+                    open ? 'bg-gray-800' : ''
+                  } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                >
+                  <>
+                    <span className="sr-only">View wallet</span>
+                    <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </Menu.Button>
+              </>
+            )}
+          </Menu>
+          {/* Notifications */}
           <Menu as="div">
             {({ open }) => (
               <Query api="/core-api/notification">
@@ -149,7 +172,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       } group px-5 py-3 w-full flex flex-col justify-center items-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
                     >
                       <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
+                      <NotificationsIcon />
                       <div className="absolute top-3 left-10">
                         <RedDot count={unread} />
                       </div>
@@ -159,126 +182,113 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               </Query>
             )}
           </Menu>
-          {/* Wallet dropdown */}
-          <Menu as="div">
-            {({ open }) => (
-              <>
-                <div>
-                  <Menu.Items className="block absolute overflow-y-auto right-0 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Wallet />
-                  </Menu.Items>
-                </div>
-
-                <Menu.Button
-                  type="button"
-                  className={`${
-                    open ? 'bg-gray-800' : ''
-                  } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
-                >
-                  <>
-                    <span className="sr-only">View wallet</span>
-                    <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
-                  </>
-                </Menu.Button>
-              </>
-            )}
-          </Menu>
-          {/* Profile dropdown */}
+          {/* Profile */}
           <Menu as="div">
             <div>
-              <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
-                <div className="h-full flex flex-col items-start">
-                  <div className="flex items-center">
-                    <div className="px-3 py-3">
-                      <UserAvatar user={me} passport={passport} />
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+              >
+                <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="h-full flex flex-col items-start">
+                    <div className="w-full flex items-center">
+                      <div className="px-3 py-3">
+                        <UserAvatar user={me} passport={passport} />
+                      </div>
+                      <div className="flex flex-col flex-wrap break-words">
+                        <span className="font-semibold">{me.displayName}</span>
+                        <span className="text-xs truncate w-30 pb-1.5">
+                          @{me.username}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex flex-col flex-wrap break-words">
-                      <span className="font-semibold">{me.displayName}</span>
-                      <span className="text-xs truncate w-30">
-                        @{me.username}
-                      </span>
-                    </div>
-                  </div>
-                  {passport?.tokenId ? (
-                    <button
-                      className="font-medium text-sm text-white mt-2"
-                      onClick={setShowProfileOverlay}
-                    >
-                      View Passport
-                    </button>
-                  ) : null}
-                  {/* Compliance */}
-                  <Disclosure>
-                    {({ open }) => (
-                      <>
-                        <Disclosure.Button className="flex w-full justify-between items-center py-2 text-left text-sm focus:outline-none">
-                          Privacy & Safety
-                          <ChevronDownIcon
-                            className={`${
-                              open ? 'rotate-180 transform' : ''
-                            } h-5 w-5 text-purple-500`}
-                          />
-                        </Disclosure.Button>
-                        <Disclosure.Panel className="text-gray-500 w-full">
-                          <div className="h-full w-full">
-                            <div className="flex flex-col text-left gap-1">
-                              <a
-                                href="https://common.sapien.network/terms.html"
-                                className="font-medium text-sm text-white py-1"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Terms of Service
-                              </a>
-                              <a
-                                href="https://common.sapien.network/privacy.html"
-                                className="font-medium text-sm text-white py-1"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Privacy Policy
-                              </a>
-                              <a
-                                href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
-                                className="font-medium text-sm text-white py-1"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Content Policy
-                              </a>
-                              <a
-                                href="https://common.sapien.network/dmca.html"
-                                className="font-medium text-sm text-white py-1"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                DMCA
-                              </a>
+                    {passport?.tokenId ? (
+                      <button
+                        className="font-medium text-sm text-white mt-2"
+                        onClick={setShowProfileOverlay}
+                      >
+                        View Passport
+                      </button>
+                    ) : null}
+                    {/* Compliance */}
+                    <Disclosure>
+                      {({ open }) => (
+                        <>
+                          <Disclosure.Button className="flex w-full justify-between items-center py-2 text-left text-sm focus:outline-none">
+                            Privacy & Safety
+                            <ChevronDownIcon
+                              className={`${
+                                open ? 'rotate-180 transform' : ''
+                              } h-5 w-5 text-purple-500`}
+                            />
+                          </Disclosure.Button>
+                          <Disclosure.Panel className="text-gray-500 w-full">
+                            <div className="h-full w-full">
+                              <div className="flex flex-col text-left gap-1">
+                                <a
+                                  href="https://common.sapien.network/terms.html"
+                                  className="font-medium text-sm text-white py-1"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Terms of Service
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/privacy.html"
+                                  className="font-medium text-sm text-white py-1"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Privacy Policy
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/static/pdf/Sapien_Content_Policy.pdf"
+                                  className="font-medium text-sm text-white py-1"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  Content Policy
+                                </a>
+                                <a
+                                  href="https://common.sapien.network/dmca.html"
+                                  className="font-medium text-sm text-white py-1"
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  DMCA
+                                </a>
+                              </div>
                             </div>
-                          </div>
-                        </Disclosure.Panel>
-                      </>
-                    )}
-                  </Disclosure>
-                  {/* Logout */}
-                  <div className="mt-4 text-left">
-                    <Link href="/logout">
-                      <a className="font-medium text-sm text-purple-600 hover:text-purple-500 flex">
-                        Logout
-                      </a>
-                    </Link>
+                          </Disclosure.Panel>
+                        </>
+                      )}
+                    </Disclosure>
+                    {/* Logout */}
+                    <div className="mt-4 text-left">
+                      <Link href="/logout">
+                        <a className="font-medium text-sm text-purple-600 hover:text-purple-500 flex">
+                          Logout
+                        </a>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              </Menu.Items>
+                </Menu.Items>
+              </Transition>
               <Menu.Button
                 className="group w-full flex text-sm text-left font-medium  focus:outline-none"
                 aria-label="Open Desktop Profile Menu"
               >
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
-                    <div className=" px-5 py-3 ">
+                    <div className="pl-5 pr-3 py-3">
                       <UserAvatar user={me} passport={passport} />
                     </div>
+                    <DropDownArrowIcon />
                   </span>
                 </span>
               </Menu.Button>

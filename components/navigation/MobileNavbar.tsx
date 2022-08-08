@@ -1,4 +1,3 @@
-import { BellIcon, CreditCardIcon, MenuIcon } from '@heroicons/react/outline';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { LogoutIcon } from '@heroicons/react/solid';
 import { Fragment } from 'react';
@@ -18,7 +17,12 @@ const Notifications = dynamic(() => import('components/notifications'));
 import { usePassport } from 'hooks/passport';
 
 // icons
-import { ChevronDownIcon } from '@heroicons/react/outline';
+import { DropDownArrowIcon, NotificationsIcon } from 'assets';
+import {
+  ChevronDownIcon,
+  CreditCardIcon,
+  MenuIcon,
+} from '@heroicons/react/outline';
 
 interface Props {
   setMobileMenuOpen: (isOpen: boolean) => void;
@@ -40,37 +44,8 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
           <span className="sr-only">Open sidebar</span>
           <MenuIcon className="h-6 w-6" aria-hidden="true" />
         </button>
-        {/* Wallet dropdown */}
         <div className="flex relative gap-2">
-          {/* Wallet dropdown */}
-          <Menu as="div">
-            {({ open }) => (
-              <Query api="/core-api/notification">
-                {({ unread }: { unread: number }) => (
-                  <>
-                    <div>
-                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Notifications />
-                      </Menu.Items>
-                    </div>
-
-                    <Menu.Button
-                      type="button"
-                      className={`${
-                        open ? 'bg-gray-800' : ''
-                      } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
-                    >
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      <div className="absolute top-3 left-10">
-                        <RedDot count={unread} />
-                      </div>
-                    </Menu.Button>
-                  </>
-                )}
-              </Query>
-            )}
-          </Menu>
+          {/* Wallet */}
           <Menu as="div">
             {({ open }) => (
               <>
@@ -79,7 +54,6 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                     <Wallet />
                   </Menu.Items>
                 </div>
-
                 <Menu.Button
                   type="button"
                   className={`${
@@ -94,6 +68,35 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
               </>
             )}
           </Menu>
+          {/* Notifications */}
+          <Menu as="div">
+            {({ open }) => (
+              <Query api="/core-api/notification">
+                {({ unread }: { unread: number }) => (
+                  <>
+                    <div>
+                      <Menu.Items className="block w-full absolute overflow-y-auto right-0 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Notifications />
+                      </Menu.Items>
+                    </div>
+                    <Menu.Button
+                      type="button"
+                      className={`${
+                        open ? 'bg-gray-800' : ''
+                      } group px-5 py-3 w-full flex flex-col justify-center h-full text-sm text-left font-medium focus:outline-none hover:bg-gray-800`}
+                    >
+                      <span className="sr-only">View notifications</span>
+                      <NotificationsIcon />
+                      <div className="absolute top-3 left-10">
+                        <RedDot count={unread} />
+                      </div>
+                    </Menu.Button>
+                  </>
+                )}
+              </Query>
+            )}
+          </Menu>
+          {/* Profile */}
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Transition
@@ -113,7 +116,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="font-semibold">{me.displayName}</span>
-                        <span className="text-xs truncate w-30">
+                        <span className="text-xs truncate w-30 pb-1.5">
                           @{me.username}
                         </span>
                       </div>
@@ -179,6 +182,7 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
                         </>
                       )}
                     </Disclosure>
+                    {/* Logout */}
                     <div className="mt-4 text-left">
                       <Link href="/logout">
                         <a className="mt-2 font-medium text-sm text-purple-600 hover:text-purple-500 flex">
@@ -199,9 +203,10 @@ const MobileNavbar = ({ setMobileMenuOpen, setShowProfileOverlay }: Props) => {
               >
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
-                    <div className=" px-5 py-3 ">
+                    <div className="pl-5 pr-3 py-3">
                       <UserAvatar user={me} passport={passport} />
                     </div>
+                    <DropDownArrowIcon />
                   </span>
                 </span>
               </Menu.Button>

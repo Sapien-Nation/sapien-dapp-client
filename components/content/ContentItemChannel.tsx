@@ -1,6 +1,7 @@
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { GlobeIcon, UserGroupIcon } from '@heroicons/react/solid';
+
 // TODO: commented until we have data to show
 // import {
 //   ChatIcon,
@@ -17,33 +18,17 @@ import { formatDateRelative } from 'utils/date';
 // hooks
 import { useTribe } from 'hooks/tribe';
 
+// icons
+import { RightTriangleIcon } from 'assets';
+import { GlobeIcon } from '@heroicons/react/solid';
+
 // types
 import type { Content as ContentType } from 'tools/types/content';
-import React from 'react';
 
 interface Props {
   content: ContentType;
   tribeID: string;
 }
-
-const RightTriangle = () => {
-  return (
-    <svg
-      width="7"
-      height="12"
-      viewBox="0 0 7 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M2.6166 10.291C1.98677 10.9214 0.909179 10.4754 0.909179 9.58425L0.90918 2.41268C0.90918 1.52199 1.98587 1.07572 2.61597 1.70525L6.20175 5.28781C6.59245 5.67815 6.59274 6.31132 6.20239 6.70202L2.6166 10.291Z"
-        fill="#4F4952"
-      />
-    </svg>
-  );
-};
 
 const ContentItem = ({
   content: {
@@ -86,7 +71,7 @@ const ContentItem = ({
             )}
             <h3 className="text-sm font-semibold text-white">{displayName}</h3>
             <h3 className="text-sm text-gray-500">@{username}</h3>
-            <RightTriangle />
+            <RightTriangleIcon />
             <div className="font-bold flex items-center gap-1">
               <GlobeIcon className="w-6 pt-0.5 text-gray-500" />
               {group.name}
