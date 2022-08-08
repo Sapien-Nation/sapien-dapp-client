@@ -13,10 +13,9 @@ export const imageHandler = async (blobInfo, progress) => {
   return Promise.resolve(fileData.url);
 };
 
-export const filePicker = (cb, value, meta) => {
+export const filePicker = (cb) => {
   const input = document.createElement('input');
   input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
   /*
     Note: In modern browsers input[type="file"] is functional without
     even adding it to the DOM, but that might not be the case in some older

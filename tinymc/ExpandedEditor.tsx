@@ -1,5 +1,7 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
+
+// helpers
 import { imageHandler, filePicker } from './imageHandlers';
 
 interface Props {
@@ -26,26 +28,40 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         mobile: {
           toolbar_drawer: 'floating',
         },
+        placeholder: 'Title',
         skin: window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'oxide-dark'
           : 'oxide',
-        plugins: 'autolink lists link image media preview media mediaembed',
+        plugins: 'autolink lists link image media preview mediaembed emoticons',
         toolbar:
           'undo redo | blocks | ' +
           'bold italic | alignleft aligncenter ' +
           'alignright alignjustify | ' +
-          'link image media',
+          'link image media emoticons',
         automatic_uploads: true,
+        media_live_embeds: true,
         images_upload_credentials: true,
         mediaembed_max_width: 450,
         image_dimensions: false,
         image_description: false,
-        file_picker_types: 'image',
+        file_picker_types: 'file image media',
         file_picker_callback: filePicker,
         images_upload_handler: imageHandler,
         extended_valid_elements: 'a[href|target=_blank]',
         link_target_list: false,
         content_style: `
+          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+            color: #656067;
+            font-size: 2em;
+            line-height: 24px;
+          }
+
+          .mce-content-body  > p:first-of-type {
+            font-size: 2em;
+            line-height: 24px;
+            font-weight: 700;
+          }
+
           .mce-content-body {
             color: #ffffff;
             background-color: #161527;

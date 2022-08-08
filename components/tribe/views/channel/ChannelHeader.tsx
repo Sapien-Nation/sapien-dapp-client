@@ -8,6 +8,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import { useCopyToClipboard } from 'react-use';
 import { useSWRConfig } from 'swr';
+import Linkify from 'linkify-react';
 
 // api
 import { deleteChannel } from 'api/channel';
@@ -25,6 +26,9 @@ import { useChannelPermissions } from 'hooks/channel';
 // types
 import type { Channel } from 'tools/types/channel';
 import type { ProfileTribe } from 'tools/types/tribe';
+
+// utils
+import { isSameOriginURL } from 'utils/url';
 
 interface Props {
   channel: Channel;
@@ -142,9 +146,32 @@ const ChannelHeader = ({ channel, showMembers }: Props) => {
           </div>
         </div>
         <div className="flex flex-col md:flex-row justify-between mt-8 mx-0 md:mx-8">
-          <p className="text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
-            {channel.description}
-          </p>
+          <Linkify
+            tagName="p"
+            options={{
+              attributes: {
+                onClick: (event) => {
+                  const url = isSameOriginURL(event.target.href);
+                  if (url) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    push(url.pathname);
+                  }
+                },
+              },
+              className: { url: 'underline text-blue-500' },
+              target: (url) => {
+                if (isSameOriginURL(url)) return '_parent';
+
+                return '_target';
+              },
+            }}
+          >
+            <p className="text-gray-300 whitespace-pre-line line-clamp-5 flex-1">
+              {channel.description}
+            </p>
+          </Linkify>
           <div className="flex justify-end items-center gap-4 text-xs text-gray-400">
             {canEdit && (
               <button onClick={() => setDialog(Dialog.Edit)}>

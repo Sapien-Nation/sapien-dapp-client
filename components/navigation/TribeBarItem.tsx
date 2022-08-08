@@ -53,9 +53,9 @@ function TribeBarItem({
 
   const [contextMenuPosition, setContextMenuPosition] = useState(null);
 
-  const [canLeave, canEdit] = useTribePermission(tribe.id, [
-    'canLeave',
-    'canEdit',
+  const [canLeaveTribe, canEditTribe] = useTribePermission(tribe.id, [
+    'canLeaveTribe',
+    'canEditTribe',
   ]);
   const { redirectToMainTribeChannel } = useMainTribe();
 
@@ -174,7 +174,7 @@ function TribeBarItem({
               Invite People{' '}
               <ClipboardCopyIcon className="aria-hidden w-5 h-5" />
             </div>
-            {canLeave && (
+            {canLeaveTribe && (
               <>
                 <div className="w-full border-t border-gray-600" />
                 <div
@@ -185,7 +185,7 @@ function TribeBarItem({
                 </div>
               </>
             )}
-            {canEdit && (
+            {canEditTribe && (
               <>
                 <div className="w-full border-t border-gray-600" />
                 <div

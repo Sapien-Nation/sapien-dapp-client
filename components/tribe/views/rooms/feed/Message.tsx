@@ -29,15 +29,8 @@ import { renderContent } from '../helpers';
 // types
 import type { RoomMessage } from 'tools/types/room';
 
-const isSameOriginURL = (url): URL | null => {
-  if (typeof window === 'undefined') return null;
-
-  const linkURL = new URL(url);
-
-  if (window.location.origin === linkURL.origin) return linkURL;
-
-  return null;
-};
+// utils
+import { isSameOriginURL } from 'utils/url';
 
 interface Props {
   addMessageManually: (content: string) => void;
