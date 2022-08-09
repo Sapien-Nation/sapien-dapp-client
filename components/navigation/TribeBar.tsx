@@ -91,7 +91,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           </>
         )}
 
-        <div className="overflow-auto space-y-3">
+        <div className="no-scrollbar overflow-auto space-y-3">
           {tribes.map((tribe: ProfileTribe) => (
             <TribeBarItem
               key={tribe.id}
