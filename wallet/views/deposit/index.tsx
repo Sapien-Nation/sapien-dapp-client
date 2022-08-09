@@ -202,33 +202,6 @@ const Deposit = ({ handleBack }: Props) => {
         };
 
         const renderDepositButton = () => {
-          if (isActivating === true) {
-            return (
-              <button
-                type="button"
-                disabled
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                <Metamask width={25} />
-                Activating Wallet...
-              </button>
-            );
-          }
-
-          if (isActive === false) {
-            return (
-              <button
-                type="button"
-                onClick={handleActivateMetamask}
-                disabled={isActivating}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                <Metamask width={25} />
-                Connect Metamask
-              </button>
-            );
-          }
-
           if (isFetchingMetamaskTokens === true) {
             return (
               <button
@@ -276,50 +249,6 @@ const Deposit = ({ handleBack }: Props) => {
                 </button>
                 Deposit
               </h5>
-              {/* TODO there is no way to really disconnect the wallet */}
-              {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
-              {false && (
-                <Popover className="justify-end items-end">
-                  {() => (
-                    <>
-                      <Popover.Button className="bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none">
-                        <DotsVerticalIcon
-                          className="h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      </Popover.Button>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                      >
-                        <Popover.Panel className="absolute z-10 w-56 max-w-sm mt-3 transform -translate-x-1/2 right-5 sm:px-0 lg:max-w-3xl">
-                          <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                            <div className="relative bg-white p-1">
-                              <div className="flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                                <button
-                                  onClick={handleDeactivateMetamask}
-                                  className="text-sm font-medium text-gray-900 flex items-center"
-                                >
-                                  <LogoutIcon
-                                    className="h-5 w-5 text-gray-400 mr-4"
-                                    aria-hidden="true"
-                                  />
-                                  Disconnect
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </Popover.Panel>
-                      </Transition>
-                    </>
-                  )}
-                </Popover>
-              )}
             </div>
             {isActive ? (
               <p className="text-sm text-white">
@@ -346,7 +275,47 @@ const Deposit = ({ handleBack }: Props) => {
           </>
         );
       }
-      case View.Home:
+      case View.Home: {
+        const renderMetamaskButton = () => {
+          if (isActivating === true) {
+            return (
+              <button
+                type="button"
+                disabled
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <Metamask width={25} />
+                Activating Wallet...
+              </button>
+            );
+          }
+
+          if (isActive) {
+            return (
+              <button
+                type="button"
+                onClick={handleDeactivateMetamask}
+                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                <Metamask width={25} />
+                Disconnect Metamask
+              </button>
+            );
+          }
+
+          return (
+            <button
+              type="button"
+              onClick={handleActivateMetamask}
+              disabled={isActivating}
+              className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            >
+              <Metamask width={25} />
+              Connect Metamask
+            </button>
+          );
+        };
+
         return (
           <>
             <div className="flex justify-between items-center">
@@ -356,75 +325,37 @@ const Deposit = ({ handleBack }: Props) => {
                 </button>
                 Deposit
               </h5>
-              {/* TODO there is no way to really disconnect the wallet */}
-              {/* https://github.com/NoahZinsmeister/web3-react/issues/377 */}
-              {false && (
-                <Popover className="justify-end items-end">
-                  {() => (
-                    <>
-                      <Popover.Button className="bg-white ml-6 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none">
-                        <DotsVerticalIcon
-                          className="h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      </Popover.Button>
-                      <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-200"
-                        enterFrom="opacity-0 translate-y-1"
-                        enterTo="opacity-100 translate-y-0"
-                        leave="transition ease-in duration-150"
-                        leaveFrom="opacity-100 translate-y-0"
-                        leaveTo="opacity-0 translate-y-1"
-                      >
-                        <Popover.Panel className="absolute z-10 w-56 max-w-sm mt-3 transform -translate-x-1/2 right-5 sm:px-0 lg:max-w-3xl">
-                          <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                            <div className="relative bg-white p-1">
-                              <div className="flex items-center w-full px-4 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                                <button
-                                  onClick={handleDeactivateMetamask}
-                                  className="text-sm font-medium text-gray-900 flex items-center"
-                                >
-                                  <LogoutIcon
-                                    className="h-5 w-5 text-gray-400 mr-4"
-                                    aria-hidden="true"
-                                  />
-                                  Disconnect
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </Popover.Panel>
-                      </Transition>
-                    </>
-                  )}
-                </Popover>
-              )}
             </div>
             <p className="text-sm text-white">
               To deposit tokens to the platform, install Metamask and complete
               the transaction.
             </p>
             <div className="text-center grid gap-6">
-              <button
-                type="button"
-                onClick={() => setView(View.DepositPassport)}
-                disabled={isActivating}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Deposit Passport
-              </button>
+              {isActive ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setView(View.DepositPassport)}
+                    disabled={isActivating}
+                    className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                  >
+                    Deposit Passport
+                  </button>
 
-              <button
-                type="button"
-                onClick={() => setView(View.DepositCoin)}
-                className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-              >
-                Deposit Tokens
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setView(View.DepositCoin)}
+                    className="w-full py-2 px-4 flex justify-center items-center gap-4 border border-transparent rounded-md shadow-sm text-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                  >
+                    Deposit Tokens
+                  </button>
+                </>
+              ) : null}
+              {renderMetamaskButton()}
             </div>
           </>
         );
+      }
       case View.DepositCoin: {
         return (
           <>
