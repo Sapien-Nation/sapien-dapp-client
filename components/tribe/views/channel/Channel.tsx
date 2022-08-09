@@ -126,33 +126,37 @@ const Channel = ({ apiKey }: Props) => {
             />
             {canPost === true && (
               <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
-                <div className="flex justify-end">
-                  <button
-                    className="grid-cols-1 flex justify-end"
-                    type="button"
-                    onClick={() => {
-                      setInitialEditorValue(editorRef.current?.getContent());
-                      setShowEditor(true);
-
-                      queueMicrotask(() => {
-                        setTimeout(() => {
-                          editorRef.current?.execCommand('SelectAll', false);
-                        }, 500);
-                      });
-                    }}
-                  >
-                    <ArrowsExpandIcon className={'w-4 h-4'} />
-                  </button>
-                </div>
-                <div className="flex gap-2 lg:rounded-3xl p-5">
+                <div className="flex gap-2 lg:rounded-3xl p-4 pb-2">
                   <UserAvatar user={me} passport={passport} />
 
                   {showEditor === false && (
                     <form
                       id="editor-form"
-                      className="flex-col flex-1"
+                      className="relative flex-col flex-1"
                       onSubmit={handleSubmit}
                     >
+                      <button
+                        className="absolute top-3 right-3 z-10"
+                        type="button"
+                        onClick={() => {
+                          setInitialEditorValue(
+                            editorRef.current?.getContent()
+                          );
+                          setShowEditor(true);
+
+                          queueMicrotask(() => {
+                            setTimeout(() => {
+                              editorRef.current?.execCommand(
+                                'SelectAll',
+                                false
+                              );
+                            }, 500);
+                          });
+                        }}
+                      >
+                        <ArrowsExpandIcon className="w-4 h-4" />
+                      </button>
+
                       <div className="h-auto min-h-[100px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
                         <InlineEditor
                           editorRef={editorRef}
