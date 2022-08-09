@@ -66,7 +66,7 @@ const Details = ({ handleSidebar }) => {
   }, [members]);
 
   return (
-    <aside className="w-72 h-full flex flex-col">
+    <aside className="w-72 h-full flex flex-col border-l border-gray-700">
       <div className="absolute -left-10 top-0 bg-sapien-red-700 lg:hidden">
         <button
           type="button"
