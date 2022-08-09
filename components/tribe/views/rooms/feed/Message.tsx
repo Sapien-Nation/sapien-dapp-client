@@ -13,6 +13,9 @@ import { deleteMessage } from 'api/room';
 import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
+// components
+import RoomAttachments from './RoomAttachments';
+
 // constants
 import { MessageType } from 'tools/constants/rooms';
 import MessageOwnerMenu from './MessageOwnerMenu';
@@ -33,7 +36,7 @@ import type { RoomMessage } from 'tools/types/room';
 import { isSameOriginURL } from 'utils/url';
 
 interface Props {
-  addMessageManually: (content: string) => void;
+  addMessageManually: (content: string, attachments: Array<File>) => void;
   isAMessageContinuation: boolean;
   message: RoomMessage;
   removeMessageFromFeed: (messageID: string) => void;
@@ -115,7 +118,8 @@ const Message = ({
       const messageContent = message.content;
       await removeMessageFromFeed(message.id);
 
-      await addMessageManually(messageContent);
+      // @ts-ignore
+      await addMessageManually(messageContent, message.attachments);
     } catch (err) {
       console.error({ message: err });
     }
@@ -142,7 +146,12 @@ const Message = ({
             <DocumentIcon className="w-12 h-12" />
           </div>
           <div>
-            <p className="text-sm  animate-pulse">Uploading Files</p>
+            <p className="text-sm  animate-pulse">
+              Uploading{' '}
+              {message.attachments.length === 1
+                ? message.attachments[0].fileName
+                : `${message.attachments.length} Files`}
+            </p>
             <span className="text-xs text-gray-300">Wait a second...</span>
           </div>
         </div>
@@ -179,51 +188,57 @@ const Message = ({
     }
 
     return (
-      <p
-        className={`${
-          isAMessageContinuation ? 'group' : 'pl-52'
-        } whitespace-pre-line break-words text-md text-white`}
-        style={{ wordBreak: 'break-word' }}
-      >
-        <span className="text-[10px] hidden group-hover:block absolute left-6 text-gray-400 top-2">
-          {isAMessageContinuation
-            ? ''
-            : new Date(createdAt).toLocaleString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              })}
-        </span>{' '}
-        <Linkify
-          tagName="p"
-          options={{
-            attributes: {
-              onClick: (event) => {
-                const url = isSameOriginURL(event.target.href);
-                if (url) {
-                  event.preventDefault();
-                  event.stopPropagation();
-
-                  push(url.pathname);
-                }
-              },
-            },
-            className: { url: 'underline text-blue-500' },
-            target: (url) => {
-              if (isSameOriginURL(url)) return '_parent';
-
-              return '_target';
-            },
-          }}
+      <>
+        <p
+          className={`${
+            isAMessageContinuation ? 'group' : 'pl-52'
+          } whitespace-pre-line break-words text-md text-white`}
+          style={{ wordBreak: 'break-word' }}
         >
-          {renderContent(
-            content,
-            mentions.length === 0 ? roomMembers : mentions,
-            tribeRooms,
-            tribeID
-          )}
-        </Linkify>
-      </p>
+          <span className="text-[10px] hidden group-hover:block absolute left-6 text-gray-400 top-2">
+            {isAMessageContinuation
+              ? ''
+              : new Date(createdAt).toLocaleString('en-US', {
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                })}
+          </span>{' '}
+          <Linkify
+            tagName="p"
+            options={{
+              attributes: {
+                onClick: (event) => {
+                  const url = isSameOriginURL(event.target.href);
+                  if (url) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    push(url.pathname);
+                  }
+                },
+              },
+              className: { url: 'underline text-blue-500' },
+              target: (url) => {
+                if (isSameOriginURL(url)) return '_parent';
+
+                return '_target';
+              },
+            }}
+          >
+            {renderContent(
+              content,
+              mentions.length === 0 ? roomMembers : mentions,
+              tribeRooms,
+              tribeID
+            )}
+          </Linkify>
+        </p>
+        <RoomAttachments
+          attachments={message.attachments}
+          isAMessageContinuation={isAMessageContinuation}
+        />
+      </>
     );
   };
 
@@ -285,6 +300,7 @@ const Message = ({
             )}
             <div className="flex flex-col gap-1 items-start">
               {renderBody()}
+
               <div className={isAMessageContinuation ? '' : 'ml-[50px]'}>
                 {reactions?.map(({ count, emoji, me }) => (
                   <span

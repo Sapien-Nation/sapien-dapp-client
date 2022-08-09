@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import useSWR, { useSWRConfig } from 'swr';
 import Link from 'next/link';
-import { twMerge } from 'tailwind-merge';
 
 // api
 import axios from 'axios';
@@ -203,25 +202,27 @@ const Channel = ({ apiKey }: Props) => {
                               Link
                             </button>
                           </div>
-                          <button
-                            type="submit"
-                            form="editor-form"
-                            className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-                          ${
-                            isPublishDisabled
-                              ? 'cursor-not-allowed bg-primary/50'
-                              : 'cursor-pointer bg-primary hover:bg-sapien-80'
-                          }`}
-                            onClick={handleSubmit}
-                            disabled={isPublishDisabled}
-                          >
-                            {isPublishing ? (
-                              <RefreshIcon className="w-5 animate-spin" />
-                            ) : (
-                              <PaperAirplaneIcon className="w-5 rotate-90" />
-                            )}
-                          </button>
                         </div>
+                      </div>
+                      <div className="flex justify-end w-full mt-2">
+                        <button
+                          type="submit"
+                          form="editor-form"
+                          className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                                            ${
+                                              isPublishDisabled
+                                                ? 'cursor-not-allowed bg-primary/50'
+                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                                            }`}
+                          onClick={handleSubmit}
+                          disabled={isPublishDisabled}
+                        >
+                          {isPublishing ? (
+                            <RefreshIcon className="w-5 animate-spin" />
+                          ) : (
+                            <PaperAirplaneIcon className="w-5 rotate-90" />
+                          )}
+                        </button>
                       </div>
                     </form>
                   )}

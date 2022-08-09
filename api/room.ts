@@ -13,10 +13,6 @@ export interface CreateRoomBody {
   type: RoomType;
 }
 
-export interface CreateRoomMessage {
-  content: string;
-}
-
 export const createRoom = (body: CreateRoomBody) =>
   axios
     .post('/core-api/room', body)
@@ -29,7 +25,7 @@ export const joinRoom = (roomID: string) =>
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const sendMessage = (roomID: string, body: CreateRoomMessage) =>
+export const sendMessage = (roomID: string, body: any) =>
   axios
     .post(`/core-api/room/${roomID}/message`, body)
     .then(({ data }) => data)

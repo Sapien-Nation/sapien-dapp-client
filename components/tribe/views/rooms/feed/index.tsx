@@ -237,7 +237,10 @@ const Feed = ({
     ]
   );
 
-  const handleMessageSubmit = async (content: string) => {
+  const handleMessageSubmit = async (
+    content: string,
+    attachments: Array<File>
+  ) => {
     const optimisticMessage = {
       content,
       createdAt: new Date().toISOString(),
@@ -258,7 +261,16 @@ const Feed = ({
               ]
             : [],
       },
-      type: MessageType.Optimistic,
+      attachments: attachments.map((file, index) => ({
+        url: '',
+        mimeType: file.type,
+        fileName: file.name,
+        id: String(index),
+      })),
+      type:
+        attachments.length === 0
+          ? MessageType.Optimistic
+          : MessageType.OptimisticWithAttachment,
       status: 'A',
       mentions: getMentionsArrayFromCacheForOptimistic(roomMembers, content),
     };
@@ -266,7 +278,14 @@ const Feed = ({
       await handleAddMessageMutation(optimisticMessage);
 
       handleScrollToBottom();
-      const newMessage = await sendMessage(roomID, { content });
+
+      const formData = new FormData();
+      formData.append('content', content);
+
+      attachments.forEach((attachment, index) => {
+        formData.append(`attachments${[index]}`, attachment);
+      });
+      const newMessage = await sendMessage(roomID, formData);
 
       await handleUpdateMesssageMutation(
         {
@@ -370,6 +389,7 @@ const Feed = ({
                   );
 
                   handleAddMessageMutation({
+                    attachments: [],
                     content: (data as RoomNewMessage).payload,
                     createdAt: (data as RoomNewMessage).createdAt,
                     id: (data as RoomNewMessage).extra.messageId,
@@ -420,6 +440,7 @@ const Feed = ({
                     );
                   }
                   handleAddMessageMutation({
+                    attachments: (data as any).extra.attachments,
                     content: (data as RoomNewMessage).payload,
                     createdAt: (data as RoomNewMessage).createdAt,
                     id: (data as RoomNewMessage).extra.messageId,

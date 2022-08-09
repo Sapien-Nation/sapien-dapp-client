@@ -6,7 +6,11 @@ import {
   PaperAirplaneIcon,
   PhotographIcon,
 } from '@heroicons/react/outline';
-import { TrashIcon } from '@heroicons/react/solid';
+import {
+  DocumentTextIcon,
+  TrashIcon,
+  VideoCameraIcon,
+} from '@heroicons/react/solid';
 import { Picker } from 'emoji-mart';
 import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import { Editor, createEditor, Transforms, Range } from 'slate';
@@ -47,7 +51,7 @@ import type { EditableProps } from 'slate-react/dist/components/editable';
 
 interface Props {
   name: string;
-  onSubmit: (text: string, attachemnts: Array<File>) => void;
+  onSubmit: (text: string, attachments: Array<File>) => void;
   slateProps?: EditableProps;
 }
 
@@ -426,28 +430,42 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       >
         {attachments.length > 0 ? (
           <ul className="py-3 flex flex-wrap gap-3">
-            {attachments.map((attachment, index) => (
-              <li key={index} id={editorID} className="relative mr-3">
-                <img
-                  className="w-20 h-20 object-cover rounded"
-                  src={URL.createObjectURL(attachment)}
-                  alt={`Attachment ${index + 1}`}
-                />
-                <button
-                  className="absolute top-0 right-0"
-                  onClick={() => {
-                    setAttachments(
-                      attachments.filter(
-                        (_, elementIndex) => index !== elementIndex
-                      )
-                    );
-                  }}
-                >
-                  <TrashIcon className="w-5 text-sapien-red-700" />
-                  <span className="sr-only">Remove attachment</span>
-                </button>
-              </li>
-            ))}
+            {attachments.map((attachment, index) => {
+              console.log(attachment);
+              return (
+                <li key={index} className="relative mr-3">
+                  {attachment.type.startsWith('image') ? (
+                    <img
+                      className="w-20 h-20 object-cover rounded"
+                      src={URL.createObjectURL(attachment)}
+                      alt={`Attachment ${index + 1}`}
+                    />
+                  ) : (
+                    <div className="h-20 w-20 flex items-center justify-center bg-sapien-neutral-400  rounded">
+                      {attachment.type.startsWith('video') ? (
+                        <VideoCameraIcon className="w-10 h-10 text-sapien-80" />
+                      ) : (
+                        <DocumentTextIcon className="w-10 h-10 text-sapien-80" />
+                      )}
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0"
+                    onClick={() => {
+                      setAttachments(
+                        attachments.filter(
+                          (_, elementIndex) => index !== elementIndex
+                        )
+                      );
+                    }}
+                  >
+                    <TrashIcon className="w-5 text-sapien-red-700" />
+                    <span className="sr-only">Remove attachment</span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         ) : null}
 
@@ -524,7 +542,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
 
           <div className="flex justify-end items-end gap-1">
             {/* File Upload */}
-            {/* <button
+            <button
               className="h-10 w-10 flex items-center text-gray-400 justify-center rounded-md hover:text-lime-600 focus:text-green-700"
               onClick={(event) => {
                 event.preventDefault();
@@ -535,7 +553,6 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
             </button>
             <input
               ref={fileRef}
-              accept=".png, .jpg, .jpeg"
               className="sr-only"
               onChange={(event) => {
                 if (event.target.files && event.target.files.length > 0) {
@@ -547,7 +564,7 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
               }}
               multiple
               type="file"
-            /> */}
+            />
 
             {/* Emoji */}
             <Popover className="relative">
