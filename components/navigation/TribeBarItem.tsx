@@ -206,8 +206,8 @@ function TribeBarItem({
           text={tribe.name}
           forceHidden={Boolean(isContextMenuOpen)}
         />
-        <div className="absolute top-0 right-0 inset-x-8">
-          <RedDot count={unreadMentions} />
+        <div className="absolute -top-1 -right-1">
+          <RedDot count={unreadMentions} showBorder />
         </div>
       </div>
 
