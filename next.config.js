@@ -15,6 +15,7 @@ const ContentSecurityPolicy = `
   img-src * blob: data:;
   connect-src * 'self' blob: data:;
   font-src data: 'self' *.gstatic.com *.amazonaws.com;
+  media-src https://d151dmflpumpzp.cloudfront.net https://d1bdmh0gdusw0k.cloudfront.net;
 `;
 
 const securityHeaders = [
