@@ -21,7 +21,11 @@ const RoomAttachments = ({ attachments, isAMessageContinuation }: Props) => {
       {attachments.map(({ fileName, mimeType, url, id }) => {
         if (mimeType.startsWith('image')) {
           /* eslint-disable-next-line @next/next/no-img-element */
-          return <img key={id} alt={fileName} className="" src={url} />;
+          return (
+            <a href={url} target="_blank" rel="noreferrer">
+              <img key={id} alt={fileName} className="" src={url} />
+            </a>
+          );
         } else if (mimeType.startsWith('video')) {
           return (
             <ReactPlayer

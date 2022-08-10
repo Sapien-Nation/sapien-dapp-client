@@ -127,8 +127,6 @@ const Channel = ({ apiKey }: Props) => {
             {canPost === true && (
               <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
                 <div className="flex gap-2 lg:rounded-3xl p-4 pb-2">
-                  <UserAvatar user={me} passport={passport} />
-
                   {showEditor === false && (
                     <form
                       id="editor-form"
@@ -157,55 +155,55 @@ const Channel = ({ apiKey }: Props) => {
                         <ArrowsExpandIcon className="w-4 h-4" />
                       </button>
 
-                      <div className="h-auto min-h-[100px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
+                      <div className="h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
                         <InlineEditor
                           editorRef={editorRef}
                           onChange={handleOnContentChange}
                           initialValue={initialEditorValue}
                         />
-                        <div className="flex gap-24 mt-7 justify-between">
-                          <div className="flex gap-3 justify-center flex-1">
-                            <button
-                              className="flex gap-3 items-center"
-                              type="button"
-                              onClick={() =>
-                                editorRef.current.execCommand('mceEmoticons')
-                              }
-                            >
-                              <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
-                              Emotion
-                            </button>
-                            <button
-                              className="flex gap-3 items-center"
-                              type="button"
-                              onClick={() =>
-                                editorRef.current.execCommand('mceImage')
-                              }
-                            >
-                              <PhotographIcon className="w-5 h-5 text-green-400" />
-                              Photo/Video/Audio
-                            </button>
-                            <button
-                              className="flex gap-3 items-center"
-                              type="button"
-                              onClick={() =>
-                                editorRef.current.execCommand('mceMedia')
-                              }
-                            >
-                              <PhotographIcon className="w-5 h-5 text-blue-400" />
-                              Embed
-                            </button>
-                            <button
-                              className="flex gap-3 items-center"
-                              type="button"
-                              onClick={() =>
-                                editorRef.current.execCommand('mceLink')
-                              }
-                            >
-                              <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
-                              Link
-                            </button>
-                          </div>
+                      </div>
+                      <div className="flex gap-24 justify-between py-2">
+                        <div className="flex gap-3 justify-center flex-1">
+                          <button
+                            className="flex gap-3 items-center"
+                            type="button"
+                            onClick={() =>
+                              editorRef.current.execCommand('mceEmoticons')
+                            }
+                          >
+                            <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
+                            Emotion
+                          </button>
+                          <button
+                            className="flex gap-3 items-center"
+                            type="button"
+                            onClick={() =>
+                              editorRef.current.execCommand('mceImage')
+                            }
+                          >
+                            <PhotographIcon className="w-5 h-5 text-green-400" />
+                            Photo/Video/Audio
+                          </button>
+                          <button
+                            className="flex gap-3 items-center"
+                            type="button"
+                            onClick={() =>
+                              editorRef.current.execCommand('mceMedia')
+                            }
+                          >
+                            <PhotographIcon className="w-5 h-5 text-blue-400" />
+                            Embed
+                          </button>
+                          <button
+                            className="flex gap-3 items-center"
+                            type="button"
+                            onClick={() =>
+                              editorRef.current.execCommand('mceLink')
+                            }
+                          >
+                            <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
+                            Link
+                          </button>
                         </div>
                       </div>
                       <div className="flex justify-end w-full mt-2">
