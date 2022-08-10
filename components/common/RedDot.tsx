@@ -1,23 +1,28 @@
 interface Props {
   animate?: boolean;
   count: number;
+  showBorder?: boolean;
 }
 
-const RedDot = ({ animate = false, count }: Props) => {
+const RedDot = ({ animate = false, count, showBorder = false }: Props) => {
   if (!count || count < 0 || isNaN(count)) return null;
 
   return (
-    <span className="relative flex items-center">
+    <div className="relative flex items-center">
       {animate === true && (
         <span className="absolute animate-ping inline-flex rounded-full bg-red-400 opacity-75 h-2 w-2 right-0 bottom-2.5" />
       )}
-      <span
-        className="rounded- bg-sapien-red-700 text-white text-10px font-bold flex justify-center items-center h-4 min-w-16px px-1"
-        style={{ borderRadius: '100px' }}
+      <div
+        className={`flex justify-center items-center bg-sapien-red-700 text-white text-[10px] font-bold p-[3px] ${
+          showBorder
+            ? 'h-5 min-w-[20px] border-[3px] border-sapien-neutral-900'
+            : 'h-4 min-w-[16px]'
+        }`}
+        style={{ borderRadius: '10px' }}
       >
         {count}
-      </span>
-    </span>
+      </div>
+    </div>
   );
 };
 

@@ -60,7 +60,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
       {/* Static sidebar for desktop */}
       <div
         aria-label="Sidebar"
-        className="py-5 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
+        className="py-3 flex flex-col items-center space-y-3 bg-sapien-neutral-800 w-20"
       >
         {isOnProfilePage && (
           <>
@@ -91,7 +91,7 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
           </>
         )}
 
-        <div className="no-scrollbar overflow-auto space-y-3">
+        <div className="no-scrollbar overflow-auto space-y-3 pt-2 px-2">
           {tribes.map((tribe: ProfileTribe) => (
             <TribeBarItem
               key={tribe.id}
