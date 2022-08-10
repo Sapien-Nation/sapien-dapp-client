@@ -129,27 +129,25 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
   return (
     <div className="shadow">
       <div className="flex-1 flex items-center justify-center lg:justify-end h-16 px-2 sm:px-4 lg:px-8">
-        <div className="flex-shrink-0 hidden lg:flex relative">
+        <div className="flex-shrink-0 hidden lg:flex relative gap-7">
           {/* Wallet */}
           <Menu as="div">
             {({ open }) => (
               <>
-                <Menu.Items className="block absolute overflow-y-auto right-36 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="block absolute overflow-y-auto right-36 h-auto w-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none mt-1">
                   <Wallet />
                 </Menu.Items>
-                <div className="h-full w-16 flex items-center justify-center">
-                  <Menu.Button
-                    type="button"
-                    className={`${
-                      open ? 'bg-sapien-neutral-900' : ''
-                    } p-3 rounded-full focus:outline-none hover:bg-sapien-neutral-900`}
-                  >
-                    <>
-                      <span className="sr-only">View wallet</span>
-                      <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
-                    </>
-                  </Menu.Button>
-                </div>
+                <Menu.Button
+                  type="button"
+                  className={`${
+                    open ? 'bg-sapien-neutral-900' : ''
+                  } h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+                >
+                  <>
+                    <span className="sr-only">View wallet</span>
+                    <CreditCardIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </Menu.Button>
               </>
             )}
           </Menu>
@@ -159,23 +157,21 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               <Query api="/core-api/notification">
                 {({ unread }: { unread: number }) => (
                   <>
-                    <Menu.Items className="block w-full absolute overflow-y-auto right-20 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="block w-full absolute overflow-y-auto right-20 h-auto max-h-96 top-full z-10 origin-top-right border border-gray-800 bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none mt-1">
                       <Notifications />
                     </Menu.Items>
-                    <div className="h-full w-16 flex items-center justify-center">
-                      <Menu.Button
-                        type="button"
-                        className={`${
-                          open ? 'bg-sapien-neutral-900' : ''
-                        } p-3 rounded-full focus:outline-none hover:bg-sapien-neutral-900`}
-                      >
-                        <span className="sr-only">View notifications</span>
-                        <NotificationsIcon />
-                        <div className="absolute top-3 left-10">
-                          <RedDot count={unread} />
-                        </div>
-                      </Menu.Button>
-                    </div>
+                    <Menu.Button
+                      type="button"
+                      className={`${
+                        open ? 'bg-sapien-neutral-900' : ''
+                      } h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+                    >
+                      <span className="sr-only">View notifications</span>
+                      <NotificationsIcon />
+                      <div className="absolute top-3 left-10">
+                        <RedDot count={unread} />
+                      </div>
+                    </Menu.Button>
                   </>
                 )}
               </Query>
@@ -193,7 +189,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 w-56 mt-14 z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="absolute right-0 w-56 top-full z-10 origin-top-right bg-sapien-neutral-600 divide-y divide-gray-100 rounded-md shadow-lg ring-1 p-4 ring-black ring-opacity-5 focus:outline-none mt-1">
                   <div className="h-full flex flex-col items-start">
                     <div className="w-full flex items-center truncate">
                       <div className="px-3 py-3">
@@ -201,7 +197,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       </div>
                       <div className="flex flex-col flex-wrap break-words">
                         <span className="font-semibold">{me.displayName}</span>
-                        <span className="text-xs truncate w-30 pb-1.5">
+                        <span className="text-xs truncate w-30 pb-[0.375rem]">
                           @{me.username}
                         </span>
                       </div>
@@ -284,7 +280,7 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
               >
                 <span className="flex w-full items-center">
                   <span className="flex min-w-0 items-center w-full justify-between">
-                    <div className="pl-5 pr-3 py-3">
+                    <div className="pr-3">
                       <UserAvatar user={me} passport={passport} />
                     </div>
                     <DropDownArrowIcon />
