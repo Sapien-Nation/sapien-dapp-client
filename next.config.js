@@ -7,7 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const ContentSecurityPolicy = `
   default-src 'self';
-  object-src 'self';
+  object-src 'self' data:;
   script-src-elem 'self' 'unsafe-inline' data: http://localhost:3000 https://localhost:3000 https://static.cloudflareinsights.com https://cdn.tiny.cloud;
   script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googletagmanager.com *.google-analytics.com *.youtube.com *.ytimg.com *.tiny.cloud;
   child-src *.youtube.com *.ytimg.com *.tiny.cloud;
@@ -15,7 +15,7 @@ const ContentSecurityPolicy = `
   img-src * blob: data:;
   connect-src * 'self' blob: data:;
   font-src data: 'self' *.gstatic.com *.amazonaws.com;
-  media-src https://d151dmflpumpzp.cloudfront.net https://d1bdmh0gdusw0k.cloudfront.net;
+  media-src 'self' https://d151dmflpumpzp.cloudfront.net https://d1bdmh0gdusw0k.cloudfront.net;
 `;
 
 const securityHeaders = [
