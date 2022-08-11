@@ -1,5 +1,5 @@
 export interface Props {
-  error: string;
+  error: any;
   extraLabel?: React.ReactElement;
   name: string;
   label: string;
