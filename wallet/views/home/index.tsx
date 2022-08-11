@@ -262,7 +262,7 @@ const Home = ({
               alt=""
             />
           </li>
-          <li
+          {/* <li
             className="bg-black hover:bg-gray-50 w-14 h-14 cursor-pointer rounded-full flex justify-center"
             onClick={() => {
               onSelectCoin(Coin.MATIC);
@@ -309,7 +309,7 @@ const Home = ({
               src="/images/usdt.png"
               alt=""
             />
-          </li>
+          </li> */}
           {tokens.map((token) => (
             <li
               className={

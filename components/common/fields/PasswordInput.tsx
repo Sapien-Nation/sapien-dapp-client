@@ -4,7 +4,7 @@ import { Control, useController } from 'react-hook-form';
 
 interface Props {
   autoComplete?: string;
-  control?: Control<any>;
+  control?: any;
   name?: string;
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
   required?: boolean;
