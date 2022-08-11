@@ -279,13 +279,17 @@ const Feed = ({
 
       handleScrollToBottom();
 
-      const formData = new FormData();
-      formData.append('content', content);
-
-      attachments.forEach((attachment, index) => {
-        formData.append(`attachments${[index]}`, attachment);
-      });
-      const newMessage = await sendMessage(roomID, formData);
+      let newMessage;
+      if (attachments.length === 0) {
+        newMessage = await sendMessage(roomID, { content });
+      } else {
+        const formData = new FormData();
+        formData.append('content', content);
+        attachments.forEach((attachment, index) => {
+          formData.append(`attachments${[index]}`, attachment);
+        });
+        newMessage = await sendMessage(roomID, formData);
+      }
 
       await handleUpdateMesssageMutation(
         {
