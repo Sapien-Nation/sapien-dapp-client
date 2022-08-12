@@ -1,4 +1,10 @@
 import {
+  EmojiHappyIcon,
+  ExternalLinkIcon,
+  PaperAirplaneIcon,
+  PhotographIcon,
+} from '@heroicons/react/solid';
+import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
@@ -22,7 +28,7 @@ import {
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Query, TextInput, TextInputLabel } from 'components/common';
+import { Query } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
@@ -632,7 +638,10 @@ const Channel = ({ apiKey }: Props) => {
             >
               <ul>
                 {swrData?.data.map((content) => (
-                  <li className="mb-8 last:mb-0" key={content.id}>
+                  <li
+                    className="mb-8 last:mb-0 border border-sapien-neutral-800 hover:border-gray-700 rounded-xl"
+                    key={content.id}
+                  >
                     <Link
                       href={`/tribes/${tribeID}/content?id=${content.id}`}
                       passHref

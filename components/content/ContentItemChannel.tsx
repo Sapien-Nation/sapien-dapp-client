@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Menu } from '@headlessui/react';
 
 // TODO: commented until we have data to show
 // import {
@@ -11,6 +12,9 @@ import { useRouter } from 'next/router';
 
 // constants
 import { ContentMimeType } from 'tools/constants/content';
+
+// dialogs
+import { CreateThreadDialog } from 'components/tribe/views/channel/dialogs';
 
 // helpers
 import { formatDateRelative } from 'utils/date';
@@ -29,17 +33,25 @@ interface Props {
   tribeID: string;
 }
 
+enum Dialog {
+  CreateThread,
+}
+
 const ContentItem = ({
   content: {
+    id,
     owner: { avatar, displayName, username },
     group,
     createdAt,
     body,
     imagePreview,
     mimeType,
+    threads,
   },
   tribeID,
 }: Props) => {
+  const [dialog, setDialog] = useState<Dialog | null>(null);
+
   const tribe = useTribe(tribeID);
   const { query } = useRouter();
 
@@ -102,6 +114,50 @@ const ContentItem = ({
             body
           )}
         </div>
+        <div
+          className="flex justify-between p-3"
+          onClick={(e) => e.preventDefault()}
+        >
+          <div
+            className={`${
+              threads?.length > 0 ? 'visible' : 'invisible'
+            } relative`}
+          >
+            <Menu>
+              <>
+                <Menu.Button>
+                  <span className="text-gray-300 hover:text-gray-400 font-bold">
+                    {`${threads?.length} ${
+                      threads?.length === 1 ? 'room' : 'rooms'
+                    } discussing`}
+                  </span>
+                </Menu.Button>
+                <Menu.Items className="block w-full absolute top-full origin-top-right bg-sapien-40 rounded-md shadow-lg focus:outline-none max-h-[140px] overflow-y-auto">
+                  <ul className="">
+                    {['#robs room', '#news', '#general'].map((room) => (
+                      <li
+                        key={room}
+                        className="font-bold hover:bg-sapien-60 px-2 py-0.5 first:rounded-t-md last:rounded-b-md truncate"
+                      >
+                        <Link href="">
+                          <a>
+                            <span className="truncate">{room}</span>
+                          </a>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </Menu.Items>
+              </>
+            </Menu>
+          </div>
+          <button
+            className="text-right text-sapien-40 hover:text-sapien-80"
+            onClick={() => setDialog(Dialog.CreateThread)}
+          >
+            create thread
+          </button>
+        </div>
         {imagePreview && (
           <img
             className="object-cover rounded-md"
@@ -122,6 +178,14 @@ const ContentItem = ({
         </span>
       </div> */}
       </div>
+      {/* create thread dialog */}
+      {dialog === Dialog.CreateThread && (
+        <CreateThreadDialog
+          contentId={id}
+          tribeId={tribeID}
+          onClose={() => setDialog(null)}
+        />
+      )}
     </>
   );
 };

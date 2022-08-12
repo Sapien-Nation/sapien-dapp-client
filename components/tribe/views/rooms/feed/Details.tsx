@@ -1,9 +1,11 @@
 import _groupBy from 'lodash/groupBy';
-import { useMemo } from 'react';
-import { XIcon } from '@heroicons/react/outline';
-import { useRouter } from 'next/router';
-import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import Link from 'next/link';
+import { ChevronUpIcon, XIcon } from '@heroicons/react/outline';
+import { Disclosure } from '@headlessui/react';
+import { FixedSizeList as List } from 'react-window';
+import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 // constats
 import { RoomMemberType } from 'tools/constants/rooms';
@@ -78,8 +80,51 @@ const Details = ({ handleSidebar }) => {
         </button>
       </div>
       <>
+        {true && (
+          <>
+            <Disclosure>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="flex items-center justify-between border-b border-gray-700 h-10 px-5 w-full">
+                    <span className="text-md text-gray-300 font-bold">
+                      Threads
+                    </span>
+                    <ChevronUpIcon
+                      className={`${
+                        open ? 'rotate-180 transform' : ''
+                      } h-5 w-5 text-purple-500`}
+                    />
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="py-3 px-5 border-b border-gray-700">
+                    <ul className="">
+                      {[
+                        'Mosquitoes at Disney World: why do you (almost) never see them?',
+                        'NFTs Are Conquering Soccer',
+                        'Why Are There So Many Homeless People?',
+                      ].map((thread) => (
+                        <li key={thread}>
+                          <Link href="">
+                            <a>
+                              <div className="flex flex-col">
+                                <span className="truncate">{thread}</span>
+                                <div className="flex gap-2 items-center">
+                                  <div className="w-10 h-10 bg-gray-600 rounded-md" />
+                                  <span className="truncate">Lorem ipsum</span>
+                                </div>
+                              </div>
+                            </a>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          </>
+        )}
         <div className="border-b border-gray-700 h-10 px-5 w-full flex items-center">
-          <h3 className="text-md  text-gray-300 font-bold ">
+          <h3 className="text-md text-gray-300 font-bold">
             Members ({members.length})
           </h3>
         </div>
