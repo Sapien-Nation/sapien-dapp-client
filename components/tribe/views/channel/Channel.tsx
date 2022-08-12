@@ -2,27 +2,33 @@ import {
   EmojiHappyIcon,
   ExternalLinkIcon,
   PaperAirplaneIcon,
-  PencilAltIcon,
   PhotographIcon,
 } from '@heroicons/react/solid';
 import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
+  XIcon,
 } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import useSWR, { useSWRConfig } from 'swr';
 import Link from 'next/link';
+import { FormProvider, useForm } from 'react-hook-form';
 
 // api
 import axios from 'axios';
-import { createContent } from 'api/content';
+import {
+  createContent,
+  createLinkContent,
+  createMediaContent,
+  uploadContentMedia,
+} from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Query, UserAvatar } from 'components/common';
+import { Query, TextInput, TextInputLabel } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
@@ -37,7 +43,6 @@ import { ContentType } from 'tools/constants/content';
 
 // hooks
 import { useChannel, useChannelPermissions } from 'hooks/channel';
-import { usePassport } from 'hooks/passport';
 
 // types
 import type { Content } from 'tools/types/content';
@@ -46,26 +51,69 @@ interface Props {
   apiKey: string;
 }
 
+type Media = {
+  key: string;
+  url: string;
+};
+
+interface MediaFormProps {
+  title: string;
+  media: null | Media;
+}
+
+interface LinkFormProps {
+  title: string;
+  link: string;
+  description: string;
+}
+
 const Channel = ({ apiKey }: Props) => {
   const [postType, setPostType] = useState<ContentType>(ContentType.POST);
   const [hasContent, setHasContent] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [isPublishing, setPublishing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [mediaMimeType, setMediaMimeType] = useState('');
   const [initialEditorValue, setInitialEditorValue] = useState('');
   const isPublishDisabled = isPublishing || !hasContent;
 
-  const { me } = useAuth();
   const toast = useToast();
   const channel = useChannel();
-  const passport = usePassport();
   const { mutate } = useSWRConfig();
   const { push, query } = useRouter();
   const { data: swrData } = useSWR(apiKey);
+  const mediaFileInputRef = useRef(null);
+
+  const mediaMethods = useForm<MediaFormProps>({
+    defaultValues: {
+      media: null,
+      title: '',
+    },
+  });
+  const {
+    formState: { errors: mediaErrors, isSubmitting: isSubmittingMediaForm },
+    handleSubmit: handleSubmitMediaForm,
+    setValue,
+    watch: watchMediaForm,
+  } = mediaMethods;
+
+  const linkMethods = useForm<LinkFormProps>({
+    defaultValues: {
+      title: '',
+      link: '',
+      description: '',
+    },
+  });
+  const {
+    formState: { errors: linkErrors, isSubmitting: isSubmittingLinkForm },
+    handleSubmit: handleSubmitLinkForm,
+  } = linkMethods;
 
   const tribeID = query.tribeID as string;
   const channelID = query.viewID as string;
 
+  const [media] = watchMediaForm(['media']);
   const [canPost] = useChannelPermissions(channelID, ['canPost']);
 
   const editorRef = useRef(null);
@@ -74,7 +122,55 @@ const Channel = ({ apiKey }: Props) => {
     setShowEditor(false);
   }, [channelID]);
 
-  const handleSubmit = async (event) => {
+  const onSubmitMedia = async ({ title, media }: MediaFormProps) => {
+    try {
+      setPublishing(true);
+
+      const response: Content = await createMediaContent({
+        title,
+        media: media.key,
+        preview: media.url,
+        mimeType: mediaMimeType,
+        groupId: channel.id,
+      });
+
+      setMediaMimeType('');
+      setPublishing(false);
+      push(`/tribes/${tribeID}/content?id=${response.id}`);
+
+      mutate(apiKey);
+    } catch (error) {
+      setPublishing(false);
+      toast({
+        message: error,
+      });
+    }
+  };
+
+  const onSubmitLink = async ({ title, link, description }: LinkFormProps) => {
+    try {
+      setPublishing(true);
+
+      const response: Content = await createLinkContent({
+        title,
+        link,
+        data: description,
+        groupId: channel.id,
+      });
+
+      setPublishing(false);
+      push(`/tribes/${tribeID}/content?id=${response.id}`);
+
+      mutate(apiKey);
+    } catch (error) {
+      setPublishing(false);
+      toast({
+        message: error,
+      });
+    }
+  };
+
+  const onSubmitPost = async (event) => {
     event.preventDefault();
     try {
       setPublishing(true);
@@ -82,13 +178,12 @@ const Channel = ({ apiKey }: Props) => {
         const content = editorRef.current.getContent();
         editorRef.current.setDirty(false);
 
-        const body = {
+        const response: Content = await createContent({
           mimeType: 'text/html',
           data: content,
           groupId: channel.id,
-        };
-
-        const response: Content = await createContent(body);
+          title: 'Title', // TODO carlos to add title
+        });
 
         setPublishing(false);
         push(`/tribes/${tribeID}/content?id=${response.id}`);
@@ -113,6 +208,326 @@ const Channel = ({ apiKey }: Props) => {
     setHasContent(Boolean(textOnlyContent.trim().length) || isImgTag);
   };
 
+  const handleUploadImage = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      const fileData: Media = await uploadContentMedia(formData);
+
+      setValue('media', fileData);
+    } catch (error) {
+      toast({
+        message: error,
+      });
+    }
+
+    setIsUploading(false);
+  };
+
+  const renderInlineFormView = () => {
+    switch (postType) {
+      case ContentType.POST:
+        return (
+          <form onSubmit={onSubmitPost} id="content-form">
+            <div className="h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
+              <InlineEditor
+                editorRef={editorRef}
+                onChange={handleOnContentChange}
+                initialValue={initialEditorValue}
+              />{' '}
+            </div>
+            <div className="flex gap-24 justify-between py-2">
+              <div className="flex gap-3 justify-center flex-1">
+                <button
+                  className="flex gap-3 items-center"
+                  type="button"
+                  onClick={() => editorRef.current.execCommand('mceEmoticons')}
+                >
+                  <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
+                  Emotion
+                </button>
+                <button
+                  className="flex gap-3 items-center"
+                  type="button"
+                  onClick={() => editorRef.current.execCommand('mceImage')}
+                >
+                  <PhotographIcon className="w-5 h-5 text-green-400" />
+                  Photo/Video/Audio
+                </button>
+                <button
+                  className="flex gap-3 items-center"
+                  type="button"
+                  onClick={() => editorRef.current.execCommand('mceMedia')}
+                >
+                  <PhotographIcon className="w-5 h-5 text-blue-400" />
+                  Embed
+                </button>
+                <button
+                  className="flex gap-3 items-center"
+                  type="button"
+                  onClick={() => editorRef.current.execCommand('mceLink')}
+                >
+                  <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
+                  Link
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-end w-full mt-2">
+              <button
+                type="submit"
+                form="content-form"
+                className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                                            ${
+                                              isPublishDisabled
+                                                ? 'cursor-not-allowed bg-primary/50'
+                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                                            }`}
+                disabled={isPublishDisabled}
+              >
+                {isPublishing ? (
+                  <RefreshIcon className="w-5 animate-spin" />
+                ) : (
+                  <PaperAirplaneIcon className="w-5 rotate-90" />
+                )}
+              </button>
+            </div>
+          </form>
+        );
+      case ContentType.MEDIA:
+        return (
+          <FormProvider {...mediaMethods}>
+            <form
+              id="media-form"
+              className="sm:overflow-hidden"
+              onSubmit={handleSubmitMediaForm(onSubmitMedia)}
+            >
+              <div className="px-4 py-5 space-y-6 sm:p-6">
+                <div>
+                  <div className="flex gap-x-4 items-end">
+                    <div className="flex-1">
+                      <TextInputLabel
+                        label="Title"
+                        name="title"
+                        error={mediaErrors?.title?.message}
+                      />
+                      <TextInput
+                        name="title"
+                        autoFocus
+                        aria-label="title"
+                        placeholder="Title"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mt-4 mb-2">
+                      Upload Media
+                    </label>
+                    <div className="mt-1 relative min-h-8-75 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                      {Boolean(media) ? (
+                        <span className="relative">
+                          <button
+                            aria-label="Remove Selected Cover"
+                            type="button"
+                            className="absolute z-10 -top-1 -right-1 inline-flex items-center p-1 bg-gray-900 rounded-full shadow-sm text-white focus:outline-none"
+                            onClick={() => {
+                              setValue('media', null);
+                            }}
+                          >
+                            <XIcon
+                              className="h-3 w-3 text-white"
+                              aria-hidden="true"
+                            />
+                          </button>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            alt="cover"
+                            className="w-100 relative rounded-md"
+                            src={media.url}
+                            data-key={media.key}
+                            onClick={() => {
+                              mediaFileInputRef.current.click();
+                            }}
+                          />
+                        </span>
+                      ) : (
+                        <div className="space-y-1 text-center">
+                          <svg
+                            className="mx-auto h-12 w-12 text-gray-400"
+                            stroke="currentColor"
+                            fill="none"
+                            viewBox="0 0 48 48"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          <div className="text-sm text-gray-600">
+                            <label
+                              htmlFor="cover-upload"
+                              className="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                            >
+                              <span>Upload a file</span>
+                              <input
+                                ref={mediaFileInputRef}
+                                id="cover-upload"
+                                name="cover-upload"
+                                type="file"
+                                accept=".png, .jpg, .jpeg"
+                                disabled={isUploading}
+                                className="sr-only"
+                                onChange={(event) => {
+                                  const file = event.target.files[0];
+
+                                  if (file) {
+                                    handleUploadImage(file);
+                                    setMediaMimeType(file.type);
+                                    mediaFileInputRef.current.value = '';
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            PNG, JPG, GIF up to 10MB
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end w-full mt-2">
+                <button
+                  type="submit"
+                  form="media-form"
+                  className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                                            ${
+                                              isSubmittingMediaForm
+                                                ? 'cursor-not-allowed bg-primary/50'
+                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                                            }`}
+                  disabled={isSubmittingMediaForm}
+                >
+                  {isSubmittingMediaForm ? (
+                    <RefreshIcon className="w-5 animate-spin" />
+                  ) : (
+                    <PaperAirplaneIcon className="w-5 rotate-90" />
+                  )}
+                </button>
+              </div>
+            </form>
+          </FormProvider>
+        );
+      case ContentType.LINK:
+        return (
+          <FormProvider {...linkMethods}>
+            <form
+              id="link-form"
+              className="sm:overflow-hidden"
+              onSubmit={handleSubmitLinkForm(onSubmitLink)}
+            >
+              <div className="px-4 py-5 space-y-6 sm:p-6">
+                <div>
+                  <div className="flex gap-x-4 items-end">
+                    <div className="flex-1">
+                      <TextInputLabel
+                        label="Title"
+                        name="title"
+                        error={linkErrors?.title?.message}
+                      />
+                      <TextInput
+                        name="title"
+                        autoFocus
+                        aria-label="title"
+                        placeholder="Title"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex-1">
+                      <TextInputLabel
+                        label="Link"
+                        name="link"
+                        error={linkErrors?.link?.message}
+                      />
+                      <TextInput
+                        name="link"
+                        aria-label="Link"
+                        placeholder="Link"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex-1">
+                      <TextInputLabel
+                        label="Description"
+                        name="description"
+                        error={linkErrors?.description?.message}
+                      />
+                      <TextInput
+                        name="description"
+                        aria-label="description"
+                        placeholder="Description"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-end w-full mt-2">
+                <button
+                  type="submit"
+                  form="link-form"
+                  className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                                            ${
+                                              isSubmittingLinkForm
+                                                ? 'cursor-not-allowed bg-primary/50'
+                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                                            }`}
+                  disabled={isSubmittingLinkForm}
+                >
+                  {isSubmittingLinkForm ? (
+                    <RefreshIcon className="w-5 animate-spin" />
+                  ) : (
+                    <PaperAirplaneIcon className="w-5 rotate-90" />
+                  )}
+                </button>
+              </div>
+            </form>
+          </FormProvider>
+        );
+    }
+  };
   let mutateFetchAPI = apiKey;
   return (
     <>
@@ -121,112 +536,83 @@ const Channel = ({ apiKey }: Props) => {
         <div className="flex-1 p-5 overflow-y-auto">
           <div className="grid gap-4">
             <ChannelHeader
+              canPost={canPost}
+              showEditor={() => setShowEditor(true)}
               channel={channel}
               showMembers={() => setShowMembers(!showMembers)}
             />
             {canPost === true && (
               <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
+                <nav className="grid grid-cols-3" aria-label="Tabs">
+                  <button
+                    onClick={() => setPostType(ContentType.POST)}
+                    className={
+                      postType === ContentType.POST
+                        ? 'border-sapien-80 text-white whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                    }
+                    aria-current={
+                      postType === ContentType.POST ? 'page' : undefined
+                    }
+                  >
+                    Post
+                  </button>
+                  <button
+                    onClick={() => setPostType(ContentType.MEDIA)}
+                    className={
+                      postType === ContentType.MEDIA
+                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                    }
+                    aria-current={
+                      postType === ContentType.MEDIA ? 'page' : undefined
+                    }
+                  >
+                    Media
+                  </button>
+                  <button
+                    onClick={() => setPostType(ContentType.LINK)}
+                    className={
+                      postType === ContentType.LINK
+                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                    }
+                    aria-current={
+                      postType === ContentType.LINK ? 'page' : undefined
+                    }
+                  >
+                    Link
+                  </button>
+                </nav>
                 <div className="flex gap-2 lg:rounded-3xl p-4 pb-2">
                   {showEditor === false && (
-                    <form
-                      id="editor-form"
-                      className="relative flex-col flex-1"
-                      onSubmit={handleSubmit}
-                    >
-                      <button
-                        className="absolute top-3 right-3 z-10"
-                        type="button"
-                        onClick={() => {
-                          setInitialEditorValue(
-                            editorRef.current?.getContent()
-                          );
-                          setShowEditor(true);
-
-                          queueMicrotask(() => {
-                            setTimeout(() => {
-                              editorRef.current?.execCommand(
-                                'SelectAll',
-                                false
-                              );
-                            }, 500);
-                          });
-                        }}
-                      >
-                        <ArrowsExpandIcon className="w-4 h-4" />
-                      </button>
-
-                      <div className="h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
-                        <InlineEditor
-                          editorRef={editorRef}
-                          onChange={handleOnContentChange}
-                          initialValue={initialEditorValue}
-                        />
-                      </div>
-                      <div className="flex gap-24 justify-between py-2">
-                        <div className="flex gap-3 justify-center flex-1">
-                          <button
-                            className="flex gap-3 items-center"
-                            type="button"
-                            onClick={() =>
-                              editorRef.current.execCommand('mceEmoticons')
-                            }
-                          >
-                            <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
-                            Emotion
-                          </button>
-                          <button
-                            className="flex gap-3 items-center"
-                            type="button"
-                            onClick={() =>
-                              editorRef.current.execCommand('mceImage')
-                            }
-                          >
-                            <PhotographIcon className="w-5 h-5 text-green-400" />
-                            Photo/Video/Audio
-                          </button>
-                          <button
-                            className="flex gap-3 items-center"
-                            type="button"
-                            onClick={() =>
-                              editorRef.current.execCommand('mceMedia')
-                            }
-                          >
-                            <PhotographIcon className="w-5 h-5 text-blue-400" />
-                            Embed
-                          </button>
-                          <button
-                            className="flex gap-3 items-center"
-                            type="button"
-                            onClick={() =>
-                              editorRef.current.execCommand('mceLink')
-                            }
-                          >
-                            <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
-                            Link
-                          </button>
-                        </div>
-                      </div>
-                      <div className="flex justify-end w-full mt-2">
+                    <div className="relative flex-col flex-1">
+                      {postType === ContentType.POST && (
                         <button
-                          type="submit"
-                          form="editor-form"
-                          className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-                                            ${
-                                              isPublishDisabled
-                                                ? 'cursor-not-allowed bg-primary/50'
-                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
-                                            }`}
-                          onClick={handleSubmit}
-                          disabled={isPublishDisabled}
+                          className="absolute top-3 right-3 z-10"
+                          type="button"
+                          onClick={() => {
+                            setInitialEditorValue(
+                              editorRef.current?.getContent()
+                            );
+                            setShowEditor(true);
+
+                            queueMicrotask(() => {
+                              setTimeout(() => {
+                                editorRef.current?.execCommand(
+                                  'SelectAll',
+                                  false
+                                );
+                              }, 500);
+                            });
+                          }}
                         >
-                          {isPublishing ? (
-                            <RefreshIcon className="w-5 animate-spin" />
-                          ) : (
-                            <PaperAirplaneIcon className="w-5 rotate-90" />
-                          )}
+                          <ArrowsExpandIcon className="w-4 h-4" />
                         </button>
-                      </div>
-                    </form>
+                      )}
+
+                      {renderInlineFormView()}
+                    </div>
                   )}
                 </div>
               </div>
@@ -317,7 +703,7 @@ const Channel = ({ apiKey }: Props) => {
 
           <button
             type="button"
-            onClick={handleSubmit}
+            onClick={onSubmitPost}
             className={`flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
             ${
               isPublishDisabled
