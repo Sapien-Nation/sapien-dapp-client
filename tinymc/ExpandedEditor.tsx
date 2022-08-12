@@ -34,7 +34,7 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
           : 'oxide',
         plugins: 'autolink lists link image media preview mediaembed emoticons',
         toolbar:
-          'undo redo | blocks | ' +
+          'insertfile undo redo | blocks | ' +
           'bold italic | alignleft aligncenter ' +
           'alignright alignjustify | ' +
           'link image media emoticons',
@@ -42,9 +42,10 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         media_live_embeds: true,
         images_upload_credentials: true,
         mediaembed_max_width: 450,
-        image_dimensions: false,
-        image_description: false,
-        file_picker_types: 'file image media',
+        image_dimensions: true,
+        image_description: true,
+        file_picker_types: 'image media file',
+        image_title: true,
         file_picker_callback: filePicker,
         images_upload_handler: imageHandler,
         extended_valid_elements: 'a[href|target=_blank]',
