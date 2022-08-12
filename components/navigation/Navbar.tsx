@@ -164,11 +164,11 @@ const Navbar = ({ setShowProfileOverlay }: Props) => {
                       type="button"
                       className={`${
                         open ? 'bg-sapien-neutral-900' : ''
-                      } h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+                      } h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900 relative`}
                     >
                       <span className="sr-only">View notifications</span>
                       <NotificationsIcon />
-                      <div className="absolute top-3 left-10">
+                      <div className="absolute top-0 left-10">
                         <RedDot count={unread} />
                       </div>
                     </Menu.Button>
