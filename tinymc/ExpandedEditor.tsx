@@ -57,15 +57,19 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
             line-height: 24px;
           }
 
-          .mce-content-body  > p:first-of-type {
-            font-size: 2em;
-            line-height: 24px;
-            font-weight: 700;
-          }
-
           .mce-content-body {
             color: #ffffff;
             background-color: #161527;
+          }
+
+          .mce-content-body > p:first-of-type {
+            font-size: 2em;
+            line-height: 34px;
+            font-weight: 700;
+          }
+
+          .mce-content-body:hover {
+            cursor: text;
           }
 
           .mce-content-body > p > a {
@@ -77,8 +81,10 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
             color: #3b82f6;
             text-decoration: underline;
           }
-          
-          * [contentEditable="true"]:focus { outline: 0px ; }
+
+          * [contentEditable='true']:focus {
+            outline: 0px;
+          }
         `,
       }}
       onEditorChange={onChange}

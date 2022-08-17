@@ -56,6 +56,7 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
     },
     imagePreview: null,
     mimeType: ContentMimeType.Html,
+    threads: [],
   };
 };
 
