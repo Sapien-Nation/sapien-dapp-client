@@ -56,6 +56,10 @@ type Media = {
   url: string;
 };
 
+interface PostFormProps {
+  title: string;
+}
+
 interface MediaFormProps {
   title: string;
   media: null | Media;
@@ -109,6 +113,16 @@ const Channel = ({ apiKey }: Props) => {
     formState: { errors: linkErrors, isSubmitting: isSubmittingLinkForm },
     handleSubmit: handleSubmitLinkForm,
   } = linkMethods;
+
+  const postMethods = useForm<PostFormProps>({
+    defaultValues: {
+      title: '',
+    },
+  });
+  const {
+    formState: { errors: postErrors },
+    handleSubmit: handleSubmitPostForm,
+  } = postMethods;
 
   const tribeID = query.tribeID as string;
   const channelID = query.viewID as string;
@@ -170,8 +184,7 @@ const Channel = ({ apiKey }: Props) => {
     }
   };
 
-  const onSubmitPost = async (event) => {
-    event.preventDefault();
+  const onSubmitPost = async ({ title }: PostFormProps) => {
     try {
       setPublishing(true);
       if (editorRef.current) {
@@ -182,7 +195,7 @@ const Channel = ({ apiKey }: Props) => {
           mimeType: 'text/html',
           data: content,
           groupId: channel.id,
-          title: 'Title', // TODO carlos to add title
+          title: title || 'Title', // While we figure out how to set a title on the expanded editor
         });
 
         setPublishing(false);
@@ -231,70 +244,115 @@ const Channel = ({ apiKey }: Props) => {
     switch (postType) {
       case ContentType.POST:
         return (
-          <form onSubmit={onSubmitPost} id="content-form">
-            <div className="h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
-              <InlineEditor
-                editorRef={editorRef}
-                onChange={handleOnContentChange}
-                initialValue={initialEditorValue}
-              />{' '}
-            </div>
-            <div className="flex gap-24 justify-between py-2">
-              <div className="flex gap-3 justify-center flex-1">
-                <button
-                  className="flex gap-3 items-center"
-                  type="button"
-                  onClick={() => editorRef.current.execCommand('mceEmoticons')}
-                >
-                  <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
-                  Emotion
-                </button>
-                <button
-                  className="flex gap-3 items-center"
-                  type="button"
-                  onClick={() => editorRef.current.execCommand('mceImage')}
-                >
-                  <PhotographIcon className="w-5 h-5 text-green-400" />
-                  Photo/Video/Audio
-                </button>
-                <button
-                  className="flex gap-3 items-center"
-                  type="button"
-                  onClick={() => editorRef.current.execCommand('mceMedia')}
-                >
-                  <PhotographIcon className="w-5 h-5 text-blue-400" />
-                  Embed
-                </button>
-                <button
-                  className="flex gap-3 items-center"
-                  type="button"
-                  onClick={() => editorRef.current.execCommand('mceLink')}
-                >
-                  <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
-                  Link
-                </button>
-              </div>
-            </div>
-            <div className="flex justify-end w-full mt-2">
-              <button
-                type="submit"
-                form="content-form"
-                className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+          <FormProvider {...postMethods}>
+            <form
+              onSubmit={handleSubmitPostForm(onSubmitPost)}
+              id="content-form"
+            >
+              <div className="px-4 py-5 space-y-6 sm:p-6">
+                <div className="flex gap-x-4 items-end">
+                  <div className="flex-1">
+                    <TextInputLabel
+                      label="Title"
+                      name="title"
+                      error={postErrors?.title?.message}
+                    />
+                    <TextInput
+                      name="title"
+                      aria-label="title"
+                      placeholder="Title"
+                      rules={{
+                        validate: {
+                          required: (value) =>
+                            value.length > 0 || 'is required',
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="relative h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
+                  <button
+                    className="absolute top-3 right-3 z-10"
+                    type="button"
+                    onClick={() => {
+                      setInitialEditorValue(editorRef.current?.getContent());
+                      setShowEditor(true);
+
+                      queueMicrotask(() => {
+                        setTimeout(() => {
+                          editorRef.current?.execCommand('SelectAll', false);
+                        }, 500);
+                      });
+                    }}
+                  >
+                    <ArrowsExpandIcon className="w-4 h-4" />
+                  </button>
+                  <InlineEditor
+                    editorRef={editorRef}
+                    onChange={handleOnContentChange}
+                    initialValue={initialEditorValue}
+                  />
+                </div>
+                <div className="flex gap-24 justify-between py-2">
+                  <div className="flex gap-3 justify-center flex-1">
+                    <button
+                      className="flex gap-3 items-center"
+                      type="button"
+                      onClick={() =>
+                        editorRef.current.execCommand('mceEmoticons')
+                      }
+                    >
+                      <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
+                      Emotion
+                    </button>
+                    <button
+                      className="flex gap-3 items-center"
+                      type="button"
+                      onClick={() => editorRef.current.execCommand('mceImage')}
+                    >
+                      <PhotographIcon className="w-5 h-5 text-green-400" />
+                      Photo/Video/Audio
+                    </button>
+                    <button
+                      className="flex gap-3 items-center"
+                      type="button"
+                      onClick={() => editorRef.current.execCommand('mceMedia')}
+                    >
+                      <PhotographIcon className="w-5 h-5 text-blue-400" />
+                      Embed
+                    </button>
+                    <button
+                      className="flex gap-3 items-center"
+                      type="button"
+                      onClick={() => editorRef.current.execCommand('mceLink')}
+                    >
+                      <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
+                      Link
+                    </button>
+                  </div>
+                </div>
+                <div className="flex justify-end w-full mt-2">
+                  <button
+                    type="submit"
+                    form="content-form"
+                    className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                                             ${
                                               isPublishDisabled
                                                 ? 'cursor-not-allowed bg-primary/50'
                                                 : 'cursor-pointer bg-primary hover:bg-sapien-80'
                                             }`}
-                disabled={isPublishDisabled}
-              >
-                {isPublishing ? (
-                  <RefreshIcon className="w-5 animate-spin" />
-                ) : (
-                  <PaperAirplaneIcon className="w-5 rotate-90" />
-                )}
-              </button>
-            </div>
-          </form>
+                    disabled={isPublishDisabled}
+                  >
+                    {isPublishing ? (
+                      <RefreshIcon className="w-5 animate-spin" />
+                    ) : (
+                      <PaperAirplaneIcon className="w-5 rotate-90" />
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </FormProvider>
         );
       case ContentType.MEDIA:
         return (
@@ -587,30 +645,6 @@ const Channel = ({ apiKey }: Props) => {
                 <div className="flex gap-2 lg:rounded-3xl p-4 pb-2">
                   {showEditor === false && (
                     <div className="relative flex-col flex-1">
-                      {postType === ContentType.POST && (
-                        <button
-                          className="absolute top-3 right-3 z-10"
-                          type="button"
-                          onClick={() => {
-                            setInitialEditorValue(
-                              editorRef.current?.getContent()
-                            );
-                            setShowEditor(true);
-
-                            queueMicrotask(() => {
-                              setTimeout(() => {
-                                editorRef.current?.execCommand(
-                                  'SelectAll',
-                                  false
-                                );
-                              }, 500);
-                            });
-                          }}
-                        >
-                          <ArrowsExpandIcon className="w-4 h-4" />
-                        </button>
-                      )}
-
                       {renderInlineFormView()}
                     </div>
                   )}
@@ -676,48 +710,54 @@ const Channel = ({ apiKey }: Props) => {
       {/* Editor */}
       {showEditor && (
         <>
-          <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
-            <div>
-              <ExpandedEditor
-                editorRef={editorRef}
-                initialValue={initialEditorValue}
-                onChange={handleOnContentChange}
-              />
-            </div>
-          </div>
-          <button
-            className="absolute top-2 left-5 flex items-center gap-2 border border-transparent px-6 py-2 text-base font-medium text-white focus:outline-none sm:text-sm"
-            onClick={() => {
-              setInitialEditorValue(editorRef.current?.getContent());
-              setShowEditor(false);
+          <FormProvider {...postMethods}>
+            <form
+              onSubmit={handleSubmitPostForm(onSubmitPost)}
+              id="content-form"
+            >
+              <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
+                <div>
+                  <ExpandedEditor
+                    editorRef={editorRef}
+                    initialValue={initialEditorValue}
+                    onChange={handleOnContentChange}
+                  />
+                </div>
+              </div>
+              <button
+                className="absolute top-2 left-5 flex items-center gap-2 border border-transparent px-6 py-2 text-base font-medium text-white focus:outline-none sm:text-sm"
+                onClick={() => {
+                  setInitialEditorValue(editorRef.current?.getContent());
+                  setShowEditor(false);
 
-              queueMicrotask(() => {
-                setTimeout(() => {
-                  editorRef.current?.execCommand('SelectAll', false);
-                }, 500);
-              });
-            }}
-          >
-            <ArrowNarrowLeftIcon className="text-white w-5" /> Back
-          </button>
-
-          <button
-            type="button"
-            onClick={onSubmitPost}
-            className={`flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                  queueMicrotask(() => {
+                    setTimeout(() => {
+                      editorRef.current?.execCommand('SelectAll', false);
+                    }, 500);
+                  });
+                }}
+              >
+                <ArrowNarrowLeftIcon className="text-white w-5" /> Back
+              </button>
+              <button
+                type="submit"
+                form="content-form"
+                className={`flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
             ${
               isPublishDisabled
                 ? 'cursor-not-allowed bg-primary/50'
                 : 'cursor-pointer bg-primary hover:bg-sapien-80'
             }`}
-            disabled={isPublishDisabled}
-          >
-            {isPublishing ? (
-              <RefreshIcon className="w-5 animate-spin" />
-            ) : (
-              <PaperAirplaneIcon className="w-5 rotate-90" />
-            )}
-          </button>
+                disabled={isPublishDisabled}
+              >
+                {isPublishing ? (
+                  <RefreshIcon className="w-5 animate-spin" />
+                ) : (
+                  <PaperAirplaneIcon className="w-5 rotate-90" />
+                )}
+              </button>
+            </form>
+          </FormProvider>
         </>
       )}
     </>
