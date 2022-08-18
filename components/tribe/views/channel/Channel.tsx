@@ -135,8 +135,8 @@ const Channel = ({ apiKey }: Props) => {
 
       const response: Content = await createMediaContent({
         title,
-        media: media.key,
-        preview: media.url,
+        media: media?.key,
+        preview: media?.url,
         mimeType: mediaMimeType,
         groupId: channel.id,
       });
