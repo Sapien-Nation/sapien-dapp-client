@@ -290,18 +290,17 @@ const Channel = ({ apiKey }: Props) => {
                   <button
                     type="submit"
                     form="content-form"
-                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-                                            ${
-                                              isPublishDisabled
-                                                ? 'cursor-not-allowed bg-primary/50'
-                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
-                                            }`}
+                    className={`${
+                      isPublishDisabled
+                        ? 'cursor-not-allowed bg-primary/50'
+                        : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                    } min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
                     disabled={isPublishDisabled}
                   >
                     {isPublishing ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>POST</>
+                      <>Post</>
                     )}
                   </button>
                 </div>
@@ -425,18 +424,17 @@ const Channel = ({ apiKey }: Props) => {
                   <button
                     type="submit"
                     form="media-form"
-                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-                                            ${
-                                              isSubmittingMediaForm
-                                                ? 'cursor-not-allowed bg-primary/50'
-                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
-                                            }`}
+                    className={`${
+                      isSubmittingMediaForm
+                        ? 'cursor-not-allowed bg-primary/50'
+                        : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                    } min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
                     disabled={isSubmittingMediaForm}
                   >
                     {isSubmittingMediaForm ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>POST</>
+                      <>Post</>
                     )}
                   </button>
                 </div>
@@ -520,18 +518,17 @@ const Channel = ({ apiKey }: Props) => {
                   <button
                     type="submit"
                     form="link-form"
-                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-                                            ${
-                                              isSubmittingLinkForm
-                                                ? 'cursor-not-allowed bg-primary/50'
-                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
-                                            }`}
+                    className={`${
+                      isSubmittingLinkForm
+                        ? 'cursor-not-allowed bg-primary/50'
+                        : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                    } min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
                     disabled={isSubmittingLinkForm}
                   >
                     {isSubmittingLinkForm ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>POST</>
+                      <>Post</>
                     )}
                   </button>
                 </div>
@@ -562,7 +559,7 @@ const Channel = ({ apiKey }: Props) => {
                     className={
                       postType === ContentType.POST
                         ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
                     }
                     aria-current={
                       postType === ContentType.POST ? 'page' : undefined
@@ -575,7 +572,7 @@ const Channel = ({ apiKey }: Props) => {
                     className={
                       postType === ContentType.MEDIA
                         ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
                     }
                     aria-current={
                       postType === ContentType.MEDIA ? 'page' : undefined
@@ -588,7 +585,7 @@ const Channel = ({ apiKey }: Props) => {
                     className={
                       postType === ContentType.LINK
                         ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
                     }
                     aria-current={
                       postType === ContentType.LINK ? 'page' : undefined
@@ -712,7 +709,7 @@ const Channel = ({ apiKey }: Props) => {
                       {isPublishing ? (
                         <RefreshIcon className="w-5 animate-spin" />
                       ) : (
-                        <>POST</>
+                        <>Post</>
                       )}
                     </button>
                   </div>
