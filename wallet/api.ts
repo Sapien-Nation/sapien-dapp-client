@@ -24,6 +24,7 @@ const getAlchemyTXhistoryPOSTParams = ({ options = {}, params = {} } = {}) => ({
     toBlock: 'latest',
     excludeZeroValue: false,
     category: ['external'],
+    order: 'desc',
     ...params,
   },
   ...options,
@@ -75,11 +76,11 @@ export const getTokenMetadata = (tokenId): Promise<Token> =>
     .then((response) => response.data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getSentTxHistory = (address, category=null) =>
+export const getSentTxHistory = (address, category = null) =>
   axios
     .post(
       alchemyAPIKeyURL,
-      getAlchemyTXhistoryPOSTParams({ params: { fromAddress: address, category: category? category : ['external'] } }),
+      getAlchemyTXhistoryPOSTParams({ params: { fromAddress: address, category: category ? category : ['external'] } }),
       {
         headers: {
           'Content-Type': 'application/json',
@@ -89,11 +90,11 @@ export const getSentTxHistory = (address, category=null) =>
     .then((response) => response)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getReceivedTxHistory = (address, category=null) =>
+export const getReceivedTxHistory = (address, category = null) =>
   axios
     .post(
       alchemyAPIKeyURL,
-      getAlchemyTXhistoryPOSTParams({ params: { toAddress: address, category: category? category : ['external'] } }),
+      getAlchemyTXhistoryPOSTParams({ params: { toAddress: address, category: category ? category : ['external'] } }),
       {
         headers: {
           'Content-Type': 'application/json',
@@ -103,20 +104,38 @@ export const getReceivedTxHistory = (address, category=null) =>
     .then((response) => response)
     .catch(({ response }) => Promise.reject(response.data.message));
 
-export const getTxHistory = async(address) => {
+/**
+ * retrieve a transaction history of user
+ * @param address user address
+ * @returns {
+ *  erc20: {sent: [...], received: [...]},
+ *  erc721: {sent, received},
+ *  erc1155: {sent, received},
+ * }
+ */
+export const getUserTxHistory = async (address) => {
   try {
     const [erc20, erc721, erc1155] = await Promise.all(
       ['erc20', 'erc721', 'erc1155'].map(async cate => {
         const sent = await getSentTxHistory(address, [cate]);
         const received = await getReceivedTxHistory(address, [cate]);
-        return [
-          ...(sent.data.err ? [] : sent.data.result.transfers),
-          ...(received.data.err ? [] : received.data.result.transfers)
-        ];
+        return {
+          sent: sent.data.err ? [] : sent.data.result.transfers,
+          received: received.data.err ? [] : received.data.result.transfers
+        };
       })
     )
-    return {erc20, erc721, erc1155};
-  } catch(err) {
+    return { erc20, erc721, erc1155 };
+  } catch (err) {
+    return Promise.reject(err.message);
+  }
+}
+
+export const getGnosisSafeTxHistory = async (address) => {
+  try {
+    const txns = await getReceivedTxHistory(address);
+    return txns.data.err ? [] : txns.data.result.transfers;
+  } catch (err) {
     return Promise.reject(err.message);
   }
 }
