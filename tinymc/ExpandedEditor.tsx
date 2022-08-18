@@ -28,7 +28,6 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         mobile: {
           toolbar_drawer: 'floating',
         },
-        placeholder: 'Title',
         skin: window.matchMedia('(prefers-color-scheme: dark)').matches
           ? 'oxide-dark'
           : 'oxide',
@@ -51,21 +50,9 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         extended_valid_elements: 'a[href|target=_blank]',
         link_target_list: false,
         content_style: `
-          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
-            color: #656067;
-            font-size: 2em;
-            line-height: 24px;
-          }
-
           .mce-content-body {
             color: #ffffff;
             background-color: #161527;
-          }
-
-          .mce-content-body > p:first-of-type {
-            font-size: 2em;
-            line-height: 34px;
-            font-weight: 700;
           }
 
           .mce-content-body:hover {

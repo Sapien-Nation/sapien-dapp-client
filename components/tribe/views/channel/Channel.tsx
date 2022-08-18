@@ -1,4 +1,3 @@
-import { PaperAirplaneIcon } from '@heroicons/react/solid';
 import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
@@ -189,7 +188,7 @@ const Channel = ({ apiKey }: Props) => {
           mimeType: 'text/html',
           data: content,
           groupId: channel.id,
-          title: title || 'Title', // While we figure out how to set a title on the expanded editor
+          title,
         });
 
         setPublishing(false);
@@ -672,12 +671,51 @@ const Channel = ({ apiKey }: Props) => {
               id="content-form"
             >
               <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
-                <div>
+                <div className="flex flex-col gap-5 mb-4">
+                  <div className="flex gap-x-4 items-end">
+                    <div className="flex-1">
+                      <TextInputLabel
+                        label="Title"
+                        name="title"
+                        error={postErrors?.title?.message}
+                      />
+                      <TextInput
+                        name="title"
+                        aria-label="title"
+                        placeholder="Title"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                    </div>
+                  </div>
                   <ExpandedEditor
                     editorRef={editorRef}
                     initialValue={initialEditorValue}
                     onChange={handleOnContentChange}
                   />
+                  <div className="flex justify-end w-full">
+                    <button
+                      type="submit"
+                      form="content-form"
+                      className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                                            ${
+                                              isPublishDisabled
+                                                ? 'cursor-not-allowed bg-primary/50'
+                                                : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                                            }`}
+                      disabled={isPublishDisabled}
+                    >
+                      {isPublishing ? (
+                        <RefreshIcon className="w-5 animate-spin" />
+                      ) : (
+                        <>POST</>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
               <button
@@ -694,23 +732,6 @@ const Channel = ({ apiKey }: Props) => {
                 }}
               >
                 <ArrowNarrowLeftIcon className="text-white w-5" /> Back
-              </button>
-              <button
-                type="submit"
-                form="content-form"
-                className={`flex items-center gap-2 bottom-10 absolute right-10 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
-            ${
-              isPublishDisabled
-                ? 'cursor-not-allowed bg-primary/50'
-                : 'cursor-pointer bg-primary hover:bg-sapien-80'
-            }`}
-                disabled={isPublishDisabled}
-              >
-                {isPublishing ? (
-                  <RefreshIcon className="w-5 animate-spin" />
-                ) : (
-                  <PaperAirplaneIcon className="w-5 rotate-90" />
-                )}
               </button>
             </form>
           </FormProvider>
