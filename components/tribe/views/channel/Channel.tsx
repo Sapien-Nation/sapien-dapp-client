@@ -1,9 +1,4 @@
-import {
-  EmojiHappyIcon,
-  ExternalLinkIcon,
-  PaperAirplaneIcon,
-  PhotographIcon,
-} from '@heroicons/react/solid';
+import { PaperAirplaneIcon } from '@heroicons/react/solid';
 import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
@@ -35,7 +30,6 @@ import ChannelLeftBar from './ChannelLeftBar';
 import ChannelHeaderPlaceholder from './ChannelHeaderPlaceholder';
 
 // context
-import { useAuth } from 'context/user';
 import { useToast } from 'context/toast';
 
 // constants
@@ -249,7 +243,7 @@ const Channel = ({ apiKey }: Props) => {
               onSubmit={handleSubmitPostForm(onSubmitPost)}
               id="content-form"
             >
-              <div className="px-4 py-5 space-y-6 sm:p-6">
+              <div className="px-4 space-y-6">
                 <div className="flex gap-x-4 items-end">
                   <div className="flex-1">
                     <TextInputLabel
@@ -270,7 +264,7 @@ const Channel = ({ apiKey }: Props) => {
                     />
                   </div>
                 </div>
-                <div className="relative h-auto min-h-[150px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
+                <div className="relative h-auto min-h-[160px] max-h-48 overflow-auto rounded-md outline-0 border-none ring-0 p-4 bg-sapien-neutral-800">
                   <button
                     className="absolute top-3 right-3 z-10"
                     type="button"
@@ -293,49 +287,11 @@ const Channel = ({ apiKey }: Props) => {
                     initialValue={initialEditorValue}
                   />
                 </div>
-                <div className="flex gap-24 justify-between py-2">
-                  <div className="flex gap-3 justify-center flex-1">
-                    <button
-                      className="flex gap-3 items-center"
-                      type="button"
-                      onClick={() =>
-                        editorRef.current.execCommand('mceEmoticons')
-                      }
-                    >
-                      <EmojiHappyIcon className="w-5 h-5 text-orange-400" />
-                      Emotion
-                    </button>
-                    <button
-                      className="flex gap-3 items-center"
-                      type="button"
-                      onClick={() => editorRef.current.execCommand('mceImage')}
-                    >
-                      <PhotographIcon className="w-5 h-5 text-green-400" />
-                      Photo/Video/Audio
-                    </button>
-                    <button
-                      className="flex gap-3 items-center"
-                      type="button"
-                      onClick={() => editorRef.current.execCommand('mceMedia')}
-                    >
-                      <PhotographIcon className="w-5 h-5 text-blue-400" />
-                      Embed
-                    </button>
-                    <button
-                      className="flex gap-3 items-center"
-                      type="button"
-                      onClick={() => editorRef.current.execCommand('mceLink')}
-                    >
-                      <ExternalLinkIcon className="w-5 h-5 text-purple-400" />
-                      Link
-                    </button>
-                  </div>
-                </div>
-                <div className="flex justify-end w-full mt-2">
+                <div className="flex justify-end w-full">
                   <button
                     type="submit"
                     form="content-form"
-                    className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                                             ${
                                               isPublishDisabled
                                                 ? 'cursor-not-allowed bg-primary/50'
@@ -346,7 +302,7 @@ const Channel = ({ apiKey }: Props) => {
                     {isPublishing ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <PaperAirplaneIcon className="w-5 rotate-90" />
+                      <>POST</>
                     )}
                   </button>
                 </div>
@@ -362,7 +318,7 @@ const Channel = ({ apiKey }: Props) => {
               className="sm:overflow-hidden"
               onSubmit={handleSubmitMediaForm(onSubmitMedia)}
             >
-              <div className="px-4 py-5 space-y-6 sm:p-6">
+              <div className="px-4 space-y-6">
                 <div>
                   <div className="flex gap-x-4 items-end">
                     <div className="flex-1">
@@ -466,25 +422,25 @@ const Channel = ({ apiKey }: Props) => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-end w-full mt-2">
-                <button
-                  type="submit"
-                  form="media-form"
-                  className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                <div className="flex justify-end w-full">
+                  <button
+                    type="submit"
+                    form="media-form"
+                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                                             ${
                                               isSubmittingMediaForm
                                                 ? 'cursor-not-allowed bg-primary/50'
                                                 : 'cursor-pointer bg-primary hover:bg-sapien-80'
                                             }`}
-                  disabled={isSubmittingMediaForm}
-                >
-                  {isSubmittingMediaForm ? (
-                    <RefreshIcon className="w-5 animate-spin" />
-                  ) : (
-                    <PaperAirplaneIcon className="w-5 rotate-90" />
-                  )}
-                </button>
+                    disabled={isSubmittingMediaForm}
+                  >
+                    {isSubmittingMediaForm ? (
+                      <RefreshIcon className="w-5 animate-spin" />
+                    ) : (
+                      <>POST</>
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </FormProvider>
@@ -497,7 +453,7 @@ const Channel = ({ apiKey }: Props) => {
               className="sm:overflow-hidden"
               onSubmit={handleSubmitLinkForm(onSubmitLink)}
             >
-              <div className="px-4 py-5 space-y-6 sm:p-6">
+              <div className="px-4 space-y-11">
                 <div>
                   <div className="flex gap-x-4 items-end">
                     <div className="flex-1">
@@ -561,25 +517,25 @@ const Channel = ({ apiKey }: Props) => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-end w-full mt-2">
-                <button
-                  type="submit"
-                  form="link-form"
-                  className={`flex items-center gap-2 rounded-full border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                <div className="flex justify-end w-full">
+                  <button
+                    type="submit"
+                    form="link-form"
+                    className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                                             ${
                                               isSubmittingLinkForm
                                                 ? 'cursor-not-allowed bg-primary/50'
                                                 : 'cursor-pointer bg-primary hover:bg-sapien-80'
                                             }`}
-                  disabled={isSubmittingLinkForm}
-                >
-                  {isSubmittingLinkForm ? (
-                    <RefreshIcon className="w-5 animate-spin" />
-                  ) : (
-                    <PaperAirplaneIcon className="w-5 rotate-90" />
-                  )}
-                </button>
+                    disabled={isSubmittingLinkForm}
+                  >
+                    {isSubmittingLinkForm ? (
+                      <RefreshIcon className="w-5 animate-spin" />
+                    ) : (
+                      <>POST</>
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </FormProvider>
@@ -600,14 +556,14 @@ const Channel = ({ apiKey }: Props) => {
               showMembers={() => setShowMembers(!showMembers)}
             />
             {canPost === true && (
-              <div className="bg-sapien-neutral-600 p-3 rounded-xl mb-4 overflow-y-auto">
+              <div className="bg-sapien-neutral-600 py-3 rounded-xl mb-4 overflow-y-auto">
                 <nav className="grid grid-cols-3" aria-label="Tabs">
                   <button
                     onClick={() => setPostType(ContentType.POST)}
                     className={
                       postType === ContentType.POST
-                        ? 'border-sapien-80 text-white whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-transparent text-white hover:border-sapien-20 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
                     }
                     aria-current={
                       postType === ContentType.POST ? 'page' : undefined
@@ -642,7 +598,7 @@ const Channel = ({ apiKey }: Props) => {
                     Link
                   </button>
                 </nav>
-                <div className="flex gap-2 lg:rounded-3xl p-4 pb-2">
+                <div className="flex gap-2 lg:rounded-3xl p-4 pb-2 min-h-[350px]">
                   {showEditor === false && (
                     <div className="relative flex-col flex-1">
                       {renderInlineFormView()}
