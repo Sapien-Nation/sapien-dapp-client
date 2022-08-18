@@ -397,7 +397,7 @@ const Channel = ({ apiKey }: Props) => {
                                 id="cover-upload"
                                 name="cover-upload"
                                 type="file"
-                                accept=".png, .jpg, .jpeg"
+                                accept="image/*, video/*, audio/*"
                                 disabled={isUploading}
                                 className="sr-only"
                                 onChange={(event) => {
@@ -413,7 +413,7 @@ const Channel = ({ apiKey }: Props) => {
                             </label>
                           </div>
                           <p className="text-xs text-gray-500">
-                            PNG, JPG, GIF up to 10MB
+                            Audio, Image or Video
                           </p>
                         </div>
                       )}
