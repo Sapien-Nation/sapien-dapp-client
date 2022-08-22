@@ -685,7 +685,7 @@ const Channel = ({ apiKey }: Props) => {
                     >
                       <ArrowNarrowLeftIcon className="text-white w-5" /> Back
                     </button>
-                    <div className="w-full max-w-[650px]">
+                    <div className="w-full max-w-[650px] px-3">
                       <TextInput
                         name="title"
                         aria-label="title"
