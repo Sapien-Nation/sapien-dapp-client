@@ -716,6 +716,11 @@ const Channel = ({ apiKey }: Props) => {
                       )}
                     </button>
                   </div>
+                  {/* since tox classes are not being referenced anywhere purgecss will remove them.
+                  temporary workaround to keep them on prod build */}
+                  <div className="hidden">
+                    <div className="tox-tinymce tox-sidebar-wrap tox-toolbar__primary tox-editor-header" />
+                  </div>
                   <ExpandedEditor
                     editorRef={editorRef}
                     initialValue={initialEditorValue}
