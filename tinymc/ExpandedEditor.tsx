@@ -28,9 +28,8 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         mobile: {
           toolbar_drawer: 'floating',
         },
-        skin: window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'oxide-dark'
-          : 'oxide',
+        skin: 'oxide-dark',
+        content_css: 'dark',
         plugins: 'autolink lists link image media preview mediaembed emoticons',
         toolbar:
           'insertfile undo redo | blocks | ' +
@@ -49,6 +48,7 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         images_upload_handler: imageHandler,
         extended_valid_elements: 'a[href|target=_blank]',
         link_target_list: false,
+        placeholder: 'Text',
         content_style: `
           .mce-content-body {
             color: #ffffff;
@@ -57,6 +57,10 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
 
           .mce-content-body:hover {
             cursor: text;
+          }
+
+          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+            color: #656067;
           }
 
           .mce-content-body > p > a {
