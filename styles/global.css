@@ -699,5 +699,11 @@
 }
 
 .tox-sidebar-wrap {
-  padding: 0 25px !important;
+  width: 100% !important;
+  max-width: 675px !important;
+  margin: 0 auto !important;
+}
+
+.tox-toolbar__primary {
+  justify-content: center !important;
 }

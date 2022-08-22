@@ -669,39 +669,27 @@ const Channel = ({ apiKey }: Props) => {
             >
               <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
                 <div className="flex flex-col gap-5 mb-4 w-full">
-                  <div className="flex-1 py-2 px-10">
-                    <div>
-                      <button
-                        className="flex items-center gap-2 border border-transparent text-base font-medium text-white focus:outline-none sm:text-sm"
-                        onClick={() => {
-                          setInitialEditorValue(
-                            editorRef.current?.getContent()
-                          );
-                          setShowEditor(false);
+                  <div className="flex justify-between pt-5 px-8">
+                    <button
+                      className="flex items-center gap-2 border border-transparent text-base font-medium text-white focus:outline-none sm:text-sm"
+                      onClick={() => {
+                        setInitialEditorValue(editorRef.current?.getContent());
+                        setShowEditor(false);
 
-                          queueMicrotask(() => {
-                            setTimeout(() => {
-                              editorRef.current?.execCommand(
-                                'SelectAll',
-                                false
-                              );
-                            }, 500);
-                          });
-                        }}
-                      >
-                        <ArrowNarrowLeftIcon className="text-white w-5" /> Back
-                      </button>
-                    </div>
-                    <div>
-                      <TextInputLabel
-                        label="Title"
-                        name="title"
-                        error={postErrors?.title?.message}
-                      />
+                        queueMicrotask(() => {
+                          setTimeout(() => {
+                            editorRef.current?.execCommand('SelectAll', false);
+                          }, 500);
+                        });
+                      }}
+                    >
+                      <ArrowNarrowLeftIcon className="text-white w-5" /> Back
+                    </button>
+                    <div className="w-full max-w-[650px]">
                       <TextInput
                         name="title"
                         aria-label="title"
-                        placeholder="Title"
+                        placeholder="Enter title"
                         rules={{
                           validate: {
                             required: (value) =>
@@ -710,17 +698,10 @@ const Channel = ({ apiKey }: Props) => {
                         }}
                       />
                     </div>
-                  </div>
-                  <ExpandedEditor
-                    editorRef={editorRef}
-                    initialValue={initialEditorValue}
-                    onChange={handleOnContentChange}
-                  />
-                  <div className="flex justify-end px-10">
                     <button
                       type="submit"
                       form="content-form"
-                      className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
+                      className={`min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm
                                             ${
                                               isPublishDisabled
                                                 ? 'cursor-not-allowed bg-primary/50'
@@ -735,6 +716,11 @@ const Channel = ({ apiKey }: Props) => {
                       )}
                     </button>
                   </div>
+                  <ExpandedEditor
+                    editorRef={editorRef}
+                    initialValue={initialEditorValue}
+                    onChange={handleOnContentChange}
+                  />
                 </div>
               </div>
             </form>
