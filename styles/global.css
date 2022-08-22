@@ -692,3 +692,12 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.tox-tinymce {
+  border-radius: 0 !important;
+  border: transparent !important;
+}
+
+.tox-sidebar-wrap {
+  padding: 0 25px !important;
+}

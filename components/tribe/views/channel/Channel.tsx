@@ -668,9 +668,31 @@ const Channel = ({ apiKey }: Props) => {
               id="content-form"
             >
               <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
-                <div className="flex flex-col gap-5 mb-4">
-                  <div className="flex gap-x-4 items-end">
-                    <div className="flex-1">
+                <div className="flex flex-col gap-5 mb-4 w-full">
+                  <div className="flex-1 py-2 px-10">
+                    <div>
+                      <button
+                        className="flex items-center gap-2 border border-transparent text-base font-medium text-white focus:outline-none sm:text-sm"
+                        onClick={() => {
+                          setInitialEditorValue(
+                            editorRef.current?.getContent()
+                          );
+                          setShowEditor(false);
+
+                          queueMicrotask(() => {
+                            setTimeout(() => {
+                              editorRef.current?.execCommand(
+                                'SelectAll',
+                                false
+                              );
+                            }, 500);
+                          });
+                        }}
+                      >
+                        <ArrowNarrowLeftIcon className="text-white w-5" /> Back
+                      </button>
+                    </div>
+                    <div>
                       <TextInputLabel
                         label="Title"
                         name="title"
@@ -694,7 +716,7 @@ const Channel = ({ apiKey }: Props) => {
                     initialValue={initialEditorValue}
                     onChange={handleOnContentChange}
                   />
-                  <div className="flex justify-end w-full">
+                  <div className="flex justify-end px-10">
                     <button
                       type="submit"
                       form="content-form"
@@ -715,21 +737,6 @@ const Channel = ({ apiKey }: Props) => {
                   </div>
                 </div>
               </div>
-              <button
-                className="absolute top-2 left-5 flex items-center gap-2 border border-transparent px-6 py-2 text-base font-medium text-white focus:outline-none sm:text-sm"
-                onClick={() => {
-                  setInitialEditorValue(editorRef.current?.getContent());
-                  setShowEditor(false);
-
-                  queueMicrotask(() => {
-                    setTimeout(() => {
-                      editorRef.current?.execCommand('SelectAll', false);
-                    }, 500);
-                  });
-                }}
-              >
-                <ArrowNarrowLeftIcon className="text-white w-5" /> Back
-              </button>
             </form>
           </FormProvider>
         </>
