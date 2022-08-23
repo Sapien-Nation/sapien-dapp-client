@@ -36,7 +36,7 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
           'bold italic | alignleft aligncenter ' +
           'alignright alignjustify | ' +
           'link image media emoticons',
-        automatic_uploads: true,
+        automatic_uploads: false,
         media_live_embeds: true,
         images_upload_credentials: true,
         mediaembed_max_width: 450,
@@ -49,6 +49,22 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         extended_valid_elements: 'a[href|target=_blank]',
         link_target_list: false,
         placeholder: 'Text',
+        video_template_callback: (data) => {
+          return (
+            `<video width="${data.width}" height="${data.height}"${
+              data.poster ? ` poster="${data.poster}"` : ''
+            } controls="controls">\n` +
+            `<source src="${data.source}"${
+              data.sourcemime ? ` type="${data.sourcemime}"` : ''
+            } />\n` +
+            (data.altsource
+              ? `<source src="${data.altsource}"${
+                  data.altsourcemime ? ` type="${data.altsourcemime}"` : ''
+                } />\n`
+              : '') +
+            '</video>'
+          );
+        },
         content_style: `
           .mce-content-body {
             color: #ffffff;
