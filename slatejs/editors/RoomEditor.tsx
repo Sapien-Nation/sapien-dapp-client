@@ -104,26 +104,26 @@ const RoomEditor = ({ name, onSubmit, slateProps = {} }: Props) => {
       }));
 
     // TODO replace with regex
-    // const matchesForEveryone = [
-    //   'ev',
-    //   'eve',
-    //   'ever',
-    //   'every',
-    //   'everyo',
-    //   'everyon',
-    //   'everyone',
-    // ];
+    const matchesForEveryone = [
+      'ev',
+      'eve',
+      'ever',
+      'every',
+      'everyo',
+      'everyon',
+      'everyone',
+    ];
 
-    // if (matchesForEveryone.includes(search.toLowerCase())) {
-    //   return [
-    //     {
-    //       id: '@everyone',
-    //       label: 'eveyone',
-    //       subtitle: 'Notify all the members of this room',
-    //     },
-    //     ...memberList,
-    //   ];
-    // }
+    if (matchesForEveryone.includes(search.toLowerCase())) {
+      return [
+        {
+          id: '@everyone',
+          label: 'everyone',
+          subtitle: 'Notify all the members of this room',
+        },
+        ...memberList,
+      ];
+    }
 
     return memberList;
   }, [roomMembers, search]);
