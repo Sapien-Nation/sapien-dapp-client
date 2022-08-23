@@ -1,10 +1,4 @@
 import {
-  EmojiHappyIcon,
-  ExternalLinkIcon,
-  PaperAirplaneIcon,
-  PhotographIcon,
-} from '@heroicons/react/solid';
-import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
@@ -28,7 +22,7 @@ import {
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Query } from 'components/common';
+import { Query, TextInput, TextInputLabel } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
