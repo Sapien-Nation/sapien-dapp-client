@@ -667,7 +667,7 @@ const Channel = ({ apiKey }: Props) => {
               onSubmit={handleSubmitPostForm(onSubmitPost)}
               id="content-form"
             >
-              <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800">
+              <div className="absolute top-0 bottom-0 right-0 left-0 flex justify-center bg-sapien-neutral-800 rounded-tl-3xl">
                 <div className="flex flex-col gap-5 mb-4 w-full">
                   <div className="flex justify-between pt-5 px-8">
                     <button
@@ -716,8 +716,8 @@ const Channel = ({ apiKey }: Props) => {
                       )}
                     </button>
                   </div>
-                  {/* since tox classes are not being referenced anywhere purgecss will remove them.
-                  temporary workaround to keep them on prod build */}
+                  {/* since tox classes are not being referenced anywhere, purgecss will remove them.
+                  temporary workaround to keep them on prod build. */}
                   <div className="hidden">
                     <div className="tox-tinymce tox-sidebar-wrap tox-toolbar__primary tox-editor-header" />
                   </div>
