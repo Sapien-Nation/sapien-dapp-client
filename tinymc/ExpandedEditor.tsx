@@ -28,17 +28,15 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         mobile: {
           toolbar_drawer: 'floating',
         },
-        placeholder: 'Title',
-        skin: window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'oxide-dark'
-          : 'oxide',
+        skin: 'oxide-dark',
+        content_css: 'dark',
         plugins: 'autolink lists link image media preview mediaembed emoticons',
         toolbar:
           'insertfile undo redo | blocks | ' +
           'bold italic | alignleft aligncenter ' +
           'alignright alignjustify | ' +
           'link image media emoticons',
-        automatic_uploads: true,
+        automatic_uploads: false,
         media_live_embeds: true,
         images_upload_credentials: true,
         mediaembed_max_width: 450,
@@ -50,26 +48,35 @@ const EditorComponent = ({ editorRef, initialValue, onChange }: Props) => {
         images_upload_handler: imageHandler,
         extended_valid_elements: 'a[href|target=_blank]',
         link_target_list: false,
+        placeholder: 'Text',
+        video_template_callback: (data) => {
+          return (
+            `<video width="${data.width}" height="${data.height}"${
+              data.poster ? ` poster="${data.poster}"` : ''
+            } controls="controls">\n` +
+            `<source src="${data.source}"${
+              data.sourcemime ? ` type="${data.sourcemime}"` : ''
+            } />\n` +
+            (data.altsource
+              ? `<source src="${data.altsource}"${
+                  data.altsourcemime ? ` type="${data.altsourcemime}"` : ''
+                } />\n`
+              : '') +
+            '</video>'
+          );
+        },
         content_style: `
-          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
-            color: #656067;
-            font-size: 2em;
-            line-height: 24px;
-          }
-
           .mce-content-body {
             color: #ffffff;
             background-color: #161527;
           }
 
-          .mce-content-body > p:first-of-type {
-            font-size: 2em;
-            line-height: 34px;
-            font-weight: 700;
-          }
-
           .mce-content-body:hover {
             cursor: text;
+          }
+
+          .mce-content-body[data-mce-placeholder]:not(.mce-visualblocks)::before {
+            color: #656067;
           }
 
           .mce-content-body > p > a {
