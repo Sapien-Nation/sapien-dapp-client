@@ -692,3 +692,22 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.5);
 }
+
+.tox-tinymce {
+  border-radius: 0 !important;
+  border: transparent !important;
+}
+
+.tox-sidebar-wrap {
+  width: 100% !important;
+  max-width: 675px !important;
+  margin: 0 auto !important;
+}
+
+.tox-toolbar__primary {
+  justify-content: center !important;
+}
+
+.tox-editor-header {
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+}

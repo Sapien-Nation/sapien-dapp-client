@@ -31,15 +31,22 @@ import type { ProfileTribe } from 'tools/types/tribe';
 import { isSameOriginURL } from 'utils/url';
 
 interface Props {
+  canPost: boolean;
   channel: Channel;
   showMembers: () => void;
+  showEditor: () => void;
 }
 
 enum Dialog {
   Edit,
 }
 
-const ChannelHeader = ({ channel, showMembers }: Props) => {
+const ChannelHeader = ({
+  canPost,
+  channel,
+  showMembers,
+  showEditor,
+}: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const toast = useToast();
@@ -126,18 +133,27 @@ const ChannelHeader = ({ channel, showMembers }: Props) => {
               </h2>
             </div>
             <div className="flex items-center gap-2">
+              {canPost === true && (
+                <button
+                  onClick={showEditor}
+                  type="button"
+                  className="relative inline-flex items-center px-4 py-2 rounded-md border-0 bg-primary hover:bg-sapien-80 focus:outline-none font-semibold"
+                >
+                  Write an Article
+                </button>
+              )}
               <div className="flex items-center">
                 <button
                   onClick={handleCopyToClipboard}
                   type="button"
-                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 focus:outline-none font-semibold"
+                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary hover:bg-sapien-80 focus:outline-none font-semibold"
                 >
                   Share
                 </button>
                 <button
                   onClick={handleCopyToClipboard}
                   type="button"
-                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none"
+                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary hover:bg-sapien-80 font-medium focus:outline-none"
                 >
                   <DocumentDuplicateIcon className="w-6" />
                 </button>
