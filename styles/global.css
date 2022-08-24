@@ -25,12 +25,6 @@
   text-decoration: underline !important;
 }
 
-.disable-preflight > p:first-of-type {
-  font-size: 2em;
-  line-height: 34px;
-  font-weight: 700;
-}
-
 .disable-preflight > h1 {
   font-size: 2em;
   font-weight: bold;
