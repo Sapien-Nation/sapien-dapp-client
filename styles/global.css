@@ -25,12 +25,6 @@
   text-decoration: underline !important;
 }
 
-.disable-preflight > p:first-of-type {
-  font-size: 2em;
-  line-height: 34px;
-  font-weight: 700;
-}
-
 .disable-preflight > h1 {
   font-size: 2em;
   font-weight: bold;
@@ -706,8 +700,10 @@
 
 .tox-toolbar__primary {
   justify-content: center !important;
+  background-color: #161527 !important;
 }
 
 .tox-editor-header {
+  background-color: #161527 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
 }

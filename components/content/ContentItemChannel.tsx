@@ -37,6 +37,7 @@ const ContentItem = ({
     body,
     imagePreview,
     mimeType,
+    title,
   },
   tribeID,
 }: Props) => {
@@ -91,6 +92,7 @@ const ContentItem = ({
           </p>
         </div>
         <div className="flex-1 p-3">
+          {title && <h1 className="text-4xl font-semibold">{title}</h1>}
           {mimeType === ContentMimeType.Html ? (
             <div
               className="disable-preflight"
