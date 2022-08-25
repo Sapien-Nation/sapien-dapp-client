@@ -54,10 +54,12 @@ export const useWelcomeMessage = (tribe: ProfileTribe): Content => {
       avatar:
         'https://cdn.discordapp.com/avatars/187385335725031424/ed2e737cb7906bbdf658a178ff5908d6.webp?size=128',
     },
-    imagePreview: null,
+    preview: null,
     mimeType: ContentMimeType.Html,
     threads: [],
     title: 'Lorem Ipsum',
+    media: '',
+    link: '',
   };
 };
 
