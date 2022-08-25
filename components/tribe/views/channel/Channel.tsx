@@ -22,7 +22,7 @@ import {
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Query, TextInput, TextInputLabel } from 'components/common';
+import { Overlay, Query, TextInput, TextInputLabel } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
@@ -73,6 +73,7 @@ const Channel = ({ apiKey }: Props) => {
   const [isUploading, setIsUploading] = useState(false);
   const [mediaMimeType, setMediaMimeType] = useState('');
   const [initialEditorValue, setInitialEditorValue] = useState('');
+  const [selectedPost, setSelectedPost] = useState<Content>(null);
   const isPublishDisabled = isPublishing || !hasContent;
 
   const toast = useToast();
@@ -538,6 +539,43 @@ const Channel = ({ apiKey }: Props) => {
         );
     }
   };
+
+  const renderPost = (content: any) => {
+    switch (content.type) {
+      case ContentType.LINK:
+        return (
+          <Link href={content.link} passHref>
+            <a target="_blank">
+              <ContentItemChannel
+                content={content}
+                tribeID={tribeID as string}
+              />
+            </a>
+          </Link>
+        );
+      case ContentType.MEDIA:
+        return (
+          <div
+            className="cursor-pointer"
+            onClick={() => setSelectedPost(content)}
+          >
+            <ContentItemChannel content={content} tribeID={tribeID as string} />
+          </div>
+        );
+      case ContentType.POST:
+        return (
+          <Link href={`/tribes/${tribeID}/content?id=${content.id}`} passHref>
+            <a>
+              <ContentItemChannel
+                content={content}
+                tribeID={tribeID as string}
+              />
+            </a>
+          </Link>
+        );
+    }
+  };
+
   let mutateFetchAPI = apiKey;
   return (
     <>
@@ -632,18 +670,11 @@ const Channel = ({ apiKey }: Props) => {
             >
               <ul>
                 {swrData?.data.map((content) => (
-                  <li className="mb-8 last:mb-0" key={content.id}>
-                    <Link
-                      href={`/tribes/${tribeID}/content?id=${content.id}`}
-                      passHref
-                    >
-                      <a>
-                        <ContentItemChannel
-                          content={content}
-                          tribeID={tribeID as string}
-                        />
-                      </a>
-                    </Link>
+                  <li
+                    className="mb-8 last:mb-0 border border-sapien-neutral-800 hover:border-gray-700 rounded-xl"
+                    key={content.id}
+                  >
+                    {renderPost(content)}
                   </li>
                 ))}
               </ul>
@@ -731,6 +762,30 @@ const Channel = ({ apiKey }: Props) => {
             </form>
           </FormProvider>
         </>
+      )}
+
+      {selectedPost && (
+        <Overlay
+          blur
+          isOpen={selectedPost !== null}
+          onClose={() => setSelectedPost(null)}
+        >
+          <>
+            <button
+              type="button"
+              className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5 z-10"
+              onClick={() => setSelectedPost(null)}
+            >
+              <XIcon className="h-8 w-8" aria-hidden="true" />
+            </button>
+            <div className="relative top-1/4 translate-y-1/2 px-48">
+              <ContentItemChannel
+                content={selectedPost}
+                tribeID={tribeID as string}
+              />
+            </div>
+          </>
+        </Overlay>
       )}
     </>
   );
