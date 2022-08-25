@@ -3,13 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Menu } from '@headlessui/react';
 
-// TODO: commented until we have data to show
-// import {
-//   ChatIcon,
-//   ShareIcon,
-//   SpeakerphoneIcon,
-// } from '@heroicons/react/outline';
-
 // constants
 import { ContentMimeType } from 'tools/constants/content';
 
@@ -44,10 +37,12 @@ const ContentItem = ({
     group,
     createdAt,
     body,
-    imagePreview,
+    preview,
     mimeType,
     title,
     threads,
+    media,
+    link,
   },
   tribeID,
 }: Props) => {
@@ -55,6 +50,39 @@ const ContentItem = ({
 
   const tribe = useTribe(tribeID);
   const { query } = useRouter();
+
+  const renderBody = () => {
+    if (mimeType === ContentMimeType.Html) {
+      return (
+        <div
+          className="disable-preflight"
+          dangerouslySetInnerHTML={{
+            __html: body,
+          }}
+        />
+      );
+    } else if (mimeType === ContentMimeType.Link) {
+      return (
+        <div className="flex flex-col gap-2">
+          <div>{body}</div>
+          <div className="text-[#3b82f6] underline">{link}</div>
+        </div>
+      );
+    } else if (mimeType.includes(ContentMimeType.Image)) {
+      return (
+        <img className="object-cover" src={media} alt="Sapien Post Image" />
+      );
+    } else if (mimeType.includes(ContentMimeType.Video)) {
+      return (
+        <video controls>
+          <source src={media} type={mimeType} />
+          Your browser does not support the video tag.
+        </video>
+      );
+    } else {
+      return <></>;
+    }
+  };
 
   return (
     <>
@@ -105,16 +133,7 @@ const ContentItem = ({
         </div>
         <div className="flex-1 p-3">
           {title && <h1 className="text-4xl font-semibold">{title}</h1>}
-          {mimeType === ContentMimeType.Html ? (
-            <div
-              className="disable-preflight"
-              dangerouslySetInnerHTML={{
-                __html: body,
-              }}
-            ></div>
-          ) : (
-            body
-          )}
+          {renderBody()}
         </div>
         <div
           // className="flex justify-between p-3"
@@ -161,25 +180,6 @@ const ContentItem = ({
             create thread
           </button>
         </div>
-        {imagePreview && (
-          <img
-            className="object-cover rounded-md"
-            src={imagePreview}
-            alt="Sapien Post Image"
-          />
-        )}
-        {/* TODO: commented until we have data to show */}
-        {/* <div className="flex items-center gap-5 text-gray-500 p-3">
-        <span className="flex items-center gap-2">
-          <ChatIcon className="h-4" />
-        </span>
-        <span className="flex items-center gap-2">
-          <SpeakerphoneIcon className="h-4" />
-        </span>
-        <span className="flex items-center gap-2">
-          <ShareIcon className="h-4" />
-        </span>
-      </div> */}
       </div>
       {/* create thread dialog */}
       {dialog === Dialog.CreateThread && (
