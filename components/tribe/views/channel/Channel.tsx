@@ -770,7 +770,7 @@ const Channel = ({ apiKey }: Props) => {
           isOpen={selectedPost !== null}
           onClose={() => setSelectedPost(null)}
         >
-          <>
+          <div className="h-full flex justify-center items-center">
             <button
               type="button"
               className="rounded-md text-gray-400 hover:text-gray-500 focus:outline-none absolute right-8 top-5 z-10"
@@ -778,13 +778,13 @@ const Channel = ({ apiKey }: Props) => {
             >
               <XIcon className="h-8 w-8" aria-hidden="true" />
             </button>
-            <div className="relative top-1/4 translate-y-1/2 px-48">
+            <div className="w-full px-48">
               <ContentItemChannel
                 content={selectedPost}
                 tribeID={tribeID as string}
               />
             </div>
-          </>
+          </div>
         </Overlay>
       )}
     </>
