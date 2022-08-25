@@ -24,7 +24,7 @@ const ContentItemMainChannel = ({
     owner: { avatar, username },
     createdAt,
     body,
-    imagePreview,
+    preview,
     mimeType,
   },
   tribeID,
@@ -33,10 +33,10 @@ const ContentItemMainChannel = ({
     <Link href={`/tribes/${tribeID}/content?id=${id}`} passHref>
       <a className="hover:bg-gray-800 max-w-2xl mx-auto rounded-md p-2 block text-gray-300 border border-gray-700">
         <div className="flex space-x-3">
-          {imagePreview && (
+          {preview && (
             <img
               className="w-32 h-24 object-cover rounded-md"
-              src={imagePreview}
+              src={preview}
               alt="Sapien Post Image"
             />
           )}
