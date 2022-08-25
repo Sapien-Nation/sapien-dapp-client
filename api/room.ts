@@ -7,10 +7,10 @@ import { RoomType } from 'tools/constants/rooms';
 export interface CreateRoomBody {
   aboutObject: string;
   aboutObjectId: string;
-  badges: Array<string>;
+  badges?: Array<string>;
   name: string;
   tribeId: string;
-  type: RoomType;
+  type?: RoomType;
 }
 
 export const createRoom = (body: CreateRoomBody) =>
