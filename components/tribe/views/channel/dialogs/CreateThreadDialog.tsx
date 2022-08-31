@@ -16,6 +16,7 @@ interface Props {
   contentId: string;
   tribeId: string;
   onClose: () => void;
+  updateFeed?: boolean;
 }
 
 interface CreateThreadFormValues {
@@ -24,7 +25,12 @@ interface CreateThreadFormValues {
   roomId: string;
 }
 
-const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
+const CreateThreadDialog = ({
+  contentId,
+  tribeId,
+  onClose,
+  updateFeed = true,
+}: Props) => {
   const rooms = useTribeRooms();
   const toast = useToast();
   const { query } = useRouter();
@@ -67,31 +73,33 @@ const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
       };
       const response = await createRoom(room);
 
-      mutate(
-        `/core-api/channel/${channelID}/feed`,
-        (feed: { data: Array<any>; nextCursor: string }) => {
-          return {
-            ...feed,
-            data: feed.data.map((post) => {
-              if (post.id === contentId) {
-                return {
-                  ...post,
-                  threads: [
-                    ...post.threads,
-                    {
-                      archived: false,
-                      ...response,
-                    },
-                  ],
-                };
-              }
+      if (updateFeed) {
+        mutate(
+          `/core-api/channel/${channelID}/feed`,
+          (feed: { data: Array<any>; nextCursor: string }) => {
+            return {
+              ...feed,
+              data: feed.data.map((post) => {
+                if (post.id === contentId) {
+                  return {
+                    ...post,
+                    threads: [
+                      ...post.threads,
+                      {
+                        archived: false,
+                        ...response,
+                      },
+                    ],
+                  };
+                }
 
-              return post;
-            }),
-          };
-        },
-        false
-      );
+                return post;
+              }),
+            };
+          },
+          false
+        );
+      }
 
       onClose();
     } catch (error) {

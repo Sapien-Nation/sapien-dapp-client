@@ -16,6 +16,7 @@ import {
   MainChannel,
   RoomView,
   UpgradeView,
+  ThreadRoomView,
 } from 'components/tribe';
 
 // hooks
@@ -23,6 +24,7 @@ import { useGetCurrentView, useTribe } from 'hooks/tribe';
 
 // providers
 import { Web3Provider } from 'wallet/providers';
+import ThreadRoomProxy from 'components/tribe/views/rooms/thread';
 
 const TribePage = () => {
   const { query } = useRouter();
@@ -70,6 +72,25 @@ const TribePage = () => {
       case View.Content:
         return <ContentView />;
       case View.Room: {
+        if (query.thread) {
+          return (
+            <Query
+              api={`/core-api/room/${query.thread}`}
+              ignoreError
+              loader={null}
+            >
+              {({ private: isPrivate, name }) => (
+                <ThreadRoomView
+                  isPrivate={isPrivate}
+                  name={name}
+                  isMember={true}
+                  threadID={query.thread as string}
+                />
+              )}
+            </Query>
+          );
+        }
+
         return (
           <Query api={`/core-api/room/${viewID}`} ignoreError loader={null}>
             {({ message, name }) => (
