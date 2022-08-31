@@ -159,6 +159,15 @@ export const useTribeRoom = (tribeID: string, roomID: string) => {
   return tribe?.rooms?.find((room) => room.id === roomID);
 };
 
+export const useTribeThreadRoom = (tribeID: string, roomID: string) => {
+  const { cache } = useSWRConfig();
+  const tribe: ProfileTribe = cache
+    .get('/core-api/user/tribes')
+    .find(({ id }) => id === tribeID);
+
+  return tribe?.rooms?.find((room) => room.id === roomID);
+};
+
 export const useTribeRooms = () => {
   const { query } = useRouter();
   const { cache } = useSWRConfig();
@@ -175,6 +184,7 @@ export const useTribeRooms = () => {
     unreadMentions: room.unreadMentions,
     hasUnread: room.hasUnread,
     private: room.private,
+    threads: room.threads ?? [],
   }));
 };
 
@@ -201,6 +211,11 @@ export const useGetCurrentView = (): CurrentView => {
       type: View.Content,
       name: 'content',
       id: 'content',
+    },
+    {
+      type: View.Thread,
+      name: 'thread',
+      id: 'thread',
     },
     {
       type: View.Badges,

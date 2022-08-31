@@ -10,8 +10,8 @@ import { useState } from 'react';
 import axios from 'api';
 
 // components
-import Feed from './feed';
-import { JoinRoom, Skeleton } from './views';
+import ThreadFeed from '../feed/ThreadFeed';
+import { JoinRoom, Skeleton } from '../views';
 import { Query } from 'components/common';
 
 // hooks
@@ -19,15 +19,15 @@ import { useTribeRoom } from 'hooks/tribe';
 
 interface RoomProps {
   apiKey: string;
-  roomID: string;
+  threadID: string;
 }
 
-const Room = ({ apiKey, roomID }: RoomProps) => {
+const Room = ({ apiKey, threadID }: RoomProps) => {
   const [isLoading, setLoading] = useState(false);
 
   const { query } = useRouter();
 
-  const { tribeID } = query;
+  const { tribeID, viewID } = query;
 
   const { mutate } = useSWRConfig();
 
@@ -57,9 +57,10 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
   };
 
   return (
-    <Feed
+    <ThreadFeed
       apiKey={mutateFetchAPI}
-      roomID={roomID}
+      threadID={threadID}
+      roomID={viewID as string}
       tribeID={tribeID as string}
       data={swrData?.data ?? []}
       onScrollTop={() => {
@@ -75,22 +76,18 @@ const Room = ({ apiKey, roomID }: RoomProps) => {
 interface RoomProxyProps {
   isMember: boolean;
   name: string;
-  roomID: string;
-  tribeID: string;
-  threadID?: string;
+  threadID: string;
+  isPrivate: boolean;
 }
 
-const RoomProxy = ({
+const ThreadRoomProxy = ({
   isMember,
   name,
-  roomID,
-  tribeID,
   threadID,
+  isPrivate,
 }: RoomProxyProps) => {
-  const room = useTribeRoom(tribeID, roomID);
-
   if (isMember === false) {
-    if (room.private) {
+    if (isPrivate) {
       return (
         <div className="relative shadow-xl sm:rounded-2xl sm:overflow-hidden h-full w-full">
           <div className="absolute inset-0">
@@ -110,16 +107,18 @@ const RoomProxy = ({
     return <JoinRoom />;
   }
 
-  const apiKey = `/core-api/room/${roomID}/messages`;
+  const apiKey = `/core-api/room/${threadID}/messages`;
 
   return (
     <>
-      <h1 className="sr-only">Room View for {name}</h1>
+      <h1 className="sr-only">Thread Room View for {name}</h1>
       <Query api={apiKey} loader={<Skeleton />}>
-        {() => <Room roomID={roomID} apiKey={apiKey} />}
+        {() => {
+          return <Room threadID={threadID} apiKey={apiKey} />;
+        }}
       </Query>
     </>
   );
 };
 
-export default RoomProxy;
+export default ThreadRoomProxy;
