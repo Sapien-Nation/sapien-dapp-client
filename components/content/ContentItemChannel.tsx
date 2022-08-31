@@ -136,8 +136,7 @@ const ContentItem = ({
           {renderBody()}
         </div>
         <div
-          // className="flex justify-between p-3"
-          className="hidden"
+          className="flex justify-between p-3"
           onClick={(e) => e.preventDefault()}
         >
           <div

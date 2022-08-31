@@ -80,7 +80,7 @@ const Details = ({ handleSidebar }) => {
         </button>
       </div>
       <>
-        {false && (
+        {true && (
           <>
             <Disclosure>
               {({ open }) => (
