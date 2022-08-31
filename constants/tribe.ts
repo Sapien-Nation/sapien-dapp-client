@@ -6,4 +6,5 @@ export enum View {
   Room,
   Badges,
   Upgrade,
+  Thread,
 }

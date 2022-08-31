@@ -155,18 +155,23 @@ const ContentItem = ({
                 </Menu.Button>
                 <Menu.Items className="block w-full absolute top-full origin-top-right bg-sapien-40 rounded-md shadow-lg focus:outline-none max-h-[140px] overflow-y-auto">
                   <ul className="">
-                    {['#robs room', '#news', '#general'].map((room) => (
-                      <li
-                        key={room}
-                        className="font-bold hover:bg-sapien-60 px-2 py-0.5 first:rounded-t-md last:rounded-b-md truncate"
-                      >
-                        <Link href="">
-                          <a>
-                            <span className="truncate">{room}</span>
-                          </a>
-                        </Link>
-                      </li>
-                    ))}
+                    {threads.map((thread) => {
+                      console.log({ thread });
+                      return (
+                        <li
+                          key={thread.id}
+                          className="font-bold hover:bg-sapien-60 px-2 py-0.5 first:rounded-t-md last:rounded-b-md truncate"
+                        >
+                          <Link
+                            href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
+                          >
+                            <a>
+                              <span className="truncate">{thread.name}</span>
+                            </a>
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </Menu.Items>
               </>
@@ -186,6 +191,7 @@ const ContentItem = ({
           contentId={id}
           tribeId={tribeID}
           onClose={() => setDialog(null)}
+          updateFeed={false}
         />
       )}
     </>
