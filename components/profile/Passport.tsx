@@ -1,79 +1,160 @@
-import { useEffect, useState } from 'react';
-import Lottie from 'react-lottie-player';
-
-// assets
-import LoadingJSONData from './lottie/Loading.json';
+import { useState } from 'react';
 
 // components
 import { Query } from 'components/common';
-import PassportForm from './PassportForm';
 
-interface Props {
-  animationData: any;
+// hooks
+import { useAuth } from 'context/user';
+import { usePassport } from 'hooks/passport';
+import { useUserBadges } from 'hooks/user';
+
+// utils
+import { formatAvatarName, formatTokenID } from 'utils/passport';
+import { formatDate } from 'utils/date';
+
+enum View {
+  Posts,
+  Badges,
+  Transactions,
+  Members,
 }
 
-const Passport = ({ animationData }: Props) => {
-  const [showPassport, setShowPassport] = useState(false);
+const Passport = () => {
+  const badges = useUserBadges();
+  const passport = usePassport();
+  const [view, setView] = useState<View>(View.Posts);
 
-  useEffect(() => {
-    if (animationData) {
-      setTimeout(() => {
-        setShowPassport(true);
-      }, 8000);
+  const renderView = () => {
+    switch (view) {
+      case View.Posts:
+        return <>Posts</>;
+      case View.Badges:
+        return <>Badges</>;
+      case View.Transactions:
+        return <>Transactions</>;
+      case View.Members:
+        return <>Members</>;
     }
-  }, [animationData]);
+  };
 
   return (
-    <div className="inset-0 flex items-center justify-center p-5 flex-1">
-      <div className="pt-4 px-4 pb-20 text-center sm:block sm:p-0 relative w-full">
-        <Lottie
-          animationData={animationData}
-          play
-          loop={false}
-          className="max-w-1100px w-full h-660 m-auto absolute left-0 right-0 bottom-0 top-0"
-        />
-        {showPassport && (
-          <div className="px-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <PassportForm closeOverlay={() => setShowPassport(false)} />
+    <div className="flex flex-col gap-2 p-4">
+      {/* passport */}
+      <div className="rounded-xl bg-sapien-neutral-600 p-7">
+        <div className="flex flex-col md:grid md:grid-cols-3 md:grid-rows-4 md:gap-x-4 max-w-4xl">
+          <div className="flex justify-center md:grid md:row-start-1 md:row-end-4">
+            <img
+              className="rounded-xl"
+              src="https://bit.ly/3czl8ws"
+              alt="Bored Ape"
+            />
           </div>
-        )}
+
+          <div>
+            <span className="block text-gray-400 font-semibold">
+              PASSPORT NUMBER:
+            </span>
+            <span className="font-bold">
+              {formatTokenID(Number(passport.tokenId))}
+            </span>
+          </div>
+          <div>
+            <span className="block text-gray-400 font-semibold">
+              ISSUING AUTHORITY:
+            </span>
+            <span className="font-bold">{passport.issuingAuthority}</span>
+          </div>
+          <div>
+            <span className="block text-gray-400 font-semibold">
+              ISSUE DATE:
+            </span>
+            <span className="font-bold">
+              {formatDate(passport.issueDate, 'LLLL d y')}
+            </span>
+          </div>
+          <div>
+            <span className="block text-gray-400 font-semibold">NAME:</span>
+            <span className="font-bold">
+              {formatAvatarName(passport.name) || 'Avatar Name'}
+            </span>
+          </div>
+          <div>
+            <span className="block text-gray-400 font-semibold">USERNAME:</span>
+            <span className="font-bold">{passport.username}</span>
+          </div>
+          <div>
+            <span className="block text-gray-400 font-semibold">BADGES:</span>
+            <span className="font-bold">
+              {formatTokenID(Number(passport.tokenId))}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <div className="flex h-12 w-full rounded-md p-[1px] bg-gradient-to-br from-[#ff64ca] to-[#f66e21]">
+              <div className="flex justify-center items-center rounded-md w-full h-full bg-sapien-neutral-600">
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff64ca] to-[#f66e21]">
+                  DAO AUTHORITY
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-2">
+            <span className="block text-gray-400 font-semibold">BIO:</span>
+            <span className="font-normal">{passport.bio || '-'}</span>
+          </div>
+        </div>
+      </div>
+      {/* badges */}
+      <div className="rounded-xl bg-sapien-neutral-600">
+        <div className="flex justify-center border-b-2 border-sapien-neutral-900">
+          <button
+            className={`border-b-2 ${
+              view === View.Posts ? 'border-red-600' : 'border-transparent'
+            } px-7 py-4`}
+            onClick={() => setView(View.Posts)}
+          >
+            Posts
+          </button>
+          <button
+            className={`border-b-2 ${
+              view === View.Badges ? 'border-red-600' : 'border-transparent'
+            } px-7 py-4`}
+            onClick={() => setView(View.Badges)}
+          >
+            Badges
+          </button>
+          <button
+            className={`border-b-2 ${
+              view === View.Transactions
+                ? 'border-red-600'
+                : 'border-transparent'
+            } px-7 py-4`}
+            onClick={() => setView(View.Transactions)}
+          >
+            Transactions
+          </button>
+          <button
+            className={`border-b-2 ${
+              view === View.Members ? 'border-red-600' : 'border-transparent'
+            } px-7 py-4`}
+            onClick={() => setView(View.Members)}
+          >
+            Members
+          </button>
+        </div>
+        <div className="flex flex-col rounded-xl bg-sapien-neutral-600 p-7">
+          <div>{renderView()}</div>
+        </div>
       </div>
     </div>
   );
 };
 
-const ProfilePassport = () => {
-  return (
-    <Query
-      loader={
-        <Lottie
-          animationData={LoadingJSONData}
-          play
-          loop
-          className="m-auto absolute left-0 right-0 bottom-0 top-0 w-60 h-60"
-        />
-      }
-      api="https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json"
-      options={{
-        fetcher: async () => {
-          try {
-            const request = await fetch(
-              'https://sapien-poc.s3.us-east-2.amazonaws.com/animations/passport.json'
-            );
-            const data = await request.json();
+const PassportProxy = () => {
+  const { me } = useAuth();
 
-            return data;
-          } catch (err) {
-            return Promise.reject(err);
-          }
-        },
-      }}
-    >
-      {(animationData: object) => {
-        return <Passport animationData={animationData} />;
-      }}
-    </Query>
+  return (
+    <Query api={`/core-api/user/${me.id}/badges`}>{() => <Passport />}</Query>
   );
 };
 
-export default ProfilePassport;
+export default PassportProxy;

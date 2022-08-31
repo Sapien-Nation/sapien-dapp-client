@@ -82,6 +82,7 @@ const Page = ({ children }: Props) => {
 
     if (pathname.includes('/discovery')) children = <DiscoveryNavigation />;
     else if (pathname.includes('/profile')) children = <ProfileNavigation />;
+    else if (pathname.includes('/home')) children = null; // TODO
     else children = <TribeNavigation handleMobileMenu={handleMobileMenu} />;
 
     return (

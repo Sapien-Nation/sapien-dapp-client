@@ -90,7 +90,13 @@ const TribeBar = ({ tribes, handleMobileMenu }: Props) => {
             <Tooltip ref={profileRef} text="Profile" />
           </>
         )}
-
+        <div className="h-12 w-12">
+          <Link href={'/home'}>
+            <a>
+              <img src="/images/sapien_nation.png" alt="Sapien Nation" />
+            </a>
+          </Link>
+        </div>
         <div className="no-scrollbar overflow-auto space-y-3 pt-2 px-2">
           {tribes.map((tribe: ProfileTribe) => (
             <TribeBarItem
