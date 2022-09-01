@@ -102,31 +102,27 @@ const Details = ({ handleSidebar }) => {
                       } h-5 w-5 text-purple-500`}
                     />
                   </Disclosure.Button>
-                  <Disclosure.Panel className="py-3 px-5 border-b border-gray-700">
+                  <Disclosure.Panel className="py-3 border-b border-gray-700 border overflow-auto max-h-[50%]">
                     <ul className="">
-                      <>
-                        {threads.map((thread) => (
-                          <li key={thread.id}>
-                            <Link
-                              href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
-                            >
-                              <a>
-                                <div className="flex flex-col">
-                                  <span className="truncate">
-                                    {thread.name}
-                                  </span>
-                                  <div className="flex gap-2 items-center">
-                                    <div className="w-10 h-10 bg-gray-600 rounded-md" />
-                                    <span className="truncate">
-                                      {thread.messages[0]?.content}
-                                    </span>
-                                  </div>
-                                </div>
-                              </a>
-                            </Link>
-                          </li>
-                        ))}
-                      </>
+                      {threads.map((thread) => (
+                        <li
+                          className="w-full hover:bg-gray-800 mb-1 px-5"
+                          key={thread.id}
+                        >
+                          <Link
+                            href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
+                          >
+                            <a>
+                              <span className="font-semibold block truncate">
+                                {thread.name}
+                              </span>
+                              <span className="font-medium text-gray-400 truncate">
+                                {thread.messages[0]?.content}
+                              </span>
+                            </a>
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </Disclosure.Panel>
                 </>
