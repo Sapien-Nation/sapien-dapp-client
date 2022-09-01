@@ -2,6 +2,7 @@ import {
   format as formatDateFns,
   formatRelative as formatDateRelativeFns,
   subDays as subDaysFns,
+  getDay as getDayFns,
 } from 'date-fns';
 
 export const formatDate = (
@@ -15,6 +16,9 @@ export const formatDate = (
     useAdditionalDayOfYearTokens?: boolean;
   }
 ) => formatDateFns(new Date(date), format, options);
+
+export const getWeekDay = (date: Date | number) =>
+  getDayFns(date);
 
 export const formatDateRelative = (
   date: Date | number | string,
