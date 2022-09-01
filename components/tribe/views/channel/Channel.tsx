@@ -22,7 +22,7 @@ import {
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Overlay, Query, TextInput, TextInputLabel } from 'components/common';
+import { Overlay, Query, TextInput, TextareaInput, TextInputLabel, CalendarInput } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
@@ -64,6 +64,12 @@ interface LinkFormProps {
   description: string;
 }
 
+interface ProposalFormProps {
+  title: string;
+  description: string;
+  options: string[];
+}
+
 const Channel = ({ apiKey }: Props) => {
   const [postType, setPostType] = useState<ContentType>(ContentType.POST);
   const [hasContent, setHasContent] = useState(false);
@@ -74,6 +80,7 @@ const Channel = ({ apiKey }: Props) => {
   const [mediaMimeType, setMediaMimeType] = useState('');
   const [initialEditorValue, setInitialEditorValue] = useState('');
   const [selectedPost, setSelectedPost] = useState<Content>(null);
+  const [proposalStep, setProposalStep] = useState(1);
   const isPublishDisabled = isPublishing || !hasContent;
 
   const toast = useToast();
@@ -107,6 +114,17 @@ const Channel = ({ apiKey }: Props) => {
     formState: { errors: linkErrors, isSubmitting: isSubmittingLinkForm },
     handleSubmit: handleSubmitLinkForm,
   } = linkMethods;
+
+  const proposalMethods = useForm<ProposalFormProps>({
+    defaultValues: {
+      title: '',
+      description: '',
+    },
+  });
+  const {
+    formState: { errors: proposalErrors, isSubmitting: isSubmittingProposalForm },
+    handleSubmit: handleSubmitProposalForm,
+  } = proposalMethods;
 
   const postMethods = useForm<PostFormProps>({
     defaultValues: {
@@ -178,6 +196,29 @@ const Channel = ({ apiKey }: Props) => {
     }
   };
 
+  const onSubmitProposal = async ({ title }: ProposalFormProps) => {
+    try {
+      setPublishing(true);
+
+      // const response: Content = await createLinkContent({
+      //   title,
+      //   link,
+      //   data: description,
+      //   groupId: channel.id,
+      // });
+
+      setPublishing(false);
+      //push(`/tribes/${tribeID}/content?id=${response.id}`);
+
+      mutate(apiKey);
+    } catch (error) {
+      setPublishing(false);
+      toast({
+        message: error,
+      });
+    }
+  };
+
   const onSubmitPost = async ({ title }: PostFormProps) => {
     try {
       setPublishing(true);
@@ -233,6 +274,154 @@ const Channel = ({ apiKey }: Props) => {
 
     setIsUploading(false);
   };
+
+  const renderProposalForm = () => {
+    switch(proposalStep) {
+      case 1:
+        return (
+          <div className="px-4 space-y-11">
+            <div>
+              <div className="flex gap-x-4 items-end">
+                <div className="flex-1">
+                  <TextInputLabel
+                    label="Title"
+                    name="title"
+                    error={proposalErrors?.title?.message}
+                  />
+                  <TextInput
+                    name="title"
+                    autoFocus
+                    aria-label="title"
+                    placeholder="Title"
+                    rules={{
+                      validate: {
+                        required: (value) =>
+                          value.length > 0 || 'is required',
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex-1">
+                  <TextInputLabel
+                    label="Description"
+                    name="description"
+                    error={proposalErrors?.description?.message}
+                  />
+                  <TextInput
+                    name="description"
+                    aria-label="description"
+                    placeholder="Description"
+                    rules={{
+                      validate: {
+                        required: (value) =>
+                          value.length > 0 || 'is required',
+                      },
+                    }}
+                  />
+                </div>
+              </div>
+              <div>
+                <div className="flex-1">
+                  <TextInputLabel
+                    label="Options"
+                    name="options"
+                    error={proposalErrors?.options?.message}
+                  />
+                  <TextInput
+                    name="option one"
+                    aria-label="option one"
+                    placeholder="Option one"
+                    rules={{
+                      validate: {
+                        required: (value) =>
+                          value.length > 0 || 'is required',
+                      },
+                    }}
+                  />
+                  <div className="py-4">
+                    <TextInput
+                      name="option two"
+                      aria-label="option two"
+                      placeholder="Option two"
+                      rules={{
+                        validate: {
+                          required: (value) =>
+                            value.length > 0 || 'is required',
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end w-full">
+              <button
+                form="content-form"
+                className={`cursor-pointer bg-primary hover:bg-sapien-80 min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
+                onClick={() => {
+                  setProposalStep(proposalStep + 1);
+                }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )
+      case 2:
+        return (
+          <div className="px-4 space-y-11">
+            <div>
+              <div className="flex gap-x-4 items-end">
+                <div className="flex-1">
+                  <TextInputLabel
+                    label="Start"
+                    name="start"
+                    error={proposalErrors?.start?.message}
+                  />
+                  <CalendarInput
+                    name="start"
+                    title="Select Start Date"
+                    autoFocus
+                    aria-label="start"
+                    placeholder="Start"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end w-full">
+              <button
+                form="content-form"
+                className={`cursor-pointer mr-4 bg-primary hover:bg-sapien-80 min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
+                onClick={() => {
+                  setProposalStep(proposalStep - 1);
+                }}
+              >
+                Previous
+              </button>
+              <button
+                type="submit"
+                form="content-form"
+                className={`${
+                  isPublishDisabled
+                    ? 'cursor-not-allowed bg-primary/50'
+                    : 'cursor-pointer bg-primary hover:bg-sapien-80'
+                } min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
+                disabled={isPublishDisabled}
+              >
+                {isPublishing ? (
+                  <RefreshIcon className="w-5 animate-spin" />
+                ) : (
+                  <>Post</>
+                )}
+              </button>
+            </div>
+          </div>
+        )
+    }
+    
+  }
 
   const renderInlineFormView = () => {
     switch (postType) {
@@ -537,6 +726,18 @@ const Channel = ({ apiKey }: Props) => {
             </form>
           </FormProvider>
         );
+        case ContentType.PROPOSAL:
+          return (
+            <FormProvider {...proposalMethods}>
+              <form
+                id="proposal-form"
+                className="sm:overflow-hidden"
+                onSubmit={handleSubmitProposalForm(onSubmitProposal)}
+              >
+                {renderProposalForm()}
+              </form>
+            </FormProvider>
+          );
     }
   };
 
@@ -591,7 +792,7 @@ const Channel = ({ apiKey }: Props) => {
             />
             {canPost === true && (
               <div className="bg-sapien-neutral-600 py-3 rounded-xl mb-4 overflow-y-auto">
-                <nav className="grid grid-cols-3" aria-label="Tabs">
+                <nav className="grid grid-cols-4" aria-label="Tabs">
                   <button
                     onClick={() => setPostType(ContentType.POST)}
                     className={
@@ -630,6 +831,19 @@ const Channel = ({ apiKey }: Props) => {
                     }
                   >
                     Link
+                  </button>
+                  <button
+                    onClick={() => setPostType(ContentType.PROPOSAL)}
+                    className={
+                      postType === ContentType.PROPOSAL
+                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
+                    }
+                    aria-current={
+                      postType === ContentType.PROPOSAL ? 'page' : undefined
+                    }
+                  >
+                    Proposal
                   </button>
                 </nav>
                 <div className="flex gap-2 lg:rounded-3xl p-4 pb-2 min-h-[350px]">
