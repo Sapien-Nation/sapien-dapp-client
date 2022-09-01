@@ -16,7 +16,6 @@ interface Props {
   contentId: string;
   tribeId: string;
   onClose: () => void;
-  updateFeed?: boolean;
 }
 
 interface CreateThreadFormValues {
@@ -25,18 +24,17 @@ interface CreateThreadFormValues {
   roomId: string;
 }
 
-const CreateThreadDialog = ({
-  contentId,
-  tribeId,
-  onClose,
-  updateFeed = true,
-}: Props) => {
+const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
   const rooms = useTribeRooms();
   const toast = useToast();
   const { query } = useRouter();
   const { mutate } = useSWRConfig();
 
   const channelID = query.viewID as string;
+  const postID = query.id as string;
+
+  // should mutate only on posts list, not on post details view
+  const mutateFeed = postID === undefined;
 
   const options = rooms?.map((room) => ({
     id: room.id,
@@ -73,7 +71,7 @@ const CreateThreadDialog = ({
       };
       const response = await createRoom(room);
 
-      if (updateFeed) {
+      if (mutateFeed) {
         mutate(
           `/core-api/channel/${channelID}/feed`,
           (feed: { data: Array<any>; nextCursor: string }) => {

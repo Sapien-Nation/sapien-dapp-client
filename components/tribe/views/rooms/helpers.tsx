@@ -28,7 +28,7 @@ export const renderContent = (
           const userID = getUserIDFromNode(singleNode);
           const user = users.find(({ id }) => id === userID);
           if (user) {
-            return <span className={TAG_CLASS}>@{user.username}</span>;
+            return <span className={TAG_CLASS}>@{user.username?.trim()}</span>;
           } else {
             return (
               <span className={TAG_CLASS}>{userID.replaceAll('-', '')}</span>
@@ -43,7 +43,7 @@ export const renderContent = (
           if (room) {
             return (
               <Link href={`/tribes/${tribeID}/${room.id}`} passHref>
-                <a className={TAG_CLASS}># {room.name}</a>
+                <a className={TAG_CLASS}># {room.name?.trim()}</a>
               </Link>
             );
           } else {

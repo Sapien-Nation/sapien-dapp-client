@@ -155,8 +155,7 @@ const ContentItem = ({
                 </Menu.Button>
                 <Menu.Items className="block w-full absolute top-full origin-top-right bg-sapien-40 rounded-md shadow-lg focus:outline-none max-h-[140px] overflow-y-auto">
                   <ul className="">
-                    {threads.map((thread) => {
-                      console.log({ thread });
+                    {threads?.map((thread) => {
                       return (
                         <li
                           key={thread.id}
@@ -191,7 +190,6 @@ const ContentItem = ({
           contentId={id}
           tribeId={tribeID}
           onClose={() => setDialog(null)}
-          updateFeed={false}
         />
       )}
     </>
