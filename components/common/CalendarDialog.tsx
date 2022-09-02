@@ -9,7 +9,7 @@ import {
 import { Menu, Transition } from '@headlessui/react'
 
 // utils
-import { formatDate, getWeekDay } from 'utils/date';
+import { formatDate, getWeekDay, addDays, subtractDays, getDaysInMonth } from 'utils/date';
 
 // components
 import { Dialog } from 'components/common';
@@ -59,10 +59,40 @@ const days = [
   { date: '2022-02-06' },
 ]
 
-const getDays = (date) => {
-  const firstDay = formatDate(date,'yyyy-MM') + '-01';
-  const dayOfWeek = getWeekDay(new Date(firstDay))
-  console.log(`DAY: ${dayOfWeek}`)
+const getDays = (curDate) => {
+  const firstDay = new Date(formatDate(curDate,'yyyy-MM') + '-01');
+  const firstDayUTC = new Date(firstDay.getTime() + firstDay.getTimezoneOffset() * 60000);
+  const dayOfWeek = getWeekDay(firstDay);
+
+  let days = [];
+  let daysBefore = [];
+  for (let i = 0; i < dayOfWeek+1; i++) {
+    const day = subtractDays(firstDayUTC, i+1);
+    const formatted = formatDate(day,'yyyy-MM-dd');
+    daysBefore.push({ date: formatted });
+  }
+  days = days.concat(daysBefore.reverse());
+
+  const daysInMonth = getDaysInMonth(firstDayUTC);
+  for (let i = 0; i < daysInMonth; i++) {
+    const postfix = (i < 10) ? `0${i+1}` : `${i+1}`
+    const formatted = formatDate(curDate,'yyyy-MM') + `-${postfix}`;
+    const d = { date: formatted, isCurrentMonth: true };
+    if (formatted == formatDate(curDate,'yyyy-MM-dd')) d['isToday'] = true;
+    days.push(d);
+  }
+
+  const lastDay = new Date(formatDate(curDate,'yyyy-MM') + `-${daysInMonth}`);
+  const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
+  const weekDay = getWeekDay(lastDay);
+
+  for (let i = 0; i < (6 - (weekDay+1)); i++) {
+    const day = addDays(lastDayUTC, i + 1);
+    const formatted = formatDate(day,'yyyy-MM-dd');
+    days.push({ date: formatted});
+  }
+
+  return days;
 }
 
 function classNames(...classes) {
@@ -76,7 +106,10 @@ interface Props {
 
 const CalendarDialog = ({title, onClose}:Props) => {
   const [currentDate, setCurrentDate] = useState(formatDate(new Date(),'yyyy-MM-dd'));
-  getDays(new Date('2022-07-05'))
+  const [days, setDays] = useState(getDays(new Date()));
+  const [month, setMonth] = useState(formatDate(new Date(),'LLLL'));
+  console.log(`DAYS: ${JSON.stringify(days)}`)
+
 
   return (
     <Dialog
@@ -94,7 +127,7 @@ const CalendarDialog = ({title, onClose}:Props) => {
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            <div className="text-white flex-auto font-semibold">January</div>
+            <div className="text-white flex-auto font-semibold">{month}</div>
             <button
               type="button"
               className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
@@ -104,12 +137,12 @@ const CalendarDialog = ({title, onClose}:Props) => {
             </button>
           </div>
           <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
+            <div>S</div>
             <div>M</div>
             <div>T</div>
             <div>W</div>
             <div>T</div>
             <div>F</div>
-            <div>S</div>
             <div>S</div>
           </div>
           <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">

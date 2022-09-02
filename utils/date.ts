@@ -2,7 +2,9 @@ import {
   format as formatDateFns,
   formatRelative as formatDateRelativeFns,
   subDays as subDaysFns,
+  addDays as addDaysFns,
   getDay as getDayFns,
+  getDaysInMonth as getDaysInMonthFns,
 } from 'date-fns';
 
 export const formatDate = (
@@ -20,6 +22,9 @@ export const formatDate = (
 export const getWeekDay = (date: Date | number) =>
   getDayFns(date);
 
+export const getDaysInMonth = (date: Date | number) =>
+  getDaysInMonthFns(date);
+
 export const formatDateRelative = (
   date: Date | number | string,
   baseDate = Date.now(),
@@ -28,6 +33,9 @@ export const formatDateRelative = (
 
 export const subtractDays = (date: Date | number, amount = 0) =>
   subDaysFns(date, amount);
+
+export const addDays = (date: Date | number, amount = 0) =>
+  addDaysFns(date, amount);
 
 export const getFormattedDate = (isoString: string) => {
   const options = { month: 'short', day: 'numeric', year: '2-digit' };
