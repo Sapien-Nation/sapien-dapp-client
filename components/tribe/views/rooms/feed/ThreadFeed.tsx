@@ -40,6 +40,7 @@ import { formatDate } from 'utils/date';
 // hooks
 import { useSound } from 'hooks/useSound';
 import { usePassport } from 'hooks/passport';
+import { useTribeRooms } from 'hooks/tribe';
 
 // slate
 import { getMentionsArrayFromCacheForOptimistic } from 'slatejs/utils';
@@ -78,6 +79,7 @@ const ThreadFeed = ({
   const passport = usePassport();
   const { mutate, cache } = useSWRConfig();
   const scrollToBottom = useRef(null);
+  const room = useTribeRooms().find(({ id }) => id === roomID);
 
   const thread = cache.get(`/core-api/room/${threadID}`);
   const threadMembers = useMemo(() => [], []);
@@ -450,6 +452,10 @@ const ThreadFeed = ({
             <div className="text-base font-semibold flex items-center">
               <span className="w-5 flex justify-center text-gray-400">
                 {thread.private ? <LockClosedIcon className="w-4" /> : '#'}
+              </span>
+              {room.name} {'> '}
+              <span className="w-5 flex justify-center text-gray-400">
+                {'#'}
               </span>
               {thread.name}
             </div>

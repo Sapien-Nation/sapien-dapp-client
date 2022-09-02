@@ -1,7 +1,7 @@
 import _groupBy from 'lodash/groupBy';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import Link from 'next/link';
-import { ChevronUpIcon, XIcon } from '@heroicons/react/outline';
+import { ChevronDownIcon, XIcon } from '@heroicons/react/outline';
 import { Disclosure } from '@headlessui/react';
 import { FixedSizeList as List } from 'react-window';
 import { useMemo } from 'react';
@@ -96,10 +96,10 @@ const Details = ({ handleSidebar }) => {
                     <span className="text-md text-gray-300 font-bold">
                       Threads
                     </span>
-                    <ChevronUpIcon
+                    <ChevronDownIcon
                       className={`${
                         open ? 'rotate-180 transform' : ''
-                      } h-5 w-5 text-purple-500`}
+                      } h-5 w-5 text-white`}
                     />
                   </Disclosure.Button>
                   <Disclosure.Panel className="py-3 border-b border-gray-700 border overflow-auto max-h-[50%]">
@@ -113,12 +113,14 @@ const Details = ({ handleSidebar }) => {
                             href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
                           >
                             <a>
-                              <span className="font-semibold block truncate">
-                                {thread.name}
-                              </span>
-                              <span className="font-medium text-gray-400 truncate">
-                                {thread.messages[0]?.content}
-                              </span>
+                              <div className="w-full">
+                                <span className="font-semibold block truncate">
+                                  {thread.name}
+                                </span>
+                                <span className="font-medium text-gray-400 truncate">
+                                  {thread.messages[0]?.content}
+                                </span>
+                              </div>
                             </a>
                           </Link>
                         </li>
