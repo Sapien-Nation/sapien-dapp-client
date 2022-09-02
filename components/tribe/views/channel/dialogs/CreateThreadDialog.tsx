@@ -122,7 +122,7 @@ const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
           onSubmit={handleSubmit(onSubmit)}
           id="create-thread"
         >
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-7">
             <TextInput name="title" placeholder="Title" />
             <TextInput name="message" placeholder="Message" />
             <Select
