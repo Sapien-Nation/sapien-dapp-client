@@ -55,6 +55,7 @@ interface PostFormProps {
 
 interface MediaFormProps {
   title: string;
+  description: string;
   media: null | Media;
 }
 
@@ -87,6 +88,7 @@ const Channel = ({ apiKey }: Props) => {
     defaultValues: {
       media: null,
       title: '',
+      description: '',
     },
   });
   const {
@@ -301,7 +303,7 @@ const Channel = ({ apiKey }: Props) => {
                     {isPublishing ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>Post</>
+                      <>Publish</>
                     )}
                   </button>
                 </div>
@@ -331,6 +333,23 @@ const Channel = ({ apiKey }: Props) => {
                         autoFocus
                         aria-label="title"
                         placeholder="Title"
+                        rules={{
+                          validate: {
+                            required: (value) =>
+                              value.length > 0 || 'is required',
+                          },
+                        }}
+                      />
+                      <TextInputLabel
+                        label="Description"
+                        name="description"
+                        error={mediaErrors?.description?.message}
+                      />
+                      <TextInput
+                        name="description"
+                        autoFocus
+                        aria-label="description"
+                        placeholder="Description"
                         rules={{
                           validate: {
                             required: (value) =>
@@ -435,7 +454,7 @@ const Channel = ({ apiKey }: Props) => {
                     {isSubmittingMediaForm ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>Post</>
+                      <>Publish</>
                     )}
                   </button>
                 </div>
@@ -529,7 +548,7 @@ const Channel = ({ apiKey }: Props) => {
                     {isSubmittingLinkForm ? (
                       <RefreshIcon className="w-5 animate-spin" />
                     ) : (
-                      <>Post</>
+                      <>Publish</>
                     )}
                   </button>
                 </div>
@@ -580,105 +599,109 @@ const Channel = ({ apiKey }: Props) => {
   return (
     <>
       <h1 className="sr-only">{channel.name}</h1>
-      <div className="h-full flex flex-row bg-sapien-neutral-800 lg:rounded-tl-3xl">
+      <div className="h-full flex bg-sapien-neutral-800 lg:rounded-tl-3xl">
         <div className="flex-1 p-5 overflow-y-auto">
-          <div className="grid gap-4">
+          <div className="pb-8">
             <ChannelHeader
               canPost={canPost}
               showEditor={() => setShowEditor(true)}
               channel={channel}
               showMembers={() => setShowMembers(!showMembers)}
             />
-            {canPost === true && (
-              <div className="bg-sapien-neutral-600 py-3 rounded-xl mb-4 overflow-y-auto">
-                <nav className="grid grid-cols-3" aria-label="Tabs">
-                  <button
-                    onClick={() => setPostType(ContentType.POST)}
-                    className={
-                      postType === ContentType.POST
-                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
-                    }
-                    aria-current={
-                      postType === ContentType.POST ? 'page' : undefined
-                    }
-                  >
-                    Post
-                  </button>
-                  <button
-                    onClick={() => setPostType(ContentType.MEDIA)}
-                    className={
-                      postType === ContentType.MEDIA
-                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
-                    }
-                    aria-current={
-                      postType === ContentType.MEDIA ? 'page' : undefined
-                    }
-                  >
-                    Media
-                  </button>
-                  <button
-                    onClick={() => setPostType(ContentType.LINK)}
-                    className={
-                      postType === ContentType.LINK
-                        ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
-                        : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
-                    }
-                    aria-current={
-                      postType === ContentType.LINK ? 'page' : undefined
-                    }
-                  >
-                    Link
-                  </button>
-                </nav>
-                <div className="flex gap-2 lg:rounded-3xl p-4 pb-2 min-h-[350px]">
-                  {showEditor === false && (
-                    <div className="relative flex-col flex-1">
-                      {renderInlineFormView()}
-                    </div>
-                  )}
+          </div>
+          <div className="container mx-auto max-w-[800px]">
+            <div className="grid gap-8 ">
+              {canPost === true && (
+                <div className="bg-sapien-neutral-600 py-3 rounded-xl overflow-y-auto">
+                  <nav className="grid grid-cols-3" aria-label="Tabs">
+                    <button
+                      onClick={() => setPostType(ContentType.POST)}
+                      className={
+                        postType === ContentType.POST
+                          ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                          : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
+                      }
+                      aria-current={
+                        postType === ContentType.POST ? 'page' : undefined
+                      }
+                    >
+                      Post
+                    </button>
+                    <button
+                      onClick={() => setPostType(ContentType.MEDIA)}
+                      className={
+                        postType === ContentType.MEDIA
+                          ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                          : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
+                      }
+                      aria-current={
+                        postType === ContentType.MEDIA ? 'page' : undefined
+                      }
+                    >
+                      Media
+                    </button>
+                    <button
+                      onClick={() => setPostType(ContentType.LINK)}
+                      className={
+                        postType === ContentType.LINK
+                          ? 'border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm'
+                          : 'border-b-2 border-sapien-20 hover:border-indigo-500 text-white whitespace-nowrap py-4 px-1 font-medium text-sm'
+                      }
+                      aria-current={
+                        postType === ContentType.LINK ? 'page' : undefined
+                      }
+                    >
+                      Link
+                    </button>
+                  </nav>
+                  <div className="flex gap-2 lg:rounded-3xl p-4 pb-2 min-h-[350px]">
+                    {showEditor === false && (
+                      <div className="relative flex-col flex-1">
+                        {renderInlineFormView()}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-            <InfiniteScroll
-              className="scroll-auto mt-4"
-              pageStart={0}
-              loadMore={async (cursor: string) => {
-                try {
-                  mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
-                  const response = await axios(mutateFetchAPI);
-                  mutate(
-                    apiKey,
-                    ({ data }) => {
-                      return {
-                        data: [...data, ...response?.data?.data],
-                        nextCursor: response?.data?.nextCursor,
-                      };
-                    },
-                    false
-                  );
-                } catch (err) {
-                  // err
-                }
-              }}
-              hasMore={swrData?.nextCursor !== null}
-              loader={null}
-              useWindow={false}
-              initialLoad={false}
-              threshold={450}
-            >
-              <ul>
-                {swrData?.data.map((content) => (
-                  <li
-                    className="mb-8 last:mb-0 border border-sapien-neutral-800 hover:border-gray-700 rounded-xl"
-                    key={content.id}
-                  >
-                    {renderPost(content)}
-                  </li>
-                ))}
-              </ul>
-            </InfiniteScroll>
+              )}
+              <InfiniteScroll
+                className="scroll-auto"
+                pageStart={0}
+                loadMore={async (cursor: string) => {
+                  try {
+                    mutateFetchAPI = `${apiKey}?nextCursor=${cursor}&limit=25`;
+                    const response = await axios(mutateFetchAPI);
+                    mutate(
+                      apiKey,
+                      ({ data }) => {
+                        return {
+                          data: [...data, ...response?.data?.data],
+                          nextCursor: response?.data?.nextCursor,
+                        };
+                      },
+                      false
+                    );
+                  } catch (err) {
+                    // err
+                  }
+                }}
+                hasMore={swrData?.nextCursor !== null}
+                loader={null}
+                useWindow={false}
+                initialLoad={false}
+                threshold={450}
+              >
+                <ul>
+                  {swrData?.data.map((content) => (
+                    <li
+                      className="mb-8 last:mb-0 border border-sapien-neutral-800 hover:border-gray-700 rounded-xl"
+                      key={content.id}
+                    >
+                      {renderPost(content)}
+                    </li>
+                  ))}
+                </ul>
+              </InfiniteScroll>
+            </div>
           </div>
         </div>
         <div
@@ -743,7 +766,7 @@ const Channel = ({ apiKey }: Props) => {
                       {isPublishing ? (
                         <RefreshIcon className="w-5 animate-spin" />
                       ) : (
-                        <>Post</>
+                        <>Publish</>
                       )}
                     </button>
                   </div>
@@ -778,7 +801,7 @@ const Channel = ({ apiKey }: Props) => {
             >
               <XIcon className="h-8 w-8" aria-hidden="true" />
             </button>
-            <div className="w-full px-48">
+            <div className="container mx-auto max-w-[800px]">
               <ContentItemChannel
                 content={selectedPost}
                 tribeID={tribeID as string}
