@@ -89,7 +89,10 @@ const getDays = (curDate) => {
   const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
   const weekDay = getWeekDay(lastDay);
 
-  for (let i = 0; i < (6 - (weekDay+1)); i++) {
+  console.log(`WEEK_DAY: ${weekDay}`)
+  let x = weekDay+1;
+  if (weekDay == 6) x = 0;
+  for (let i = 0; i < (6 - (x)); i++) {
     const day = addDays(lastDayUTC, i + 1);
     const formatted = formatDate(day,'yyyy-MM-dd');
     days.push({ date: formatted});
@@ -138,13 +141,12 @@ const CalendarDialog = ({title, onClose}:Props) => {
       });
     }
     if (val == 'next') {
-      console.log(`MONTH: ${month.value}`)
+      // console.log(`MONTH: ${month.value}`)
       const daysInMonth = getDaysInMonth(firstDayUTC);
       const lastDay = new Date(month.value + `-${daysInMonth}`);
       const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
       const nextDay = addDays(lastDayUTC,1);
-      console.log(`LAST_DAY: ${lastDay}`)
-      console.log(`NEXT_DAY: ${nextDay}`)
+      console.log(`DAYS: ${JSON.stringify(getDays(nextDay))}`)
       setDays(getDays(nextDay));
       setMonth({
         value: formatDate(nextDay, 'yyyy-MM'), 
