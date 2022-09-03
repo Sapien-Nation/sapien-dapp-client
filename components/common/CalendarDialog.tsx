@@ -78,7 +78,10 @@ const getDays = (curDate) => {
     const postfix = (i < 10) ? `0${i+1}` : `${i+1}`
     const formatted = formatDate(curDate,'yyyy-MM') + `-${postfix}`;
     const d = { date: formatted, isCurrentMonth: true };
-    if (formatted == formatDate(curDate,'yyyy-MM-dd')) d['isToday'] = true;
+    if (formatted == formatDate(curDate,'yyyy-MM-dd')) {
+      d['isToday'] = true;
+      d['isSelected'] = true;
+    }
     days.push(d);
   }
 
@@ -105,11 +108,50 @@ interface Props {
 }
 
 const CalendarDialog = ({title, onClose}:Props) => {
-  const [currentDate, setCurrentDate] = useState(formatDate(new Date(),'yyyy-MM-dd'));
   const [days, setDays] = useState(getDays(new Date()));
-  const [month, setMonth] = useState(formatDate(new Date(),'LLLL'));
-  console.log(`DAYS: ${JSON.stringify(days)}`)
+  const [month, setMonth] = useState({
+    value: formatDate(new Date(), 'yyyy-MM'),
+    name: `${formatDate(new Date(),'LLLL')} ${formatDate(new Date(),'yyyy')}`
+  });
+  console.log(`MONTH: ${month.value}`)
 
+  const setSelectedDay = (date) => {
+    const newDays = days.map(day => {
+      if (day.date == date) {
+        return { ...day, isSelected: true}
+      }
+      delete day.isSelected
+      return day;
+    });
+    setDays(newDays);
+  }
+
+  const updateMonth = (val) => {
+    const firstDay = new Date(month.value + '-01');
+    const firstDayUTC = new Date(firstDay.getTime() + firstDay.getTimezoneOffset() * 60000);
+    if (val == 'prev') { 
+      const prevDay = subtractDays(firstDayUTC,1);
+      setDays(getDays(prevDay));
+      setMonth({
+        value: formatDate(prevDay, 'yyyy-MM'), 
+        name: `${formatDate(prevDay,'LLLL')} ${formatDate(prevDay,'yyyy')}`
+      });
+    }
+    if (val == 'next') {
+      console.log(`MONTH: ${month.value}`)
+      const daysInMonth = getDaysInMonth(firstDayUTC);
+      const lastDay = new Date(month.value + `-${daysInMonth}`);
+      const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
+      const nextDay = addDays(lastDayUTC,1);
+      console.log(`LAST_DAY: ${lastDay}`)
+      console.log(`NEXT_DAY: ${nextDay}`)
+      setDays(getDays(nextDay));
+      setMonth({
+        value: formatDate(nextDay, 'yyyy-MM'), 
+        name: `${formatDate(nextDay,'LLLL')} ${formatDate(nextDay,'yyyy')}`
+      });
+    }
+  }
 
   return (
     <Dialog
@@ -123,14 +165,16 @@ const CalendarDialog = ({title, onClose}:Props) => {
             <button
               type="button"
               className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+              onClick={() => updateMonth('prev')}
             >
               <span className="sr-only">Previous month</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
             </button>
-            <div className="text-white flex-auto font-semibold">{month}</div>
+            <div className="text-white flex-auto font-semibold">{month.name}</div>
             <button
               type="button"
               className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+              onClick={() => updateMonth('next')}
             >
               <span className="sr-only">Next month</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
@@ -150,6 +194,8 @@ const CalendarDialog = ({title, onClose}:Props) => {
               <button
                 key={day.date}
                 type="button"
+                onClick={() => setSelectedDay(day.date)}
+                disabled={!day.isCurrentMonth}
                 className={classNames(
                   'py-1.5 hover:bg-gray-100 focus:z-10',
                   day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',

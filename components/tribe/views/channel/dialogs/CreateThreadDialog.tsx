@@ -31,6 +31,10 @@ const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
   const { mutate } = useSWRConfig();
 
   const channelID = query.viewID as string;
+  const postID = query.id as string;
+
+  // should mutate only on posts list, not on post details view
+  const mutateFeed = postID === undefined;
 
   const options = rooms?.map((room) => ({
     id: room.id,
@@ -67,31 +71,33 @@ const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
       };
       const response = await createRoom(room);
 
-      mutate(
-        `/core-api/channel/${channelID}/feed`,
-        (feed: { data: Array<any>; nextCursor: string }) => {
-          return {
-            ...feed,
-            data: feed.data.map((post) => {
-              if (post.id === contentId) {
-                return {
-                  ...post,
-                  threads: [
-                    ...post.threads,
-                    {
-                      archived: false,
-                      ...response,
-                    },
-                  ],
-                };
-              }
+      if (mutateFeed) {
+        mutate(
+          `/core-api/channel/${channelID}/feed`,
+          (feed: { data: Array<any>; nextCursor: string }) => {
+            return {
+              ...feed,
+              data: feed.data.map((post) => {
+                if (post.id === contentId) {
+                  return {
+                    ...post,
+                    threads: [
+                      ...post.threads,
+                      {
+                        archived: false,
+                        ...response,
+                      },
+                    ],
+                  };
+                }
 
-              return post;
-            }),
-          };
-        },
-        false
-      );
+                return post;
+              }),
+            };
+          },
+          false
+        );
+      }
 
       onClose();
     } catch (error) {
@@ -116,7 +122,7 @@ const CreateThreadDialog = ({ contentId, tribeId, onClose }: Props) => {
           onSubmit={handleSubmit(onSubmit)}
           id="create-thread"
         >
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-7">
             <TextInput name="title" placeholder="Title" />
             <TextInput name="message" placeholder="Message" />
             <Select
