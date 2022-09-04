@@ -37,7 +37,7 @@ const TextInput = ({
   });
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-1 flex-row">
       {startAdornment && (
         <div className="flex items-center">
           <span className="absolute w-8 text-right">{startAdornment}</span>

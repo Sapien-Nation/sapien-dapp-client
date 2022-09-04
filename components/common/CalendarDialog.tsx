@@ -1,63 +1,15 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import {
-  CalendarIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  DotsHorizontalIcon,
 } from '@heroicons/react/solid'
-import { Menu, Transition } from '@headlessui/react'
 
 // utils
 import { formatDate, getWeekDay, addDays, subtractDays, getDaysInMonth } from 'utils/date';
 
 // components
 import { Dialog } from 'components/common';
-
-const days = [
-  { date: '2021-12-27' },
-  { date: '2021-12-28' },
-  { date: '2021-12-29' },
-  { date: '2021-12-30' },
-  { date: '2021-12-31' },
-  { date: '2022-01-01', isCurrentMonth: true },
-  { date: '2022-01-02', isCurrentMonth: true },
-  { date: '2022-01-03', isCurrentMonth: true },
-  { date: '2022-01-04', isCurrentMonth: true },
-  { date: '2022-01-05', isCurrentMonth: true },
-  { date: '2022-01-06', isCurrentMonth: true },
-  { date: '2022-01-07', isCurrentMonth: true },
-  { date: '2022-01-08', isCurrentMonth: true },
-  { date: '2022-01-09', isCurrentMonth: true },
-  { date: '2022-01-10', isCurrentMonth: true },
-  { date: '2022-01-11', isCurrentMonth: true },
-  { date: '2022-01-12', isCurrentMonth: true, isToday: true },
-  { date: '2022-01-13', isCurrentMonth: true },
-  { date: '2022-01-14', isCurrentMonth: true },
-  { date: '2022-01-15', isCurrentMonth: true },
-  { date: '2022-01-16', isCurrentMonth: true },
-  { date: '2022-01-17', isCurrentMonth: true },
-  { date: '2022-01-18', isCurrentMonth: true },
-  { date: '2022-01-19', isCurrentMonth: true },
-  { date: '2022-01-20', isCurrentMonth: true },
-  { date: '2022-01-21', isCurrentMonth: true },
-  { date: '2022-01-22', isCurrentMonth: true, isSelected: true },
-  { date: '2022-01-23', isCurrentMonth: true },
-  { date: '2022-01-24', isCurrentMonth: true },
-  { date: '2022-01-25', isCurrentMonth: true },
-  { date: '2022-01-26', isCurrentMonth: true },
-  { date: '2022-01-27', isCurrentMonth: true },
-  { date: '2022-01-28', isCurrentMonth: true },
-  { date: '2022-01-29', isCurrentMonth: true },
-  { date: '2022-01-30', isCurrentMonth: true },
-  { date: '2022-01-31', isCurrentMonth: true },
-  { date: '2022-02-01' },
-  { date: '2022-02-02' },
-  { date: '2022-02-03' },
-  { date: '2022-02-04' },
-  { date: '2022-02-05' },
-  { date: '2022-02-06' },
-]
 
 const getDays = (curDate) => {
   const firstDay = new Date(formatDate(curDate,'yyyy-MM') + '-01');
@@ -75,7 +27,7 @@ const getDays = (curDate) => {
 
   const daysInMonth = getDaysInMonth(firstDayUTC);
   for (let i = 0; i < daysInMonth; i++) {
-    const postfix = (i < 10) ? `0${i+1}` : `${i+1}`
+    const postfix = (i < 9) ? `0${i+1}` : `${i+1}`
     const formatted = formatDate(curDate,'yyyy-MM') + `-${postfix}`;
     const d = { date: formatted, isCurrentMonth: true };
     if (formatted == formatDate(curDate,'yyyy-MM-dd')) {
@@ -89,7 +41,6 @@ const getDays = (curDate) => {
   const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
   const weekDay = getWeekDay(lastDay);
 
-  console.log(`WEEK_DAY: ${weekDay}`)
   let x = weekDay+1;
   if (weekDay == 6) x = 0;
   for (let i = 0; i < (6 - (x)); i++) {
@@ -108,17 +59,19 @@ function classNames(...classes) {
 interface Props {
   title: string;
   onClose: () => void;
+  setValue: (string) => void;
+  setShowDialog: (boolean) => void;
 }
 
-const CalendarDialog = ({title, onClose}:Props) => {
+const CalendarDialog = ({title, onClose, setValue, setShowDialog}:Props) => {
   const [days, setDays] = useState(getDays(new Date()));
+  const [selectedDay, setSelectedDay] = useState(new Date());
   const [month, setMonth] = useState({
     value: formatDate(new Date(), 'yyyy-MM'),
     name: `${formatDate(new Date(),'LLLL')} ${formatDate(new Date(),'yyyy')}`
   });
-  console.log(`MONTH: ${month.value}`)
 
-  const setSelectedDay = (date) => {
+  const updateSelectedDay = (date) => {
     const newDays = days.map(day => {
       if (day.date == date) {
         return { ...day, isSelected: true}
@@ -127,6 +80,7 @@ const CalendarDialog = ({title, onClose}:Props) => {
       return day;
     });
     setDays(newDays);
+    setSelectedDay(date);
   }
 
   const updateMonth = (val) => {
@@ -141,12 +95,10 @@ const CalendarDialog = ({title, onClose}:Props) => {
       });
     }
     if (val == 'next') {
-      // console.log(`MONTH: ${month.value}`)
       const daysInMonth = getDaysInMonth(firstDayUTC);
       const lastDay = new Date(month.value + `-${daysInMonth}`);
       const lastDayUTC = new Date(lastDay.getTime() + lastDay.getTimezoneOffset() * 60000);
       const nextDay = addDays(lastDayUTC,1);
-      console.log(`DAYS: ${JSON.stringify(getDays(nextDay))}`)
       setDays(getDays(nextDay));
       setMonth({
         value: formatDate(nextDay, 'yyyy-MM'), 
@@ -160,6 +112,11 @@ const CalendarDialog = ({title, onClose}:Props) => {
       show
       title={title}
       onClose={onClose}
+      onConfirm={() => {
+        setValue(selectedDay);
+        setShowDialog(false);
+        console.log(`SELECTED: ${selectedDay}`)
+      }}
     >
       <div>
         <div className="mt-10 text-center lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:mt-9 xl:col-start-1">
@@ -196,7 +153,7 @@ const CalendarDialog = ({title, onClose}:Props) => {
               <button
                 key={day.date}
                 type="button"
-                onClick={() => setSelectedDay(day.date)}
+                onClick={() => updateSelectedDay(day.date)}
                 disabled={!day.isCurrentMonth}
                 className={classNames(
                   'py-1.5 hover:bg-gray-100 focus:z-10',

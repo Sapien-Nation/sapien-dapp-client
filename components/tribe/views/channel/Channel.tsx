@@ -2,6 +2,7 @@ import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
+  PlusIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
@@ -277,6 +278,57 @@ const Channel = ({ apiKey }: Props) => {
     setIsUploading(false);
   };
 
+  const proposalOptions = () => {
+    //const [options, setOptions] = useState()
+
+    return (
+      <div className="flex-1">
+        <div className="mr-14">
+          <TextInputLabel
+            label="Options"
+            name="options"
+            error={proposalErrors?.options?.message}
+          />
+          <TextInput
+            name="option one"
+            aria-label="option one"
+            placeholder="Option one"
+            rules={{
+              validate: {
+                required: (value) =>
+                  value.length > 0 || 'is required',
+              },
+            }}
+          />
+        </div>
+        <div className="flex flex-row py-4">
+          <TextInput
+            name="option two"
+            aria-label="option two"
+            placeholder="Option two"
+            rules={{
+              validate: {
+                required: (value) =>
+                  value.length > 0 || 'is required',
+              },
+            }}
+          />
+          <button
+            type="button"
+            className={`${
+              open ? 'bg-sapien-neutral-900' : ''
+            } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+          >
+            <>
+              <span className="sr-only">Add Option</span>
+              <PlusIcon className="h-6 w-6" aria-hidden="true" />
+            </>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   const renderProposalForm = () => {
     switch(proposalStep) {
       case 1:
@@ -325,37 +377,7 @@ const Channel = ({ apiKey }: Props) => {
                 </div>
               </div>
               <div>
-                <div className="flex-1">
-                  <TextInputLabel
-                    label="Options"
-                    name="options"
-                    error={proposalErrors?.options?.message}
-                  />
-                  <TextInput
-                    name="option one"
-                    aria-label="option one"
-                    placeholder="Option one"
-                    rules={{
-                      validate: {
-                        required: (value) =>
-                          value.length > 0 || 'is required',
-                      },
-                    }}
-                  />
-                  <div className="py-4">
-                    <TextInput
-                      name="option two"
-                      aria-label="option two"
-                      placeholder="Option two"
-                      rules={{
-                        validate: {
-                          required: (value) =>
-                            value.length > 0 || 'is required',
-                        },
-                      }}
-                    />
-                  </div>
-                </div>
+                {proposalOptions()}
               </div>
             </div>
             <div className="flex justify-end w-full">
@@ -376,19 +398,35 @@ const Channel = ({ apiKey }: Props) => {
           <div className="px-4 space-y-11">
             <div>
               <div className="flex gap-x-4 items-end">
-                <div className="flex-1">
-                  <TextInputLabel
-                    label="Start"
-                    name="start"
-                    error={proposalErrors?.start?.message}
-                  />
-                  <CalendarInput
-                    name="start"
-                    title="Select Start Date"
-                    autoFocus
-                    aria-label="start"
-                    placeholder="Start"
-                  />
+                <div className="flex flex-row gap-x-4 w-full">
+                  <div className="flex flex-col w-full">
+                    <TextInputLabel
+                      label="Start"
+                      name="start"
+                      error={proposalErrors?.start?.message}
+                    />
+                    <CalendarInput
+                      name="start"
+                      title="Select Start Date"
+                      autoFocus
+                      aria-label="start"
+                      placeholder="Start"
+                    />
+                  </div>
+                  <div className="flex flex-col w-full">
+                    <TextInputLabel
+                      label="End"
+                      name="end"
+                      error={proposalErrors?.end?.message}
+                    />
+                    <CalendarInput
+                      name="end"
+                      title="Select End Date"
+                      autoFocus
+                      aria-label="end"
+                      placeholder="End"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -415,7 +453,7 @@ const Channel = ({ apiKey }: Props) => {
                 {isPublishing ? (
                   <RefreshIcon className="w-5 animate-spin" />
                 ) : (
-                  <>Post</>
+                  <>Publish</>
                 )}
               </button>
             </div>

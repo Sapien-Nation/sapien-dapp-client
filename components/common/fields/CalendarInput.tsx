@@ -1,6 +1,9 @@
 import { useFormContext } from 'react-hook-form';
 import { InputHTMLAttributes, useEffect, useState } from 'react';
 
+// utils
+import { formatDate } from 'utils/date';
+
 // components
 import { CalendarDialog } from 'components/common';
 
@@ -35,6 +38,7 @@ const CalendarInput = ({
 }: Props) => {
   const { register, setFocus } = useFormContext();
   const [showDialog, setShowDialog] = useState(false);
+  const [value, setValue] = useState(formatDate(new Date(),'yyyy-MM-dd'));
 
   useEffect(() => {
     if (autoFocus) {
@@ -55,6 +59,8 @@ const CalendarInput = ({
           disabled ? 'bg-gray-500 cursor-not-allowed' : 'bg-gray-800'
         } ${startAdornment ? 'pl-8' : ''}`}
         disabled={disabled}
+        readOnly
+        value={value}
         onClick={() => setShowDialog(true)}
         {...rest}
         {...register(name, {
@@ -79,6 +85,8 @@ const CalendarInput = ({
         <CalendarDialog
           title={title}
           onClose={() => setShowDialog(false)}
+          setValue={setValue}
+          setShowDialog={setShowDialog}
         />
       )}
     </div>
