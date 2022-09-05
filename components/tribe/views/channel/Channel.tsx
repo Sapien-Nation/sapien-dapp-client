@@ -83,6 +83,7 @@ const Channel = ({ apiKey }: Props) => {
   const [initialEditorValue, setInitialEditorValue] = useState('');
   const [selectedPost, setSelectedPost] = useState<Content>(null);
   const [proposalStep, setProposalStep] = useState(1);
+  const [proposalOptions, setProposalOptions] = useState(["Option one", "Option two"]);
   const isPublishDisabled = isPublishing || !hasContent;
 
   const toast = useToast();
@@ -278,9 +279,7 @@ const Channel = ({ apiKey }: Props) => {
     setIsUploading(false);
   };
 
-  const proposalOptions = () => {
-    //const [options, setOptions] = useState()
-
+  const renderProposalOptions = () => {
     return (
       <div className="flex-1">
         <div className="mr-14">
@@ -289,41 +288,55 @@ const Channel = ({ apiKey }: Props) => {
             name="options"
             error={proposalErrors?.options?.message}
           />
-          <TextInput
-            name="option one"
-            aria-label="option one"
-            placeholder="Option one"
-            rules={{
-              validate: {
-                required: (value) =>
-                  value.length > 0 || 'is required',
-              },
-            }}
-          />
-        </div>
-        <div className="flex flex-row py-4">
-          <TextInput
-            name="option two"
-            aria-label="option two"
-            placeholder="Option two"
-            rules={{
-              validate: {
-                required: (value) =>
-                  value.length > 0 || 'is required',
-              },
-            }}
-          />
-          <button
-            type="button"
-            className={`${
-              open ? 'bg-sapien-neutral-900' : ''
-            } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
-          >
-            <>
-              <span className="sr-only">Add Option</span>
-              <PlusIcon className="h-6 w-6" aria-hidden="true" />
-            </>
-          </button>
+          {proposalOptions.map((option, index) => (
+            <div
+              key={index}
+              className="flex flex-row py-2"
+            >
+              <TextInput
+                name={`Option ${index+1}`}
+                aria-label={`Option ${index+1}`}
+                placeholder={`Option ${index+1}`}
+                rules={{
+                  validate: {
+                    required: (value) =>
+                      value.length > 0 || 'is required',
+                  },
+                }}
+              />
+              {index > 0 && index < proposalOptions.length - 1 &&
+                <button
+                type="button"
+                className={`${
+                  open ? 'bg-sapien-neutral-900' : ''
+                } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+                onClick={() => {
+                  proposalOptions.splice(index,1)
+                  setProposalOptions([...proposalOptions])
+                }}
+                >
+                  <>
+                    <span className="sr-only">Remove Option</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </button>
+              }
+              {index == proposalOptions.length - 1 &&
+                <button
+                type="button"
+                className={`${
+                  open ? 'bg-sapien-neutral-900' : ''
+                } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
+                onClick={() => setProposalOptions([...proposalOptions,"New Option"])}
+                >
+                  <>
+                    <span className="sr-only">Add Option</span>
+                    <PlusIcon className="h-6 w-6" aria-hidden="true" />
+                  </>
+                </button>
+              }
+            </div>
+          ))}
         </div>
       </div>
     )
@@ -377,7 +390,7 @@ const Channel = ({ apiKey }: Props) => {
                 </div>
               </div>
               <div>
-                {proposalOptions()}
+                {renderProposalOptions()}
               </div>
             </div>
             <div className="flex justify-end w-full">
@@ -406,8 +419,7 @@ const Channel = ({ apiKey }: Props) => {
                       error={proposalErrors?.start?.message}
                     />
                     <CalendarInput
-                      name="start"
-                      title="Select Start Date"
+                      name="Start"
                       autoFocus
                       aria-label="start"
                       placeholder="Start"
@@ -420,8 +432,7 @@ const Channel = ({ apiKey }: Props) => {
                       error={proposalErrors?.end?.message}
                     />
                     <CalendarInput
-                      name="end"
-                      title="Select End Date"
+                      name="End"
                       autoFocus
                       aria-label="end"
                       placeholder="End"

@@ -9,7 +9,7 @@ import {
 import { formatDate, getWeekDay, addDays, subtractDays, getDaysInMonth } from 'utils/date';
 
 // components
-import { Dialog } from 'components/common';
+import { Dialog, TextInput } from 'components/common';
 
 const getDays = (curDate) => {
   const firstDay = new Date(formatDate(curDate,'yyyy-MM') + '-01');
@@ -57,13 +57,19 @@ function classNames(...classes) {
 }
 
 interface Props {
-  title: string;
+  name: string;
   onClose: () => void;
   setValue: (string) => void;
   setShowDialog: (boolean) => void;
 }
 
-const CalendarDialog = ({title, onClose, setValue, setShowDialog}:Props) => {
+enum View {
+  Date,
+  Time,
+}
+
+const CalendarDialog = ({name, onClose, setValue, setShowDialog}:Props) => {
+  const [view, setView] = useState(View.Date);
   const [days, setDays] = useState(getDays(new Date()));
   const [selectedDay, setSelectedDay] = useState(new Date());
   const [month, setMonth] = useState({
@@ -107,82 +113,108 @@ const CalendarDialog = ({title, onClose, setValue, setShowDialog}:Props) => {
     }
   }
 
+  const renderView = () => {
+    switch(view) {
+      case View.Date:
+        return (
+          <div className="mt-10 text-center lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:mt-9 xl:col-start-1">
+            <div className="flex items-center text-gray-900">
+              <button
+                type="button"
+                className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                onClick={() => updateMonth('prev')}
+              >
+                <span className="sr-only">Previous month</span>
+                <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+              <div className="text-white flex-auto font-semibold">{month.name}</div>
+              <button
+                type="button"
+                className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                onClick={() => updateMonth('next')}
+              >
+                <span className="sr-only">Next month</span>
+                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
+              <div>S</div>
+              <div>M</div>
+              <div>T</div>
+              <div>W</div>
+              <div>T</div>
+              <div>F</div>
+              <div>S</div>
+            </div>
+            <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
+              {days.map((day, dayIdx) => (
+                <button
+                  key={day.date}
+                  type="button"
+                  onClick={() => updateSelectedDay(day.date)}
+                  disabled={!day.isCurrentMonth}
+                  className={classNames(
+                    'py-1.5 hover:bg-gray-100 focus:z-10',
+                    day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
+                    (day.isSelected || day.isToday) && 'font-semibold',
+                    day.isSelected && 'text-white',
+                    !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
+                    !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
+                    day.isToday && !day.isSelected && 'text-indigo-600',
+                    dayIdx === 0 && 'rounded-tl-lg',
+                    dayIdx === 6 && 'rounded-tr-lg',
+                    dayIdx === days.length - 7 && 'rounded-bl-lg',
+                    dayIdx === days.length - 1 && 'rounded-br-lg'
+                  )}
+                >
+                  <time
+                    dateTime={day.date}
+                    className={classNames(
+                      'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
+                      day.isSelected && day.isToday && 'bg-indigo-600',
+                      day.isSelected && !day.isToday && 'bg-gray-900'
+                    )}
+                  >
+                    {day.date.split('-').pop().replace(/^0/, '')}
+                  </time>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      case View.Time:
+        return (
+          <div className="py-4">
+            <TextInput
+              aria-label="time"
+              autoComplete="time"
+              name="time"
+              placeholder="12:00"
+            />
+          </div>
+        );
+    }
+  }
+
   return (
     <Dialog
       show
-      title={title}
+      title={view == View.Date ? `Select ${name} Date` : `Select ${name} Time`}
       onClose={onClose}
+      confirmLabel={view == View.Date ? "Next" : "Confirm"}
       onConfirm={() => {
-        setValue(selectedDay);
-        setShowDialog(false);
-        console.log(`SELECTED: ${selectedDay}`)
+        if (view == View.Date) {
+          setView(View.Time);
+        }
+        else {
+          setValue(selectedDay);
+          setShowDialog(false);
+          console.log(`SELECTED: ${selectedDay}`)
+        }
       }}
     >
       <div>
-        <div className="mt-10 text-center lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:mt-9 xl:col-start-1">
-          <div className="flex items-center text-gray-900">
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-              onClick={() => updateMonth('prev')}
-            >
-              <span className="sr-only">Previous month</span>
-              <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-            <div className="text-white flex-auto font-semibold">{month.name}</div>
-            <button
-              type="button"
-              className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
-              onClick={() => updateMonth('next')}
-            >
-              <span className="sr-only">Next month</span>
-              <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </button>
-          </div>
-          <div className="mt-6 grid grid-cols-7 text-xs leading-6 text-gray-500">
-            <div>S</div>
-            <div>M</div>
-            <div>T</div>
-            <div>W</div>
-            <div>T</div>
-            <div>F</div>
-            <div>S</div>
-          </div>
-          <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
-            {days.map((day, dayIdx) => (
-              <button
-                key={day.date}
-                type="button"
-                onClick={() => updateSelectedDay(day.date)}
-                disabled={!day.isCurrentMonth}
-                className={classNames(
-                  'py-1.5 hover:bg-gray-100 focus:z-10',
-                  day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
-                  (day.isSelected || day.isToday) && 'font-semibold',
-                  day.isSelected && 'text-white',
-                  !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
-                  !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
-                  day.isToday && !day.isSelected && 'text-indigo-600',
-                  dayIdx === 0 && 'rounded-tl-lg',
-                  dayIdx === 6 && 'rounded-tr-lg',
-                  dayIdx === days.length - 7 && 'rounded-bl-lg',
-                  dayIdx === days.length - 1 && 'rounded-br-lg'
-                )}
-              >
-                <time
-                  dateTime={day.date}
-                  className={classNames(
-                    'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
-                    day.isSelected && day.isToday && 'bg-indigo-600',
-                    day.isSelected && !day.isToday && 'bg-gray-900'
-                  )}
-                >
-                  {day.date.split('-').pop().replace(/^0/, '')}
-                </time>
-              </button>
-            ))}
-          </div>
-        </div>
+        {renderView()}
       </div>
     </Dialog>
   );

@@ -10,7 +10,6 @@ import { CalendarDialog } from 'components/common';
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'pattern'>;
 interface Props extends InputProps {
   name: string;
-  title: string;
   pattern?: RegExp;
   maxLength?: number;
   replaceWhiteSpace?: boolean;
@@ -22,7 +21,6 @@ interface Props extends InputProps {
 
 const CalendarInput = ({
   name,
-  title,
   pattern,
   maxLength = 100,
   replaceWhiteSpace = false,
@@ -83,7 +81,7 @@ const CalendarInput = ({
       />
       {showDialog && (
         <CalendarDialog
-          title={title}
+          name={name}
           onClose={() => setShowDialog(false)}
           setValue={setValue}
           setShowDialog={setShowDialog}
