@@ -167,7 +167,11 @@ const ContentItem = ({
                         className={`${
                           threads?.length ? 'initial' : 'hidden'
                         } text-sm text-white hover:bg-gray-800 p-2 truncate border-t border-gray-700`}
-                        onClick={() => setDialog(Dialog.CreateThread)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setDialog(Dialog.CreateThread);
+                        }}
                       >
                         Create Thread
                       </li>
@@ -182,6 +186,7 @@ const ContentItem = ({
               threads?.length ? 'hidden' : 'initial'
             } text-right text-sapien-40 hover:text-sapien-80 py-2`}
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               setDialog(Dialog.CreateThread);
             }}
