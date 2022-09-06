@@ -41,7 +41,6 @@ const ContentItem = ({
     group,
     createdAt,
     body,
-    preview,
     mimeType,
     title,
     threads,
@@ -85,6 +84,13 @@ const ContentItem = ({
             <source src={media} type={mimeType} />
             Your browser does not support the video tag.
           </video>
+        );
+      } else if (mimeType.includes(ContentMimeType.Audio)) {
+        return (
+          <audio controls>
+            <source src={media} type={mimeType} />
+            Your browser does not support the audio tag.
+          </audio>
         );
       } else {
         return <></>;
