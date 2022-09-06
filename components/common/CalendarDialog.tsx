@@ -72,6 +72,7 @@ const CalendarDialog = ({name, onClose, setValue, setShowDialog}:Props) => {
   const [view, setView] = useState(View.Date);
   const [days, setDays] = useState(getDays(new Date()));
   const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState("12:00");
   const [month, setMonth] = useState({
     value: formatDate(new Date(), 'yyyy-MM'),
     name: `${formatDate(new Date(),'LLLL')} ${formatDate(new Date(),'yyyy')}`
@@ -185,11 +186,16 @@ const CalendarDialog = ({name, onClose, setValue, setShowDialog}:Props) => {
       case View.Time:
         return (
           <div className="py-4">
-            <TextInput
+            <input
               aria-label="time"
               autoComplete="time"
               name="time"
+              value={selectedTime}
               placeholder="12:00"
+              className='appearance-none block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm'
+              onChange={(event) => {
+                setSelectedTime(event.target.value)
+              }}
             />
           </div>
         );
@@ -207,9 +213,8 @@ const CalendarDialog = ({name, onClose, setValue, setShowDialog}:Props) => {
           setView(View.Time);
         }
         else {
-          setValue(selectedDay);
+          setValue({date: formatDate(selectedDay, 'MMM dd, yyyy'), time: selectedTime});
           setShowDialog(false);
-          console.log(`SELECTED: ${selectedDay}`)
         }
       }}
     >

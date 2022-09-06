@@ -36,7 +36,7 @@ const CalendarInput = ({
 }: Props) => {
   const { register, setFocus } = useFormContext();
   const [showDialog, setShowDialog] = useState(false);
-  const [value, setValue] = useState(formatDate(new Date(),'yyyy-MM-dd'));
+  const [value, setValue] = useState({ date: formatDate(new Date(),'MMM dd, yyyy'), time: formatDate(new Date(), 'hh:mm') });
 
   useEffect(() => {
     if (autoFocus) {
@@ -58,7 +58,7 @@ const CalendarInput = ({
         } ${startAdornment ? 'pl-8' : ''}`}
         disabled={disabled}
         readOnly
-        value={value}
+        value={`${value.date} - ${value.time}`}
         onClick={() => setShowDialog(true)}
         {...rest}
         {...register(name, {
