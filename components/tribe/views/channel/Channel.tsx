@@ -805,6 +805,7 @@ const Channel = ({ apiKey }: Props) => {
               <ContentItemChannel
                 content={selectedPost}
                 tribeID={tribeID as string}
+                showPostDetails={selectedPost?.type === ContentType.MEDIA}
               />
             </div>
           </div>

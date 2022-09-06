@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
+import { useRouter } from 'next/router';
+
+// components
+import PostPreview from './PostPreview';
 
 // constants
 import { ContentMimeType } from 'tools/constants/content';
@@ -23,6 +27,7 @@ import type { Content as ContentType } from 'tools/types/content';
 interface Props {
   content: ContentType;
   tribeID: string;
+  showPostDetails?: boolean;
 }
 
 enum Dialog {
@@ -44,41 +49,48 @@ const ContentItem = ({
     link,
   },
   tribeID,
+  showPostDetails = false,
 }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const tribe = useTribe(tribeID);
+  const { query } = useRouter();
+  const isPostDetailsView = query.id;
 
   const renderBody = () => {
-    if (mimeType === ContentMimeType.Html) {
-      return (
-        <div
-          className="disable-preflight"
-          dangerouslySetInnerHTML={{
-            __html: body,
-          }}
-        />
-      );
-    } else if (mimeType === ContentMimeType.Link) {
-      return (
-        <div className="flex flex-col gap-2">
-          <div>{body}</div>
-          <div className="text-[#3b82f6] underline">{link}</div>
-        </div>
-      );
-    } else if (mimeType.includes(ContentMimeType.Image)) {
-      return (
-        <img className="object-cover" src={media} alt="Sapien Post Image" />
-      );
-    } else if (mimeType.includes(ContentMimeType.Video)) {
-      return (
-        <video controls>
-          <source src={media} type={mimeType} />
-          Your browser does not support the video tag.
-        </video>
-      );
+    if (isPostDetailsView || showPostDetails) {
+      if (mimeType === ContentMimeType.Html) {
+        return (
+          <div
+            className="disable-preflight"
+            dangerouslySetInnerHTML={{
+              __html: body,
+            }}
+          />
+        );
+      } else if (mimeType === ContentMimeType.Link) {
+        return (
+          <div className="flex flex-col gap-2">
+            <div>{body}</div>
+            <div className="text-[#3b82f6] underline">{link}</div>
+          </div>
+        );
+      } else if (mimeType.includes(ContentMimeType.Image)) {
+        return (
+          <img className="object-cover" src={media} alt="Sapien Post Image" />
+        );
+      } else if (mimeType.includes(ContentMimeType.Video)) {
+        return (
+          <video controls>
+            <source src={media} type={mimeType} />
+            Your browser does not support the video tag.
+          </video>
+        );
+      } else {
+        return <></>;
+      }
     } else {
-      return <></>;
+      return <PostPreview title={title} mimeType={mimeType} body={body} />;
     }
   };
 
@@ -119,7 +131,9 @@ const ContentItem = ({
           </p>
         </div>
         <div className="flex-1 p-3">
-          {title && <h1 className="text-4xl font-semibold">{title}</h1>}
+          {isPostDetailsView && title && (
+            <h1 className="text-4xl font-semibold">title</h1>
+          )}
           {renderBody()}
         </div>
         <div className="flex justify-between p-3">
@@ -167,7 +181,11 @@ const ContentItem = ({
                         className={`${
                           threads?.length ? 'initial' : 'hidden'
                         } text-sm text-white hover:bg-gray-800 p-2 truncate border-t border-gray-700`}
-                        onClick={() => setDialog(Dialog.CreateThread)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setDialog(Dialog.CreateThread);
+                        }}
                       >
                         Create Thread
                       </li>
@@ -182,6 +200,7 @@ const ContentItem = ({
               threads?.length ? 'hidden' : 'initial'
             } text-right text-sapien-40 hover:text-sapien-80 py-2`}
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               setDialog(Dialog.CreateThread);
             }}
