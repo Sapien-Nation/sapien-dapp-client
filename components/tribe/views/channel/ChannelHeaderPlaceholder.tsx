@@ -25,7 +25,7 @@ const ChannelHeaderPlaceholder = () => {
                     onClick={() => {}}
                     disabled
                     type="button"
-                    className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 font-medium focus:outline-none animate-pulse"
+                    className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary hover:bg-sapien-80 font-medium focus:outline-none animate-pulse"
                   >
                     ...
                   </button>
@@ -33,7 +33,7 @@ const ChannelHeaderPlaceholder = () => {
                     onClick={() => {}}
                     disabled
                     type="button"
-                    className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
+                    className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary hover:bg-sapien-80 font-medium focus:outline-none mr-3"
                   >
                     <DocumentDuplicateIcon className="w-6" />
                   </button>

@@ -90,14 +90,14 @@ const MainChannelHeader = ({ tribe }: Props) => {
                 <button
                   onClick={handleCopyToClipboard}
                   type="button"
-                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary-200 focus:outline-none font-semibold"
+                  className="relative inline-flex items-center px-4 py-2 rounded-l-md border-0 bg-primary hover:bg-sapien-80 focus:outline-none font-semibold"
                 >
                   Invite
                 </button>
                 <button
                   onClick={handleCopyToClipboard}
                   type="button"
-                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary-200 font-medium focus:outline-none mr-3"
+                  className="-ml-px relative inline-flex items-center px-4 py-2 rounded-r-md border-l bg-primary hover:bg-sapien-80 font-medium focus:outline-none mr-3"
                 >
                   <DocumentDuplicateIcon className="w-6" />
                 </button>
