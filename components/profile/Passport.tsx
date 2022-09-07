@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 // components
 import { Query } from 'components/common';
+import Transaction from './views/transaction';
 
 // hooks
 import { useAuth } from 'context/user';
@@ -31,7 +32,7 @@ const Passport = () => {
       case View.Badges:
         return <>Badges</>;
       case View.Transactions:
-        return <>Transactions</>;
+        return <Transaction />;
       case View.Members:
         return <>Members</>;
     }

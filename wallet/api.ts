@@ -25,6 +25,7 @@ const getAlchemyTXhistoryPOSTParams = ({ options = {}, params = {} } = {}) => ({
     excludeZeroValue: false,
     category: ['external'],
     order: 'desc',
+    withMetadata: true,
     ...params,
   },
   ...options,
