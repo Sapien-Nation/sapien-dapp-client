@@ -1,6 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Menu, Transition } from '@headlessui/react';
+import { useRouter } from 'next/router';
+
+// components
+import PostPreview from './PostPreview';
 
 // constants
 import { ContentMimeType } from 'tools/constants/content';
@@ -23,6 +27,7 @@ import type { Content as ContentType } from 'tools/types/content';
 interface Props {
   content: ContentType;
   tribeID: string;
+  showPostDetails?: boolean;
 }
 
 enum Dialog {
@@ -36,7 +41,6 @@ const ContentItem = ({
     group,
     createdAt,
     body,
-    preview,
     mimeType,
     title,
     threads,
@@ -44,41 +48,55 @@ const ContentItem = ({
     link,
   },
   tribeID,
+  showPostDetails = false,
 }: Props) => {
   const [dialog, setDialog] = useState<Dialog | null>(null);
 
   const tribe = useTribe(tribeID);
+  const { query } = useRouter();
+  const isPostDetailsView = query.id;
 
   const renderBody = () => {
-    if (mimeType === ContentMimeType.Html) {
-      return (
-        <div
-          className="disable-preflight"
-          dangerouslySetInnerHTML={{
-            __html: body,
-          }}
-        />
-      );
-    } else if (mimeType === ContentMimeType.Link) {
-      return (
-        <div className="flex flex-col gap-2">
-          <div>{body}</div>
-          <div className="text-[#3b82f6] underline">{link}</div>
-        </div>
-      );
-    } else if (mimeType.includes(ContentMimeType.Image)) {
-      return (
-        <img className="object-cover" src={media} alt="Sapien Post Image" />
-      );
-    } else if (mimeType.includes(ContentMimeType.Video)) {
-      return (
-        <video controls>
-          <source src={media} type={mimeType} />
-          Your browser does not support the video tag.
-        </video>
-      );
+    if (isPostDetailsView || showPostDetails) {
+      if (mimeType === ContentMimeType.Html) {
+        return (
+          <div
+            className="disable-preflight"
+            dangerouslySetInnerHTML={{
+              __html: body,
+            }}
+          />
+        );
+      } else if (mimeType === ContentMimeType.Link) {
+        return (
+          <div className="flex flex-col gap-2">
+            <div>{body}</div>
+            <div className="text-[#3b82f6] underline">{link}</div>
+          </div>
+        );
+      } else if (mimeType.includes(ContentMimeType.Image)) {
+        return (
+          <img className="object-cover" src={media} alt="Sapien Post Image" />
+        );
+      } else if (mimeType.includes(ContentMimeType.Video)) {
+        return (
+          <video controls>
+            <source src={media} type={mimeType} />
+            Your browser does not support the video tag.
+          </video>
+        );
+      } else if (mimeType.includes(ContentMimeType.Audio)) {
+        return (
+          <audio controls>
+            <source src={media} type={mimeType} />
+            Your browser does not support the audio tag.
+          </audio>
+        );
+      } else {
+        return <></>;
+      }
     } else {
-      return <></>;
+      return <PostPreview title={title} mimeType={mimeType} body={body} />;
     }
   };
 
@@ -119,75 +137,81 @@ const ContentItem = ({
           </p>
         </div>
         <div className="flex-1 p-3">
-          {title && <h1 className="text-4xl font-semibold">{title}</h1>}
+          {isPostDetailsView && title && (
+            <h1 className="text-4xl font-semibold">title</h1>
+          )}
           {renderBody()}
         </div>
         <div className="flex justify-between p-3">
-          <div
-            className={`${
-              threads?.length > 0 ? 'visible' : 'invisible'
-            } relative`}
-          >
-            <Menu>
-              <>
-                <Menu.Button className="text-gray-300 hover:text-gray-400 font-bold py-2">
-                  {`${threads?.length} ${
-                    threads?.length === 1 ? 'room' : 'rooms'
-                  } discussing`}
-                </Menu.Button>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="w-full absolute max-h-[200px] overflow-y-auto rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <ul className="">
-                      {threads?.map((thread) => {
-                        return (
-                          <li
-                            key={thread.id}
-                            className="text-sm text-white hover:bg-gray-800 p-2 truncate"
-                          >
-                            <Link
-                              href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
+          {threads?.length ? (
+            <div className="relative">
+              <Menu>
+                <>
+                  <Menu.Button className="text-gray-300 hover:text-gray-400 font-bold py-2">
+                    {`${threads?.length} ${
+                      threads?.length === 1 ? 'room' : 'rooms'
+                    } discussing`}
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="w-full absolute max-h-[200px] overflow-y-auto rounded-md bg-sapien-neutral-900 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <ul className="">
+                        {threads?.map((thread) => {
+                          return (
+                            <li
+                              key={thread.id}
+                              className="text-sm text-white hover:bg-gray-800 p-2 truncate"
                             >
-                              <a>
-                                <span className="truncate">{thread.name}</span>
-                              </a>
-                            </Link>
-                          </li>
-                        );
-                      })}
+                              <Link
+                                href={`/tribes/${tribeID}/${thread.parentId}?thread=${thread.id}`}
+                              >
+                                <a>
+                                  <span className="truncate">
+                                    {thread.name}
+                                  </span>
+                                </a>
+                              </Link>
+                            </li>
+                          );
+                        })}
 
-                      <li
-                        className={`${
-                          threads?.length ? 'initial' : 'hidden'
-                        } text-sm text-white hover:bg-gray-800 p-2 truncate border-t border-gray-700`}
-                        onClick={() => setDialog(Dialog.CreateThread)}
-                      >
-                        Create Thread
-                      </li>
-                    </ul>
-                  </Menu.Items>
-                </Transition>
-              </>
-            </Menu>
-          </div>
-          <button
-            className={`${
-              threads?.length ? 'hidden' : 'initial'
-            } text-right text-sapien-40 hover:text-sapien-80 py-2`}
-            onClick={(e) => {
-              e.stopPropagation();
-              setDialog(Dialog.CreateThread);
-            }}
-          >
-            Create Thread
-          </button>
+                        <li
+                          className={`${
+                            threads?.length ? 'initial' : 'hidden'
+                          } text-sm text-white hover:bg-gray-800 p-2 truncate border-t border-gray-700`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setDialog(Dialog.CreateThread);
+                          }}
+                        >
+                          Create Thread
+                        </li>
+                      </ul>
+                    </Menu.Items>
+                  </Transition>
+                </>
+              </Menu>
+            </div>
+          ) : (
+            <button
+              className={'text-right text-sapien-40 hover:text-sapien-80 py-2'}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setDialog(Dialog.CreateThread);
+              }}
+            >
+              Create Thread
+            </button>
+          )}
         </div>
       </div>
       {/* create thread dialog */}
