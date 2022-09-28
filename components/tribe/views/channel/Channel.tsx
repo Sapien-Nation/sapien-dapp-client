@@ -2,7 +2,6 @@ import {
   ArrowNarrowLeftIcon,
   ArrowsExpandIcon,
   RefreshIcon,
-  PlusIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import { useRouter } from 'next/router';
@@ -18,12 +17,13 @@ import {
   createContent,
   createLinkContent,
   createMediaContent,
+  createProposalContent,
   uploadContentMedia,
 } from 'api/content';
 
 // components
 import { ContentItemChannel } from 'components/content';
-import { Overlay, Query, TextInput, TextareaInput, TextInputLabel, CalendarInput } from 'components/common';
+import { Overlay, Query, TextInput, TextInputLabel, OptionsInput, CalendarInput } from 'components/common';
 import { InlineEditor, ExpandedEditor } from 'tinymc';
 import ChannelHeader from './ChannelHeader';
 import ChannelLeftBar from './ChannelLeftBar';
@@ -69,7 +69,9 @@ interface LinkFormProps {
 interface ProposalFormProps {
   title: string;
   description: string;
-  options: string[];
+  options: string;
+  start: string;
+  end: string;
 }
 
 const Channel = ({ apiKey }: Props) => {
@@ -83,7 +85,6 @@ const Channel = ({ apiKey }: Props) => {
   const [initialEditorValue, setInitialEditorValue] = useState('');
   const [selectedPost, setSelectedPost] = useState<Content>(null);
   const [proposalStep, setProposalStep] = useState(1);
-  const [proposalOptions, setProposalOptions] = useState(["Option one", "Option two"]);
   const isPublishDisabled = isPublishing || !hasContent;
 
   const toast = useToast();
@@ -200,19 +201,32 @@ const Channel = ({ apiKey }: Props) => {
     }
   };
 
-  const onSubmitProposal = async ({ title }: ProposalFormProps) => {
+  const onSubmitProposal = async (data: ProposalFormProps) => {
+    let options = [];
+    const {
+      title,
+      description,
+      start,
+      end
+    } = data;
+    for (const key in data) {
+      if (key.slice(0,6) == 'option') options.push(data[key])
+    }
+   
     try {
       setPublishing(true);
 
-      // const response: Content = await createLinkContent({
-      //   title,
-      //   link,
-      //   data: description,
-      //   groupId: channel.id,
-      // });
+      const response: Content = await createProposalContent({
+        title,
+        data: description,
+        groupId: channel.id,
+        options,
+        start,
+        end,
+      });
 
       setPublishing(false);
-      //push(`/tribes/${tribeID}/content?id=${response.id}`);
+      push(`/tribes/${tribeID}/content?id=${response.id}`);
 
       mutate(apiKey);
     } catch (error) {
@@ -279,68 +293,7 @@ const Channel = ({ apiKey }: Props) => {
     setIsUploading(false);
   };
 
-  const renderProposalOptions = () => {
-    return (
-      <div className="flex-1">
-        <div className="mr-14">
-          <TextInputLabel
-            label="Options"
-            name="options"
-            error={proposalErrors?.options?.message}
-          />
-          {proposalOptions.map((option, index) => (
-            <div
-              key={index}
-              className="flex flex-row py-2"
-            >
-              <TextInput
-                name={`Option ${index+1}`}
-                aria-label={`Option ${index+1}`}
-                placeholder={`Option ${index+1}`}
-                rules={{
-                  validate: {
-                    required: (value) =>
-                      value.length > 0 || 'is required',
-                  },
-                }}
-              />
-              {index > 0 && index < proposalOptions.length - 1 &&
-                <button
-                type="button"
-                className={`${
-                  open ? 'bg-sapien-neutral-900' : ''
-                } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
-                onClick={() => {
-                  proposalOptions.splice(index,1)
-                  setProposalOptions([...proposalOptions])
-                }}
-                >
-                  <>
-                    <span className="sr-only">Remove Option</span>
-                    <XIcon className="h-6 w-6" aria-hidden="true" />
-                  </>
-                </button>
-              }
-              {index == proposalOptions.length - 1 &&
-                <button
-                type="button"
-                className={`${
-                  open ? 'bg-sapien-neutral-900' : ''
-                } ml-4 h-10 w-10 flex items-center justify-center rounded-full focus:outline-none bg-sapien-neutral-200/25 hover:bg-sapien-neutral-900`}
-                onClick={() => setProposalOptions([...proposalOptions,"New Option"])}
-                >
-                  <>
-                    <span className="sr-only">Add Option</span>
-                    <PlusIcon className="h-6 w-6" aria-hidden="true" />
-                  </>
-                </button>
-              }
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
+ 
 
   const renderProposalForm = () => {
     switch(proposalStep) {
@@ -390,14 +343,24 @@ const Channel = ({ apiKey }: Props) => {
                 </div>
               </div>
               <div>
-                {renderProposalOptions()}
+                <TextInputLabel
+                  label="Options"
+                  name="options"
+                  error={proposalErrors?.options?.message}
+                />
+                <OptionsInput
+                  name="options"
+                  autoFocus
+                  aria-label="options"
+                />
               </div>
             </div>
             <div className="flex justify-end w-full">
               <button
-                form="content-form"
+                type="button"
                 className={`cursor-pointer bg-primary hover:bg-sapien-80 min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
-                onClick={() => {
+                onClick={(event) => {
+                  event.preventDefault();
                   setProposalStep(proposalStep + 1);
                 }}
               >
@@ -419,7 +382,7 @@ const Channel = ({ apiKey }: Props) => {
                       error={proposalErrors?.start?.message}
                     />
                     <CalendarInput
-                      name="Start"
+                      name="start"
                       autoFocus
                       aria-label="start"
                       placeholder="Start"
@@ -432,7 +395,7 @@ const Channel = ({ apiKey }: Props) => {
                       error={proposalErrors?.end?.message}
                     />
                     <CalendarInput
-                      name="End"
+                      name="end"
                       autoFocus
                       aria-label="end"
                       placeholder="End"
@@ -443,9 +406,10 @@ const Channel = ({ apiKey }: Props) => {
             </div>
             <div className="flex justify-end w-full">
               <button
-                form="content-form"
+                type="button"
                 className={`cursor-pointer mr-4 bg-primary hover:bg-sapien-80 min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
-                onClick={() => {
+                onClick={(event) => {
+                  event.preventDefault()
                   setProposalStep(proposalStep - 1);
                 }}
               >
@@ -453,13 +417,13 @@ const Channel = ({ apiKey }: Props) => {
               </button>
               <button
                 type="submit"
-                form="content-form"
+                form="proposal-form"
                 className={`${
-                  isPublishDisabled
+                  isSubmittingProposalForm
                     ? 'cursor-not-allowed bg-primary/50'
                     : 'cursor-pointer bg-primary hover:bg-sapien-80'
                 } min-w-[70px] flex items-center justify-center gap-2 rounded-xl border border-transparent shadow-sm px-2 py-2 text-base font-bold text-white focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-primary sm:text-sm`}
-                disabled={isPublishDisabled}
+                disabled={isSubmittingProposalForm}
               >
                 {isPublishing ? (
                   <RefreshIcon className="w-5 animate-spin" />

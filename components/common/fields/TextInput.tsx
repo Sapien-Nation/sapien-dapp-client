@@ -70,7 +70,6 @@ const TextInput = ({
         }}
         {...rest}
         {...register(name, {
-          ...rules,
           onChange: (event) => {
             event.preventDefault();
             let value = event.target.value;
@@ -85,6 +84,7 @@ const TextInput = ({
 
             event.target.value = valueModifier ? valueModifier(value) : value;
           },
+          ...rules,
         })}
       />
     </div>

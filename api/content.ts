@@ -41,6 +41,21 @@ export const createLinkContent = (content: {
     .then(({ data }) => data)
     .catch(({ response }) => Promise.reject(response.data.message));
 
+// TODO: rename data to description
+// should this use a proposal type?
+export const createProposalContent = (content: {
+  groupId: string;
+  title: string;
+  data?: string;
+  options: string[];
+  start: string;
+  end: string;
+}) =>
+  axios
+    .post('/core-api/post/proposal', content)
+    .then(({ data }) => data)
+    .catch(({ response }) => Promise.reject(response.data.message));
+
 export const deleteContent = (contentID: string) =>
   axios
     .delete(`/core-api/post/${contentID}`)
