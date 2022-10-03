@@ -3,7 +3,7 @@ import { createDecipheriv } from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const walletInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_AUTH_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
@@ -18,7 +18,7 @@ export const decrypt = (value) => {
 const connectWallet = async (headers) =>
   walletInstance
     .post(
-      `${process.env.NEXT_PUBLIC_API_AUTH_URL}/wallet-api/connect`,
+      `${process.env.NEXT_PUBLIC_API_URL}/wallet-api/connect`,
       {},
       {
         withCredentials: true,
